@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+    Document   : plugin.xml
+    Created on : September 23, 2008, 11:11 AM
+    Author     : sdorra
+    Description:
+        Purpose of the document follows.
+-->
+
+<plugin  xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+   xmlns='http://dev.sonia.de/schema/plugin-schema'
+   xsi:schemaLocation='http://dev.sonia.de/schema/plugin-schema file:/Users/sdorra/Projects/libraries/SoniaUtil/src/sonia/plugin/plugin-schema.xsd'>
+        <name>sonia.test</name>
+        <display-name>Test-Plugin</display-name>
+        <description>Erstellt ein Test-Servlet und ein Test-Macro</description>
+        <version>0.0.1</version>
+        <vendor>Sebastian Sdorra</vendor>
+        <activator>sonia.test.PluginActivator</activator>
+</plugin>
