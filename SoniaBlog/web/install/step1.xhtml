@@ -1,0 +1,68 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html">
+    
+    <body>
+        
+        <ui:composition template="/template/jab/template.xhtml">
+            
+            <ui:define name="title">
+                <h:outputText value="#{label.installation1}" />
+            </ui:define>
+            
+            <ui:define name="content">
+                
+                <h:form id="form">
+                
+                    <h2><h:outputText value="#{label.dbConnection}" /></h2>
+                    
+                    <h:panelGrid columns="3">
+                        
+                        <h:outputLabel for="dbEmbedded" value="#{label.dbEmbedded}" />
+                        <h:selectBooleanCheckbox id="dbEmbedded" value="#{InstallBean.databaseEmbedded}" onclick="submit();" />
+                        <h:message for="dbEmbedded" />
+                        
+                    </h:panelGrid>
+                    
+                    <h:panelGrid columns="3" rendered="#{!InstallBean.databaseEmbedded}">
+                        
+                        <h:outputLabel for="dbDriver" value="#{label.dbDriver}" />
+                        <h:inputText id="dbDriver" value="#{InstallBean.databaseDriver}" required="true" />
+                        <h:message for="dbDriver" />
+                        
+                        <h:outputLabel for="dbUrl" value="#{label.dbUrl}" />
+                        <h:inputText id="dbUrl" value="#{InstallBean.databaseUrl}" required="true" />
+                        <h:message for="dbUrl" />
+                        
+                        <h:outputLabel for="dbUsername" value="#{label.dbUsername}" />
+                        <h:inputText id="dbUsername" value="#{InstallBean.databaseUsername}" required="true" />
+                        <h:message for="dbUsername" />
+                        
+                        <h:outputLabel for="dbPassword" value="#{label.dbPassword}" />
+                        <h:inputSecret id="dbPassword" value="#{InstallBean.databsePassword}" rendered="true" />
+                        <h:message for="dbPassword" />
+                        
+                    </h:panelGrid>
+                    
+                    <h2><h:outputLabel value="#{label.resourceDirectory}" /></h2>
+                    
+                    <h:panelGrid columns="3">
+                        
+                        <h:outputLabel for="resourceDir" value="#{label.path}" />
+                        <h:inputText id="resourceDir" value="#{InstallBean.resourcePath}" required="true" />
+                        <h:message for="resourceDir" />
+                        
+                    </h:panelGrid>
+                    
+                    <h:commandButton value="#{label.step2}" action="#{InstallBean.next}" />
+                    
+                </h:form>
+                
+            </ui:define>
+            
+        </ui:composition>
+        
+    </body>
+</html>

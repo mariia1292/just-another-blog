@@ -1,0 +1,43 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:blog="http://jab.nitilon.org/blog/">
+  
+  <body>
+    
+    <ui:composition template="./template.xhtml">
+      
+      <ui:define name="title">
+        <h:outputText value="#{label.searchResult}" />
+      </ui:define>
+      
+      <ui:define name="content">
+      
+        <h1><h:outputText value="#{label.searchResult}" /></h1>
+        
+        <h:form>
+          
+          <h:dataTable value="#{BlogBean.searchResult}" var="Result" styleClass="full">
+            
+            <h:column>
+              <h2><blog:link value="#{Result.title}" object="#{Result.data}" /></h2>
+              <h:outputText value="#{Result.searchResult}" escape="false" />
+              <br />
+              <h:outputText value="#{Result.creationDate}">
+                <f:convertDateTime pattern="#{BlogBean.blog.dateFormat}" />
+              </h:outputText>
+            </h:column>
+            
+          </h:dataTable>
+          
+        </h:form>
+        
+      </ui:define>
+      
+    </ui:composition>
+    
+  </body>
+</html>

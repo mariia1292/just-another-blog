@@ -1,0 +1,118 @@
+@charset "UTF-8";
+/**
+* "Yet Another Multicolumn Layout" - (X)HTML/CSS Framework
+* (en) Template for designing a screen layout
+* (de) Gestaltungsvorlage für die Erstellung eines Screenlayouts
+*
+* @file		basemod_draft.css
+* @creator		YAML Builder v0.3 Preview
+* @link		http://builder.yaml.de
+*/
+
+@media all
+{
+    /**
+    * Design of the Basic Layout | Gestaltung des YAML Basis-Layouts
+    *
+    * @section layout-basics
+    */
+    
+    /* Page margins and background | Randbereiche & Seitenhintergrund */
+    html { height: 99% }
+    body { background: #aaa; padding: 10px; min-height: 101%; }
+    
+    /* Layout: Width, Background, Border | Layout: Breite, Hintergrund, Rahmen */
+    #page_margins { border: 1px #889 solid; width: 90%; min-width: 740px; margin: auto; }
+    #page { border: 1px #667 solid; background: #fff; }
+    #header { overflow: hidden; margin-bottom: 0.5em; padding: 40px 0 0 0; }
+    #topnav {   }
+    #nav { overflow: hidden; border-bottom: 5px solid #DCE6FA; color: #36C; padding: 3px 50px; }
+    #footer { margin: 0; padding: 1em 50px; border-top: 5px solid #DCE6FA; height: 2em;}
+    
+    /**
+    * (en) Repositioning content container
+    * (de) Neupositionierung der Content Container
+    *
+    * |-------------------------------|
+    * | #header                       |
+    * |-------------------------------|
+    * | #col1               | #col3   |
+    * | 75%                 | flexible|
+    * |-------------------------------|
+    * | #footer                       |
+    * |-------------------------------|
+    */
+    
+    /* #col1 becomes main column | Linke float-Spalte wird zur Inhaltsspalte */
+    #col1 { width: 75%; }
+    
+    /* hide #col2 | Rechte Spalte abschalten */
+    #col2, #col2_content { display:none }
+    
+    /* #col3 moves to the right | Linken Randabstand anpassen - #col3 wird zur Randspalte */
+    #col3 { margin-left:75%; margin-right:0; }
+    #col3_content { padding-left: 20px; padding-right: 10px; }
+    
+    
+    div.fh-header { border-bottom: 20px solid #DCE6FA; display: block; height: 55px; }
+    div.fh-header h1 { float: left; margin-left: 50px; font-size: 1.6em; text-decoration: none; border: 0px; padding-top: 1.5em; }
+    div.fh-header img { float: right; margin-right: 50px; }
+    
+    #header table { width: 100%; margin: 0; padding: 0; }
+    #header table tr { margin: 0; padding: 0; }
+    
+    #header table td { 
+        margin: 0; 
+        padding: 0; 
+        border: 3px solid white; 
+        font-size: 0px; 
+        height: 7px; 
+        width: 75px; 
+        color: #36C;
+    }
+    #header table th { 
+        margin: 0; 
+        padding: 3px 3px 3px 0; 
+        border: 0; 
+        font-weight: normal; 
+        width: 75px; 
+        height: 20px; 
+        text-align: left; 
+        color: #36C; 
+    }
+    
+    #header table td a, 
+    #header table td a#hover, 
+    #header table td a#active { display: block; background: transparent; width: 100%; height: 100%; text-decoration: none; }
+    
+    #header .logo { width: 240px; vertical-align: bottom; padding-right: 50px; }
+    #header .logo-spacer { width: auto; }
+    #header .left-spacer { width: 46px; }
+    #header .spacer { width: 2px; }
+    #header .w-bs { width: 82px; }
+    #header .w-wf { width: 75px; }
+    #header .w-wob { width: 60px; }
+    #header .w-sz { width: 56px; }
+    
+    /**
+    * Formatting of the Content Area | Formatierung der Inhaltsbereichs
+    *
+    * @section layout-main
+    */
+    #main { padding: 1em 0; margin: 0 50px 0 50px } 
+    
+    
+    /**
+    * Design of Additional Layout Elements | Gestaltung weiterer Layoutelemente
+    *
+    * @section layout-misc
+    */
+    
+    /* Haupt-Navigation */
+    #nav_main { }
+    
+    #nav_main a#current {
+        font-weight: bold;
+    }
+    
+}

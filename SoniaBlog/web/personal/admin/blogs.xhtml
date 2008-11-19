@@ -1,0 +1,66 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core">
+  
+  <body>
+    
+    <ui:composition template="./../../template/jab/template.xhtml">
+      
+      <ui:define name="title">
+        <h:outputText value="#{label.blogAdministration}" />
+      </ui:define>
+      
+      <ui:define name="content">
+      
+        <h1><h:outputText value="#{label.blogAdministration}" /></h1>
+        
+        <h:form>
+          
+          <h:dataTable value="#{AdminBlogBean.blogs}" var="Blog">
+            
+            <h:column>
+              <f:facet name="header">
+                <h:outputText value="#{label.servername}" />
+              </f:facet>
+              <h:outputText value="#{Blog.servername}" />
+            </h:column>
+            
+            <h:column>
+              <f:facet name="header">
+                <h:outputText value="#{label.title}" />
+              </f:facet>
+              <h:outputText value="#{Blog.title}" />
+            </h:column>
+            
+            <h:column>
+              <f:facet name="header">
+                <h:outputText value="#{label.creationDate}" />
+              </f:facet>
+              <h:outputText value="#{Blog.creationDate}">
+                <f:convertDateTime pattern="yyyy-MM-dd HH:mm" />
+              </h:outputText>
+            </h:column>
+            
+            <h:column>
+              <f:facet name="header">
+                <h:outputText value="#{label.active}" />
+              </f:facet>
+              <h:selectBooleanCheckbox value="#{Blog.active}" />
+            </h:column>
+            
+          </h:dataTable>
+          
+        </h:form>
+        
+      </ui:define>
+      
+      <ui:define name="info">
+      </ui:define>
+      
+    </ui:composition>
+    
+  </body>
+</html>

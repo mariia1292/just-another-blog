@@ -1,0 +1,42 @@
+@charset "UTF-8";
+/**
+ * "Yet Another Multicolumn Layout" - (X)HTML/CSS Framework
+ * (en) Example of a patch stylesheet for the Internet Explorer
+ * (de) Beispiel für ein Anpassungs-Stylesheet für den Internet Explorer
+ *
+ * @file            patch_layout_draft.css
+ * @creator         YAML Builder v0.3 Preview
+ * @link	        http://builder.yaml.de
+ */
+
+
+/* Layout independent adjustments | Layout-unabhängige Anpassungen  */
+@import url(../../yaml/core/iehacks.css);
+
+/* Layout-dependent adjustments | Layout-abhängige Anpassungen */
+@media screen
+{
+
+* html #header div.fh-header h1 { margin-left: 25px; }
+    
+* html input[type=password] { width: 223pt; border: 2px solid red; }
+* html input[type=password].short { width: 123pt; border: 2px solid red; }
+* html input.long { width: 403pt; }
+
+/*-------------------------------------------------------*/
+/* min-width / max-width for IE
+** IE5.x/Win - x
+** IE6       - x
+** IE7       - 0
+*/   
+* html #page_margins {
+  width: 90%;
+   
+  width: expression((document.documentElement && document.documentElement.clientHeight) ?
+    (document.documentElement.clientWidth < 740) ? "740px" : (( document.documentElement.clientWidth > (90 * parseInt(document.documentElement.currentStyle.fontSize))) ? "90%" : "auto") :
+
+    (document.body.clientWidth < 740) ? "740px" : (( document.body.clientWidth > (90 * parseInt(document.body.currentStyle.fontSize))) ? "90%" : "auto")
+ );
+}
+
+}

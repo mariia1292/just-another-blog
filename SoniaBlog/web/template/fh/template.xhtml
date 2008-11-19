@@ -1,0 +1,130 @@
+<?xml version='1.0' encoding='UTF-8' ?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:t="http://myfaces.apache.org/tomahawk"
+      xmlns:blog="http://jab.nitilon.org/blog/">
+    <head>
+        <title><ui:insert name="title">SoniaBlog</ui:insert></title>
+        <!--<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-15"/>-->
+        <link rel="stylesheet" class="user" type="text/css" href="${facesContext.externalContext.requestContextPath}/template/fh/css/blog.css"/>
+        <!--[if lte IE 7]>
+        <link rel="stylesheet" class="user" type="text/css" href="${facesContext.externalContext.requestContextPath}/template/fh/css/patches/patch_layout.css"/>
+        <![endif]-->
+        <link rel="alternate" type="application/rss+xml"  title="#{label.entries}" href="${facesContext.externalContext.requestContextPath}/servlet/entries.rss" />
+        <link rel="alternate" type="application/rss+xml"  title="#{label.comments}" href="${facesContext.externalContext.requestContextPath}/servlet/comments.rss" />
+        <ui:insert name="head" />
+    </head>
+    <body>
+        <div id="page_margins">
+        <div id="page">
+            <div id="header">
+                <div id="topnav">
+                    <a class="skip" title="skip link" href="#navigation">
+                        Skip to the navigation
+                    </a>
+                    <span class="hideme">
+                        .
+                    </span>
+                    <a class="skip" title="skip link" href="#content">
+                        Skip to the content
+                    </a>
+                    <span class="hideme">
+                        .
+                    </span>
+                </div>
+                <div class="fh-header">
+                    <h1>
+                        <h:outputText value="#{label.blogTitle}" rendered="#{!BlogBean.installed}" />
+                        <h:outputText value="#{BlogBean.blog.title}" rendered="#{BlogBean.installed}" />
+                    </h1>
+                    <h:graphicImage value="/template/fh/images/logo.gif" alt="#{label.blogTitle}" />
+                </div>
+            </div>
+            <div id="nav">
+                <a id="navigation" name="navigation">
+                </a>
+                <div id="nav_main">
+                    <!-- Navigation -->
+                        <h:form id="mainNavigationForm">
+                            <t:panelNavigation2 styleClass="mainNavigation" layout="list">
+                                <t:navigationMenuItems value="#{BlogBean.mainNavigation}" />
+                            </t:panelNavigation2>
+                        </h:form>
+                </div>
+            </div>
+            <div id="main">
+                
+                <div id="col1">
+                    <div id="col1_content" class="clearfix"> 
+                        
+                        <h1><ui:insert name="title">SoniaBlog</ui:insert></h1>
+                        
+                        <ui:insert name="content" />
+                        <p>&nbsp;</p>
+                        <h:messages id="messages" layout="table" styleClass="full" 
+                                    globalOnly="true" errorClass="error" 
+                                    fatalClass="error" warnClass="warning" 
+                                    infoClass="note" />
+                    </div>
+                    
+                </div>
+                <!-- end: #col1 -->
+                <!-- begin: #col2 second float column -->
+                <div id="col2">
+                    <div id="col2_content" class="clearfix"> </div>
+                </div>
+                <!-- end: #col2 -->
+                        <!-- begin: #col3 static column -->
+                
+                <div id="col3">
+                    <div id="col3_content" class="clearfix">
+                        
+                        <ui:insert name="info">
+                            
+                            <h:panelGroup rendered="#{BlogBean.installed}">
+                            
+                                <h3><h:outputText value="#{label.categories}" /></h3>
+                                <h:form>
+                                    <h:dataTable value="#{BlogBean.categories}" var="Category">
+                                        <h:column>
+                                            <blog:link value="#{Category.name}" object="#{Category}" />
+                                        </h:column>
+                                    </h:dataTable>
+                                </h:form>
+                                
+                                <h3><h:outputText value="#{label.search}" /></h3>
+                                <h:form>
+                                    <h:inputText styleClass="short" value="#{BlogBean.searchString}" required="true" />
+                                    <div class="spacer" />
+                                        <h:commandButton value="Search" action="searchResult" />
+                                    </h:form>
+                                        
+                                </h:panelGroup>
+                                
+                            </ui:insert>
+                            
+                        </div>
+                        <!-- IE column clearing -->
+                        <div id="ie_clearing">&nbsp;</div>
+                    </div>
+                    
+                    
+                    
+                </div>
+                <div id="footer">
+                    <h:form>
+                        <div class="left">
+                            <!-- FH -->
+                        </div>
+                        <div class="right">
+                            <!-- imprint -->
+                        </div>
+                    </h:form>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

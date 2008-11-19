@@ -1,0 +1,72 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core">
+    
+    <body>
+        
+        <ui:composition template="./template.xhtml">
+            
+            <ui:define name="title">
+                <h:outputText value="#{BlogBean.entry.title}" />
+            </ui:define>
+            
+            <ui:define name="content">
+                
+                <h:outputText value="#{BlogBean.entry.content}" escape="false" />
+                
+                <h:dataTable value="#{BlogBean.comments}" var="Comment">
+                    
+                    <h:column>
+                        
+                        <h:outputText value="#{Comment.authorName}" rendered="#{Comment.authorURL == null}" />
+                        <h:outputLink value="#{Comment.authorURL}" rendered="#{Comment.authorURL != null}">
+                            <h:outputText value="#{Comment.authorName}" />    
+                        </h:outputLink>
+                        <h:outputText value=": #{Comment.content}" />
+                        <br />
+                        
+                        <h:outputText value="#{Comment.creationDate}">
+                            <f:convertDateTime pattern="yyyy-MM-dd HH:mm" />
+                        </h:outputText>
+                        
+                    </h:column>
+                    
+                </h:dataTable>
+                
+                <h:form>
+                    
+                    <h:panelGrid columns="3">
+                        
+                        <h:outputLabel for="name" value="#{label.name}" />
+                        <h:inputText id="name" value="#{BlogBean.comment.authorName}" required="true" />
+                        <h:message for="name" />
+                        
+                        <h:outputLabel for="mail" value="#{label.email}" />
+                        <h:inputText id="mail" value="#{BlogBean.comment.authorMail}" />
+                        <h:message for="mail" />
+                        
+                        <h:outputLabel for="url" value="#{label.url}" />
+                        <h:inputText id="url" value="#{BlogBean.comment.authorURL}" />
+                        <h:message for="url" />
+                        
+                        <h:outputLabel for="content" value="#{label.content}" />
+                        <h:inputTextarea id="content" value="#{BlogBean.comment.content}" required="true">
+                          <f:validateLength maximum="2048" />
+                        </h:inputTextarea>
+                        <h:message for="content" />
+                        
+                    </h:panelGrid>
+                    
+                    <h:commandButton value="#{label.save}" action="#{BlogBean.addComment}" />
+                    
+                </h:form>
+                
+            </ui:define>
+            
+        </ui:composition>
+        
+    </body>
+</html>

@@ -1,0 +1,28 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:t="http://myfaces.apache.org/tomahawk"
+      xmlns:h="http://java.sun.com/jsf/html">
+    
+    <body>
+        
+        <ui:composition template="/template/jab/template.xhtml">
+            
+            <ui:define name="mainNavigation">
+              <h:form id="mainNavigationForm">
+                <t:panelNavigation2 styleClass="mainNavigation" layout="list">
+                  <t:navigationMenuItem binding="#{BlogBean.overviewItem}" />
+                  <t:navigationMenuItems value="#{BlogBean.authorNavigation}" />
+                  <t:navigationMenuItems value="#{BlogBean.adminNavigation}" />
+                </t:panelNavigation2>
+              </h:form>
+            </ui:define>
+
+            <ui:define name="info">
+            </ui:define>
+
+        </ui:composition>
+        
+    </body>
+</html>

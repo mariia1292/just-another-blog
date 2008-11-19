@@ -1,0 +1,53 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core">
+  
+  <body>
+    
+    <ui:composition template="./template.xhtml">
+      
+      <ui:define name="title">
+        <h:outputText value="RE: #{CommentBean.comment.entry.title}" />
+      </ui:define>
+      
+      <ui:define name="content">
+      
+        <h1><h:outputText value="RE: #{CommentBean.comment.entry.title}" /></h1>
+        
+        <h:panelGrid columns="2" columnClasses="label,none">
+          
+          <h:outputLabel for="date" value="#{label.creationDate}" />
+          <h:outputText id="date" value="#{CommentBean.comment.creationDate}">
+            <f:convertDateTime pattern="yyyy-MM-dd HH:mm" />
+          </h:outputText>
+          
+          <h:outputLabel for="name" value="#{label.author}" />
+          <h:outputText id="name" value="#{CommentBean.comment.authorName}" />
+          
+          <h:outputLabel for="mail" value="#{label.email}" />
+          <h:outputText id="mail" value="#{CommentBean.comment.authorMail}" />
+          
+          <h:outputLabel for="url" value="#{label.url}" />
+          <h:outputText value="#{CommentBean.comment.authorURL}" />
+          
+          <h:outputLabel for="address" value="#{label.address}" />
+          <h:outputText id="address" value="#{CommentBean.comment.authorAddress}" />
+          
+          <h:outputLabel for="content" value="#{label.content}" />
+          <h:outputText id="content" value="#{CommentBean.comment.content}" />
+          
+        </h:panelGrid>
+        
+        <h:form>
+          <h:commandLink value="#{label.back}" action="comments" />
+        </h:form>
+        
+      </ui:define>
+      
+    </ui:composition>
+    
+  </body>
+</html>
