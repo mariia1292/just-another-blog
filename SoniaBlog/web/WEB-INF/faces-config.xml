@@ -134,7 +134,17 @@
     <converter-id>converter.category</converter-id>
     <converter-class>sonia.blog.wui.converter.CategoryConverter</converter-class>
   </converter>
-  
+
+  <validator>
+    <validator-id>validator.url</validator-id>
+    <validator-class>sonia.blog.api.jsf.validator.URLValidator</validator-class>
+  </validator>
+
+  <validator>
+    <validator-id>validator.mail</validator-id>
+    <validator-class>sonia.blog.api.jsf.validator.MailValidator</validator-class>
+  </validator>
+
   <lifecycle>
     <phase-listener>
             sonia.blog.app.AccessPhaseListener
@@ -211,7 +221,13 @@
     <managed-bean-class>sonia.blog.wui.MemberBean</managed-bean-class>
     <managed-bean-scope>request</managed-bean-scope>
   </managed-bean>
-  
+
+  <managed-bean>
+    <managed-bean-name>AdminBlogBean</managed-bean-name>
+    <managed-bean-class>sonia.blog.wui.AdminBlogBean</managed-bean-class>
+    <managed-bean-scope>request</managed-bean-scope>
+  </managed-bean>
+
   <component>
     <display-name>content</display-name>
     <component-type>sonia.blog.content</component-type>
@@ -270,9 +286,5 @@
       <renderer-class>sonia.blog.api.jsf.content.ContentRenderer</renderer-class>
     </renderer>
   </render-kit>
-    <managed-bean>
-        <managed-bean-name>AdminBlogBean</managed-bean-name>
-        <managed-bean-class>sonia.blog.wui.AdminBlogBean</managed-bean-class>
-        <managed-bean-scope>request</managed-bean-scope>
-    </managed-bean>
+    
 </faces-config>
