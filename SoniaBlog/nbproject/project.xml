@@ -18,15 +18,15 @@
                     <file>${libs.Lucene.classpath}</file>
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
-                <library files="1">
+                <library>
                     <file>${reference.SoniaUtil.jar}</file>
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
-                <library files="1">
+                <library>
                     <file>${reference.SoniaWebUtil.jar}</file>
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
-                <library files="1">
+                <library>
                     <file>${reference.PluginTest.jar}</file>
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>

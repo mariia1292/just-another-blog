@@ -556,17 +556,11 @@ or ant -Dj2ee.platform.classpath=&lt;server_classpath&gt; (where no properties f
         <basename file="${libs.Lucene.classpath.libfile.1}" property="included.lib.libs.Lucene.classpath.1"/>
         <copy-ear-war file="${libs.Lucene.classpath.libfile.2}" propname="included.lib.libs.Lucene.classpath.2.X"/>
         <copy-ear-war file="${libs.Lucene.classpath.libfile.1}" propname="included.lib.libs.Lucene.classpath.1.X"/>
-        <basename file="${reference.SoniaUtil.jar}" property="included.lib.reference.SoniaUtil.jar"/>
-        <copy-ear-war file="${reference.SoniaUtil.jar}" propname="included.lib.reference.SoniaUtil.jar.X"/>
-        <basename file="${reference.SoniaWebUtil.jar}" property="included.lib.reference.SoniaWebUtil.jar"/>
-        <copy-ear-war file="${reference.SoniaWebUtil.jar}" propname="included.lib.reference.SoniaWebUtil.jar.X"/>
-        <basename file="${reference.PluginTest.jar}" property="included.lib.reference.PluginTest.jar"/>
-        <copy-ear-war file="${reference.PluginTest.jar}" propname="included.lib.reference.PluginTest.jar.X"/>
         <basename file="${reference.SoniaBlogAPI.jar}" property="included.lib.reference.SoniaBlogAPI.jar"/>
         <copy-ear-war file="${reference.SoniaBlogAPI.jar}" propname="included.lib.reference.SoniaBlogAPI.jar.X"/>
         <mkdir dir="${build.web.dir}/META-INF"/>
         <manifest file="${build.web.dir}/META-INF/MANIFEST.MF" mode="update">
-            <attribute name="Class-Path" value="${included.lib.libs.MyFaces-Tomahawk.classpath.1.X} ${included.lib.libs.MyFaces-Tomahawk.classpath.2.X} ${included.lib.libs.MyFaces-Tomahawk.classpath.3.X} ${included.lib.libs.MyFaces-Tomahawk.classpath.4.X} ${included.lib.libs.MyFaces-Tomahawk.classpath.5.X} ${included.lib.libs.facelets-1-1-14.classpath.1.X} ${included.lib.libs.facelets-1-1-14.classpath.2.X} ${included.lib.libs.Lucene.classpath.1.X} ${included.lib.libs.Lucene.classpath.2.X} ${included.lib.reference.SoniaUtil.jar} ${included.lib.reference.SoniaWebUtil.jar} ${included.lib.reference.PluginTest.jar} ${included.lib.reference.SoniaBlogAPI.jar} "/>
+            <attribute name="Class-Path" value="${included.lib.libs.MyFaces-Tomahawk.classpath.1.X} ${included.lib.libs.MyFaces-Tomahawk.classpath.2.X} ${included.lib.libs.MyFaces-Tomahawk.classpath.3.X} ${included.lib.libs.MyFaces-Tomahawk.classpath.4.X} ${included.lib.libs.MyFaces-Tomahawk.classpath.5.X} ${included.lib.libs.facelets-1-1-14.classpath.1.X} ${included.lib.libs.facelets-1-1-14.classpath.2.X} ${included.lib.libs.Lucene.classpath.1.X} ${included.lib.libs.Lucene.classpath.2.X} ${included.lib.reference.SoniaBlogAPI.jar} "/>
         </manifest>
         <delete dir="${dist.ear.dir}/temp"/>
     </target>
@@ -580,9 +574,6 @@ or ant -Dj2ee.platform.classpath=&lt;server_classpath&gt; (where no properties f
         <copy file="${libs.facelets-1-1-14.classpath.libfile.1}" todir="${build.web.dir}/WEB-INF/lib"/>
         <copy file="${libs.Lucene.classpath.libfile.2}" todir="${build.web.dir}/WEB-INF/lib"/>
         <copy file="${libs.Lucene.classpath.libfile.1}" todir="${build.web.dir}/WEB-INF/lib"/>
-        <copy file="${reference.SoniaUtil.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
-        <copy file="${reference.SoniaWebUtil.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
-        <copy file="${reference.PluginTest.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
         <copy file="${reference.SoniaBlogAPI.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
     </target>
     <target depends="init,compile,compile-jsps,-pre-dist,library-inclusion-in-manifest" name="do-ear-dist">
