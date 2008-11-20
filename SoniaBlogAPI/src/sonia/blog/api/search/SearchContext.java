@@ -39,8 +39,11 @@ public interface SearchContext
    * @param search
    *
    * @return
+   *
+   * @throws SearchException
    */
-  public List<SearchEntry> search(Blog blog, String search) throws SearchException;
+  public List<SearchEntry> search(Blog blog, String search)
+          throws SearchException;
 
   //~--- get methods ----------------------------------------------------------
 

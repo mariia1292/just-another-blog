@@ -3,14 +3,24 @@
  * and open the template in the editor.
  */
 
+
+
 package sonia.blog.entity;
 
 /**
  *
  * @author sdorra
  */
-public interface ContentObject {
+public interface ContentObject
+{
 
-  public String getContent( boolean shortVersion );
-  
+  /**
+   * Method description
+   *
+   *
+   * @param shortVersion
+   *
+   * @return
+   */
+  public String getContent(boolean shortVersion);
 }

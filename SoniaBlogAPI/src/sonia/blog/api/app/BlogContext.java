@@ -264,17 +264,6 @@ public class BlogContext
    *
    * @return
    */
-  public MacroParser getMacroParser()
-  {
-    return MacroParser.getInstance();
-  }
-
-  /**
-   * Method description
-   *
-   *
-   * @return
-   */
   public LinkBuilder getLinkBuilder()
   {
     if (linkBuilder == null)
@@ -284,6 +273,17 @@ public class BlogContext
     }
 
     return (LinkBuilder) linkBuilder.getImplementation();
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  public MacroParser getMacroParser()
+  {
+    return MacroParser.getInstance();
   }
 
   /**

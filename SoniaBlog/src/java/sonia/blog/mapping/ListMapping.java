@@ -43,8 +43,8 @@ public class ListMapping extends AbstractMappingHandler
    */
   public String handleMapping(FacesContext context, Blog blog, String[] args)
   {
-    System.out.println( "handle listMapping" );
-    
+    System.out.println("handle listMapping");
+
     int position = 0;
     int max = blog.getEntriesPerPage();
 
@@ -64,7 +64,7 @@ public class ListMapping extends AbstractMappingHandler
     Query q = em.createNamedQuery("Entry.overview");
 
     q.setParameter("blog", blog);
-    
+
     List list = q.getResultList();
     LinkBuilder linkBuilder = BlogContext.getInstance().getLinkBuilder();
     BlogBean blogBean = getBlogBean(context);

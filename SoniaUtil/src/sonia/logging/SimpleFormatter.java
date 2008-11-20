@@ -73,8 +73,9 @@ public class SimpleFormatter extends Formatter
    * Method description
    *
    *
-   * @param buffer
-   * @param rec
+   *
+   * @param result
+   * @param record
    * @param thrown
    *
    * @return

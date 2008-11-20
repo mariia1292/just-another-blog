@@ -161,8 +161,10 @@ public class InstallBean extends AbstractBean
             logger.log(Level.SEVERE, null, ex);
           }
         }
+
         String uri = context.getLinkBuilder().buildLink(getRequest(), "/blog");
-        sendRedirect( uri );
+
+        sendRedirect(uri);
       }
       catch (Exception ex)
       {

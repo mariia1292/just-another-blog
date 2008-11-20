@@ -22,6 +22,19 @@ public class LoginConfiguration extends Configuration
   /**
    * Method description
    *
+   */
+  @Override
+  public void refresh()
+  {
+
+    // do nothing
+  }
+
+  //~--- get methods ----------------------------------------------------------
+
+  /**
+   * Method description
+   *
    *
    * @param arg0
    *

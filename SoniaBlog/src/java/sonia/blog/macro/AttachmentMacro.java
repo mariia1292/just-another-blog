@@ -9,6 +9,9 @@ package sonia.blog.macro;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import sonia.blog.api.app.BlogContext;
+import sonia.blog.api.app.BlogRequest;
+import sonia.blog.api.link.LinkBuilder;
 import sonia.blog.entity.Attachment;
 import sonia.blog.entity.Blog;
 import sonia.blog.entity.Entry;
@@ -21,9 +24,6 @@ import java.text.SimpleDateFormat;
 
 import java.util.List;
 import java.util.Map;
-import sonia.blog.api.app.BlogContext;
-import sonia.blog.api.app.BlogRequest;
-import sonia.blog.api.link.LinkBuilder;
 
 /**
  *

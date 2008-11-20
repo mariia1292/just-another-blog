@@ -524,7 +524,7 @@ public class Entry implements Serializable, ContentObject, PermaObject
   private List<Tag> tags;
 
   /** Field description */
-  @Column(length=5000)
+  @Column(length = 5000)
   private String teaser;
 
   /** Field description */

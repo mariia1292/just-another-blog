@@ -62,18 +62,29 @@ public class ContentTag extends BaseTag
     return ContentComponent.RENDERER;
   }
 
+  //~--- set methods ----------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   * @param entry
+   */
   public void setEntry(ValueExpression entry)
   {
     this.entry = entry;
   }
 
+  /**
+   * Method description
+   *
+   *
+   * @param teaser
+   */
   public void setTeaser(ValueExpression teaser)
   {
     this.teaser = teaser;
   }
-
-  //~--- set methods ----------------------------------------------------------
-
 
   /**
    * Method description
@@ -88,8 +99,8 @@ public class ContentTag extends BaseTag
     {
       component.setValueExpression("entry", entry);
     }
-    
-    if ( teaser != null )
+
+    if (teaser != null)
     {
       component.setValueExpression("teaser", teaser);
     }
@@ -101,5 +112,7 @@ public class ContentTag extends BaseTag
 
   /** Field description */
   private ValueExpression entry;
+
+  /** Field description */
   private ValueExpression teaser;
 }

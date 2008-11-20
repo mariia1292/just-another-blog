@@ -79,8 +79,7 @@ public class PluginActivator implements Activator
    *
    * @return
    */
-  private ServiceReference getReference(
-          PluginContext context)
+  private ServiceReference getReference(PluginContext context)
   {
     return context.getServiceRegistry().getServiceReference("/servlet");
   }

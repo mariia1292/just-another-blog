@@ -407,6 +407,7 @@ public class DefaultConfigReader
     try
     {
       Object obj = Class.forName(classString).newInstance();
+
       instance = clazz.cast(obj);
     }
     catch (Exception ex)

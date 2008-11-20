@@ -12,6 +12,8 @@ package sonia.blog.mapping;
 import sonia.blog.api.app.BlogContext;
 import sonia.blog.entity.Blog;
 
+//~--- JDK imports ------------------------------------------------------------
+
 import java.util.List;
 import java.util.logging.Level;
 
@@ -62,7 +64,8 @@ public class CategoryMapping extends AbstractMappingHandler
 
         List list = q.getResultList();
         String prefix = BlogContext.getInstance().getLinkBuilder().buildLink(
-                            getRequest(context), "/blog/categories/" + id + "/");
+                            getRequest(context),
+                            "/blog/categories/" + id + "/");
 
         setEntries(getBlogBean(context), list, position, max, prefix);
         em.close();

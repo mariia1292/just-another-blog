@@ -65,6 +65,7 @@ public class ServiceLocator
           if (!line.startsWith("#"))
           {
             Object obj = Class.forName(line).newInstance();
+
             service = serviceClass.cast(obj);
           }
         }
@@ -128,7 +129,8 @@ public class ServiceLocator
             try
             {
               Object obj = Class.forName(line).newInstance();
-              resultList.add( serviceClass.cast(obj) );
+
+              resultList.add(serviceClass.cast(obj));
             }
             catch (Exception ex)
             {

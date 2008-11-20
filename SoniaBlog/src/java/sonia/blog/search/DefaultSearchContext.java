@@ -16,6 +16,7 @@ import org.apache.lucene.document.Document;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.queryParser.MultiFieldQueryParser;
+import org.apache.lucene.queryParser.ParseException;
 import org.apache.lucene.queryParser.QueryParser;
 import org.apache.lucene.search.Hits;
 import org.apache.lucene.search.IndexSearcher;
@@ -29,6 +30,7 @@ import org.apache.lucene.search.highlight.TokenSources;
 import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.search.SearchContext;
 import sonia.blog.api.search.SearchEntry;
+import sonia.blog.api.search.SearchException;
 import sonia.blog.entity.Blog;
 import sonia.blog.entity.Entry;
 
@@ -43,8 +45,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.persistence.EntityManager;
-import org.apache.lucene.queryParser.ParseException;
-import sonia.blog.api.search.SearchException;
 
 /**
  *
@@ -85,8 +85,11 @@ public class DefaultSearchContext implements SearchContext
    * @param search
    *
    * @return
+   *
+   * @throws SearchException
    */
-  public List<SearchEntry> search(Blog blog, String search) throws SearchException
+  public List<SearchEntry> search(Blog blog, String search)
+          throws SearchException
   {
     List<SearchEntry> entries = new ArrayList<SearchEntry>();
 
@@ -147,7 +150,8 @@ public class DefaultSearchContext implements SearchContext
         catch (Exception ex)
         {
           logger.log(Level.SEVERE, null, ex);
-          throw new SearchException( ex.getLocalizedMessage() );
+
+          throw new SearchException(ex.getLocalizedMessage());
         }
         finally
         {

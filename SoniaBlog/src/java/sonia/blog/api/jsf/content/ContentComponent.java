@@ -9,6 +9,8 @@ package sonia.blog.api.jsf.content;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import sonia.blog.entity.Entry;
+
 import sonia.jsf.base.BaseComponent;
 
 //~--- JDK imports ------------------------------------------------------------
@@ -16,7 +18,6 @@ import sonia.jsf.base.BaseComponent;
 import javax.el.ValueExpression;
 
 import javax.faces.context.FacesContext;
-import sonia.blog.entity.Entry;
 
 /**
  *
@@ -91,6 +92,26 @@ public class ContentComponent extends BaseComponent
    *
    * @return
    */
+  public Entry getEntry()
+  {
+    if (entry != null)
+    {
+      return entry;
+    }
+
+    ValueExpression ve = getValueExpression("entry");
+
+    return (ve != null)
+           ? (Entry) ve.getValue(getFacesContext().getELContext())
+           : null;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
   @Override
   public String getFamily()
   {
@@ -103,17 +124,17 @@ public class ContentComponent extends BaseComponent
    *
    * @return
    */
-  public Entry getEntry()
+  public Boolean getTeaser()
   {
-    if (entry != null)
+    if (teaser != null)
     {
-      return entry;
+      return teaser;
     }
 
-    ValueExpression ve = getValueExpression("entry");
+    ValueExpression ve = getValueExpression("teaser");
 
     return (ve != null)
-           ? (Entry)ve.getValue(getFacesContext().getELContext())
+           ? (Boolean) ve.getValue(getFacesContext().getELContext())
            : null;
   }
 
@@ -123,40 +144,33 @@ public class ContentComponent extends BaseComponent
    * Method description
    *
    *
-   * @param value
+   *
+   * @param entry
    */
   public void setEntry(Entry entry)
   {
     this.entry = entry;
   }
 
-  public Boolean getTeaser()
-  {
-    if ( teaser != null )
-    {
-    return teaser;
-    }
-    ValueExpression ve = getValueExpression("teaser");
-
-    return (ve != null)
-           ? (Boolean)ve.getValue(getFacesContext().getELContext())
-           : null;
-  }
-
+  /**
+   * Method description
+   *
+   *
+   * @param teaser
+   */
   public void setTeaser(Boolean teaser)
   {
     this.teaser = teaser;
   }
-  
-  
 
   //~--- fields ---------------------------------------------------------------
+
+  /** Field description */
+  private Entry entry;
 
   /** Field description */
   private Object[] state;
 
   /** Field description */
-  private Entry entry;
-  
   private Boolean teaser;
 }

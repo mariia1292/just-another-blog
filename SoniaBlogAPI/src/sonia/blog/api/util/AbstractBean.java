@@ -23,8 +23,6 @@ import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.annotation.PostConstruct;
-
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 
@@ -44,13 +42,23 @@ public class AbstractBean
   /** Field description */
   public static final String SUCCESS = "success";
 
+  //~--- constructors ---------------------------------------------------------
+
+  /**
+   * Constructs ...
+   *
+   */
+  public AbstractBean()
+  {
+    init();
+  }
+
   //~--- methods --------------------------------------------------------------
 
   /**
    * Method description
    *
    */
-  @PostConstruct
   public void init()
   {
     this.logger = Logger.getLogger(getClass().getName());

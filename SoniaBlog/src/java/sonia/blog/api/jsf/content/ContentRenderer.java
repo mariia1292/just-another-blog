@@ -67,7 +67,7 @@ public class ContentRenderer extends BaseRenderer
         String content = null;
 
         if ((contentComponent.getTeaser() != null)
-            && contentComponent.getTeaser() && ! isBlank(entry.getTeaser()))
+            && contentComponent.getTeaser() &&!isBlank(entry.getTeaser()))
         {
           content = entry.getTeaser();
         }

@@ -86,11 +86,67 @@ public class ImageUtil
           throws IOException
   {
     BufferedImage inputImage = ImageIO.read(in);
-    double ratio = (double) inputImage.getHeight() / (double) inputImage.getWidth();
+    double ratio = (double) inputImage.getHeight()
+                   / (double) inputImage.getWidth();
     int height = (int) (width * ratio);
 
     resize(inputImage, out, format, width, height);
   }
+
+  //~--- get methods ----------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   * @param in
+   *
+   * @return
+   *
+   * @throws IOException
+   */
+  public static Dimension getDimension(InputStream in) throws IOException
+  {
+    BufferedImage img = ImageIO.read(in);
+
+    return new Dimension(img.getWidth(), img.getHeight());
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param in
+   *
+   * @return
+   *
+   * @throws IOException
+   */
+  public static int getHeight(InputStream in) throws IOException
+  {
+    BufferedImage img = ImageIO.read(in);
+
+    return img.getHeight();
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param in
+   *
+   * @return
+   *
+   * @throws IOException
+   */
+  public static int getWidth(InputStream in) throws IOException
+  {
+    BufferedImage img = ImageIO.read(in);
+
+    return img.getWidth();
+  }
+
+  //~--- methods --------------------------------------------------------------
 
   /**
    * Method description
@@ -116,22 +172,4 @@ public class ImageUtil
     outputImage.getGraphics().drawImage(scaledImage, 0, 0, width, height, null);
     ImageIO.write(outputImage, format, out);
   }
-  
-  public static int getWidth( InputStream in ) throws IOException
-  {
-    BufferedImage img = ImageIO.read(in);
-    return img.getWidth();
-  }
-  
-  public static int getHeight( InputStream in ) throws IOException
-  {
-    BufferedImage img = ImageIO.read(in);
-    return img.getHeight();
-  }
-  
-  public static Dimension getDimension( InputStream in ) throws IOException {
-    BufferedImage img = ImageIO.read(in);
-    return new Dimension( img.getWidth(), img.getHeight() );
-  }
-  
 }

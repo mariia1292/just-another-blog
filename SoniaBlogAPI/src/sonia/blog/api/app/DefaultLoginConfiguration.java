@@ -36,6 +36,19 @@ public class DefaultLoginConfiguration extends Configuration
         Constants.SERVICE_AUTHENTICATION);
   }
 
+  //~--- methods --------------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   */
+  @Override
+  public void refresh()
+  {
+
+    // do nothing
+  }
+
   //~--- get methods ----------------------------------------------------------
 
   /**
