@@ -71,7 +71,7 @@ public class CommentBean extends AbstractBean
         entry.getComments().remove(comment);
         em.merge(entry);
         em.getTransaction().commit();
-        messageHandler.info("removeCommentSuccess");
+        getMessageHandler().info("removeCommentSuccess");
       }
       catch (Exception ex)
       {
@@ -81,7 +81,7 @@ public class CommentBean extends AbstractBean
         }
 
         logger.log(Level.SEVERE, null, ex);
-        messageHandler.error("removeCommentFailure");
+        getMessageHandler().error("removeCommentFailure");
       }
       finally
       {
@@ -108,7 +108,7 @@ public class CommentBean extends AbstractBean
       comm.setSpam(!comm.isSpam());
       em.merge(comm);
       em.getTransaction().commit();
-      messageHandler.info("toggleSpamSuccess");
+      getMessageHandler().info("toggleSpamSuccess");
     }
     catch (Exception ex)
     {
@@ -118,7 +118,7 @@ public class CommentBean extends AbstractBean
       }
 
       logger.log(Level.SEVERE, null, ex);
-      messageHandler.error("toggleSpamFailure");
+      getMessageHandler().error("toggleSpamFailure");
     }
     finally
     {

@@ -5,4 +5,9 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<jsp:forward page="blog/list/" />
+<%@page import="sonia.blog.api.app.*" %>
+<%
+    String uri = BlogContext.getInstance().getLinkBuilder().buildLink(
+            new BlogRequest(request), "/list/index.jab");
+    response.sendRedirect(uri);
+%>

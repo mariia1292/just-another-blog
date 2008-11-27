@@ -146,7 +146,7 @@ public class EntryBean extends AbstractBean
       em.remove(em.merge(entry));
       newEntry();
       em.getTransaction().commit();
-      messageHandler.info("removeEntrySuccess");
+      getMessageHandler().info("removeEntrySuccess");
     }
     catch (Exception ex)
     {
@@ -156,7 +156,7 @@ public class EntryBean extends AbstractBean
       }
 
       logger.log(Level.SEVERE, null, ex);
-      messageHandler.error("removeEntryFailure");
+      getMessageHandler().error("removeEntryFailure");
     }
     finally
     {
@@ -187,7 +187,7 @@ public class EntryBean extends AbstractBean
 
       file.delete();
       em.getTransaction().commit();
-      messageHandler.info("removeAttachmentSuccess");
+      getMessageHandler().info("removeAttachmentSuccess");
     }
     catch (Exception ex)
     {
@@ -197,7 +197,7 @@ public class EntryBean extends AbstractBean
       }
 
       logger.log(Level.SEVERE, null, ex);
-      messageHandler.error("removeAttachmentFailure");
+      getMessageHandler().error("removeAttachmentFailure");
     }
     finally
     {
@@ -231,12 +231,12 @@ public class EntryBean extends AbstractBean
 
         entry.setAuthor(author);
         em.persist(entry);
-        messageHandler.info("createEntrySuccess");
+        getMessageHandler().info("createEntrySuccess");
       }
       else
       {
         em.merge(entry);
-        messageHandler.info("updateEntrySuccess");
+        getMessageHandler().info("updateEntrySuccess");
       }
 
       em.getTransaction().commit();
@@ -251,7 +251,7 @@ public class EntryBean extends AbstractBean
       }
 
       result = FAILURE;
-      messageHandler.error("entryActionFailure");
+      getMessageHandler().error("entryActionFailure");
     }
 
     em.close();

@@ -6,31 +6,31 @@
             <name>SoniaBlog</name>
             <minimum-ant-version>1.6</minimum-ant-version>
             <web-module-libraries>
-                <library files="5">
+                <library>
                     <file>${libs.MyFaces-Tomahawk.classpath}</file>
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
-                <library files="2">
+                <library>
                     <file>${libs.facelets-1-1-14.classpath}</file>
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
-                <library files="2">
+                <library>
                     <file>${libs.Lucene.classpath}</file>
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
-                <library files="1">
+                <library>
                     <file>${reference.SoniaUtil.jar}</file>
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
-                <library files="1">
+                <library>
                     <file>${reference.SoniaWebUtil.jar}</file>
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
-                <library files="1">
+                <library>
                     <file>${reference.PluginTest.jar}</file>
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
-                <library files="1">
+                <library>
                     <file>${reference.SoniaBlogAPI.jar}</file>
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>

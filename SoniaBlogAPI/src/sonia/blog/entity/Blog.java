@@ -39,8 +39,10 @@ import javax.persistence.TemporalType;
 @Entity @NamedQueries({ @NamedQuery(name = "Blog.findByServername",
         query = "select b from Blog as b where b.servername = :servername") ,
                         @NamedQuery(name = "Blog.findAll",
-        query = "select b from Blog b") }) @EntityListeners({
-          BlogListener.class })
+        query = "select b from Blog b") ,
+                        @NamedQuery(name = "Blog.findActive",
+        query = "select b from Blog b where b.active = true") }) @EntityListeners(
+          { BlogListener.class })
 public class Blog implements Serializable, PermaObject
 {
 

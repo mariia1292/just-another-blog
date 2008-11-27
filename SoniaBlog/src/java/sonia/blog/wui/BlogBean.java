@@ -28,7 +28,6 @@ import sonia.blog.entity.Role;
 //~--- JDK imports ------------------------------------------------------------
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
@@ -77,7 +76,7 @@ public class BlogBean extends AbstractBean
       comment = newComment;
       em.getTransaction().commit();
       entry = em.find(Entry.class, entry.getId());
-      messageHandler.info("createCommentSuccess");
+      getMessageHandler().info("createCommentSuccess");
     }
     catch (Exception ex)
     {
@@ -87,7 +86,7 @@ public class BlogBean extends AbstractBean
       }
 
       logger.log(Level.SEVERE, null, ex);
-      messageHandler.error("createCommentFailure");
+      getMessageHandler().error("createCommentFailure");
     }
     finally
     {
@@ -239,28 +238,8 @@ public class BlogBean extends AbstractBean
    *
    * @return
    */
-  public DataModel getEntries()
+  public List<Entry> getEntries()
   {
-    if (entries == null)
-    {
-      entries = new ListDataModel();
-
-      EntityManager em = BlogContext.getInstance().getEntityManager();
-      List list = null;
-      Query q = em.createNamedQuery("Entry.overview");
-
-      q.setParameter("blog", getRequest().getCurrentBlog());
-      list = q.getResultList();
-      Collections.reverse(list);
-
-      if (list != null)
-      {
-        entries.setWrappedData(list);
-      }
-
-      em.close();
-    }
-
     return entries;
   }
 
@@ -322,7 +301,7 @@ public class BlogBean extends AbstractBean
     NavigationMenuItem overview = new NavigationMenuItem();
 
     overview.setValue(bundle.getString("overview"));
-    overview.setExternalLink(linkBuilder.buildLink(request, "/blog/list/"));
+    overview.setExternalLink(linkBuilder.buildLink(request, "/list/index.jab"));
     navigation.add(overview);
 
     return navigation;
@@ -340,19 +319,15 @@ public class BlogBean extends AbstractBean
 
     if (entry != null)
     {
-      if (entries instanceof ListDataModel)
+      int pos = entries.indexOf(entry);
+
+      if (pos >= 0)
       {
-        List data = (List) entries.getWrappedData();
-        int pos = data.indexOf(entry);
+        pos++;
 
-        if (pos >= 0)
+        if (pos < entries.size())
         {
-          pos++;
-
-          if (pos < data.size())
-          {
-            e = (Entry) data.get(pos);
-          }
+          e = entries.get(pos);
         }
       }
     }
@@ -368,6 +343,7 @@ public class BlogBean extends AbstractBean
    */
   public String getNextUri()
   {
+    String nextUri = null;
     return nextUri;
   }
 
@@ -386,10 +362,21 @@ public class BlogBean extends AbstractBean
       overviewItem = new UINavigationMenuItem();
       overviewItem.setValue(getResourceBundle("label").getString("overview"));
       overviewItem.setExternalLink(linkBuilder.buildLink(getRequest(),
-              "/blog/list/"));
+              "/list/index.jab"));
     }
 
     return overviewItem;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  public DataModel getPageEntries()
+  {
+    return pageEntries;
   }
 
   /**
@@ -404,16 +391,12 @@ public class BlogBean extends AbstractBean
 
     if (entry != null)
     {
-      if (entries instanceof ListDataModel)
-      {
-        List data = (List) entries.getWrappedData();
-        int pos = data.indexOf(entry);
+      int pos = entries.indexOf(entry);
 
-        if (pos > 0)
-        {
-          pos--;
-          e = (Entry) data.get(pos);
-        }
+      if (pos > 0)
+      {
+        pos--;
+        e = entries.get(pos);
       }
     }
 
@@ -428,6 +411,7 @@ public class BlogBean extends AbstractBean
    */
   public String getPrevUri()
   {
+    String prevUri = null;
     return prevUri;
   }
 
@@ -531,18 +515,6 @@ public class BlogBean extends AbstractBean
     return BlogContext.getInstance().isInstalled();
   }
 
-  //~--- set methods ----------------------------------------------------------
-
-  /**
-   * Method description
-   *
-   *
-   * @param categories
-   */
-  public void setCategories(DataModel categories)
-  {
-    this.categories = categories;
-  }
 
   /**
    * Method description
@@ -561,7 +533,7 @@ public class BlogBean extends AbstractBean
    *
    * @param entries
    */
-  public void setEntries(DataModel entries)
+  public void setEntries(List<Entry> entries)
   {
     this.entries = entries;
   }
@@ -576,18 +548,7 @@ public class BlogBean extends AbstractBean
   {
     this.entry = entry;
   }
-
-  /**
-   * Method description
-   *
-   *
-   * @param nextUri
-   */
-  public void setNextUri(String nextUri)
-  {
-    this.nextUri = nextUri;
-  }
-
+  
   /**
    * Method description
    *
@@ -603,11 +564,11 @@ public class BlogBean extends AbstractBean
    * Method description
    *
    *
-   * @param prevUri
+   * @param pageEntries
    */
-  public void setPrevUri(String prevUri)
+  public void setPageEntries(DataModel pageEntries)
   {
-    this.prevUri = prevUri;
+    this.pageEntries = pageEntries;
   }
 
   /**
@@ -641,19 +602,16 @@ public class BlogBean extends AbstractBean
   private Comment comment;
 
   /** Field description */
-  private DataModel entries;
+  private List<Entry> entries;
 
   /** Field description */
   private Entry entry;
 
   /** Field description */
-  private String nextUri;
-
-  /** Field description */
   private UINavigationMenuItem overviewItem;
 
   /** Field description */
-  private String prevUri;
+  private DataModel pageEntries;
 
   /** Field description */
   private DataModel searchResult;

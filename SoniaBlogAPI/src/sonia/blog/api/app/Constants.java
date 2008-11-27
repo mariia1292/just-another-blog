@@ -50,16 +50,13 @@ public interface Constants
   public static final String SERVICE_CONTEXTLISTENER = "/contextListener";
 
   /** Field description */
-  public static final String SERVICE_DEFAULTMAPPING = "/app/default-mapping";
-
-  /** Field description */
   public static final String SERVICE_ENTRY_LISTENER = "/listener/entry";
 
   /** Field description */
   public static final String SERVICE_LINKBUILDER = "/app/linkBuilder";
 
   /** Field description */
-  public static final String SERVICE_MAPPING = "/app/mapping";
+  public static final String SERVICE_MAPPINGHANDLER = "/app/mappingHandler";
 
   /** Field description */
   public static final String SERVICE_SEARCHCONTEXT = "/app/searchContext";

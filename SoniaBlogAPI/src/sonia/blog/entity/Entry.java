@@ -54,6 +54,8 @@ import javax.persistence.TemporalType;
               query = "select e from Entry e join e.category c join c.blog b where b = :blog order by e.creationDate desc") ,
   @NamedQuery(name = "Entry.findByTag",
               query = "select e from Entry e join e.tags t where e.published = true and t = :tag order by e.creationDate") ,
+  @NamedQuery(name = "Entry.findByTagId",
+              query = "select e from Entry e join e.tags t where e.published = true and t.id = :tagId order by e.creationDate") ,
   @NamedQuery(name = "Entry.findByTagName",
               query = "select e from Entry e join e.category c join c.blog b join e.tags t where b = :blog and e.published = true and t.name = :name order by e.creationDate") ,
   @NamedQuery(name = "Entry.findByCategoryId",
@@ -173,6 +175,24 @@ public class Entry implements Serializable, ContentObject, PermaObject
   public User getAuthor()
   {
     return author;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  public String getAuthorName()
+  {
+    String name = null;
+
+    if (author != null)
+    {
+      name = author.getDisplayName();
+    }
+
+    return name;
   }
 
   /**

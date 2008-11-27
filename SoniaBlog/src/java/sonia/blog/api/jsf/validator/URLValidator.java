@@ -3,11 +3,17 @@
  * and open the template in the editor.
  */
 
+
+
 package sonia.blog.api.jsf.validator;
+
+//~--- JDK imports ------------------------------------------------------------
 
 import java.net.MalformedURLException;
 import java.net.URL;
+
 import java.util.ResourceBundle;
+
 import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
@@ -18,29 +24,44 @@ import javax.faces.validator.ValidatorException;
  *
  * @author sdorra
  */
-public class URLValidator implements Validator {
+public class URLValidator implements Validator
+{
 
-  public void validate(FacesContext context, UIComponent component, Object value) throws ValidatorException
+  /**
+   * Method description
+   *
+   *
+   * @param context
+   * @param component
+   * @param value
+   *
+   * @throws ValidatorException
+   */
+  public void validate(FacesContext context, UIComponent component,
+                       Object value)
+          throws ValidatorException
   {
-    if ( value != null )
+    if (value != null)
     {
       String url = value.toString();
-      if ( url != null && url.length() > 0 )
+
+      if ((url != null) && (url.length() > 0))
       {
         try
         {
           new URL(url);
         }
-        catch ( MalformedURLException ex )
+        catch (MalformedURLException ex)
         {
-          ResourceBundle bundle = context.getApplication().getResourceBundle(context, "message");
+          ResourceBundle bundle =
+            context.getApplication().getResourceBundle(context, "message");
           String msgValue = bundle.getString("malformedUrl");
-          FacesMessage msg = new FacesMessage( FacesMessage.SEVERITY_ERROR, msgValue, msgValue );
+          FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                               msgValue, msgValue);
+
           throw new ValidatorException(msg);
         }
       }
     }
-    
   }
-
 }

@@ -37,6 +37,21 @@ public class DefaultLinkBuilder implements LinkBuilder
    */
   public String buildLink(BlogRequest request, String link)
   {
+    return buildLink(request, null, link);
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param request
+   * @param blog
+   * @param link
+   *
+   * @return
+   */
+  public String buildLink(BlogRequest request, Blog blog, String link)
+  {
     String prefix = "";
 
     if (!link.contains("://"))
@@ -50,7 +65,11 @@ public class DefaultLinkBuilder implements LinkBuilder
         prefix = "http://";
       }
 
-      if (BlogContext.getInstance().isInstalled())
+      if (blog != null)
+      {
+        prefix += blog.getServername();
+      }
+      else if (BlogContext.getInstance().isInstalled())
       {
         prefix += request.getCurrentBlog().getServername();
       }
@@ -84,22 +103,32 @@ public class DefaultLinkBuilder implements LinkBuilder
   {
     String link = null;
 
-    if (object instanceof Blog) {}
+    if (object instanceof Blog)
+    {
+      link = buildLink(request, (Blog) object, "");
+    }
     else
     {
       link = buildLink(request, "");
 
       if (object instanceof Entry)
       {
-        link += "blog/entries/" + object.getId();
+        if (request.getMapping() != null)
+        {
+          link = request.getMapping().getUri(request, this, object);
+        }
+        else
+        {
+          link += "list/" + object.getId() + ".jab";
+        }
       }
       else if (object instanceof Category)
       {
-        link += "blog/categories/" + object.getId();
+        link += "categories/" + object.getId() + "/index.jab";
       }
       else if (object instanceof Tag)
       {
-        link += "blog/tag/" + ((Tag) object).getName();
+        link += "tags/" + ((Tag) object).getId() + "/index.jab";
       }
       else if (object instanceof Attachment)
       {

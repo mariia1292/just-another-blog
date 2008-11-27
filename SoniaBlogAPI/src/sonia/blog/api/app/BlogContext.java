@@ -10,6 +10,7 @@ package sonia.blog.api.app;
 //~--- non-JDK imports --------------------------------------------------------
 
 import sonia.blog.api.link.LinkBuilder;
+import sonia.blog.api.mapping.MappingHandler;
 import sonia.blog.api.search.SearchContext;
 import sonia.blog.api.template.TemplateManager;
 import sonia.blog.entity.Blog;
@@ -292,6 +293,23 @@ public class BlogContext
    *
    * @return
    */
+  public MappingHandler getMappingHandler()
+  {
+    if (mappingHandler == null)
+    {
+      mappingHandler = getServiceRegistry().getServiceReference(
+        Constants.SERVICE_MAPPINGHANDLER);
+    }
+
+    return (MappingHandler) mappingHandler.getImplementation();
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
   public PluginContext getPluginContext()
   {
     return pluginContext;
@@ -424,6 +442,9 @@ public class BlogContext
 
   /** Field description */
   private Configuration loginConfiguration;
+
+  /** Field description */
+  private ServiceReference mappingHandler;
 
   /** Field description */
   private PluginContext pluginContext;

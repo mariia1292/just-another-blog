@@ -11,22 +11,15 @@ package sonia.blog.api.mapping;
 
 import sonia.blog.api.app.BlogRequest;
 import sonia.blog.api.app.BlogResponse;
+import sonia.blog.api.link.LinkBuilder;
+import sonia.blog.entity.PermaObject;
 
 /**
  *
  * @author sdorra
  */
-public interface MappingHandler
+public interface MappingEntry
 {
-
-  /**
-   * Method description
-   *
-   *
-   * @param path
-   * @param entry
-   */
-  public void addMappging(String path, MappingEntry entry);
 
   /**
    * Method description
@@ -34,16 +27,14 @@ public interface MappingHandler
    *
    * @param request
    * @param response
+   * @param param
    *
    * @return
    */
-  public boolean handleMapping(BlogRequest request, BlogResponse response);
+  public boolean handleMapping(BlogRequest request, BlogResponse response,
+                               String[] param);
 
-  /**
-   * Method description
-   *
-   *
-   * @param path
-   */
-  public void removeMapping(String path);
+  public String getUri( BlogRequest request, LinkBuilder linkBuilder, PermaObject object );
+
+
 }

@@ -9,7 +9,10 @@ package sonia.blog.app;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.app.BlogRequest;
+import sonia.blog.api.app.BlogResponse;
+import sonia.blog.api.mapping.MappingHandler;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -22,6 +25,7 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  *
@@ -52,8 +56,11 @@ public class BlogContextFilter implements Filter
           throws IOException, ServletException
   {
     BlogRequest request = new BlogRequest((HttpServletRequest) req);
+    BlogResponse response = new BlogResponse((HttpServletResponse) resp);
 
-    chain.doFilter(request, resp);
+    BlogContext.getInstance().getMappingHandler().handleMapping(request,
+            response);
+    chain.doFilter(request, response);
   }
 
   /**

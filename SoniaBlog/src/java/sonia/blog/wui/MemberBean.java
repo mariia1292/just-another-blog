@@ -58,7 +58,7 @@ public class MemberBean extends AbstractBean
       {
         member = em.merge(member);
         em.getTransaction().commit();
-        messageHandler.info("changeRoleSuccess");
+        getMessageHandler().info("changeRoleSuccess");
       }
       catch (Exception ex)
       {
@@ -68,7 +68,7 @@ public class MemberBean extends AbstractBean
         }
 
         logger.log(Level.SEVERE, null, ex);
-        messageHandler.error("changeRoleFailure");
+        getMessageHandler().error("changeRoleFailure");
       }
       finally
       {

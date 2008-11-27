@@ -56,7 +56,7 @@ public class ConfigBean extends AbstractBean
     {
       blog = em.merge(blog);
       em.getTransaction().commit();
-      messageHandler.info("unpdateConfigSuccess");
+      getMessageHandler().info("unpdateConfigSuccess");
     }
     catch (Exception ex)
     {
@@ -68,7 +68,7 @@ public class ConfigBean extends AbstractBean
       }
 
       logger.log(Level.SEVERE, null, ex);
-      messageHandler.error("unpdateConfigFailure");
+      getMessageHandler().error("unpdateConfigFailure");
     }
     finally
     {

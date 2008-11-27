@@ -11,18 +11,18 @@ package sonia.blog.app;
 
 import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.app.Constants;
+import sonia.blog.api.mapping.MappingHandler;
 import sonia.blog.authentication.DefaultLoginModule;
 import sonia.blog.link.DefaultLinkBuilder;
 import sonia.blog.macro.AttachmentMacro;
+import sonia.blog.macro.BlogsMacro;
 import sonia.blog.macro.GalleryMacro;
 import sonia.blog.macro.HelloWorldMacro;
 import sonia.blog.macro.SpoilerMacro;
-import sonia.blog.mapping.CategoryMapping;
-import sonia.blog.mapping.DateMapping;
-import sonia.blog.mapping.EntryMapping;
-import sonia.blog.mapping.ListMapping;
-import sonia.blog.mapping.SearchMapping;
-import sonia.blog.mapping.TagMapping;
+import sonia.blog.mapping.CategoryMappingEntry;
+import sonia.blog.mapping.DefaultMappingHandler;
+import sonia.blog.mapping.ListMappingEntry;
+import sonia.blog.mapping.TagMappingEntry;
 import sonia.blog.rss.RssServlet;
 import sonia.blog.search.DefaultSearchContext;
 import sonia.blog.search.IndexListener;
@@ -207,6 +207,7 @@ public class BlogContextListener implements ServletContextListener
     parser.putMacro("hello", new HelloWorldMacro());
     parser.putMacro("gallery", new GalleryMacro());
     parser.putMacro("spoiler", new SpoilerMacro());
+    parser.putMacro("blogs", new BlogsMacro());
 
     AttachmentMacro am = new AttachmentMacro();
 
@@ -223,18 +224,13 @@ public class BlogContextListener implements ServletContextListener
   private void initServices(BlogContext context)
   {
     ServiceRegistry registry = context.getPluginContext().getServiceRegistry();
-    ServiceReference mappingReference =
-      registry.registerService(Constants.SERVICE_MAPPING);
-    ListMapping listMapping = new ListMapping();
+    MappingHandler mappingHandler = new DefaultMappingHandler();
 
-    mappingReference.addImplementation(listMapping);
-    mappingReference.addImplementation(new EntryMapping());
-    mappingReference.addImplementation(new CategoryMapping());
-    mappingReference.addImplementation(new SearchMapping());
-    mappingReference.addImplementation(new TagMapping());
-    mappingReference.addImplementation(new DateMapping());
+    mappingHandler.addMappging("/list", new ListMappingEntry());
+    mappingHandler.addMappging("/tags", new TagMappingEntry());
+    mappingHandler.addMappging("/categories", new CategoryMappingEntry());
     registry.registerService(
-        Constants.SERVICE_DEFAULTMAPPING).addImplementation(listMapping);
+        Constants.SERVICE_MAPPINGHANDLER).addImplementation(mappingHandler);
     registry.registerService(Constants.SERVICE_SERVLET).addImplementation(
         new RssServlet());
     registry.registerService(Constants.SERVICE_CONTEXTLISTENER);

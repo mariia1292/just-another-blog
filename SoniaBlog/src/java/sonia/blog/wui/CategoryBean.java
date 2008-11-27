@@ -88,7 +88,7 @@ public class CategoryBean extends AbstractBean
       try
       {
         em.remove(em.merge(cat));
-        messageHandler.info("removeCategorySuccess");
+        getMessageHandler().info("removeCategorySuccess");
         em.getTransaction().commit();
       }
       catch (Exception ex)
@@ -100,7 +100,7 @@ public class CategoryBean extends AbstractBean
 
         logger.log(Level.SEVERE, null, ex);
         result = FAILURE;
-        messageHandler.error("categoryActionFailure");
+        getMessageHandler().error("categoryActionFailure");
       }
       finally
       {
@@ -110,7 +110,7 @@ public class CategoryBean extends AbstractBean
     else
     {
       result = FAILURE;
-      messageHandler.warn("categoryHasEntries");
+      getMessageHandler().warn("categoryHasEntries");
     }
 
     return result;
@@ -136,12 +136,12 @@ public class CategoryBean extends AbstractBean
       if (category.getId() != null)
       {
         em.merge(category);
-        messageHandler.info("updateCategorySuccess");
+        getMessageHandler().info("updateCategorySuccess");
       }
       else
       {
         em.persist(category);
-        messageHandler.info("createCategorySuccess");
+        getMessageHandler().info("createCategorySuccess");
       }
 
       em.getTransaction().commit();
@@ -154,7 +154,7 @@ public class CategoryBean extends AbstractBean
       }
 
       logger.log(Level.SEVERE, null, ex);
-      messageHandler.error("categoryActionFailure");
+      getMessageHandler().error("categoryActionFailure");
       result = FAILURE;
     }
     finally

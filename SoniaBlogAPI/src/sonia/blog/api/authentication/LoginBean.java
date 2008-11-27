@@ -48,11 +48,11 @@ public class LoginBean extends AbstractBean
       loginContext.login();
       authenticated = true;
       result = SUCCESS;
-      messageHandler.info("loginSuccess");
+      getMessageHandler().info("loginSuccess");
     }
     catch (LoginException ex)
     {
-      messageHandler.warn("loginFailure");
+      getMessageHandler().warn("loginFailure");
       logger.log(Level.WARNING, null, ex);
     }
 
@@ -84,7 +84,7 @@ public class LoginBean extends AbstractBean
       loginContext = null;
     }
 
-    messageHandler.info("logoutSuccess");
+    getMessageHandler().info("logoutSuccess");
 
     return SUCCESS;
   }

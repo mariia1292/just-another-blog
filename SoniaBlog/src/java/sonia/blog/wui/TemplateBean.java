@@ -55,7 +55,7 @@ public class TemplateBean extends AbstractBean
         blog.setTemplate(template.getPath());
         em.merge(blog);
         em.getTransaction().commit();
-        messageHandler.info("changeTemplateSuccess");
+        getMessageHandler().info("changeTemplateSuccess");
       }
       catch (Exception ex)
       {
@@ -65,7 +65,7 @@ public class TemplateBean extends AbstractBean
         }
 
         logger.log(Level.SEVERE, null, ex);
-        messageHandler.error("changeTemplateFailure");
+        getMessageHandler().error("changeTemplateFailure");
       }
       finally
       {

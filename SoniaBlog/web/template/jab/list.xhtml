@@ -24,7 +24,7 @@
         
         <h:form>
           
-          <ui:repeat value="#{BlogBean.entries}" var="Entry">
+          <ui:repeat value="#{BlogBean.pageEntries}" var="Entry">
             <h2>
               <blog:link value="#{Entry.title}" object="#{Entry}" />
             </h2>

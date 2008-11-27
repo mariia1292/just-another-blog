@@ -10,12 +10,15 @@ package sonia.blog.api.app;
 //~--- non-JDK imports --------------------------------------------------------
 
 import sonia.blog.api.authentication.LoginBean;
+import sonia.blog.api.mapping.MappingEntry;
 import sonia.blog.entity.Blog;
 import sonia.blog.entity.BlogMember;
 import sonia.blog.entity.Role;
 import sonia.blog.entity.User;
 
 //~--- JDK imports ------------------------------------------------------------
+
+import java.io.UnsupportedEncodingException;
 
 import java.security.Principal;
 
@@ -107,6 +110,17 @@ public class BlogRequest extends HttpServletRequestWrapper
     }
 
     return loginBean;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  public MappingEntry getMapping()
+  {
+    return mapping;
   }
 
   /**
@@ -302,6 +316,32 @@ public class BlogRequest extends HttpServletRequestWrapper
    * Method description
    *
    *
+   * @param enc
+   *
+   * @throws UnsupportedEncodingException
+   */
+  @Override
+  public void setCharacterEncoding(String enc)
+          throws UnsupportedEncodingException
+  {
+    // do nothing
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param mapping
+   */
+  public void setMapping(MappingEntry mapping)
+  {
+    this.mapping = mapping;
+  }
+
+  /**
+   * Method description
+   *
+   *
    * @param redirect
    */
   public void setRedirect(String redirect)
@@ -324,6 +364,9 @@ public class BlogRequest extends HttpServletRequestWrapper
 
   /** Field description */
   private Blog blog;
+
+  /** Field description */
+  private MappingEntry mapping;
 
   /** Field description */
   private BlogMember member;

@@ -147,16 +147,13 @@
 
   <lifecycle>
     <phase-listener>
-            sonia.blog.app.AccessPhaseListener
-    </phase-listener>
-    <phase-listener>
-            sonia.blog.app.BlogContextPhaseListener
+      sonia.blog.app.BlogContextPhaseListener
     </phase-listener>
   </lifecycle>
   
   <application>
     <view-handler>
-            com.sun.facelets.FaceletViewHandler
+      sonia.blog.wui.resolver.BlogViewHandler
     </view-handler>
     <resource-bundle>
       <base-name>sonia.blog.resources.label</base-name>

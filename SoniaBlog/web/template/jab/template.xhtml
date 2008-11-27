@@ -33,9 +33,13 @@
             </a>
             <span class="hideme">.</span>
             <!-- end: skip link navigation -->
-            <span>
+            <!--<span>
               <a href="#">Login</a> | <a href="#">Contact</a> | <a href="#">Imprint</a>
-            </span> 
+            </span>-->
+          </div>
+          <div id="title">
+            <h1><h:outputText value="#{BlogBean.blog.title}" rendered="#{BlogBean.installed}" /></h1>
+            <span><h:outputText value="#{BlogBean.blog.description}" rendered="#{BlogBean.installed}" /></span>
           </div>
         </div>
         

@@ -46,11 +46,11 @@
   </filter>
   <filter-mapping>
     <filter-name>MyFacesExtensionFilter</filter-name>
-    <url-pattern>/blog/*</url-pattern>
+    <url-pattern>/faces/myFacesExtensionResource/*</url-pattern>
   </filter-mapping>
   <filter-mapping>
     <filter-name>MyFacesExtensionFilter</filter-name>
-    <url-pattern>/faces/myFacesExtensionResource/*</url-pattern>
+    <url-pattern>*.jab</url-pattern>
   </filter-mapping>
   <filter-mapping>
     <filter-name>BlogContextFilter</filter-name>
@@ -77,21 +77,17 @@
     <servlet-name>ResourceServlet</servlet-name>
     <servlet-class>sonia.blog.wui.servlet.ResourceServlet</servlet-class>
   </servlet>
-    <servlet>
-        <servlet-name>TestServlet</servlet-name>
-        <servlet-class>sonia.blog.wui.servlet.TestServlet</servlet-class>
-    </servlet>
-    <servlet-mapping>
+  <servlet>
+    <servlet-name>TestServlet</servlet-name>
+    <servlet-class>sonia.blog.wui.servlet.TestServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
     <servlet-name>PluginServlet</servlet-name>
     <url-pattern>/servlet/*</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
     <servlet-name>Faces Servlet</servlet-name>
-    <url-pattern>/blog/*</url-pattern>
-  </servlet-mapping>
-  <servlet-mapping>
-    <servlet-name>Faces Servlet</servlet-name>
-    <url-pattern>*.jsf</url-pattern>
+    <url-pattern>*.jab</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
     <servlet-name>AttachmentServlet</servlet-name>
@@ -101,11 +97,11 @@
     <servlet-name>ResourceServlet</servlet-name>
     <url-pattern>/resource/*</url-pattern>
   </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>TestServlet</servlet-name>
-        <url-pattern>/test</url-pattern>
-    </servlet-mapping>
-    <session-config>
+  <servlet-mapping>
+    <servlet-name>TestServlet</servlet-name>
+    <url-pattern>/test</url-pattern>
+  </servlet-mapping>
+  <session-config>
     <session-timeout>
             30
     </session-timeout>
