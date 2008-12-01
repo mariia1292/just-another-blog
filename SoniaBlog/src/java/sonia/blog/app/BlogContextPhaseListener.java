@@ -7,12 +7,6 @@
 
 package sonia.blog.app;
 
-//~--- non-JDK imports --------------------------------------------------------
-
-import sonia.blog.api.app.BlogContext;
-import sonia.blog.api.app.BlogRequest;
-import sonia.blog.api.app.BlogResponse;
-
 //~--- JDK imports ------------------------------------------------------------
 
 import java.util.Iterator;
@@ -61,17 +55,6 @@ public class BlogContextPhaseListener implements PhaseListener
       FacesContext context = event.getFacesContext();
 
       applyMessages(context);
-
-      if (BlogContext.getInstance().isInstalled())
-      {
-        BlogRequest request =
-          (BlogRequest) context.getExternalContext().getRequest();
-        BlogResponse response =
-          (BlogResponse) context.getExternalContext().getResponse();
-
-        BlogContext.getInstance().getMappingHandler().handleMapping(request,
-                response);
-      }
     }
   }
 

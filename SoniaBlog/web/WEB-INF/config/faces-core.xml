@@ -1,0 +1,103 @@
+<?xml version='1.0' encoding='UTF-8'?>
+
+<!-- =========== FULL CONFIGURATION FILE ================================== -->
+<faces-config version="1.2" 
+    xmlns="http://java.sun.com/xml/ns/javaee" 
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_1_2.xsd">
+
+  <converter>
+    <converter-id>converter.category</converter-id>
+    <converter-class>sonia.blog.wui.converter.CategoryConverter</converter-class>
+  </converter>
+
+  <validator>
+    <validator-id>validator.url</validator-id>
+    <validator-class>sonia.blog.api.jsf.validator.URLValidator</validator-class>
+  </validator>
+
+  <validator>
+    <validator-id>validator.mail</validator-id>
+    <validator-class>sonia.blog.api.jsf.validator.MailValidator</validator-class>
+  </validator>
+
+  <lifecycle>
+    <phase-listener>
+      sonia.blog.app.BlogContextPhaseListener
+    </phase-listener>
+  </lifecycle>
+  
+  <application>
+    <view-handler>
+      sonia.blog.wui.resolver.BlogViewHandler
+    </view-handler>
+    <resource-bundle>
+      <base-name>sonia.blog.resources.label</base-name>
+      <var>label</var>
+    </resource-bundle>
+    <resource-bundle>
+      <base-name>sonia.blog.resources.message</base-name>
+      <var>message</var>
+    </resource-bundle>
+  </application>
+
+  <component>
+    <display-name>content</display-name>
+    <component-type>sonia.blog.content</component-type>
+    <component-class>sonia.blog.api.jsf.content.ContentComponent</component-class>
+    <component-extension>
+      <renderer-type>sonia.blog.content.renderer</renderer-type>
+    </component-extension>
+  </component>
+  
+  <component>
+    <display-name>link</display-name>
+    <component-type>sonia.blog.link</component-type>
+    <component-class>sonia.blog.api.jsf.link.LinkComponent</component-class>
+    <component-extension>
+      <renderer-type>sonia.blog.link.renderer</renderer-type>
+    </component-extension>
+  </component>
+  
+  <component>
+    <display-name>resource</display-name>
+    <component-type>sonia.blog.resource</component-type>
+    <component-class>sonia.blog.api.jsf.resource.ResourceComponent</component-class>
+    <component-extension>
+      <renderer-type>sonia.blog.resource.renderer</renderer-type>
+    </component-extension>
+  </component>
+  
+  <component>
+    <display-name>search</display-name>
+    <component-type>sonia.blog.search</component-type>
+    <component-class>sonia.blog.api.jsf.search.SearchComponent</component-class>
+    <component-extension>
+      <renderer-type>sonia.blog.search.renderer</renderer-type>
+    </component-extension>
+  </component>
+  
+  <render-kit>
+    <renderer>
+      <component-family>sonia.blog.link</component-family>
+      <renderer-type>sonia.blog.link.renderer</renderer-type>
+      <renderer-class>sonia.blog.api.jsf.link.LinkRenderer</renderer-class>
+    </renderer>
+    <renderer>
+      <component-family>sonia.blog.resource</component-family>
+      <renderer-type>sonia.blog.resource.renderer</renderer-type>
+      <renderer-class>sonia.blog.api.jsf.resource.ResourceRenderer</renderer-class>
+    </renderer>
+    <renderer>
+      <component-family>sonia.blog.search</component-family>
+      <renderer-type>sonia.blog.search.renderer</renderer-type>
+      <renderer-class>sonia.blog.api.jsf.search.SearchRenderer</renderer-class>
+    </renderer>
+    <renderer>
+      <component-family>sonia.blog.content</component-family>
+      <renderer-type>sonia.blog.content.renderer</renderer-type>
+      <renderer-class>sonia.blog.api.jsf.content.ContentRenderer</renderer-class>
+    </renderer>
+  </render-kit>
+    
+</faces-config>

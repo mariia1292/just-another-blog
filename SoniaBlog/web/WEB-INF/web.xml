@@ -1,112 +1,139 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app version="2.5" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
+
+  <!-- jsf parameter -->
+
   <context-param>
     <param-name>com.sun.faces.verifyObjects</param-name>
     <param-value>true</param-value>
   </context-param>
+  
   <context-param>
     <param-name>com.sun.faces.validateXml</param-name>
     <param-value>true</param-value>
   </context-param>
+  
+  <context-param>
+    <param-name>javax.faces.CONFIG_FILES</param-name>
+    <param-value>/WEB-INF/config/faces-core.xml,/WEB-INF/config/faces-beans.xml,/WEB-INF/config/faces-navigation.xml</param-value>
+  </context-param>
+  
   <context-param>
     <param-name>javax.faces.DEFAULT_SUFFIX</param-name>
     <param-value>.xhtml</param-value>
   </context-param>
+
+  <!-- facelets parameter -->
+
   <context-param>
     <param-name>facelets.DEVELOPMENT</param-name>
     <param-value>true</param-value>
   </context-param>
+  
   <context-param>
     <param-name>facelets.SKIP_COMMENTS</param-name>
     <param-value>false</param-value>
   </context-param>
+  
   <context-param>
     <param-name>facelets.LIBRARIES</param-name>
-    <param-value>/WEB-INF/blog.taglib.xml</param-value>
+    <param-value>/WEB-INF/config/blog.taglib.xml</param-value>
   </context-param>
+  
   <context-param>
     <param-name>facelets.RESOURCE_RESOLVER</param-name>
     <param-value>sonia.blog.wui.resolver.ResourceResolver</param-value>
   </context-param>
+
+  <!-- blog parameter -->
+
   <context-param>
     <param-name>sonia.config.ConfigFile</param-name>
     <param-value>/WEB-INF/config/main-config.xml</param-value>
   </context-param>
+  
   <context-param>
     <param-name>sonia.config.AccessFile</param-name>
     <param-value>/WEB-INF/config/access.xml</param-value>
   </context-param>
+
+  <!-- BlogContextFilter -->
+
   <filter>
     <filter-name>BlogContextFilter</filter-name>
     <filter-class>sonia.blog.app.BlogContextFilter</filter-class>
   </filter>
-  <filter>
-    <filter-name>MyFacesExtensionFilter</filter-name>
-    <filter-class>org.apache.myfaces.webapp.filter.ExtensionsFilter</filter-class>
-  </filter>
-  <filter-mapping>
-    <filter-name>MyFacesExtensionFilter</filter-name>
-    <url-pattern>/faces/myFacesExtensionResource/*</url-pattern>
-  </filter-mapping>
-  <filter-mapping>
-    <filter-name>MyFacesExtensionFilter</filter-name>
-    <url-pattern>*.jab</url-pattern>
-  </filter-mapping>
+
   <filter-mapping>
     <filter-name>BlogContextFilter</filter-name>
     <url-pattern>/*</url-pattern>
   </filter-mapping>
+
+  <!-- MyFacesExtensionFilter -->
+
+  <filter>
+    <filter-name>MyFacesExtensionFilter</filter-name>
+    <filter-class>org.apache.myfaces.webapp.filter.ExtensionsFilter</filter-class>
+  </filter>
+
+  <filter-mapping>
+    <filter-name>MyFacesExtensionFilter</filter-name>
+    <url-pattern>/faces/myFacesExtensionResource/*</url-pattern>
+  </filter-mapping>
+  
+  <filter-mapping>
+    <filter-name>MyFacesExtensionFilter</filter-name>
+    <url-pattern>*.jab</url-pattern>
+  </filter-mapping>
+  
+  
   <listener>
     <description>ServletContextListener</description>
     <listener-class>sonia.blog.app.BlogContextListener</listener-class>
   </listener>
+
+  <!-- Faces Servlet -->
+
   <servlet>
     <servlet-name>Faces Servlet</servlet-name>
     <servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
     <load-on-startup>1</load-on-startup>
   </servlet>
-  <servlet>
-    <servlet-name>PluginServlet</servlet-name>
-    <servlet-class>sonia.blog.plugin.PluginServlet</servlet-class>
-  </servlet>
-  <!--<servlet>
-    <servlet-name>AttachmentServlet</servlet-name>
-    <servlet-class>sonia.blog.wui.servlet.AttachmentServlet</servlet-class>
-  </servlet>-->
-  <servlet>
-    <servlet-name>ResourceServlet</servlet-name>
-    <servlet-class>sonia.blog.wui.servlet.ResourceServlet</servlet-class>
-  </servlet>
-  <servlet>
-    <servlet-name>TestServlet</servlet-name>
-    <servlet-class>sonia.blog.wui.servlet.TestServlet</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>PluginServlet</servlet-name>
-    <url-pattern>/servlet/*</url-pattern>
-  </servlet-mapping>
+
   <servlet-mapping>
     <servlet-name>Faces Servlet</servlet-name>
     <url-pattern>*.jab</url-pattern>
   </servlet-mapping>
-  <!--<servlet-mapping>
-    <servlet-name>AttachmentServlet</servlet-name>
-    <url-pattern>/attachment/*</url-pattern>
-  </servlet-mapping>-->
+
+  <!-- TODO: Remove PluginServlet -->
+
+  <servlet>
+    <servlet-name>PluginServlet</servlet-name>
+    <servlet-class>sonia.blog.plugin.PluginServlet</servlet-class>
+  </servlet>
+
   <servlet-mapping>
-    <servlet-name>ResourceServlet</servlet-name>
-    <url-pattern>/resource/*</url-pattern>
+    <servlet-name>PluginServlet</servlet-name>
+    <url-pattern>/servlet/*</url-pattern>
   </servlet-mapping>
-  <servlet-mapping>
-    <servlet-name>TestServlet</servlet-name>
-    <url-pattern>/test</url-pattern>
-  </servlet-mapping>
+
+  <jsp-config>
+    <taglib>
+      <taglib-uri>http://jab.nitilon.org/blog/</taglib-uri>
+      <taglib-location>/WEB-INF/config/blog.tld</taglib-location>
+    </taglib>
+  </jsp-config>
+
+  <!-- core config -->
+
   <session-config>
     <session-timeout>
             30
     </session-timeout>
   </session-config>
+  
   <welcome-file-list>
     <welcome-file>forward.jsp</welcome-file>
   </welcome-file-list>
+  
 </web-app>

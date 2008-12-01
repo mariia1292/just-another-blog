@@ -24,8 +24,9 @@ import sonia.blog.mapping.CategoryMappingEntry;
 import sonia.blog.mapping.DefaultMappingHandler;
 import sonia.blog.mapping.ListMappingEntry;
 import sonia.blog.mapping.RandomMappingEntry;
+import sonia.blog.mapping.ResourceMappingEntry;
+import sonia.blog.mapping.RssMappingEntry;
 import sonia.blog.mapping.TagMappingEntry;
-import sonia.blog.rss.RssServlet;
 import sonia.blog.search.DefaultSearchContext;
 import sonia.blog.search.IndexListener;
 
@@ -233,10 +234,10 @@ public class BlogContextListener implements ServletContextListener
     mappingHandler.addMappging("/categories", new CategoryMappingEntry());
     mappingHandler.addMappging("/random.jab", new RandomMappingEntry());
     mappingHandler.addMappging("/attachment", new AttachmentMappingEntry());
+    mappingHandler.addMappging("/resource", new ResourceMappingEntry());
+    mappingHandler.addMappging("/feed", new RssMappingEntry());
     registry.registerService(
         Constants.SERVICE_MAPPINGHANDLER).addImplementation(mappingHandler);
-    registry.registerService(Constants.SERVICE_SERVLET).addImplementation(
-        new RssServlet());
     registry.registerService(Constants.SERVICE_CONTEXTLISTENER);
     registry.registerService(Constants.SERVCIE_ENCRYPTION).addImplementation(
         new MD5Encryption());

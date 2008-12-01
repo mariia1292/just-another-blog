@@ -60,7 +60,4 @@ public interface Constants
 
   /** Field description */
   public static final String SERVICE_SEARCHCONTEXT = "/app/searchContext";
-
-  /** Field description */
-  public static final String SERVICE_SERVLET = "/servlet";
 }
