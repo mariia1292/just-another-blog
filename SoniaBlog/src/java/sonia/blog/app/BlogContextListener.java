@@ -19,9 +19,11 @@ import sonia.blog.macro.BlogsMacro;
 import sonia.blog.macro.GalleryMacro;
 import sonia.blog.macro.HelloWorldMacro;
 import sonia.blog.macro.SpoilerMacro;
+import sonia.blog.mapping.AttachmentMappingEntry;
 import sonia.blog.mapping.CategoryMappingEntry;
 import sonia.blog.mapping.DefaultMappingHandler;
 import sonia.blog.mapping.ListMappingEntry;
+import sonia.blog.mapping.RandomMappingEntry;
 import sonia.blog.mapping.TagMappingEntry;
 import sonia.blog.rss.RssServlet;
 import sonia.blog.search.DefaultSearchContext;
@@ -229,6 +231,8 @@ public class BlogContextListener implements ServletContextListener
     mappingHandler.addMappging("/list", new ListMappingEntry());
     mappingHandler.addMappging("/tags", new TagMappingEntry());
     mappingHandler.addMappging("/categories", new CategoryMappingEntry());
+    mappingHandler.addMappging("/random.jab", new RandomMappingEntry());
+    mappingHandler.addMappging("/attachment", new AttachmentMappingEntry());
     registry.registerService(
         Constants.SERVICE_MAPPINGHANDLER).addImplementation(mappingHandler);
     registry.registerService(Constants.SERVICE_SERVLET).addImplementation(

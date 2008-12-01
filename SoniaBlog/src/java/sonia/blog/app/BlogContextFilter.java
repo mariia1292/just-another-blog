@@ -58,9 +58,11 @@ public class BlogContextFilter implements Filter
     BlogRequest request = new BlogRequest((HttpServletRequest) req);
     BlogResponse response = new BlogResponse((HttpServletResponse) resp);
 
-    BlogContext.getInstance().getMappingHandler().handleMapping(request,
-            response);
-    chain.doFilter(request, response);
+    if (BlogContext.getInstance().getMappingHandler().handleMapping(request,
+            response))
+    {
+      chain.doFilter(request, response);
+    }
   }
 
   /**

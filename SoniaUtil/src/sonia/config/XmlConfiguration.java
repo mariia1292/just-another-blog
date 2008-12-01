@@ -54,9 +54,24 @@ public class XmlConfiguration extends StringBasedConfiguration
   public XmlConfiguration()
   {
     this.properties = new HashMap<String, String[]>();
+    this.listeners = new ArrayList<ConfigurationListener>();
   }
 
   //~--- methods --------------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   * @param listener
+   */
+  public void addListener(ConfigurationListener listener)
+  {
+    synchronized (listeners)
+    {
+      listeners.add(listener);
+    }
+  }
 
   /**
    * Method description
@@ -141,6 +156,21 @@ public class XmlConfiguration extends StringBasedConfiguration
   public void remove(String key)
   {
     properties.remove(key);
+    fireConfigChangedEvent(key);
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param listener
+   */
+  public void removeListener(ConfigurationListener listener)
+  {
+    synchronized (listeners)
+    {
+      listeners.remove(listener);
+    }
   }
 
   /**
@@ -264,6 +294,7 @@ public class XmlConfiguration extends StringBasedConfiguration
     if (!isBlank(value))
     {
       properties.put(key, new String[] { value });
+      fireConfigChangedEvent(key);
     }
   }
 
@@ -285,9 +316,29 @@ public class XmlConfiguration extends StringBasedConfiguration
     }
 
     properties.put(key, value);
+    fireConfigChangedEvent(key);
+  }
+
+  //~--- methods --------------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   * @param key
+   */
+  private void fireConfigChangedEvent(String key)
+  {
+    for (ConfigurationListener listener : listeners)
+    {
+      listener.configChanged(this, key);
+    }
   }
 
   //~--- fields ---------------------------------------------------------------
+
+  /** Field description */
+  private final List<ConfigurationListener> listeners;
 
   /** Field description */
   private Map<String, String[]> properties;

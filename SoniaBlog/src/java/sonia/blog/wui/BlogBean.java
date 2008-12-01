@@ -265,6 +265,12 @@ public class BlogBean extends AbstractBean
     List<NavigationMenuItem> navigation = new ArrayList<NavigationMenuItem>();
     ResourceBundle bundle = getResourceBundle("label");
     BlogRequest request = getRequest();
+    LinkBuilder linkBuilder = BlogContext.getInstance().getLinkBuilder();
+    NavigationMenuItem random = new NavigationMenuItem();
+
+    random.setLabel(bundle.getString("random"));
+    random.setExternalLink(linkBuilder.buildLink(request, "/random.jab"));
+    navigation.add(random);
 
     if (request.getUser() == null)
     {
@@ -344,6 +350,7 @@ public class BlogBean extends AbstractBean
   public String getNextUri()
   {
     String nextUri = null;
+
     return nextUri;
   }
 
@@ -412,6 +419,7 @@ public class BlogBean extends AbstractBean
   public String getPrevUri()
   {
     String prevUri = null;
+
     return prevUri;
   }
 
@@ -515,6 +523,7 @@ public class BlogBean extends AbstractBean
     return BlogContext.getInstance().isInstalled();
   }
 
+  //~--- set methods ----------------------------------------------------------
 
   /**
    * Method description
@@ -548,7 +557,7 @@ public class BlogBean extends AbstractBean
   {
     this.entry = entry;
   }
-  
+
   /**
    * Method description
    *

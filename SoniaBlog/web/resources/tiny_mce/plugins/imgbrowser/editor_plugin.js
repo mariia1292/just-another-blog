@@ -20,7 +20,7 @@
 		 */
 		init : function(ed, url) {
                         var id = ed.getParam( "entry_id" );
-                        var address = url + '/dialog.jsf';
+                        var address = url + '/dialog.jab';
                         if ( id != null && id != "" )
                         {
                           address += "?id=" + id;

@@ -13,7 +13,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Properties;
 import java.util.Set;
 
@@ -32,6 +34,7 @@ public class PropertiesConfiguration extends StringBasedConfiguration
   public PropertiesConfiguration()
   {
     this.properties = new Properties();
+    this.listeners = new ArrayList<ConfigurationListener>();
   }
 
   /**
@@ -43,6 +46,7 @@ public class PropertiesConfiguration extends StringBasedConfiguration
   public PropertiesConfiguration(Properties properties)
   {
     this.properties = properties;
+    this.listeners = new ArrayList<ConfigurationListener>();
   }
 
   /**
@@ -55,6 +59,7 @@ public class PropertiesConfiguration extends StringBasedConfiguration
   {
     this.delimeter = delimeter;
     this.properties = new Properties();
+    this.listeners = new ArrayList<ConfigurationListener>();
   }
 
   /**
@@ -68,9 +73,24 @@ public class PropertiesConfiguration extends StringBasedConfiguration
   {
     this.properties = properties;
     this.delimeter = delimeter;
+    this.listeners = new ArrayList<ConfigurationListener>();
   }
 
   //~--- methods --------------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   * @param listener
+   */
+  public void addListener(ConfigurationListener listener)
+  {
+    synchronized (listeners)
+    {
+      listeners.add(listener);
+    }
+  }
 
   /**
    * Method description
@@ -125,6 +145,21 @@ public class PropertiesConfiguration extends StringBasedConfiguration
   public void remove(String key)
   {
     properties.remove(key);
+    fireConfigChangedEvent(key);
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param listener
+   */
+  public void removeListener(ConfigurationListener listener)
+  {
+    synchronized (listeners)
+    {
+      listeners.remove(listener);
+    }
   }
 
   /**
@@ -202,6 +237,7 @@ public class PropertiesConfiguration extends StringBasedConfiguration
     if (!isBlank(value))
     {
       properties.setProperty(key, value);
+      fireConfigChangedEvent(key);
     }
   }
 
@@ -235,10 +271,30 @@ public class PropertiesConfiguration extends StringBasedConfiguration
     if (!isBlank(value))
     {
       properties.setProperty(key, value);
+      fireConfigChangedEvent(key);
+    }
+  }
+
+  //~--- methods --------------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   * @param key
+   */
+  private void fireConfigChangedEvent(String key)
+  {
+    for (ConfigurationListener listener : listeners)
+    {
+      listener.configChanged(this, key);
     }
   }
 
   //~--- fields ---------------------------------------------------------------
+
+  /** Field description */
+  private final List<ConfigurationListener> listeners;
 
   /** Field description */
   protected String delimeter = ";";

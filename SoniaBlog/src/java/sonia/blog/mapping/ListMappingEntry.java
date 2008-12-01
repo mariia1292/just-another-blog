@@ -14,7 +14,6 @@ import sonia.blog.api.app.BlogRequest;
 import sonia.blog.api.app.BlogResponse;
 import sonia.blog.entity.Blog;
 import sonia.blog.entity.Entry;
-import sonia.blog.entity.PermaObject;
 import sonia.blog.wui.BlogBean;
 
 //~--- JDK imports ------------------------------------------------------------

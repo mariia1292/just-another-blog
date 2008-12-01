@@ -18,9 +18,25 @@ public interface ModifyableConfiguration extends Configuration
    * Method description
    *
    *
+   * @param listener
+   */
+  public void addListener(ConfigurationListener listener);
+
+  /**
+   * Method description
+   *
+   *
    * @param key
    */
   public void remove(String key);
+
+  /**
+   * Method description
+   *
+   *
+   * @param listener
+   */
+  public void removeListener(ConfigurationListener listener);
 
   //~--- set methods ----------------------------------------------------------
 

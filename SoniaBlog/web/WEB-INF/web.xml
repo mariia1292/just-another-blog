@@ -69,10 +69,10 @@
     <servlet-name>PluginServlet</servlet-name>
     <servlet-class>sonia.blog.plugin.PluginServlet</servlet-class>
   </servlet>
-  <servlet>
+  <!--<servlet>
     <servlet-name>AttachmentServlet</servlet-name>
     <servlet-class>sonia.blog.wui.servlet.AttachmentServlet</servlet-class>
-  </servlet>
+  </servlet>-->
   <servlet>
     <servlet-name>ResourceServlet</servlet-name>
     <servlet-class>sonia.blog.wui.servlet.ResourceServlet</servlet-class>
@@ -89,10 +89,10 @@
     <servlet-name>Faces Servlet</servlet-name>
     <url-pattern>*.jab</url-pattern>
   </servlet-mapping>
-  <servlet-mapping>
+  <!--<servlet-mapping>
     <servlet-name>AttachmentServlet</servlet-name>
     <url-pattern>/attachment/*</url-pattern>
-  </servlet-mapping>
+  </servlet-mapping>-->
   <servlet-mapping>
     <servlet-name>ResourceServlet</servlet-name>
     <url-pattern>/resource/*</url-pattern>
