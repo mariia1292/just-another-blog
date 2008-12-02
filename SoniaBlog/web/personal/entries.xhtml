@@ -95,7 +95,7 @@
             </h:panelGroup>
             
             <h:outputLabel value="#{label.attachments}" />
-            <h:panelGroup>
+            <h:panelGroup layout="block" styleClass="attachments">
               <h:dataTable styleClass="full" value="#{EntryBean.attachments}" var="Attachment">
                 <h:column>
                   <f:facet name="header">
@@ -129,7 +129,9 @@
                   <h:commandLink value="#{label.remove}" actionListener="#{EntryBean.removeAttachment}" />
                 </h:column>
               </h:dataTable>
-              <t:inputFileUpload value="#{EntryBean.uploadedFile}" />
+              <t:inputFileUpload value="#{EntryBean.uploadedFile}" /><br />
+              <h:selectBooleanCheckbox id="unzip" value="#{EntryBean.unzipFiles}" />
+              <h:outputLabel for="unzip" value="#{label.unzipFiles}" /><br />
               <h:commandButton value="#{label.upload}" action="#{EntryBean.upload}" />
             </h:panelGroup>
             

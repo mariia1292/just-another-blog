@@ -31,10 +31,14 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+import java.net.URLConnection;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Level;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 
 import javax.faces.event.ActionEvent;
 import javax.faces.model.DataModel;
@@ -305,76 +309,81 @@ public class EntryBean extends AbstractBean
       saveDraft();
     }
 
-    System.out.println("UPLOAD");
-
-    Attachment attachment = new Attachment();
-
-    attachment.setEntry(entry);
-    attachment.setMimeType(uploadedFile.getContentType());
-    attachment.setSize(uploadedFile.getSize());
-    attachment.setName(uploadedFile.getName());
-    System.out.println("ATTACHMENT CREATED");
-
-    EntityManager em = BlogContext.getInstance().getEntityManager();
-
-    em.getTransaction().begin();
-
-    InputStream in = null;
-    OutputStream out = null;
-
-    try
+    if (unzipFiles && uploadedFile.getName().endsWith(".zip"))
     {
-      in = uploadedFile.getInputStream();
-
-      File dir = new File(directory, "" + entry.getId());
-
-      if (!dir.exists())
-      {
-        dir.mkdirs();
-      }
-
-      System.out.println("FILE: " + dir.getPath());
-
-      File file = new File(dir, "" + System.currentTimeMillis());
-
-      out = new FileOutputStream(file);
-      Util.copy(in, out);
-
-      String path = file.getPath().substring(directory.getPath().length());
-
-      attachment.setFilePath(path);
-      em.persist(attachment);
-      em.getTransaction().commit();
+      result = unzip();
     }
-    catch (Exception ex)
+    else
     {
-      if (em.getTransaction().isActive())
-      {
-        em.getTransaction().rollback();
-      }
+      Attachment attachment = new Attachment();
 
-      logger.log(Level.SEVERE, null, ex);
-      result = FAILURE;
-    }
-    finally
-    {
-      em.close();
+      attachment.setEntry(entry);
+      attachment.setMimeType(uploadedFile.getContentType());
+      attachment.setSize(uploadedFile.getSize());
+      attachment.setName(uploadedFile.getName());
+      System.out.println("ATTACHMENT CREATED");
+
+      EntityManager em = BlogContext.getInstance().getEntityManager();
+
+      em.getTransaction().begin();
+
+      InputStream in = null;
+      OutputStream out = null;
 
       try
       {
-        if (in != null)
+        in = uploadedFile.getInputStream();
+
+        File dir = new File(directory, "" + entry.getId());
+
+        if (!dir.exists())
         {
-          in.close();
+          dir.mkdirs();
         }
 
-        if (out != null)
-        {
-          out.close();
-        }
+        System.out.println("FILE: " + dir.getPath());
+
+        File file = new File(dir, "" + System.currentTimeMillis());
+
+        out = new FileOutputStream(file);
+        Util.copy(in, out);
+
+        String path = file.getPath().substring(directory.getPath().length());
+
+        attachment.setFilePath(path);
+        em.persist(attachment);
+        em.getTransaction().commit();
       }
-      catch (IOException ex)
+      catch (Exception ex)
       {
+        if (em.getTransaction().isActive())
+        {
+          em.getTransaction().rollback();
+        }
+
         logger.log(Level.SEVERE, null, ex);
+        result = FAILURE;
+      }
+      finally
+      {
+        em.close();
+
+        try
+        {
+          if (in != null)
+          {
+            in.close();
+          }
+
+          if (out != null)
+          {
+            out.close();
+          }
+        }
+        catch (IOException ex)
+        {
+          logger.log(Level.SEVERE, null, ex);
+        }
       }
     }
 
@@ -543,6 +552,17 @@ public class EntryBean extends AbstractBean
     return uploadedFile;
   }
 
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  public boolean isUnzipFiles()
+  {
+    return unzipFiles;
+  }
+
   //~--- set methods ----------------------------------------------------------
 
   /**
@@ -565,6 +585,17 @@ public class EntryBean extends AbstractBean
   public void setTagString(String tagString)
   {
     this.tagString = tagString;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param unzipFiles
+   */
+  public void setUnzipFiles(boolean unzipFiles)
+  {
+    this.unzipFiles = unzipFiles;
   }
 
   /**
@@ -661,6 +692,100 @@ public class EntryBean extends AbstractBean
     entry.setTags(tags);
   }
 
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  private String unzip()
+  {
+    InputStream in = null;
+    String result = SUCCESS;
+
+    try
+    {
+      in = uploadedFile.getInputStream();
+
+      if (in != null)
+      {
+        EntityManager em = BlogContext.getInstance().getEntityManager();
+        ZipInputStream zis = new ZipInputStream(in);
+        ZipEntry ze = zis.getNextEntry();
+        File dir = new File(directory, "" + entry.getId());
+
+        if (!dir.exists())
+        {
+          dir.mkdirs();
+        }
+
+        while (ze != null)
+        {
+          if (!ze.isDirectory())
+          {
+            try
+            {
+              em.getTransaction().begin();
+
+              File file = new File(dir, "" + System.currentTimeMillis());
+
+              Util.copy(zis, new FileOutputStream(file));
+
+              String name = ze.getName();
+              Attachment attachment = new Attachment();
+              String path =
+                file.getPath().substring(directory.getPath().length());
+
+              attachment.setEntry(entry);
+              attachment.setFilePath(path);
+              attachment.setMimeType(
+                  URLConnection.getFileNameMap().getContentTypeFor(name));
+              attachment.setName(name);
+              attachment.setSize(file.length());
+              em.persist(attachment);
+              em.getTransaction().commit();
+            }
+            catch (IOException ex)
+            {
+              if (em.getTransaction().isActive())
+              {
+                em.getTransaction().rollback();
+              }
+
+              logger.log(Level.SEVERE, null, ex);
+            }
+          }
+
+          ze = zis.getNextEntry();
+        }
+      }
+      else
+      {
+        result = FAILURE;
+      }
+    }
+    catch (IOException ex)
+    {
+      logger.log(Level.SEVERE, null, ex);
+    }
+    finally
+    {
+      try
+      {
+        if (in != null)
+        {
+          in.close();
+        }
+      }
+      catch (IOException ex)
+      {
+        logger.log(Level.SEVERE, null, ex);
+      }
+    }
+
+    return result;
+  }
+
   //~--- fields ---------------------------------------------------------------
 
   /** Field description */
@@ -677,6 +802,9 @@ public class EntryBean extends AbstractBean
 
   /** Field description */
   private String tagString;
+
+  /** Field description */
+  private boolean unzipFiles = false;
 
   /** Field description */
   private UploadedFile uploadedFile;

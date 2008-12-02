@@ -235,7 +235,7 @@ public class BlogContextListener implements ServletContextListener
     mappingHandler.addMappging("/categories", new CategoryMappingEntry());
     mappingHandler.addMappging("/random.jab", new RandomMappingEntry());
     mappingHandler.addMappging("/attachment", new AttachmentMappingEntry());
-    mappingHandler.addMappging("/resource", new ResourceMappingEntry());
+    mappingHandler.addMappging("/resource/", new ResourceMappingEntry());
     mappingHandler.addMappging("/feed", new FeedMappingEntry());
     mappingHandler.addMappging("/search.jab", new SearchMappingEntry());
     registry.registerService(
