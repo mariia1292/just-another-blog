@@ -11,6 +11,7 @@ package sonia.blog.api.jsf.search;
 
 import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.app.BlogRequest;
+import sonia.blog.api.link.LinkBuilder;
 
 import sonia.jsf.base.BaseRenderer;
 
@@ -104,9 +105,11 @@ public class SearchRenderer extends BaseRenderer
       (BlogRequest) context.getExternalContext().getRequest();
     boolean link = (searchComponent.getType() != null)
                    && searchComponent.getType().equals("link");
+    LinkBuilder linkBuilder = BlogContext.getInstance().getLinkBuilder();
+    String searchUri = linkBuilder.buildLink(request, "/search.jab");
 
     writer.startElement("form", searchComponent);
-    writer.writeAttribute("action", "#13", null);
+    writer.writeAttribute("action", searchUri, null);
     writer.writeAttribute("method", "get", null);
 
     if (searchComponent.getStyle() != null)
@@ -124,14 +127,9 @@ public class SearchRenderer extends BaseRenderer
       writer.writeAttribute("target", searchComponent.getTarget(), null);
     }
 
-    String uri = BlogContext.getInstance().getLinkBuilder().buildLink(request,
-                   "/blog/search/");
-
-    writer.writeAttribute("onsubmit",
-                          "this.action = '" + uri
-                          + "' + this.childNodes[0].value", null);
     writer.startElement("input", searchComponent);
     writer.writeAttribute("type", "text", null);
+    writer.writeAttribute("name", "search", null);
 
     String value = searchComponent.getValue();
 

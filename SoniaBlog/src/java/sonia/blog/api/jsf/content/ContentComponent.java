@@ -9,7 +9,7 @@ package sonia.blog.api.jsf.content;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import sonia.blog.entity.Entry;
+import sonia.blog.entity.ContentObject;
 
 import sonia.jsf.base.BaseComponent;
 
@@ -57,7 +57,7 @@ public class ContentComponent extends BaseComponent
   {
     state = (Object[]) obj;
     super.restoreState(context, state[0]);
-    entry = (Entry) state[1];
+    object = (ContentObject) state[1];
     teaser = (Boolean) state[2];
   }
 
@@ -78,7 +78,7 @@ public class ContentComponent extends BaseComponent
     }
 
     state[0] = super.saveState(context);
-    state[1] = entry;
+    state[1] = object;
     state[2] = teaser;
 
     return state;
@@ -92,18 +92,10 @@ public class ContentComponent extends BaseComponent
    *
    * @return
    */
-  public Entry getEntry()
+  @Override
+  public String getFamily()
   {
-    if (entry != null)
-    {
-      return entry;
-    }
-
-    ValueExpression ve = getValueExpression("entry");
-
-    return (ve != null)
-           ? (Entry) ve.getValue(getFacesContext().getELContext())
-           : null;
+    return FAMILY;
   }
 
   /**
@@ -112,10 +104,18 @@ public class ContentComponent extends BaseComponent
    *
    * @return
    */
-  @Override
-  public String getFamily()
+  public ContentObject getObject()
   {
-    return FAMILY;
+    if (object != null)
+    {
+      return object;
+    }
+
+    ValueExpression ve = getValueExpression("object");
+
+    return (ve != null)
+           ? (ContentObject) ve.getValue(getFacesContext().getELContext())
+           : null;
   }
 
   /**
@@ -145,11 +145,12 @@ public class ContentComponent extends BaseComponent
    *
    *
    *
-   * @param entry
+   *
+   * @param object
    */
-  public void setEntry(Entry entry)
+  public void setEntry(ContentObject object)
   {
-    this.entry = entry;
+    this.object = object;
   }
 
   /**
@@ -166,7 +167,7 @@ public class ContentComponent extends BaseComponent
   //~--- fields ---------------------------------------------------------------
 
   /** Field description */
-  private Entry entry;
+  private ContentObject object;
 
   /** Field description */
   private Object[] state;

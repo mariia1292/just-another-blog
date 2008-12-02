@@ -5,45 +5,45 @@
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:blog="http://jab.nitilon.org/blog/">
-  
+
   <body>
-    
+
     <ui:composition template="./template.xhtml">
-      
+
       <ui:define name="title">
         <h:outputText value="#{BlogBean.blog.title}" />
       </ui:define>
-      
+
       <ui:define name="content">
-      
-        <div class="entryNavigation">
+
+        <h:panelGroup layout="block" styleClass="entryNavigation" rendered="#{BlogBean.navigationRendered}">
           <blog:link value="#{label.prev}" href="#{BlogBean.prevUri}" disabled="#{BlogBean.prevUri == null}" />
           <h:outputText value=" | " />
           <blog:link value="#{label.next}" href="#{BlogBean.nextUri}" disabled="#{BlogBean.nextUri == null}" />
-        </div>
-        
+        </h:panelGroup>
+
         <h:form>
-          
+
           <ui:repeat value="#{BlogBean.pageEntries}" var="Entry">
             <h2>
               <blog:link value="#{Entry.title}" object="#{Entry}" />
             </h2>
             <p id="content">
-              <blog:content entry="#{Entry}" teaser="true" />
+              <blog:content object="#{Entry}" teaser="true" />
             </p>
             <p>
               <h:outputText value="#{Entry.creationDate}">
                 <f:convertDateTime pattern="#{BlogBean.blog.dateFormat}" />
               </h:outputText>
-              <h:outputText value=", #{Entry.author.displayName}" />
+              <h:outputText value=", #{Entry.authorName}" />
             </p>
           </ui:repeat>
-          
+
         </h:form>
-        
+
       </ui:define>
-      
+
     </ui:composition>
-    
+
   </body>
 </html>

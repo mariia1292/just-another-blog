@@ -171,6 +171,17 @@ public class AttachmentMappingEntry
     return null;
   }
 
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  public boolean isNavigationRendered()
+  {
+    return true;
+  }
+
   //~--- methods --------------------------------------------------------------
 
   /**

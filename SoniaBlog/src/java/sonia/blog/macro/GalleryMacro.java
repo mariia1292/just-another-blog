@@ -13,6 +13,7 @@ import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.app.BlogRequest;
 import sonia.blog.api.link.LinkBuilder;
 import sonia.blog.entity.Attachment;
+import sonia.blog.entity.ContentObject;
 import sonia.blog.entity.Entry;
 
 import sonia.macro.Macro;
@@ -59,12 +60,13 @@ public class GalleryMacro implements Macro
     if (environment != null)
     {
       FacesContext ctx = (FacesContext) environment.get("facesContext");
-      Entry entry = (Entry) environment.get("entry");
+      ContentObject object = (ContentObject) environment.get("object");
       BlogRequest request = (BlogRequest) environment.get("request");
 
-      if ((ctx != null) && (entry != null) && (request != null))
+      if ((ctx != null) && (object != null) && (object instanceof Entry)
+          && (request != null))
       {
-        result = createImageGallery(ctx, request, entry);
+        result = createImageGallery(ctx, request, (Entry) object);
       }
     }
 

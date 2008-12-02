@@ -123,4 +123,15 @@ public class ResourceMappingEntry implements MappingEntry
   {
     return null;
   }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  public boolean isNavigationRendered()
+  {
+    return false;
+  }
 }

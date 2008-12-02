@@ -7,15 +7,15 @@
 
 package sonia.blog.api.search;
 
-//~--- JDK imports ------------------------------------------------------------
+//~--- non-JDK imports --------------------------------------------------------
 
-import java.util.Date;
+import sonia.blog.entity.ContentObject;
 
 /**
  *
  * @author sdorra
  */
-public interface SearchEntry
+public interface SearchEntry extends ContentObject
 {
 
   /**
@@ -24,45 +24,5 @@ public interface SearchEntry
    *
    * @return
    */
-  public String getAuthor();
-
-  /**
-   * Method description
-   *
-   *
-   * @return
-   */
-  public String getContent();
-
-  /**
-   * Method description
-   *
-   *
-   * @return
-   */
-  public Date getCreationDate();
-
-  /**
-   * Method description
-   *
-   *
-   * @return
-   */
-  public Object getData();
-
-  /**
-   * Method description
-   *
-   *
-   * @return
-   */
-  public String getSearchResult();
-
-  /**
-   * Method description
-   *
-   *
-   * @return
-   */
-  public String getTitle();
+  public ContentObject getData();
 }

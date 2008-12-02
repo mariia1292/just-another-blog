@@ -26,7 +26,7 @@
       <type>java.lang.Object</type>
     </attribute>
     <attribute>
-      <name>entry</name>
+      <name>object</name>
       <rtexprvalue>true</rtexprvalue>
       <required>true</required>
       <type>java.lang.Object</type>

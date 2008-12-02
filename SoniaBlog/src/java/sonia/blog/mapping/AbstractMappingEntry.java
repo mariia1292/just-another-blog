@@ -35,9 +35,6 @@ public abstract class AbstractMappingEntry implements MappingEntry
   /** Field description */
   public static final String VIEW_NOTFOUND = "notFound.xhtml";
 
-  /** Field description */
-  public static final String VIEW_RESULT = "result.xhtml";
-
   //~--- constructors ---------------------------------------------------------
 
   /**
@@ -71,6 +68,17 @@ public abstract class AbstractMappingEntry implements MappingEntry
     }
 
     return blogBean;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  public boolean isNavigationRendered()
+  {
+    return true;
   }
 
   //~--- set methods ----------------------------------------------------------

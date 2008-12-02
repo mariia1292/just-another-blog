@@ -324,6 +324,7 @@ public class BlogRequest extends HttpServletRequestWrapper
   public void setCharacterEncoding(String enc)
           throws UnsupportedEncodingException
   {
+
     // do nothing
   }
 

@@ -14,6 +14,7 @@ import sonia.blog.api.app.BlogRequest;
 import sonia.blog.api.link.LinkBuilder;
 import sonia.blog.entity.Attachment;
 import sonia.blog.entity.Blog;
+import sonia.blog.entity.ContentObject;
 import sonia.blog.entity.Entry;
 
 import sonia.macro.Macro;
@@ -48,10 +49,11 @@ public class AttachmentMacro implements Macro
     String result = "";
     BlogRequest request = (BlogRequest) environment.get("request");
     Blog blog = (Blog) environment.get("blog");
-    Entry entry = (Entry) environment.get("entry");
+    ContentObject object = (ContentObject) environment.get("object");
 
-    if ((blog != null) && (entry != null))
+    if ((blog != null) && (object != null) && (object instanceof Entry))
     {
+      Entry entry = (Entry) object;
       List<Attachment> attachments = entry.getAttachments();
 
       if ((attachments != null) &&!attachments.isEmpty())

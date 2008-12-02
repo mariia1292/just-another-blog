@@ -9,6 +9,7 @@ package sonia.blog.macro;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import sonia.blog.entity.ContentObject;
 import sonia.blog.entity.Entry;
 
 import sonia.macro.Macro;
@@ -46,7 +47,7 @@ public class SpoilerMacro implements Macro
 
     String style = parameters.get("style");
     String clazz = parameters.get("class");
-    Entry entry = (Entry) environment.get("object");
+    ContentObject object = (ContentObject) environment.get("object");
     String js = "var div = this.parentNode.getElementsByTagName('div')[0]";
 
     js += ".getElementsByTagName('div')[0];";
@@ -70,7 +71,7 @@ public class SpoilerMacro implements Macro
     }
 
     result += ">";
-    result += "<div id=\"spoiler_" + entry.getId()
+    result += "<div id=\"spoiler_" + object.getId()
               + "\" style=\"display: none;\">\n";
     result += body + "\n";
     result += "</div>\n";

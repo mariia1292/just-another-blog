@@ -15,6 +15,7 @@ import org.apache.myfaces.custom.navmenu.UINavigationMenuItem;
 import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.app.BlogRequest;
 import sonia.blog.api.link.LinkBuilder;
+import sonia.blog.api.mapping.MappingEntry;
 import sonia.blog.api.search.SearchContext;
 import sonia.blog.api.search.SearchEntry;
 import sonia.blog.api.search.SearchException;
@@ -22,6 +23,7 @@ import sonia.blog.api.template.Template;
 import sonia.blog.api.util.AbstractBean;
 import sonia.blog.entity.Blog;
 import sonia.blog.entity.Comment;
+import sonia.blog.entity.ContentObject;
 import sonia.blog.entity.Entry;
 import sonia.blog.entity.Role;
 
@@ -55,48 +57,57 @@ public class BlogBean extends AbstractBean
    */
   public void addComment()
   {
-    comment.setAuthorAddress(getRequest().getRemoteAddr());
-    comment.setEntry(entry);
-
-    EntityManager em = BlogContext.getInstance().getEntityManager();
-
-    em.getTransaction().begin();
-
-    try
+    if (entry instanceof ContentObject)
     {
-      em.persist(comment);
-      entry.getComments().add(comment);
-      entry = em.merge(entry);
+      Entry e = (Entry) entry;
 
-      Comment newComment = new Comment();
+      comment.setAuthorAddress(getRequest().getRemoteAddr());
+      comment.setEntry(e);
 
-      newComment.setAuthorMail(comment.getAuthorMail());
-      newComment.setAuthorName(comment.getAuthorName());
-      newComment.setAuthorURL(comment.getAuthorURL());
-      comment = newComment;
-      em.getTransaction().commit();
-      entry = em.find(Entry.class, entry.getId());
-      getMessageHandler().info("createCommentSuccess");
-    }
-    catch (Exception ex)
-    {
-      if (em.getTransaction().isActive())
+      EntityManager em = BlogContext.getInstance().getEntityManager();
+
+      em.getTransaction().begin();
+
+      try
       {
-        em.getTransaction().rollback();
+        em.persist(comment);
+        e.getComments().add(comment);
+        e = em.merge(e);
+
+        Comment newComment = new Comment();
+
+        newComment.setAuthorMail(comment.getAuthorMail());
+        newComment.setAuthorName(comment.getAuthorName());
+        newComment.setAuthorURL(comment.getAuthorURL());
+        comment = newComment;
+        em.getTransaction().commit();
+        e = em.find(Entry.class, e.getId());
+        getMessageHandler().info("createCommentSuccess");
+      }
+      catch (Exception ex)
+      {
+        if (em.getTransaction().isActive())
+        {
+          em.getTransaction().rollback();
+        }
+
+        logger.log(Level.SEVERE, null, ex);
+        getMessageHandler().error("createCommentFailure");
+      }
+      finally
+      {
+        em.close();
       }
 
-      logger.log(Level.SEVERE, null, ex);
-      getMessageHandler().error("createCommentFailure");
+      String uri =
+        BlogContext.getInstance().getLinkBuilder().buildLink(getRequest(), e);
+
+      sendRedirect(uri);
     }
-    finally
+    else
     {
-      em.close();
+      getMessageHandler().error("commentOnlyOnEntries");
     }
-
-    String uri =
-      BlogContext.getInstance().getLinkBuilder().buildLink(getRequest(), entry);
-
-    sendRedirect(uri);
   }
 
   //~--- get methods ----------------------------------------------------------
@@ -238,7 +249,7 @@ public class BlogBean extends AbstractBean
    *
    * @return
    */
-  public List<Entry> getEntries()
+  public List<? extends ContentObject> getEntries()
   {
     return entries;
   }
@@ -249,7 +260,7 @@ public class BlogBean extends AbstractBean
    *
    * @return
    */
-  public Entry getEntry()
+  public ContentObject getEntry()
   {
     return entry;
   }
@@ -319,9 +330,9 @@ public class BlogBean extends AbstractBean
    *
    * @return
    */
-  public Entry getNextEntry()
+  public ContentObject getNextEntry()
   {
-    Entry e = null;
+    ContentObject co = null;
 
     if (entry != null)
     {
@@ -333,12 +344,12 @@ public class BlogBean extends AbstractBean
 
         if (pos < entries.size())
         {
-          e = entries.get(pos);
+          co = entries.get(pos);
         }
       }
     }
 
-    return e;
+    return co;
   }
 
   /**
@@ -392,9 +403,9 @@ public class BlogBean extends AbstractBean
    *
    * @return
    */
-  public Entry getPrevEntry()
+  public ContentObject getPrevEntry()
   {
-    Entry e = null;
+    ContentObject co = null;
 
     if (entry != null)
     {
@@ -403,11 +414,11 @@ public class BlogBean extends AbstractBean
       if (pos > 0)
       {
         pos--;
-        e = entries.get(pos);
+        co = entries.get(pos);
       }
     }
 
-    return e;
+    return co;
   }
 
   /**
@@ -523,6 +534,25 @@ public class BlogBean extends AbstractBean
     return BlogContext.getInstance().isInstalled();
   }
 
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  public boolean isNavigationRendered()
+  {
+    boolean result = false;
+    MappingEntry mapping = getRequest().getMapping();
+
+    if (mapping != null)
+    {
+      result = mapping.isNavigationRendered();
+    }
+
+    return result;
+  }
+
   //~--- set methods ----------------------------------------------------------
 
   /**
@@ -542,7 +572,7 @@ public class BlogBean extends AbstractBean
    *
    * @param entries
    */
-  public void setEntries(List<Entry> entries)
+  public void setEntries(List<? extends ContentObject> entries)
   {
     this.entries = entries;
   }
@@ -553,7 +583,7 @@ public class BlogBean extends AbstractBean
    *
    * @param entry
    */
-  public void setEntry(Entry entry)
+  public void setEntry(ContentObject entry)
   {
     this.entry = entry;
   }
@@ -611,10 +641,10 @@ public class BlogBean extends AbstractBean
   private Comment comment;
 
   /** Field description */
-  private List<Entry> entries;
+  private List<? extends ContentObject> entries;
 
   /** Field description */
-  private Entry entry;
+  private ContentObject entry;
 
   /** Field description */
   private UINavigationMenuItem overviewItem;

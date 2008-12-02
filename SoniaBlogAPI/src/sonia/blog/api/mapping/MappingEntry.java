@@ -34,7 +34,26 @@ public interface MappingEntry
   public boolean handleMapping(BlogRequest request, BlogResponse response,
                                String[] param);
 
-  public String getUri( BlogRequest request, LinkBuilder linkBuilder, PermaObject object );
+  //~--- get methods ----------------------------------------------------------
 
+  /**
+   * Method description
+   *
+   *
+   * @param request
+   * @param linkBuilder
+   * @param object
+   *
+   * @return
+   */
+  public String getUri(BlogRequest request, LinkBuilder linkBuilder,
+                       PermaObject object);
 
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  public boolean isNavigationRendered();
 }

@@ -140,7 +140,7 @@ public class DefaultSearchContext implements SearchContext
               }
             }
 
-            entries.add(new DefaultSearchEntry(doc, searchResult));
+            entries.add(new DefaultSearchEntry(doc, searchResult, i));
           }
         }
         catch (ParseException ex)

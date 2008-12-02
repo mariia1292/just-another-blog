@@ -19,6 +19,9 @@ import sonia.blog.entity.Comment;
 import sonia.blog.entity.Entry;
 import sonia.blog.entity.PermaObject;
 
+import sonia.config.ConfigurationListener;
+import sonia.config.ModifyableConfiguration;
+
 import sonia.rss.Channel;
 import sonia.rss.FeedParser;
 import sonia.rss.Item;
@@ -27,11 +30,9 @@ import sonia.rss.Item;
 
 import java.io.IOException;
 
-import java.net.MalformedURLException;
 import java.net.URL;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -45,14 +46,41 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author sdorra
  */
-public class RssMappingEntry implements MappingEntry
+public class FeedMappingEntry implements MappingEntry, ConfigurationListener
 {
 
   /** Field description */
   private static Logger logger =
-    Logger.getLogger(RssMappingEntry.class.getName());
+    Logger.getLogger(FeedMappingEntry.class.getName());
+
+  //~--- constructors ---------------------------------------------------------
+
+  /**
+   * Constructs ...
+   *
+   */
+  public FeedMappingEntry()
+  {
+    super();
+    loadConfig();
+  }
 
   //~--- methods --------------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   * @param config
+   * @param key
+   */
+  public void configChanged(ModifyableConfiguration config, String key)
+  {
+    if (key.startsWith("feed"))
+    {
+      loadConfig();
+    }
+  }
 
   /**
    * Method description
@@ -83,7 +111,7 @@ public class RssMappingEntry implements MappingEntry
 
         if (param[0].equals("entries"))
         {
-          Query q = em.createNamedQuery("Entry.overview");
+          Query q = em.createNamedQuery("Entry.findByBlog");
 
           q.setParameter("blog", blog);
 
@@ -91,8 +119,6 @@ public class RssMappingEntry implements MappingEntry
 
           if (entries != null)
           {
-            Collections.reverse(entries);
-
             for (Entry entry : entries)
             {
               String link = linkBuilder.buildLink(request, entry);
@@ -140,7 +166,7 @@ public class RssMappingEntry implements MappingEntry
           channel.setPubDate(blog.getCreationDate());
           channel.setItems(items);
 
-          FeedParser parser = FeedParser.getInstance("rss2");
+          FeedParser parser = FeedParser.getInstance(feedType);
 
           parser.store(channel, response.getOutputStream());
         }
@@ -174,6 +200,17 @@ public class RssMappingEntry implements MappingEntry
     return false;
   }
 
+  /**
+   * Method description
+   *
+   */
+  public void loadConfig()
+  {
+    feedType =
+      BlogContext.getInstance().getConfiguration().getString("feed.type",
+        "rss2");
+  }
+
   //~--- get methods ----------------------------------------------------------
 
   /**
@@ -191,4 +228,20 @@ public class RssMappingEntry implements MappingEntry
   {
     return null;
   }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  public boolean isNavigationRendered()
+  {
+    return false;
+  }
+
+  //~--- fields ---------------------------------------------------------------
+
+  /** Field description */
+  private String feedType;
 }

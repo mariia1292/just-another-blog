@@ -14,6 +14,7 @@ import org.apache.lucene.document.Document;
 
 import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.search.SearchEntry;
+import sonia.blog.entity.ContentObject;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -44,11 +45,52 @@ public class DefaultSearchEntry implements SearchEntry
    *
    * @param document
    * @param searchResult
+   * @param hit
    */
-  public DefaultSearchEntry(Document document, String searchResult)
+  public DefaultSearchEntry(Document document, String searchResult, long hit)
   {
     this.document = document;
     this.searchResult = searchResult;
+    this.hit = hit;
+  }
+
+  //~--- methods --------------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   * @param arg0
+   *
+   * @return
+   */
+  @Override
+  public boolean equals(Object arg0)
+  {
+    return getData().equals(arg0);
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  @Override
+  public int hashCode()
+  {
+    return getData().hashCode();
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  public boolean renderMacros()
+  {
+    return false;
   }
 
   //~--- get methods ----------------------------------------------------------
@@ -59,7 +101,7 @@ public class DefaultSearchEntry implements SearchEntry
    *
    * @return
    */
-  public String getAuthor()
+  public String getAuthorName()
   {
     return document.get("author");
   }
@@ -72,7 +114,7 @@ public class DefaultSearchEntry implements SearchEntry
    */
   public String getContent()
   {
-    return document.get("content");
+    return searchResult;
   }
 
   /**
@@ -108,9 +150,9 @@ public class DefaultSearchEntry implements SearchEntry
    * @return
    */
   @SuppressWarnings("unchecked")
-  public Object getData()
+  public ContentObject getData()
   {
-    Object result = null;
+    ContentObject result = null;
     EntityManager em = BlogContext.getInstance().getEntityManager();
 
     try
@@ -118,7 +160,7 @@ public class DefaultSearchEntry implements SearchEntry
       Class clazz = Class.forName(document.get("type"));
       Long id = Long.parseLong(document.get("id"));
 
-      result = em.find(clazz, id);
+      result = (ContentObject) em.find(clazz, id);
     }
     catch (Exception ex)
     {
@@ -138,9 +180,20 @@ public class DefaultSearchEntry implements SearchEntry
    *
    * @return
    */
-  public String getSearchResult()
+  public Long getId()
   {
-    return searchResult;
+    return hit;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  public String getTeaser()
+  {
+    return getContent();
   }
 
   /**
@@ -158,6 +211,9 @@ public class DefaultSearchEntry implements SearchEntry
 
   /** Field description */
   private Document document;
+
+  /** Field description */
+  private Long hit;
 
   /** Field description */
   private String searchResult;

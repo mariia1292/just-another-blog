@@ -46,6 +46,8 @@ import javax.persistence.TemporalType;
 {
   @NamedQuery(name = "Entry.overview",
               query = "select e from Entry e join e.category c join c.blog b where b = :blog and e.published = true order by e.creationDate") ,
+  @NamedQuery(name = "Entry.findByBlog",
+              query = "select e from Entry e join e.category c join c.blog b where b = :blog and e.published = true order by e.creationDate desc") ,
   @NamedQuery(name = "Entry.findByCategory",
               query = "select e from Entry as e where e.category = :category and e.published = true order by e.creationDate") ,
   @NamedQuery(name = "Entry.findIdFromBlog",
@@ -63,7 +65,7 @@ import javax.persistence.TemporalType;
   @NamedQuery(name = "Entry.findByDate",
               query = "select e from Entry e join e.category c join c.blog b where b = :blog and e.published = true and e.creationDate between :start and :end")
 })
-public class Entry implements Serializable, ContentObject, PermaObject
+public class Entry implements Serializable, ContentObject
 {
 
   /** Field description */
@@ -116,6 +118,17 @@ public class Entry implements Serializable, ContentObject, PermaObject
              : 0);
 
     return hash;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  public boolean renderMacros()
+  {
+    return true;
   }
 
   /**
@@ -249,30 +262,6 @@ public class Entry implements Serializable, ContentObject, PermaObject
   public String getContent()
   {
     return content;
-  }
-
-  /**
-   * Method description
-   *
-   *
-   * @param shortVersion
-   *
-   * @return
-   */
-  public String getContent(boolean shortVersion)
-  {
-    String result = null;
-
-    if (shortVersion && (teaser != null) && (teaser.trim().length() > 0))
-    {
-      result = teaser;
-    }
-    else
-    {
-      result = content;
-    }
-
-    return result;
   }
 
   /**

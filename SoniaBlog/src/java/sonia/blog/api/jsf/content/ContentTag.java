@@ -31,7 +31,7 @@ public class ContentTag extends BaseTag
   @Override
   public void release()
   {
-    entry = null;
+    object = null;
     teaser = null;
     super.release();
   }
@@ -72,7 +72,7 @@ public class ContentTag extends BaseTag
    */
   public void setEntry(ValueExpression entry)
   {
-    this.entry = entry;
+    this.object = entry;
   }
 
   /**
@@ -95,9 +95,9 @@ public class ContentTag extends BaseTag
   @Override
   protected void setProperties(UIComponent component)
   {
-    if (entry != null)
+    if (object != null)
     {
-      component.setValueExpression("entry", entry);
+      component.setValueExpression("object", object);
     }
 
     if (teaser != null)
@@ -111,7 +111,7 @@ public class ContentTag extends BaseTag
   //~--- fields ---------------------------------------------------------------
 
   /** Field description */
-  private ValueExpression entry;
+  private ValueExpression object;
 
   /** Field description */
   private ValueExpression teaser;

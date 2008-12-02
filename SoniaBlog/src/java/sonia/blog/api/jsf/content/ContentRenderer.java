@@ -10,7 +10,7 @@ package sonia.blog.api.jsf.content;
 //~--- non-JDK imports --------------------------------------------------------
 
 import sonia.blog.api.app.BlogRequest;
-import sonia.blog.entity.Entry;
+import sonia.blog.entity.ContentObject;
 import sonia.blog.wui.BlogBean;
 
 import sonia.jsf.base.BaseRenderer;
@@ -57,9 +57,9 @@ public class ContentRenderer extends BaseRenderer
 
     if (isRendered(context, contentComponent))
     {
-      Entry entry = contentComponent.getEntry();
+      ContentObject object = contentComponent.getObject();
 
-      if (entry != null)
+      if (object != null)
       {
         BlogBean blogBean =
           (BlogBean) context.getExternalContext().getSessionMap().get(
@@ -67,16 +67,17 @@ public class ContentRenderer extends BaseRenderer
         String content = null;
 
         if ((contentComponent.getTeaser() != null)
-            && contentComponent.getTeaser() &&!isBlank(entry.getTeaser()))
+            && contentComponent.getTeaser() &&!isBlank(object.getTeaser()))
         {
-          content = entry.getTeaser();
+          content = object.getTeaser();
         }
         else
         {
-          content = entry.getContent();
+          content = object.getContent();
         }
 
-        if ((blogBean != null) && blogBean.getBlog().isAllowMacros())
+        if ((blogBean != null) && object.renderMacros()
+            && blogBean.getBlog().isAllowMacros())
         {
           BlogRequest request =
             (BlogRequest) context.getExternalContext().getRequest();
@@ -88,7 +89,7 @@ public class ContentRenderer extends BaseRenderer
           if (blogBean != null)
           {
             environment.put("blog", blogBean.getBlog());
-            environment.put("entry", entry);
+            environment.put("object", object);
           }
 
           MacroParser parser = MacroParser.getInstance();
