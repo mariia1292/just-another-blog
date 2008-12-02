@@ -12,7 +12,15 @@
             <renderer-type>sonia.blog.content.renderer</renderer-type>
         </component>
     </tag>
-    
+
+    <tag>
+        <tag-name>calendar</tag-name>
+        <component>
+            <component-type>sonia.blog.calendar</component-type>
+            <renderer-type>sonia.blog.calendar.renderer</renderer-type>
+        </component>
+    </tag>
+
     <tag>
         <tag-name>resource</tag-name>
         <component>

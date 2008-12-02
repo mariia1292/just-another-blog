@@ -26,6 +26,35 @@
       <type>java.lang.Object</type>
     </attribute>
     <attribute>
+      <name>rendered</name>
+      <rtexprvalue>true</rtexprvalue>
+      <required>false</required>
+      <type>java.lang.Object</type>
+    </attribute>
+  </tag>
+  <tag>
+    <name>content</name>
+    <tag-class>sonia.blog.api.jsf.content.ContentTag</tag-class>
+    <body-content>JSP</body-content>
+    <attribute>
+      <name>style</name>
+      <rtexprvalue>true</rtexprvalue>
+      <required>false</required>
+      <type>java.lang.Object</type>
+    </attribute>
+    <attribute>
+      <name>styleClass</name>
+      <rtexprvalue>true</rtexprvalue>
+      <required>false</required>
+      <type>java.lang.Object</type>
+    </attribute>
+    <attribute>
+      <name>role</name>
+      <rtexprvalue>true</rtexprvalue>
+      <required>false</required>
+      <type>java.lang.Object</type>
+    </attribute>
+    <attribute>
       <name>object</name>
       <rtexprvalue>true</rtexprvalue>
       <required>true</required>

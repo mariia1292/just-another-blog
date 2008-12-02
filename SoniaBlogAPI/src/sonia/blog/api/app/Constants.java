@@ -15,6 +15,18 @@ public interface Constants
 {
 
   /** Field description */
+  public static final String CONFIG_FEEDTYPE = "feed.type";
+
+  /** Field description */
+  public static final String CONFIG_IMAGEEXTENSION = "image.extension";
+
+  /** Field description */
+  public static final String CONFIG_IMAGEFORMAT = "image.format";
+
+  /** Field description */
+  public static final String CONFIG_IMAGEMIMETYPE = "image.mimetype";
+
+  /** Field description */
   public static final String LOGINMODULE_NAME = "BlogLoginModule";
 
   /** Field description */

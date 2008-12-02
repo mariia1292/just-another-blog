@@ -732,6 +732,7 @@ public class EntryBean extends AbstractBean
               Util.copy(zis, new FileOutputStream(file));
 
               String name = ze.getName();
+              name = name.replaceAll("/", "-");
               Attachment attachment = new Attachment();
               String path =
                 file.getPath().substring(directory.getPath().length());

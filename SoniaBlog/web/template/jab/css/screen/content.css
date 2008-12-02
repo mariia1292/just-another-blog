@@ -201,5 +201,17 @@
     border:0;
     border-bottom: 1px #eee solid;
   }
+
+  /**
+  * Selection-Calendar
+  * 
+  */
+  table.calendar { width: 100%; border: 1px solid; }
+  table.calendar thead tr th { text-align: center; margin: 0; padding: 1px;  }
+  table.calendar tbody tr td { text-align: center; margin: 0; padding: 1px; }
+  table.calendar tbody tr td.today { border: 1px gray dashed;  }
+  table.calendar tbody tr td span.weekdayHeader { font-weight: bold; border-bottom: 1px solid; }
+  table.calendar tbody tr td span.weekenddayHeader { font-weight: bold; border-bottom: 1px solid; }
+
 }
 

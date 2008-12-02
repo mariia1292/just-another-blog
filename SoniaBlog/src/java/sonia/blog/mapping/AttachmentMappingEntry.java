@@ -12,6 +12,7 @@ package sonia.blog.mapping;
 import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.app.BlogRequest;
 import sonia.blog.api.app.BlogResponse;
+import sonia.blog.api.app.Constants;
 import sonia.blog.api.link.LinkBuilder;
 import sonia.blog.api.mapping.MappingEntry;
 import sonia.blog.entity.Attachment;
@@ -276,9 +277,12 @@ public class AttachmentMappingEntry
   {
     XmlConfiguration config = BlogContext.getInstance().getConfiguration();
 
-    format = config.getString("image.format", DEFAULT_IMAGE_FORMAT);
-    extension = config.getString("image.extension", DEFAULT_IMAGE_EXTENSION);
-    mimeType = config.getString("image.mimetype", DEFAULT_IMAGE_MIMETYPE);
+    format = config.getString(Constants.CONFIG_IMAGEFORMAT,
+                              DEFAULT_IMAGE_FORMAT);
+    extension = config.getString(Constants.CONFIG_IMAGEEXTENSION,
+                                 DEFAULT_IMAGE_EXTENSION);
+    mimeType = config.getString(Constants.CONFIG_IMAGEMIMETYPE,
+                                DEFAULT_IMAGE_MIMETYPE);
   }
 
   /**
@@ -442,6 +446,12 @@ public class AttachmentMappingEntry
 
     try
     {
+      if (logger.isLoggable(Level.INFO))
+      {
+        logger.info("resize image " + source.getName() + " (resolution "
+                    + width + "x" + height + ")");
+      }
+
       in = new FileInputStream(source);
       out = new FileOutputStream(target);
       ImageUtil.resize(in, out, format, width, height);

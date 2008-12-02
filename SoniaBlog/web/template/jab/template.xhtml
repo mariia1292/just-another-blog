@@ -6,7 +6,8 @@
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:t="http://myfaces.apache.org/tomahawk"
-      xmlns:blog="http://jab.nitilon.org/blog/">
+      xmlns:blog="http://jab.nitilon.org/blog/"
+      xmlns:u1="http://jab.nitilon.org/blog/">
   <head>
     <title><ui:insert name="title">JAB</ui:insert> | Just-Another-Blog</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
@@ -91,14 +92,17 @@
                   
                   <h3><h:outputText value="#{label.search}" /></h3>
                   <blog:search value="#{BlogBean.searchString}" label="#{label.search}" />
-                  
+
+                  <h3><h:outputText value="#{label.calendar}" /></h3>
+                  <blog:calendar styleClass="calendar" />
+
                   <h:form id="extraNavigationForm">
                     <h3><h:outputText value="#{label.extraNavigation}" /></h3>
                     <t:panelNavigation2 styleClass="overview" layout="list">
                       <t:navigationMenuItems value="#{BlogBean.extraNavigation}" />
                     </t:panelNavigation2>
                   </h:form>
-                  
+
                 </h:panelGroup>
                 
               </ui:insert>
