@@ -61,9 +61,11 @@ import javax.persistence.TemporalType;
   @NamedQuery(name = "Entry.findByTagName",
               query = "select e from Entry e join e.category c join c.blog b join e.tags t where b = :blog and e.published = true and t.name = :name order by e.creationDate") ,
   @NamedQuery(name = "Entry.findByCategoryId",
-              query = "select e From Entry e join e.category c where c.id = :id and e.published =true order by e.creationDate") ,
+              query = "select e From Entry e join e.category c where c.id = :id and e.published = true order by e.creationDate") ,
   @NamedQuery(name = "Entry.findByDate",
-              query = "select e from Entry e join e.category c join c.blog b where b = :blog and e.published = true and e.creationDate between :start and :end")
+              query = "select e from Entry e join e.category c join c.blog b where b = :blog and e.published = true and e.creationDate between :start and :end") ,
+  @NamedQuery(name = "Entry.calendar",
+              query = "select e.creationDate from Entry e join e.category c join c.blog b where b = :blog and e.published = true and e.creationDate between :start and :end")
 })
 public class Entry implements Serializable, ContentObject
 {
