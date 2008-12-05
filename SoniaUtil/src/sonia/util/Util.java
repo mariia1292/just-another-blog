@@ -58,4 +58,19 @@ public class Util
 
     return in;
   }
+
+  //~--- get methods ----------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   * @param value
+   *
+   * @return
+   */
+  public static boolean isBlank(String value)
+  {
+    return (value == null) || (value.length() == 0);
+  }
 }

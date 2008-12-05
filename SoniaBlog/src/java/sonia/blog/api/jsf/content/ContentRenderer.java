@@ -9,6 +9,7 @@ package sonia.blog.api.jsf.content;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.app.BlogRequest;
 import sonia.blog.entity.ContentObject;
 import sonia.blog.wui.BlogBean;
@@ -27,6 +28,8 @@ import java.util.Map;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
+
+import javax.persistence.EntityManager;
 
 /**
  *
@@ -85,10 +88,14 @@ public class ContentRenderer extends BaseRenderer
 
           environment.put("facesContext", context);
           environment.put("request", request);
+          environment.put("blog", request.getCurrentBlog());
+          environment.put(
+              "linkBase",
+              BlogContext.getInstance().getLinkBuilder().buildLink(
+                request, "/"));
 
           if (blogBean != null)
           {
-            environment.put("blog", blogBean.getBlog());
             environment.put("object", object);
           }
 

@@ -105,18 +105,6 @@
     <url-pattern>*.jab</url-pattern>
   </servlet-mapping>
 
-  <!-- TODO: Remove PluginServlet -->
-
-  <servlet>
-    <servlet-name>PluginServlet</servlet-name>
-    <servlet-class>sonia.blog.plugin.PluginServlet</servlet-class>
-  </servlet>
-
-  <servlet-mapping>
-    <servlet-name>PluginServlet</servlet-name>
-    <url-pattern>/servlet/*</url-pattern>
-  </servlet-mapping>
-
   <jsp-config>
     <taglib>
       <taglib-uri>http://jab.nitilon.org/blog/</taglib-uri>

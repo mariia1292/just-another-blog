@@ -54,15 +54,7 @@ public class AttachmentMappingEntry
         implements MappingEntry, ConfigurationListener
 {
 
-  /** Field description */
-  private static final String DEFAULT_IMAGE_EXTENSION = "jpg";
-
-  /** Field description */
-  private static final String DEFAULT_IMAGE_FORMAT = "jpg";
-
-  /** Field description */
-  private static final String DEFAULT_IMAGE_MIMETYPE = "image/jpeg";
-
+ 
   //~--- constructors ---------------------------------------------------------
 
   /**
@@ -278,11 +270,11 @@ public class AttachmentMappingEntry
     XmlConfiguration config = BlogContext.getInstance().getConfiguration();
 
     format = config.getString(Constants.CONFIG_IMAGEFORMAT,
-                              DEFAULT_IMAGE_FORMAT);
+                              Constants.DEFAULT_IMAGE_FORMAT);
     extension = config.getString(Constants.CONFIG_IMAGEEXTENSION,
-                                 DEFAULT_IMAGE_EXTENSION);
+                                 Constants.DEFAULT_IMAGE_EXTENSION);
     mimeType = config.getString(Constants.CONFIG_IMAGEMIMETYPE,
-                                DEFAULT_IMAGE_MIMETYPE);
+                                Constants.DEFAULT_IMAGE_MIMETYPE);
   }
 
   /**

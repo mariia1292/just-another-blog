@@ -27,6 +27,15 @@ public interface Constants
   public static final String CONFIG_IMAGEMIMETYPE = "image.mimetype";
 
   /** Field description */
+  public static final String DEFAULT_IMAGE_EXTENSION = "jpg";
+
+  /** Field description */
+  public static final String DEFAULT_IMAGE_FORMAT = "jpg";
+
+  /** Field description */
+  public static final String DEFAULT_IMAGE_MIMETYPE = "image/jpeg";
+
+  /** Field description */
   public static final String LOGINMODULE_NAME = "BlogLoginModule";
 
   /** Field description */

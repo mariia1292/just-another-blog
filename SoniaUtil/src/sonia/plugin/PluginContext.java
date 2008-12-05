@@ -166,7 +166,6 @@ public class PluginContext
     int oldState = plugin.getState();
 
     plugin.setState(Plugin.STATE_UNREGISTERED);
-    plugins.remove(plugin.getName());
     fireStateChange(oldState, plugin);
   }
 
