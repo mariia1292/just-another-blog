@@ -79,7 +79,9 @@ public class PdfViewerMacro implements Macro, ConfigurationListener
     attchmentDir = new File(BlogContext.getInstance().getResourceDirectory(),
                             "attachment");
     this.resourceDir = resourceDir;
+
     XmlConfiguration config = BlogContext.getInstance().getConfiguration();
+
     config.addListener(this);
     loadConfiguration(config);
   }
@@ -97,7 +99,7 @@ public class PdfViewerMacro implements Macro, ConfigurationListener
   {
     if (key.startsWith("image"))
     {
-      loadConfiguration( config );
+      loadConfiguration(config);
     }
   }
 
@@ -143,7 +145,8 @@ public class PdfViewerMacro implements Macro, ConfigurationListener
 
             if (attachmentFile.exists())
             {
-              result = createPdfImageGallery(request, linkBase, id, attachmentFile);
+              result = createPdfImageGallery(request, linkBase, id,
+                                             attachmentFile, body);
             }
             else
             {
@@ -187,20 +190,22 @@ public class PdfViewerMacro implements Macro, ConfigurationListener
    *
    *
    * @param request
+   * @param linkBase
    * @param id
    * @param attachmentFile
+   * @param body
    *
    * @return
    */
-  private String createPdfImageGallery(BlogRequest request, String linkBase, long id,
-          File attachmentFile)
+  private String createPdfImageGallery(BlogRequest request, String linkBase,
+          long id, File attachmentFile, String body)
   {
     String result = null;
     File pdfDir = new File(resourceDir, String.valueOf(id));
 
     if (pdfDir.exists())
     {
-      result = printPdfImageGallery(request, linkBase, pdfDir);
+      result = printPdfImageGallery(request, linkBase, pdfDir, body);
     }
     else
     {
@@ -209,7 +214,7 @@ public class PdfViewerMacro implements Macro, ConfigurationListener
         try
         {
           createPdfImageGallery(pdfDir, attachmentFile);
-          result = printPdfImageGallery(request, linkBase, pdfDir);
+          result = printPdfImageGallery(request, linkBase, pdfDir, body);
         }
         catch (Exception ex)
         {
@@ -286,8 +291,10 @@ public class PdfViewerMacro implements Macro, ConfigurationListener
   /**
    * Method description
    *
+   *
+   * @param config
    */
-  private void loadConfiguration( ModifyableConfiguration config )
+  private void loadConfiguration(ModifyableConfiguration config)
   {
     extension = config.getString(Constants.CONFIG_IMAGEEXTENSION,
                                  Constants.DEFAULT_IMAGE_EXTENSION);
@@ -301,11 +308,14 @@ public class PdfViewerMacro implements Macro, ConfigurationListener
    *
    *
    * @param request
+   * @param linkBase
    * @param pdfDir
+   * @param body
    *
    * @return
    */
-  private String printPdfImageGallery(BlogRequest request, String linkBase,  File pdfDir)
+  private String printPdfImageGallery(BlogRequest request, String linkBase,
+          File pdfDir, String body)
   {
     String result = "";
     String res = linkBase + "resources/lightbox/";
@@ -342,16 +352,27 @@ public class PdfViewerMacro implements Macro, ConfigurationListener
     {
       for (int i = 1; i < files.length; i++)
       {
-        
         String link = baseLink + i + "." + extension;
 
         result += "<a id=\"" + name + "_" + i + "\" title=\"Page " + i + "\" ";
-        if ( i > 1 )
+        result += "rel=\"[ligthbox[group_a" + i + "]\" href=\"" + link + "\"";
+
+        if (i > 1)
         {
-          result += "style=\"display: none;\" ";
+          result += " style=\"display: none;\">";
         }
-        result += "rel=\"[ligthbox[group_a" + i + "]\" ";
-        result += "href=\"" + link + "\">Page " + i + "</a>\n";
+        else
+        {
+          if ((body == null) || (body.trim().length() == 0))
+          {
+            body = "<img src=\"" + linkBase
+                   + "resource/icon/document.gif\" alt=\"PDF\" />";
+          }
+
+          result += ">" + body;
+        }
+
+        result += "</a>\n";
       }
     }
 
