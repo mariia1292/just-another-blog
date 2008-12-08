@@ -44,14 +44,11 @@ import sonia.security.encryption.MD5Encryption;
 //~--- JDK imports ------------------------------------------------------------
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FilenameFilter;
 import java.io.IOException;
 
 import java.util.HashMap;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
 import javax.security.auth.login.AppConfigurationEntry;
@@ -66,12 +63,6 @@ import javax.servlet.ServletContextListener;
  */
 public class BlogContextListener implements ServletContextListener
 {
-
-  /** Field description */
-  private static Logger logger =
-    Logger.getLogger(BlogContextListener.class.getName());
-
-  //~--- methods --------------------------------------------------------------
 
   /**
    * Method description
@@ -108,15 +99,9 @@ public class BlogContextListener implements ServletContextListener
       BlogContext context = BlogContext.getInstance();
 
       context.setServletContext(event.getServletContext());
-
-      if (context.isInstalled())
-      {
-
-        // configureLogger();
-      }
-
       initServices(context);
       initMacros();
+      configureLogger();
       context.getPluginContext().addStateChangeListener(new PluginListener());
       context.getPluginContext().searchClasspath(
           buildClasspath(event.getServletContext()));
@@ -133,7 +118,7 @@ public class BlogContextListener implements ServletContextListener
     }
     catch (IOException ex)
     {
-      logger.log(Level.SEVERE, null, ex);
+      ex.printStackTrace(System.err);
 
       throw new RuntimeException(ex);
     }
@@ -194,10 +179,10 @@ public class BlogContextListener implements ServletContextListener
    */
   private void configureLogger() throws IOException
   {
-    String path = BlogContext.getInstance().getServletContext().getRealPath(
-                      "/WEB-INF/config/logger.properties");
+    Logger logger = Logger.getLogger("sonia.blog");
 
-    LogManager.getLogManager().readConfiguration(new FileInputStream(path));
+    // logger.setUseParentHandlers(false);
+    // logger.addHandler(new LoggingHandler());
   }
 
   /**

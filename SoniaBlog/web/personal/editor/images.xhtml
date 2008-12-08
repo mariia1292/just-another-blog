@@ -1,0 +1,64 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core">
+  <body>
+
+    <ui:composition template="./template.xhtml">
+      
+      <ui:define name="head">
+        <script type="text/javascript" src="../../resources/tiny_mce/plugins/imgbrowser/js/dialog.js"></script>
+      </ui:define>
+
+      <ui:define name="content">
+        <h3><h:outputText value="#{label.options}" /></h3>
+        <div style="display: block;" id="size">
+
+          <div style="float: left;">
+
+            <h:form id="size">
+
+              <h:selectOneRadio id="type" label="type" value="#{EntryBean.imageSize}">
+
+                <f:selectItem itemLabel="#{label.sizeNormal}" itemValue="" />
+                <f:selectItem itemLabel="#{label.sizeOriginal}" itemValue="orginal" />
+                <f:selectItem itemLabel="#{label.sizeThumbnail}" itemValue="thumb" />
+
+              </h:selectOneRadio>
+
+            </h:form>
+
+          </div>
+
+          <div style="float: right;">
+
+            <a href="#" onclick="ImageDialog.insertGallery()">
+              <h:outputText value="#{label.insertGallery}" />
+            </a>
+
+          </div>
+          <div style="clear: both;"></div>
+        </div>
+
+        <br />
+
+        <h3><h:outputText value="#{label.images}" /></h3>
+        <div class="images">
+
+          <ui:repeat value="#{EntryBean.thumbnails}" var="Thumbnail">
+
+            <a style="margin: 3px;" href="#" onclick="ImageDialog.insert('../attachment/#{Thumbnail.id}')">
+              <h:graphicImage value="/attachment/#{Thumbnail.id}?thumb" />
+            </a>
+          </ui:repeat>
+
+        </div>
+      </ui:define>
+
+    </ui:composition>
+
+  </body>
+</html>
+

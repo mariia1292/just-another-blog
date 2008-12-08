@@ -502,6 +502,17 @@ public class EntryBean extends AbstractBean
    *
    * @return
    */
+  public String getImageSize()
+  {
+    return imageSize;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
   public String getTagString()
   {
     return tagString;
@@ -574,6 +585,17 @@ public class EntryBean extends AbstractBean
   public void setEntry(Entry entry)
   {
     this.entry = entry;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param imageSize
+   */
+  public void setImageSize(String imageSize)
+  {
+    this.imageSize = imageSize;
   }
 
   /**
@@ -732,7 +754,9 @@ public class EntryBean extends AbstractBean
               Util.copy(zis, new FileOutputStream(file));
 
               String name = ze.getName();
+
               name = name.replaceAll("/", "-");
+
               Attachment attachment = new Attachment();
               String path =
                 file.getPath().substring(directory.getPath().length());
@@ -800,6 +824,9 @@ public class EntryBean extends AbstractBean
 
   /** Field description */
   private Entry entry;
+
+  /** Field description */
+  private String imageSize = "";
 
   /** Field description */
   private String tagString;

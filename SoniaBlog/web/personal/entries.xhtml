@@ -21,8 +21,8 @@
           tinyMCE.init({
             theme : "advanced",
             mode : "textareas",
-            plugins : "fullscreen,safari,emotions,imgbrowser",
-            theme_advanced_buttons3_add : "|,emotions,fullscreen,imgbrowser", 
+            plugins : "fullscreen,safari,emotions,imgbrowser,attachment,links",
+            theme_advanced_buttons3_add : "|,emotions,fullscreen,|,imgbrowser,attachment,links",
             <h:outputText value="content_css: '/jab#{BlogBean.template.contentCSS}?' + new Date().getTime()," 
                           rendered="#{BlogBean.template.contentCSS != null}" />
             convert_urls : false,
@@ -92,47 +92,6 @@
                 <f:validateLength maximum="5000" />
               </h:inputTextarea>
               <h:message for="teaser" />
-            </h:panelGroup>
-            
-            <h:outputLabel value="#{label.attachments}" />
-            <h:panelGroup layout="block" styleClass="attachments">
-              <h:dataTable styleClass="full" value="#{EntryBean.attachments}" var="Attachment">
-                <h:column>
-                  <f:facet name="header">
-                    <h:outputText value="#{label.name}" />
-                  </f:facet>
-                  <h:outputLink value="../../../attachment/#{Attachment.id}" target="_blank">
-                    <h:outputText value="#{Attachment.name}" />
-                  </h:outputLink>
-                </h:column>
-                <h:column>
-                  <f:facet name="header">
-                    <h:outputText value="#{label.mimeType}" />
-                  </f:facet>
-                  <h:outputText value="#{Attachment.mimeType}" />
-                </h:column>
-                <h:column>
-                  <f:facet name="header">
-                    <h:outputText value="#{label.size}" />
-                  </f:facet>
-                  <h:outputText value="#{Attachment.size}" />
-                </h:column>
-                <h:column>
-                  <f:facet name="header">
-                    <h:outputText value="#{label.creationDate}" />
-                  </f:facet>
-                  <h:outputText value="#{Attachment.creationDate}">
-                    <f:convertDateTime pattern="yyyy-MM-dd HH:mm:ss" />
-                  </h:outputText>
-                </h:column>
-                <h:column>
-                  <h:commandLink value="#{label.remove}" actionListener="#{EntryBean.removeAttachment}" />
-                </h:column>
-              </h:dataTable>
-              <t:inputFileUpload value="#{EntryBean.uploadedFile}" /><br />
-              <h:selectBooleanCheckbox id="unzip" value="#{EntryBean.unzipFiles}" />
-              <h:outputLabel for="unzip" value="#{label.unzipFiles}" /><br />
-              <h:commandButton value="#{label.upload}" action="#{EntryBean.upload}" />
             </h:panelGroup>
             
           </h:panelGrid>

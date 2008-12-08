@@ -7,9 +7,9 @@
 
 (function() {
   // Load plugin specific language pack
-  tinymce.PluginManager.requireLangPack('imgbrowser');
+  tinymce.PluginManager.requireLangPack('attachment');
 
-  tinymce.create('tinymce.plugins.ImgBrowserPlugin', {
+  tinymce.create('tinymce.plugins.AttachmentPlugin', {
     /**
 		 * Initializes the plugin, this will be executed after the plugin has been created.
 		 * This call is done before the editor instance has finished it's initialization so use the onInit event
@@ -21,17 +21,17 @@
     init : function(ed, url) {
       
       var id = ed.getParam( "entry_id" );
-      var address = url + '/../../../../personal/editor/images.jab';
+      var address = url + '/../../../../personal/editor/attachments.jab';
       if ( id != null && id != "" )
       {
         address += "?id=" + id;
       }
       // Register the command so that it can be invoked by using tinyMCE.activeEditor.execCommand('mceExample');
-      ed.addCommand('mceImgBrowser', function() {
+      ed.addCommand('mceAttachment', function() {
         ed.windowManager.open({
           file : address,
-          width : 720 + parseInt(ed.getLang('imgbrowser.delta_width', 0)),
-          height : 576 + parseInt(ed.getLang('imgbrowser.delta_height', 0)),
+          width : 720 + parseInt(ed.getLang('attachment.delta_width', 0)),
+          height : 576 + parseInt(ed.getLang('attachment.delta_height', 0)),
           inline : 1,
           scrollbars: "yes"
         }, {
@@ -40,10 +40,10 @@
       });
 
       // Register example button
-      ed.addButton('imgbrowser', {
-        title : 'imgbrowser.desc',
-        cmd : 'mceImgBrowser',
-        image : url + '/img/image.gif'
+      ed.addButton('attachment', {
+        title : 'attachment.desc',
+        cmd : 'mceAttachment',
+        image : url + '/img/attachment.gif'
       });
     },
 
@@ -69,7 +69,7 @@
 		 */
     getInfo : function() {
       return {
-        longname : 'ImageBrowser Plugin',
+        longname : 'Attachment Plugin',
         author : 'Sebastian Sdorra',
         authorurl : 'http://www.fh-wolfenbuettel.de',
         infourl : 'http://www.fh-wolfenbuettel.de/rz',
@@ -79,5 +79,5 @@
   });
 
   // Register plugin
-  tinymce.PluginManager.add('imgbrowser', tinymce.plugins.ImgBrowserPlugin);
+  tinymce.PluginManager.add('attachment', tinymce.plugins.AttachmentPlugin);
 })();

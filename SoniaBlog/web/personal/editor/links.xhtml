@@ -1,0 +1,51 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core">
+  <body>
+
+    <ui:composition template="./template.xhtml">
+
+      <ui:define name="head">
+        <script type="text/javascript" src="../../resources/tiny_mce/plugins/links/js/dialog.js"></script>
+      </ui:define>
+
+      <ui:define name="content">
+
+        <h3><h:outputText value="#{label.options}" /></h3>
+
+        <div class="options">
+
+          <input type="checkbox" id="newwindow" name="newwindow" />
+          <h:outputText value="#{label.optionNewWindow}" />
+
+        </div>
+
+        <h3><h:outputText value="#{label.links}" /></h3>
+        
+        <div class="entries">
+
+          <ul>
+            <ui:repeat value="#{EntryBean.entries}" var="Entry">
+              <li>
+                <a href="#" onclick="LinksDialog.insert('../list/#{Entry.id}.jab','#{Entry.title}');">
+                  <h:outputText value="#{Entry.title}" />
+                </a>
+              </li>
+            </ui:repeat>
+          </ul>
+          
+        </div>
+
+      </ui:define>
+
+      <ui:define name="footer">
+      </ui:define>
+
+    </ui:composition>
+
+  </body>
+</html>
+

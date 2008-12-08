@@ -7,9 +7,9 @@
 
 (function() {
   // Load plugin specific language pack
-  tinymce.PluginManager.requireLangPack('imgbrowser');
+  tinymce.PluginManager.requireLangPack('links');
 
-  tinymce.create('tinymce.plugins.ImgBrowserPlugin', {
+  tinymce.create('tinymce.plugins.LinksPlugin', {
     /**
 		 * Initializes the plugin, this will be executed after the plugin has been created.
 		 * This call is done before the editor instance has finished it's initialization so use the onInit event
@@ -20,18 +20,13 @@
 		 */
     init : function(ed, url) {
       
-      var id = ed.getParam( "entry_id" );
-      var address = url + '/../../../../personal/editor/images.jab';
-      if ( id != null && id != "" )
-      {
-        address += "?id=" + id;
-      }
+      var address = url + '/../../../../personal/editor/links.jab';
       // Register the command so that it can be invoked by using tinyMCE.activeEditor.execCommand('mceExample');
-      ed.addCommand('mceImgBrowser', function() {
+      ed.addCommand('mceLinks', function() {
         ed.windowManager.open({
           file : address,
-          width : 720 + parseInt(ed.getLang('imgbrowser.delta_width', 0)),
-          height : 576 + parseInt(ed.getLang('imgbrowser.delta_height', 0)),
+          width : 320 + parseInt(ed.getLang('links.delta_width', 0)),
+          height : 576 + parseInt(ed.getLang('links.delta_height', 0)),
           inline : 1,
           scrollbars: "yes"
         }, {
@@ -40,10 +35,10 @@
       });
 
       // Register example button
-      ed.addButton('imgbrowser', {
-        title : 'imgbrowser.desc',
-        cmd : 'mceImgBrowser',
-        image : url + '/img/image.gif'
+      ed.addButton('links', {
+        title : 'links.desc',
+        cmd : 'mceLinks',
+        image : url + '/img/links.gif'
       });
     },
 
@@ -69,7 +64,7 @@
 		 */
     getInfo : function() {
       return {
-        longname : 'ImageBrowser Plugin',
+        longname : 'Links Plugin',
         author : 'Sebastian Sdorra',
         authorurl : 'http://www.fh-wolfenbuettel.de',
         infourl : 'http://www.fh-wolfenbuettel.de/rz',
@@ -79,5 +74,5 @@
   });
 
   // Register plugin
-  tinymce.PluginManager.add('imgbrowser', tinymce.plugins.ImgBrowserPlugin);
+  tinymce.PluginManager.add('links', tinymce.plugins.LinksPlugin);
 })();

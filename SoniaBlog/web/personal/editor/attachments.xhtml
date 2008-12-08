@@ -1,0 +1,84 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+  <body>
+
+    <ui:composition template="./template.xhtml">
+
+      <ui:define name="head">
+        <script type="text/javascript" src="../../resources/tiny_mce/plugins/attachment/js/dialog.js"></script>
+      </ui:define>
+
+      <ui:define name="content">
+
+        <h3><h:outputText value="#{label.options}" /></h3>
+
+        <div class="options">
+
+          <input type="checkbox" id="newwindow" name="newwindow" checked="checked" />
+          <h:outputText value="#{label.optionNewWindow}" />
+
+        </div>
+
+
+        <h3><h:outputText value="#{label.attachments}" /></h3>
+
+        <div class="attachments">
+
+          <h:form>
+
+            <h:dataTable value="#{EntryBean.attachments}" var="Attachment">
+
+              <h:column>
+                <f:facet name="header">
+                  <h:outputText value="#{label.name}" />
+                </f:facet>
+                <a href="#" onclick="AttachmentDialog.insert('../attachment/#{Attachment.id}','#{Attachment.name}')">
+                  <h:outputText value="#{Attachment.name}" />
+                </a>
+              </h:column>
+
+              <h:column>
+                <f:facet name="header">
+                  <h:outputText value="#{label.mimeType}" />
+                </f:facet>
+                <h:outputText value="#{Attachment.mimeType}" />
+              </h:column>
+
+              <h:column>
+                <f:facet name="header">
+                  <h:outputText value="#{label.size}" />
+                </f:facet>
+                <h:outputText value="#{Attachment.size}" />
+              </h:column>
+
+              <h:column>
+                <f:facet name="header">
+                  <h:outputText value="#{label.creationDate}" />
+                </f:facet>
+                <h:outputText value="#{Attachment.creationDate}">
+                  <f:convertDateTime pattern="yyyy-MM-dd HH:mm:ss" />
+                </h:outputText>
+              </h:column>
+
+              <h:column>
+                <h:commandLink value="#{label.remove}" actionListener="#{EntryBean.removeAttachment}" />
+              </h:column>
+
+            </h:dataTable>
+
+          </h:form>
+
+        </div>
+
+      </ui:define>
+
+    </ui:composition>
+
+  </body>
+</html>
+

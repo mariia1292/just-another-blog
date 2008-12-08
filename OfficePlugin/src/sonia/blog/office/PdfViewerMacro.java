@@ -333,7 +333,7 @@ public class PdfViewerMacro implements Macro, ConfigurationListener
     });
     String name = "pdfgallery_" + pdfDir.getName();
 
-    result += "<div id=\"" + name + "\">\n";
+    result += "<span id=\"" + name + "\">\n";
 
     String path = pdfDir.getName() + "/";
     String baseLink = linkBase + PdfViewerMappingEntry.PATH + path;
@@ -355,10 +355,10 @@ public class PdfViewerMacro implements Macro, ConfigurationListener
       }
     }
 
-    result += "</div>\n";
+    result += "</span>\n";
     result += "<script type=\"text/javascript\">\n";
     result += "$(document).ready(function() {\n";
-    result += "$(\"div#" + name + " a\").lightBox({\n";
+    result += "$(\"span#" + name + " a\").lightBox({\n";
     result += "imageLoading: '" + res + "images/lightbox-ico-loading.gif',\n";
     result += "imageBtnPrev: '" + res + "images/lightbox-btn-prev.gif',\n";
     result += "imageBtnNext: '" + res + "images/lightbox-btn-next.gif',\n";
