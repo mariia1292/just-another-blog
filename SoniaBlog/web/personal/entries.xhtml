@@ -24,9 +24,10 @@
             skin : "jab",
             plugins : "fullscreen,safari,emotions,imgbrowser,attachment,links",
             theme_advanced_buttons3_add : "|,emotions,fullscreen,|,imgbrowser,attachment,links",
-            <h:outputText value="content_css: '/jab#{BlogBean.template.contentCSS}?' + new Date().getTime()," 
+            <h:outputText value="content_css: '#{EntryBean.contentCSS}?' + new Date().getTime(),"
                           rendered="#{BlogBean.template.contentCSS != null}" />
             convert_urls : false,
+            <h:outputText value="document_base_url : '#{EntryBean.baseUrl}'," />
             fullscreen_new_window : true,
             fullscreen_settings : {
               theme_advanced_path_location : "top"

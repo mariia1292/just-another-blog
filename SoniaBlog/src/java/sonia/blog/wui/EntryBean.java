@@ -13,6 +13,7 @@ import org.apache.myfaces.custom.fileupload.UploadedFile;
 
 import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.app.BlogRequest;
+import sonia.blog.api.template.Template;
 import sonia.blog.api.util.AbstractBean;
 import sonia.blog.entity.Attachment;
 import sonia.blog.entity.Blog;
@@ -428,6 +429,18 @@ public class EntryBean extends AbstractBean
    *
    * @return
    */
+  public String getBaseUrl()
+  {
+    return BlogContext.getInstance().getLinkBuilder().buildLink(getRequest(),
+            "/");
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
   @SuppressWarnings("unchecked")
   public SelectItem[] getCategoryItems()
   {
@@ -456,6 +469,23 @@ public class EntryBean extends AbstractBean
     em.close();
 
     return items;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  public String getContentCSS()
+  {
+    BlogRequest request = getRequest();
+    Template template =
+      BlogContext.getInstance().getTemplateManager().getTemplate(
+          request.getCurrentBlog());
+
+    return BlogContext.getInstance().getLinkBuilder().buildLink(request,
+            template.getContentCSS());
   }
 
   /**

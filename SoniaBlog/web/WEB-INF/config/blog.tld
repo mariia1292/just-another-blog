@@ -4,8 +4,8 @@
   <short-name>blog</short-name>
   <uri>http://jab.nitilon.org/blog/</uri>
   <tag>
-    <name>content</name>
-    <tag-class>sonia.blog.api.jsf.content.ContentTag</tag-class>
+    <name>calendar</name>
+    <tag-class>sonia.blog.api.jsf.calendar.CalendarTag</tag-class>
     <body-content>JSP</body-content>
     <attribute>
       <name>style</name>

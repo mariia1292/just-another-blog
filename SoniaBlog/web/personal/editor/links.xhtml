@@ -30,7 +30,7 @@
           <ul>
             <ui:repeat value="#{EntryBean.entries}" var="Entry">
               <li>
-                <a href="#" onclick="LinksDialog.insert('../list/#{Entry.id}.jab','#{Entry.title}');">
+                <a href="#" onclick="LinksDialog.insert('list/#{Entry.id}.jab','#{Entry.title}');">
                   <h:outputText value="#{Entry.title}" />
                 </a>
               </li>
