@@ -21,6 +21,7 @@ import sonia.blog.macro.HelloWorldMacro;
 import sonia.blog.macro.SpoilerMacro;
 import sonia.blog.mapping.AttachmentMappingEntry;
 import sonia.blog.mapping.CategoryMappingEntry;
+import sonia.blog.mapping.DateMappingEntry;
 import sonia.blog.mapping.DefaultMappingHandler;
 import sonia.blog.mapping.FeedMappingEntry;
 import sonia.blog.mapping.ListMappingEntry;
@@ -223,6 +224,7 @@ public class BlogContextListener implements ServletContextListener
     mappingHandler.addMappging("/resource/", new ResourceMappingEntry());
     mappingHandler.addMappging("/feed", new FeedMappingEntry());
     mappingHandler.addMappging("/search.jab", new SearchMappingEntry());
+    mappingHandler.addMappging("/date", new DateMappingEntry());
     registry.registerService(
         Constants.SERVICE_MAPPINGHANDLER).addImplementation(mappingHandler);
     registry.registerService(Constants.SERVICE_CONTEXTLISTENER);

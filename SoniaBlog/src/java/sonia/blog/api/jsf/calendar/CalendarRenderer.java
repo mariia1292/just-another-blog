@@ -83,8 +83,6 @@ public class CalendarRenderer extends BaseRenderer
       Date endDate = createEndDate(month - 1, year);
       List<Date> dates = getEntryDates(blog, startDate, endDate);
 
-      System.out.println("DATES: " + dates.size());
-
       ResponseWriter writer = context.getResponseWriter();
 
       writer.startElement("table", component);
@@ -321,8 +319,6 @@ public class CalendarRenderer extends BaseRenderer
     {
       Query q = em.createNamedQuery("Entry.calendar");
 
-      System.out.println(startDate);
-      System.out.println(endDate);
       q.setParameter("blog", blog);
       q.setParameter("start", startDate);
       q.setParameter("end", endDate);

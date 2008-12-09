@@ -29,16 +29,13 @@ import sonia.security.encryption.Encryption;
 //~--- JDK imports ------------------------------------------------------------
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.IOException;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 
 import java.util.ResourceBundle;
 import java.util.logging.Level;
-import java.util.logging.LogManager;
 
 import javax.persistence.EntityManager;
 
@@ -99,11 +96,11 @@ public class InstallBean extends AbstractBean
 
       XmlConfiguration configuration = context.getConfiguration();
 
-      configuration.set("db.driver", databaseDriver);
-      configuration.set("db.url", databaseUrl);
-      configuration.set("db.username", databaseUsername);
-      configuration.set("db.password", databsePassword);
-      configuration.set("resource.directory", resourcePath);
+      configuration.set(Constants.CONFIG_DB_DRIVER, databaseDriver);
+      configuration.set(Constants.CONFIG_DB_URL, databaseUrl);
+      configuration.set(Constants.CONFIG_DB_USERNAME, databaseUsername);
+      configuration.set(Constants.CONFIG_DB_PASSWORD, databsePassword);
+      configuration.set(Constants.CONFIG_RESOURCE_DIRECTORY, resourcePath);
 
       /*
        * try
@@ -480,20 +477,6 @@ public class InstallBean extends AbstractBean
     }
 
     return result;
-  }
-
-  /**
-   * Method description
-   *
-   *
-   * @throws IOException
-   */
-  private void configureLogger() throws IOException
-  {
-    String path = BlogContext.getInstance().getServletContext().getRealPath(
-                      "/WEB-INF/config/logger.properties");
-
-    LogManager.getLogManager().readConfiguration(new FileInputStream(path));
   }
 
   //~--- fields ---------------------------------------------------------------

@@ -200,7 +200,7 @@ public class BlogContext
   public Blog getDefaultBlog()
   {
     Blog blog = null;
-    Long id = configuration.getLong("defaultBlog");
+    Long id = configuration.getLong(Constants.CONFIG_DEFAULTBLOG);
 
     if (id != null)
     {
@@ -237,10 +237,14 @@ public class BlogContext
       XmlConfiguration config = getConfiguration();
       Map<String, String> parameters = new HashMap<String, String>();
 
-      parameters.put("toplink.jdbc.driver", config.getString("db.driver"));
-      parameters.put("toplink.jdbc.url", config.getString("db.url"));
-      parameters.put("toplink.jdbc.user", config.getString("db.username"));
-      parameters.put("toplink.jdbc.password", config.getString("db.password"));
+      parameters.put("toplink.jdbc.driver",
+                     config.getString(Constants.CONFIG_DB_DRIVER));
+      parameters.put("toplink.jdbc.url",
+                     config.getString(Constants.CONFIG_DB_URL));
+      parameters.put("toplink.jdbc.user",
+                     config.getString(Constants.CONFIG_DB_USERNAME));
+      parameters.put("toplink.jdbc.password",
+                     config.getString(Constants.CONFIG_DB_PASSWORD));
       entityManagerFactory =
         Persistence.createEntityManagerFactory("SoniaBlog-PU", parameters);
     }
@@ -326,7 +330,8 @@ public class BlogContext
     if (resourceDirectory == null)
     {
       XmlConfiguration config = getConfiguration();
-      String resourcePath = config.getString("resource.directory");
+      String resourcePath =
+        config.getString(Constants.CONFIG_RESOURCE_DIRECTORY);
 
       if (resourcePath == null)
       {

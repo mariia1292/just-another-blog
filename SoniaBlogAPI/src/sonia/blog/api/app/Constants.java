@@ -15,6 +15,21 @@ public interface Constants
 {
 
   /** Field description */
+  public static final String CONFIG_DB_DRIVER = "db.driver";
+
+  /** Field description */
+  public static final String CONFIG_DB_PASSWORD = "db.password";
+
+  /** Field description */
+  public static final String CONFIG_DB_URL = "db.url";
+
+  /** Field description */
+  public static final String CONFIG_DB_USERNAME = "db.username";
+
+  /** Field description */
+  public static String CONFIG_DEFAULTBLOG = "defaultBlog";
+
+  /** Field description */
   public static final String CONFIG_FEEDTYPE = "feed.type";
 
   /** Field description */
@@ -25,6 +40,9 @@ public interface Constants
 
   /** Field description */
   public static final String CONFIG_IMAGEMIMETYPE = "image.mimetype";
+
+  /** Field description */
+  public static final String CONFIG_RESOURCE_DIRECTORY = "resource.directory";
 
   /** Field description */
   public static final String DEFAULT_IMAGE_EXTENSION = "jpg";
