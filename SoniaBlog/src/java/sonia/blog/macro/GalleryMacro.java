@@ -113,8 +113,6 @@ public class GalleryMacro implements Macro
                     + "js/jquery.js\"></script>\n";
           result += "<script type=\"text/javascript\" src=\"" + res
                     + "js/jquery.lightbox-0.5.js\"></script>\n";
-          result += "<script type=\"text/javascript\" src=\"" + res
-                    + "js/lightbox.js\"></script>\n";
           result += "<link rel=\"stylesheet\" href=\"" + res
                     + "css/jquery.lightbox-0.5.css\" "
                     + "type=\"text/css\" media=\"screen\"></link>\n";
