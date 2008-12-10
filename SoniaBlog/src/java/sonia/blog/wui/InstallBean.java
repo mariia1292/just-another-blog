@@ -159,7 +159,7 @@ public class InstallBean extends AbstractBean
           }
         }
 
-        String uri = context.getLinkBuilder().buildLink(getRequest(), "/blog");
+        String uri = context.getLinkBuilder().buildLink(getRequest(), "/");
 
         sendRedirect(uri);
       }
