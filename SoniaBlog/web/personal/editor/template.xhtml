@@ -23,7 +23,16 @@
 
         <h:form enctype="multipart/form-data">
 
-          <t:inputFileUpload value="#{EntryBean.uploadedFile}" /><br />
+          <h:panelGrid columns="2">
+
+            <h:outputText value="#{label.description}" />
+            <h:outputText value="#{label.file}" />
+
+            <h:inputText value="#{EntryBean.uploadDescription}" />
+            <t:inputFileUpload value="#{EntryBean.uploadedFile}" />
+
+          </h:panelGrid>
+          
           <h:selectBooleanCheckbox id="unzip" value="#{EntryBean.unzipFiles}" />
           <h:outputLabel for="unzip" value="#{label.unzipFiles}" /><br />
           <h:commandButton value="#{label.upload}" action="#{EntryBean.upload}" />

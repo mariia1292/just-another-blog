@@ -83,6 +83,17 @@ public class EntryBean extends AbstractBean
    *
    * @return
    */
+  public String abortAttachmentEdit()
+  {
+    return SUCCESS;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
   public String edit()
   {
     entry = (Entry) entries.getRowData();
@@ -104,6 +115,26 @@ public class EntryBean extends AbstractBean
     }
 
     return SUCCESS;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  public String editAttachment()
+  {
+    String result = FAILURE;
+
+    attachment = (Attachment) attachments.getRowData();
+
+    if (attachment != null)
+    {
+      result = SUCCESS;
+    }
+
+    return result;
   }
 
   /**
@@ -270,6 +301,43 @@ public class EntryBean extends AbstractBean
    *
    * @return
    */
+  public String saveAttachment()
+  {
+    EntityManager em = BlogContext.getInstance().getEntityManager();
+
+    em.getTransaction().begin();
+
+    try
+    {
+      attachment = em.merge(attachment);
+      em.getTransaction().commit();
+    }
+    catch (Exception ex)
+    {
+      logger.log(Level.SEVERE, null, ex);
+
+      if (em.getTransaction().isActive())
+      {
+        em.getTransaction().rollback();
+      }
+    }
+    finally
+    {
+      if (em != null)
+      {
+        em.close();
+      }
+    }
+
+    return SUCCESS;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
   public String saveDraft()
   {
     entry.setPublished(false);
@@ -322,6 +390,7 @@ public class EntryBean extends AbstractBean
       attachment.setMimeType(uploadedFile.getContentType());
       attachment.setSize(uploadedFile.getSize());
       attachment.setName(uploadedFile.getName());
+      attachment.setDescription(uploadDescription);
       System.out.println("ATTACHMENT CREATED");
 
       EntityManager em = BlogContext.getInstance().getEntityManager();
@@ -353,6 +422,7 @@ public class EntryBean extends AbstractBean
 
         attachment.setFilePath(path);
         em.persist(attachment);
+        uploadDescription = null;
         em.getTransaction().commit();
       }
       catch (Exception ex)
@@ -392,6 +462,17 @@ public class EntryBean extends AbstractBean
   }
 
   //~--- get methods ----------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  public Attachment getAttachment()
+  {
+    return attachment;
+  }
 
   /**
    * Method description
@@ -588,6 +669,17 @@ public class EntryBean extends AbstractBean
    *
    * @return
    */
+  public String getUploadDescription()
+  {
+    return uploadDescription;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
   public UploadedFile getUploadedFile()
   {
     return uploadedFile;
@@ -605,6 +697,17 @@ public class EntryBean extends AbstractBean
   }
 
   //~--- set methods ----------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   * @param attachment
+   */
+  public void setAttachment(Attachment attachment)
+  {
+    this.attachment = attachment;
+  }
 
   /**
    * Method description
@@ -648,6 +751,17 @@ public class EntryBean extends AbstractBean
   public void setUnzipFiles(boolean unzipFiles)
   {
     this.unzipFiles = unzipFiles;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param uploadDescription
+   */
+  public void setUploadDescription(String uploadDescription)
+  {
+    this.uploadDescription = uploadDescription;
   }
 
   /**
@@ -797,6 +911,16 @@ public class EntryBean extends AbstractBean
                   URLConnection.getFileNameMap().getContentTypeFor(name));
               attachment.setName(name);
               attachment.setSize(file.length());
+
+              if (!Util.isBlank(uploadDescription))
+              {
+                attachment.setDescription(uploadDescription);
+              }
+              else
+              {
+                attachment.setDescription(uploadedFile.getName());
+              }
+
               em.persist(attachment);
               em.getTransaction().commit();
             }
@@ -813,6 +937,8 @@ public class EntryBean extends AbstractBean
 
           ze = zis.getNextEntry();
         }
+
+        uploadDescription = null;
       }
       else
       {
@@ -844,6 +970,9 @@ public class EntryBean extends AbstractBean
   //~--- fields ---------------------------------------------------------------
 
   /** Field description */
+  private Attachment attachment;
+
+  /** Field description */
   private DataModel attachments;
 
   /** Field description */
@@ -863,6 +992,9 @@ public class EntryBean extends AbstractBean
 
   /** Field description */
   private boolean unzipFiles = false;
+
+  /** Field description */
+  private String uploadDescription;
 
   /** Field description */
   private UploadedFile uploadedFile;

@@ -51,6 +51,13 @@
 
               <h:column>
                 <f:facet name="header">
+                  <h:outputText value="#{label.description}" />
+                </f:facet>
+                <h:outputText value="#{Attachment.description}" />
+              </h:column>
+
+              <h:column>
+                <f:facet name="header">
                   <h:outputText value="#{label.size}" />
                 </f:facet>
                 <h:outputText value="#{Attachment.size}" />
@@ -66,6 +73,16 @@
               </h:column>
 
               <h:column>
+                <f:facet name="header">
+                  <h:outputText value="#{label.edit}" />
+                </f:facet>
+                <h:commandLink value="#{label.edit}" action="#{EntryBean.editAttachment}" />
+              </h:column>
+
+              <h:column>
+                <f:facet name="header">
+                  <h:outputText value="#{label.remove}" />
+                </f:facet>
                 <h:commandLink value="#{label.remove}" actionListener="#{EntryBean.removeAttachment}" />
               </h:column>
 

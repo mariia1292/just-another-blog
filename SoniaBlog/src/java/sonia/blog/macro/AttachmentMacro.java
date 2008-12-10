@@ -53,6 +53,8 @@ public class AttachmentMacro implements Macro
 
     if ((blog != null) && (object != null) && (object instanceof Entry))
     {
+      System.out.println("ATTACHMENT MACRO");
+
       Entry entry = (Entry) object;
       List<Attachment> attachments = entry.getAttachments();
 
@@ -89,7 +91,7 @@ public class AttachmentMacro implements Macro
         result += ">";
         result += "<thead>\n";
         result += "<th>Name</th>\n";
-        result += "<th>MimeType</th>\n";
+        result += "<th>Description</th>\n";
         result += "<th>Size</th>\n";
         result += "<th>Date</th>\n";
         result += "</thead>\n";
@@ -104,7 +106,15 @@ public class AttachmentMacro implements Macro
           result += attachment.getName();
           result += "</a>";
           result += "</td>\n";
-          result += "<td>" + attachment.getMimeType() + "</td>\n";
+
+          String description = attachment.getDescription();
+
+          if (description == null)
+          {
+            description = "";
+          }
+
+          result += "<td>" + description + "</td>\n";
           result += "<td>" + attachment.getSize() + "</td>\n";
           result += "<td>" + sdf.format(attachment.getCreationDate())
                     + "</td>\n";

@@ -127,6 +127,17 @@ public class Attachment implements Serializable, PermaObject
    *
    * @return
    */
+  public String getDescription()
+  {
+    return description;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
   public Entry getEntry()
   {
     return entry;
@@ -188,6 +199,17 @@ public class Attachment implements Serializable, PermaObject
   }
 
   //~--- set methods ----------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   * @param description
+   */
+  public void setDescription(String description)
+  {
+    this.description = description;
+  }
 
   /**
    * Method description
@@ -272,6 +294,9 @@ public class Attachment implements Serializable, PermaObject
   /** Field description */
   @Temporal(TemporalType.TIMESTAMP)
   private Date creationDate;
+
+  /** Field description */
+  private String description;
 
   /** Field description */
   @ManyToOne

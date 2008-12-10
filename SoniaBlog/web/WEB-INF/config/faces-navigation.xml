@@ -85,6 +85,30 @@
       <to-view-id>/personal/entries.xhtml</to-view-id>
     </navigation-case>
   </navigation-rule>
+
+  <navigation-rule>
+    <from-view-id>/personal/editor/attachments.xhtml</from-view-id>
+    <navigation-case>
+      <from-outcome>success</from-outcome>
+      <to-view-id>/personal/editor/edit.xhtml</to-view-id>
+    </navigation-case>
+    <navigation-case>
+      <from-outcome>failure</from-outcome>
+      <to-view-id>/personal/editor/attachments.xhtml</to-view-id>
+    </navigation-case>
+  </navigation-rule>
+
+  <navigation-rule>
+    <from-view-id>/personal/editor/edit.xhtml</from-view-id>
+    <navigation-case>
+      <from-outcome>success</from-outcome>
+      <to-view-id>/personal/editor/attachments.xhtml</to-view-id>
+    </navigation-case>
+    <navigation-case>
+      <from-outcome>failure</from-outcome>
+      <to-view-id>/personal/editor/edit.xhtml</to-view-id>
+    </navigation-case>
+  </navigation-rule>
   
   <navigation-rule>
     <from-view-id>/login.xhtml</from-view-id>

@@ -187,6 +187,9 @@
 
   .entryNavigation { text-align: center; }
 
+  .clean { margin: 0; padding: 0; }
+  .middle { vertical-align: middle; }
+
   /**
   * Miscellaneous | Sonstiges
   *

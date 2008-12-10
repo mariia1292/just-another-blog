@@ -128,10 +128,10 @@ public class BlogBean extends AbstractBean
 
       navigation.add(new NavigationMenuItem(bundle.getString("templates"),
               "templates"));
-      navigation.add(new NavigationMenuItem(bundle.getString("general"),
-              "general"));
       navigation.add(new NavigationMenuItem(bundle.getString("members"),
               "members"));
+      navigation.add(new NavigationMenuItem(bundle.getString("general"),
+              "general"));
     }
 
     return navigation;

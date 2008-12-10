@@ -14,10 +14,12 @@
       </ui:define>
       
       <ui:define name="content">
-        
+
+        <h1><h:outputText value="#{label.members}" /></h1>
+
         <h:form>
           
-          <h:dataTable value="#{MemberBean.members}" var="Member">
+          <h:dataTable columnClasses="middle,none" value="#{MemberBean.members}" var="Member">
             
             <h:column>
               <f:facet name="header">
@@ -30,7 +32,8 @@
               <f:facet name="header">
                 <h:outputText value="#{label.role}" />
               </f:facet>
-              <h:selectOneRadio value="#{Member.role}" onclick="submit();" valueChangeListener="#{MemberBean.roleChanged}">
+              <h:selectOneRadio styleClass="clean" value="#{Member.role}"
+                                onclick="submit();" valueChangeListener="#{MemberBean.roleChanged}">
                 <f:selectItems value="#{MemberBean.roleItems}" />
               </h:selectOneRadio>
             </h:column>
