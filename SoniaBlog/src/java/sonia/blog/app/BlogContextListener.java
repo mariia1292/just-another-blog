@@ -34,6 +34,8 @@ import sonia.blog.search.IndexListener;
 
 import sonia.macro.MacroParser;
 
+import sonia.net.FileNameMap;
+
 import sonia.plugin.Plugin;
 import sonia.plugin.PluginStateListener;
 import sonia.plugin.ServiceReference;
@@ -47,6 +49,8 @@ import sonia.security.encryption.MD5Encryption;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
+
+import java.net.URLConnection;
 
 import java.util.HashMap;
 import java.util.List;
@@ -100,6 +104,7 @@ public class BlogContextListener implements ServletContextListener
       BlogContext context = BlogContext.getInstance();
 
       context.setServletContext(event.getServletContext());
+      initFileNameMap();
       initServices(context);
       initMacros();
       configureLogger();
@@ -184,6 +189,17 @@ public class BlogContextListener implements ServletContextListener
 
     // logger.setUseParentHandlers(false);
     // logger.addHandler(new LoggingHandler());
+  }
+
+  /**
+   * Method description
+   *
+   */
+  private void initFileNameMap()
+  {
+    FileNameMap nameMap = new FileNameMap();
+
+    URLConnection.setFileNameMap(nameMap);
   }
 
   /**

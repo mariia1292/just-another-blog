@@ -40,7 +40,7 @@ public class PluginActivator implements Activator
       new File(BlogContext.getInstance().getResourceDirectory(),
                "macros" + File.separator + "officeplugin");
 
-    if ( ! resourceDir.exists() )
+    if (!resourceDir.exists())
     {
       resourceDir.mkdirs();
     }
@@ -50,6 +50,7 @@ public class PluginActivator implements Activator
                                new PdfViewerMappingEntry(resourceDir));
     parser = MacroParser.getInstance();
     parser.putMacro(PdfViewerMacro.NAME, new PdfViewerMacro(resourceDir));
+    parser.putMacro(CodeMacro.NAME, new CodeMacro());
   }
 
   /**
@@ -60,6 +61,7 @@ public class PluginActivator implements Activator
    */
   public void stop(PluginContext context)
   {
+    parser.removeMacro(CodeMacro.NAME);
     parser.removeMacro(PdfViewerMacro.NAME);
     mappingHandler.removeMapping("/" + PdfViewerMacro.NAME);
   }

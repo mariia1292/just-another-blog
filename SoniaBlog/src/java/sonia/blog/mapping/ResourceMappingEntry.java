@@ -23,6 +23,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+import java.net.URLConnection;
+
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -62,6 +64,11 @@ public class ResourceMappingEntry implements MappingEntry
       {
         uri += "/" + p;
       }
+
+      String name = param[param.length - 1];
+      String mimeType = URLConnection.getFileNameMap().getContentTypeFor(name);
+
+      response.setContentType(mimeType);
 
       InputStream in = Util.findResource(uri);
       OutputStream out = null;
