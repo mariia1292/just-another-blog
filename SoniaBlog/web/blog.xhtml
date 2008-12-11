@@ -1,0 +1,52 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html">
+
+  <body>
+
+    <ui:composition template="./template/jab/template.xhtml">
+
+      <ui:define name="title">
+        <h:outputText value="#{label.createBlog}" />
+      </ui:define>
+
+      <ui:define name="content">
+        <h1><h:outputText value="#{label.createBlog}" /></h1>
+
+        <h:form id="blogform">
+
+          <h:panelGrid columns="3">
+
+            <h:outputLabel for="servername" value="#{label.servername}" />
+            <h:inputText id="servername" value="#{BlogCreationBean.blog.servername}" required="true" />
+            <h:message for="servername" />
+
+            <h:outputLabel for="title" value="#{label.title}" />
+            <h:inputText id="title" value="#{BlogCreationBean.blog.title}" required="true" />
+            <h:message for="title" />
+
+            <h:outputLabel for="blogMail" value="#{label.email}" />
+            <h:inputText id="blogMail" value="#{BlogCreationBean.blog.email}" required="true" />
+            <h:message for="blogMail" />
+
+            <h:outputLabel for="description" value="#{label.description}" />
+            <h:inputTextarea id="description" value="#{BlogCreationBean.blog.description}" />
+            <h:message for="description" />
+
+          </h:panelGrid>
+
+          <h:commandButton value="#{label.save}" action="#{BlogCreationBean.save}" />
+
+        </h:form>
+
+      </ui:define>
+
+      <ui:define name="info">
+      </ui:define>
+
+    </ui:composition>
+
+  </body>
+</html>

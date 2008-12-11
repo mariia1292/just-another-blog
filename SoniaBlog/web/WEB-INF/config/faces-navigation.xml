@@ -25,8 +25,12 @@
       <to-view-id>/personal/entries.xhtml</to-view-id>
     </navigation-case>
     <navigation-case>
-      <from-outcome>searchResult</from-outcome>
-      <to-view-id>/searchResult.xhtml</to-view-id>
+      <from-outcome>register</from-outcome>
+      <to-view-id>/register.xhtml</to-view-id>
+    </navigation-case>
+    <navigation-case>
+      <from-outcome>createBlog</from-outcome>
+      <to-view-id>/blog.xhtml</to-view-id>
     </navigation-case>
     <navigation-case>
       <from-outcome>deny</from-outcome>
@@ -34,21 +38,6 @@
     </navigation-case>
   </navigation-rule>
   
-  <navigation-rule>
-    <from-view-id>/index.xhtml</from-view-id>
-    <navigation-case>
-      <from-outcome>detail</from-outcome>
-      <to-view-id>/detail.xhtml</to-view-id>
-    </navigation-case>
-  </navigation-rule>
-  
-  <navigation-rule>
-    <from-view-id>/searchResult.xhtml</from-view-id>
-    <navigation-case>
-      <from-outcome>detail</from-outcome>
-      <to-view-id>/detail.xhtml</to-view-id>
-    </navigation-case>
-  </navigation-rule>
   
   <navigation-rule>
     <from-view-id>/personal/*</from-view-id>
@@ -107,18 +96,6 @@
     <navigation-case>
       <from-outcome>failure</from-outcome>
       <to-view-id>/personal/editor/edit.xhtml</to-view-id>
-    </navigation-case>
-  </navigation-rule>
-  
-  <navigation-rule>
-    <from-view-id>/login.xhtml</from-view-id>
-    <navigation-case>
-      <from-outcome>success</from-outcome>
-      <to-view-id>/personal/entries.xhtml</to-view-id>
-    </navigation-case>
-    <navigation-case>
-      <from-outcome>failure</from-outcome>
-      <to-view-id>/login.xhtml</to-view-id>
     </navigation-case>
   </navigation-rule>
   

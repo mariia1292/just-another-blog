@@ -287,6 +287,8 @@ public class BlogBean extends AbstractBean
     {
       navigation.add(new NavigationMenuItem(bundle.getString("login"),
               "login"));
+      navigation.add(new NavigationMenuItem(bundle.getString("register"),
+              "register"));
     }
     else
     {
@@ -296,6 +298,8 @@ public class BlogBean extends AbstractBean
                 "personal"));
       }
 
+      navigation.add(new NavigationMenuItem(bundle.getString("createBlog"),
+              "createBlog"));
       navigation.add(new NavigationMenuItem(bundle.getString("logout"),
               "#{LoginBean.logout}"));
     }

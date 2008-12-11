@@ -34,7 +34,11 @@ import javax.persistence.TemporalType;
  */
 @Entity @Table(name = "BlogUser")
 @NamedQueries({ @NamedQuery(name = "User.login",
-                            query = "select u from User as u where u.active = true and u.name = :name and u.password = :password") })
+                            query = "select u from User as u where u.active = true and u.name = :name and u.password = :password") ,
+                @NamedQuery(name = "User.findByName",
+                            query = "select u from User as u where u.active = true and u.name = :name"),
+@NamedQuery(name = "User.findByEmail",
+                            query = "select u from User as u where u.active = true and u.email = :email")})
 public class User implements Serializable, Principal, PermaObject
 {
 

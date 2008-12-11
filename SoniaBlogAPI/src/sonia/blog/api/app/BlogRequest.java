@@ -273,26 +273,34 @@ public class BlogRequest extends HttpServletRequestWrapper
 
     if (user != null)
     {
-      if (!searchForMember)
+      if (!user.isGlobalAdmin())
       {
-        EntityManager em = BlogContext.getInstance().getEntityManager();
-        Query q = em.createNamedQuery("BlogMember.findByBlogAndUser");
-
-        q.setParameter("user", user);
-        q.setParameter("blog", getCurrentBlog());
-
-        try
+        if (!searchForMember)
         {
-          member = (BlogMember) q.getSingleResult();
+          EntityManager em = BlogContext.getInstance().getEntityManager();
+          Query q = em.createNamedQuery("BlogMember.findByBlogAndUser");
+
+          q.setParameter("user", user);
+          q.setParameter("blog", getCurrentBlog());
+
+          try
+          {
+            member = (BlogMember) q.getSingleResult();
+          }
+          catch (NoResultException ex) {}
+
+          searchForMember = true;
         }
-        catch (NoResultException ex) {}
 
-        searchForMember = true;
+        if (member != null)
+        {
+          result = role.equalsIgnoreCase(member.getRole().name());
+        }
       }
-
-      if (member != null)
+      else
       {
-        result = role.equalsIgnoreCase(member.getRole().name());
+        result = true;
+        searchForMember = true;
       }
     }
 

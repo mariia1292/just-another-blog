@@ -10,6 +10,7 @@ package sonia.blog.api.authentication;
 //~--- non-JDK imports --------------------------------------------------------
 
 import sonia.blog.api.app.BlogContext;
+import sonia.blog.api.app.BlogRequest;
 import sonia.blog.api.util.AbstractBean;
 
 //~--- JDK imports ------------------------------------------------------------
@@ -49,6 +50,7 @@ public class LoginBean extends AbstractBean
       authenticated = true;
       result = SUCCESS;
       getMessageHandler().info("loginSuccess");
+      redirect();
     }
     catch (LoginException ex)
     {
@@ -85,6 +87,7 @@ public class LoginBean extends AbstractBean
     }
 
     getMessageHandler().info("logoutSuccess");
+    redirect();
 
     return SUCCESS;
   }
@@ -157,6 +160,21 @@ public class LoginBean extends AbstractBean
   public void setUsername(String username)
   {
     this.username = username;
+  }
+
+  //~--- methods --------------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   */
+  private void redirect()
+  {
+    BlogRequest request = getRequest();
+    String uri = BlogContext.getInstance().getLinkBuilder().buildLink(request,
+                   request.getCurrentBlog());
+
+    sendRedirect(uri);
   }
 
   //~--- fields ---------------------------------------------------------------

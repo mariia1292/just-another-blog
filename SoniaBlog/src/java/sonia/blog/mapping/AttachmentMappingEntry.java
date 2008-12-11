@@ -54,9 +54,6 @@ public class AttachmentMappingEntry
         implements MappingEntry, ConfigurationListener
 {
 
- 
-  //~--- constructors ---------------------------------------------------------
-
   /**
    * Constructs ...
    *

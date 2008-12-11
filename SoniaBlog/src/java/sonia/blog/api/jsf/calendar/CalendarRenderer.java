@@ -82,7 +82,6 @@ public class CalendarRenderer extends BaseRenderer
       Date startDate = createStartDate(month - 1, year);
       Date endDate = createEndDate(month - 1, year);
       List<Date> dates = getEntryDates(blog, startDate, endDate);
-
       ResponseWriter writer = context.getResponseWriter();
 
       writer.startElement("table", component);
@@ -197,16 +196,16 @@ public class CalendarRenderer extends BaseRenderer
    * @param year
    * @return
    */
-  private Date createStartDate(int month, int year)
+  private Date createEndDate(int month, int year)
   {
     GregorianCalendar cal = new GregorianCalendar();
 
     cal.set(Calendar.YEAR, year);
     cal.set(Calendar.MONTH, month);
-    cal.set(Calendar.DAY_OF_MONTH, 1);
-    cal.set(Calendar.HOUR_OF_DAY, 0);
-    cal.set(Calendar.MINUTE, 0);
-    cal.set(Calendar.SECOND, 1);
+    cal.set(Calendar.DAY_OF_MONTH, cal.getActualMaximum(Calendar.DAY_OF_MONTH));
+    cal.set(Calendar.HOUR_OF_DAY, 23);
+    cal.set(Calendar.MINUTE, 59);
+    cal.set(Calendar.SECOND, 59);
 
     return cal.getTime();
   }
@@ -220,16 +219,16 @@ public class CalendarRenderer extends BaseRenderer
    * @param year
    * @return
    */
-  private Date createEndDate(int month, int year)
+  private Date createStartDate(int month, int year)
   {
     GregorianCalendar cal = new GregorianCalendar();
 
     cal.set(Calendar.YEAR, year);
     cal.set(Calendar.MONTH, month);
-    cal.set(Calendar.DAY_OF_MONTH, cal.getActualMaximum(Calendar.DAY_OF_MONTH));
-    cal.set(Calendar.HOUR_OF_DAY, 23);
-    cal.set(Calendar.MINUTE, 59);
-    cal.set(Calendar.SECOND, 59);
+    cal.set(Calendar.DAY_OF_MONTH, 1);
+    cal.set(Calendar.HOUR_OF_DAY, 0);
+    cal.set(Calendar.MINUTE, 0);
+    cal.set(Calendar.SECOND, 1);
 
     return cal.getTime();
   }

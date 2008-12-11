@@ -5,7 +5,19 @@
     xmlns="http://java.sun.com/xml/ns/javaee" 
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
     xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_1_2.xsd">
-  
+
+  <managed-bean>
+    <managed-bean-name>RegistrationBean</managed-bean-name>
+    <managed-bean-class>sonia.blog.wui.RegistrationBean</managed-bean-class>
+    <managed-bean-scope>request</managed-bean-scope>
+  </managed-bean>
+
+  <managed-bean>
+    <managed-bean-name>BlogCreationBean</managed-bean-name>
+    <managed-bean-class>sonia.blog.wui.BlogCreationBean</managed-bean-class>
+    <managed-bean-scope>request</managed-bean-scope>
+  </managed-bean>
+
   <managed-bean>
     <managed-bean-name>InstallBean</managed-bean-name>
     <managed-bean-class>sonia.blog.wui.InstallBean</managed-bean-class>
