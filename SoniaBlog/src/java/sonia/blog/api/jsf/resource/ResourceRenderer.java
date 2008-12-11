@@ -76,6 +76,11 @@ public class ResourceRenderer extends BaseRenderer
         writer.writeAttribute("rel", "alternate", null);
         writer.writeAttribute("type", "application/rss+xml", type);
       }
+      else if (type.equalsIgnoreCase("opensearch"))
+      {
+        writer.writeAttribute("rel", "search", null);
+        writer.writeAttribute("type", "application/opensearchdescription+xml", type);
+      }
 
       if (resource.getTitle() != null)
       {

@@ -25,6 +25,7 @@ import sonia.blog.mapping.DateMappingEntry;
 import sonia.blog.mapping.DefaultMappingHandler;
 import sonia.blog.mapping.FeedMappingEntry;
 import sonia.blog.mapping.ListMappingEntry;
+import sonia.blog.mapping.OpenSearchMappingEntry;
 import sonia.blog.mapping.RandomMappingEntry;
 import sonia.blog.mapping.ResourceMappingEntry;
 import sonia.blog.mapping.SearchMappingEntry;
@@ -240,6 +241,7 @@ public class BlogContextListener implements ServletContextListener
     mappingHandler.addMappging("/resource/", new ResourceMappingEntry());
     mappingHandler.addMappging("/feed", new FeedMappingEntry());
     mappingHandler.addMappging("/search.jab", new SearchMappingEntry());
+    mappingHandler.addMappging("/opensearch.xml", new OpenSearchMappingEntry());
     mappingHandler.addMappging("/date", new DateMappingEntry());
     registry.registerService(
         Constants.SERVICE_MAPPINGHANDLER).addImplementation(mappingHandler);
