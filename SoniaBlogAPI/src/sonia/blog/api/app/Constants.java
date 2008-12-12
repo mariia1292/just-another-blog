@@ -15,6 +15,12 @@ public interface Constants
 {
 
   /** Field description */
+  public static final String CONFIG_ALLOW_BLOGCREATION = "allow.blogCreation";
+
+  /** Field description */
+  public static final String CONFIG_ALLOW_REGISTRATION = "allow.begistration";
+
+  /** Field description */
   public static final String CONFIG_DB_DRIVER = "db.driver";
 
   /** Field description */
@@ -71,6 +77,9 @@ public interface Constants
 
   /** Field description */
   public static final String SERVCIE_ENCRYPTION = "/app/encryption";
+
+  /** Field description */
+  public static final String SERVCIE_GLOBALCONFIGPROVIDER = "/config/global";
 
   /** Field description */
   public static final String SERVICE_ATTACHMENT_LISTENER =

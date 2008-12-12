@@ -3,38 +3,46 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:f="http://java.sun.com/jsf/core">
-  
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:blog="http://jab.nitilon.org/blog/">
+
   <body>
-    
-    <ui:composition template="./../../template/jab/template.xhtml">
-      
+
+    <ui:composition template="./template.xhtml">
+
       <ui:define name="title">
         <h:outputText value="#{label.blogAdministration}" />
       </ui:define>
-      
+
       <ui:define name="content">
-      
+
         <h1><h:outputText value="#{label.blogAdministration}" /></h1>
-        
+
         <h:form>
-          
+
           <h:dataTable value="#{AdminBlogBean.blogs}" var="Blog">
-            
+
             <h:column>
               <f:facet name="header">
                 <h:outputText value="#{label.servername}" />
               </f:facet>
-              <h:outputText value="#{Blog.servername}" />
+              <blog:link object="#{Blog}" value="#{Blog.servername}" target="_blank" />
             </h:column>
-            
+
             <h:column>
               <f:facet name="header">
                 <h:outputText value="#{label.title}" />
               </f:facet>
               <h:outputText value="#{Blog.title}" />
             </h:column>
-            
+
+            <h:column>
+              <f:facet name="header">
+                <h:outputText value="#{label.description}" />
+              </f:facet>
+              <h:outputText value="#{Blog.description}" />
+            </h:column>
+
             <h:column>
               <f:facet name="header">
                 <h:outputText value="#{label.creationDate}" />
@@ -43,24 +51,21 @@
                 <f:convertDateTime pattern="yyyy-MM-dd HH:mm" />
               </h:outputText>
             </h:column>
-            
+
             <h:column>
               <f:facet name="header">
                 <h:outputText value="#{label.active}" />
               </f:facet>
               <h:selectBooleanCheckbox value="#{Blog.active}" />
             </h:column>
-            
+
           </h:dataTable>
-          
+
         </h:form>
-        
+
       </ui:define>
-      
-      <ui:define name="info">
-      </ui:define>
-      
+
     </ui:composition>
-    
+
   </body>
 </html>

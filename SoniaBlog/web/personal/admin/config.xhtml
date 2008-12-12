@@ -1,0 +1,49 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:blog="http://jab.nitilon.org/blog/">
+
+  <body>
+
+    <ui:composition template="./template.xhtml">
+
+      <ui:define name="title">
+        <h:outputText value="#{label.configuration}" />
+      </ui:define>
+
+      <ui:define name="content">
+
+        <h1><h:outputText value="#{label.configuration}" /></h1>
+
+        <h2><h:outputText value="#{label.general}" /></h2>
+
+        <h:form>
+
+          <h:panelGrid columns="3">
+
+            <h:outputLabel for="allowRegistration" value="#{label.allowRegistration}" />
+            <h:selectBooleanCheckbox id="allowRegistration" value="#{GlobalConfigBean.allowRegistration}" />
+            <h:message for="allowRegistration" />
+
+          </h:panelGrid>
+
+          <h:commandButton action="#{GlobalConfigBean.save}" value="#{label.save}" />
+
+        </h:form>
+
+
+        <ui:include src="/view/ldap/config.xhtml" />
+
+        <ui:repeat value="#{GlobalConfigBean.configurationProviders}" var="Path">
+          <ui:include src="/view/ldap/config.xhtml" />
+        </ui:repeat>
+
+      </ui:define>
+
+    </ui:composition>
+
+  </body>
+</html>

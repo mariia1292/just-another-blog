@@ -14,6 +14,7 @@ import org.apache.myfaces.custom.navmenu.UINavigationMenuItem;
 
 import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.app.BlogRequest;
+import sonia.blog.api.app.Constants;
 import sonia.blog.api.link.LinkBuilder;
 import sonia.blog.api.mapping.MappingEntry;
 import sonia.blog.api.search.SearchContext;
@@ -26,6 +27,8 @@ import sonia.blog.entity.Comment;
 import sonia.blog.entity.ContentObject;
 import sonia.blog.entity.Entry;
 import sonia.blog.entity.Role;
+
+import sonia.config.Configuration;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -121,17 +124,24 @@ public class BlogBean extends AbstractBean
   public List<NavigationMenuItem> getAdminNavigation()
   {
     List<NavigationMenuItem> navigation = new ArrayList<NavigationMenuItem>();
+    BlogRequest request = getRequest();
+    ResourceBundle bundle = getResourceBundle("label");
 
-    if (getRequest().isUserInRole(Role.ADMIN))
+    if (request.isUserInRole(Role.ADMIN))
     {
-      ResourceBundle bundle = getResourceBundle("label");
-
       navigation.add(new NavigationMenuItem(bundle.getString("templates"),
               "templates"));
       navigation.add(new NavigationMenuItem(bundle.getString("members"),
               "members"));
       navigation.add(new NavigationMenuItem(bundle.getString("general"),
               "general"));
+    }
+
+    if (request.getUser().isGlobalAdmin())
+    {
+      navigation.add(
+          new NavigationMenuItem(
+              bundle.getString("blogAdministration"), "administration"));
     }
 
     return navigation;
@@ -273,10 +283,12 @@ public class BlogBean extends AbstractBean
    */
   public List<NavigationMenuItem> getExtraNavigation()
   {
+    BlogContext context = BlogContext.getInstance();
+    Configuration config = context.getConfiguration();
     List<NavigationMenuItem> navigation = new ArrayList<NavigationMenuItem>();
     ResourceBundle bundle = getResourceBundle("label");
     BlogRequest request = getRequest();
-    LinkBuilder linkBuilder = BlogContext.getInstance().getLinkBuilder();
+    LinkBuilder linkBuilder = context.getLinkBuilder();
     NavigationMenuItem random = new NavigationMenuItem();
 
     random.setLabel(bundle.getString("random"));
@@ -287,8 +299,12 @@ public class BlogBean extends AbstractBean
     {
       navigation.add(new NavigationMenuItem(bundle.getString("login"),
               "login"));
-      navigation.add(new NavigationMenuItem(bundle.getString("register"),
-              "register"));
+
+      if (config.getBoolean(Constants.CONFIG_ALLOW_REGISTRATION, Boolean.FALSE))
+      {
+        navigation.add(new NavigationMenuItem(bundle.getString("register"),
+                "register"));
+      }
     }
     else
     {
@@ -298,8 +314,12 @@ public class BlogBean extends AbstractBean
                 "personal"));
       }
 
-      navigation.add(new NavigationMenuItem(bundle.getString("createBlog"),
-              "createBlog"));
+      if (config.getBoolean(Constants.CONFIG_ALLOW_BLOGCREATION, Boolean.FALSE))
+      {
+        navigation.add(new NavigationMenuItem(bundle.getString("createBlog"),
+                "createBlog"));
+      }
+
       navigation.add(new NavigationMenuItem(bundle.getString("logout"),
               "#{LoginBean.logout}"));
     }

@@ -11,6 +11,7 @@ package sonia.blog.wui;
 
 import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.app.BlogRequest;
+import sonia.blog.api.app.Constants;
 import sonia.blog.api.link.LinkBuilder;
 import sonia.blog.api.util.AbstractBean;
 import sonia.blog.entity.Blog;
@@ -18,6 +19,8 @@ import sonia.blog.entity.BlogMember;
 import sonia.blog.entity.Category;
 import sonia.blog.entity.Role;
 import sonia.blog.entity.User;
+
+import sonia.config.Configuration;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -141,39 +144,63 @@ public class BlogCreationBean extends AbstractBean
   {
     String result = SUCCESS;
 
-    em.getTransaction().begin();
-
-    try
+    if (isPermitted())
     {
-      ResourceBundle label = getResourceBundle("label");
+      em.getTransaction().begin();
 
-      em.persist(blog);
-
-      Category category = new Category();
-
-      category.setName(label.getString("defaultCategory"));
-      category.setBlog(blog);
-      em.persist(category);
-
-      User user = getRequest().getUser();
-      BlogMember member = new BlogMember(blog, user, Role.ADMIN);
-
-      em.persist(member);
-      em.getTransaction().commit();
-    }
-    catch (Exception ex)
-    {
-      if (em.getTransaction().isActive())
+      try
       {
-        em.getTransaction().rollback();
-      }
+        ResourceBundle label = getResourceBundle("label");
 
-      logger.log(Level.SEVERE, null, ex);
-      getMessageHandler().error("unknownError");
+        em.persist(blog);
+
+        Category category = new Category();
+
+        category.setName(label.getString("defaultCategory"));
+        category.setBlog(blog);
+        em.persist(category);
+
+        User user = getRequest().getUser();
+        BlogMember member = new BlogMember(blog, user, Role.ADMIN);
+
+        em.persist(member);
+        em.getTransaction().commit();
+      }
+      catch (Exception ex)
+      {
+        if (em.getTransaction().isActive())
+        {
+          em.getTransaction().rollback();
+        }
+
+        logger.log(Level.SEVERE, null, ex);
+        getMessageHandler().error("unknownError");
+        result = FAILURE;
+      }
+    }
+    else
+    {
+      getMessageHandler().error("blogCreationDisabled");
       result = FAILURE;
     }
 
     return result;
+  }
+
+  //~--- get methods ----------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  private boolean isPermitted()
+  {
+    Configuration config = BlogContext.getInstance().getConfiguration();
+
+    return config.getBoolean(Constants.CONFIG_ALLOW_BLOGCREATION,
+                             Boolean.FALSE);
   }
 
   //~--- fields ---------------------------------------------------------------

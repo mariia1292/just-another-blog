@@ -269,6 +269,7 @@ public class BlogContextListener implements ServletContextListener
         new DefaultSearchContext());
     registry.registerService(Constants.SERVICE_LINKBUILDER).addImplementation(
         new DefaultLinkBuilder());
+    registry.registerService(Constants.SERVCIE_GLOBALCONFIGPROVIDER);
   }
 
   //~--- get methods ----------------------------------------------------------

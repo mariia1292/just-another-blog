@@ -15,13 +15,13 @@ import sonia.blog.api.app.Constants;
 import sonia.blog.api.util.AbstractBean;
 import sonia.blog.entity.User;
 
+import sonia.config.Configuration;
+
 import sonia.plugin.ServiceReference;
 
 import sonia.security.encryption.Encryption;
 
 //~--- JDK imports ------------------------------------------------------------
-
-import java.io.IOException;
 
 import java.util.logging.Level;
 
@@ -108,29 +108,37 @@ public class RegistrationBean extends AbstractBean
   {
     String result = SUCCESS;
 
-    if (user.getPassword().equals(passwordRepeat))
+    if (isPermitted())
     {
-      user.setPassword(encryptPassword(passwordRepeat));
-
-      EntityManager em = BlogContext.getInstance().getEntityManager();
-
-      result = checkNameAndEmail(em);
-
-      if (result.equals(SUCCESS))
+      if (user.getPassword().equals(passwordRepeat))
       {
-        result = createUser(em);
+        user.setPassword(encryptPassword(passwordRepeat));
+
+        EntityManager em = BlogContext.getInstance().getEntityManager();
+
+        result = checkNameAndEmail(em);
+
+        if (result.equals(SUCCESS))
+        {
+          result = createUser(em);
+        }
+
+        redirect();
+
+        if (em != null)
+        {
+          em.close();
+        }
       }
-
-      redirect();
-
-      if (em != null)
+      else
       {
-        em.close();
+        getMessageHandler().error("passwordsNotEqual");
+        result = FAILURE;
       }
     }
     else
     {
-      getMessageHandler().error("passwordsNotEqual");
+      getMessageHandler().error("registrationDisabled");
       result = FAILURE;
     }
 
@@ -255,6 +263,22 @@ public class RegistrationBean extends AbstractBean
                    request.getCurrentBlog());
 
     sendRedirect(uri);
+  }
+
+  //~--- get methods ----------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  private boolean isPermitted()
+  {
+    Configuration config = BlogContext.getInstance().getConfiguration();
+
+    return config.getBoolean(Constants.CONFIG_ALLOW_REGISTRATION,
+                             Boolean.FALSE);
   }
 
   //~--- fields ---------------------------------------------------------------

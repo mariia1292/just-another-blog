@@ -53,8 +53,6 @@ public class AttachmentMacro implements Macro
 
     if ((blog != null) && (object != null) && (object instanceof Entry))
     {
-      System.out.println("ATTACHMENT MACRO");
-
       Entry entry = (Entry) object;
       List<Attachment> attachments = entry.getAttachments();
 

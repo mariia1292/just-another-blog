@@ -41,7 +41,7 @@ public class AdminBlogBean extends AbstractBean
     blogs = new ListDataModel();
 
     EntityManager em = BlogContext.getInstance().getEntityManager();
-    Query q = em.createNamedQuery("Blog");
+    Query q = em.createNamedQuery("Blog.findAll");
 
     try
     {
