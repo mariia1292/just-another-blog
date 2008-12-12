@@ -4,7 +4,8 @@
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:f="http://java.sun.com/jsf/core"
-      xmlns:blog="http://jab.nitilon.org/blog/">
+      xmlns:blog="http://jab.nitilon.org/blog/"
+      xmlns:c="http://java.sun.com/jstl/core">
 
   <body>
 
@@ -34,12 +35,9 @@
 
         </h:form>
 
-
-        <ui:include src="/view/ldap/config.xhtml" />
-
-        <ui:repeat value="#{GlobalConfigBean.configurationProviders}" var="Path">
-          <ui:include src="/view/ldap/config.xhtml" />
-        </ui:repeat>
+        <c:forEach items="#{GlobalConfigBean.configurationProviders}" var="provider">
+          <ui:include src="#{provider}" />
+        </c:forEach>
 
       </ui:define>
 

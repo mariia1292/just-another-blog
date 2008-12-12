@@ -63,7 +63,7 @@ public class RegistrationBean extends AbstractBean
 
     try
     {
-      Query q = em.createNamedQuery("User.findByName");
+      Query q = em.createNamedQuery("User.findActiveByName");
 
       q.setParameter("name", user.getName());
       u = (User) q.getSingleResult();
