@@ -22,6 +22,8 @@
             skin : "jab",
             plugins : "fullscreen,safari,emotions,imgbrowser,attachment,links,table",
             theme_advanced_buttons3_add : "|,table,emotions,fullscreen,|,imgbrowser,attachment,links",
+            theme_advanced_toolbar_location : "top",
+            theme_advanced_toolbar_align : "left",
             <h:outputText value="content_css: '#{EntryBean.contentCSS}?' + new Date().getTime(),"
                           rendered="#{BlogBean.template.contentCSS != null}" />
             convert_urls : false,

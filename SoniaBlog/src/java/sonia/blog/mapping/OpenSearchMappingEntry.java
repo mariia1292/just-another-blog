@@ -74,6 +74,18 @@ public class OpenSearchMappingEntry implements MappingEntry
               + "search.jab?search={searchTerms}\" />\n";
     result += "  <Query role=\"example\" searchTerms=\"jab\" />\n";
     result += "  <InputEncoding>UTF-8</InputEncoding>\n";
+    result += "  <Image width=\"16\" height=\"16\">\n";
+    result += "    " + link + "template/jab/images/icon-16.gif\n";
+    result += "  </Image>\n";
+    result += "  <Image width=\"32\" height=\"32\">\n";
+    result += "    " + link + "template/jab/images/icon-32.gif\n";
+    result += "  </Image>\n";
+    result += "  <Image width=\"64\" height=\"64\">\n";
+    result += "    " + link + "template/jab/images/icon-64.gif\n";
+    result += "  </Image>\n";
+    result += "  <Image width=\"128\" height=\"128\">\n";
+    result += "    " + link + "template/jab/images/icon-128.gif\n";
+    result += "  </Image>\n";
     result += "  <moz:SearchForm>" + link + "</moz:SearchForm>\n";
     result += "</OpenSearchDescription>";
 
