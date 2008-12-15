@@ -1,0 +1,50 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core">
+  
+  <body>
+    
+    <ui:composition template="../template.xhtml">
+      
+      <ui:define name="title">
+        <h:outputText value="#{label.members}" />
+      </ui:define>
+      
+      <ui:define name="content">
+
+        <h1><h:outputText value="#{label.members}" /></h1>
+
+        <h:form>
+          
+          <h:dataTable columnClasses="middle,none" value="#{MemberBean.members}" var="Member">
+            
+            <h:column>
+              <f:facet name="header">
+                <h:outputText value="#{label.name}" />
+              </f:facet>
+              <h:outputText value="#{Member.user.displayName}" />
+            </h:column>
+            
+            <h:column>
+              <f:facet name="header">
+                <h:outputText value="#{label.role}" />
+              </f:facet>
+              <h:selectOneRadio styleClass="clean" value="#{Member.role}"
+                                onclick="submit();" valueChangeListener="#{MemberBean.roleChanged}">
+                <f:selectItems value="#{MemberBean.roleItems}" />
+              </h:selectOneRadio>
+            </h:column>
+            
+          </h:dataTable>
+          
+        </h:form>
+        
+      </ui:define>
+      
+    </ui:composition>
+    
+  </body>
+</html>
