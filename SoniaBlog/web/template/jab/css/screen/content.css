@@ -189,6 +189,7 @@
 
   .clean { margin: 0; padding: 0; }
   .middle { vertical-align: middle; }
+  .nowrap { white-space: nowrap; }
 
   /**
   * Miscellaneous | Sonstiges

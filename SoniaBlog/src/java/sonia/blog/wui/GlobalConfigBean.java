@@ -90,6 +90,17 @@ public class GlobalConfigBean extends AbstractConfigBean
    *
    * @return
    */
+  public boolean isAllowBlogCreation()
+  {
+    return allowBlogCreation;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
   public boolean isAllowRegistration()
   {
     return allowRegistration;
@@ -101,9 +112,20 @@ public class GlobalConfigBean extends AbstractConfigBean
    * Method description
    *
    *
+   * @param allowBlogCreation
+   */
+  public void setAllowBlogCreation(boolean allowBlogCreation)
+  {
+    this.allowBlogCreation = allowBlogCreation;
+  }
+
+  /**
+   * Method description
+   *
+   *
    * @param allowRegistration
    */
-  public void setAllowResgistration(boolean allowRegistration)
+  public void setAllowRegistration(boolean allowRegistration)
   {
     this.allowRegistration = allowRegistration;
   }

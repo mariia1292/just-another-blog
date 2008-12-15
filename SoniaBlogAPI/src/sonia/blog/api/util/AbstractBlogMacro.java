@@ -19,6 +19,7 @@ import sonia.macro.Macro;
 //~--- JDK imports ------------------------------------------------------------
 
 import java.util.Map;
+import java.util.logging.Logger;
 
 import javax.faces.context.FacesContext;
 
@@ -28,8 +29,19 @@ import javax.servlet.http.HttpServletRequest;
  *
  * @author sdorra
  */
-public abstract class AbstractBlogBeanMacro implements Macro
+public abstract class AbstractBlogMacro implements Macro
 {
+
+  /**
+   * Constructs ...
+   *
+   */
+  public AbstractBlogMacro()
+  {
+    logger = Logger.getLogger(getClass().getName());
+  }
+
+  //~--- methods --------------------------------------------------------------
 
   /**
    * Method description
@@ -135,4 +147,9 @@ public abstract class AbstractBlogBeanMacro implements Macro
   {
     return object instanceof Entry;
   }
+
+  //~--- fields ---------------------------------------------------------------
+
+  /** Field description */
+  protected Logger logger;
 }

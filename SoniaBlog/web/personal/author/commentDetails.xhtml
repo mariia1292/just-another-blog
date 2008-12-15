@@ -7,7 +7,7 @@
   
   <body>
     
-    <ui:composition template="./template.xhtml">
+    <ui:composition template="../template.xhtml">
       
       <ui:define name="title">
         <h:outputText value="RE: #{CommentBean.comment.entry.title}" />
@@ -28,10 +28,14 @@
           <h:outputText id="name" value="#{CommentBean.comment.authorName}" />
           
           <h:outputLabel for="mail" value="#{label.email}" />
-          <h:outputText id="mail" value="#{CommentBean.comment.authorMail}" />
+          <h:outputLink id="mail" target="_blank" value="mailto:#{CommentBean.comment.authorMail}">
+            <h:outputText value="#{CommentBean.comment.authorMail}" />
+          </h:outputLink>
           
           <h:outputLabel for="url" value="#{label.url}" />
-          <h:outputText value="#{CommentBean.comment.authorURL}" />
+          <h:outputLink id="url" target="_blank" value="#{CommentBean.comment.authorURL}">
+            <h:outputText value="#{CommentBean.comment.authorURL}" />
+          </h:outputLink>
           
           <h:outputLabel for="address" value="#{label.address}" />
           <h:outputText id="address" value="#{CommentBean.comment.authorAddress}" />

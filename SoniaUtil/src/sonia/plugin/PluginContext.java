@@ -32,6 +32,7 @@ public class PluginContext
     this.serviceRegistry = new ServiceRegistry();
     this.listeners = new ArrayList<PluginStateListener>();
     this.plugins = new HashMap<String, Plugin>();
+    this.store = new DefaultPluginStore();
   }
 
   //~--- methods --------------------------------------------------------------
@@ -62,7 +63,7 @@ public class PluginContext
     this.plugins.put(plugin.getName(), plugin);
     fireStateChange(Plugin.STATE_UNREGISTERED, plugin);
 
-    if (plugin.isAutostart())
+    if (plugin.isAutostart() && store.isStartAble(plugin))
     {
       start(plugin);
     }
@@ -105,6 +106,7 @@ public class PluginContext
   {
     for (Plugin plugin : plugins.values())
     {
+      stop(plugin, false);
       unregister(plugin);
     }
   }
@@ -121,6 +123,7 @@ public class PluginContext
 
     plugin.getActivator().start(this);
     plugin.setState(Plugin.STATE_STARTED);
+    store.startPlugin(plugin);
     fireStateChange(oldState, plugin);
   }
 
@@ -132,11 +135,7 @@ public class PluginContext
    */
   public void stop(Plugin plugin)
   {
-    int oldState = plugin.getState();
-
-    plugin.getActivator().stop(this);
-    plugin.setState(Plugin.STATE_STOPED);
-    fireStateChange(oldState, plugin);
+    stop(plugin, true);
   }
 
   /**
@@ -177,9 +176,44 @@ public class PluginContext
    *
    * @return
    */
+  public List<Plugin> getPlugins()
+  {
+    return new ArrayList<Plugin>(plugins.values());
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
   public ServiceRegistry getServiceRegistry()
   {
     return serviceRegistry;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  public PluginStore getStore()
+  {
+    return store;
+  }
+
+  //~--- set methods ----------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   * @param store
+   */
+  public void setStore(PluginStore store)
+  {
+    this.store = store;
   }
 
   //~--- methods --------------------------------------------------------------
@@ -199,14 +233,39 @@ public class PluginContext
     }
   }
 
+  /**
+   * Method description
+   *
+   *
+   * @param plugin
+   * @param save
+   */
+  private void stop(Plugin plugin, boolean save)
+  {
+    int oldState = plugin.getState();
+
+    plugin.getActivator().stop(this);
+    plugin.setState(Plugin.STATE_STOPED);
+
+    if (save)
+    {
+      store.stopPlugin(plugin);
+    }
+
+    fireStateChange(oldState, plugin);
+  }
+
   //~--- fields ---------------------------------------------------------------
 
   /** Field description */
-  private List<PluginStateListener> listeners;
+  private final List<PluginStateListener> listeners;
 
   /** Field description */
   private Map<String, Plugin> plugins;
 
   /** Field description */
   private ServiceRegistry serviceRegistry;
+
+  /** Field description */
+  private PluginStore store;
 }

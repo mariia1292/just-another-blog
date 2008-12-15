@@ -7,14 +7,26 @@
     xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_1_2.xsd">
 
   <managed-bean>
+    <managed-bean-name>PluginBean</managed-bean-name>
+    <managed-bean-class>sonia.blog.wui.PluginBean</managed-bean-class>
+    <managed-bean-scope>request</managed-bean-scope>
+  </managed-bean>
+
+  <managed-bean>
+    <managed-bean-name>GlobalStatusBean</managed-bean-name>
+    <managed-bean-class>sonia.blog.wui.GlobalStatusBean</managed-bean-class>
+    <managed-bean-scope>request</managed-bean-scope>
+  </managed-bean>
+
+  <managed-bean>
     <managed-bean-name>GlobalConfigBean</managed-bean-name>
     <managed-bean-class>sonia.blog.wui.GlobalConfigBean</managed-bean-class>
     <managed-bean-scope>request</managed-bean-scope>
   </managed-bean>
 
   <managed-bean>
-    <managed-bean-name>GlobalAdminBean</managed-bean-name>
-    <managed-bean-class>sonia.blog.wui.GlobalAdminBean</managed-bean-class>
+    <managed-bean-name>PersonalBean</managed-bean-name>
+    <managed-bean-class>sonia.blog.wui.PersonalBean</managed-bean-class>
     <managed-bean-scope>request</managed-bean-scope>
   </managed-bean>
 

@@ -32,13 +32,13 @@ import sonia.blog.mapping.SearchMappingEntry;
 import sonia.blog.mapping.TagMappingEntry;
 import sonia.blog.search.DefaultSearchContext;
 import sonia.blog.search.IndexListener;
+import sonia.blog.spam.MathSpamProtection;
 
 import sonia.macro.MacroParser;
 
 import sonia.net.FileNameMap;
 
-import sonia.plugin.Plugin;
-import sonia.plugin.PluginStateListener;
+import sonia.plugin.DefaultPluginStore;
 import sonia.plugin.ServiceReference;
 import sonia.plugin.ServiceRegistry;
 
@@ -62,6 +62,7 @@ import javax.security.auth.login.AppConfigurationEntry;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
+import sonia.blog.macro.FLVMacro;
 
 /**
  * Web application lifecycle listener.
@@ -109,7 +110,16 @@ public class BlogContextListener implements ServletContextListener
       initServices(context);
       initMacros();
       configureLogger();
-      context.getPluginContext().addStateChangeListener(new PluginListener());
+
+      File pluginStore = new File(context.getResourceDirectory(),
+                                  "plugin.store");
+
+      if (!pluginStore.exists())
+      {
+        pluginStore.mkdirs();
+      }
+
+      context.getPluginContext().setStore(new DefaultPluginStore(pluginStore));
       context.getPluginContext().searchClasspath(
           buildClasspath(event.getServletContext()));
 
@@ -215,6 +225,7 @@ public class BlogContextListener implements ServletContextListener
     parser.putMacro("gallery", new GalleryMacro());
     parser.putMacro("spoiler", new SpoilerMacro());
     parser.putMacro("blogs", new BlogsMacro());
+    parser.putMacro("flvviewer", new FLVMacro());
 
     AttachmentMacro am = new AttachmentMacro();
 
@@ -270,6 +281,10 @@ public class BlogContextListener implements ServletContextListener
     registry.registerService(Constants.SERVICE_LINKBUILDER).addImplementation(
         new DefaultLinkBuilder());
     registry.registerService(Constants.SERVCIE_GLOBALCONFIGPROVIDER);
+    registry.registerService(Constants.SERVCIE_GLOBALSTATUSROVIDER);
+    registry.registerService(
+        Constants.SERVICE_SPAMPROTECTIONMETHOD).addImplementation(
+        new MathSpamProtection());
   }
 
   //~--- get methods ----------------------------------------------------------
@@ -290,32 +305,5 @@ public class BlogContextListener implements ServletContextListener
           Constants.SERVICE_CONTEXTLISTENER);
 
     return reference.getImplementations();
-  }
-
-  //~--- inner classes --------------------------------------------------------
-
-  /**
-   * Class description
-   *
-   *
-   * @version    Enter version here..., 08/09/23
-   * @author     Enter your name here...
-   */
-  private class PluginListener implements PluginStateListener
-  {
-
-    /**
-     * Method description
-     *
-     *
-     * @param oldState
-     * @param newState
-     * @param plugin
-     */
-    public void stateChanged(int oldState, int newState, Plugin plugin)
-    {
-      System.out.println(plugin.getName() + "(" + oldState + "," + newState
-                         + ")");
-    }
   }
 }

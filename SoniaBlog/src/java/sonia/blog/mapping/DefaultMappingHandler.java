@@ -16,8 +16,12 @@ import sonia.blog.api.mapping.MappingHandler;
 
 //~--- JDK imports ------------------------------------------------------------
 
+import java.io.UnsupportedEncodingException;
+
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -25,6 +29,12 @@ import java.util.Map;
  */
 public class DefaultMappingHandler implements MappingHandler
 {
+
+  /** Field description */
+  private static Logger logger =
+    Logger.getLogger(DefaultMappingHandler.class.getName());
+
+  //~--- constructors ---------------------------------------------------------
 
   /**
    * Constructs ...
@@ -81,6 +91,7 @@ public class DefaultMappingHandler implements MappingHandler
     {
       MappingEntry mapping = mappgins.get(path);
 
+      setCharacterEncoding(request);
       uri = uri.substring(path.length());
 
       if (uri.startsWith("/"))
@@ -106,6 +117,26 @@ public class DefaultMappingHandler implements MappingHandler
   public void removeMapping(String path)
   {
     mappgins.remove(path);
+  }
+
+  //~--- set methods ----------------------------------------------------------
+
+  /**
+   * Workaround
+   *
+   *
+   * @param request
+   */
+  private void setCharacterEncoding(BlogRequest request)
+  {
+    try
+    {
+      request.getRequest().setCharacterEncoding(request.getCharacterEncoding());
+    }
+    catch (UnsupportedEncodingException ex)
+    {
+      logger.log(Level.SEVERE, null, ex);
+    }
   }
 
   //~--- fields ---------------------------------------------------------------

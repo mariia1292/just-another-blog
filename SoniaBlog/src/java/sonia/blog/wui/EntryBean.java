@@ -60,6 +60,9 @@ public class EntryBean extends AbstractBean
   /** Field description */
   private static final String DETAIL = "detail";
 
+  /** Field description */
+  private static final String EDITOR = "editor";
+
   //~--- constructors ---------------------------------------------------------
 
   /**
@@ -114,7 +117,7 @@ public class EntryBean extends AbstractBean
       }
     }
 
-    return SUCCESS;
+    return EDITOR;
   }
 
   /**
@@ -148,7 +151,7 @@ public class EntryBean extends AbstractBean
     entry = new Entry();
     tagString = "";
 
-    return SUCCESS;
+    return EDITOR;
   }
 
   /**
@@ -391,7 +394,6 @@ public class EntryBean extends AbstractBean
       attachment.setSize(uploadedFile.getSize());
       attachment.setName(uploadedFile.getName());
       attachment.setDescription(uploadDescription);
-      System.out.println("ATTACHMENT CREATED");
 
       EntityManager em = BlogContext.getInstance().getEntityManager();
 
@@ -410,8 +412,6 @@ public class EntryBean extends AbstractBean
         {
           dir.mkdirs();
         }
-
-        System.out.println("FILE: " + dir.getPath());
 
         File file = new File(dir, "" + System.currentTimeMillis());
 

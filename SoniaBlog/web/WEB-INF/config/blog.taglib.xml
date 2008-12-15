@@ -45,4 +45,20 @@
         </component>
     </tag>
 
+    <tag>
+        <tag-name>spamLabel</tag-name>
+        <component>
+            <component-type>sonia.blog.spamLabel</component-type>
+            <renderer-type>sonia.blog.spamLabel.renderer</renderer-type>
+        </component>
+    </tag>
+
+    <tag>
+        <tag-name>spamInput</tag-name>
+        <component>
+            <component-type>sonia.blog.spamInput</component-type>
+            <renderer-type>sonia.blog.spamInput.renderer</renderer-type>
+        </component>
+    </tag>
+
 </facelet-taglib>

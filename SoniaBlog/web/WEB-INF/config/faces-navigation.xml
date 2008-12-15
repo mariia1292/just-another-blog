@@ -22,7 +22,7 @@
     </navigation-case>
     <navigation-case>
       <from-outcome>personal</from-outcome>
-      <to-view-id>/personal/entries.xhtml</to-view-id>
+      <to-view-id>/personal/author/entries.xhtml</to-view-id>
     </navigation-case>
     <navigation-case>
       <from-outcome>register</from-outcome>
@@ -43,71 +43,79 @@
     <from-view-id>/personal/*</from-view-id>
     <navigation-case>
       <from-outcome>categories</from-outcome>
-      <to-view-id>/personal/categories.xhtml</to-view-id>
+      <to-view-id>/personal/author/categories.xhtml</to-view-id>
     </navigation-case>
     <navigation-case>
       <from-outcome>templates</from-outcome>
-      <to-view-id>/personal/templates.xhtml</to-view-id>
+      <to-view-id>/personal/admin/templates.xhtml</to-view-id>
     </navigation-case>
     <navigation-case>
       <from-outcome>comments</from-outcome>
-      <to-view-id>/personal/comments.xhtml</to-view-id>
+      <to-view-id>/personal/author/comments.xhtml</to-view-id>
     </navigation-case>
     <navigation-case>
       <from-outcome>general</from-outcome>
-      <to-view-id>/personal/general.xhtml</to-view-id>
+      <to-view-id>/personal/admin/general.xhtml</to-view-id>
     </navigation-case>
     <navigation-case>
       <from-outcome>members</from-outcome>
-      <to-view-id>/personal/members.xhtml</to-view-id>
+      <to-view-id>/personal/admin/members.xhtml</to-view-id>
     </navigation-case>
     <navigation-case>
       <from-outcome>administration</from-outcome>
-      <to-view-id>/personal/admin/blogs.xhtml</to-view-id>
+      <to-view-id>/personal/globaladmin/blogs.xhtml</to-view-id>
     </navigation-case>
-  </navigation-rule>
-
-  <navigation-rule>
-    <from-view-id>/personal/admin/*</from-view-id>
+    <navigation-case>
+      <from-outcome>globalStatus</from-outcome>
+      <to-view-id>/personal/globaladmin/status.xhtml</to-view-id>
+    </navigation-case>
     <navigation-case>
       <from-outcome>config</from-outcome>
-      <to-view-id>/personal/admin/config.xhtml</to-view-id>
+      <to-view-id>/personal/globaladmin/config.xhtml</to-view-id>
+    </navigation-case>
+    <navigation-case>
+      <from-outcome>editor</from-outcome>
+      <to-view-id>/personal/author/editor/editor.xhtml</to-view-id>
+    </navigation-case>
+    <navigation-case>
+      <from-outcome>plugins</from-outcome>
+      <to-view-id>/personal/globaladmin/plugins.xhtml</to-view-id>
     </navigation-case>
   </navigation-rule>
   
   <navigation-rule>
-    <from-view-id>/personal/entries.xhtml</from-view-id>
+    <from-view-id>/personal/author/entries.xhtml</from-view-id>
     <navigation-case>
       <from-outcome>success</from-outcome>
-      <to-view-id>/personal/entries.xhtml</to-view-id>
+      <to-view-id>/personal/author/entries.xhtml</to-view-id>
     </navigation-case>
     <navigation-case>
       <from-outcome>failure</from-outcome>
-      <to-view-id>/personal/entries.xhtml</to-view-id>
+      <to-view-id>/personal/author/entries.xhtml</to-view-id>
     </navigation-case>
   </navigation-rule>
 
   <navigation-rule>
-    <from-view-id>/personal/editor/attachments.xhtml</from-view-id>
+    <from-view-id>/personal/author/editor/attachments.xhtml</from-view-id>
     <navigation-case>
       <from-outcome>success</from-outcome>
-      <to-view-id>/personal/editor/edit.xhtml</to-view-id>
+      <to-view-id>/personal/author/editor/edit.xhtml</to-view-id>
     </navigation-case>
     <navigation-case>
       <from-outcome>failure</from-outcome>
-      <to-view-id>/personal/editor/attachments.xhtml</to-view-id>
+      <to-view-id>/personal/author/editor/attachments.xhtml</to-view-id>
     </navigation-case>
   </navigation-rule>
 
   <navigation-rule>
-    <from-view-id>/personal/editor/edit.xhtml</from-view-id>
+    <from-view-id>/personal/author/editor/edit.xhtml</from-view-id>
     <navigation-case>
       <from-outcome>success</from-outcome>
-      <to-view-id>/personal/editor/attachments.xhtml</to-view-id>
+      <to-view-id>/personal/author/editor/attachments.xhtml</to-view-id>
     </navigation-case>
     <navigation-case>
       <from-outcome>failure</from-outcome>
-      <to-view-id>/personal/editor/edit.xhtml</to-view-id>
+      <to-view-id>/personal/author/editor/edit.xhtml</to-view-id>
     </navigation-case>
   </navigation-rule>
   
@@ -136,10 +144,10 @@
   </navigation-rule>
   
   <navigation-rule>
-    <from-view-id>/personal/comments.xhtml</from-view-id>
+    <from-view-id>/personal/author/comments.xhtml</from-view-id>
     <navigation-case>
       <from-outcome>details</from-outcome>
-      <to-view-id>/personal/commentDetails.xhtml</to-view-id>
+      <to-view-id>/personal/author/commentDetails.xhtml</to-view-id>
     </navigation-case>
   </navigation-rule>
     

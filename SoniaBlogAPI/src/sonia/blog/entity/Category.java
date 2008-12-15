@@ -34,7 +34,9 @@ import javax.persistence.TemporalType;
 @Entity @NamedQueries({ @NamedQuery(name = "Category.findAllFromBlog",
         query = "select c from Category c where c.blog = :blog") ,
                         @NamedQuery(name = "Category.findIdFromBlog",
-        query = "select c from Category c where c.id = :id and c.blog = :blog") })
+        query = "select c from Category c where c.id = :id and c.blog = :blog") ,
+                        @NamedQuery(name = "Category.countAll",
+        query = "select count(c) from Category c") })
 public class Category implements Serializable, PermaObject
 {
 

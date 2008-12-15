@@ -38,7 +38,9 @@ import javax.persistence.TemporalType;
         @NamedQueries({ @NamedQuery(name = "Comment.findFromBlog",
         query = "select c from Comment c join c.entry e join e.category ca join ca.blog b where b = :blog and e.published = true order by c.creationDate desc") ,
                         @NamedQuery(name = "Comment.entryOverview",
-        query = "select c from Comment c join c.entry e where e = :entry and c.spam = false order by c.creationDate ") })
+        query = "select c from Comment c join c.entry e where e = :entry and c.spam = false order by c.creationDate ") ,
+                        @NamedQuery(name = "Comment.countAll",
+        query = "select count(c) from Comment c") })
 public class Comment implements Serializable, PermaObject
 {
 

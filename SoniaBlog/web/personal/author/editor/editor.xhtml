@@ -3,13 +3,11 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:f="http://java.sun.com/jsf/core"
-      xmlns:t="http://myfaces.apache.org/tomahawk"
-      xmlns:c="http://java.sun.com/jstl/core">
+      xmlns:f="http://java.sun.com/jsf/core">
   
   <body>
     
-    <ui:composition template="/personal/template.xhtml">
+    <ui:composition template="../../template.xhtml">
       
       <ui:define name="title">
         <h:outputText value="#{label.entries}" />
@@ -22,8 +20,8 @@
             theme : "advanced",
             mode : "textareas",
             skin : "jab",
-            plugins : "fullscreen,safari,emotions,imgbrowser,attachment,links",
-            theme_advanced_buttons3_add : "|,emotions,fullscreen,|,imgbrowser,attachment,links",
+            plugins : "fullscreen,safari,emotions,imgbrowser,attachment,links,table",
+            theme_advanced_buttons3_add : "|,table,emotions,fullscreen,|,imgbrowser,attachment,links",
             <h:outputText value="content_css: '#{EntryBean.contentCSS}?' + new Date().getTime(),"
                           rendered="#{BlogBean.template.contentCSS != null}" />
             convert_urls : false,
@@ -35,23 +33,6 @@
           });
 
         </script>
-      </ui:define>
-      
-      <ui:define name="info">
-        
-        <h:form>
-          
-          <h:commandLink value="#{label.newEntry}" action="#{EntryBean.newEntry}" />
-          
-          <h3><h:outputText value="#{label.entries}" /></h3>
-          
-          <ul>
-            <ui:repeat value="#{EntryBean.entries}" var="Entry">
-              <li><h:commandLink value="#{Entry.title}" action="#{EntryBean.edit}" /></li>
-            </ui:repeat>
-          </ul>
-        </h:form>
-        
       </ui:define>
       
       <ui:define name="content">

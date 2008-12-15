@@ -21,7 +21,7 @@
     init : function(ed, url) {
       
       var id = ed.getParam( "entry_id" );
-      var address = url + '/../../../../personal/editor/attachments.jab';
+      var address = url + '/../../../../personal/author/editor/attachments.jab';
       if ( id != null && id != "" )
       {
         address += "?id=" + id;

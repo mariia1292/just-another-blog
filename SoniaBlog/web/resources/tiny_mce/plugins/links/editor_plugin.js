@@ -20,7 +20,7 @@
 		 */
     init : function(ed, url) {
       
-      var address = url + '/../../../../personal/editor/links.jab';
+      var address = url + '/../../../../personal/author/editor/links.jab';
       // Register the command so that it can be invoked by using tinyMCE.activeEditor.execCommand('mceExample');
       ed.addCommand('mceLinks', function() {
         ed.windowManager.open({

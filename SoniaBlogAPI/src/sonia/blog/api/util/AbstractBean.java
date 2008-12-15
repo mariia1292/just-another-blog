@@ -59,34 +59,10 @@ public class AbstractBean
    * Method description
    *
    */
-  public void init()
+  protected void init()
   {
     this.logger = Logger.getLogger(getClass().getName());
   }
-
-  //~--- get methods ----------------------------------------------------------
-
-  /**
-   * Method description
-   *
-   *
-   * @return
-   */
-  public MessageHandler getMessageHandler()
-  {
-    if (messageHandler == null)
-    {
-      FacesContext context = FacesContext.getCurrentInstance();
-      ResourceBundle bundle =
-        context.getApplication().getResourceBundle(context, "message");
-
-      this.messageHandler = new MessageHandler(bundle, true);
-    }
-
-    return messageHandler;
-  }
-
-  //~--- methods --------------------------------------------------------------
 
   /**
    * Method description
@@ -125,6 +101,26 @@ public class AbstractBean
   }
 
   //~--- get methods ----------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  protected MessageHandler getMessageHandler()
+  {
+    if (messageHandler == null)
+    {
+      FacesContext context = FacesContext.getCurrentInstance();
+      ResourceBundle bundle =
+        context.getApplication().getResourceBundle(context, "message");
+
+      this.messageHandler = new MessageHandler(bundle, true);
+    }
+
+    return messageHandler;
+  }
 
   /**
    * Method description

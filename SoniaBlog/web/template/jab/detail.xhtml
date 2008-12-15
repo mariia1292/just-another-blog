@@ -5,7 +5,8 @@
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:blog="http://jab.nitilon.org/blog/"
-      xmlns:t="http://myfaces.apache.org/tomahawk">
+      xmlns:t="http://myfaces.apache.org/tomahawk"
+      xmlns:u1="http://jab.nitilon.org/blog/">
 
   <body>
 
@@ -34,7 +35,7 @@
           <h:column>
 
             <h:outputText value="#{Comment.authorName}" rendered="#{Comment.authorURL == null}" />
-            <h:outputLink value="#{Comment.authorURL}" rendered="#{Comment.authorURL != null}">
+            <h:outputLink target="_blank" value="#{Comment.authorURL}" rendered="#{Comment.authorURL != null}">
               <h:outputText value="#{Comment.authorName}" />
             </h:outputLink>
             <h:outputText value=": #{Comment.content}" escape="#{!BlogBean.blog.allowHtmlComments}" />
@@ -73,6 +74,10 @@
               <f:validateLength maximum="255" />
             </h:inputTextarea>
             <h:message for="content" />
+
+            <blog:spamLabel method="#{BlogBean.spamInputMethod}" />
+            <blog:spamInput id="spam" />
+            <h:message for="spam" />
 
           </h:panelGrid>
 

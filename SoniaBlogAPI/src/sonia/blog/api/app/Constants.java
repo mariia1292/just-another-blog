@@ -18,7 +18,7 @@ public interface Constants
   public static final String CONFIG_ALLOW_BLOGCREATION = "allow.blogCreation";
 
   /** Field description */
-  public static final String CONFIG_ALLOW_REGISTRATION = "allow.begistration";
+  public static final String CONFIG_ALLOW_REGISTRATION = "allow.registration";
 
   /** Field description */
   public static final String CONFIG_DB_DRIVER = "db.driver";
@@ -36,6 +36,9 @@ public interface Constants
   public static String CONFIG_DEFAULTBLOG = "defaultBlog";
 
   /** Field description */
+  public static final String CONFIG_ENCODING = "encoding";
+
+  /** Field description */
   public static final String CONFIG_FEEDTYPE = "feed.type";
 
   /** Field description */
@@ -49,6 +52,9 @@ public interface Constants
 
   /** Field description */
   public static final String CONFIG_RESOURCE_DIRECTORY = "resource.directory";
+
+  /** Field description */
+  public static final String DEFAULT_ENCODING = "UTF-8";
 
   /** Field description */
   public static final String DEFAULT_IMAGE_EXTENSION = "jpg";
@@ -82,6 +88,9 @@ public interface Constants
   public static final String SERVCIE_GLOBALCONFIGPROVIDER = "/config/global";
 
   /** Field description */
+  public static final String SERVCIE_GLOBALSTATUSROVIDER = "/status/global";
+
+  /** Field description */
   public static final String SERVICE_ATTACHMENT_LISTENER =
     "/listener/attachment";
 
@@ -108,4 +117,7 @@ public interface Constants
 
   /** Field description */
   public static final String SERVICE_SEARCHCONTEXT = "/app/searchContext";
+
+  /** Field description */
+  public static final String SERVICE_SPAMPROTECTIONMETHOD = "/app/input/spam";
 }

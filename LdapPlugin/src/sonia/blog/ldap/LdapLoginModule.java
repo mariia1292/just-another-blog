@@ -15,6 +15,8 @@ import sonia.blog.entity.User;
 import sonia.config.ConfigurationListener;
 import sonia.config.ModifyableConfiguration;
 
+import sonia.net.ssl.SSLSocketFactory;
+
 import sonia.security.authentication.LoginModule;
 
 import sonia.util.Util;
@@ -49,7 +51,6 @@ import javax.security.auth.login.LoginException;
  * @author sdorra
  */
 public class LdapLoginModule extends LoginModule
-        implements ConfigurationListener
 {
 
   /** Field description */
@@ -65,23 +66,6 @@ public class LdapLoginModule extends LoginModule
   public LdapLoginModule()
   {
     load(BlogContext.getInstance().getConfiguration());
-  }
-
-  //~--- methods --------------------------------------------------------------
-
-  /**
-   * Method description
-   *
-   *
-   * @param config
-   * @param key
-   */
-  public void configChanged(ModifyableConfiguration config, String key)
-  {
-    if (key.startsWith("ldap."))
-    {
-      load(config);
-    }
   }
 
   //~--- get methods ----------------------------------------------------------
@@ -175,9 +159,9 @@ public class LdapLoginModule extends LoginModule
     {
       environment.put(Context.SECURITY_PROTOCOL, "ssl");
 
-      // TODO: write sonia.blog.ldap.SSLSocketFactory oder in Util ???
+      // TODO: check function
       environment.put("java.naing.ldap.factory.socket",
-                      "sonia.blog.ldap.SSLSocketFactory");
+                      SSLSocketFactory.class.getName());
     }
 
     environment.put(Context.SECURITY_PRINCIPAL, dn);

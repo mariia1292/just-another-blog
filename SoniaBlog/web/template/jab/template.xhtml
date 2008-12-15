@@ -64,8 +64,8 @@
           <div id="col1">
             <div id="col1_content" class="clearfix">
               <h:messages id="messages" layout="table" styleClass="full" 
-                          globalOnly="true" errorClass="error" 
-                          fatalClass="error" warnClass="warning" 
+                          globalOnly="true" errorClass="warning"
+                          fatalClass="warning" warnClass="warning"
                           infoClass="note" />
               <ui:insert name="content" />
             </div>
@@ -86,7 +86,7 @@
                   
                   <h3><h:outputText value="#{label.tags}" /></h3>
                   <ui:repeat value="#{BlogBean.tags}" var="Tag">
-                    <blog:link value="#{Tag.name}" object="#{Tag}" />
+                    <blog:link value="#{Tag.name}" object="#{Tag}" styleClass="nowrap" />
                     <h:outputText value=" " />
                   </ui:repeat>
                   

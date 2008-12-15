@@ -9,7 +9,6 @@ package sonia.blog.ldap;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import java.util.HashMap;
 import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.app.Constants;
 
@@ -22,6 +21,8 @@ import sonia.plugin.PluginContext;
 import sonia.plugin.ServiceReference;
 
 //~--- JDK imports ------------------------------------------------------------
+
+import java.util.HashMap;
 
 import javax.security.auth.login.AppConfigurationEntry;
 
@@ -81,6 +82,7 @@ public class PluginActivator implements Activator, ConfigurationListener
 
     XmlConfiguration config = BlogContext.getInstance().getConfiguration();
 
+    config.addListener(this);
     active = config.getBoolean(LdapConfigBean.CONFIG_LDAP_ENABLED,
                                Boolean.FALSE);
 
@@ -103,6 +105,7 @@ public class PluginActivator implements Activator, ConfigurationListener
       configReference.removeImplementation("/view/ldap/config.xhtml");
     }
 
+    BlogContext.getInstance().getConfiguration().removeListener(this);
     disableLdapModule();
   }
 

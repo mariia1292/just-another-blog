@@ -4,25 +4,49 @@
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:t="http://myfaces.apache.org/tomahawk"
       xmlns:h="http://java.sun.com/jsf/html">
-    
-    <body>
-        
-        <ui:composition template="/template/jab/template.xhtml">
-            
-            <ui:define name="mainNavigation">
-              <h:form id="mainNavigationForm">
-                <t:panelNavigation2 styleClass="mainNavigation" layout="list">
-                  <t:navigationMenuItem binding="#{BlogBean.overviewItem}" />
-                  <t:navigationMenuItems value="#{BlogBean.authorNavigation}" />
-                  <t:navigationMenuItems value="#{BlogBean.adminNavigation}" />
-                </t:panelNavigation2>
-              </h:form>
-            </ui:define>
 
-            <ui:define name="info">
-            </ui:define>
+  <body>
 
-        </ui:composition>
-        
-    </body>
+    <ui:composition template="/template/jab/template.xhtml">
+
+      <ui:define name="info">
+
+        <h:panelGroup rendered="#{PersonalBean.author}">
+
+          <h3><h:outputText value="#{label.author}" /></h3>
+          <h:form id="authorNavForm">
+            <t:panelNavigation2 id="authorNav" layout="list">
+              <t:navigationMenuItems value="#{PersonalBean.authorNavigation}" />
+            </t:panelNavigation2>
+          </h:form>
+
+        </h:panelGroup>
+
+        <h:panelGroup rendered="#{PersonalBean.admin}">
+
+          <h3><h:outputText value="#{label.administration}" /></h3>
+          <h:form id="adminNavForma">
+            <t:panelNavigation2 id="adminNav" layout="list">
+              <t:navigationMenuItems value="#{PersonalBean.adminNavigation}" />
+            </t:panelNavigation2>
+          </h:form>
+
+        </h:panelGroup>
+
+        <h:panelGroup rendered="#{PersonalBean.gloablAdmin}">
+
+          <h3><h:outputText value="#{label.globalAdministration}" /></h3>
+          <h:form id="globalAdminNavForm">
+            <t:panelNavigation2 id="globalAdminNav" layout="list">
+              <t:navigationMenuItems value="#{PersonalBean.globalAdminNavigation}" />
+            </t:panelNavigation2>
+          </h:form>
+
+        </h:panelGroup>
+
+      </ui:define>
+
+    </ui:composition>
+
+  </body>
 </html>

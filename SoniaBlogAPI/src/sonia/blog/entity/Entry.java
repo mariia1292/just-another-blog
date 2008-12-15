@@ -65,7 +65,8 @@ import javax.persistence.TemporalType;
   @NamedQuery(name = "Entry.findByDate",
               query = "select e from Entry e join e.category c join c.blog b where b = :blog and e.published = true and e.creationDate between :start and :end") ,
   @NamedQuery(name = "Entry.calendar",
-              query = "select e.creationDate from Entry e join e.category c join c.blog b where b = :blog and e.published = true and e.creationDate between :start and :end")
+              query = "select e.creationDate from Entry e join e.category c join c.blog b where b = :blog and e.published = true and e.creationDate between :start and :end") ,
+  @NamedQuery(name = "Entry.countAll", query = "select count(e) from Entry e")
 })
 public class Entry implements Serializable, ContentObject
 {

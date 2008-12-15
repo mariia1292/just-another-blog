@@ -67,6 +67,24 @@ public class BlogRequest extends HttpServletRequestWrapper
    *
    * @return
    */
+  @Override
+  public String getCharacterEncoding()
+  {
+    if (encoding == null)
+    {
+      encoding = BlogContext.getInstance().getConfiguration().getString(
+        Constants.CONFIG_ENCODING, Constants.DEFAULT_ENCODING);
+    }
+
+    return encoding;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
   public Blog getCurrentBlog()
   {
     if (blog == null)
@@ -332,7 +350,6 @@ public class BlogRequest extends HttpServletRequestWrapper
   public void setCharacterEncoding(String enc)
           throws UnsupportedEncodingException
   {
-
     // do nothing
   }
 
@@ -373,6 +390,9 @@ public class BlogRequest extends HttpServletRequestWrapper
 
   /** Field description */
   private Blog blog;
+
+  /** Field description */
+  private String encoding;
 
   /** Field description */
   private MappingEntry mapping;

@@ -3,32 +3,35 @@
  * and open the template in the editor.
  */
 
+
+
 package sonia.blog.api.util;
+
+//~--- non-JDK imports --------------------------------------------------------
+
+import sonia.blog.api.app.BlogContext;
+
+import sonia.config.XmlConfiguration;
+
+//~--- JDK imports ------------------------------------------------------------
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.text.SimpleDateFormat;
+
 import java.util.Date;
 import java.util.logging.Level;
-import sonia.blog.api.app.BlogContext;
-import sonia.config.XmlConfiguration;
 
 /**
  *
  * @author sdorra
  */
-public abstract class AbstractConfigBean extends AbstractBean {
+public abstract class AbstractConfigBean extends AbstractBean
+{
 
-  private XmlConfiguration config;
-
-  /** Field description */
-  private static SimpleDateFormat sdf =
-    new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
-
-  public abstract void load( XmlConfiguration config );
-
-  public abstract void store( XmlConfiguration config );
-
+  /**
+   * Constructs ...
+   *
+   */
   public AbstractConfigBean()
   {
     super();
@@ -36,6 +39,23 @@ public abstract class AbstractConfigBean extends AbstractBean {
     load(config);
   }
 
+  //~--- methods --------------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   * @param config
+   */
+  public abstract void load(XmlConfiguration config);
+
+  /**
+   * Method description
+   *
+   *
+   * @param config
+   */
+  public abstract void store(XmlConfiguration config);
 
   /**
    * Method description
@@ -45,7 +65,7 @@ public abstract class AbstractConfigBean extends AbstractBean {
    */
   public String save()
   {
-    store( config );
+    store(config);
 
     String result = SUCCESS;
     File file = BlogContext.getInstance().getConfigFile();
@@ -57,7 +77,7 @@ public abstract class AbstractConfigBean extends AbstractBean {
     }
 
     File backupFile = new File(backupDir,
-                               "config-" + sdf.format(new Date()) + ".xml");
+                               "config-" + new Date().getTime() + ".xml");
 
     try
     {
@@ -79,5 +99,8 @@ public abstract class AbstractConfigBean extends AbstractBean {
     return result;
   }
 
+  //~--- fields ---------------------------------------------------------------
 
+  /** Field description */
+  private XmlConfiguration config;
 }

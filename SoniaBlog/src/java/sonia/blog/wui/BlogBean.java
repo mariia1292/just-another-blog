@@ -20,15 +20,17 @@ import sonia.blog.api.mapping.MappingEntry;
 import sonia.blog.api.search.SearchContext;
 import sonia.blog.api.search.SearchEntry;
 import sonia.blog.api.search.SearchException;
+import sonia.blog.api.spam.SpamInputProtection;
 import sonia.blog.api.template.Template;
 import sonia.blog.api.util.AbstractBean;
 import sonia.blog.entity.Blog;
 import sonia.blog.entity.Comment;
 import sonia.blog.entity.ContentObject;
 import sonia.blog.entity.Entry;
-import sonia.blog.entity.Role;
 
 import sonia.config.Configuration;
+
+import sonia.plugin.ServiceReference;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -102,10 +104,11 @@ public class BlogBean extends AbstractBean
         em.close();
       }
 
-      String uri =
-        BlogContext.getInstance().getLinkBuilder().buildLink(getRequest(), e);
-
-      sendRedirect(uri);
+      /*
+       * String uri =
+       * BlogContext.getInstance().getLinkBuilder().buildLink(getRequest(), e);
+       * sendRedirect(uri);
+       */
     }
     else
     {
@@ -114,64 +117,6 @@ public class BlogBean extends AbstractBean
   }
 
   //~--- get methods ----------------------------------------------------------
-
-  /**
-   * Method description
-   *
-   *
-   * @return
-   */
-  public List<NavigationMenuItem> getAdminNavigation()
-  {
-    List<NavigationMenuItem> navigation = new ArrayList<NavigationMenuItem>();
-    BlogRequest request = getRequest();
-    ResourceBundle bundle = getResourceBundle("label");
-
-    if (request.isUserInRole(Role.ADMIN))
-    {
-      navigation.add(new NavigationMenuItem(bundle.getString("templates"),
-              "templates"));
-      navigation.add(new NavigationMenuItem(bundle.getString("members"),
-              "members"));
-      navigation.add(new NavigationMenuItem(bundle.getString("general"),
-              "general"));
-    }
-
-    if (request.getUser().isGlobalAdmin())
-    {
-      navigation.add(
-          new NavigationMenuItem(
-              bundle.getString("blogAdministration"), "administration"));
-    }
-
-    return navigation;
-  }
-
-  /**
-   * Method description
-   *
-   *
-   * @return
-   */
-  public List<NavigationMenuItem> getAuthorNavigation()
-  {
-    List<NavigationMenuItem> navigation = new ArrayList<NavigationMenuItem>();
-
-    if (getRequest().isUserInRole(Role.AUTHOR)
-        || getRequest().isUserInRole(Role.ADMIN))
-    {
-      ResourceBundle bundle = getResourceBundle("label");
-
-      navigation.add(new NavigationMenuItem(bundle.getString("entries"),
-              "personal"));
-      navigation.add(new NavigationMenuItem(bundle.getString("categories"),
-              "categories"));
-      navigation.add(new NavigationMenuItem(bundle.getString("comments"),
-              "comments"));
-    }
-
-    return navigation;
-  }
 
   /**
    * Method description
@@ -508,6 +453,24 @@ public class BlogBean extends AbstractBean
    *
    * @return
    */
+  public SpamInputProtection getSpamInputMethod()
+  {
+    if (spamServiceReference == null)
+    {
+      spamServiceReference =
+        BlogContext.getInstance().getServiceRegistry().getServiceReference(
+          Constants.SERVICE_SPAMPROTECTIONMETHOD);
+    }
+
+    return (SpamInputProtection) spamServiceReference.getImplementation();
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
   public DataModel getTags()
   {
     tags = new ListDataModel();
@@ -681,6 +644,9 @@ public class BlogBean extends AbstractBean
 
   /** Field description */
   private String searchString;
+
+  /** Field description */
+  private ServiceReference spamServiceReference;
 
   /** Field description */
   private DataModel tags;

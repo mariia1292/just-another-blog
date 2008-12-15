@@ -34,13 +34,17 @@ import javax.persistence.TemporalType;
  *
  * @author sdorra
  */
-@Entity @EntityListeners({ AttachmentListener.class })
-        @NamedQueries({ @NamedQuery(name = "Attachment.entryOverview",
-        query = "select a from Attachment a join a.entry e where e = :entry order by a.creationDate desc") ,
-                        @NamedQuery(name = "Attachment.findByBlogAndId",
-        query = "select a from Attachment a join a.entry e join e.category c join c.blog b where b = :blog and a.id = :id") ,
-                        @NamedQuery(name = "Attachment.findImagesFromEntry",
-        query = "select a from Attachment a join a.entry e where e = :entry and a.mimeType like 'image/%'") })
+@Entity @EntityListeners({ AttachmentListener.class }) @NamedQueries(
+{
+  @NamedQuery(name = "Attachment.entryOverview",
+              query = "select a from Attachment a join a.entry e where e = :entry order by a.creationDate desc") ,
+  @NamedQuery(name = "Attachment.findByBlogAndId",
+              query = "select a from Attachment a join a.entry e join e.category c join c.blog b where b = :blog and a.id = :id") ,
+  @NamedQuery(name = "Attachment.findImagesFromEntry",
+              query = "select a from Attachment a join a.entry e where e = :entry and a.mimeType like 'image/%'") ,
+  @NamedQuery(name = "Attachment.countAll",
+              query = "select count(a) from Attachment a")
+})
 public class Attachment implements Serializable, PermaObject
 {
 

@@ -63,7 +63,7 @@ public class PluginActivator implements Activator
   {
     parser.removeMacro(CodeMacro.NAME);
     parser.removeMacro(PdfViewerMacro.NAME);
-    mappingHandler.removeMapping("/" + PdfViewerMacro.NAME);
+    mappingHandler.removeMapping("/" + PdfViewerMappingEntry.PATH);
   }
 
   //~--- fields ---------------------------------------------------------------

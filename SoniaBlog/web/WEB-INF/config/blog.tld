@@ -4,6 +4,34 @@
   <short-name>blog</short-name>
   <uri>http://jab.nitilon.org/blog/</uri>
   <tag>
+    <name>spamLabel</name>
+    <tag-class>sonia.blog.api.jsf.spam.SpamLabelTag</tag-class>
+    <body-content>empty</body-content>
+    <attribute>
+      <name>id</name>
+      <rtexprvalue>true</rtexprvalue>
+      <required>false</required>
+      <type>java.lang.Object</type>
+    </attribute>
+    <attribute>
+      <name>method</name>
+      <rtexprvalue>true</rtexprvalue>
+      <required>false</required>
+      <type>java.lang.Object</type>
+    </attribute>
+  </tag>
+  <tag>
+    <name>spamInput</name>
+    <tag-class>sonia.blog.api.jsf.spam.SpamInputTag</tag-class>
+    <body-content>empty</body-content>
+    <attribute>
+      <name>id</name>
+      <rtexprvalue>true</rtexprvalue>
+      <required>false</required>
+      <type>java.lang.Object</type>
+    </attribute>
+  </tag>
+  <tag>
     <name>calendar</name>
     <tag-class>sonia.blog.api.jsf.calendar.CalendarTag</tag-class>
     <body-content>JSP</body-content>
