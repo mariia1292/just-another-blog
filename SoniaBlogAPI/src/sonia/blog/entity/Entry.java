@@ -63,7 +63,7 @@ import javax.persistence.TemporalType;
   @NamedQuery(name = "Entry.findByCategoryId",
               query = "select e From Entry e join e.category c where c.id = :id and e.published = true order by e.creationDate") ,
   @NamedQuery(name = "Entry.findByDate",
-              query = "select e from Entry e join e.category c join c.blog b where b = :blog and e.published = true and e.creationDate between :start and :end") ,
+              query = "select e from Entry e join e.category c join c.blog b where b = :blog and e.published = true and e.creationDate between :start and :end order by e.creationDate") ,
   @NamedQuery(name = "Entry.calendar",
               query = "select e.creationDate from Entry e join e.category c join c.blog b where b = :blog and e.published = true and e.creationDate between :start and :end") ,
   @NamedQuery(name = "Entry.countAll", query = "select count(e) from Entry e")
@@ -513,7 +513,7 @@ public class Entry implements Serializable, ContentObject
   private List<Comment> comments;
 
   /** Field description */
-  @Lob @Column(nullable = false)
+  @Lob
   private String content;
 
   /** Field description */

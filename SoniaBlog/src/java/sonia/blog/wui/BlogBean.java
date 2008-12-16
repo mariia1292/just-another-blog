@@ -35,6 +35,7 @@ import sonia.plugin.ServiceReference;
 //~--- JDK imports ------------------------------------------------------------
 
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
@@ -204,6 +205,29 @@ public class BlogBean extends AbstractBean
    *
    * @return
    */
+  public int getCurrentPage()
+  {
+    int page = 0;
+    String param = getRequest().getParameter("page");
+
+    if (param != null)
+    {
+      try
+      {
+        page = Integer.parseInt(param);
+      }
+      catch (NumberFormatException ex) {}
+    }
+
+    return page;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
   public List<? extends ContentObject> getEntries()
   {
     return entries;
@@ -331,6 +355,18 @@ public class BlogBean extends AbstractBean
   {
     String nextUri = null;
 
+    if (entries != null)
+    {
+      BlogRequest request = getRequest();
+      int page = getCurrentPage() + 1;
+      int entriesPerPage = request.getCurrentBlog().getEntriesPerPage();
+
+      if (entries.size() > (page * entriesPerPage))
+      {
+        nextUri = getPageUri(request, page);
+      }
+    }
+
     return nextUri;
   }
 
@@ -399,6 +435,17 @@ public class BlogBean extends AbstractBean
   public String getPrevUri()
   {
     String prevUri = null;
+
+    if (entries != null)
+    {
+      BlogRequest request = getRequest();
+      int page = getCurrentPage();
+
+      if (page > 0)
+      {
+        prevUri = getPageUri(request, page-1);
+      }
+    }
 
     return prevUri;
   }
@@ -617,6 +664,38 @@ public class BlogBean extends AbstractBean
   public void setSearchString(String searchString)
   {
     this.searchString = searchString;
+  }
+
+  //~--- get methods ----------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   * @param request
+   * @param page
+   *
+   * @return
+   */
+  @SuppressWarnings("unchecked")
+  private String getPageUri(BlogRequest request, int page)
+  {
+    String uri =
+      request.getRequestURI().substring(request.getContextPath().length())
+      + "?page=" + page;
+    Enumeration<String> enm = request.getParameterNames();
+
+    while (enm.hasMoreElements())
+    {
+      String name = enm.nextElement();
+
+      if (!name.equals("page"))
+      {
+        uri += "&" + name + "=" + request.getParameter(name);
+      }
+    }
+
+    return uri;
   }
 
   //~--- fields ---------------------------------------------------------------

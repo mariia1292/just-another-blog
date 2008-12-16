@@ -16,6 +16,7 @@ import sonia.blog.api.search.SearchEntry;
 import sonia.blog.entity.Attachment;
 import sonia.blog.entity.Blog;
 import sonia.blog.entity.Category;
+import sonia.blog.entity.ContentObject;
 import sonia.blog.entity.Entry;
 import sonia.blog.entity.PermaObject;
 import sonia.blog.entity.Tag;
@@ -112,7 +113,7 @@ public class DefaultLinkBuilder implements LinkBuilder
     {
       link = buildLink(request, "");
 
-      if (object instanceof Entry)
+      if (object instanceof ContentObject)
       {
         if (request.getMapping() != null)
         {
@@ -134,11 +135,6 @@ public class DefaultLinkBuilder implements LinkBuilder
       else if (object instanceof Attachment)
       {
         link += "attachment/" + object.getId();
-      }
-      else if (object instanceof SearchEntry)
-      {
-        link += "search.jab?search=" + request.getParameter("search");
-        link += "&hit=" + object.getId();
       }
     }
 

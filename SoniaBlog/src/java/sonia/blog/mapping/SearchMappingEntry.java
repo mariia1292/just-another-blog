@@ -22,6 +22,8 @@ import sonia.blog.wui.BlogBean;
 
 //~--- JDK imports ------------------------------------------------------------
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.logging.Level;
 
@@ -65,7 +67,6 @@ public class SearchMappingEntry extends ScrollableMappingEntry
         {
           BlogBean blogBean = getBlogBean(request);
 
-          blogBean.setEntries(entries);
           end = (end < entries.size())
                 ? end
                 : entries.size();
@@ -73,6 +74,7 @@ public class SearchMappingEntry extends ScrollableMappingEntry
           List<SearchEntry> pageEntries = entries.subList(start, end);
 
           blogBean.setPageEntries(new ListDataModel(pageEntries));
+          blogBean.setEntries(buildEntryList(entries));
 
           String hitString = request.getParameter("hit");
 
@@ -131,8 +133,33 @@ public class SearchMappingEntry extends ScrollableMappingEntry
     String uri = linkBuilder.buildLink(request, "/search.jab");
 
     uri += "?search=" + request.getParameter("search");
-    uri += "&hit=" + object.getId();
+
+    int index = getBlogBean(request).getEntries().indexOf(object);
+
+    uri += "&hit=" + index;
 
     return uri;
+  }
+
+  //~--- methods --------------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   * @param entries
+   *
+   * @return
+   */
+  private List<ContentObject> buildEntryList(List<SearchEntry> entries)
+  {
+    List<ContentObject> objects = new ArrayList<ContentObject>();
+
+    for (SearchEntry e : entries)
+    {
+      objects.add(e.getData());
+    }
+
+    return objects;
   }
 }

@@ -34,7 +34,10 @@ import java.io.OutputStream;
 
 import java.net.URLConnection;
 
+import java.text.SimpleDateFormat;
+
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Level;
@@ -176,30 +179,53 @@ public class EntryBean extends AbstractBean
   public String remove()
   {
     String result = SUCCESS;
-    EntityManager em = BlogContext.getInstance().getEntityManager();
+    Long id = entry.getId();
 
-    em.getTransaction().begin();
+    if (id != null)
+    {
+      EntityManager em = BlogContext.getInstance().getEntityManager();
 
-    try
-    {
-      em.remove(em.merge(entry));
-      newEntry();
-      em.getTransaction().commit();
-      getMessageHandler().info("removeEntrySuccess");
-    }
-    catch (Exception ex)
-    {
-      if (em.getTransaction().isActive())
+      em.getTransaction().begin();
+
+      try
       {
-        em.getTransaction().rollback();
-      }
+        List<Attachment> attachmentList = entry.getAttachments();
 
-      logger.log(Level.SEVERE, null, ex);
-      getMessageHandler().error("removeEntryFailure");
-    }
-    finally
-    {
-      em.close();
+        if (attachmentList != null)
+        {
+          for (Attachment a : attachmentList)
+          {
+            em.remove(em.merge(a));
+          }
+        }
+
+        em.remove(em.merge(entry));
+        newEntry();
+        em.getTransaction().commit();
+
+        File attachmentDir = new File(directory, "" + id);
+
+        if (attachmentDir.exists())
+        {
+          Util.delete(attachmentDir);
+        }
+
+        getMessageHandler().info("removeEntrySuccess");
+      }
+      catch (Exception ex)
+      {
+        if (em.getTransaction().isActive())
+        {
+          em.getTransaction().rollback();
+        }
+
+        logger.log(Level.SEVERE, null, ex);
+        getMessageHandler().error("removeEntryFailure");
+      }
+      finally
+      {
+        em.close();
+      }
     }
 
     return result;
@@ -267,6 +293,11 @@ public class EntryBean extends AbstractBean
 
         // entry.setBlog(blog);
         User author = request.getUser();
+
+        if (entry.getTitle() == null)
+        {
+          entry.setTitle("NewEntry " + getDateString(request, new Date()));
+        }
 
         entry.setAuthor(author);
         em.persist(entry);
@@ -965,6 +996,25 @@ public class EntryBean extends AbstractBean
     }
 
     return result;
+  }
+
+  //~--- get methods ----------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   * @param request
+   * @param date
+   *
+   * @return
+   */
+  private String getDateString(BlogRequest request, Date date)
+  {
+    SimpleDateFormat sdf =
+      new SimpleDateFormat(request.getCurrentBlog().getDateFormat());
+
+    return sdf.format(date);
   }
 
   //~--- fields ---------------------------------------------------------------

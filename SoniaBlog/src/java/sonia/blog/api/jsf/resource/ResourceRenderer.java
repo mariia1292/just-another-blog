@@ -82,10 +82,14 @@ public class ResourceRenderer extends BaseRenderer
         writer.writeAttribute("type", "application/opensearchdescription+xml",
                               type);
       }
+      else if (type.equalsIgnoreCase("favicon"))
+      {
+        writer.writeAttribute("rel", "shortcut icon", null);
+      }
 
       if (resource.getTitle() != null)
       {
-        writer.writeAttribute("title", resource.getTitle(), null);
+        writer.writeAttribute("title", "JAB - " + resource.getTitle(), null);
       }
 
       if (resource.getHref() != null)

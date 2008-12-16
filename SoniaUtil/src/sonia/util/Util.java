@@ -46,6 +46,30 @@ public class Util
    * Method description
    *
    *
+   * @param file
+   */
+  public static void delete(File file)
+  {
+    if (file.isDirectory())
+    {
+      File[] children = file.listFiles();
+
+      if (children != null)
+      {
+        for (File child : children)
+        {
+          delete(child);
+        }
+      }
+    }
+
+    file.delete();
+  }
+
+  /**
+   * Method description
+   *
+   *
    * @param resource
    *
    * @return

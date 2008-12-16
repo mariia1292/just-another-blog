@@ -64,7 +64,7 @@ public class OpenSearchMappingEntry implements MappingEntry
     result += "<OpenSearchDescription ";
     result += "xmlns=\"http://a9.com/-/spec/opensearch/1.1/\" ";
     result += "xmlns:moz=\"http://www.mozilla.org/2006/browser/search/\">\n";
-    result += "  <ShortName>" + blog.getTitle() + "</ShortName>\n";
+    result += "  <ShortName>JAB - " + blog.getTitle() + "</ShortName>\n";
     result += "  <Description>" + blog.getDescription() + "</Description>\n";
 
     String link = BlogContext.getInstance().getLinkBuilder().buildLink(request,
