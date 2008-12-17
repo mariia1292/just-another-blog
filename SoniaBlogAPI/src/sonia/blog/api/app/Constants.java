@@ -51,6 +51,9 @@ public interface Constants
   public static final String CONFIG_IMAGEMIMETYPE = "image.mimetype";
 
   /** Field description */
+  public static final String CONFIG_PASSWORD_MINLENGTH = "password.minLength";
+
+  /** Field description */
   public static final String CONFIG_RESOURCE_DIRECTORY = "resource.directory";
 
   /** Field description */
@@ -64,6 +67,9 @@ public interface Constants
 
   /** Field description */
   public static final String DEFAULT_IMAGE_MIMETYPE = "image/jpeg";
+
+  /** Field description */
+  public static final int DEFAULT_PASSWORD_MINLENGTH = 6;
 
   /** Field description */
   public static final String LOGINMODULE_NAME = "BlogLoginModule";

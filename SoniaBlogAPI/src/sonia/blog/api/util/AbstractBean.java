@@ -53,6 +53,43 @@ public class AbstractBean
     init();
   }
 
+  //~--- get methods ----------------------------------------------------------
+
+  /**
+   * Method description
+   * TODO check function
+   *
+   * @param clazz
+   *
+   * @return
+   */
+  @SuppressWarnings("unchecked")
+  public <T>T getBean(Class<T> clazz)
+  {
+    T result = null;
+    String el = "#{" + clazz.getSimpleName() + "}";
+    FacesContext context = FacesContext.getCurrentInstance();
+    Object obj =
+      context.getApplication().getELResolver().getValue(context.getELContext(),
+        el, null);
+
+    if (clazz.isInstance(obj))
+    {
+      result = (T) obj;
+    }
+
+    try
+    {
+      result = clazz.newInstance();
+    }
+    catch (Exception ex)
+    {
+      logger.log(Level.SEVERE, null, ex);
+    }
+
+    return result;
+  }
+
   //~--- methods --------------------------------------------------------------
 
   /**

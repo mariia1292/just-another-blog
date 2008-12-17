@@ -33,6 +33,10 @@
             <h:selectBooleanCheckbox id="allowBlogCreation" value="#{GlobalConfigBean.allowBlogCreation}" />
             <h:message for="allowBlogCreation" />
 
+            <h:outputLabel for="passwordMinLength" value="#{label.passwordMinLength}" />
+            <h:inputText id="passwordMinLength" styleClass="short" value="#{GlobalConfigBean.passwordMinLength}" required="true" />
+            <h:message for="passwordMinLength" />
+
           </h:panelGrid>
 
           <h:commandButton action="#{GlobalConfigBean.save}" value="#{label.save}" />

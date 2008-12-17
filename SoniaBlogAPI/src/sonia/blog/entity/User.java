@@ -235,6 +235,17 @@ public class User implements Serializable, Principal, PermaObject
     return globalAdmin;
   }
 
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  public boolean isSelfManaged()
+  {
+    return selfManaged;
+  }
+
   //~--- set methods ----------------------------------------------------------
 
   /**
@@ -325,6 +336,17 @@ public class User implements Serializable, Principal, PermaObject
     this.password = password;
   }
 
+  /**
+   * Method description
+   *
+   *
+   * @param selfManaged
+   */
+  public void setSelfManaged(boolean selfManaged)
+  {
+    this.selfManaged = selfManaged;
+  }
+
   //~--- methods --------------------------------------------------------------
 
   /**
@@ -358,9 +380,6 @@ public class User implements Serializable, Principal, PermaObject
   private String activationCode;
 
   /** Field description */
-  private boolean active = true;
-
-  /** Field description */
   @Column(nullable = false)
   private String displayName;
 
@@ -390,4 +409,10 @@ public class User implements Serializable, Principal, PermaObject
   /** Field description */
   @Temporal(TemporalType.TIMESTAMP) @Column(nullable = false)
   private Date registrationDate;
+
+  /** Field description */
+  private boolean selfManaged = true;
+
+  /** Field description */
+  private boolean active = true;
 }

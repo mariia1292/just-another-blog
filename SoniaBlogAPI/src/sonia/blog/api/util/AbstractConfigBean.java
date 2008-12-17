@@ -83,6 +83,7 @@ public abstract class AbstractConfigBean extends AbstractBean
     {
       file.renameTo(backupFile);
       config.store(new FileOutputStream(file));
+      getMessageHandler().info("saveConfigSuccess");
     }
     catch (Exception ex)
     {

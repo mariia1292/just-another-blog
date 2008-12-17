@@ -13,6 +13,13 @@
 
         <h:panelGroup rendered="#{PersonalBean.author}">
 
+          <h3><h:outputText value="#{label.user}" /></h3>
+          <h:form id="readerNavForm">
+            <t:panelNavigation2 id="readerNav" layout="list">
+              <t:navigationMenuItems value="#{PersonalBean.readerNavigation}" />
+            </t:panelNavigation2>
+          </h:form>
+
           <h3><h:outputText value="#{label.author}" /></h3>
           <h:form id="authorNavForm">
             <t:panelNavigation2 id="authorNav" layout="list">

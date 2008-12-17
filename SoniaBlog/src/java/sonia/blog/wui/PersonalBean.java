@@ -29,6 +29,27 @@ import java.util.ResourceBundle;
 public class PersonalBean extends AbstractBean
 {
 
+  public List<NavigationMenuItem> getReaderNavigation()
+  {
+    if ( readerNavigation == null )
+    {
+      ResourceBundle label = getResourceBundle("label");
+
+      readerNavigation = new ArrayList<NavigationMenuItem>();
+      
+      User user = getRequest().getUser();
+      if ( user.isSelfManaged() )
+      {
+        readerNavigation.add( new NavigationMenuItem(label.getString("userSettings"), "userSettings") );
+      }
+
+      
+    }
+    return readerNavigation;
+  }
+
+  private List<NavigationMenuItem> readerNavigation;
+
   /**
    * Method description
    *
@@ -54,7 +75,7 @@ public class PersonalBean extends AbstractBean
     }
     else
     {
-      adminNavigation = null;
+      adminNavigation = new ArrayList<NavigationMenuItem>();
     }
 
     return adminNavigation;
@@ -89,7 +110,7 @@ public class PersonalBean extends AbstractBean
     }
     else
     {
-      authorNavigation = null;
+      authorNavigation = new ArrayList<NavigationMenuItem>();
     }
 
     return authorNavigation;
@@ -120,6 +141,10 @@ public class PersonalBean extends AbstractBean
         globalAdminNavigation.add(
             new NavigationMenuItem(label.getString("configuration"), "config"));
       }
+    }
+    else
+    {
+       globalAdminNavigation = new ArrayList<NavigationMenuItem>();
     }
 
     return globalAdminNavigation;

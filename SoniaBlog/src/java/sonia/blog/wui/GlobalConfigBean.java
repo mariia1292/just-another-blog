@@ -55,6 +55,8 @@ public class GlobalConfigBean extends AbstractConfigBean
             Boolean.FALSE);
     allowBlogCreation = config.getBoolean(Constants.CONFIG_ALLOW_BLOGCREATION,
             Boolean.FALSE);
+    passwordMinLength = config.getInteger(Constants.CONFIG_PASSWORD_MINLENGTH,
+            Constants.DEFAULT_PASSWORD_MINLENGTH);
   }
 
   /**
@@ -68,6 +70,7 @@ public class GlobalConfigBean extends AbstractConfigBean
   {
     config.set(Constants.CONFIG_ALLOW_REGISTRATION, allowRegistration);
     config.set(Constants.CONFIG_ALLOW_BLOGCREATION, allowBlogCreation);
+    config.set(Constants.CONFIG_PASSWORD_MINLENGTH, passwordMinLength);
   }
 
   //~--- get methods ----------------------------------------------------------
@@ -82,6 +85,17 @@ public class GlobalConfigBean extends AbstractConfigBean
   public List<String> getConfigurationProviders()
   {
     return reference.getImplementations();
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  public int getPasswordMinLength()
+  {
+    return passwordMinLength;
   }
 
   /**
@@ -130,6 +144,17 @@ public class GlobalConfigBean extends AbstractConfigBean
     this.allowRegistration = allowRegistration;
   }
 
+  /**
+   * Method description
+   *
+   *
+   * @param passwordMinLength
+   */
+  public void setPasswordMinLength(int passwordMinLength)
+  {
+    this.passwordMinLength = passwordMinLength;
+  }
+
   //~--- fields ---------------------------------------------------------------
 
   /** Field description */
@@ -137,6 +162,9 @@ public class GlobalConfigBean extends AbstractConfigBean
 
   /** Field description */
   private boolean allowRegistration;
+
+  /** Field description */
+  private int passwordMinLength;
 
   /** Field description */
   private ServiceReference reference;

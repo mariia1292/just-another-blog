@@ -190,6 +190,7 @@ public class LdapLoginModule extends LoginModule
       u = new User();
       u.setName(lu.getName());
       u.setActive(Boolean.TRUE);
+      u.setSelfManaged(false);
       u.setEmail(lu.getMail());
       u.setPassword("ldap");
       u.setDisplayName(lu.getDisplayName());
@@ -290,6 +291,7 @@ public class LdapLoginModule extends LoginModule
     try
     {
       user = em.merge(user);
+      em.getTransaction().commit();
     }
     catch (Exception ex)
     {
