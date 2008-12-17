@@ -16,6 +16,7 @@ import sonia.blog.authentication.DefaultLoginModule;
 import sonia.blog.link.DefaultLinkBuilder;
 import sonia.blog.macro.AttachmentMacro;
 import sonia.blog.macro.BlogsMacro;
+import sonia.blog.macro.FLVMacro;
 import sonia.blog.macro.GalleryMacro;
 import sonia.blog.macro.HelloWorldMacro;
 import sonia.blog.macro.SpoilerMacro;
@@ -62,7 +63,6 @@ import javax.security.auth.login.AppConfigurationEntry;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
-import sonia.blog.macro.FLVMacro;
 
 /**
  * Web application lifecycle listener.

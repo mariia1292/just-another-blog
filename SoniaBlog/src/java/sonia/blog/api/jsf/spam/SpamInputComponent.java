@@ -35,9 +35,6 @@ public class SpamInputComponent extends UIInput
     setRendererType(RENDERER);
   }
 
-
-
-
   //~--- get methods ----------------------------------------------------------
 
   /**

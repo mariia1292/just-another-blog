@@ -127,6 +127,7 @@ public class PluginActivator implements Activator, ConfigurationListener
    * Method description
    *
    */
+  @SuppressWarnings("unckecked")
   private void enableLdapModule()
   {
     if (entry == null)

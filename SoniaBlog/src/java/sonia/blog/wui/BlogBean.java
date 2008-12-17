@@ -443,7 +443,7 @@ public class BlogBean extends AbstractBean
 
       if (page > 0)
       {
-        prevUri = getPageUri(request, page-1);
+        prevUri = getPageUri(request, page - 1);
       }
     }
 

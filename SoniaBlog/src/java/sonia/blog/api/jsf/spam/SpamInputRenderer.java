@@ -62,6 +62,7 @@ public class SpamInputRenderer extends BaseRenderer
       {
         String msg = context.getApplication().getResourceBundle(context,
                        "message").getString("spamInputFailure");
+
         context.addMessage(clientId,
                            new FacesMessage(FacesMessage.SEVERITY_WARN, msg,
                              null));

@@ -12,7 +12,6 @@ package sonia.blog.ldap;
 import sonia.blog.api.app.BlogContext;
 import sonia.blog.entity.User;
 
-import sonia.config.ConfigurationListener;
 import sonia.config.ModifyableConfiguration;
 
 import sonia.net.ssl.SSLSocketFactory;
