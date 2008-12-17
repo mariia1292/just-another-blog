@@ -386,6 +386,7 @@ exists or setup the property manually. For example like this:
         <ant antfile="${project.SoniaBlogAPI}/build.xml" inheritall="false" target="jar"/>
         <ant antfile="${project.SoniaUtil}/build.xml" inheritall="false" target="jar"/>
         <ant antfile="${project.SoniaWebUtil}/build.xml" inheritall="false" target="jar"/>
+        <ant antfile="${project.WebIntegrationPlugin}/build.xml" inheritall="false" target="jar"/>
     </target>
     <target depends="init" if="dist.ear.dir" name="deps-ear-jar" unless="no.deps">
         <ant antfile="${project.LdapPlugin}/build.xml" inheritall="false" target="jar"/>
@@ -394,6 +395,7 @@ exists or setup the property manually. For example like this:
         <ant antfile="${project.SoniaBlogAPI}/build.xml" inheritall="false" target="jar"/>
         <ant antfile="${project.SoniaUtil}/build.xml" inheritall="false" target="jar"/>
         <ant antfile="${project.SoniaWebUtil}/build.xml" inheritall="false" target="jar"/>
+        <ant antfile="${project.WebIntegrationPlugin}/build.xml" inheritall="false" target="jar"/>
     </target>
     <target depends="init, deps-module-jar, deps-ear-jar" name="deps-jar" unless="no.deps"/>
     <target depends="init,deps-jar" name="-pre-pre-compile">
@@ -541,9 +543,10 @@ exists or setup the property manually. For example like this:
         <copyfiles files="${reference.SoniaBlogAPI.jar}" iftldtodir="${build.web.dir}/WEB-INF" manifestproperty="manifest.reference.SoniaBlogAPI.jar" todir="${dist.ear.dir}"/>
         <copyfiles files="${reference.OfficePlugin.jar}" iftldtodir="${build.web.dir}/WEB-INF" manifestproperty="manifest.reference.OfficePlugin.jar" todir="${dist.ear.dir}"/>
         <copyfiles files="${reference.LdapPlugin.jar}" iftldtodir="${build.web.dir}/WEB-INF" manifestproperty="manifest.reference.LdapPlugin.jar" todir="${dist.ear.dir}"/>
+        <copyfiles files="${reference.WebIntegrationPlugin.jar}" iftldtodir="${build.web.dir}/WEB-INF" manifestproperty="manifest.reference.WebIntegrationPlugin.jar" todir="${dist.ear.dir}"/>
         <mkdir dir="${build.web.dir}/META-INF"/>
         <manifest file="${build.web.dir}/META-INF/MANIFEST.MF" mode="update">
-            <attribute name="Class-Path" value="${manifest.libs.MyFaces-Tomahawk.classpath} ${manifest.libs.facelets-1-1-14.classpath} ${manifest.libs.PdfRenderer.classpath} ${manifest.libs.Lucene.classpath} ${manifest.reference.SoniaUtil.jar} ${manifest.reference.SoniaWebUtil.jar} ${manifest.reference.PluginTest.jar} ${manifest.reference.SoniaBlogAPI.jar} ${manifest.reference.OfficePlugin.jar} ${manifest.reference.LdapPlugin.jar} "/>
+            <attribute name="Class-Path" value="${manifest.libs.MyFaces-Tomahawk.classpath} ${manifest.libs.facelets-1-1-14.classpath} ${manifest.libs.PdfRenderer.classpath} ${manifest.libs.Lucene.classpath} ${manifest.reference.SoniaUtil.jar} ${manifest.reference.SoniaWebUtil.jar} ${manifest.reference.PluginTest.jar} ${manifest.reference.SoniaBlogAPI.jar} ${manifest.reference.OfficePlugin.jar} ${manifest.reference.LdapPlugin.jar} ${manifest.reference.WebIntegrationPlugin.jar} "/>
         </manifest>
     </target>
     <target depends="init" name="library-inclusion-in-archive" unless="dist.ear.dir">
@@ -557,6 +560,7 @@ exists or setup the property manually. For example like this:
         <copyfiles files="${reference.SoniaBlogAPI.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
         <copyfiles files="${reference.OfficePlugin.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
         <copyfiles files="${reference.LdapPlugin.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
+        <copyfiles files="${reference.WebIntegrationPlugin.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
     </target>
     <target depends="init,compile,compile-jsps,-pre-dist,library-inclusion-in-manifest" name="do-ear-dist">
         <dirname file="${dist.ear.war}" property="dist.jar.dir"/>
@@ -840,6 +844,7 @@ exists or setup the property manually. For example like this:
         <ant antfile="${project.SoniaBlogAPI}/build.xml" inheritall="false" target="clean"/>
         <ant antfile="${project.SoniaUtil}/build.xml" inheritall="false" target="clean"/>
         <ant antfile="${project.SoniaWebUtil}/build.xml" inheritall="false" target="clean"/>
+        <ant antfile="${project.WebIntegrationPlugin}/build.xml" inheritall="false" target="clean"/>
     </target>
     <target depends="init" name="do-clean">
         <condition property="build.dir.to.clean" value="${build.web.dir}">

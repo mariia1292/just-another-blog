@@ -9,10 +9,15 @@ package sonia.util;
 
 //~--- JDK imports ------------------------------------------------------------
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
+
+import java.net.URL;
+import java.net.URLConnection;
 
 import java.text.NumberFormat;
 
@@ -130,6 +135,51 @@ public class Util
   }
 
   //~--- get methods ----------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   * @param url
+   *
+   * @return
+   *
+   * @throws IOException
+   */
+  public static String getContent(URL url) throws IOException
+  {
+    String result = null;
+    URLConnection conn = url.openConnection();
+    String type = conn.getContentType();
+
+    if (type.toLowerCase().startsWith("text"))
+    {
+      String encoding = conn.getContentEncoding();
+      InputStream in = conn.getInputStream();
+      BufferedReader reader = null;
+
+      if (isBlank(encoding))
+      {
+        reader = new BufferedReader(new InputStreamReader(in));
+      }
+      else
+      {
+        reader = new BufferedReader(new InputStreamReader(in, encoding));
+      }
+
+      result = "";
+
+      String line = reader.readLine();
+
+      while (line != null)
+      {
+        result += line + "\n";
+        line = reader.readLine();
+      }
+    }
+
+    return result;
+  }
 
   /**
    * Method description
