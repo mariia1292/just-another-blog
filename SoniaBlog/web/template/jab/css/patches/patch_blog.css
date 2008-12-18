@@ -16,7 +16,7 @@
  */
 
 /* Layout-independent adjustments | Layout-unabhängige Anpassungen ----------------------------------- */
-@import url(../../../../yaml/core/iehacks.css);
+@import url(../../yaml/core/iehacks.css);
 
 /* Layout-dependent adjustments | Layout-abhängige Anpassungen --------------------------------------- */
 @media screen, projection
@@ -30,24 +30,9 @@
    * @valid      yes
    */
 
-  * html #col3 {height: 1%;}        /* Activate hack for 3-Pixel-Jog Bug | Hack für 3-Pixel-Jog Bug aktivieren */
-  * html #col2 {margin-right: -3px;}
-  * html #col3 { margin-left: 74%; }
 
- /**
-  * min-width/max-width workaround for IE5.x & IE6
-  *
-  * @workaround
-  * @affected   IE 5.x/Win, IE6
-  * @css-for    IE 5.x/Win, IE6
-  * @valid      no
-  */
-
-  * html #page_margins {
-    /* Fallback if JavaScript is disabled */
-    width: 80em;
-
-    /* JS-Expression for min-/max-width simulation */
-	width: expression((document.documentElement && document.documentElement.clientHeight) ? ((document.documentElement.clientWidth < 740) ? "740px" : ((document.documentElement.clientWidth > (80 * 16 * (parseInt(this.parentNode.currentStyle.fontSize) / 100))) ? "80em" : "auto" )) : ((document.body.clientWidth < 740) ? "740px" : ((document.body.clientWidth > (80 * 16 * (parseInt(this.parentNode.currentStyle.fontSize) / 100))) ? "80em" : "auto" )));
-  }
+  * html #col3 {height: 1%}
+  * html #col1 {margin-right: -3px}
+  * html #col3 {margin-left: 74%}
+  
 }

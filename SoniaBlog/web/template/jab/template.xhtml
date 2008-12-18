@@ -20,9 +20,9 @@
   </head>
   <body>
     <div id="page_margins">
-      
+
       <div id="page">
-        
+
         <div id="header">
           <div id="topnav">
             <!-- start: skip link navigation -->
@@ -44,7 +44,7 @@
             <span><h:outputText value="#{BlogBean.blog.description}" rendered="#{BlogBean.installed}" /></span>
           </div>
         </div>
-        
+
         <!-- begin: main navigation #nav -->
         <div id="nav"> <a id="navigation" name="navigation"></a>
           <!-- skiplink anchor: navigation -->
@@ -64,33 +64,32 @@
         <div id="main"> <a id="content" name="content"></a>
           <div id="col1">
             <div id="col1_content" class="clearfix">
-              <h:messages id="messages" layout="table" styleClass="full" 
-                          globalOnly="true" errorClass="warning"
-                          fatalClass="warning" warnClass="warning"
-                          infoClass="note" />
+              <h:messages id="messages" globalOnly="true"
+                          errorClass="warning" fatalClass="warning"
+                          warnClass="warning" infoClass="note" />
               <ui:insert name="content" />
             </div>
           </div>
           <div id="col3">
             <div id="col3_content" class="clearfix">
-              
+
               <ui:insert name="info">
-                
+
                 <h:panelGroup rendered="#{BlogBean.installed}">
-                
+
                   <h3><h:outputText value="#{label.categories}" /></h3>
                   <h:dataTable styleClass="overview" value="#{BlogBean.categories}" var="Category">
                     <h:column>
                       <blog:link value="#{Category.name}" object="#{Category}" />
                     </h:column>
                   </h:dataTable>
-                  
+
                   <h3><h:outputText value="#{label.tags}" /></h3>
                   <ui:repeat value="#{BlogBean.tags}" var="Tag">
                     <blog:link value="#{Tag.name}" object="#{Tag}" styleClass="nowrap" />
                     <h:outputText value=" " />
                   </ui:repeat>
-                  
+
                   <h3><h:outputText value="#{label.search}" /></h3>
                   <blog:search value="#{BlogBean.searchString}" label="#{label.search}" />
 
@@ -105,7 +104,7 @@
                   </h:form>
 
                 </h:panelGroup>
-                
+
               </ui:insert>
             </div>
             <!-- IE Column Clearing -->
@@ -123,7 +122,7 @@
         </div>
         <!-- end: #footer -->
       </div>
-      
+
     </div>
   </body>
 </html>

@@ -35,7 +35,7 @@
 
   /* (en) Layout: width, background, borders */
   /* (de) Layout: Breite, Hintergrund, Rahmen */
-  #page_margins { width: 980px; background: #fff; }
+  #page_margins { width: 980px; min-width: inherit; max-width: none; background: #fff; }
   #page{ padding: 0px; }
 
   /* (en) Designing main layout elements */
@@ -45,6 +45,8 @@
     vertical-align: bottom;
     height: 150px;
   }
+
+  #nav { overflow: hidden; }
 
   #topnav { color: #aaa; background: transparent; }
 
@@ -77,17 +79,18 @@
    * |-------------------------------|
    * | #footer                       |
    * |-------------------------------|
-   */
+   */  
 
   /* #col1 becomes main column | Linke float-Spalte wird zur Inhaltsspalte */
-  #col1 { width: 75%; }
+  #col1 { float: left; width: 75%}
+  #col1_content { padding: 0 10px 0 5px }
 
   /* hide #col2 | Rechte Spalte abschalten */
-  #col2, #col2_content { display:none }
+  #col2 { display:none }
 
   /* #col3 moves to the right | Linken Randabstand anpassen - #col3 wird zur Randspalte */
-  #col3 { margin-left:75%; margin-right:0; }
-  #col3_content { padding-left: 20px; padding-right: 10px; }
+  #col3 { width: auto; margin: 0 0 0 75%}
+  #col3_content { padding: 0 5px 0 20px }
 
 
 }
