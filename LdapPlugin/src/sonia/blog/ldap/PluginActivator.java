@@ -27,7 +27,7 @@ import java.util.HashMap;
 import javax.security.auth.login.AppConfigurationEntry;
 
 /**
- * TODO: ConfigurationListener not really working
+ *
  * @author sdorra
  */
 public class PluginActivator implements Activator, ConfigurationListener

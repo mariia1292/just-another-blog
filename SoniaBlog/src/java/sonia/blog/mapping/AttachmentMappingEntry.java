@@ -320,8 +320,8 @@ public class AttachmentMappingEntry
     response.setContentType(mimeType);
     response.setContentLength((int) file.length());
     response.setHeader("Content-Disposition", "filename=\"" + name + "\";");
+    response.setDateHeader("Last-Modified", file.lastModified());
 
-    // TODO set last-modified header
     OutputStream out = null;
     InputStream in = null;
 

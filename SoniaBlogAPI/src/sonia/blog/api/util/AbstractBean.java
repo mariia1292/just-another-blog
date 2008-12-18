@@ -57,21 +57,20 @@ public class AbstractBean
 
   /**
    * Method description
-   * TODO check function
    *
    * @param clazz
    *
    * @return
    */
   @SuppressWarnings("unchecked")
-  public <T>T getBean(Class<T> clazz)
+  public <T>T getBean(Class<T> clazz, String name)
   {
     T result = null;
-    String el = "#{" + clazz.getSimpleName() + "}";
+    String el = "#{" + name + "}";
     FacesContext context = FacesContext.getCurrentInstance();
     Object obj =
       context.getApplication().getELResolver().getValue(context.getELContext(),
-        el, null);
+        null, el);
 
     if (clazz.isInstance(obj))
     {
