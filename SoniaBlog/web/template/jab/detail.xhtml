@@ -28,62 +28,68 @@
 
         <blog:content object="#{BlogBean.entry}" />
 
-        <h3><h:outputText value="#{label.comments}" /></h3>
+        <h:panelGroup styleClass="comments" rendered="#{BlogBean.showComments}">
 
-        <h:dataTable id="commentTable" value="#{BlogBean.comments}" var="Comment">
+          <a rel="comments"></a>
 
-          <h:column>
+          <h3><h:outputText value="#{label.comments}" /></h3>
 
-            <h:outputText value="#{Comment.authorName}" rendered="#{Comment.authorURL == null}" />
-            <h:outputLink target="_blank" value="#{Comment.authorURL}" rendered="#{Comment.authorURL != null}">
-              <h:outputText value="#{Comment.authorName}" />
-            </h:outputLink>
-            <h:outputText value=": #{Comment.content}" escape="#{!BlogBean.blog.allowHtmlComments}" />
-            <br />
+          <h:dataTable id="commentTable" value="#{BlogBean.comments}" var="Comment">
 
-            <h:outputText value="#{Comment.creationDate}">
-              <f:convertDateTime pattern="#{BlogBean.blog.dateFormat}" />
-            </h:outputText>
+            <h:column>
 
-          </h:column>
+              <h:outputText value="#{Comment.authorName}" rendered="#{Comment.authorURL == null}" />
+              <h:outputLink target="_blank" value="#{Comment.authorURL}" rendered="#{Comment.authorURL != null}">
+                <h:outputText value="#{Comment.authorName}" />
+              </h:outputLink>
+              <h:outputText value=": #{Comment.content}" escape="#{!BlogBean.blog.allowHtmlComments}" />
+              <br />
 
-        </h:dataTable>
+              <h:outputText value="#{Comment.creationDate}">
+                <f:convertDateTime pattern="#{BlogBean.blog.dateFormat}" />
+              </h:outputText>
 
-        <h:form id="commentForm" prependId="false" rendered="#{BlogBean.blog.allowComments}">
+            </h:column>
 
-          <h:panelGrid columns="3">
+          </h:dataTable>
 
-            <h:outputLabel for="name" value="#{label.name}" />
-            <h:inputText id="name" value="#{BlogBean.comment.authorName}" required="true" />
-            <h:message for="name" />
+          <h:form id="commentForm" prependId="false">
 
-            <h:outputLabel for="mail" value="#{label.email}" />
-            <h:inputText id="mail" value="#{BlogBean.comment.authorMail}">
-              <f:validator validatorId="validator.mail" />
-            </h:inputText>
-            <h:message for="mail" />
+            <h:panelGrid columns="3">
 
-            <h:outputLabel for="url" value="#{label.url}" />
-            <h:inputText id="url" value="#{BlogBean.comment.authorURL}">
-              <f:validator validatorId="validator.url" />
-            </h:inputText>
-            <h:message for="url" />
+              <h:outputLabel for="name" value="#{label.name}" />
+              <h:inputText id="name" value="#{BlogBean.comment.authorName}" required="true" />
+              <h:message for="name" />
 
-            <h:outputLabel for="content" value="#{label.content}" />
-            <h:inputTextarea id="content" value="#{BlogBean.comment.content}" required="true">
-              <f:validateLength maximum="255" />
-            </h:inputTextarea>
-            <h:message for="content" />
+              <h:outputLabel for="mail" value="#{label.email}" />
+              <h:inputText id="mail" value="#{BlogBean.comment.authorMail}">
+                <f:validator validatorId="validator.mail" />
+              </h:inputText>
+              <h:message for="mail" />
 
-            <blog:spamLabel method="#{BlogBean.spamInputMethod}" />
-            <blog:spamInput id="spam" />
-            <h:message for="spam" />
+              <h:outputLabel for="url" value="#{label.url}" />
+              <h:inputText id="url" value="#{BlogBean.comment.authorURL}">
+                <f:validator validatorId="validator.url" />
+              </h:inputText>
+              <h:message for="url" />
 
-          </h:panelGrid>
+              <h:outputLabel for="content" value="#{label.content}" />
+              <h:inputTextarea id="content" value="#{BlogBean.comment.content}" required="true">
+                <f:validateLength maximum="255" />
+              </h:inputTextarea>
+              <h:message for="content" />
 
-          <h:commandButton value="#{label.save}" action="#{BlogBean.addComment}" />
+              <blog:spamLabel method="#{BlogBean.spamInputMethod}" />
+              <blog:spamInput id="spam" />
+              <h:message for="spam" />
 
-        </h:form>
+            </h:panelGrid>
+
+            <h:commandButton value="#{label.save}" action="#{BlogBean.addComment}" />
+
+          </h:form>
+
+        </h:panelGroup>
 
       </ui:define>
 

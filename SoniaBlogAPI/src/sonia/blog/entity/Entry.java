@@ -68,13 +68,25 @@ import javax.persistence.TemporalType;
               query = "select e.creationDate from Entry e join e.category c join c.blog b where b = :blog and e.published = true and e.creationDate between :start and :end") ,
   @NamedQuery(name = "Entry.countAll", query = "select count(e) from Entry e")
 })
-public class Entry implements Serializable, ContentObject
+public class Entry implements Serializable, ContentObject, CommentAble
 {
 
   /** Field description */
   private static final long serialVersionUID = 4400178922212522094L;
 
   //~--- methods --------------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   * @param comment
+   */
+  public void addComment(Comment comment)
+  {
+    getComments().add(comment);
+    comment.setEntry(this);
+  }
 
   /**
    * Method description

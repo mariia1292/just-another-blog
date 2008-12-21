@@ -16,6 +16,7 @@ import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -255,7 +256,7 @@ public class Category implements Serializable, PermaObject
   private String description;
 
   /** Field description */
-  @OneToMany(mappedBy = "category")
+  @OneToMany(fetch = FetchType.LAZY, mappedBy = "category")
   private List<Entry> entries;
 
   /** Field description */

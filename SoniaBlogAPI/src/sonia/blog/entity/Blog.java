@@ -22,6 +22,7 @@ import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -561,7 +562,7 @@ public class Blog implements Serializable, PermaObject
   private boolean allowMacros = true;
 
   /** Field description */
-  @OneToMany(mappedBy = "blog")
+  @OneToMany(fetch = FetchType.LAZY, mappedBy = "blog")
   private List<Category> categories;
 
   /** Field description */
@@ -592,7 +593,7 @@ public class Blog implements Serializable, PermaObject
   private int imageWidth = 640;
 
   /** Field description */
-  @OneToMany(mappedBy = "blog")
+  @OneToMany(fetch = FetchType.LAZY, mappedBy = "blog")
   private List<BlogMember> members;
 
   /** Field description */

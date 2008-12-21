@@ -7,26 +7,21 @@
 
 package sonia.blog.entity;
 
-//~--- non-JDK imports --------------------------------------------------------
-
-import sonia.blog.api.listener.AttachmentListener;
-
 //~--- JDK imports ------------------------------------------------------------
 
 import java.io.Serializable;
 
 import java.util.Date;
+import java.util.List;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EntityListeners;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
-import javax.persistence.PrePersist;
+import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
@@ -34,22 +29,12 @@ import javax.persistence.TemporalType;
  *
  * @author sdorra
  */
-@Entity @EntityListeners({ AttachmentListener.class }) @NamedQueries(
-{
-  @NamedQuery(name = "Attachment.entryOverview",
-              query = "select a from Attachment a join a.entry e where e = :entry order by a.creationDate desc") ,
-  @NamedQuery(name = "Attachment.findByBlogAndId",
-              query = "select a from Attachment a join a.entry e join e.category c join c.blog b where b = :blog and a.id = :id") ,
-  @NamedQuery(name = "Attachment.findImagesFromEntry",
-              query = "select a from Attachment a join a.entry e where e = :entry and a.mimeType like 'image/%'") ,
-  @NamedQuery(name = "Attachment.countAll",
-              query = "select count(a) from Attachment a")
-})
-public class Attachment implements Serializable, PermaObject
+@Entity
+public class Page implements Serializable, ContentObject
 {
 
   /** Field description */
-  private static final long serialVersionUID = 6433042381384640712L;
+  private static final long serialVersionUID = 7471131711796508969L;
 
   //~--- methods --------------------------------------------------------------
 
@@ -66,12 +51,12 @@ public class Attachment implements Serializable, PermaObject
   {
 
     // TODO: Warning - this method won't work in the case the id fields are not set
-    if (!(object instanceof Attachment))
+    if (!(object instanceof Page))
     {
       return false;
     }
 
-    Attachment other = (Attachment) object;
+    Page other = (Page) object;
 
     if (((this.id == null) && (other.id != null))
         || ((this.id != null) &&!this.id.equals(other.id)))
@@ -106,10 +91,21 @@ public class Attachment implements Serializable, PermaObject
    *
    * @return
    */
+  public boolean renderMacros()
+  {
+    return true;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
   @Override
   public String toString()
   {
-    return "sonia.blop.entity.Attachment[id=" + id + "]";
+    return "sonia.blog.entity.Page[id=" + id + "]";
   }
 
   //~--- get methods ----------------------------------------------------------
@@ -120,42 +116,53 @@ public class Attachment implements Serializable, PermaObject
    *
    * @return
    */
+  public List<Attachment> getAttachments()
+  {
+    return attachments;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  public User getAuthor()
+  {
+    return author;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  public String getAuthorName()
+  {
+    return author.getDisplayName();
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  public String getContent()
+  {
+    return content;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
   public Date getCreationDate()
   {
     return creationDate;
-  }
-
-  /**
-   * Method description
-   *
-   *
-   * @return
-   */
-  public String getDescription()
-  {
-    return description;
-  }
-
-  /**
-   * Method description
-   *
-   *
-   * @return
-   */
-  public Entry getEntry()
-  {
-    return entry;
-  }
-
-  /**
-   * Method description
-   *
-   *
-   * @return
-   */
-  public String getFilePath()
-  {
-    return filePath;
   }
 
   /**
@@ -175,9 +182,9 @@ public class Attachment implements Serializable, PermaObject
    *
    * @return
    */
-  public String getMimeType()
+  public Page getParent()
   {
-    return mimeType;
+    return parent;
   }
 
   /**
@@ -186,9 +193,9 @@ public class Attachment implements Serializable, PermaObject
    *
    * @return
    */
-  public String getName()
+  public int getPosition()
   {
-    return name;
+    return position;
   }
 
   /**
@@ -197,9 +204,9 @@ public class Attachment implements Serializable, PermaObject
    *
    * @return
    */
-  public Page getPage()
+  public String getTeaser()
   {
-    return page;
+    return content;
   }
 
   /**
@@ -208,9 +215,20 @@ public class Attachment implements Serializable, PermaObject
    *
    * @return
    */
-  public long getSize()
+  public String getTitle()
   {
-    return fileSize;
+    return title;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  public boolean isPublished()
+  {
+    return published;
   }
 
   //~--- set methods ----------------------------------------------------------
@@ -219,33 +237,44 @@ public class Attachment implements Serializable, PermaObject
    * Method description
    *
    *
-   * @param description
+   * @param attachments
    */
-  public void setDescription(String description)
+  public void setAttachments(List<Attachment> attachments)
   {
-    this.description = description;
+    this.attachments = attachments;
   }
 
   /**
    * Method description
    *
    *
-   * @param entry
+   * @param author
    */
-  public void setEntry(Entry entry)
+  public void setAuthor(User author)
   {
-    this.entry = entry;
+    this.author = author;
   }
 
   /**
    * Method description
    *
    *
-   * @param filePath
+   * @param content
    */
-  public void setFilePath(String filePath)
+  public void setContent(String content)
   {
-    this.filePath = filePath;
+    this.content = content;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param creationDate
+   */
+  public void setCreationDate(Date creationDate)
+  {
+    this.creationDate = creationDate;
   }
 
   /**
@@ -263,90 +292,78 @@ public class Attachment implements Serializable, PermaObject
    * Method description
    *
    *
-   * @param mimeType
+   * @param parent
    */
-  public void setMimeType(String mimeType)
+  public void setParent(Page parent)
   {
-    this.mimeType = mimeType;
+    this.parent = parent;
   }
 
   /**
    * Method description
    *
    *
-   * @param name
+   * @param position
    */
-  public void setName(String name)
+  public void setPosition(int position)
   {
-    this.name = name;
+    this.position = position;
   }
 
   /**
    * Method description
    *
    *
-   * @param page
+   * @param published
    */
-  public void setPage(Page page)
+  public void setPublished(boolean published)
   {
-    this.page = page;
+    this.published = published;
   }
 
   /**
    * Method description
    *
    *
-   * @param size
+   * @param title
    */
-  public void setSize(long size)
+  public void setTitle(String title)
   {
-    this.fileSize = size;
-  }
-
-  //~--- methods --------------------------------------------------------------
-
-  /**
-   * Method description
-   *
-   */
-  @PrePersist
-  void prePersists()
-  {
-    creationDate = new Date();
+    this.title = title;
   }
 
   //~--- fields ---------------------------------------------------------------
+
+  /** Field description */
+  @OneToMany(mappedBy = "page")
+  private List<Attachment> attachments;
+
+  /** Field description */
+  @ManyToOne
+  private User author;
+
+  /** Field description */
+  @Lob
+  private String content;
 
   /** Field description */
   @Temporal(TemporalType.TIMESTAMP)
   private Date creationDate;
 
   /** Field description */
-  private String description;
-
-  /** Field description */
-  @ManyToOne
-  private Entry entry;
-
-  /** Field description */
-  @Column(nullable = false)
-  private String filePath;
-
-  /** Field description */
-  private long fileSize;
-
-  /** Field description */
   @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
   /** Field description */
-  private String mimeType;
+  @ManyToOne(fetch = FetchType.LAZY)
+  private Page parent;
 
   /** Field description */
-  @Column(nullable = false)
-  private String name;
+  private int position;
 
   /** Field description */
-  @ManyToOne
-  private Page page;
+  private boolean published = false;
+
+  /** Field description */
+  private String title;
 }

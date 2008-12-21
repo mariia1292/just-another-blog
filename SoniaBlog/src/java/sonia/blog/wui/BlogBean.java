@@ -17,6 +17,7 @@ import sonia.blog.api.app.BlogRequest;
 import sonia.blog.api.app.Constants;
 import sonia.blog.api.link.LinkBuilder;
 import sonia.blog.api.mapping.MappingEntry;
+import sonia.blog.api.navigation.NavigationProvider;
 import sonia.blog.api.search.SearchContext;
 import sonia.blog.api.search.SearchEntry;
 import sonia.blog.api.search.SearchException;
@@ -25,8 +26,8 @@ import sonia.blog.api.template.Template;
 import sonia.blog.api.util.AbstractBean;
 import sonia.blog.entity.Blog;
 import sonia.blog.entity.Comment;
+import sonia.blog.entity.CommentAble;
 import sonia.blog.entity.ContentObject;
-import sonia.blog.entity.Entry;
 
 import sonia.config.Configuration;
 
@@ -63,12 +64,12 @@ public class BlogBean extends AbstractBean
    */
   public void addComment()
   {
-    if (entry instanceof ContentObject)
+    if (entry instanceof CommentAble)
     {
-      Entry e = (Entry) entry;
+      CommentAble ca = (CommentAble) entry;
 
       comment.setAuthorAddress(getRequest().getRemoteAddr());
-      comment.setEntry(e);
+      ca.addComment(comment);
 
       EntityManager em = BlogContext.getInstance().getEntityManager();
 
@@ -77,8 +78,7 @@ public class BlogBean extends AbstractBean
       try
       {
         em.persist(comment);
-        e.getComments().add(comment);
-        e = em.merge(e);
+        entry = em.merge(entry);
 
         Comment newComment = new Comment();
 
@@ -87,7 +87,6 @@ public class BlogBean extends AbstractBean
         newComment.setAuthorURL(comment.getAuthorURL());
         comment = newComment;
         em.getTransaction().commit();
-        e = em.find(Entry.class, e.getId());
         getMessageHandler().info("createCommentSuccess");
       }
       catch (Exception ex)
@@ -250,6 +249,7 @@ public class BlogBean extends AbstractBean
    *
    * @return
    */
+  @SuppressWarnings("unchecked")
   public List<NavigationMenuItem> getExtraNavigation()
   {
     BlogContext context = BlogContext.getInstance();
@@ -291,6 +291,26 @@ public class BlogBean extends AbstractBean
 
       navigation.add(new NavigationMenuItem(bundle.getString("logout"),
               "#{LoginBean.logout}"));
+    }
+
+    if (extraNavigationReference == null)
+    {
+      extraNavigationReference =
+        context.getServiceRegistry().getServiceReference(
+          Constants.NAVIGATION_EXTRA);
+    }
+
+    List<NavigationProvider> providers =
+      extraNavigationReference.getImplementations();
+
+    if ((providers != null) &&!providers.isEmpty())
+    {
+      FacesContext facesContext = FacesContext.getCurrentInstance();
+
+      for (NavigationProvider provider : providers)
+      {
+        provider.handleNavigation(facesContext, request, navigation);
+      }
     }
 
     return navigation;
@@ -587,6 +607,24 @@ public class BlogBean extends AbstractBean
     return result;
   }
 
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  public boolean isShowComments()
+  {
+    boolean result = false;
+
+    if (entry instanceof CommentAble)
+    {
+      result = getBlog().isAllowComments();
+    }
+
+    return result;
+  }
+
   //~--- set methods ----------------------------------------------------------
 
   /**
@@ -711,6 +749,9 @@ public class BlogBean extends AbstractBean
 
   /** Field description */
   private ContentObject entry;
+
+  /** Field description */
+  private ServiceReference extraNavigationReference;
 
   /** Field description */
   private UINavigationMenuItem overviewItem;

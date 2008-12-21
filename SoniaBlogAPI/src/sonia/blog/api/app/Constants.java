@@ -75,6 +75,21 @@ public interface Constants
   public static final String LOGINMODULE_NAME = "BlogLoginModule";
 
   /** Field description */
+  public static final String NAVIGATION_ADMIN = "/nav/admin";
+
+  /** Field description */
+  public static final String NAVIGATION_AUTHOR = "/nav/author";
+
+  /** Field description */
+  public static final String NAVIGATION_EXTRA = "/nav/extra";
+
+  /** Field description */
+  public static final String NAVIGATION_GLOBALADMIN = "/nav/globaladmin";
+
+  /** Field description */
+  public static final String NAVIGATION_READER = "/nav/reader";
+
+  /** Field description */
   public static final String PAGE_PREFIX = "blog";
 
   /** Field description */

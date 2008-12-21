@@ -285,6 +285,13 @@ public class BlogContextListener implements ServletContextListener
     registry.registerService(
         Constants.SERVICE_SPAMPROTECTIONMETHOD).addImplementation(
         new MathSpamProtection());
+
+    // register NavigationProvider
+    registry.registerService(Constants.NAVIGATION_EXTRA);
+    registry.registerService(Constants.NAVIGATION_READER);
+    registry.registerService(Constants.NAVIGATION_AUTHOR);
+    registry.registerService(Constants.NAVIGATION_ADMIN);
+    registry.registerService(Constants.NAVIGATION_GLOBALADMIN);
   }
 
   //~--- get methods ----------------------------------------------------------

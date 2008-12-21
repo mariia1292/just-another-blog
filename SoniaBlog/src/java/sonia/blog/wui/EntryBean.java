@@ -437,7 +437,8 @@ public class EntryBean extends AbstractBean
       {
         in = uploadedFile.getInputStream();
 
-        File dir = new File(directory, "" + entry.getId());
+        File dir = new File(directory,
+                            "entries" + File.separator + entry.getId());
 
         if (!dir.exists())
         {
@@ -909,7 +910,8 @@ public class EntryBean extends AbstractBean
         EntityManager em = BlogContext.getInstance().getEntityManager();
         ZipInputStream zis = new ZipInputStream(in);
         ZipEntry ze = zis.getNextEntry();
-        File dir = new File(directory, "" + entry.getId());
+        File dir = new File(directory,
+                            "entries" + File.separator + entry.getId());
 
         if (!dir.exists())
         {
