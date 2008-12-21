@@ -66,6 +66,12 @@ public class EntryBean extends AbstractBean
   /** Field description */
   private static final String EDITOR = "editor";
 
+  /** Field description */
+  private static final String UPLOAD_FAILURE = "upload-failure";
+
+  /** Field description */
+  private static final String UPLOAD_SUCCESS = "upload-success";
+
   //~--- constructors ---------------------------------------------------------
 
   /**
@@ -299,6 +305,12 @@ public class EntryBean extends AbstractBean
           entry.setTitle("NewEntry " + getDateString(request, new Date()));
         }
 
+        if (entry.getCategory() == null)
+        {
+          Category cat = findCategory(em, request.getCurrentBlog());
+          entry.setCategory(cat);
+        }
+
         entry.setAuthor(author);
         em.persist(entry);
         getMessageHandler().info("createEntrySuccess");
@@ -401,7 +413,7 @@ public class EntryBean extends AbstractBean
    */
   public String upload()
   {
-    String result = SUCCESS;
+    String result = UPLOAD_SUCCESS;
 
     if (entry.isPublished() && (entry.getId() != null))
     {
@@ -465,7 +477,7 @@ public class EntryBean extends AbstractBean
         }
 
         logger.log(Level.SEVERE, null, ex);
-        result = FAILURE;
+        result = UPLOAD_FAILURE;
       }
       finally
       {
@@ -894,12 +906,30 @@ public class EntryBean extends AbstractBean
    * Method description
    *
    *
+   * @param em
+   * @param blog
+   *
+   * @return
+   */
+  private Category findCategory(EntityManager em, Blog blog)
+  {
+    Query q = em.createNamedQuery("Category.findFirstFromBlog");
+
+    q.setParameter("blog", blog);
+
+    return (Category) q.getSingleResult();
+  }
+
+  /**
+   * Method description
+   *
+   *
    * @return
    */
   private String unzip()
   {
     InputStream in = null;
-    String result = SUCCESS;
+    String result = UPLOAD_SUCCESS;
 
     try
     {
@@ -975,7 +1005,7 @@ public class EntryBean extends AbstractBean
       }
       else
       {
-        result = FAILURE;
+        result = UPLOAD_FAILURE;
       }
     }
     catch (IOException ex)
