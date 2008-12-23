@@ -43,8 +43,9 @@ import javax.persistence.TemporalType;
   @NamedQuery(name = "Attachment.findImagesFromEntry",
               query = "select a from Attachment a join a.entry e where e = :entry and a.mimeType like 'image/%'") ,
   @NamedQuery(name = "Attachment.countAll",
-              query = "select count(a) from Attachment a")
-
+              query = "select count(a) from Attachment a") ,
+  @NamedQuery(name = "Attachment.countFromBlog",
+              query = "select count(a) from Attachment a join a.entry e join e.category c join c.blog b where b = :blog")
 })
 public class Attachment implements Serializable, PermaObject, FileObject
 {

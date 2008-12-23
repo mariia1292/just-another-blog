@@ -188,6 +188,9 @@
 
   td.label { background: #ccc; color: #333 }
 
+  table.small td,
+  table.small th { margin: 2px; padding: 2px; }
+
   #commentForm input[type=text] { width: 220pt; }
   #commentForm textarea { width: 220pt; height: 150pt; }
 
@@ -224,12 +227,31 @@
   * Selection-Calendar
   * 
   */
-  table.calendar { border: 1px solid; }
+  table.calendar { border: 1px solid gray; }
   table.calendar thead tr th,
   table.calendar tbody tr td { text-align: center; margin: 0; padding: 3px 6px; }
   table.calendar tbody tr td.today { border: 1px gray dashed;  }
   table.calendar tbody tr td span.weekdayHeader,
   table.calendar tbody tr td span.weekenddayHeader { font-weight: bold; border-bottom: 1px solid; }
 
+  /**
+  * dashboard
+  *'
+  */
+  div.widget-left,
+  div.widget-right
+  {
+        display: block;
+        width: 49%;
+        margin: 0 0 10px 0;
+        padding: 0;
+        border: 1px dashed gray;
+        overflow: hidden;
+        height: 200px;
+        overflow: hidden;
+  }
+  div.widget-left { float: left;  }
+  div.widget-right { float: right;  }
+  div.widget-content { padding: 3px; }
 }
 

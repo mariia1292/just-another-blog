@@ -2,8 +2,8 @@
 <Scene Scope="Project" version="2">
     <Scope Scope="Faces Configuration Only"/>
     <Scope Scope="Project">
-        <Node id="resources/tiny_mce/plugins/table/row.htm" x="25159" y="32" zoom="true"/>
         <Node id="resources/tiny_mce/plugins/table/table.htm" x="25602" y="32" zoom="true"/>
+        <Node id="resources/tiny_mce/plugins/table/row.htm" x="25159" y="32" zoom="true"/>
         <Node id="resources/tiny_mce/themes/advanced/source_editor.htm" x="17150" y="32" zoom="true"/>
         <Node id="personal/author/entries.xhtml" x="3605" y="32" zoom="true"/>
         <Node id="install/step2.xhtml" x="34" y="32" zoom="true"/>
@@ -27,21 +27,21 @@
         <Node id="resources/tiny_mce/plugins/preview/example.html" x="23203" y="32" zoom="true"/>
         <Node id="deny.xhtml" x="5163" y="32" zoom="true"/>
         <Node id="personal/admin/members.xhtml" x="4788" y="32" zoom="true"/>
-        <Node id="template/jab/yaml/markup_draft.html" x="13982" y="32" zoom="true"/>
         <Node id="resources/tiny_mce/plugins/media/media.htm" x="13517" y="32" zoom="true"/>
+        <Node id="template/jab/yaml/markup_draft.html" x="13982" y="32" zoom="true"/>
         <Node id="resources/tiny_mce/plugins/searchreplace/searchreplace.htm" x="17680" y="32" zoom="true"/>
         <Node id="resources/tiny_mce/themes/advanced/link.htm" x="16680" y="32" zoom="true"/>
         <Node id="resources/tiny_mce/plugins/template/template.htm" x="19662" y="32" zoom="true"/>
-        <Node id="resources/tiny_mce/plugins/xhtmlxtras/del.htm" x="18237" y="32" zoom="true"/>
-        <Node id="resources/tiny_mce/themes/advanced/charmap.htm" x="24185" y="32" zoom="true"/>
         <Node id="personal/globaladmin/blogs.xhtml" x="7321" y="32" zoom="true"/>
-        <Node id="resources/tiny_mce/plugins/xhtmlxtras/abbr.htm" x="9601" y="32" zoom="true"/>
-        <Node id="resources/tiny_mce/plugins/xhtmlxtras/acronym.htm" x="15812" y="32" zoom="true"/>
+        <Node id="resources/tiny_mce/themes/advanced/charmap.htm" x="24185" y="32" zoom="true"/>
+        <Node id="resources/tiny_mce/plugins/xhtmlxtras/del.htm" x="18237" y="32" zoom="true"/>
         <Node id="resources/tiny_mce/plugins/inlinepopups/template.htm" x="26053" y="32" zoom="true"/>
-        <Node id="resources/tiny_mce/plugins/advimage/image.htm" x="12002" y="32" zoom="true"/>
+        <Node id="resources/tiny_mce/plugins/xhtmlxtras/acronym.htm" x="15812" y="32" zoom="true"/>
+        <Node id="resources/tiny_mce/plugins/xhtmlxtras/abbr.htm" x="9601" y="32" zoom="true"/>
         <Node id="blog.xhtml" x="1114" y="32" zoom="true"/>
-        <Node id="resources/tiny_mce/plugins/xhtmlxtras/attributes.htm" x="9084" y="32" zoom="true"/>
+        <Node id="resources/tiny_mce/plugins/advimage/image.htm" x="12002" y="32" zoom="true"/>
         <Node id="resources/tiny_mce/plugins/style/props.htm" x="22260" y="32" zoom="true"/>
+        <Node id="resources/tiny_mce/plugins/xhtmlxtras/attributes.htm" x="9084" y="32" zoom="true"/>
         <Node id="resources/tiny_mce/plugins/table/cell.htm" x="21819" y="32" zoom="true"/>
         <Node id="resources/tiny_mce/themes/advanced/anchor.htm" x="22715" y="32" zoom="true"/>
         <Node id="resources/tiny_mce/plugins/xhtmlxtras/ins.htm" x="24684" y="32" zoom="true"/>
@@ -53,15 +53,15 @@
         <Node id="login.xhtml" x="2218" y="32" zoom="true"/>
         <Node id="personal/author/editor/editor.xhtml" x="3967" y="32" zoom="true"/>
         <Node id="resources/tiny_mce/plugins/fullpage/fullpage.htm" x="19171" y="32" zoom="true"/>
-        <Node id="resources/tiny_mce/plugins/fullscreen/fullscreen.htm" x="8573" y="32" zoom="true"/>
         <Node id="personal/globaladmin/config.xhtml" x="6668" y="32" zoom="true"/>
+        <Node id="resources/tiny_mce/plugins/fullscreen/fullscreen.htm" x="8573" y="32" zoom="true"/>
         <Node id="resources/lightbox/index.htm" x="16321" y="32" zoom="true"/>
         <Node id="personal/author/categories.xhtml" x="7712" y="32" zoom="true"/>
         <Node id="resources/tiny_mce/plugins/paste/pasteword.htm" x="20161" y="32" zoom="true"/>
         <Node id="resources/tiny_mce/plugins/paste/pastetext.htm" x="21338" y="32" zoom="true"/>
         <Node id="forward.jsp" x="21097" y="32" zoom="true"/>
-        <Node id="personal/admin/templates.xhtml" x="6097" y="32" zoom="true"/>
         <Node id="index.xhtml" x="1352" y="32" zoom="true"/>
+        <Node id="personal/admin/templates.xhtml" x="6097" y="32" zoom="true"/>
         <Node id="resources/tiny_mce/plugins/example/dialog.htm" x="14873" y="32" zoom="true"/>
         <Node id="resources/tiny_mce/plugins/paste/blank.htm" x="10085" y="32" zoom="true"/>
         <Node id="resources/tiny_mce/plugins/emotions/emotions.htm" x="13010" y="32" zoom="true"/>

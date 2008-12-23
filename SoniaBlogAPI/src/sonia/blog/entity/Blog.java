@@ -563,7 +563,11 @@ public class Blog implements Serializable, PermaObject
   private boolean allowMacros = true;
 
   /** Field description */
-  @OneToMany(fetch = FetchType.LAZY, mappedBy = "blog",cascade=CascadeType.REMOVE)
+  @OneToMany(
+    fetch = FetchType.LAZY,
+    mappedBy = "blog",
+    cascade = CascadeType.REMOVE
+  )
   private List<Category> categories;
 
   /** Field description */
@@ -594,7 +598,11 @@ public class Blog implements Serializable, PermaObject
   private int imageWidth = 640;
 
   /** Field description */
-  @OneToMany(fetch = FetchType.LAZY, mappedBy = "blog",cascade=CascadeType.REMOVE)
+  @OneToMany(
+    fetch = FetchType.LAZY,
+    mappedBy = "blog",
+    cascade = CascadeType.REMOVE
+  )
   private List<BlogMember> members;
 
   /** Field description */

@@ -109,7 +109,22 @@ public class EntryBean extends AbstractBean
    */
   public String edit()
   {
-    entry = (Entry) entries.getRowData();
+    Entry e = (Entry) entries.getRowData();
+
+    return edit(e);
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param entry
+   *
+   * @return
+   */
+  public String edit(Entry entry)
+  {
+    this.entry = entry;
     tagString = "";
 
     List<Tag> tags = entry.getTags();

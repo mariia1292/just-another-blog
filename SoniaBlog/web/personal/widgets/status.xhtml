@@ -1,0 +1,35 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html">
+  <body>
+
+    <ui:composition>
+
+      <h3><h:outputText value="#{label.status}" /></h3>
+
+      <h:panelGrid styleClass="small" columns="2">
+
+        <h:outputText value="#{label.entries}" />
+        <h:outputText value="#{DashboardBean.entryCount}" />
+
+        <h:outputText value="#{label.comments}" />
+        <h:outputText value="#{DashboardBean.commentCount}" />
+
+        <h:outputText value="#{label.categories}" />
+        <h:outputText value="#{DashboardBean.categoryCount}" />
+
+        <h:outputText value="#{label.attachments}" />
+        <h:outputText value="#{DashboardBean.attachmentCount}" />
+
+        <h:outputText value="#{label.members}" />
+        <h:outputText value="#{DashboardBean.memberCount}" />
+
+      </h:panelGrid>
+
+    </ui:composition>
+
+  </body>
+</html>
+

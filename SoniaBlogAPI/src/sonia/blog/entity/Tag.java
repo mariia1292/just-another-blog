@@ -26,12 +26,17 @@ import javax.persistence.NamedQuery;
  *
  * @author sdorra
  */
-@Entity @NamedQueries({ @NamedQuery(name = "Tag.findFromBlog",
-        query = "select t from Tag t join t.entries e join e.category c join c.blog b where b = :blog group by t") ,
-                        @NamedQuery(name = "Tag.findFromBlogAndName",
-        query = "select t from Tag t join t.entries e join e.category c join c.blog b where e.published = true and b = :blog and t.name = :name group by t") ,
-                        @NamedQuery(name = "Tag.countAll",
-        query = "select count(t) from Tag t") })
+@Entity @NamedQueries(
+{
+  @NamedQuery(name = "Tag.findFromBlog",
+              query = "select t from Tag t join t.entries e join e.category c join c.blog b where b = :blog group by t") ,
+  @NamedQuery(name = "Tag.findFromBlogAndName",
+              query = "select t from Tag t join t.entries e join e.category c join c.blog b where e.published = true and b = :blog and t.name = :name group by t") ,
+  @NamedQuery(name = "Tag.countAll", query = "select count(t) from Tag t") ,
+  // TODO: repair Query
+  @NamedQuery(name = "Tag.countFromBlog",
+              query = "select count(t) from Tag t join t.entries e join e.category c join c.blog b where b = :blog group by t.name")
+})
 public class Tag implements PermaObject, Serializable
 {
 

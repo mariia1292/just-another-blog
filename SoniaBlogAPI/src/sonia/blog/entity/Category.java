@@ -41,6 +41,8 @@ import javax.persistence.TemporalType;
               query = "select c from Category c where c.id = :id and c.blog = :blog") ,
   @NamedQuery(name = "Category.countAll",
               query = "select count(c) from Category c") ,
+  @NamedQuery(name = "Category.countFromBlog",
+              query = "select count(c) from Category c where c.blog = :blog") ,
   @NamedQuery(name = "Category.findFirstFromBlog",
               query = "select c from Category c where c.blog = :blog and c.id = ( select min(cat.id) from Category cat where cat.blog = :blog )")
 })
@@ -262,7 +264,11 @@ public class Category implements Serializable, PermaObject
   private String description;
 
   /** Field description */
-  @OneToMany(fetch = FetchType.LAZY, mappedBy = "category",cascade=CascadeType.REMOVE)
+  @OneToMany(
+    fetch = FetchType.LAZY,
+    mappedBy = "category",
+    cascade = CascadeType.REMOVE
+  )
   private List<Entry> entries;
 
   /** Field description */

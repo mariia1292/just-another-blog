@@ -87,7 +87,7 @@ public class PersonalBean extends AbstractBean
             new NavigationMenuItem(
                 bundle.getString("newEntry"), "#{EntryBean.newEntry}"));
         authorNavigation.add(
-            new NavigationMenuItem(bundle.getString("entries"), "personal"));
+            new NavigationMenuItem(bundle.getString("entries"), "entries"));
         authorNavigation.add(
             new NavigationMenuItem(
                 bundle.getString("categories"), "categories"));
@@ -153,6 +153,8 @@ public class PersonalBean extends AbstractBean
       ResourceBundle label = getResourceBundle("label");
 
       readerNavigation = new ArrayList<NavigationMenuItem>();
+      readerNavigation.add(new NavigationMenuItem(label.getString("dashboard"),
+              "dashboard"));
 
       User user = getRequest().getUser();
 

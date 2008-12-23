@@ -112,7 +112,8 @@ public class BlogContextListener implements ServletContextListener
       initMacros();
       configureLogger();
 
-      File pluginStore = context.getResourceManager().getDirectory(Constants.RESOURCE_PLUGINSTORE);
+      File pluginStore = context.getResourceManager().getDirectory(
+                             Constants.RESOURCE_PLUGINSTORE);
 
       if (!pluginStore.exists())
       {
@@ -293,6 +294,14 @@ public class BlogContextListener implements ServletContextListener
     registry.registerService(Constants.NAVIGATION_AUTHOR);
     registry.registerService(Constants.NAVIGATION_ADMIN);
     registry.registerService(Constants.NAVIGATION_GLOBALADMIN);
+
+    // register dashboardWidgets
+    registry.registerService(
+        Constants.SERVICE_DASHBOARDWIDGET).addImplementation(
+        "/personal/widgets/rss.xhtml").addImplementation(
+        "/personal/widgets/comments.xhtml").addImplementation(
+        "/personal/widgets/drafts.xhtml").addImplementation(
+        "/personal/widgets/status.xhtml");
   }
 
   //~--- get methods ----------------------------------------------------------

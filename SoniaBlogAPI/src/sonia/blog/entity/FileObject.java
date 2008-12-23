@@ -3,14 +3,22 @@
  * and open the template in the editor.
  */
 
+
+
 package sonia.blog.entity;
 
 /**
  *
  * @author sdorra
  */
-public interface FileObject {
+public interface FileObject
+{
 
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
   public String getFilePath();
-
 }

@@ -59,6 +59,7 @@ public class AbstractBean
    * Method description
    *
    * @param clazz
+   * @param name
    *
    * @return
    */
@@ -75,15 +76,6 @@ public class AbstractBean
     if (clazz.isInstance(obj))
     {
       result = (T) obj;
-    }
-
-    try
-    {
-      result = clazz.newInstance();
-    }
-    catch (Exception ex)
-    {
-      logger.log(Level.SEVERE, null, ex);
     }
 
     return result;

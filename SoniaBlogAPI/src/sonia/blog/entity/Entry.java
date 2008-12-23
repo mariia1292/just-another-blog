@@ -66,7 +66,11 @@ import javax.persistence.TemporalType;
               query = "select e from Entry e join e.category c join c.blog b where b = :blog and e.published = true and e.creationDate between :start and :end order by e.creationDate") ,
   @NamedQuery(name = "Entry.calendar",
               query = "select e.creationDate from Entry e join e.category c join c.blog b where b = :blog and e.published = true and e.creationDate between :start and :end") ,
-  @NamedQuery(name = "Entry.countAll", query = "select count(e) from Entry e")
+  @NamedQuery(name = "Entry.countAll", query = "select count(e) from Entry e") ,
+  @NamedQuery(name = "Entry.findDraftsOfUser",
+              query = "select e from Entry e join e.category c join c.blog b where b = :blog and e.published = false and e.author = :user order by e.creationDate desc") ,
+  @NamedQuery(name = "Entry.countFromBlog",
+              query = "select count(e) from Entry e join e.category c join c.blog b where b = :blog")
 })
 public class Entry implements Serializable, ContentObject, CommentAble
 {
@@ -544,7 +548,8 @@ public class Entry implements Serializable, ContentObject, CommentAble
   private boolean published = true;
 
   /** Field description */
-  @ManyToMany(cascade=CascadeType.REMOVE) @OrderBy("name")
+  @ManyToMany(cascade = CascadeType.REMOVE)
+  @OrderBy("name")
   private List<Tag> tags;
 
   /** Field description */

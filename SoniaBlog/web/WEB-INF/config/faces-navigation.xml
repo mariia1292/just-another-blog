@@ -21,8 +21,8 @@
       <to-view-id>/login.xhtml</to-view-id>
     </navigation-case>
     <navigation-case>
-      <from-outcome>personal</from-outcome>
-      <to-view-id>/personal/author/entries.xhtml</to-view-id>
+      <from-outcome>dashboard</from-outcome>
+      <to-view-id>/personal/dashboard.xhtml</to-view-id>
     </navigation-case>
     <navigation-case>
       <from-outcome>register</from-outcome>
@@ -41,6 +41,10 @@
   
   <navigation-rule>
     <from-view-id>/personal/*</from-view-id>
+    <navigation-case>
+      <from-outcome>entries</from-outcome>
+      <to-view-id>/personal/author/entries.xhtml</to-view-id>
+    </navigation-case>
     <navigation-case>
       <from-outcome>userSettings</from-outcome>
       <to-view-id>/personal/userSettings.xhtml</to-view-id>
@@ -152,6 +156,14 @@
     <navigation-case>
       <from-outcome>details</from-outcome>
       <to-view-id>/personal/author/commentDetails.xhtml</to-view-id>
+    </navigation-case>
+  </navigation-rule>
+
+  <navigation-rule>
+    <from-view-id>/personal/dashboard.xhtml</from-view-id>
+    <navigation-case>
+      <from-outcome>edit-draft</from-outcome>
+      <to-view-id>/personal/author/editor/editor.xhtml</to-view-id>
     </navigation-case>
   </navigation-rule>
     

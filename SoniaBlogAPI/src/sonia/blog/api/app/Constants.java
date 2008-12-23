@@ -118,6 +118,9 @@ public interface Constants
   public static final String RESOURCE_DATABASE = "db";
 
   /** Field description */
+  public static final String RESOURCE_ENTRIES = "entries";
+
+  /** Field description */
   public static final String RESOURCE_IMAGE = "images";
 
   /** Field description */
@@ -127,11 +130,10 @@ public interface Constants
   public static final String RESOURCE_LOG = "logs";
 
   /** Field description */
-  public static final String RESOURCE_PLUGINSTORE = "plugins";
-
-  public static final String RESOURCE_ENTRIES = "entries";
-
   public static final String RESOURCE_PAGES = "pages";
+
+  /** Field description */
+  public static final String RESOURCE_PLUGINSTORE = "plugins";
 
   /*
    * Config Parameters
@@ -175,6 +177,9 @@ public interface Constants
 
   /** Field description */
   public static final String SERVICE_CONTEXTLISTENER = "/contextListener";
+
+  /** Field description */
+  public static final String SERVICE_DASHBOARDWIDGET = "/dashboard/widget";
 
   /** Field description */
   public static final String SERVICE_ENTRY_LISTENER = "/listener/entry";
