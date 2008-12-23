@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
@@ -562,7 +563,7 @@ public class Blog implements Serializable, PermaObject
   private boolean allowMacros = true;
 
   /** Field description */
-  @OneToMany(fetch = FetchType.LAZY, mappedBy = "blog")
+  @OneToMany(fetch = FetchType.LAZY, mappedBy = "blog",cascade=CascadeType.REMOVE)
   private List<Category> categories;
 
   /** Field description */
@@ -593,7 +594,7 @@ public class Blog implements Serializable, PermaObject
   private int imageWidth = 640;
 
   /** Field description */
-  @OneToMany(fetch = FetchType.LAZY, mappedBy = "blog")
+  @OneToMany(fetch = FetchType.LAZY, mappedBy = "blog",cascade=CascadeType.REMOVE)
   private List<BlogMember> members;
 
   /** Field description */

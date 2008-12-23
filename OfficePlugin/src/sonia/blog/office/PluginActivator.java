@@ -19,7 +19,6 @@ import sonia.plugin.PluginContext;
 
 //~--- JDK imports ------------------------------------------------------------
 
-import java.io.File;
 
 /**
  *
@@ -36,20 +35,13 @@ public class PluginActivator implements Activator
    */
   public void start(PluginContext context)
   {
-    File resourceDir =
-      new File(BlogContext.getInstance().getResourceDirectory(),
-               "macros" + File.separator + "officeplugin");
+    BlogContext ctx = BlogContext.getInstance();
 
-    if (!resourceDir.exists())
-    {
-      resourceDir.mkdirs();
-    }
-
-    mappingHandler = BlogContext.getInstance().getMappingHandler();
+    mappingHandler = ctx.getMappingHandler();
     mappingHandler.addMappging("/" + PdfViewerMappingEntry.PATH,
-                               new PdfViewerMappingEntry(resourceDir));
+                               new PdfViewerMappingEntry());
     parser = MacroParser.getInstance();
-    parser.putMacro(PdfViewerMacro.NAME, new PdfViewerMacro(resourceDir));
+    parser.putMacro(PdfViewerMacro.NAME, new PdfViewerMacro());
     parser.putMacro(CodeMacro.NAME, new CodeMacro());
   }
 

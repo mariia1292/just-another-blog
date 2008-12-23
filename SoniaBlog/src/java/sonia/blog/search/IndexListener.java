@@ -27,6 +27,8 @@ import java.io.File;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import sonia.blog.api.app.Constants;
+import sonia.blog.api.app.ResourceManager;
 
 /**
  *
@@ -47,9 +49,7 @@ public class IndexListener extends EntityListener
    */
   public IndexListener()
   {
-    File resourceDir = BlogContext.getInstance().getResourceDirectory();
-
-    indexDir = new File(resourceDir, "index");
+    resourceManager = BlogContext.getInstance().getResourceManager();
   }
 
   //~--- methods --------------------------------------------------------------
@@ -206,7 +206,7 @@ public class IndexListener extends EntityListener
 
         if (id != null)
         {
-          result = new File(indexDir, id.toString());
+          result = resourceManager.getDirectory(Constants.RESOURCE_INDEX, blog);
         }
       }
     }
@@ -214,8 +214,6 @@ public class IndexListener extends EntityListener
     return result;
   }
 
-  //~--- fields ---------------------------------------------------------------
+  private ResourceManager resourceManager;
 
-  /** Field description */
-  private File indexDir;
 }

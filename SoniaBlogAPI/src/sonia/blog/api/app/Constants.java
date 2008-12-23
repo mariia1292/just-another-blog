@@ -33,7 +33,7 @@ public interface Constants
   public static final String CONFIG_DB_USERNAME = "db.username";
 
   /** Field description */
-  public static String CONFIG_DEFAULTBLOG = "defaultBlog";
+  public static final String CONFIG_DEFAULTBLOG = "defaultBlog";
 
   /** Field description */
   public static final String CONFIG_ENCODING = "encoding";
@@ -57,6 +57,13 @@ public interface Constants
   public static final String CONFIG_RESOURCE_DIRECTORY = "resource.directory";
 
   /** Field description */
+  public static final String CONFIG_SPAMMETHOD = "spam.method";
+
+  /*
+   * Default Config Parameters
+   */
+
+  /** Field description */
   public static final String DEFAULT_ENCODING = "UTF-8";
 
   /** Field description */
@@ -74,6 +81,10 @@ public interface Constants
   /** Field description */
   public static final String LOGINMODULE_NAME = "BlogLoginModule";
 
+  /*
+   * Navigation
+   */
+
   /** Field description */
   public static final String NAVIGATION_ADMIN = "/nav/admin";
 
@@ -89,8 +100,42 @@ public interface Constants
   /** Field description */
   public static final String NAVIGATION_READER = "/nav/reader";
 
+  /*
+   * Other
+   */
+
   /** Field description */
   public static final String PAGE_PREFIX = "blog";
+
+  /*
+   * Resources
+   */
+
+  /** Field description */
+  public static final String RESOURCE_ATTACHMENT = "attachments";
+
+  /** Field description */
+  public static final String RESOURCE_DATABASE = "db";
+
+  /** Field description */
+  public static final String RESOURCE_IMAGE = "images";
+
+  /** Field description */
+  public static final String RESOURCE_INDEX = "index";
+
+  /** Field description */
+  public static final String RESOURCE_LOG = "logs";
+
+  /** Field description */
+  public static final String RESOURCE_PLUGINSTORE = "plugins";
+
+  public static final String RESOURCE_ENTRIES = "entries";
+
+  public static final String RESOURCE_PAGES = "pages";
+
+  /*
+   * Config Parameters
+   */
 
   /** Field description */
   public static final char[] SECRET_KEY =
@@ -98,6 +143,10 @@ public interface Constants
     'L', 'W', '/', '!', 'C', 'b', 'X', ']', 'R', 'f', '4', 'B', 'H', 'd', 'I',
     '['
   };
+
+  /*
+   * Services
+   */
 
   /** Field description */
   public static final String SERVCIE_CIPHER = "/app/cipher";

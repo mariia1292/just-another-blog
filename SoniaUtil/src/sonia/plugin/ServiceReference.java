@@ -36,10 +36,14 @@ public class ServiceReference
    *
    *
    * @param impl
+   *
+   * @return
    */
-  public void addImplementation(Object impl)
+  public ServiceReference addImplementation(Object impl)
   {
     this.serviceImplementationList.add(impl);
+
+    return this;
   }
 
   /**
@@ -47,10 +51,14 @@ public class ServiceReference
    *
    *
    * @param impl
+   *
+   * @return
    */
-  public void removeImplementation(Object impl)
+  public ServiceReference removeImplementation(Object impl)
   {
     this.serviceImplementationList.remove(impl);
+
+    return this;
   }
 
   //~--- get methods ----------------------------------------------------------

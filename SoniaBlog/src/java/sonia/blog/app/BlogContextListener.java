@@ -33,6 +33,7 @@ import sonia.blog.mapping.SearchMappingEntry;
 import sonia.blog.mapping.TagMappingEntry;
 import sonia.blog.search.DefaultSearchContext;
 import sonia.blog.search.IndexListener;
+import sonia.blog.spam.CaptchaSpamProtection;
 import sonia.blog.spam.MathSpamProtection;
 
 import sonia.macro.MacroParser;
@@ -111,8 +112,7 @@ public class BlogContextListener implements ServletContextListener
       initMacros();
       configureLogger();
 
-      File pluginStore = new File(context.getResourceDirectory(),
-                                  "plugin.store");
+      File pluginStore = context.getResourceManager().getDirectory(Constants.RESOURCE_PLUGINSTORE);
 
       if (!pluginStore.exists())
       {
@@ -284,7 +284,8 @@ public class BlogContextListener implements ServletContextListener
     registry.registerService(Constants.SERVCIE_GLOBALSTATUSROVIDER);
     registry.registerService(
         Constants.SERVICE_SPAMPROTECTIONMETHOD).addImplementation(
-        new MathSpamProtection());
+        new MathSpamProtection()).addImplementation(
+        new CaptchaSpamProtection());
 
     // register NavigationProvider
     registry.registerService(Constants.NAVIGATION_EXTRA);

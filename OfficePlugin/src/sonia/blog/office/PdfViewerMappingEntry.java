@@ -13,8 +13,10 @@ import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.app.BlogRequest;
 import sonia.blog.api.app.BlogResponse;
 import sonia.blog.api.app.Constants;
+import sonia.blog.api.app.ResourceManager;
 import sonia.blog.api.link.LinkBuilder;
 import sonia.blog.api.mapping.MappingEntry;
+import sonia.blog.entity.Blog;
 import sonia.blog.entity.PermaObject;
 
 import sonia.config.ConfigurationListener;
@@ -53,12 +55,9 @@ public class PdfViewerMappingEntry
    * Constructs ...
    *
    *
-   * @param resourceDir
    */
-  public PdfViewerMappingEntry(File resourceDir)
+  public PdfViewerMappingEntry()
   {
-    this.resourceDir = resourceDir;
-
     XmlConfiguration config = BlogContext.getInstance().getConfiguration();
 
     mimeType = config.getString(Constants.CONFIG_IMAGEMIMETYPE,
@@ -105,7 +104,7 @@ public class PdfViewerMappingEntry
 
       if (!Util.isBlank(directory))
       {
-        File pageDir = new File(resourceDir, directory);
+        File pageDir = getDirectory(directory, request.getCurrentBlog());
 
         if (pageDir.exists())
         {
@@ -202,6 +201,24 @@ public class PdfViewerMappingEntry
     return false;
   }
 
+  /**
+   * Method description
+   *
+   *
+   * @param directory
+   * @param blog
+   *
+   * @return
+   */
+  private File getDirectory(String directory, Blog blog)
+  {
+    ResourceManager resManager = BlogContext.getInstance().getResourceManager();
+
+    File attachmentDir = resManager.getDirectory( Constants.RESOURCE_ATTACHMENT, blog, false );
+
+    return new File( attachmentDir, "pdfviewer" + File.separator + directory );
+  }
+
   //~--- fields ---------------------------------------------------------------
 
   /** Field description */
@@ -210,7 +227,4 @@ public class PdfViewerMappingEntry
 
   /** Field description */
   private String mimeType;
-
-  /** Field description */
-  private File resourceDir;
 }

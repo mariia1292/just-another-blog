@@ -14,6 +14,7 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -261,7 +262,7 @@ public class Category implements Serializable, PermaObject
   private String description;
 
   /** Field description */
-  @OneToMany(fetch = FetchType.LAZY, mappedBy = "category")
+  @OneToMany(fetch = FetchType.LAZY, mappedBy = "category",cascade=CascadeType.REMOVE)
   private List<Entry> entries;
 
   /** Field description */

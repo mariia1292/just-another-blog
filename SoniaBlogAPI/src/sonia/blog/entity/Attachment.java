@@ -44,8 +44,9 @@ import javax.persistence.TemporalType;
               query = "select a from Attachment a join a.entry e where e = :entry and a.mimeType like 'image/%'") ,
   @NamedQuery(name = "Attachment.countAll",
               query = "select count(a) from Attachment a")
+
 })
-public class Attachment implements Serializable, PermaObject
+public class Attachment implements Serializable, PermaObject, FileObject
 {
 
   /** Field description */

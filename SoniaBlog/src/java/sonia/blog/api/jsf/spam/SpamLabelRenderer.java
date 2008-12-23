@@ -9,6 +9,7 @@ package sonia.blog.api.jsf.spam;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import sonia.blog.api.app.BlogRequest;
 import sonia.blog.api.spam.SpamInputProtection;
 
 import sonia.jsf.base.BaseRenderer;
@@ -60,7 +61,9 @@ public class SpamLabelRenderer extends BaseRenderer
     }
     else
     {
-      String answer = method.renderInput(context.getResponseWriter());
+      BlogRequest request =
+        (BlogRequest) context.getExternalContext().getRequest();
+      String answer = method.renderInput(request, context.getResponseWriter());
 
       context.getExternalContext().getSessionMap().put(REQUESTKEY, answer);
     }

@@ -544,7 +544,7 @@ public class Entry implements Serializable, ContentObject, CommentAble
   private boolean published = true;
 
   /** Field description */
-  @ManyToMany @OrderBy("name")
+  @ManyToMany(cascade=CascadeType.REMOVE) @OrderBy("name")
   private List<Tag> tags;
 
   /** Field description */

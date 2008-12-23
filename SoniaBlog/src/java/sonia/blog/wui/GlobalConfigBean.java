@@ -11,6 +11,7 @@ package sonia.blog.wui;
 
 import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.app.Constants;
+import sonia.blog.api.spam.SpamInputProtection;
 import sonia.blog.api.util.AbstractConfigBean;
 
 import sonia.config.XmlConfiguration;
@@ -20,6 +21,8 @@ import sonia.plugin.ServiceReference;
 //~--- JDK imports ------------------------------------------------------------
 
 import java.util.List;
+
+import javax.faces.model.SelectItem;
 
 /**
  *
@@ -35,9 +38,20 @@ public class GlobalConfigBean extends AbstractConfigBean
   public GlobalConfigBean()
   {
     super();
-    reference =
-      BlogContext.getInstance().getServiceRegistry().getServiceReference(
-        Constants.SERVCIE_GLOBALCONFIGPROVIDER);
+
+    BlogContext context = BlogContext.getInstance();
+
+    reference = context.getServiceRegistry().getServiceReference(
+      Constants.SERVCIE_GLOBALCONFIGPROVIDER);
+    spamInputServcieReference =
+      context.getServiceRegistry().getServiceReference(
+        Constants.SERVICE_SPAMPROTECTIONMETHOD);
+
+    if (spamInputMethod == null)
+    {
+      spamInputMethod =
+        spamInputServcieReference.getImplementation().getClass().getName();
+    }
   }
 
   //~--- methods --------------------------------------------------------------
@@ -57,6 +71,7 @@ public class GlobalConfigBean extends AbstractConfigBean
             Boolean.FALSE);
     passwordMinLength = config.getInteger(Constants.CONFIG_PASSWORD_MINLENGTH,
             Constants.DEFAULT_PASSWORD_MINLENGTH);
+    spamInputMethod = config.getString(Constants.CONFIG_SPAMMETHOD);
   }
 
   /**
@@ -71,6 +86,7 @@ public class GlobalConfigBean extends AbstractConfigBean
     config.set(Constants.CONFIG_ALLOW_REGISTRATION, allowRegistration);
     config.set(Constants.CONFIG_ALLOW_BLOGCREATION, allowBlogCreation);
     config.set(Constants.CONFIG_PASSWORD_MINLENGTH, passwordMinLength);
+    config.set(Constants.CONFIG_SPAMMETHOD, spamInputMethod);
   }
 
   //~--- get methods ----------------------------------------------------------
@@ -96,6 +112,51 @@ public class GlobalConfigBean extends AbstractConfigBean
   public int getPasswordMinLength()
   {
     return passwordMinLength;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  public String getSpamInputMethod()
+  {
+    return spamInputMethod;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  @SuppressWarnings("unchecked")
+  public SelectItem[] getSpamInputMethodItems()
+  {
+    SelectItem[] items = null;
+    List<SpamInputProtection> list =
+      spamInputServcieReference.getImplementations();
+
+    if ((list != null) &&!list.isEmpty())
+    {
+      int s = list.size();
+
+      items = new SelectItem[s];
+
+      for (int i = 0; i < s; i++)
+      {
+        SpamInputProtection sp = list.get(i);
+
+        items[i] = new SelectItem(sp.getClass().getName(), sp.getLabel());
+      }
+    }
+    else
+    {
+      items = new SelectItem[0];
+    }
+
+    return items;
   }
 
   /**
@@ -155,6 +216,17 @@ public class GlobalConfigBean extends AbstractConfigBean
     this.passwordMinLength = passwordMinLength;
   }
 
+  /**
+   * Method description
+   *
+   *
+   * @param spamInputMethod
+   */
+  public void setSpamInputMethod(String spamInputMethod)
+  {
+    this.spamInputMethod = spamInputMethod;
+  }
+
   //~--- fields ---------------------------------------------------------------
 
   /** Field description */
@@ -168,4 +240,10 @@ public class GlobalConfigBean extends AbstractConfigBean
 
   /** Field description */
   private ServiceReference reference;
+
+  /** Field description */
+  private String spamInputMethod;
+
+  /** Field description */
+  private ServiceReference spamInputServcieReference;
 }

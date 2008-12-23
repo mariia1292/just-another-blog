@@ -30,8 +30,11 @@ import sonia.blog.entity.CommentAble;
 import sonia.blog.entity.ContentObject;
 
 import sonia.config.Configuration;
+import sonia.config.XmlConfiguration;
 
 import sonia.plugin.ServiceReference;
+
+import sonia.util.Util;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -55,6 +58,18 @@ import javax.persistence.Query;
  */
 public class BlogBean extends AbstractBean
 {
+
+  /**
+   * Constructs ...
+   *
+   */
+  public BlogBean()
+  {
+    super();
+    config = BlogContext.getInstance().getConfiguration();
+  }
+
+  //~--- methods --------------------------------------------------------------
 
   /**
    * Method description
@@ -520,6 +535,7 @@ public class BlogBean extends AbstractBean
    *
    * @return
    */
+  @SuppressWarnings("unchecked")
   public SpamInputProtection getSpamInputMethod()
   {
     if (spamServiceReference == null)
@@ -529,7 +545,38 @@ public class BlogBean extends AbstractBean
           Constants.SERVICE_SPAMPROTECTIONMETHOD);
     }
 
-    return (SpamInputProtection) spamServiceReference.getImplementation();
+    SpamInputProtection method = null;
+    String configString = config.getString(Constants.CONFIG_SPAMMETHOD);
+
+    if (!Util.isBlank(configString))
+    {
+      if (!configString.equalsIgnoreCase("none"))
+      {
+        List<SpamInputProtection> list =
+          spamServiceReference.getImplementations();
+
+        for (SpamInputProtection sp : list)
+        {
+          if (sp.getClass().getName().equals(configString))
+          {
+            method = sp;
+          }
+        }
+
+        if (method == null)
+        {
+          logger.warning("method " + configString
+                         + " not found, using default");
+          method = list.get(0);
+        }
+      }
+    }
+    else
+    {
+      method = (SpamInputProtection) spamServiceReference.getImplementation();
+    }
+
+    return method;
   }
 
   /**
@@ -743,6 +790,9 @@ public class BlogBean extends AbstractBean
 
   /** Field description */
   private Comment comment;
+
+  /** Field description */
+  private XmlConfiguration config;
 
   /** Field description */
   private List<? extends ContentObject> entries;

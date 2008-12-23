@@ -72,14 +72,9 @@ public class PdfViewerMacro implements Macro, ConfigurationListener
    * Constructs ...
    *
    *
-   * @param resourceDir
    */
-  public PdfViewerMacro(File resourceDir)
+  public PdfViewerMacro()
   {
-    attchmentDir = new File(BlogContext.getInstance().getResourceDirectory(),
-                            "attachment");
-    this.resourceDir = resourceDir;
-
     XmlConfiguration config = BlogContext.getInstance().getConfiguration();
 
     config.addListener(this);
@@ -121,12 +116,13 @@ public class PdfViewerMacro implements Macro, ConfigurationListener
     Blog blog = (Blog) environment.get("blog");
     BlogRequest request = (BlogRequest) environment.get("request");
     String linkBase = (String) environment.get("linkBase");
+    BlogContext context = BlogContext.getInstance();
 
     if ((object != null) && (object instanceof Entry))
     {
       if ((parameters != null) && (parameters.containsKey("id")))
       {
-        EntityManager em = BlogContext.getInstance().getEntityManager();
+        EntityManager em = context.getEntityManager();
 
         try
         {
@@ -140,8 +136,8 @@ public class PdfViewerMacro implements Macro, ConfigurationListener
 
           if (attachment.getMimeType().equalsIgnoreCase(PDFMIMETYPE))
           {
-            File attachmentFile = new File(attchmentDir,
-                                           attachment.getFilePath());
+            File attachmentFile =
+              context.getResourceManager().getFile(attachment);
 
             if (attachmentFile.exists())
             {
@@ -201,7 +197,9 @@ public class PdfViewerMacro implements Macro, ConfigurationListener
           long id, File attachmentFile, String body)
   {
     String result = null;
-    File pdfDir = new File(resourceDir, String.valueOf(id));
+    File resDir = BlogContext.getInstance().getResourceManager().getDirectory(
+                      Constants.RESOURCE_ATTACHMENT, request.getCurrentBlog());
+    File pdfDir = new File(resDir, "pdfviewer" + File.separator + id);
 
     if (pdfDir.exists())
     {
@@ -393,14 +391,8 @@ public class PdfViewerMacro implements Macro, ConfigurationListener
   //~--- fields ---------------------------------------------------------------
 
   /** Field description */
-  private File attchmentDir;
-
-  /** Field description */
   private String extension;
 
   /** Field description */
   private String format;
-
-  /** Field description */
-  private File resourceDir;
 }

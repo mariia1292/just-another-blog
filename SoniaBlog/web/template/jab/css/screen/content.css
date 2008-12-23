@@ -175,9 +175,12 @@
   tbody th { background: #ccc; color: #333 }
   tbody th.sub { background: #ddd; color: #333 }
 
-
   table.overview { margin-bottom: 0.5em; }
   table.overview td, table.overview th { padding: 0; }
+
+  table.list { margin: 0; padding: 0; }
+  table.list td,
+  table.list th { margin: 0; padding: 0; }
 
   table.editor { width: 100% }
   td.e1 { width: 20% }

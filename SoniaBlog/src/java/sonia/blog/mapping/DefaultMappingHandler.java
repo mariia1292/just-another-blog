@@ -63,6 +63,19 @@ public class DefaultMappingHandler implements MappingHandler
    * Method description
    *
    *
+   * @param path
+   *
+   * @return
+   */
+  public boolean containsPath(String path)
+  {
+    return mappgins.containsKey(path);
+  }
+
+  /**
+   * Method description
+   *
+   *
    * @param request
    * @param response
    *

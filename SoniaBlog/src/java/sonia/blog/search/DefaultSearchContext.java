@@ -28,6 +28,7 @@ import org.apache.lucene.search.highlight.TextFragment;
 import org.apache.lucene.search.highlight.TokenSources;
 
 import sonia.blog.api.app.BlogContext;
+import sonia.blog.api.app.Constants;
 import sonia.blog.api.search.SearchContext;
 import sonia.blog.api.search.SearchEntry;
 import sonia.blog.api.search.SearchException;
@@ -212,10 +213,8 @@ public class DefaultSearchContext implements SearchContext
    */
   private File getDirectory(Blog blog)
   {
-    File resourceDir = BlogContext.getInstance().getResourceDirectory();
-    File indexDir = new File(resourceDir, "index");
-
-    return new File(indexDir, blog.getId().toString());
+    return BlogContext.getInstance().getResourceManager().getDirectory(
+        Constants.RESOURCE_INDEX, blog);
   }
 
   //~--- inner classes --------------------------------------------------------

@@ -43,7 +43,7 @@ public class GlobalStatusBean extends AbstractBean
     reference =
       BlogContext.getInstance().getServiceRegistry().getServiceReference(
         Constants.SERVCIE_GLOBALSTATUSROVIDER);
-    resourceDir = BlogContext.getInstance().getResourceDirectory();
+    resourceDir = BlogContext.getInstance().getResourceManager().getResourceDirectory();
   }
 
   //~--- get methods ----------------------------------------------------------

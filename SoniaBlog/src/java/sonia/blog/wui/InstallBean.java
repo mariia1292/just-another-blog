@@ -211,12 +211,7 @@ public class InstallBean extends AbstractBean
     }
 
     File resourceDirectory = new File(resourcePath);
-
-    new File(resourceDirectory, "index").mkdirs();
-    new File(resourceDirectory, "attachment").mkdirs();
-    new File(resourceDirectory, "logs").mkdirs();
-
-    File dbDriectory = new File(resourceDirectory, "db");
+    File dbDriectory = new File(resourceDirectory, Constants.RESOURCE_DATABASE);
 
     dbDriectory.mkdirs();
 

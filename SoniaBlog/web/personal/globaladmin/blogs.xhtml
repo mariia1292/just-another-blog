@@ -59,6 +59,13 @@
               <h:selectBooleanCheckbox value="#{Blog.active}" />
             </h:column>
 
+            <h:column>
+              <f:facet name="header">
+                <h:outputText value="#{label.remove}" />
+              </f:facet>
+              <h:commandLink value="#{label.remove}" onclick="if (!confirm('#{message.blogRealyDelete}')) return false" action="#{AdminBlogBean.remove}" />
+            </h:column>
+
           </h:dataTable>
 
         </h:form>

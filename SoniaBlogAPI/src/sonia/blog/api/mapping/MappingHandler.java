@@ -32,6 +32,16 @@ public interface MappingHandler
    * Method description
    *
    *
+   * @param path
+   *
+   * @return
+   */
+  public boolean containsPath(String path);
+
+  /**
+   * Method description
+   *
+   *
    * @param request
    * @param response
    *

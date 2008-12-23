@@ -10,12 +10,11 @@ package sonia.blog.logging;
 //~--- non-JDK imports --------------------------------------------------------
 
 import sonia.blog.api.app.BlogContext;
+import sonia.blog.api.app.Constants;
 
 import sonia.logging.FileHandler;
 
 //~--- JDK imports ------------------------------------------------------------
-
-import java.io.File;
 
 import java.util.logging.LogManager;
 
@@ -36,9 +35,7 @@ public class LoggingHandler extends FileHandler
   protected void initDirectory(LogManager manager)
   {
     System.out.println("initDirectory");
-
-    File resourceDir = BlogContext.getInstance().getResourceDirectory();
-
-    directory = new File(resourceDir, "logs");
+    directory = BlogContext.getInstance().getResourceManager().getDirectory(
+      Constants.RESOURCE_LOG);
   }
 }

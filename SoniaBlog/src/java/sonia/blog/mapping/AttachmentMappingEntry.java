@@ -103,9 +103,10 @@ public class AttachmentMappingEntry
 
         try
         {
+          Blog blog = request.getCurrentBlog();
           Query q = em.createNamedQuery("Attachment.findByBlogAndId");
 
-          q.setParameter("blog", request.getCurrentBlog());
+          q.setParameter("blog", blog);
           q.setParameter("id", id);
 
           Attachment attachment = (Attachment) q.getSingleResult();
@@ -388,7 +389,7 @@ public class AttachmentMappingEntry
       maxHeight = blog.getImageHeight();
     }
 
-    printImage(response, name, file, maxWidth, maxHeight);
+    printImage(response, name, file, blog, maxWidth, maxHeight);
   }
 
   /**
@@ -398,13 +399,14 @@ public class AttachmentMappingEntry
    * @param response
    * @param name
    * @param file
+   * @param blog
    * @param maxWidth
    * @param maxHeight
    */
   private void printImage(BlogResponse response, String name, File file,
-                          int maxWidth, int maxHeight)
+                          Blog blog, int maxWidth, int maxHeight)
   {
-    File image = getFile(file, maxWidth, maxHeight);
+    File image = getFile(file, blog, maxWidth, maxHeight);
 
     if (!image.exists())
     {
@@ -489,17 +491,20 @@ public class AttachmentMappingEntry
    *
    *
    * @param file
+   * @param blog
    * @param maxWidth
    * @param maxHeigt
    *
    * @return
    */
-  private File getFile(File file, int maxWidth, int maxHeigt)
+  private File getFile(File file, Blog blog, int maxWidth, int maxHeigt)
   {
-    File resourceDir = BlogContext.getInstance().getResourceDirectory();
+    File resourceDir =
+      BlogContext.getInstance().getResourceManager().getDirectory(
+          Constants.RESOURCE_ATTACHMENT, blog);
     File imageDir = new File(resourceDir,
-                             "image" + File.separator + maxWidth + "x"
-                             + maxHeigt);
+                             Constants.RESOURCE_IMAGE + File.separator
+                             + maxWidth + "x" + maxHeigt);
 
     if (!imageDir.exists())
     {
@@ -523,10 +528,7 @@ public class AttachmentMappingEntry
    */
   private File getFile(Attachment attachment)
   {
-    File resourceDir = BlogContext.getInstance().getResourceDirectory();
-
-    return new File(resourceDir,
-                    "attachment" + File.separator + attachment.getFilePath());
+    return BlogContext.getInstance().getResourceManager().getFile(attachment);
   }
 
   /**

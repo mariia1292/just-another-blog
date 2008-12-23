@@ -325,9 +325,9 @@ public class BlogContext
    *
    * @return
    */
-  public File getResourceDirectory()
+  public ResourceManager getResourceManager()
   {
-    if (resourceDirectory == null)
+    if (resourceManager == null)
     {
       XmlConfiguration config = getConfiguration();
       String resourcePath =
@@ -338,10 +338,10 @@ public class BlogContext
         resourcePath = getServletContext().getRealPath("WEB-INF/resources");
       }
 
-      resourceDirectory = new File(resourcePath);
+      resourceManager = new ResourceManager(new File(resourcePath));
     }
 
-    return resourceDirectory;
+    return resourceManager;
   }
 
   /**
@@ -455,7 +455,7 @@ public class BlogContext
   private PluginContext pluginContext;
 
   /** Field description */
-  private File resourceDirectory;
+  private ResourceManager resourceManager;
 
   /** Field description */
   private ServiceReference searchContext;

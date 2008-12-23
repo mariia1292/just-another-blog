@@ -13,6 +13,8 @@ import org.apache.myfaces.custom.fileupload.UploadedFile;
 
 import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.app.BlogRequest;
+import sonia.blog.api.app.Constants;
+import sonia.blog.api.app.ResourceManager;
 import sonia.blog.api.template.Template;
 import sonia.blog.api.util.AbstractBean;
 import sonia.blog.entity.Attachment;
@@ -80,11 +82,10 @@ public class EntryBean extends AbstractBean
    */
   public EntryBean()
   {
+    super();
     entry = new Entry();
-
-    File resourceDirectory = BlogContext.getInstance().getResourceDirectory();
-
-    directory = new File(resourceDirectory, "attachment");
+    resourceDirectory =
+      BlogContext.getInstance().getResourceManager().getResourceDirectory();
   }
 
   //~--- methods --------------------------------------------------------------
@@ -209,7 +210,7 @@ public class EntryBean extends AbstractBean
         newEntry();
         em.getTransaction().commit();
 
-        File attachmentDir = new File(directory, "" + id);
+        File attachmentDir = new File(getDirectory(), "" + id);
 
         if (attachmentDir.exists())
         {
@@ -254,7 +255,7 @@ public class EntryBean extends AbstractBean
     {
       em.remove(em.merge(attachment));
 
-      File file = new File(directory, attachment.getFilePath());
+      File file = new File(getDirectory(), attachment.getFilePath());
 
       file.delete();
       em.getTransaction().commit();
@@ -308,6 +309,7 @@ public class EntryBean extends AbstractBean
         if (entry.getCategory() == null)
         {
           Category cat = findCategory(em, request.getCurrentBlog());
+
           entry.setCategory(cat);
         }
 
@@ -449,8 +451,10 @@ public class EntryBean extends AbstractBean
       {
         in = uploadedFile.getInputStream();
 
-        File dir = new File(directory,
-                            "entries" + File.separator + entry.getId());
+        File rootDir = getDirectory();
+        File dir = new File(rootDir,
+                            Constants.RESOURCE_ENTRIES + File.separator
+                            + entry.getId());
 
         if (!dir.exists())
         {
@@ -462,7 +466,8 @@ public class EntryBean extends AbstractBean
         out = new FileOutputStream(file);
         Util.copy(in, out);
 
-        String path = file.getPath().substring(directory.getPath().length());
+        String path = file.getAbsolutePath().substring(
+                          resourceDirectory.getAbsolutePath().length());
 
         attachment.setFilePath(path);
         em.persist(attachment);
@@ -940,8 +945,10 @@ public class EntryBean extends AbstractBean
         EntityManager em = BlogContext.getInstance().getEntityManager();
         ZipInputStream zis = new ZipInputStream(in);
         ZipEntry ze = zis.getNextEntry();
-        File dir = new File(directory,
-                            "entries" + File.separator + entry.getId());
+        File root = getDirectory();
+        File dir = new File(root,
+                            Constants.RESOURCE_ENTRIES + File.separator
+                            + entry.getId());
 
         if (!dir.exists())
         {
@@ -965,8 +972,8 @@ public class EntryBean extends AbstractBean
               name = name.replaceAll("/", "-");
 
               Attachment attachment = new Attachment();
-              String path =
-                file.getPath().substring(directory.getPath().length());
+              String path = file.getAbsolutePath().substring(
+                                resourceDirectory.getAbsolutePath().length());
 
               attachment.setEntry(entry);
               attachment.setFilePath(path);
@@ -1049,6 +1056,25 @@ public class EntryBean extends AbstractBean
     return sdf.format(date);
   }
 
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  private File getDirectory()
+  {
+    if (directory == null)
+    {
+      Blog blog = getRequest().getCurrentBlog();
+      ResourceManager manager = BlogContext.getInstance().getResourceManager();
+
+      directory = manager.getDirectory(Constants.RESOURCE_ATTACHMENT, blog);
+    }
+
+    return directory;
+  }
+
   //~--- fields ---------------------------------------------------------------
 
   /** Field description */
@@ -1068,6 +1094,9 @@ public class EntryBean extends AbstractBean
 
   /** Field description */
   private String imageSize = "";
+
+  /** Field description */
+  private File resourceDirectory;
 
   /** Field description */
   private String tagString;
