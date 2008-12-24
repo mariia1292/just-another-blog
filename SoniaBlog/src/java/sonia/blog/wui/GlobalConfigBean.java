@@ -13,6 +13,7 @@ import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.app.Constants;
 import sonia.blog.api.spam.SpamInputProtection;
 import sonia.blog.api.util.AbstractConfigBean;
+import sonia.blog.entity.Blog;
 
 import sonia.config.XmlConfiguration;
 
@@ -23,6 +24,8 @@ import sonia.plugin.ServiceReference;
 import java.util.List;
 
 import javax.faces.model.SelectItem;
+
+import javax.persistence.EntityManager;
 
 /**
  *
@@ -72,6 +75,7 @@ public class GlobalConfigBean extends AbstractConfigBean
     passwordMinLength = config.getInteger(Constants.CONFIG_PASSWORD_MINLENGTH,
             Constants.DEFAULT_PASSWORD_MINLENGTH);
     spamInputMethod = config.getString(Constants.CONFIG_SPAMMETHOD);
+    defaultBlog = config.getLong(Constants.CONFIG_DEFAULTBLOG);
   }
 
   /**
@@ -87,6 +91,7 @@ public class GlobalConfigBean extends AbstractConfigBean
     config.set(Constants.CONFIG_ALLOW_BLOGCREATION, allowBlogCreation);
     config.set(Constants.CONFIG_PASSWORD_MINLENGTH, passwordMinLength);
     config.set(Constants.CONFIG_SPAMMETHOD, spamInputMethod);
+    config.set(Constants.CONFIG_DEFAULTBLOG, defaultBlog);
   }
 
   //~--- get methods ----------------------------------------------------------
@@ -98,9 +103,56 @@ public class GlobalConfigBean extends AbstractConfigBean
    * @return
    */
   @SuppressWarnings("unchecked")
+  public SelectItem[] getBlogItems()
+  {
+    SelectItem[] items = null;
+    EntityManager em = BlogContext.getInstance().getEntityManager();
+    List<Blog> blogList =
+      em.createNamedQuery("Blog.findActive").getResultList();
+
+    if ((blogList != null) &&!blogList.isEmpty())
+    {
+      int s = blogList.size();
+
+      items = new SelectItem[s];
+
+      for (int i = 0; i < s; i++)
+      {
+        Blog blog = blogList.get(i);
+        String label = blog.getTitle() + " (" + blog.getServername() + ")";
+
+        items[i] = new SelectItem(blog.getId(), label);
+      }
+    }
+    else
+    {
+      items = new SelectItem[0];
+    }
+
+    return items;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  @SuppressWarnings("unchecked")
   public List<String> getConfigurationProviders()
   {
     return reference.getImplementations();
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  public Long getDefaultBlog()
+  {
+    return defaultBlog;
   }
 
   /**
@@ -209,6 +261,17 @@ public class GlobalConfigBean extends AbstractConfigBean
    * Method description
    *
    *
+   * @param defaultBlog
+   */
+  public void setDefaultBlog(Long defaultBlog)
+  {
+    this.defaultBlog = defaultBlog;
+  }
+
+  /**
+   * Method description
+   *
+   *
    * @param passwordMinLength
    */
   public void setPasswordMinLength(int passwordMinLength)
@@ -234,6 +297,9 @@ public class GlobalConfigBean extends AbstractConfigBean
 
   /** Field description */
   private boolean allowRegistration;
+
+  /** Field description */
+  private Long defaultBlog;
 
   /** Field description */
   private int passwordMinLength;

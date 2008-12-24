@@ -62,6 +62,12 @@
             <h:outputLabel for="imageHeight" value="#{label.imageHeight}" />
             <h:inputText id="imageHeight" styleClass="short" value="#{ConfigBean.blog.imageHeight}" required="true" />
             <h:message for="imageHeight" />
+
+            <h:outputLabel for="dateFormat" value="#{label.dateFormat}" />
+            <h:inputText id="dateFormat" value="#{ConfigBean.blog.dateFormat}" required="true">
+              <f:validator validatorId="validator.dateFormat" />
+            </h:inputText>
+            <h:message for="dateFormat" />
             
           </h:panelGrid>
           

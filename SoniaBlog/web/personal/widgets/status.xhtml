@@ -9,21 +9,21 @@
 
       <h3><h:outputText value="#{label.status}" /></h3>
 
-      <h:panelGrid styleClass="small" columns="2">
+      <h:panelGrid style="width: 50%" styleClass="small" columns="2">
 
-        <h:outputText value="#{label.entries}" />
+        <h:outputText value="#{label.entryCount}" />
         <h:outputText value="#{DashboardBean.entryCount}" />
 
-        <h:outputText value="#{label.comments}" />
+        <h:outputText value="#{label.commentCount}" />
         <h:outputText value="#{DashboardBean.commentCount}" />
 
-        <h:outputText value="#{label.categories}" />
+        <h:outputText value="#{label.categoryCount}" />
         <h:outputText value="#{DashboardBean.categoryCount}" />
 
-        <h:outputText value="#{label.attachments}" />
+        <h:outputText value="#{label.attachmentCount}" />
         <h:outputText value="#{DashboardBean.attachmentCount}" />
 
-        <h:outputText value="#{label.members}" />
+        <h:outputText value="#{label.memberCount}" />
         <h:outputText value="#{DashboardBean.memberCount}" />
 
       </h:panelGrid>

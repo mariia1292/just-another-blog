@@ -43,6 +43,12 @@
             </h:selectOneRadio>
             <h:message for="spamInputMethod" />
 
+            <h:outputLabel for="defaultBlog" value="#{label.defaultBlog}" />
+            <h:selectOneMenu id="defaultBlog" value="#{GlobalConfigBean.defaultBlog}">
+              <f:selectItems value="#{GlobalConfigBean.blogItems}" />
+            </h:selectOneMenu>
+            <h:message for="defaultBlog" />
+
           </h:panelGrid>
 
           <h:commandButton action="#{GlobalConfigBean.save}" value="#{label.save}" />
