@@ -21,6 +21,9 @@ public interface Constants
   public static final String CONFIG_ALLOW_REGISTRATION = "allow.registration";
 
   /** Field description */
+  public static final String CONFIG_CLEANUPCODE = "editor.cleanup";
+
+  /** Field description */
   public static final String CONFIG_DB_DRIVER = "db.driver";
 
   /** Field description */
