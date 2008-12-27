@@ -61,4 +61,12 @@
         </component>
     </tag>
 
+    <tag>
+        <tag-name>tagList</tag-name>
+        <component>
+            <component-type>sonia.blog.taglist</component-type>
+            <renderer-type>sonia.blog.taglist.renderer</renderer-type>
+        </component>
+    </tag>
+
 </facelet-taglib>

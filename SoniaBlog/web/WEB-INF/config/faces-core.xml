@@ -109,6 +109,15 @@
     </component-extension>
   </component>
 
+  <component>
+    <display-name>tagList</display-name>
+    <component-type>sonia.blog.taglist</component-type>
+    <component-class>sonia.blog.api.jsf.taglist.TagListComponent</component-class>
+    <component-extension>
+      <renderer-type>sonia.blog.taglist.renderer</renderer-type>
+    </component-extension>
+  </component>
+
   <render-kit>
     <renderer>
       <component-family>sonia.blog.link</component-family>
@@ -144,6 +153,11 @@
       <component-family>sonia.blog.spamLabel</component-family>
       <renderer-type>sonia.blog.spamLabel.renderer</renderer-type>
       <renderer-class>sonia.blog.api.jsf.spam.SpamLabelRenderer</renderer-class>
+    </renderer>
+    <renderer>
+      <component-family>sonia.blog.taglist</component-family>
+      <renderer-type>sonia.blog.taglist.renderer</renderer-type>
+      <renderer-class>sonia.blog.api.jsf.taglist.TagListRenderer</renderer-class>
     </renderer>
   </render-kit>
     

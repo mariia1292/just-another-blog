@@ -244,7 +244,7 @@ public class DashboardBean extends AbstractBean
    */
   public long getTagCount()
   {
-    return 0;//countQuery("Tag.countFromBlog");
+    return 0;    // countQuery("Tag.countFromBlog");
   }
 
   /**

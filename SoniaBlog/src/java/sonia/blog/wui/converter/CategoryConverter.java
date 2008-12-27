@@ -50,12 +50,10 @@ public class CategoryConverter implements Converter
                             String value)
   {
     Object object = null;
-
     EntityManager em = BlogContext.getInstance().getEntityManager();
+
     try
     {
-      
-
       object = em.find(Category.class, Long.parseLong(value));
     }
     catch (NumberFormatException ex)

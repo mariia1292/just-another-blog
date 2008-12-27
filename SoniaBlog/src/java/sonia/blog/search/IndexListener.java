@@ -16,6 +16,8 @@ import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.Term;
 
 import sonia.blog.api.app.BlogContext;
+import sonia.blog.api.app.Constants;
+import sonia.blog.api.app.ResourceManager;
 import sonia.blog.api.listener.EntityListener;
 import sonia.blog.entity.Blog;
 import sonia.blog.entity.Category;
@@ -27,8 +29,6 @@ import java.io.File;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import sonia.blog.api.app.Constants;
-import sonia.blog.api.app.ResourceManager;
 
 /**
  *
@@ -214,6 +214,8 @@ public class IndexListener extends EntityListener
     return result;
   }
 
-  private ResourceManager resourceManager;
+  //~--- fields ---------------------------------------------------------------
 
+  /** Field description */
+  private ResourceManager resourceManager;
 }

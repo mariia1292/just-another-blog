@@ -850,7 +850,6 @@ public class EntryBean extends AbstractBean
    */
   private void buildTagList(EntityManager em)
   {
-    Blog blog = getRequest().getCurrentBlog();
     List<Tag> tags = new ArrayList<Tag>();
     List<Tag> oldTags = entry.getTags();
 
@@ -874,9 +873,8 @@ public class EntryBean extends AbstractBean
 
         if (t == null)
         {
-          Query q = em.createNamedQuery("Tag.findFromBlogAndName");
+          Query q = em.createNamedQuery("Tag.findFromName");
 
-          q.setParameter("blog", blog);
           q.setParameter("name", tag);
 
           try

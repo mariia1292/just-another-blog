@@ -32,6 +32,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 
 import java.sql.Connection;
+import java.sql.Driver;
 import java.sql.DriverManager;
 
 import java.util.ResourceBundle;
@@ -227,10 +228,13 @@ public class InstallBean extends AbstractBean
 
     try
     {
-      Class.forName(databaseDriver);
+      Driver driver = (Driver) Class.forName(databaseDriver).newInstance();
+
+      DriverManager.registerDriver(driver);
     }
-    catch (ClassNotFoundException ex)
+    catch (Exception ex)
     {
+      logger.log(Level.WARNING, null, ex);
       getMessageHandler().error("form:dbDriver", "dbDriverNotFound");
       result = FAILURE;
     }
@@ -468,7 +472,7 @@ public class InstallBean extends AbstractBean
     }
     catch (Exception ex)
     {
-      logger.log(Level.FINE, null, ex);
+      logger.log(Level.WARNING, null, ex);
     }
 
     return result;

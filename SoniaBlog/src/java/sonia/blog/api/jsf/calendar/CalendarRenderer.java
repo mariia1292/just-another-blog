@@ -104,7 +104,16 @@ public class CalendarRenderer extends BaseRenderer
       writer.startElement("tr", null);
       writer.startElement("th", null);
       writer.writeAttribute("colspan", "7", null);
-      writer.write(month + " " + year);
+      writer.startElement("a", null);
+      writer.writeAttribute("href", buildLink(null, month, year, request),
+                            null);
+      writer.write("" + month);
+      writer.endElement("a");
+      writer.write(" ");
+      writer.startElement("a", null);
+      writer.writeAttribute("href", buildLink(null, null, year, request), null);
+      writer.write("" + year);
+      writer.endElement("a");
       writer.endElement("th");
       writer.endElement("tr");
       writer.endElement("thead");
@@ -179,12 +188,25 @@ public class CalendarRenderer extends BaseRenderer
    *
    * @return
    */
-  private String buildLink(int day, int month, int year, BlogRequest request)
+  private String buildLink(Integer day, Integer month, Integer year,
+                           BlogRequest request)
   {
     String link = BlogContext.getInstance().getLinkBuilder().buildLink(request,
                     "/date/");
 
-    return link + year + "-" + month + "-" + day + "/index.jab";
+    link += year;
+
+    if (month != null)
+    {
+      link += "-" + month;
+
+      if (day != null)
+      {
+        link += "-" + day;
+      }
+    }
+
+    return link + "/index.jab";
   }
 
   /**

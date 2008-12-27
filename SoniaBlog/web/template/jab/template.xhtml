@@ -6,7 +6,8 @@
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:t="http://myfaces.apache.org/tomahawk"
-      xmlns:blog="http://jab.nitilon.org/blog/">
+      xmlns:blog="http://jab.nitilon.org/blog/"
+      xmlns:u1="http://jab.nitilon.org/blog/">
   <head>
     <title><ui:insert name="title">JAB</ui:insert> | Just-Another-Blog</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
@@ -85,10 +86,7 @@
                   </h:dataTable>
 
                   <h3><h:outputText value="#{label.tags}" /></h3>
-                  <ui:repeat value="#{BlogBean.tags}" var="Tag">
-                    <blog:link value="#{Tag.name}" object="#{Tag}" styleClass="nowrap" />
-                    <h:outputText value=" " />
-                  </ui:repeat>
+                  <blog:tagList />
 
                   <h3><h:outputText value="#{label.search}" /></h3>
                   <blog:search value="#{BlogBean.searchString}" label="#{label.search}" />
