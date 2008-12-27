@@ -76,6 +76,8 @@ public class GlobalConfigBean extends AbstractConfigBean
             Constants.DEFAULT_PASSWORD_MINLENGTH);
     spamInputMethod = config.getString(Constants.CONFIG_SPAMMETHOD);
     defaultBlog = config.getLong(Constants.CONFIG_DEFAULTBLOG);
+    cleanupCode = config.getBoolean(Constants.CONFIG_CLEANUPCODE,
+                                    Boolean.FALSE);
   }
 
   /**
@@ -92,6 +94,7 @@ public class GlobalConfigBean extends AbstractConfigBean
     config.set(Constants.CONFIG_PASSWORD_MINLENGTH, passwordMinLength);
     config.set(Constants.CONFIG_SPAMMETHOD, spamInputMethod);
     config.set(Constants.CONFIG_DEFAULTBLOG, defaultBlog);
+    config.set(Constants.CONFIG_CLEANUPCODE, cleanupCode);
   }
 
   //~--- get methods ----------------------------------------------------------
@@ -233,6 +236,17 @@ public class GlobalConfigBean extends AbstractConfigBean
     return allowRegistration;
   }
 
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  public boolean isCleanupCode()
+  {
+    return cleanupCode;
+  }
+
   //~--- set methods ----------------------------------------------------------
 
   /**
@@ -255,6 +269,17 @@ public class GlobalConfigBean extends AbstractConfigBean
   public void setAllowRegistration(boolean allowRegistration)
   {
     this.allowRegistration = allowRegistration;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param cleanupCode
+   */
+  public void setCleanupCode(boolean cleanupCode)
+  {
+    this.cleanupCode = cleanupCode;
   }
 
   /**
@@ -297,6 +322,9 @@ public class GlobalConfigBean extends AbstractConfigBean
 
   /** Field description */
   private boolean allowRegistration;
+
+  /** Field description */
+  private boolean cleanupCode;
 
   /** Field description */
   private Long defaultBlog;

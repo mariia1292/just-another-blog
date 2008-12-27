@@ -11,6 +11,8 @@ package sonia.blog.wui;
 
 import org.apache.myfaces.custom.fileupload.UploadedFile;
 
+import org.w3c.tidy.Tidy;
+
 import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.app.BlogRequest;
 import sonia.blog.api.app.Constants;
@@ -28,6 +30,8 @@ import sonia.util.Util;
 
 //~--- JDK imports ------------------------------------------------------------
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -308,6 +312,7 @@ public class EntryBean extends AbstractBean
     try
     {
       buildTagList(em);
+      cleanupContent();
 
       if (entry.getId() == null)
       {
@@ -733,6 +738,29 @@ public class EntryBean extends AbstractBean
    *
    * @return
    */
+  public Tidy getTitdy()
+  {
+    if (tidy == null)
+    {
+      tidy = new Tidy();
+      tidy.setPrintBodyOnly(true);
+
+      File configDir =
+        BlogContext.getInstance().getConfigFile().getParentFile();
+
+      tidy.setConfigurationFromFile(new File(configDir,
+              "tidy.properties").getPath());
+    }
+
+    return tidy;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
   public String getUploadDescription()
   {
     return uploadDescription;
@@ -918,6 +946,41 @@ public class EntryBean extends AbstractBean
     }
 
     entry.setTags(tags);
+  }
+
+  /**
+   * Method description
+   *
+   */
+  private void cleanupContent()
+  {
+    if (BlogContext.getInstance().getConfiguration().getBoolean(
+            Constants.CONFIG_CLEANUPCODE, Boolean.FALSE))
+    {
+      getTitdy();
+
+      ByteArrayInputStream bais = null;
+      ByteArrayOutputStream baos = null;
+      String content = entry.getContent();
+
+      if ((content != null) && (content.length() > 0))
+      {
+        bais = new ByteArrayInputStream(content.getBytes());
+        baos = new ByteArrayOutputStream();
+        tidy.parse(bais, baos);
+        entry.setContent(baos.toString());
+      }
+
+      String teaser = entry.getTeaser();
+
+      if ((teaser != null) && (teaser.length() > 0))
+      {
+        bais = new ByteArrayInputStream(teaser.getBytes());
+        baos = new ByteArrayOutputStream();
+        tidy.parse(bais, baos);
+        entry.setTeaser(baos.toString());
+      }
+    }
   }
 
   /**
@@ -1113,6 +1176,9 @@ public class EntryBean extends AbstractBean
 
   /** Field description */
   private String tagString;
+
+  /** Field description */
+  private Tidy tidy;
 
   /** Field description */
   private boolean unzipFiles = false;
