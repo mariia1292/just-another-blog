@@ -82,7 +82,7 @@ public class FileNameMap implements java.net.FileNameMap
 
     if ((index > 0) && (index < fileName.length()))
     {
-      mimeType = mimeTypes.getProperty(fileName.substring(index));
+      mimeType = mimeTypes.getProperty(fileName.substring(index).toLowerCase());
     }
 
     if ((mimeType == null) || (mimeType.trim().length() == 0))

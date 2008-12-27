@@ -25,10 +25,10 @@ public class TagListComponent extends BaseComponent
 {
 
   /** Field description */
-  public static final int DEFAULT_MAXPERCENTAGE = 75;
+  public static final int DEFAULT_MAXPERCENTAGE = 150;
 
   /** Field description */
-  public static final int DEFAULT_MINPERCENTAGE = 150;
+  public static final int DEFAULT_MINPERCENTAGE = 75;
 
   /** Field description */
   public static final String FAMILY = "sonia.blog.taglist";
