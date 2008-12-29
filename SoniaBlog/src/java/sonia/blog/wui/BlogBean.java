@@ -292,11 +292,8 @@ public class BlogBean extends AbstractBean
     }
     else
     {
-      if (request.isUserInRole("author") || request.isUserInRole("admin"))
-      {
-        navigation.add(new NavigationMenuItem(bundle.getString("personal"),
-                "dashboard"));
-      }
+      navigation.add(new NavigationMenuItem(bundle.getString("personal"),
+              "dashboard"));
 
       if (config.getBoolean(Constants.CONFIG_ALLOW_BLOGCREATION, Boolean.FALSE))
       {

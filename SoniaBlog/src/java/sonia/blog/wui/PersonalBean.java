@@ -123,6 +123,9 @@ public class PersonalBean extends AbstractBean
             new NavigationMenuItem(
                 label.getString("blogAdministration"), "administration"));
         globalAdminNavigation.add(
+            new NavigationMenuItem(
+                label.getString("userAdministration"), "userAdministration"));
+        globalAdminNavigation.add(
             new NavigationMenuItem(label.getString("plugins"), "plugins"));
         globalAdminNavigation.add(
             new NavigationMenuItem(label.getString("status"), "globalStatus"));

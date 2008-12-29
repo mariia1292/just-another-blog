@@ -29,12 +29,17 @@ import javax.persistence.TemporalType;
  *
  * @author sdorra
  */
-@Entity @NamedQueries({ @NamedQuery(name = "BlogMember.findByBlogAndUser",
-        query = "select m from BlogMember as m where m.blog = :blog and m.user = :user") ,
-                        @NamedQuery(name = "BlogMember.findByBlog",
-        query = "select m from BlogMember m where m.blog = :blog") ,
-                        @NamedQuery(name = "BlogMember.countFromBlog",
-        query = "select count(m) from BlogMember m where m.blog = :blog") })
+@Entity @NamedQueries(
+{
+  @NamedQuery(name = "BlogMember.findByBlogAndUser",
+              query = "select m from BlogMember as m where m.blog = :blog and m.user = :user") ,
+  @NamedQuery(name = "BlogMember.findByUser",
+              query = "select m from BlogMember m where m.user = :user") ,
+  @NamedQuery(name = "BlogMember.findByBlog",
+              query = "select m from BlogMember m where m.blog = :blog") ,
+  @NamedQuery(name = "BlogMember.countFromBlog",
+              query = "select count(m) from BlogMember m where m.blog = :blog")
+})
 public class BlogMember implements Serializable
 {
 

@@ -42,6 +42,9 @@ public interface Constants
   public static final String CONFIG_DEFAULTBLOG = "defaultBlog";
 
   /** Field description */
+  public static final String CONFIG_DEFAULTROLE = "default.role";
+
+  /** Field description */
   public static final String CONFIG_ENCODING = "encoding";
 
   /** Field description */
@@ -214,10 +217,11 @@ public interface Constants
   public static final String SSOLOGINMODULE_NAME = "BlogSSOLoginModule";
 
   /** Field description */
+  public static final int SSO_DISABLED = 0;
+
+  /** Field description */
   public static final int SSO_EVERYREQUEST = 2;
 
   /** Field description */
   public static final int SSO_ONEPERSESSION = 1;
-
-  public static final int SSO_DISABLED = 0;
 }

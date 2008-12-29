@@ -13,6 +13,9 @@ import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.app.BlogRequest;
 import sonia.blog.api.app.Constants;
 import sonia.blog.api.util.AbstractBean;
+import sonia.blog.entity.Blog;
+import sonia.blog.entity.BlogMember;
+import sonia.blog.entity.Role;
 import sonia.blog.entity.User;
 
 import sonia.config.Configuration;
@@ -20,6 +23,8 @@ import sonia.config.Configuration;
 import sonia.plugin.ServiceReference;
 
 import sonia.security.encryption.Encryption;
+
+import sonia.util.Util;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -212,7 +217,14 @@ public class RegistrationBean extends AbstractBean
     try
     {
       em.persist(user);
+
+      Blog blog = getRequest().getCurrentBlog();
+      Role role = getDefaultRole();
+      BlogMember member = new BlogMember(blog, user, role);
+
+      em.persist(member);
       em.getTransaction().commit();
+      getMessageHandler().info("registrationSuccess");
     }
     catch (Exception ex)
     {
@@ -266,6 +278,30 @@ public class RegistrationBean extends AbstractBean
   }
 
   //~--- get methods ----------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  private Role getDefaultRole()
+  {
+    Role role = null;
+    String value = BlogContext.getInstance().getConfiguration().getString(
+                       Constants.CONFIG_DEFAULTROLE);
+
+    if (Util.isBlank(value))
+    {
+      role = Role.READER;
+    }
+    else
+    {
+      role = Role.valueOf(value);
+    }
+
+    return role;
+  }
 
   /**
    * Method description

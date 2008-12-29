@@ -45,7 +45,11 @@ import javax.persistence.TemporalType;
               query = "select u from User as u where u.active = true and u.email = :email") ,
   @NamedQuery(name = "User.countAll", query = "select count(u) from User u") ,
   @NamedQuery(name = "User.findByNameAndCode",
-              query = "select u from User u where u.active = true and u.name = :name and u.activationCode = :activationCode")
+              query = "select u from User u where u.active = true and u.name = :name and u.activationCode = :activationCode") ,
+  @NamedQuery(name = "User.findAll",
+              query = "select u from User u order by u.name") ,
+  @NamedQuery(name = "User.findAllActives",
+              query = "select u from User u where u.active = true order by u.name")
 })
 public class User implements Serializable, Principal, PermaObject
 {

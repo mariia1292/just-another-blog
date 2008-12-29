@@ -11,7 +11,7 @@
 
       <ui:define name="info">
 
-        <h:panelGroup rendered="#{PersonalBean.author}">
+        <h:panelGroup>
 
           <h3><h:outputText value="#{label.user}" /></h3>
           <h:form id="readerNavForm">
@@ -19,6 +19,10 @@
               <t:navigationMenuItems value="#{PersonalBean.readerNavigation}" />
             </t:panelNavigation2>
           </h:form>
+
+        </h:panelGroup>
+
+        <h:panelGroup rendered="#{PersonalBean.author}">
 
           <h3><h:outputText value="#{label.author}" /></h3>
           <h:form id="authorNavForm">

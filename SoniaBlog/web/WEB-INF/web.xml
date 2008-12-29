@@ -21,7 +21,7 @@
       /WEB-INF/config/faces-navigation.xml
     </param-value>
   </context-param>
-  
+
   <context-param>
     <param-name>javax.faces.DEFAULT_SUFFIX</param-name>
     <param-value>.xhtml</param-value>
@@ -93,8 +93,9 @@
     <filter-name>MyFacesExtensionFilter</filter-name>
     <url-pattern>*.jab</url-pattern>
   </filter-mapping>
-  
-  
+
+  <!-- ServletListener -->
+
   <listener>
     <description>ServletContextListener</description>
     <listener-class>sonia.blog.app.BlogContextListener</listener-class>

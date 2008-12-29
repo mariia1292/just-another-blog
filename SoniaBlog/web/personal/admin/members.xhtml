@@ -32,7 +32,7 @@
               <f:facet name="header">
                 <h:outputText value="#{label.role}" />
               </f:facet>
-              <h:selectOneRadio styleClass="clean" value="#{Member.role}"
+              <h:selectOneRadio styleClass="list" value="#{Member.role}"
                                 onclick="submit();" valueChangeListener="#{MemberBean.roleChanged}">
                 <f:selectItems value="#{MemberBean.roleItems}" />
               </h:selectOneRadio>

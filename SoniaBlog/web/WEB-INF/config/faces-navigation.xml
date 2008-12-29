@@ -89,8 +89,28 @@
       <from-outcome>plugins</from-outcome>
       <to-view-id>/personal/globaladmin/plugins.xhtml</to-view-id>
     </navigation-case>
+    <navigation-case>
+      <from-outcome>userAdministration</from-outcome>
+      <to-view-id>/personal/globaladmin/users.xhtml</to-view-id>
+    </navigation-case>
   </navigation-rule>
-  
+
+  <navigation-rule>
+    <from-view-id>/personal/globaladmin/users.xhtml</from-view-id>
+    <navigation-case>
+      <from-outcome>detail</from-outcome>
+      <to-view-id>/personal/globaladmin/userDetail.xhtml</to-view-id>
+    </navigation-case>
+  </navigation-rule>
+
+  <navigation-rule>
+    <from-view-id>/personal/globaladmin/userDetail.xhtml</from-view-id>
+    <navigation-case>
+      <from-outcome>back</from-outcome>
+      <to-view-id>/personal/globaladmin/users.xhtml</to-view-id>
+    </navigation-case>
+  </navigation-rule>
+
   <navigation-rule>
     <from-view-id>/personal/author/entries.xhtml</from-view-id>
     <navigation-case>
