@@ -12,6 +12,8 @@ package sonia.blog.wui;
 import org.apache.myfaces.custom.fileupload.UploadedFile;
 
 import org.w3c.tidy.Tidy;
+import org.w3c.tidy.TidyMessage;
+import org.w3c.tidy.TidyMessageListener;
 
 import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.app.BlogRequest;
@@ -743,13 +745,41 @@ public class EntryBean extends AbstractBean
     if (tidy == null)
     {
       tidy = new Tidy();
+      tidy.setQuiet(true);
+      tidy.setMessageListener(new TidyMessageListener()
+      {
+        public void messageReceived(TidyMessage message)
+        {
+          String msg = message.getLine() + " : " + message.getColumn() + " "
+                       + message.getMessage();
+
+          if ((message.getLevel() == TidyMessage.Level.INFO)
+              || (message.getLevel() == TidyMessage.Level.SUMMARY))
+          {
+            logger.info(msg);
+          }
+          else if (message.getLevel() == TidyMessage.Level.WARNING)
+          {
+            logger.warning(msg);
+          }
+          else if (message.getLevel() == TidyMessage.Level.ERROR)
+          {
+            logger.severe(msg);
+          }
+        }
+      });
       tidy.setPrintBodyOnly(true);
 
       File configDir =
         BlogContext.getInstance().getConfigFile().getParentFile();
+      String path = new File(configDir, "tidy.properties").getPath();
 
-      tidy.setConfigurationFromFile(new File(configDir,
-              "tidy.properties").getPath());
+      if (logger.isLoggable(Level.INFO))
+      {
+        logger.info("load tidy configuration " + path);
+      }
+
+      tidy.setConfigurationFromFile(path);
     }
 
     return tidy;

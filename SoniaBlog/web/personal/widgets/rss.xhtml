@@ -3,10 +3,23 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:f="http://java.sun.com/jsf/core">
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:c="http://java.sun.com/jstl/core">
   <body>
 
     <ui:composition>
+
+      <c:if test="#{DashboardBean.channel == null}">
+
+        <h3><h:outputText value="#{label.rssWidgetTitle}" /></h3>
+
+        <p>
+          <h:outputText value="#{message.rssCouldNotLoadChannel}" />
+        </p>
+
+      </c:if>
+
+      <c:if test="#{DashboardBean.channel != null}">
 
       <h3><h:outputText value="#{DashboardBean.channel.title}" /></h3>
 
@@ -25,6 +38,8 @@
         </h:column>
 
       </h:dataTable>
+
+      </c:if>
 
     </ui:composition>
 

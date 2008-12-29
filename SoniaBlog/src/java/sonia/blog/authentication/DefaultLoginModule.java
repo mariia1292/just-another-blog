@@ -11,6 +11,7 @@ package sonia.blog.authentication;
 
 import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.app.Constants;
+import sonia.blog.api.authentication.RolePrincipal;
 import sonia.blog.entity.Role;
 import sonia.blog.entity.User;
 
@@ -149,49 +150,6 @@ public class DefaultLoginModule extends LoginModule
 
     return u;
   }
-
-  //~--- inner classes --------------------------------------------------------
-
-  /**
-   * Class description
-   *
-   *
-   * @version    Enter version here..., 08/09/25
-   * @author     Enter your name here...
-   */
-  private class RolePrincipal implements Principal
-  {
-
-    /**
-     * Constructs ...
-     *
-     *
-     * @param role
-     */
-    private RolePrincipal(Role role)
-    {
-      this.role = role;
-    }
-
-    //~--- get methods --------------------------------------------------------
-
-    /**
-     * Method description
-     *
-     *
-     * @return
-     */
-    public String getName()
-    {
-      return role.name();
-    }
-
-    //~--- fields -------------------------------------------------------------
-
-    /** Field description */
-    private Role role;
-  }
-
 
   //~--- fields ---------------------------------------------------------------
 

@@ -25,6 +25,7 @@ import sonia.rss.FeedParser;
 import java.io.IOException;
 
 import java.net.URL;
+import java.net.UnknownHostException;
 
 import java.util.List;
 import java.util.logging.Level;
@@ -109,6 +110,10 @@ public class DashboardBean extends AbstractBean
 
         channel = parser.load(
           new URL("http://rss.golem.de/rss.php?feed=RSS2.0").openStream());
+      }
+      catch (UnknownHostException ex)
+      {
+        logger.log(Level.FINE, null, ex);
       }
       catch (IOException ex)
       {

@@ -9,6 +9,7 @@ package sonia.blog.api.app;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import sonia.blog.api.authentication.SSOCallbackHandler;
 import sonia.blog.api.link.LinkBuilder;
 import sonia.blog.api.mapping.MappingHandler;
 import sonia.blog.api.search.SearchContext;
@@ -108,7 +109,8 @@ public class BlogContext
   {
     if (loginConfiguration == null)
     {
-      loginConfiguration = new DefaultLoginConfiguration();
+      loginConfiguration =
+        new DefaultLoginConfiguration(Constants.SERVICE_AUTHENTICATION);
     }
 
     LoginCallbackHandler callbackHandler = new LoginCallbackHandler(username,
@@ -116,6 +118,34 @@ public class BlogContext
 
     return new LoginContext(Constants.LOGINMODULE_NAME, new Subject(),
                             callbackHandler, loginConfiguration);
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param request
+   * @param response
+   *
+   * @return
+   *
+   * @throws LoginException
+   */
+  public LoginContext buildSSOLoginContext(BlogRequest request,
+          BlogResponse response)
+          throws LoginException
+  {
+    if (ssoLoginConfiguration == null)
+    {
+      ssoLoginConfiguration =
+        new DefaultLoginConfiguration(Constants.SERVICE_SSOAUTHENTICATION);
+    }
+
+    SSOCallbackHandler callbackHandler = new SSOCallbackHandler(request,
+                                           response);
+
+    return new LoginContext(Constants.SSOLOGINMODULE_NAME, new Subject(),
+                            callbackHandler, ssoLoginConfiguration);
   }
 
   /**
@@ -462,6 +492,9 @@ public class BlogContext
 
   /** Field description */
   private ServletContext servletContext;
+
+  /** Field description */
+  private Configuration ssoLoginConfiguration;
 
   /** Field description */
   private TemplateManager templateManager;

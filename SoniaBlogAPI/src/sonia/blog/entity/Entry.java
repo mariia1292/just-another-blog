@@ -513,7 +513,8 @@ public class Entry implements Serializable, ContentObject, CommentAble
   //~--- fields ---------------------------------------------------------------
 
   /** Field description */
-  @OneToMany(mappedBy = "entry", cascade = { CascadeType.REMOVE })
+  @OneToMany(mappedBy = "entry",
+             cascade = { CascadeType.REMOVE, CascadeType.MERGE })
   private List<Attachment> attachments;
 
   /** Field description */
@@ -525,7 +526,8 @@ public class Entry implements Serializable, ContentObject, CommentAble
   private Category category;
 
   /** Field description */
-  @OneToMany(mappedBy = "entry", cascade = { CascadeType.REMOVE })
+  @OneToMany(mappedBy = "entry",
+             cascade = { CascadeType.REMOVE, CascadeType.MERGE })
   private List<Comment> comments;
 
   /** Field description */
@@ -548,8 +550,7 @@ public class Entry implements Serializable, ContentObject, CommentAble
   private boolean published = true;
 
   /** Field description */
-  @ManyToMany(cascade = CascadeType.REMOVE)
-  @OrderBy("name")
+  @ManyToMany @OrderBy("name")
   private List<Tag> tags;
 
   /** Field description */

@@ -11,6 +11,7 @@ package sonia.blog.api.util;
 
 import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.app.BlogRequest;
+import sonia.blog.api.app.BlogResponse;
 
 import sonia.jsf.util.MessageHandler;
 
@@ -195,10 +196,22 @@ public class AbstractBean
    *
    * @return
    */
-  protected HttpServletResponse getResponse()
+  protected BlogResponse getResponse()
   {
-    return (HttpServletResponse) FacesContext.getCurrentInstance()
-      .getExternalContext().getResponse();
+    BlogResponse blogResponse = null;
+    Object response =
+      FacesContext.getCurrentInstance().getExternalContext().getResponse();
+
+    if (response instanceof BlogResponse)
+    {
+      blogResponse = (BlogResponse) response;
+    }
+    else if (response instanceof HttpServletResponse)
+    {
+      blogResponse = new BlogResponse((HttpServletResponse) response);
+    }
+
+    return blogResponse;
   }
 
   //~--- fields ---------------------------------------------------------------

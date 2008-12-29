@@ -24,6 +24,9 @@ public interface Constants
   public static final String CONFIG_CLEANUPCODE = "editor.cleanup";
 
   /** Field description */
+  public static final String CONFIG_COKKIETIME = "cookie.time";
+
+  /** Field description */
   public static final String CONFIG_DB_DRIVER = "db.driver";
 
   /** Field description */
@@ -62,9 +65,14 @@ public interface Constants
   /** Field description */
   public static final String CONFIG_SPAMMETHOD = "spam.method";
 
-  /*
-   * Default Config Parameters
-   */
+  /** Field description */
+  public static final String CONFIG_SSO = "auth.sso";
+
+  /** Field description */
+  public static final String COOKIE_NAME = "jab.login.cookie";
+
+  /** Field description */
+  public static final int DEFAULT_COOKIETIME = 60 * 60 * 24 * 31;
 
   /** Field description */
   public static final String DEFAULT_ENCODING = "UTF-8";
@@ -198,4 +206,18 @@ public interface Constants
 
   /** Field description */
   public static final String SERVICE_SPAMPROTECTIONMETHOD = "/app/input/spam";
+
+  /** Field description */
+  public static final String SERVICE_SSOAUTHENTICATION = "/app/sso";
+
+  /** Field description */
+  public static final String SSOLOGINMODULE_NAME = "BlogSSOLoginModule";
+
+  /** Field description */
+  public static final int SSO_EVERYREQUEST = 2;
+
+  /** Field description */
+  public static final int SSO_ONEPERSESSION = 1;
+
+  public static final int SSO_DISABLED = 0;
 }

@@ -166,6 +166,8 @@ public class FeedMappingEntry implements MappingEntry, ConfigurationListener
           channel.setPubDate(blog.getCreationDate());
           channel.setItems(items);
 
+          response.setContentType( "application/rss+xml" );
+
           FeedParser parser = FeedParser.getInstance(feedType);
 
           parser.store(channel, response.getOutputStream());

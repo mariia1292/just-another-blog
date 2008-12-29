@@ -29,11 +29,11 @@ public class DefaultLoginConfiguration extends Configuration
    * Constructs ...
    *
    */
-  public DefaultLoginConfiguration()
+  public DefaultLoginConfiguration( String serviceName )
   {
     reference =
       BlogContext.getInstance().getServiceRegistry().getServiceReference(
-        Constants.SERVICE_AUTHENTICATION);
+        serviceName);
   }
 
   //~--- methods --------------------------------------------------------------

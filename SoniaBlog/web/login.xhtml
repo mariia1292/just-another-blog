@@ -17,7 +17,7 @@
       <ui:define name="content">
 
         <h1><h:outputText value="#{label.loginTitle}" /></h1>
-        
+
         <h:form>
 
           <h:panelGrid columns="3">
@@ -29,6 +29,10 @@
             <h:outputLabel for="password" value="#{label.password}" />
             <h:inputSecret id="password" value="#{LoginBean.password}" required="true" />
             <h:message for="password" />
+
+            <h:selectBooleanCheckbox id="cookie" value="#{LoginBean.cookie}" rendered="#{LoginBean.ssoEnabled}" />
+            <h:outputLabel for="cookie" value="#{label.cookie}" rendered="#{LoginBean.ssoEnabled}" />
+            <h:message for="cookie" rendered="#{LoginBean.ssoEnabled}" />
 
             <f:facet name="footer">
               <h:panelGroup />

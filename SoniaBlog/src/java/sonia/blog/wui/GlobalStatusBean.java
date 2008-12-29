@@ -74,7 +74,13 @@ public class GlobalStatusBean extends AbstractBean
    */
   public String getAttachmentSize()
   {
-    long size = Util.getLength(new File(resourceDir, "attachment"));
+    long size = 0;
+    File attachments = new File(resourceDir, Constants.RESOURCE_ATTACHMENT);
+
+    for (File dir : attachments.listFiles())
+    {
+      size += Util.getLength(new File(dir, Constants.RESOURCE_ENTRIES));
+    }
 
     return Util.formatSize((double) size);
   }
@@ -155,7 +161,13 @@ public class GlobalStatusBean extends AbstractBean
    */
   public String getImageSize()
   {
-    long size = Util.getLength(new File(resourceDir, "image"));
+    long size = 0;
+    File attachments = new File(resourceDir, Constants.RESOURCE_ATTACHMENT);
+
+    for (File dir : attachments.listFiles())
+    {
+      size += Util.getLength(new File(dir, Constants.RESOURCE_IMAGE));
+    }
 
     return Util.formatSize((double) size);
   }
@@ -168,7 +180,7 @@ public class GlobalStatusBean extends AbstractBean
    */
   public String getIndexSize()
   {
-    long size = Util.getLength(new File(resourceDir, "index"));
+    long size = Util.getLength(new File(resourceDir, Constants.RESOURCE_INDEX));
 
     return Util.formatSize((double) size);
   }

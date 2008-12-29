@@ -78,6 +78,7 @@ public class GlobalConfigBean extends AbstractConfigBean
     defaultBlog = config.getLong(Constants.CONFIG_DEFAULTBLOG);
     cleanupCode = config.getBoolean(Constants.CONFIG_CLEANUPCODE,
                                     Boolean.FALSE);
+    sso = config.getInteger(Constants.CONFIG_SSO, Constants.SSO_ONEPERSESSION);
   }
 
   /**
@@ -95,6 +96,7 @@ public class GlobalConfigBean extends AbstractConfigBean
     config.set(Constants.CONFIG_SPAMMETHOD, spamInputMethod);
     config.set(Constants.CONFIG_DEFAULTBLOG, defaultBlog);
     config.set(Constants.CONFIG_CLEANUPCODE, cleanupCode);
+    config.set(Constants.CONFIG_SSO, sso);
   }
 
   //~--- get methods ----------------------------------------------------------
@@ -220,6 +222,17 @@ public class GlobalConfigBean extends AbstractConfigBean
    *
    * @return
    */
+  public int getSso()
+  {
+    return sso;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
   public boolean isAllowBlogCreation()
   {
     return allowBlogCreation;
@@ -315,6 +328,17 @@ public class GlobalConfigBean extends AbstractConfigBean
     this.spamInputMethod = spamInputMethod;
   }
 
+  /**
+   * Method description
+   *
+   *
+   * @param sso
+   */
+  public void setSso(int sso)
+  {
+    this.sso = sso;
+  }
+
   //~--- fields ---------------------------------------------------------------
 
   /** Field description */
@@ -340,4 +364,7 @@ public class GlobalConfigBean extends AbstractConfigBean
 
   /** Field description */
   private ServiceReference spamInputServcieReference;
+
+  /** Field description */
+  private int sso;
 }

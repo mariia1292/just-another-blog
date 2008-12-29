@@ -565,8 +565,7 @@ public class Blog implements Serializable, PermaObject
   /** Field description */
   @OneToMany(
     fetch = FetchType.LAZY,
-    mappedBy = "blog",
-    cascade = CascadeType.REMOVE
+    mappedBy = "blog"
   )
   private List<Category> categories;
 
@@ -600,8 +599,7 @@ public class Blog implements Serializable, PermaObject
   /** Field description */
   @OneToMany(
     fetch = FetchType.LAZY,
-    mappedBy = "blog",
-    cascade = CascadeType.REMOVE
+    mappedBy = "blog"
   )
   private List<BlogMember> members;
 

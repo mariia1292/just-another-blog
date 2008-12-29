@@ -12,6 +12,7 @@ package sonia.blog.app;
 import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.app.Constants;
 import sonia.blog.api.mapping.MappingHandler;
+import sonia.blog.authentication.CookieLoginModule;
 import sonia.blog.authentication.DefaultLoginModule;
 import sonia.blog.link.DefaultLinkBuilder;
 import sonia.blog.macro.AttachmentMacro;
@@ -271,6 +272,15 @@ public class BlogContextListener implements ServletContextListener
 
     registry.registerService(
         Constants.SERVICE_AUTHENTICATION).addImplementation(authEntry);
+
+    AppConfigurationEntry ssoAuthEntry =
+      new AppConfigurationEntry(
+          CookieLoginModule.class.getName(),
+          AppConfigurationEntry.LoginModuleControlFlag.REQUIRED,
+          new HashMap<String, Object>());
+
+    registry.registerService(
+        Constants.SERVICE_SSOAUTHENTICATION).addImplementation(ssoAuthEntry);
     registry.registerService(Constants.SERVICE_BLOG_LISTENER);
     registry.registerService(
         Constants.SERVICE_ENTRY_LISTENER).addImplementation(

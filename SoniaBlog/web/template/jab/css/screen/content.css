@@ -181,6 +181,7 @@
   table.list { margin: 0; padding: 0; }
   table.list td,
   table.list th { margin: 0; padding: 0; }
+  table.list label { margin-right: 3px; }
 
   table.editor { width: 100% }
   td.e1 { width: 20% }

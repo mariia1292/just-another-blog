@@ -14,6 +14,8 @@ import sonia.blog.api.app.Constants;
 import sonia.blog.api.app.ResourceManager;
 import sonia.blog.api.util.AbstractBean;
 import sonia.blog.entity.Blog;
+import sonia.blog.entity.BlogMember;
+import sonia.blog.entity.Category;
 
 import sonia.util.Util;
 
@@ -60,6 +62,20 @@ public class AdminBlogBean extends AbstractBean
 
         try
         {
+          List<Category> categories = blog.getCategories();
+
+          for (Category c : categories)
+          {
+            em.remove(em.merge(c));
+          }
+
+          List<BlogMember> members = blog.getMembers();
+
+          for (BlogMember m : members)
+          {
+            em.remove(em.merge(m));
+          }
+
           em.remove(em.merge(blog));
           em.getTransaction().commit();
 

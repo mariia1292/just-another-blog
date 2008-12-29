@@ -53,6 +53,14 @@
             </h:selectOneMenu>
             <h:message for="defaultBlog" />
 
+            <h:outputLabel for="sso" value="#{label.sso}" />
+            <h:selectOneRadio id="sso" value="#{GlobalConfigBean.sso}" styleClass="list">
+              <f:selectItem itemLabel="#{label.disabled}" itemValue="0" />
+              <f:selectItem itemLabel="#{label.ssoOnePerSession}" itemValue="1" />
+              <f:selectItem itemLabel="#{label.ssoEveryRequest}" itemValue="2" />
+            </h:selectOneRadio>
+            <h:message for="sso" />
+
           </h:panelGrid>
 
           <h:commandButton action="#{GlobalConfigBean.save}" value="#{label.save}" />
