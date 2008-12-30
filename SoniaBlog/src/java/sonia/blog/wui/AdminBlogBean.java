@@ -106,8 +106,8 @@ public class AdminBlogBean extends AbstractBean
           }
 
           logger.log(Level.SEVERE, null, ex);
-          getMessageHandler().info(null, "failureBlogDelete", null,
-                                   blog.getTitle());
+          getMessageHandler().error(null, "failureBlogDelete", null,
+                                    blog.getTitle());
         }
         finally
         {

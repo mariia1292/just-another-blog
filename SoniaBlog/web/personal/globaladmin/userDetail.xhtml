@@ -37,7 +37,11 @@
 
             <h:outputLabel for="active" value="#{label.active}" />
             <h:selectBooleanCheckbox id="active" value="#{AdminUserBean.user.active}" />
-            <h:message for="email" />
+            <h:message for="active" />
+
+            <h:outputLabel for="globalAdmin" value="#{label.globalAdmin}" />
+            <h:selectBooleanCheckbox id="globalAdmin" value="#{AdminUserBean.user.globalAdmin}" />
+            <h:message for="globalAdmin" />
 
           </h:panelGrid>
 

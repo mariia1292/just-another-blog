@@ -31,6 +31,7 @@ import javax.faces.model.ListDataModel;
 import javax.faces.model.SelectItem;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.Query;
 
 /**
@@ -114,28 +115,36 @@ public class AdminUserBean extends AbstractBean
     String result = SUCCESS;
     EntityManager em = BlogContext.getInstance().getEntityManager();
 
-    em.getTransaction().begin();
+    if (checkMail(em))
+    {
+      em.getTransaction().begin();
 
-    try
-    {
-      user = em.merge(user);
-      em.getTransaction().commit();
-      getMessageHandler().info("userSettingsUpdateSuccess");
-    }
-    catch (Exception ex)
-    {
-      if (em.getTransaction().isActive())
+      try
       {
-        em.getTransaction().rollback();
+        user = em.merge(user);
+        em.getTransaction().commit();
+        getMessageHandler().info("userSettingsUpdateSuccess");
       }
+      catch (Exception ex)
+      {
+        if (em.getTransaction().isActive())
+        {
+          em.getTransaction().rollback();
+        }
 
-      logger.log(Level.SEVERE, null, ex);
-      result = FAILURE;
-      getMessageHandler().error("unknownError");
+        logger.log(Level.SEVERE, null, ex);
+        result = FAILURE;
+        getMessageHandler().error("unknownError");
+      }
+      finally
+      {
+        em.close();
+      }
     }
-    finally
+    else
     {
-      em.close();
+      getMessageHandler().warn(null, "emailAllreadyExists", null,
+                               user.getEmail());
     }
 
     return result;
@@ -353,6 +362,32 @@ public class AdminUserBean extends AbstractBean
   public void setUsers(DataModel users)
   {
     this.users = users;
+  }
+
+  //~--- methods --------------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   * @param em
+   *
+   * @return
+   */
+  private boolean checkMail(EntityManager em)
+  {
+    User u = null;
+
+    try
+    {
+      Query q = em.createNamedQuery("User.findByEmail");
+
+      q.setParameter("email", user.getEmail());
+      u = (User) q.getSingleResult();
+    }
+    catch (NoResultException ex) {}
+
+    return u == null || u.equals( user );
   }
 
   //~--- fields ---------------------------------------------------------------

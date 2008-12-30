@@ -22,6 +22,8 @@ import sonia.blog.entity.User;
 
 import sonia.config.Configuration;
 
+import sonia.util.Util;
+
 //~--- JDK imports ------------------------------------------------------------
 
 import java.util.ResourceBundle;
@@ -47,6 +49,8 @@ public class BlogCreationBean extends AbstractBean
     super();
     this.blog = new Blog();
     this.blog.setTemplate("jab");
+    this.domain = BlogContext.getInstance().getConfiguration().getString(
+      Constants.CONFIG_DOMAIN, "");
   }
 
   //~--- methods --------------------------------------------------------------
@@ -59,6 +63,8 @@ public class BlogCreationBean extends AbstractBean
    */
   public String save()
   {
+    setServername();
+
     String result = SUCCESS;
     EntityManager em = BlogContext.getInstance().getEntityManager();
     Blog b = null;
@@ -104,6 +110,17 @@ public class BlogCreationBean extends AbstractBean
     return blog;
   }
 
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  public String getDomain()
+  {
+    return domain;
+  }
+
   //~--- set methods ----------------------------------------------------------
 
   /**
@@ -115,6 +132,17 @@ public class BlogCreationBean extends AbstractBean
   public void setBlog(Blog blog)
   {
     this.blog = blog;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param domain
+   */
+  public void setDomain(String domain)
+  {
+    this.domain = domain;
   }
 
   //~--- methods --------------------------------------------------------------
@@ -203,8 +231,29 @@ public class BlogCreationBean extends AbstractBean
                              Boolean.FALSE);
   }
 
+  //~--- set methods ----------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   */
+  private void setServername()
+  {
+    String servername = blog.getServername();
+
+    if (!Util.isBlank(domain))
+    {
+      servername += "." + domain;
+    }
+
+    blog.setServername(servername);
+  }
+
   //~--- fields ---------------------------------------------------------------
 
   /** Field description */
   private Blog blog;
+
+  /** Field description */
+  private String domain;
 }

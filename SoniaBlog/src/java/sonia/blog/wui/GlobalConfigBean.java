@@ -79,6 +79,7 @@ public class GlobalConfigBean extends AbstractConfigBean
     cleanupCode = config.getBoolean(Constants.CONFIG_CLEANUPCODE,
                                     Boolean.FALSE);
     sso = config.getInteger(Constants.CONFIG_SSO, Constants.SSO_ONEPERSESSION);
+    domain = config.getString(Constants.CONFIG_DOMAIN, "");
   }
 
   /**
@@ -97,6 +98,7 @@ public class GlobalConfigBean extends AbstractConfigBean
     config.set(Constants.CONFIG_DEFAULTBLOG, defaultBlog);
     config.set(Constants.CONFIG_CLEANUPCODE, cleanupCode);
     config.set(Constants.CONFIG_SSO, sso);
+    config.set(Constants.CONFIG_DOMAIN, domain);
   }
 
   //~--- get methods ----------------------------------------------------------
@@ -158,6 +160,17 @@ public class GlobalConfigBean extends AbstractConfigBean
   public Long getDefaultBlog()
   {
     return defaultBlog;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  public String getDomain()
+  {
+    return domain;
   }
 
   /**
@@ -310,6 +323,17 @@ public class GlobalConfigBean extends AbstractConfigBean
    * Method description
    *
    *
+   * @param domain
+   */
+  public void setDomain(String domain)
+  {
+    this.domain = domain;
+  }
+
+  /**
+   * Method description
+   *
+   *
    * @param passwordMinLength
    */
   public void setPasswordMinLength(int passwordMinLength)
@@ -352,6 +376,9 @@ public class GlobalConfigBean extends AbstractConfigBean
 
   /** Field description */
   private Long defaultBlog;
+
+  /** Field description */
+  private String domain;
 
   /** Field description */
   private int passwordMinLength;

@@ -291,7 +291,7 @@ public class XmlConfiguration extends StringBasedConfiguration
   {
     String value = parseString(object);
 
-    if (!isBlank(value))
+    if (value != null)
     {
       properties.put(key, new String[] { value });
       fireConfigChangedEvent(key);

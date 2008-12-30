@@ -19,12 +19,16 @@
 
         <h1><h:outputText value="#{label.userAdministration}" /></h1>
 
+        <h2><h:outputText value="#{label.options}" /></h2>
+
         <h:form>
 
           <h:selectBooleanCheckbox value="#{AdminUserBean.onlyActive}" onchange="submit();" />
           <h:outputText value=" #{label.showOnlyActives}" />
 
         </h:form>
+
+        <h2><h:outputText value="#{label.users}" /></h2>
 
         <h:form>
 

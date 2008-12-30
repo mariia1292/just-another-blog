@@ -563,10 +563,7 @@ public class Blog implements Serializable, PermaObject
   private boolean allowMacros = true;
 
   /** Field description */
-  @OneToMany(
-    fetch = FetchType.LAZY,
-    mappedBy = "blog"
-  )
+  @OneToMany(fetch = FetchType.LAZY, mappedBy = "blog")
   private List<Category> categories;
 
   /** Field description */
@@ -599,7 +596,8 @@ public class Blog implements Serializable, PermaObject
   /** Field description */
   @OneToMany(
     fetch = FetchType.LAZY,
-    mappedBy = "blog"
+    mappedBy = "blog",
+    cascade = { CascadeType.MERGE, CascadeType.REMOVE }
   )
   private List<BlogMember> members;
 

@@ -45,6 +45,9 @@ public interface Constants
   public static final String CONFIG_DEFAULTROLE = "default.role";
 
   /** Field description */
+  public static final String CONFIG_DOMAIN = "domain";
+
+  /** Field description */
   public static final String CONFIG_ENCODING = "encoding";
 
   /** Field description */

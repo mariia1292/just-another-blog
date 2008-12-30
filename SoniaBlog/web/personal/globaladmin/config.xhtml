@@ -61,6 +61,12 @@
             </h:selectOneRadio>
             <h:message for="sso" />
 
+            <h:outputLabel for="domain" value="#{label.domain}" />
+            <h:inputText id="domain" value="#{GlobalConfigBean.domain}">
+              <f:validator validatorId="validator.domain" />
+            </h:inputText>
+            <h:message for="domain" />
+
           </h:panelGrid>
 
           <h:commandButton action="#{GlobalConfigBean.save}" value="#{label.save}" />

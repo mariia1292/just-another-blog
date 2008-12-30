@@ -21,9 +21,14 @@
     <validator-class>sonia.blog.api.jsf.validator.MailValidator</validator-class>
   </validator>
 
-   <validator>
+  <validator>
     <validator-id>validator.dateFormat</validator-id>
     <validator-class>sonia.blog.api.jsf.validator.DateFormatValidator</validator-class>
+  </validator>
+
+  <validator>
+    <validator-id>validator.domain</validator-id>
+    <validator-class>sonia.blog.api.jsf.validator.DomainValidator</validator-class>
   </validator>
 
   <lifecycle>
