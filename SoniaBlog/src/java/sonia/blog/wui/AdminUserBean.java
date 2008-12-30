@@ -277,9 +277,6 @@ public class AdminUserBean extends AbstractBean
       String query = onlyActive
                      ? "User.findAllActives"
                      : "User.findAll";
-
-      System.out.println(query);
-
       Query q = em.createNamedQuery(query);
 
       users = new ListDataModel(q.getResultList());
@@ -387,7 +384,7 @@ public class AdminUserBean extends AbstractBean
     }
     catch (NoResultException ex) {}
 
-    return u == null || u.equals( user );
+    return (u == null) || u.equals(user);
   }
 
   //~--- fields ---------------------------------------------------------------

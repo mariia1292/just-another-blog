@@ -68,9 +68,16 @@
 
             <h:column>
               <f:facet name="header">
+                <h:outputText value="#{label.globalAdmin}" />
+              </f:facet>
+              <h:selectBooleanCheckbox value="#{User.globalAdmin}" readonly="true" onclick="return false" />
+            </h:column>
+
+            <h:column>
+              <f:facet name="header">
                 <h:outputText value="#{label.active}" />
               </f:facet>
-              <h:selectBooleanCheckbox value="#{User.active}" readonly="true" />
+              <h:selectBooleanCheckbox value="#{User.active}" readonly="true" onclick="return false" />
             </h:column>
 
           </h:dataTable>
