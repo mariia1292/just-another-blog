@@ -17,6 +17,7 @@ import sonia.blog.entity.Blog;
 import sonia.blog.entity.BlogMember;
 import sonia.blog.entity.Role;
 import sonia.blog.entity.User;
+import sonia.blog.util.BlogUtil;
 
 import sonia.config.Configuration;
 
@@ -29,6 +30,9 @@ import sonia.util.Util;
 //~--- JDK imports ------------------------------------------------------------
 
 import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import javax.mail.MessagingException;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -49,6 +53,9 @@ public class RegistrationBean extends AbstractBean
   {
     super();
     this.user = new User();
+    sendAcknowledgeMail =
+      BlogContext.getInstance().getConfiguration().getBoolean(
+        Constants.CONFIG_REGISTERACKNOWLEDGEMENT, false);
   }
 
   //~--- methods --------------------------------------------------------------
@@ -126,6 +133,11 @@ public class RegistrationBean extends AbstractBean
         if (result.equals(SUCCESS))
         {
           result = createUser(em);
+
+          if (sendAcknowledgeMail)
+          {
+            sendMail();
+          }
         }
 
         redirect();
@@ -277,6 +289,26 @@ public class RegistrationBean extends AbstractBean
     sendRedirect(uri);
   }
 
+  /**
+   * Method description
+   *
+   */
+  private void sendMail()
+  {
+    BlogRequest request = getRequest();
+
+    try
+    {
+      BlogUtil.sendMail(request.getCurrentBlog().getEmail(), user.getEmail(),
+                        "subject", "text");
+    }
+    catch (MessagingException ex)
+    {
+      getMessageHandler().error("unknownError");
+      logger.log(Level.SEVERE, null, ex);
+    }
+  }
+
   //~--- get methods ----------------------------------------------------------
 
   /**
@@ -321,6 +353,9 @@ public class RegistrationBean extends AbstractBean
 
   /** Field description */
   private String passwordRepeat;
+
+  /** Field description */
+  private boolean sendAcknowledgeMail;
 
   /** Field description */
   private User user;

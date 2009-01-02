@@ -19,6 +19,8 @@ import sonia.config.XmlConfiguration;
 
 import sonia.plugin.ServiceReference;
 
+import sonia.util.Util;
+
 //~--- JDK imports ------------------------------------------------------------
 
 import java.util.List;
@@ -80,6 +82,11 @@ public class GlobalConfigBean extends AbstractConfigBean
                                     Boolean.FALSE);
     sso = config.getInteger(Constants.CONFIG_SSO, Constants.SSO_ONEPERSESSION);
     domain = config.getString(Constants.CONFIG_DOMAIN, "");
+    smtpServer = config.getString(Constants.CONFIG_SMTPSERVER);
+    smtpPort = config.getInteger(Constants.CONFIG_SMTPPORT, 25);
+    smtpUsername = config.getString(Constants.CONFIG_SMTPUSER);
+    registerAcknowledgement =
+      config.getBoolean(Constants.CONFIG_REGISTERACKNOWLEDGEMENT, false);
   }
 
   /**
@@ -99,6 +106,34 @@ public class GlobalConfigBean extends AbstractConfigBean
     config.set(Constants.CONFIG_CLEANUPCODE, cleanupCode);
     config.set(Constants.CONFIG_SSO, sso);
     config.set(Constants.CONFIG_DOMAIN, domain);
+    config.set(Constants.CONFIG_SMTPSERVER, smtpServer);
+    config.set(Constants.CONFIG_SMTPPORT, smtpPort);
+    config.set(Constants.CONFIG_SMTPUSER, smtpUsername);
+    config.set(Constants.CONFIG_REGISTERACKNOWLEDGEMENT,
+               registerAcknowledgement);
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  @Override
+  public boolean verify()
+  {
+    boolean result = true;
+
+    if (registerAcknowledgement)
+    {
+      if (Util.isBlank(smtpServer))
+      {
+        result = false;
+        getMessageHandler().warn("mailForm:servername", "mailNotConfigured");
+      }
+    }
+
+    return result;
   }
 
   //~--- get methods ----------------------------------------------------------
@@ -190,6 +225,50 @@ public class GlobalConfigBean extends AbstractConfigBean
    *
    * @return
    */
+  public ServiceReference getReference()
+  {
+    return reference;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  public int getSmtpPort()
+  {
+    return smtpPort;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  public String getSmtpServer()
+  {
+    return smtpServer;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  public String getSmtpUsername()
+  {
+    return smtpUsername;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
   public String getSpamInputMethod()
   {
     return spamInputMethod;
@@ -235,6 +314,17 @@ public class GlobalConfigBean extends AbstractConfigBean
    *
    * @return
    */
+  public ServiceReference getSpamInputServcieReference()
+  {
+    return spamInputServcieReference;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
   public int getSso()
   {
     return sso;
@@ -271,6 +361,17 @@ public class GlobalConfigBean extends AbstractConfigBean
   public boolean isCleanupCode()
   {
     return cleanupCode;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  public boolean isRegisterAcknowledgement()
+  {
+    return registerAcknowledgement;
   }
 
   //~--- set methods ----------------------------------------------------------
@@ -345,11 +446,78 @@ public class GlobalConfigBean extends AbstractConfigBean
    * Method description
    *
    *
+   * @param reference
+   */
+  public void setReference(ServiceReference reference)
+  {
+    this.reference = reference;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param registerAcknowledgement
+   */
+  public void setRegisterAcknowledgement(boolean registerAcknowledgement)
+  {
+    this.registerAcknowledgement = registerAcknowledgement;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param smtpPort
+   */
+  public void setSmtpPort(int smtpPort)
+  {
+    this.smtpPort = smtpPort;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param smtpServer
+   */
+  public void setSmtpServer(String smtpServer)
+  {
+    this.smtpServer = smtpServer;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param smtpUsername
+   */
+  public void setSmtpUsername(String smtpUsername)
+  {
+    this.smtpUsername = smtpUsername;
+  }
+
+  /**
+   * Method description
+   *
+   *
    * @param spamInputMethod
    */
   public void setSpamInputMethod(String spamInputMethod)
   {
     this.spamInputMethod = spamInputMethod;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param spamInputServcieReference
+   */
+  public void setSpamInputServcieReference(
+          ServiceReference spamInputServcieReference)
+  {
+    this.spamInputServcieReference = spamInputServcieReference;
   }
 
   /**
@@ -385,6 +553,18 @@ public class GlobalConfigBean extends AbstractConfigBean
 
   /** Field description */
   private ServiceReference reference;
+
+  /** Field description */
+  private boolean registerAcknowledgement;
+
+  /** Field description */
+  private int smtpPort;
+
+  /** Field description */
+  private String smtpServer;
+
+  /** Field description */
+  private String smtpUsername;
 
   /** Field description */
   private String spamInputMethod;

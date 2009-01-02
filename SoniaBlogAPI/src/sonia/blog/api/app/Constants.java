@@ -66,7 +66,23 @@ public interface Constants
   public static final String CONFIG_PASSWORD_MINLENGTH = "password.minLength";
 
   /** Field description */
+  public static final String CONFIG_REGISTERACKNOWLEDGEMENT =
+    "register.acknowledgement.mail";
+
+  /** Field description */
   public static final String CONFIG_RESOURCE_DIRECTORY = "resource.directory";
+
+  /** Field description */
+  public static String CONFIG_SMTPPASSWORD = "smtp.password";
+
+  /** Field description */
+  public static String CONFIG_SMTPPORT = "smtp.port";
+
+  /** Field description */
+  public static String CONFIG_SMTPSERVER = "smtp.server";
+
+  /** Field description */
+  public static String CONFIG_SMTPUSER = "smtp.user";
 
   /** Field description */
   public static final String CONFIG_SPAMMETHOD = "spam.method";

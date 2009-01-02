@@ -73,6 +73,38 @@
 
         </h:form>
 
+        <h2><h:outputText value="#{label.mailConfig}" /></h2>
+
+        <h:form id="mailForm">
+
+          <h:panelGrid columns="3">
+
+            <h:outputLabel for="servername" value="#{label.smtpServer}" />
+            <h:inputText id="servername" value="#{GlobalConfigBean.smtpServer}">
+              <f:validator validatorId="validator.domain" />
+            </h:inputText>
+            <h:message for="servername" />
+
+            <h:outputLabel for="port" value="#{label.smtpPort}" />
+            <h:inputText id="port" styleClass="short" value="#{GlobalConfigBean.smtpPort}">
+              <f:validateLongRange minimum="1" maximum="99999" />
+            </h:inputText>
+            <h:message for="port" />
+
+            <h:outputLabel for="username" value="#{label.smtpUser}" />
+            <h:inputText id="username" value="#{GlobalConfigBean.smtpUsername}" />
+            <h:message for="username" />
+
+            <h:outputLabel for="registerAcknowledgement" value="#{label.registerAcknowledgementMail}" />
+            <h:selectBooleanCheckbox id="registerAcknowledgement" value="#{GlobalConfigBean.registerAcknowledgement}" />
+            <h:message for="registerAcknowledgement" />
+
+          </h:panelGrid>
+
+          <h:commandButton action="#{GlobalConfigBean.save}" value="#{label.save}" />
+
+        </h:form>
+
         <c:forEach items="#{GlobalConfigBean.configurationProviders}" var="provider">
           <ui:include src="#{provider}" />
         </c:forEach>

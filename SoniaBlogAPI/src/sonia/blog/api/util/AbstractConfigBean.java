@@ -63,38 +63,54 @@ public abstract class AbstractConfigBean extends AbstractBean
    *
    * @return
    */
+  public abstract boolean verify();
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
   public String save()
   {
-    store(config);
-
     String result = SUCCESS;
-    File file = BlogContext.getInstance().getConfigFile();
-    File backupDir = new File(file.getParentFile(), "backup");
 
-    if (!backupDir.exists())
+    if (verify())
     {
-      backupDir.mkdirs();
-    }
+      store(config);
 
-    File backupFile = new File(backupDir,
-                               "config-" + new Date().getTime() + ".xml");
+      File file = BlogContext.getInstance().getConfigFile();
+      File backupDir = new File(file.getParentFile(), "backup");
 
-    try
-    {
-      file.renameTo(backupFile);
-      config.store(new FileOutputStream(file));
-      getMessageHandler().info("saveConfigSuccess");
-    }
-    catch (Exception ex)
-    {
-      logger.log(Level.SEVERE, null, ex);
-      getMessageHandler().error("unknownError");
-      result = FAILURE;
-
-      if (!file.exists() && backupFile.exists())
+      if (!backupDir.exists())
       {
-        backupFile.renameTo(file);
+        backupDir.mkdirs();
       }
+
+      File backupFile = new File(backupDir,
+                                 "config-" + new Date().getTime() + ".xml");
+
+      try
+      {
+        file.renameTo(backupFile);
+        config.store(new FileOutputStream(file));
+        getMessageHandler().info("saveConfigSuccess");
+      }
+      catch (Exception ex)
+      {
+        logger.log(Level.SEVERE, null, ex);
+        getMessageHandler().error("unknownError");
+        result = FAILURE;
+
+        if (!file.exists() && backupFile.exists())
+        {
+          backupFile.renameTo(file);
+        }
+      }
+    }
+    else
+    {
+      result = FAILURE;
     }
 
     return result;
