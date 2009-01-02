@@ -49,6 +49,12 @@
       <required>false</required>
       <type>java.lang.Object</type>
     </attribute>
+    <attribute>
+      <name>maxItems</name>
+      <rtexprvalue>true</rtexprvalue>
+      <required>false</required>
+      <type>java.lang.Object</type>
+    </attribute>
   </tag>
   <tag>
     <name>spamLabel</name>

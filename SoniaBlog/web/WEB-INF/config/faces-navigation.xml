@@ -112,6 +112,22 @@
   </navigation-rule>
 
   <navigation-rule>
+    <from-view-id>/personal/globaladmin/blogs.xhtml</from-view-id>
+    <navigation-case>
+      <from-outcome>detail</from-outcome>
+      <to-view-id>/personal/globaladmin/blogDetail.xhtml</to-view-id>
+    </navigation-case>
+  </navigation-rule>
+
+  <navigation-rule>
+    <from-view-id>/personal/globaladmin/blogDetail.xhtml</from-view-id>
+    <navigation-case>
+      <from-outcome>back</from-outcome>
+      <to-view-id>/personal/globaladmin/blogs.xhtml</to-view-id>
+    </navigation-case>
+  </navigation-rule>
+
+  <navigation-rule>
     <from-view-id>/personal/author/entries.xhtml</from-view-id>
     <navigation-case>
       <from-outcome>success</from-outcome>

@@ -304,6 +304,7 @@ public class BlogContextListener implements ServletContextListener
     registry.registerService(Constants.NAVIGATION_AUTHOR);
     registry.registerService(Constants.NAVIGATION_ADMIN);
     registry.registerService(Constants.NAVIGATION_GLOBALADMIN);
+    registry.registerService(Constants.NAVIGATION_BLOGACTION);
 
     // register dashboardWidgets
     registry.registerService(

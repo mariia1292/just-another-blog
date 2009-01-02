@@ -109,6 +109,9 @@ public interface Constants
   public static final String NAVIGATION_AUTHOR = "/nav/author";
 
   /** Field description */
+  public static String NAVIGATION_BLOGACTION = "/nav/globaladmin/blog/action";
+
+  /** Field description */
   public static final String NAVIGATION_EXTRA = "/nav/extra";
 
   /** Field description */

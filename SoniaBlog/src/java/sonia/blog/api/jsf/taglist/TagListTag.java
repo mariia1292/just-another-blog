@@ -54,6 +54,17 @@ public class TagListTag extends BaseTag
    * Method description
    *
    *
+   * @param maxItems
+   */
+  public void setMaxItems(ValueExpression maxItems)
+  {
+    this.maxItems = maxItems;
+  }
+
+  /**
+   * Method description
+   *
+   *
    * @param maxPercentage
    */
   public void setMaxPercentage(ValueExpression maxPercentage)
@@ -91,10 +102,18 @@ public class TagListTag extends BaseTag
       component.setValueExpression("maxPercentage", maxPercentage);
     }
 
+    if (maxItems != null)
+    {
+      component.setValueExpression("maxItems", maxItems);
+    }
+
     super.setProperties(component);
   }
 
   //~--- fields ---------------------------------------------------------------
+
+  /** Field description */
+  private ValueExpression maxItems;
 
   /** Field description */
   private ValueExpression maxPercentage;

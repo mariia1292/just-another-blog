@@ -9,13 +9,14 @@ package sonia.blog.api.util;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import java.util.Comparator;
 import sonia.blog.entity.Tag;
 
 /**
  *
  * @author sdorra
  */
-public class TagWrapper
+public class TagWrapper implements Comparable<TagWrapper>
 {
 
   /**
@@ -29,6 +30,33 @@ public class TagWrapper
   {
     this.tag = tag;
     this.count = count;
+  }
+
+  //~--- methods --------------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   * @param o
+   *
+   * @return
+   */
+  public int compareTo(TagWrapper o)
+  {
+    int result = -1;
+
+    if (o != null)
+    {
+      result = o.count.compareTo(count);
+
+      if (result == 0)
+      {
+        result = tag.getName().compareTo(o.tag.getName());
+      }
+    }
+
+    return result;
   }
 
   //~--- get methods ----------------------------------------------------------

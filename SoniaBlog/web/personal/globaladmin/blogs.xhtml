@@ -56,7 +56,14 @@
               <f:facet name="header">
                 <h:outputText value="#{label.active}" />
               </f:facet>
-              <h:selectBooleanCheckbox value="#{Blog.active}" />
+              <h:selectBooleanCheckbox value="#{Blog.active}" readonly="true" onclick="return false" />
+            </h:column>
+
+            <h:column>
+              <f:facet name="header">
+                <h:outputText value="#{label.details}" />
+              </f:facet>
+              <h:commandLink value="#{label.details}" action="#{AdminBlogBean.detail}" />
             </h:column>
 
             <h:column>

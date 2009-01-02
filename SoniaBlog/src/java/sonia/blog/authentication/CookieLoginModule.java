@@ -9,6 +9,7 @@ package sonia.blog.authentication;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import java.util.Date;
 import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.app.BlogRequest;
 import sonia.blog.api.app.BlogResponse;
@@ -157,11 +158,19 @@ public class CookieLoginModule extends SSOLoginModule
             context.getConfiguration().getInteger(
               Constants.CONFIG_COKKIETIME, Constants.DEFAULT_COOKIETIME));
         response.addCookie(cookie);
+        em.getTransaction().begin();
+        user.setLastLogin(new Date());
+        user = em.merge(user);
+        em.getTransaction().commit();
       }
     }
     catch (NoResultException ex) {}
     catch (Exception ex)
     {
+      if ( em.getTransaction().isActive() )
+      {
+        em.getTransaction().rollback();
+      }
       logger.log(Level.SEVERE, null, ex);
     }
     finally

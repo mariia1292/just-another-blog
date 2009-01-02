@@ -40,7 +40,7 @@
               <h:outputText value="#{label.author}: " rendered="#{Template.author != null}" />
               <h:outputText value="#{Template.author}" 
                             rendered="#{Template.author != null and Template.email == null}" />
-              <h:outputLink value="mailto: #{Template.email}" 
+              <h:outputLink value="mailto:#{Template.email}" 
                             rendered="#{Template.author != null and Template.email != null}">
                 <h:outputText value="#{Template.author}" />
               </h:outputLink>

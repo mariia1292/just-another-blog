@@ -25,6 +25,9 @@ public class TagListComponent extends BaseComponent
 {
 
   /** Field description */
+  public static final int DEFAULT_MAXITEMS = 50;
+
+  /** Field description */
   public static final int DEFAULT_MAXPERCENTAGE = 150;
 
   /** Field description */
@@ -63,6 +66,7 @@ public class TagListComponent extends BaseComponent
     super.restoreState(context, state[0]);
     minPercentage = (Integer) state[1];
     maxPercentage = (Integer) state[2];
+    maxItems = (Integer) state[3];
   }
 
   /**
@@ -78,12 +82,13 @@ public class TagListComponent extends BaseComponent
   {
     if (state == null)
     {
-      state = new Object[3];
+      state = new Object[4];
     }
 
     state[0] = super.saveState(context);
     state[1] = minPercentage;
     state[2] = maxPercentage;
+    state[3] = maxItems;
 
     return state;
   }
@@ -100,6 +105,26 @@ public class TagListComponent extends BaseComponent
   public String getFamily()
   {
     return FAMILY;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  public Integer getMaxItems()
+  {
+    if (maxItems != null)
+    {
+      return maxItems;
+    }
+
+    ValueExpression ve = getValueExpression("maxItems");
+
+    return (ve != null)
+           ? (Integer) ve.getValue(getFacesContext().getELContext())
+           : DEFAULT_MAXITEMS;
   }
 
   /**
@@ -148,6 +173,17 @@ public class TagListComponent extends BaseComponent
    * Method description
    *
    *
+   * @param maxItems
+   */
+  public void setMaxItems(Integer maxItems)
+  {
+    this.maxItems = maxItems;
+  }
+
+  /**
+   * Method description
+   *
+   *
    * @param maxPercentage
    */
   public void setMaxPercentage(Integer maxPercentage)
@@ -167,6 +203,9 @@ public class TagListComponent extends BaseComponent
   }
 
   //~--- fields ---------------------------------------------------------------
+
+  /** Field description */
+  private Integer maxItems;
 
   /** Field description */
   private Integer maxPercentage;
