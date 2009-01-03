@@ -107,7 +107,7 @@ public class FLVMacro extends AbstractBlogMacro
 
   /**
    * Method description
-   *
+   * TODO: replace with AttachmentDAO.findByBlogAndId
    *
    * @param blog
    * @param id

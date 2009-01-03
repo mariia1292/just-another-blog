@@ -36,11 +36,12 @@ import javax.persistence.TemporalType;
  */
 @Entity @EntityListeners({ CommentListener.class }) @NamedQueries(
 {
-  @NamedQuery(name = "Comment.findFromBlog",
+  @NamedQuery(name = "Comment.findAll", query = "select c from Comment c") ,
+  @NamedQuery(name = "Comment.findAllByBlog",
               query = "select c from Comment c join c.entry e join e.category ca join ca.blog b where b = :blog and e.published = true order by c.creationDate desc") ,
   @NamedQuery(name = "Comment.entryOverview",
               query = "select c from Comment c join c.entry e where e = :entry and c.spam = false order by c.creationDate ") ,
-  @NamedQuery(name = "Comment.countAll",
+  @NamedQuery(name = "Comment.count",
               query = "select count(c) from Comment c") ,
   @NamedQuery(name = "Comment.countFromBlog",
               query = "select count(c) from Comment c join c.entry e join e.category cat join cat.blog b where b = :blog")

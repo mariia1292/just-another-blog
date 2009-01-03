@@ -35,7 +35,7 @@ import javax.persistence.TemporalType;
 @Entity @Table(name = "BlogUser")
 @NamedQueries(
 {
-  @NamedQuery(name = "User.login",
+  @NamedQuery(name = "User.findByNameAndPassword",
               query = "select u from User as u where u.active = true and u.name = :name and u.password = :password") ,
   @NamedQuery(name = "User.findActiveByName",
               query = "select u from User as u where u.active = true and u.name = :name") ,
@@ -43,9 +43,9 @@ import javax.persistence.TemporalType;
               query = "select u from User as u where u.name = :name") ,
   @NamedQuery(name = "User.findByEmail",
               query = "select u from User as u where u.active = true and u.email = :email") ,
-  @NamedQuery(name = "User.countAll", query = "select count(u) from User u") ,
+  @NamedQuery(name = "User.count", query = "select count(u) from User u") ,
   @NamedQuery(name = "User.findByNameAndCode",
-              query = "select u from User u where u.active = true and u.name = :name and u.activationCode = :activationCode") ,
+              query = "select u from User u where u.active = true and u.name = :name and u.activationCode = :code") ,
   @NamedQuery(name = "User.findAll",
               query = "select u from User u order by u.name") ,
   @NamedQuery(name = "User.findAllActives",

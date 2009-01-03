@@ -136,7 +136,7 @@ public class DateMappingEntry extends ScrollableMappingEntry
 
   /**
    * Method description
-   *
+   * TODO: replace with EntryDAO.findByBlogAndDate
    *
    * @param blog
    * @param startDate
@@ -152,7 +152,7 @@ public class DateMappingEntry extends ScrollableMappingEntry
 
     try
     {
-      Query q = em.createNamedQuery("Entry.findByDate");
+      Query q = em.createNamedQuery("Entry.findByBlogAndDate");
 
       q.setParameter("blog", blog);
       q.setParameter("start", startDate);

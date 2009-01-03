@@ -99,6 +99,7 @@ public class AttachmentMappingEntry
       try
       {
         long id = Long.parseLong(param[0]);
+        // TODO: replace with AttachmentDAO.findByBlogAndId
         EntityManager em = BlogContext.getInstance().getEntityManager();
 
         try

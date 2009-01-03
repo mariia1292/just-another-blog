@@ -145,11 +145,11 @@ public class CookieLoginModule extends SSOLoginModule
 
     try
     {
-
+      // TODO: replace with UserDAO.findByNameAndCode()
       Query q = em.createNamedQuery("User.findByNameAndCode");
 
       q.setParameter("name", username);
-      q.setParameter("activationCode", activationCode);
+      q.setParameter("code", activationCode);
       user = (User) q.getSingleResult();
 
       if (user != null)

@@ -111,7 +111,8 @@ public class FeedMappingEntry implements MappingEntry, ConfigurationListener
 
         if (param[0].equals("entries"))
         {
-          Query q = em.createNamedQuery("Entry.findByBlog");
+          // TODO: replace with EntryDAO.findAllActivesByBlog
+          Query q = em.createNamedQuery("Entry.findAllActivesByBlog");
 
           q.setParameter("blog", blog);
 
@@ -133,7 +134,8 @@ public class FeedMappingEntry implements MappingEntry, ConfigurationListener
         }
         else if (param[0].equals("comments"))
         {
-          Query q = em.createNamedQuery("Comment.findFromBlog");
+          // TODO: replace with CommentDAO.findAllByBlog
+          Query q = em.createNamedQuery("Comment.findAllByBlog");
 
           q.setParameter("blog", blog);
 

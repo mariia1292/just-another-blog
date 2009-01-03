@@ -35,11 +35,12 @@ import javax.persistence.TemporalType;
  */
 @Entity @NamedQueries(
 {
+  @NamedQuery(name = "Category.findAll", query = "select c from Category c") ,
   @NamedQuery(name = "Category.findAllFromBlog",
               query = "select c from Category c where c.blog = :blog") ,
   @NamedQuery(name = "Category.findIdFromBlog",
               query = "select c from Category c where c.id = :id and c.blog = :blog") ,
-  @NamedQuery(name = "Category.countAll",
+  @NamedQuery(name = "Category.count",
               query = "select count(c) from Category c") ,
   @NamedQuery(name = "Category.countFromBlog",
               query = "select count(c) from Category c where c.blog = :blog") ,

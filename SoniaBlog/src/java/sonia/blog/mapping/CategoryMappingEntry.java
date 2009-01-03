@@ -128,6 +128,7 @@ public class CategoryMappingEntry extends ScrollableMappingEntry
   @SuppressWarnings("unchecked")
   private List<Entry> buildList(long id)
   {
+    // TODO: replace with findByCategory
     List<Entry> list = null;
     EntityManager em = BlogContext.getInstance().getEntityManager();
 

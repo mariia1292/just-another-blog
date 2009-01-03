@@ -31,6 +31,10 @@ import javax.persistence.TemporalType;
  */
 @Entity @NamedQueries(
 {
+  @NamedQuery(name = "BlogMember.findAll",
+              query = "select m from BlogMember as m") ,
+  @NamedQuery(name = "BlogMember.count",
+              query = "select count(m) from BlogMember as m") ,
   @NamedQuery(name = "BlogMember.findByBlogAndUser",
               query = "select m from BlogMember as m where m.blog = :blog and m.user = :user") ,
   @NamedQuery(name = "BlogMember.findByUser",

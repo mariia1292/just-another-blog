@@ -264,7 +264,9 @@ public class DefaultSearchContext implements SearchContext
         writer = new IndexWriter(file, new StandardAnalyzer(), true);
         em = BlogContext.getInstance().getEntityManager();
 
-        javax.persistence.Query q = em.createNamedQuery("Entry.overview");
+        // TODO: replace with EntryDAO.findAllActives()
+
+        javax.persistence.Query q = em.createNamedQuery("Entry.findAllActives");
 
         q.setParameter("blog", blog);
 

@@ -59,6 +59,7 @@ public class RandomMappingEntry extends AbstractMappingEntry
                                String[] param)
   {
     String viewId = VIEW_DETAIL;
+    // TODO: replace with Entry.findByBlog()
     EntityManager em = BlogContext.getInstance().getEntityManager();
     Query q = em.createNamedQuery("Entry.findByBlog");
 

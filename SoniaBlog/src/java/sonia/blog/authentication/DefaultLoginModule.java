@@ -113,8 +113,9 @@ public class DefaultLoginModule extends LoginModule
       passwordString = enc.encrypt(passwordString);
     }
 
+    // TODO: replace with UserDAO.findByNameAndPassword()
     EntityManager em = BlogContext.getInstance().getEntityManager();
-    Query q = em.createNamedQuery("User.login");
+    Query q = em.createNamedQuery("User.findByNameAndPassword");
 
     q.setParameter("name", username);
     q.setParameter("password", passwordString);

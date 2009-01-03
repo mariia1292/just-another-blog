@@ -334,6 +334,7 @@ public class CalendarRenderer extends BaseRenderer
   private List<Date> getEntryDates(Blog blog, Date startDate, Date endDate)
   {
     List<Date> dates = null;
+    // TODO: Replace with EntryDAO.findCalendarDates()
     EntityManager em = BlogContext.getInstance().getEntityManager();
 
     try

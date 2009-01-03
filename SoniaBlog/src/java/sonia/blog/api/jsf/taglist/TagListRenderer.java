@@ -94,7 +94,8 @@ public class TagListRenderer extends BaseRenderer
 
       try
       {
-        Query q = em.createNamedQuery("Tag.findFromBlogAndCount");
+        // TODO: replace with TagDAO.findByBlogAndCount
+        Query q = em.createNamedQuery("Tag.findByBlogAndCount");
 
         q.setParameter("blog", blog);
 

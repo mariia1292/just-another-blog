@@ -116,7 +116,7 @@ public class TagMappingEntry extends ScrollableMappingEntry
 
   /**
    * Method description
-   *
+   * TODO: replace with Entry.findByBlogAndTag
    *
    * @param tagId
    *

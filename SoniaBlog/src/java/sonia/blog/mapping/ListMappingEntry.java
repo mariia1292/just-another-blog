@@ -129,7 +129,8 @@ public class ListMappingEntry extends ScrollableMappingEntry
 
     try
     {
-      Query q = em.createNamedQuery("Entry.overview");
+      // TODO: replace with EntryDAO.findAllActivesByBlog()
+      Query q = em.createNamedQuery("Entry.findAllActivesByBlog");
 
       q.setParameter("blog", blog);
       list = q.getResultList();

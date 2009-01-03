@@ -58,7 +58,8 @@ public class BlogsMacro implements Macro
 
     try
     {
-      Query q = em.createNamedQuery("Blog.findActive");
+      // TODO: replace with BlogDAO.findAllActives
+      Query q = em.createNamedQuery("Blog.findAllActives");
       List<Blog> blogs = q.getResultList();
 
       if ((blogs != null) &&!blogs.isEmpty())

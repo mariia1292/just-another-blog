@@ -152,6 +152,7 @@ public class DefaultSearchEntry implements SearchEntry
   @SuppressWarnings("unchecked")
   public ContentObject getData()
   {
+    // TODO: replace with DAOFactory.doSomething
     ContentObject result = null;
     EntityManager em = BlogContext.getInstance().getEntityManager();
 

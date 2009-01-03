@@ -58,7 +58,7 @@ public class GlobalStatusBean extends AbstractBean
   public long getAttachmentCount()
   {
     EntityManager em = BlogContext.getInstance().getEntityManager();
-    Query q = em.createNamedQuery("Attachment.countAll");
+    Query q = em.createNamedQuery("Attachment.count");
     Long result = (Long) q.getSingleResult();
 
     em.close();
@@ -94,7 +94,7 @@ public class GlobalStatusBean extends AbstractBean
   public long getBlogCount()
   {
     EntityManager em = BlogContext.getInstance().getEntityManager();
-    Query q = em.createNamedQuery("Blog.countAll");
+    Query q = em.createNamedQuery("Blog.count");
     Long result = (Long) q.getSingleResult();
 
     em.close();
@@ -111,7 +111,7 @@ public class GlobalStatusBean extends AbstractBean
   public long getCategoryCount()
   {
     EntityManager em = BlogContext.getInstance().getEntityManager();
-    Query q = em.createNamedQuery("Category.countAll");
+    Query q = em.createNamedQuery("Category.count");
     Long result = (Long) q.getSingleResult();
 
     em.close();
@@ -128,7 +128,7 @@ public class GlobalStatusBean extends AbstractBean
   public long getCommentCount()
   {
     EntityManager em = BlogContext.getInstance().getEntityManager();
-    Query q = em.createNamedQuery("Comment.countAll");
+    Query q = em.createNamedQuery("Comment.count");
     Long result = (Long) q.getSingleResult();
 
     em.close();
@@ -145,7 +145,7 @@ public class GlobalStatusBean extends AbstractBean
   public long getEntryCount()
   {
     EntityManager em = BlogContext.getInstance().getEntityManager();
-    Query q = em.createNamedQuery("Entry.countAll");
+    Query q = em.createNamedQuery("Entry.count");
     Long result = (Long) q.getSingleResult();
 
     em.close();
@@ -219,7 +219,7 @@ public class GlobalStatusBean extends AbstractBean
   public long getTagCount()
   {
     EntityManager em = BlogContext.getInstance().getEntityManager();
-    Query q = em.createNamedQuery("Tag.countAll");
+    Query q = em.createNamedQuery("Tag.count");
     Long result = (Long) q.getSingleResult();
 
     em.close();
@@ -236,7 +236,7 @@ public class GlobalStatusBean extends AbstractBean
   public long getUserCount()
   {
     EntityManager em = BlogContext.getInstance().getEntityManager();
-    Query q = em.createNamedQuery("User.countAll");
+    Query q = em.createNamedQuery("User.count");
     Long result = (Long) q.getSingleResult();
 
     em.close();
