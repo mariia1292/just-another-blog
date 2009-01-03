@@ -84,6 +84,8 @@ public interface Constants
   /** Field description */
   public static String CONFIG_SMTPUSER = "smtp.user";
 
+  public static String CONFIG_SMTPSTARTTLS = "smtp.starttls";
+
   /** Field description */
   public static final String CONFIG_SPAMMETHOD = "spam.method";
 

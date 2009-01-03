@@ -85,6 +85,7 @@ public class GlobalConfigBean extends AbstractConfigBean
     smtpServer = config.getString(Constants.CONFIG_SMTPSERVER);
     smtpPort = config.getInteger(Constants.CONFIG_SMTPPORT, 25);
     smtpUsername = config.getString(Constants.CONFIG_SMTPUSER);
+    smtpPassword = config.getString(Constants.CONFIG_SMTPPASSWORD);
     registerAcknowledgement =
       config.getBoolean(Constants.CONFIG_REGISTERACKNOWLEDGEMENT, false);
   }
@@ -109,6 +110,7 @@ public class GlobalConfigBean extends AbstractConfigBean
     config.set(Constants.CONFIG_SMTPSERVER, smtpServer);
     config.set(Constants.CONFIG_SMTPPORT, smtpPort);
     config.set(Constants.CONFIG_SMTPUSER, smtpUsername);
+    config.set(Constants.CONFIG_SMTPPASSWORD, smtpPassword);
     config.set(Constants.CONFIG_REGISTERACKNOWLEDGEMENT,
                registerAcknowledgement);
   }
@@ -228,6 +230,17 @@ public class GlobalConfigBean extends AbstractConfigBean
   public ServiceReference getReference()
   {
     return reference;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  public String getSmtpPassword()
+  {
+    return smtpPassword;
   }
 
   /**
@@ -468,6 +481,17 @@ public class GlobalConfigBean extends AbstractConfigBean
    * Method description
    *
    *
+   * @param smtpPassword
+   */
+  public void setSmtpPassword(String smtpPassword)
+  {
+    this.smtpPassword = smtpPassword;
+  }
+
+  /**
+   * Method description
+   *
+   *
    * @param smtpPort
    */
   public void setSmtpPort(int smtpPort)
@@ -556,6 +580,9 @@ public class GlobalConfigBean extends AbstractConfigBean
 
   /** Field description */
   private boolean registerAcknowledgement;
+
+  /** Field description */
+  private String smtpPassword;
 
   /** Field description */
   private int smtpPort;

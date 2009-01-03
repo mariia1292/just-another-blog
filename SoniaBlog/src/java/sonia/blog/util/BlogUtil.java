@@ -20,6 +20,7 @@ import sonia.util.Util;
 
 import java.util.Properties;
 
+import javax.mail.Authenticator;
 import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.Session;
@@ -63,15 +64,32 @@ public class BlogUtil
     props.put("mail.smtp.port",
               config.getInteger(Constants.CONFIG_SMTPPORT, 25));
 
+    if (BlogContext.getInstance().getConfiguration().getBoolean(
+            Constants.CONFIG_SMTPSTARTTLS, Boolean.FALSE))
+    {
+      props.put("mail.smtp.starttls.enable", Boolean.TRUE);
+    }
+
+    Authenticator auth = null;
     String user = config.getString(Constants.CONFIG_SMTPUSER);
 
     if (!Util.isBlank(user))
     {
       props.put("mail.smtp.user", user);
+
+      String password = config.getString(Constants.CONFIG_SMTPPASSWORD);
+
+      if (!Util.isBlank(password))
+      {
+        props.put("mail.smtp.auth", "true");
+        auth = new SmtpAuthenticator(user, password);
+      }
     }
 
-    Session session = Session.getInstance(props);
+    Session session = Session.getInstance(props, auth);
+
     session.setDebug(true);
+
     MimeMessage msg = new MimeMessage(session);
 
     msg.setFrom(new InternetAddress(from));
