@@ -59,6 +59,19 @@ public class JpaAttachmentDAO extends JpaGenericDAO<Attachment>
    * Method description
    *
    *
+   * @param blog
+   *
+   * @return
+   */
+  public long countByBlog(Blog blog)
+  {
+    return countQuery("Attachment.countByBlog", blog);
+  }
+
+  /**
+   * Method description
+   *
+   *
    * @return
    */
   public List<Attachment> findAll()

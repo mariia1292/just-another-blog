@@ -30,7 +30,6 @@ import sonia.util.Util;
 //~--- JDK imports ------------------------------------------------------------
 
 import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javax.mail.MessagingException;
 
@@ -63,7 +62,6 @@ public class RegistrationBean extends AbstractBean
   /**
    * Method description
    *
-   *
    * @param em
    *
    * @return
@@ -75,7 +73,8 @@ public class RegistrationBean extends AbstractBean
 
     try
     {
-      Query q = em.createNamedQuery("User.findActiveByName");
+      // TODO: replace with UserDAO.findByName
+      Query q = em.createNamedQuery("User.findByName");
 
       q.setParameter("name", user.getName());
       u = (User) q.getSingleResult();
@@ -92,6 +91,7 @@ public class RegistrationBean extends AbstractBean
     {
       try
       {
+        // TODO: replace with UserDAO.findByEmail
         Query q = em.createNamedQuery("User.findByEmail");
 
         q.setParameter("email", user.getEmail());
@@ -223,6 +223,8 @@ public class RegistrationBean extends AbstractBean
   private String createUser(EntityManager em)
   {
     String result = SUCCESS;
+
+    // TODO: replace with UserDAO.add and MemberDAO.add
 
     em.getTransaction().begin();
 

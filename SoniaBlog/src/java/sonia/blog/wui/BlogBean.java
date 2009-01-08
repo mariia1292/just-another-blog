@@ -73,7 +73,7 @@ public class BlogBean extends AbstractBean
 
   /**
    * Method description
-   *
+   * TODO relace with CommentDAO.add
    *
    *
    */
@@ -146,7 +146,7 @@ public class BlogBean extends AbstractBean
 
   /**
    * Method description
-   *
+   * TODO replace with Category.findAllByBlog
    *
    * @return
    */
@@ -155,7 +155,7 @@ public class BlogBean extends AbstractBean
     categories = new ListDataModel();
 
     EntityManager em = BlogContext.getInstance().getEntityManager();
-    Query q = em.createNamedQuery("Category.findAllFromBlog");
+    Query q = em.createNamedQuery("Category.findAllByBlog");
 
     q.setParameter("blog", getRequest().getCurrentBlog());
 
@@ -189,7 +189,7 @@ public class BlogBean extends AbstractBean
 
   /**
    * Method description
-   *
+   * TODO replace with CommentDAO.findActivesByEntry
    *
    * @return
    */
@@ -197,7 +197,7 @@ public class BlogBean extends AbstractBean
   {
     DataModel comments = new ListDataModel();
     EntityManager em = BlogContext.getInstance().getEntityManager();
-    Query q = em.createNamedQuery("Comment.entryOverview");
+    Query q = em.createNamedQuery("Comment.findAllActivesByEntry");
 
     q.setParameter("entry", entry);
 
@@ -578,7 +578,7 @@ public class BlogBean extends AbstractBean
 
   /**
    * Method description
-   *
+   * TODO replace with TagDAO.findAllByBlog
    *
    * @return
    */
@@ -587,7 +587,7 @@ public class BlogBean extends AbstractBean
     tags = new ListDataModel();
 
     EntityManager em = BlogContext.getInstance().getEntityManager();
-    Query q = em.createNamedQuery("Tag.findFromBlog");
+    Query q = em.createNamedQuery("Tag.findAllByBlog");
 
     q.setParameter("blog", getRequest().getCurrentBlog());
 

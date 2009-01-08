@@ -55,6 +55,19 @@ public class JpaCategoryDAO extends JpaGenericDAO<Category>
    * Method description
    *
    *
+   * @param blog
+   *
+   * @return
+   */
+  public long countByBlog(Blog blog)
+  {
+    return countQuery("Category.countByBlog", blog);
+  }
+
+  /**
+   * Method description
+   *
+   *
    * @return
    */
   public List<Category> findAll()

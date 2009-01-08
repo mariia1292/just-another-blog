@@ -10,12 +10,12 @@ package sonia.blog.api.dao;
 //~--- non-JDK imports --------------------------------------------------------
 
 import sonia.blog.entity.Attachment;
+import sonia.blog.entity.Blog;
 import sonia.blog.entity.Entry;
 
 //~--- JDK imports ------------------------------------------------------------
 
 import java.util.List;
-import sonia.blog.entity.Blog;
 
 /**
  *
@@ -24,9 +24,15 @@ import sonia.blog.entity.Blog;
 public interface AttachmentDAO extends GenericDAO<Attachment>
 {
 
-  public List<Attachment> findAllImagesByEntry( Entry entry );
-
-  public Attachment findByBlogAndId( Blog blog, Long id );
+  /**
+   * Method description
+   *
+   *
+   * @param blog
+   *
+   * @return
+   */
+  public long countByBlog(Blog blog);
 
   /**
    * Method description
@@ -37,4 +43,25 @@ public interface AttachmentDAO extends GenericDAO<Attachment>
    * @return
    */
   public List<Attachment> findAllByEntry(Entry entry);
+
+  /**
+   * Method description
+   *
+   *
+   * @param entry
+   *
+   * @return
+   */
+  public List<Attachment> findAllImagesByEntry(Entry entry);
+
+  /**
+   * Method description
+   *
+   *
+   * @param blog
+   * @param id
+   *
+   * @return
+   */
+  public Attachment findByBlogAndId(Blog blog, Long id);
 }

@@ -31,5 +31,15 @@ public interface CategoryDAO extends GenericDAO<Category>
    *
    * @return
    */
+  public long countByBlog(Blog blog);
+
+  /**
+   * Method description
+   *
+   *
+   * @param blog
+   *
+   * @return
+   */
   public List<Category> findAllByBlog(Blog blog);
 }

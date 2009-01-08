@@ -36,7 +36,7 @@ import javax.persistence.TemporalType;
  */
 @Entity @EntityListeners({ AttachmentListener.class }) @NamedQueries(
 {
-  @NamedQuery(name = "Attachment.entryOverview",
+  @NamedQuery(name = "Attachment.findAllByEntry",
               query = "select a from Attachment a join a.entry e where e = :entry order by a.creationDate desc") ,
   @NamedQuery(name = "Attachment.findByBlogAndId",
               query = "select a from Attachment a join a.entry e join e.category c join c.blog b where b = :blog and a.id = :id") ,
@@ -46,7 +46,7 @@ import javax.persistence.TemporalType;
               query = "select count(a) from Attachment a") ,
   @NamedQuery(name = "Attachment.findAll",
               query = "select a from Attachment a") ,
-  @NamedQuery(name = "Attachment.countFromBlog",
+  @NamedQuery(name = "Attachment.countByBlog",
               query = "select count(a) from Attachment a join a.entry e join e.category c join c.blog b where b = :blog")
 })
 public class Attachment implements Serializable, PermaObject, FileObject

@@ -10,13 +10,18 @@ package sonia.blog.dao.jpa;
 //~--- non-JDK imports --------------------------------------------------------
 
 import sonia.blog.api.dao.MemberDAO;
+import sonia.blog.entity.Blog;
 import sonia.blog.entity.BlogMember;
+import sonia.blog.entity.User;
 
 //~--- JDK imports ------------------------------------------------------------
 
 import java.util.List;
 
+import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.NoResultException;
+import javax.persistence.Query;
 
 /**
  *
@@ -53,10 +58,103 @@ public class JpaMemberDAO extends JpaGenericDAO<BlogMember> implements MemberDAO
    * Method description
    *
    *
+   * @param blog
+   *
+   * @return
+   */
+  public long countByBlog(Blog blog)
+  {
+    return countQuery("BlogMember.countByBlog", blog);
+  }
+
+  /**
+   * Method description
+   *
+   *
    * @return
    */
   public List<BlogMember> findAll()
   {
     return findList("BlogMember.findAll");
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param blog
+   *
+   * @return
+   */
+  public List<BlogMember> findByBlog(Blog blog)
+  {
+    return findList("BlogMember.findByBlog", blog);
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param blog
+   * @param user
+   *
+   * @return
+   */
+  public List<BlogMember> findByBlogAndUser(Blog blog, User user)
+  {
+    List<BlogMember> members = null;
+    EntityManager em = createEntityManager();
+
+    try
+    {
+      Query q = em.createNamedQuery("BlogMember.findByBlogAndUser");
+
+      q.setParameter("blog", blog);
+      q.setParameter("user", user);
+      members = q.getResultList();
+    }
+    catch (NoResultException ex) {}
+    finally
+    {
+      if (em != null)
+      {
+        em.close();
+      }
+    }
+
+    return members;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param user
+   *
+   * @return
+   */
+  @SuppressWarnings("unchecked")
+  public List<BlogMember> findByUser(User user)
+  {
+    List<BlogMember> members = null;
+    EntityManager em = createEntityManager();
+
+    try
+    {
+      Query q = em.createNamedQuery("BlogMember.findByUser");
+
+      q.setParameter("user", user);
+      members = q.getResultList();
+    }
+    catch (NoResultException ex) {}
+    finally
+    {
+      if (em != null)
+      {
+        em.close();
+      }
+    }
+
+    return members;
   }
 }

@@ -283,6 +283,7 @@ public class LoginBean extends AbstractBean
     if ((users != null) &&!users.isEmpty())
     {
       User user = users.iterator().next();
+      // TODO: replace with MemberDAO.findByBlogAndUser
       EntityManager em = BlogContext.getInstance().getEntityManager();
 
       try
@@ -317,6 +318,7 @@ public class LoginBean extends AbstractBean
   private void createCookie()
   {
     BlogContext context = BlogContext.getInstance();
+    // TODO: replace with
     EntityManager em = context.getEntityManager();
 
     try
@@ -367,6 +369,7 @@ public class LoginBean extends AbstractBean
    */
   private void createMembership(Blog blog, User user)
   {
+    // TODO: replace with MemberDAO.add
     EntityManager em = BlogContext.getInstance().getEntityManager();
 
     em.getTransaction().begin();

@@ -69,9 +69,70 @@ public class JpaUserDAO extends JpaGenericDAO<User> implements UserDAO
    *
    * @return
    */
-  public List<User> findAllActive()
+  public List<User> findAllActives()
   {
-    throw new UnsupportedOperationException("Not supported yet.");
+    return findList("User.findAllActives");
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param email
+   *
+   * @return
+   */
+  public User findByEmail(String email)
+  {
+    User user = null;
+    EntityManager em = createEntityManager();
+    Query q = em.createNamedQuery("User.findByEmail");
+
+    q.setParameter("email", email);
+
+    try {}
+    catch (NoResultException ex) {}
+    finally
+    {
+      if (em != null)
+      {
+        em.close();
+      }
+    }
+
+    return user;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param name
+   *
+   * @return
+   */
+  public User findByName(String name)
+  {
+    User user = null;
+    EntityManager em = createEntityManager();
+    Query q = em.createNamedQuery("User.findByName");
+
+    q.setParameter("name", name);
+
+    try
+    {
+      user = (User) q.getSingleResult();
+    }
+    catch (NoResultException ex) {}
+    finally
+    {
+      if (em != null)
+      {
+        em.close();
+      }
+    }
+
+    return user;
   }
 
   /**
@@ -125,6 +186,30 @@ public class JpaUserDAO extends JpaGenericDAO<User> implements UserDAO
 
     q.setParameter("name", name);
     q.setParameter("password", password);
+
+    try
+    {
+      user = (User) q.getSingleResult();
+    }
+    catch (NoResultException ex) {}
+    finally
+    {
+      if (em != null)
+      {
+        em.close();
+      }
+    }
+
+    return user;
+  }
+
+  public User findActiveByName(String name)
+  {
+    User user = null;
+    EntityManager em = createEntityManager();
+    Query q = em.createNamedQuery("User.findActiveByName");
+
+    q.setParameter("name", name);
 
     try
     {

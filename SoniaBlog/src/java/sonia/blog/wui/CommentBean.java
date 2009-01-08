@@ -67,8 +67,11 @@ public class CommentBean extends AbstractBean
       {
         Entry entry = comm.getEntry();
 
+        // TODO replace with CommentDAO.remove
         em.remove(em.merge(comm));
         entry.getComments().remove(comment);
+
+        // TODO repalce with EntryDAO.edit
         em.merge(entry);
         em.getTransaction().commit();
         getMessageHandler().info("removeCommentSuccess");
@@ -105,6 +108,7 @@ public class CommentBean extends AbstractBean
 
     try
     {
+      // TODO replace with CommentDAO.edit
       comm.setSpam(!comm.isSpam());
       em.merge(comm);
       em.getTransaction().commit();
@@ -141,7 +145,7 @@ public class CommentBean extends AbstractBean
 
   /**
    * Method description
-   *
+   * TODO replace with CommentDAO.findAllByBlog
    *
    * @return
    */
@@ -151,7 +155,7 @@ public class CommentBean extends AbstractBean
 
     Blog blog = getRequest().getCurrentBlog();
     EntityManager em = BlogContext.getInstance().getEntityManager();
-    Query q = em.createNamedQuery("Comment.findFromBlog");
+    Query q = em.createNamedQuery("Comment.findAllByBlog");
 
     q.setParameter("blog", blog);
 

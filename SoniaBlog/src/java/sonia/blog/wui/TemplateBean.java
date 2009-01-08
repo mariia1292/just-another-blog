@@ -44,6 +44,7 @@ public class TemplateBean extends AbstractBean
 
     if (template != null)
     {
+      // TODO: replace with BlogDAO.edit
       EntityManager em = BlogContext.getInstance().getEntityManager();
 
       em.getTransaction().begin();

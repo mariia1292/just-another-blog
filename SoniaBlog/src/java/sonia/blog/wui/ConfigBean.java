@@ -54,6 +54,7 @@ public class ConfigBean extends AbstractBean
 
     try
     {
+      // TODO replace with BlogDAO.edit
       blog = em.merge(blog);
       em.getTransaction().commit();
       getMessageHandler().info("unpdateConfigSuccess");

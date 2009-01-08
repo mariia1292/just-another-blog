@@ -149,6 +149,7 @@ public class UserSettingsBean extends AbstractBean
   {
     if (user == null)
     {
+      // TODO: replace with UserDAO.find
       Long id = getRequest().getUser().getId();
       EntityManager em = BlogContext.getInstance().getEntityManager();
 
@@ -205,6 +206,7 @@ public class UserSettingsBean extends AbstractBean
   private String save()
   {
     String result = SUCCESS;
+    // TODO: replace with UserDAO.edit
     EntityManager em = BlogContext.getInstance().getEntityManager();
 
     em.getTransaction().begin();

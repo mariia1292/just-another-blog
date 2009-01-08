@@ -74,24 +74,24 @@ public class DashboardBean extends AbstractBean
 
   /**
    * Method description
-   *
+   * TODO replace with AttachmentDAO.countByBlog
    *
    * @return
    */
   public long getAttachmentCount()
   {
-    return countQuery("Attachment.countFromBlog");
+    return countQuery("Attachment.countByBlog");
   }
 
   /**
    * Method description
-   *
+   * TODO replace with CategoryDAO.countByBlog
    *
    * @return
    */
   public long getCategoryCount()
   {
-    return countQuery("Category.countFromBlog");
+    return countQuery("Category.countByBlog");
   }
 
   /**
@@ -126,18 +126,19 @@ public class DashboardBean extends AbstractBean
 
   /**
    * Method description
+   * TODO replace with CommentDAO.countByBlog
    *
    *
    * @return
    */
   public long getCommentCount()
   {
-    return countQuery("Comment.countFromBlog");
+    return countQuery("Comment.countByBlog");
   }
 
   /**
    * Method description
-   *
+   * TODO replace with CommentDAO.findAllByBlog
    *
    * @return
    */
@@ -149,7 +150,7 @@ public class DashboardBean extends AbstractBean
 
       try
       {
-        Query q = em.createNamedQuery("Comment.findFromBlog");
+        Query q = em.createNamedQuery("Comment.findAllByBlog");
 
         q.setParameter("blog", getRequest().getCurrentBlog());
         q.setMaxResults(5);
@@ -171,7 +172,7 @@ public class DashboardBean extends AbstractBean
 
   /**
    * Method description
-   *
+   * TDOD replace with EntryDAO.findAllDraftsByBlogAndUser
    *
    * @return
    */
@@ -182,7 +183,7 @@ public class DashboardBean extends AbstractBean
     {
       BlogRequest request = getRequest();
       EntityManager em = BlogContext.getInstance().getEntityManager();
-      Query q = em.createNamedQuery("Entry.findDraftsOfUser");
+      Query q = em.createNamedQuery("Entry.findAllDraftsByBlogAndUser");
 
       q.setParameter("user", request.getUser());
       q.setParameter("blog", request.getCurrentBlog());
@@ -227,7 +228,7 @@ public class DashboardBean extends AbstractBean
    */
   public long getEntryCount()
   {
-    return countQuery("Entry.countFromBlog");
+    return countQuery("Entry.countByBlog");
   }
 
   /**
@@ -238,7 +239,7 @@ public class DashboardBean extends AbstractBean
    */
   public long getMemberCount()
   {
-    return countQuery("BlogMember.countFromBlog");
+    return countQuery("BlogMember.countByBlog");
   }
 
   /**

@@ -91,7 +91,7 @@ public class GalleryMacro implements Macro
     BlogContext context = BlogContext.getInstance();
     // TODO: replace with AttachmentDAO.findImagesFromEntry
     EntityManager em = context.getEntityManager();
-    Query q = em.createNamedQuery("Attachment.findImagesFromEntry");
+    Query q = em.createNamedQuery("Attachment.findAllImagesByEntry");
 
     q.setParameter("entry", entry);
 

@@ -211,6 +211,7 @@ public class EntryBean extends AbstractBean
 
     if (id != null)
     {
+      // TODO replace with EntryDAO.remove
       EntityManager em = BlogContext.getInstance().getEntityManager();
 
       em.getTransaction().begin();
@@ -261,7 +262,7 @@ public class EntryBean extends AbstractBean
 
   /**
    * Method description
-   *
+   * TODO replace with AttachmentDAO.remove
    *
    * @param event
    */
@@ -336,6 +337,7 @@ public class EntryBean extends AbstractBean
         }
 
         entry.setAuthor(author);
+        // TODO replace with EntryDAO.add
         em.persist(entry);
         getMessageHandler().info("createEntrySuccess");
       }
@@ -367,7 +369,7 @@ public class EntryBean extends AbstractBean
 
   /**
    * Method description
-   *
+   * TODO replace with AttachmentDAO.edit
    *
    * @return
    */
@@ -492,6 +494,7 @@ public class EntryBean extends AbstractBean
                           resourceDirectory.getAbsolutePath().length());
 
         attachment.setFilePath(path);
+        // TODO replace with AttachmentDAO.add
         em.persist(attachment);
         uploadDescription = null;
         em.getTransaction().commit();
@@ -547,7 +550,7 @@ public class EntryBean extends AbstractBean
 
   /**
    * Method description
-   *
+   * AttachmentDAO.findAllByEntry
    *
    * @return
    */
@@ -558,7 +561,7 @@ public class EntryBean extends AbstractBean
     if ((entry != null) && (entry.getId() != null))
     {
       EntityManager em = BlogContext.getInstance().getEntityManager();
-      Query q = em.createNamedQuery("Attachment.entryOverview");
+      Query q = em.createNamedQuery("Attachment.findAllByEntry");
 
       q.setParameter("entry", entry);
 
@@ -589,7 +592,7 @@ public class EntryBean extends AbstractBean
 
   /**
    * Method description
-   *
+   * TODO replace with CategoryDAO.findAllByBlog
    *
    * @return
    */
@@ -598,7 +601,7 @@ public class EntryBean extends AbstractBean
   {
     SelectItem[] items = null;
     EntityManager em = BlogContext.getInstance().getEntityManager();
-    Query q = em.createNamedQuery("Category.findAllFromBlog");
+    Query q = em.createNamedQuery("Category.findAllByBlog");
     Blog blog = getRequest().getCurrentBlog();
 
     q.setParameter("blog", blog);
@@ -642,7 +645,7 @@ public class EntryBean extends AbstractBean
 
   /**
    * Method description
-   *
+   * TODO replace with EntryDAO.findByBlog
    *
    * @return
    */
@@ -652,7 +655,7 @@ public class EntryBean extends AbstractBean
 
     EntityManager em = BlogContext.getInstance().getEntityManager();
     List list = null;
-    Query q = em.createNamedQuery("Entry.findFromBlog");
+    Query q = em.createNamedQuery("Entry.findByBlog");
 
     q.setParameter("blog", getRequest().getCurrentBlog());
     list = q.getResultList();
@@ -702,7 +705,7 @@ public class EntryBean extends AbstractBean
 
   /**
    * Method description
-   *
+   * TODO replace with AttachmentDAO.findAllImagesByEntry
    *
    * @return
    */
@@ -713,7 +716,7 @@ public class EntryBean extends AbstractBean
     if (entry != null)
     {
       EntityManager em = BlogContext.getInstance().getEntityManager();
-      Query q = em.createNamedQuery("Attachment.findImagesFromEntry");
+      Query q = em.createNamedQuery("Attachment.findAllImagesByEntry");
 
       q.setParameter("entry", entry);
 
@@ -901,7 +904,7 @@ public class EntryBean extends AbstractBean
 
   /**
    * Method description
-   *
+   * TODO replace with Tag.findByName
    *
    * @param em
    *
@@ -931,7 +934,7 @@ public class EntryBean extends AbstractBean
 
         if (t == null)
         {
-          Query q = em.createNamedQuery("Tag.findFromName");
+          Query q = em.createNamedQuery("Tag.findByName");
 
           q.setParameter("name", tag);
 

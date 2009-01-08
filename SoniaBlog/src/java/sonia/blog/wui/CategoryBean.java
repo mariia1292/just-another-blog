@@ -81,6 +81,7 @@ public class CategoryBean extends AbstractBean
 
     if (cat.getEntries().isEmpty())
     {
+      // TODO replace with CategoryDAO.remove
       EntityManager em = BlogContext.getInstance().getEntityManager();
 
       em.getTransaction().begin();
@@ -135,11 +136,13 @@ public class CategoryBean extends AbstractBean
 
       if (category.getId() != null)
       {
+        // TODO replace with CategoryDAO.edit
         em.merge(category);
         getMessageHandler().info("updateCategorySuccess");
       }
       else
       {
+        // TODO replace with CategoryDAO.add
         em.persist(category);
         getMessageHandler().info("createCategorySuccess");
       }
@@ -169,7 +172,7 @@ public class CategoryBean extends AbstractBean
 
   /**
    * Method description
-   *
+   * TODO replace with CategoryDAO.findAllByBlog
    *
    * @return
    */
@@ -179,7 +182,7 @@ public class CategoryBean extends AbstractBean
     categories = new ListDataModel();
 
     EntityManager em = BlogContext.getInstance().getEntityManager();
-    Query q = em.createNamedQuery("Category.findAllFromBlog");
+    Query q = em.createNamedQuery("Category.findAllByBlog");
 
     q.setParameter("blog", getRequest().getCurrentBlog());
 

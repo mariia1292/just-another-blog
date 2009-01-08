@@ -41,7 +41,7 @@ import javax.persistence.TemporalType;
               query = "select m from BlogMember m where m.user = :user") ,
   @NamedQuery(name = "BlogMember.findByBlog",
               query = "select m from BlogMember m where m.blog = :blog") ,
-  @NamedQuery(name = "BlogMember.countFromBlog",
+  @NamedQuery(name = "BlogMember.countByBlog",
               query = "select count(m) from BlogMember m where m.blog = :blog")
 })
 public class BlogMember implements Serializable

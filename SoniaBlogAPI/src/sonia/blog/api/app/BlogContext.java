@@ -150,7 +150,7 @@ public class BlogContext
 
   /**
    * Method description
-   *
+   * TODO: replace with DAOFactory.destroy
    */
   public void destroy()
   {
@@ -242,7 +242,7 @@ public class BlogContext
 
   /**
    * Method description
-   *
+   * TODO: remove
    *
    *
    * @param recreate
@@ -284,7 +284,7 @@ public class BlogContext
 
   /**
    * Method description
-   *
+   * TODO: remove
    *
    * @return
    */

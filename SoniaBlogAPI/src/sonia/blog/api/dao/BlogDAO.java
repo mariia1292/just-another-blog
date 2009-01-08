@@ -9,8 +9,11 @@ package sonia.blog.api.dao;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import java.util.List;
 import sonia.blog.entity.Blog;
+
+//~--- JDK imports ------------------------------------------------------------
+
+import java.util.List;
 
 /**
  *
@@ -23,11 +26,17 @@ public interface BlogDAO extends GenericDAO<Blog>
    * Method description
    *
    *
+   * @return
+   */
+  public List<Blog> findAllActives();
+
+  /**
+   * Method description
+   *
+   *
    * @param servername
    *
    * @return
    */
   public Blog findByServername(String servername);
-
-  public List<Blog> findAllActives();
 }

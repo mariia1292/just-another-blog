@@ -50,6 +50,7 @@ public class MemberBean extends AbstractBean
 
     if (member != null)
     {
+      // TODO: replace with MemberDAO.edit
       EntityManager em = BlogContext.getInstance().getEntityManager();
 
       em.getTransaction().begin();
@@ -81,7 +82,7 @@ public class MemberBean extends AbstractBean
 
   /**
    * Method description
-   *
+   * TODO: replace with MemberDAO.findByBlog
    *
    * @return
    */

@@ -81,7 +81,7 @@ public class BlogRequest extends HttpServletRequestWrapper
 
   /**
    * Method description
-   *
+   * TODO: replace with BlogDAO.findByServername
    *
    * @return
    */
@@ -295,6 +295,7 @@ public class BlogRequest extends HttpServletRequestWrapper
       {
         if (!searchForMember)
         {
+          // TODO: replace with MemberDAO.findByBlogAndUser
           EntityManager em = BlogContext.getInstance().getEntityManager();
           Query q = em.createNamedQuery("BlogMember.findByBlogAndUser");
 

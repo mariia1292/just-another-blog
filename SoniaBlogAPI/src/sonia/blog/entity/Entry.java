@@ -70,9 +70,9 @@ import javax.persistence.TemporalType;
   @NamedQuery(name = "Entry.calendar",
               query = "select e.creationDate from Entry e join e.category c join c.blog b where b = :blog and e.published = true and e.creationDate between :start and :end") ,
   @NamedQuery(name = "Entry.count", query = "select count(e) from Entry e") ,
-  @NamedQuery(name = "Entry.findDraftsOfUser",
+  @NamedQuery(name = "Entry.findAllDraftsByBlogAndUser",
               query = "select e from Entry e join e.category c join c.blog b where b = :blog and e.published = false and e.author = :user order by e.creationDate desc") ,
-  @NamedQuery(name = "Entry.countFromBlog",
+  @NamedQuery(name = "Entry.countByBlog",
               query = "select count(e) from Entry e join e.category c join c.blog b where b = :blog")
 })
 public class Entry implements Serializable, ContentObject, CommentAble

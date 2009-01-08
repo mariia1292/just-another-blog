@@ -50,6 +50,7 @@ public class CategoryConverter implements Converter
                             String value)
   {
     Object object = null;
+    // TODO: replace with CategoryDAO.find
     EntityManager em = BlogContext.getInstance().getEntityManager();
 
     try

@@ -13,6 +13,7 @@ import sonia.blog.api.dao.EntryDAO;
 import sonia.blog.entity.Blog;
 import sonia.blog.entity.Category;
 import sonia.blog.entity.Entry;
+import sonia.blog.entity.Tag;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -23,7 +24,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
-import sonia.blog.entity.Tag;
+import sonia.blog.entity.User;
 
 /**
  *
@@ -54,6 +55,19 @@ public class JpaEntryDAO extends JpaGenericDAO<Entry> implements EntryDAO
   public long count()
   {
     return countQuery("Entry.count");
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param blog
+   *
+   * @return
+   */
+  public long countByBlog(Blog blog)
+  {
+    return countQuery("Entry.countByBlog", blog);
   }
 
   /**
@@ -101,6 +115,110 @@ public class JpaEntryDAO extends JpaGenericDAO<Entry> implements EntryDAO
    *
    * @return
    */
+  public List<Entry> findByBlogAndDate(Blog blog, Date startDate, Date endDate)
+  {
+    List<Entry> entries = null;
+    EntityManager em = createEntityManager();
+
+    try
+    {
+      Query q = em.createNamedQuery("Entry.findByBlogAndDate");
+
+      q.setParameter("blog", blog);
+      q.setParameter("start", startDate);
+      q.setParameter("end", endDate);
+      entries = q.getResultList();
+    }
+    catch (NoResultException ex) {}
+    finally
+    {
+      if (em != null)
+      {
+        em.close();
+      }
+    }
+
+    return entries;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param blog
+   * @param tag
+   *
+   * @return
+   */
+  public List<Entry> findByBlogAndTag(Blog blog, Tag tag)
+  {
+    List<Entry> entries = null;
+    EntityManager em = createEntityManager();
+
+    try
+    {
+      Query q = em.createNamedQuery("Entry.findByBlogAndTag");
+
+      q.setParameter("blog", blog);
+      q.setParameter("tag", tag);
+      entries = q.getResultList();
+    }
+    catch (NoResultException ex) {}
+    finally
+    {
+      if (em != null)
+      {
+        em.close();
+      }
+    }
+
+    return entries;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param category
+   *
+   * @return
+   */
+  @SuppressWarnings("unchecked")
+  public List<Entry> findByCategory(Category category)
+  {
+    List<Entry> entries = null;
+    EntityManager em = createEntityManager();
+
+    try
+    {
+      Query q = em.createNamedQuery("Entry.findByCategory");
+
+      q.setParameter("category", category);
+      entries = q.getResultList();
+    }
+    catch (NoResultException ex) {}
+    finally
+    {
+      if (em != null)
+      {
+        em.close();
+      }
+    }
+
+    return entries;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param blog
+   * @param startDate
+   * @param endDate
+   *
+   * @return
+   */
+  @SuppressWarnings("unchecked")
   public List<Date> findCalendarDates(Blog blog, Date startDate, Date endDate)
   {
     List<Date> dates = null;
@@ -128,75 +246,22 @@ public class JpaEntryDAO extends JpaGenericDAO<Entry> implements EntryDAO
   }
 
   @SuppressWarnings("unchecked")
-  public List<Entry> findByCategory(Category category)
+  public List<Entry> findAllDraftsByBlogAndUser(Blog blog, User user)
   {
     List<Entry> entries = null;
 
     EntityManager em = createEntityManager();
+    Query q = em.createNamedQuery("User.findAllDraftsByBlogAndUser");
+    q.setParameter("blog", blog);
+    q.setParameter("user", user);
     try
     {
-      Query q = em.createNamedQuery("Entry.findByCategory");
-      q.setParameter("category", category);
       entries = q.getResultList();
-
     }
-    catch ( NoResultException ex )
-    {}
+    catch (NoResultException ex){}
     finally
     {
       if ( em != null )
-      {
-        em.close();
-      }
-    }
-
-
-    return entries;
-  }
-
-  public List<Entry> findByBlogAndDate(Blog blog, Date startDate, Date endDate)
-  {
-     List<Entry> entries = null;
-    EntityManager em = createEntityManager();
-
-    try
-    {
-      Query q = em.createNamedQuery("Entry.findByBlogAndDate");
-
-      q.setParameter("blog", blog);
-      q.setParameter("start", startDate);
-      q.setParameter("end", endDate);
-      entries = q.getResultList();
-    }
-    catch (NoResultException ex){}
-    finally
-    {
-      if (em != null)
-      {
-        em.close();
-      }
-    }
-
-    return entries;
-  }
-
-  public List<Entry> findByBlogAndTag(Blog blog, Tag tag)
-  {
-     List<Entry> entries = null;
-    EntityManager em = createEntityManager();
-
-    try
-    {
-      Query q = em.createNamedQuery("Entry.findByBlogAndTag");
-
-      q.setParameter("blog", blog);
-      q.setParameter("tag", tag);
-      entries = q.getResultList();
-    }
-    catch (NoResultException ex){}
-    finally
-    {
-      if (em != null)
       {
         em.close();
       }

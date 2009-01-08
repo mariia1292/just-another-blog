@@ -18,7 +18,10 @@ import sonia.blog.entity.Entry;
 
 import java.util.List;
 
+import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.NoResultException;
+import javax.persistence.Query;
 
 /**
  *
@@ -55,6 +58,19 @@ public class JpaCommentDAO extends JpaGenericDAO<Comment> implements CommentDAO
    * Method description
    *
    *
+   * @param blog
+   *
+   * @return
+   */
+  public long countByBlog(Blog blog)
+  {
+    return countQuery("Comment.countByBlog", blog);
+  }
+
+  /**
+   * Method description
+   *
+   *
    * @return
    */
   public List<Comment> findAll()
@@ -70,9 +86,29 @@ public class JpaCommentDAO extends JpaGenericDAO<Comment> implements CommentDAO
    *
    * @return
    */
-  public List<Comment> findAllActiveByEntry(Entry entry)
+  @SuppressWarnings("unchecked")
+  public List<Comment> findAllActivesByEntry(Entry entry)
   {
-    throw new UnsupportedOperationException("Not supported yet.");
+    List<Comment> comments = null;
+    EntityManager em = createEntityManager();
+    Query q = em.createNamedQuery("Comment.findAllActivesByEntry");
+
+    q.setParameter("entry", entry);
+
+    try
+    {
+      comments = q.getResultList();
+    }
+    catch (NoResultException ex) {}
+    finally
+    {
+      if (em != null)
+      {
+        em.close();
+      }
+    }
+
+    return comments;
   }
 
   /**

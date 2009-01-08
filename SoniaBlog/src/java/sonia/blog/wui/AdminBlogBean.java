@@ -89,6 +89,8 @@ public class AdminBlogBean extends AbstractBean
 
     try
     {
+
+      // TODO replace with BlogDAO.findByServername
       Query q = em.createNamedQuery("Blog.findByServername");
 
       q.setParameter("servername", blog.getServername());
@@ -162,7 +164,7 @@ public class AdminBlogBean extends AbstractBean
     if ((context != null) && context.isReIndexable() &&!context.isLocked())
     {
       context.reIndex(blog);
-      getMessageHandler().info( "rebuildIndex" );
+      getMessageHandler().info("rebuildIndex");
     }
     else
     {
@@ -198,6 +200,7 @@ public class AdminBlogBean extends AbstractBean
         {
           List<Category> categories = blog.getCategories();
 
+          // TODO replace with CategoryDAO.remove
           for (Category c : categories)
           {
             em.remove(em.merge(c));
@@ -205,11 +208,13 @@ public class AdminBlogBean extends AbstractBean
 
           List<BlogMember> members = blog.getMembers();
 
+          // TODO replace with MemberDAO.remove
           for (BlogMember m : members)
           {
             em.remove(em.merge(m));
           }
 
+          // TODO replace with BlogDAO.remove
           em.remove(em.merge(blog));
           em.getTransaction().commit();
 
@@ -280,6 +285,7 @@ public class AdminBlogBean extends AbstractBean
     {
       EntityManager em = BlogContext.getInstance().getEntityManager();
 
+      // replace with MemberDAO.edit
       em.getTransaction().begin();
 
       try
@@ -314,6 +320,8 @@ public class AdminBlogBean extends AbstractBean
   public String save()
   {
     String result = SUCCESS;
+
+    // TODO replace with Blog.edit
     EntityManager em = BlogContext.getInstance().getEntityManager();
 
     try
@@ -402,13 +410,13 @@ public class AdminBlogBean extends AbstractBean
 
   /**
    * Method description
-   *
+   * TODO replace AttachmentDAO.countByBlog
    *
    * @return
    */
   public long getAttachmentCount()
   {
-    return countQuery("Attachment.countFromBlog");
+    return countQuery("Attachment.countByBlog");
   }
 
   /**
@@ -432,6 +440,7 @@ public class AdminBlogBean extends AbstractBean
   {
     blogs = new ListDataModel();
 
+    // TODO BlogDAO.findAll
     EntityManager em = BlogContext.getInstance().getEntityManager();
     Query q = em.createNamedQuery("Blog.findAll");
 
@@ -455,46 +464,46 @@ public class AdminBlogBean extends AbstractBean
 
   /**
    * Method description
-   *
+   * TODO replace with CategoryDAO.countByBlog
    *
    * @return
    */
   public long getCategoryCount()
   {
-    return countQuery("Category.countFromBlog");
+    return countQuery("Category.countByBlog");
   }
 
   /**
    * Method description
-   *
+   * TODO replace with CommentDAO.countByBlog
    *
    * @return
    */
   public long getCommentCount()
   {
-    return countQuery("Comment.countFromBlog");
+    return countQuery("Comment.countByBlog");
   }
 
   /**
    * Method description
-   *
+   * TODO replace with EntryDAO.countByBlog
    *
    * @return
    */
   public long getEntryCount()
   {
-    return countQuery("Entry.countFromBlog");
+    return countQuery("Entry.countByBlog");
   }
 
   /**
    * Method description
-   *
+   * TODO replace with MemberDAO.countByBlog
    *
    * @return
    */
   public long getMemberCount()
   {
-    return countQuery("BlogMember.countFromBlog");
+    return countQuery("BlogMember.countByBlog");
   }
 
   /**
@@ -507,6 +516,7 @@ public class AdminBlogBean extends AbstractBean
   {
     members = new ListDataModel();
 
+    // TODO MemberDAO.findByBlog
     EntityManager em = BlogContext.getInstance().getEntityManager();
     Query q = em.createNamedQuery("BlogMember.findByBlog");
 

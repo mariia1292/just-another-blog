@@ -66,6 +66,8 @@ public class BlogCreationBean extends AbstractBean
     setServername();
 
     String result = SUCCESS;
+
+    // TODO replace with BlogDAO.findByServername
     EntityManager em = BlogContext.getInstance().getEntityManager();
     Blog b = null;
     Query q = em.createNamedQuery("Blog.findByServername");
@@ -179,18 +181,20 @@ public class BlogCreationBean extends AbstractBean
       try
       {
         ResourceBundle label = getResourceBundle("label");
-
+        // TODO replace with BlogDAO.add
         em.persist(blog);
 
         Category category = new Category();
 
         category.setName(label.getString("defaultCategory"));
         category.setBlog(blog);
+        // TODO replace with CategoryDAO.add
         em.persist(category);
 
         User user = getRequest().getUser();
         BlogMember member = new BlogMember(blog, user, Role.ADMIN);
 
+        // TODO replace with MemberDAO.add
         em.persist(member);
         em.getTransaction().commit();
       }

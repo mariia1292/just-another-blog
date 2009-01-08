@@ -26,11 +26,60 @@ public interface UserDAO extends GenericDAO<User>
    * Method description
    *
    *
+   * @param name
+   *
    * @return
    */
-  public List<User> findAllActive();
+  public User findActiveByName(String name);
 
-  public User findByNameAndCode( String name, String code );
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  public List<User> findAllActives();
 
-  public User findByNameAndPassword( String name, String password );
+  /**
+   * Method description
+   *
+   *
+   * @param email
+   *
+   * @return
+   */
+  public User findByEmail(String email);
+
+  /**
+   * Method description
+   *
+   *
+   *
+   * @param name
+   *
+   * @return
+   */
+  public User findByName(String name);
+
+  /**
+   * Method description
+   *
+   *
+   * @param name
+   * @param code
+   *
+   * @return
+   */
+  public User findByNameAndCode(String name, String code);
+
+  /**
+   * Method description
+   *
+   *
+   * @param name
+   * @param password
+   *
+   * @return
+   */
+  public User findByNameAndPassword(String name, String password);
 }

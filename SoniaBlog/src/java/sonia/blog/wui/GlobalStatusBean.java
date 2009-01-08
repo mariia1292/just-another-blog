@@ -51,7 +51,7 @@ public class GlobalStatusBean extends AbstractBean
 
   /**
    * Method description
-   *
+   * TODO: replace with AttachmentDAO.count
    *
    * @return
    */
@@ -87,7 +87,7 @@ public class GlobalStatusBean extends AbstractBean
 
   /**
    * Method description
-   *
+   * TODO: replace with BlogDAO.count
    *
    * @return
    */
@@ -104,7 +104,7 @@ public class GlobalStatusBean extends AbstractBean
 
   /**
    * Method description
-   *
+   * TODO: replace with CategoryDAO.count
    *
    * @return
    */
@@ -121,7 +121,7 @@ public class GlobalStatusBean extends AbstractBean
 
   /**
    * Method description
-   *
+   * TODO: replace with CommentDAO.count
    *
    * @return
    */
@@ -138,7 +138,7 @@ public class GlobalStatusBean extends AbstractBean
 
   /**
    * Method description
-   *
+   * TODO: replace with EntryDAO.count
    *
    * @return
    */
@@ -212,7 +212,7 @@ public class GlobalStatusBean extends AbstractBean
 
   /**
    * Method description
-   *
+   * TODO: replace with TagDAO.count
    *
    * @return
    */
@@ -229,7 +229,7 @@ public class GlobalStatusBean extends AbstractBean
 
   /**
    * Method description
-   *
+   * TODO: replace with UserDAO.count
    *
    * @return
    */

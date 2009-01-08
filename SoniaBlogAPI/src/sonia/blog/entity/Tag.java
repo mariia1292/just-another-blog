@@ -30,9 +30,9 @@ import javax.persistence.NamedQuery;
 @Entity @NamedQueries(
 {
   @NamedQuery(name = "Tag.findAll", query = "select t from Tag t") ,
-  @NamedQuery(name = "Tag.findFromBlog",
+  @NamedQuery(name = "Tag.findByBlog",
               query = "select t from Tag t join t.entries e join e.category c join c.blog b where b = :blog and e.published = true group by t") ,
-  @NamedQuery(name = "Tag.findFromName",
+  @NamedQuery(name = "Tag.findByName",
               query = "select t from Tag t join t.entries e join e.category c join c.blog b where e.published = true and t.name = :name group by t") ,
   @NamedQuery(name = "Tag.count", query = "select count(t) from Tag t") ,
 

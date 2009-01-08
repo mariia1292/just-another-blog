@@ -129,6 +129,7 @@ public class InstallBean extends AbstractBean
       entry.setTitle(message.getString("firstEntryTitle"));
       entry.setContent(message.getString("firstEntryContent"));
 
+      // TODO replace with various daos
       EntityManager em = context.getEntityManager(true);
 
       em.getTransaction().begin();

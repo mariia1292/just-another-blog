@@ -150,9 +150,10 @@ public class GlobalConfigBean extends AbstractConfigBean
   public SelectItem[] getBlogItems()
   {
     SelectItem[] items = null;
+    // TODO: replace with BlogDAO.findAllActives
     EntityManager em = BlogContext.getInstance().getEntityManager();
     List<Blog> blogList =
-      em.createNamedQuery("Blog.findActive").getResultList();
+      em.createNamedQuery("Blog.findAllActives").getResultList();
 
     if ((blogList != null) &&!blogList.isEmpty())
     {

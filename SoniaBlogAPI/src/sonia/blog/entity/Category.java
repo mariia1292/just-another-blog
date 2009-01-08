@@ -36,13 +36,13 @@ import javax.persistence.TemporalType;
 @Entity @NamedQueries(
 {
   @NamedQuery(name = "Category.findAll", query = "select c from Category c") ,
-  @NamedQuery(name = "Category.findAllFromBlog",
+  @NamedQuery(name = "Category.findAllByBlog",
               query = "select c from Category c where c.blog = :blog") ,
   @NamedQuery(name = "Category.findIdFromBlog",
               query = "select c from Category c where c.id = :id and c.blog = :blog") ,
   @NamedQuery(name = "Category.count",
               query = "select count(c) from Category c") ,
-  @NamedQuery(name = "Category.countFromBlog",
+  @NamedQuery(name = "Category.countByBlog",
               query = "select count(c) from Category c where c.blog = :blog") ,
   @NamedQuery(name = "Category.findFirstFromBlog",
               query = "select c from Category c where c.blog = :blog and c.id = ( select min(cat.id) from Category cat where cat.blog = :blog )")

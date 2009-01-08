@@ -77,6 +77,7 @@ public class AdminUserBean extends AbstractBean
 
     if (member != null)
     {
+      // TODO replace with MemberDAO.edit
       EntityManager em = BlogContext.getInstance().getEntityManager();
 
       em.getTransaction().begin();
@@ -113,6 +114,7 @@ public class AdminUserBean extends AbstractBean
   public String save()
   {
     String result = SUCCESS;
+    // TODO replace with UserDAO.edit
     EntityManager em = BlogContext.getInstance().getEntityManager();
 
     if (checkMail(em))
@@ -190,6 +192,7 @@ public class AdminUserBean extends AbstractBean
 
   /**
    * Method description
+   * TODO replace with MemberDAO.findByUser
    *
    *
    * @return
@@ -365,7 +368,7 @@ public class AdminUserBean extends AbstractBean
 
   /**
    * Method description
-   *
+   * TODO replace with UserDAO.findByEmail
    *
    * @param em
    *
