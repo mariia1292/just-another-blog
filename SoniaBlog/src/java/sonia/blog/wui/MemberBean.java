@@ -10,6 +10,7 @@ package sonia.blog.wui;
 //~--- non-JDK imports --------------------------------------------------------
 
 import sonia.blog.api.app.BlogContext;
+import sonia.blog.api.dao.MemberDAO;
 import sonia.blog.api.util.AbstractBean;
 import sonia.blog.entity.BlogMember;
 import sonia.blog.entity.Role;
@@ -18,15 +19,11 @@ import sonia.blog.entity.Role;
 
 import java.util.List;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
 
 import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.DataModel;
 import javax.faces.model.ListDataModel;
 import javax.faces.model.SelectItem;
-
-import javax.persistence.EntityManager;
-import javax.persistence.Query;
 
 /**
  *
@@ -50,30 +47,15 @@ public class MemberBean extends AbstractBean
 
     if (member != null)
     {
-      // TODO: replace with MemberDAO.edit
-      EntityManager em = BlogContext.getInstance().getEntityManager();
+      MemberDAO memberDAO = BlogContext.getDAOFactory().getMemberDAO();
 
-      em.getTransaction().begin();
-
-      try
+      if (memberDAO.edit(member))
       {
-        member = em.merge(member);
-        em.getTransaction().commit();
         getMessageHandler().info("changeRoleSuccess");
       }
-      catch (Exception ex)
+      else
       {
-        if (em.getTransaction().isActive())
-        {
-          em.getTransaction().rollback();
-        }
-
-        logger.log(Level.SEVERE, null, ex);
         getMessageHandler().error("changeRoleFailure");
-      }
-      finally
-      {
-        em.close();
       }
     }
   }
@@ -82,7 +64,6 @@ public class MemberBean extends AbstractBean
 
   /**
    * Method description
-   * TODO: replace with MemberDAO.findByBlog
    *
    * @return
    */
@@ -90,24 +71,13 @@ public class MemberBean extends AbstractBean
   {
     members = new ListDataModel();
 
-    EntityManager em = BlogContext.getInstance().getEntityManager();
-    Query q = em.createNamedQuery("BlogMember.findByBlog");
+    MemberDAO memberDAO = BlogContext.getDAOFactory().getMemberDAO();
+    List<BlogMember> memberList =
+      memberDAO.findByBlog(getRequest().getCurrentBlog());
 
-    q.setParameter("blog", getRequest().getCurrentBlog());
-
-    try
+    if ((memberList != null) &&!memberList.isEmpty())
     {
-      List list = q.getResultList();
-
-      members.setWrappedData(list);
-    }
-    catch (Exception ex)
-    {
-      logger.log(Level.SEVERE, null, ex);
-    }
-    finally
-    {
-      em.close();
+      members.setWrappedData(memberList);
     }
 
     return members;

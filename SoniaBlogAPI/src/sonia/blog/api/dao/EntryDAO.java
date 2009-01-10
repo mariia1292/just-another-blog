@@ -59,12 +59,12 @@ public interface EntryDAO extends GenericDAO<Entry>
    * Method description
    *
    *
+   *
    * @param blog
-   * @param user
    *
    * @return
    */
-  public List<Entry> findAllDraftsByBlogAndUser(Blog blog, User user);
+  public List<Entry> findAllByBlog(Blog blog);
 
   /**
    * Method description
@@ -76,7 +76,8 @@ public interface EntryDAO extends GenericDAO<Entry>
    *
    * @return
    */
-  public List<Entry> findByBlogAndDate(Blog blog, Date startDate, Date endDate);
+  public List<Entry> findAllByBlogAndDate(Blog blog, Date startDate,
+          Date endDate);
 
   /**
    * Method description
@@ -87,7 +88,7 @@ public interface EntryDAO extends GenericDAO<Entry>
    *
    * @return
    */
-  public List<Entry> findByBlogAndTag(Blog blog, Tag tag);
+  public List<Entry> findAllByBlogAndTag(Blog blog, Tag tag);
 
   /**
    * Method description
@@ -97,7 +98,7 @@ public interface EntryDAO extends GenericDAO<Entry>
    *
    * @return
    */
-  public List<Entry> findByCategory(Category category);
+  public List<Entry> findAllByCategory(Category category);
 
   /**
    * Method description
@@ -109,5 +110,17 @@ public interface EntryDAO extends GenericDAO<Entry>
    *
    * @return
    */
-  public List<Date> findCalendarDates(Blog blog, Date startDate, Date endDate);
+  public List<Date> findAllCalendarDates(Blog blog, Date startDate,
+          Date endDate);
+
+  /**
+   * Method description
+   *
+   *
+   * @param blog
+   * @param user
+   *
+   * @return
+   */
+  public List<Entry> findAllDraftsByBlogAndUser(Blog blog, User user);
 }

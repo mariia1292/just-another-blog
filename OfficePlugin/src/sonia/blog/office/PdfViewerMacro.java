@@ -12,6 +12,7 @@ package sonia.blog.office;
 import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.app.BlogRequest;
 import sonia.blog.api.app.Constants;
+import sonia.blog.api.dao.AttachmentDAO;
 import sonia.blog.entity.Attachment;
 import sonia.blog.entity.Blog;
 import sonia.blog.entity.Entry;
@@ -45,9 +46,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.imageio.ImageIO;
-
-import javax.persistence.EntityManager;
-import javax.persistence.Query;
 
 /**
  *
@@ -122,49 +120,29 @@ public class PdfViewerMacro implements Macro, ConfigurationListener
     {
       if ((parameters != null) && (parameters.containsKey("id")))
       {
-        EntityManager em = context.getEntityManager();
+        Long id = Long.parseLong(parameters.get("id"));
+        AttachmentDAO attachmentDAO =
+          BlogContext.getDAOFactory().getAttachmentDAO();
+        Attachment attachment = attachmentDAO.findByBlogAndId(blog, id);
 
-        try
+        if (attachment.getMimeType().equalsIgnoreCase(PDFMIMETYPE))
         {
-          Query q = em.createNamedQuery("Attachment.findByBlogAndId");
-          Long id = Long.parseLong(parameters.get("id"));
+          File attachmentFile =
+            context.getResourceManager().getFile(attachment);
 
-          q.setParameter("id", id);
-          q.setParameter("blog", blog);
-
-          Attachment attachment = (Attachment) q.getSingleResult();
-
-          if (attachment.getMimeType().equalsIgnoreCase(PDFMIMETYPE))
+          if (attachmentFile.exists())
           {
-            File attachmentFile =
-              context.getResourceManager().getFile(attachment);
-
-            if (attachmentFile.exists())
-            {
-              result = createPdfImageGallery(request, linkBase, id,
-                                             attachmentFile, body);
-            }
-            else
-            {
-              result = "-- file not found --";
-            }
+            result = createPdfImageGallery(request, linkBase, id,
+                                           attachmentFile, body);
           }
           else
           {
-            result = "-- file is not a pdf --";
+            result = "-- file not found --";
           }
         }
-        catch (Exception ex)
+        else
         {
-          logger.log(Level.SEVERE, null, ex);
-          result = "-- " + ex.getLocalizedMessage() + " --";
-        }
-        finally
-        {
-          if (em != null)
-          {
-            em.close();
-          }
+          result = "-- file is not a pdf --";
         }
       }
       else

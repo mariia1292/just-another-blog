@@ -82,6 +82,20 @@ public class JpaCommentDAO extends JpaGenericDAO<Comment> implements CommentDAO
    * Method description
    *
    *
+   * @param start
+   * @param max
+   *
+   * @return
+   */
+  public List<Comment> findAll(int start, int max)
+  {
+    return findList("Comment.findAll", start, max);
+  }
+
+  /**
+   * Method description
+   *
+   *
    * @param entry
    *
    * @return

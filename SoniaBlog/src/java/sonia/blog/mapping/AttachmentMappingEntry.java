@@ -13,6 +13,7 @@ import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.app.BlogRequest;
 import sonia.blog.api.app.BlogResponse;
 import sonia.blog.api.app.Constants;
+import sonia.blog.api.dao.AttachmentDAO;
 import sonia.blog.api.link.LinkBuilder;
 import sonia.blog.api.mapping.MappingEntry;
 import sonia.blog.entity.Attachment;
@@ -40,10 +41,6 @@ import java.io.OutputStream;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
-import javax.persistence.Query;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -99,42 +96,22 @@ public class AttachmentMappingEntry
       try
       {
         long id = Long.parseLong(param[0]);
-        // TODO: replace with AttachmentDAO.findByBlogAndId
-        EntityManager em = BlogContext.getInstance().getEntityManager();
+        AttachmentDAO attachmentDAO =
+          BlogContext.getDAOFactory().getAttachmentDAO();
+        Blog blog = request.getCurrentBlog();
+        Attachment attachment = attachmentDAO.findByBlogAndId(blog, id);
 
-        try
+        if ((attachment != null)
+            && (attachment.getEntry().isPublished()
+                || request.isUserInRole(Role.ADMIN)
+                || request.isUserInRole(Role.AUTHOR)))
         {
-          Blog blog = request.getCurrentBlog();
-          Query q = em.createNamedQuery("Attachment.findByBlogAndId");
-
-          q.setParameter("blog", blog);
-          q.setParameter("id", id);
-
-          Attachment attachment = (Attachment) q.getSingleResult();
-
-          if ((attachment != null)
-              && (attachment.getEntry().isPublished()
-                  || request.isUserInRole(Role.ADMIN)
-                  || request.isUserInRole(Role.AUTHOR)))
-          {
-            printAttachment(request, response, attachment);
-          }
-          else
-          {
-            sendNotFound(response);
-          }
+          printAttachment(request, response, attachment);
         }
-        catch (NoResultException ex)
+        else
         {
           sendNotFound(response);
         }
-        catch (Exception ex)
-        {
-          logger.log(Level.SEVERE, null, ex);
-          sendNotFound(response);
-        }
-
-        em.close();
       }
       catch (NumberFormatException ex)
       {

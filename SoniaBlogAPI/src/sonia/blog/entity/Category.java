@@ -44,7 +44,7 @@ import javax.persistence.TemporalType;
               query = "select count(c) from Category c") ,
   @NamedQuery(name = "Category.countByBlog",
               query = "select count(c) from Category c where c.blog = :blog") ,
-  @NamedQuery(name = "Category.findFirstFromBlog",
+  @NamedQuery(name = "Category.findFirstByBlog",
               query = "select c from Category c where c.blog = :blog and c.id = ( select min(cat.id) from Category cat where cat.blog = :blog )")
 })
 public class Category implements Serializable, PermaObject

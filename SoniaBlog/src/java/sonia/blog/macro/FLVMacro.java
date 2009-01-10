@@ -19,12 +19,8 @@ import sonia.blog.entity.ContentObject;
 //~--- JDK imports ------------------------------------------------------------
 
 import java.util.Map;
-import java.util.logging.Level;
 
 import javax.faces.context.FacesContext;
-
-import javax.persistence.EntityManager;
-import javax.persistence.Query;
 
 /**
  *
@@ -107,7 +103,6 @@ public class FLVMacro extends AbstractBlogMacro
 
   /**
    * Method description
-   * TODO: replace with AttachmentDAO.findByBlogAndId
    *
    * @param blog
    * @param id
@@ -116,27 +111,8 @@ public class FLVMacro extends AbstractBlogMacro
    */
   private Attachment findAttachment(Blog blog, long id)
   {
-    Attachment attachment = null;
-    EntityManager em = BlogContext.getInstance().getEntityManager();
-
-    try
-    {
-      Query q = em.createNamedQuery("Attachment.findByBlogAndId");
-
-      q.setParameter("blog", blog);
-      q.setParameter("id", id);
-      attachment = (Attachment) q.getSingleResult();
-    }
-    catch (Exception ex)
-    {
-      logger.log(Level.SEVERE, null, ex);
-    }
-    finally
-    {
-      em.close();
-    }
-
-    return attachment;
+    return BlogContext.getDAOFactory().getAttachmentDAO().findByBlogAndId(blog,
+            id);
   }
 
   /**

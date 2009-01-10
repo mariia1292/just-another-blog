@@ -13,8 +13,10 @@ import org.apache.lucene.document.DateTools;
 import org.apache.lucene.document.Document;
 
 import sonia.blog.api.app.BlogContext;
+import sonia.blog.api.dao.EntryDAO;
 import sonia.blog.api.search.SearchEntry;
 import sonia.blog.entity.ContentObject;
+import sonia.blog.entity.Entry;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -23,8 +25,6 @@ import java.text.ParseException;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import javax.persistence.EntityManager;
 
 /**
  *
@@ -149,27 +149,25 @@ public class DefaultSearchEntry implements SearchEntry
    *
    * @return
    */
-  @SuppressWarnings("unchecked")
   public ContentObject getData()
   {
-    // TODO: replace with DAOFactory.doSomething
     ContentObject result = null;
-    EntityManager em = BlogContext.getInstance().getEntityManager();
 
     try
     {
       Class clazz = Class.forName(document.get("type"));
-      Long id = Long.parseLong(document.get("id"));
 
-      result = (ContentObject) em.find(clazz, id);
+      if (clazz.equals(Entry.class))
+      {
+        EntryDAO entryDAO = BlogContext.getDAOFactory().getEntryDAO();
+        Long id = Long.parseLong(document.get("id"));
+
+        result = entryDAO.find(id);
+      }
     }
     catch (Exception ex)
     {
       logger.log(Level.SEVERE, null, ex);
-    }
-    finally
-    {
-      em.close();
     }
 
     return result;

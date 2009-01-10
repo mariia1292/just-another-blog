@@ -19,7 +19,7 @@ import sonia.blog.api.util.AbstractBean;
 import sonia.blog.entity.Role;
 import sonia.blog.entity.User;
 
-import sonia.plugin.ServiceReference;
+import sonia.plugin.service.ServiceReference;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -225,17 +225,16 @@ public class PersonalBean extends AbstractBean
    * @param servicePath
    * @param items
    */
-  @SuppressWarnings("unchecked")
   private void handleProviders(String servicePath,
                                List<NavigationMenuItem> items)
   {
     BlogContext context = BlogContext.getInstance();
-    ServiceReference reference =
-      context.getServiceRegistry().getServiceReference(servicePath);
+    ServiceReference<NavigationProvider> reference =
+      context.getServiceRegistry().get(NavigationProvider.class, servicePath);
 
     if (reference != null)
     {
-      List<NavigationProvider> providers = reference.getImplementations();
+      List<NavigationProvider> providers = reference.getAll();
 
       if ((providers != null) &&!providers.isEmpty())
       {

@@ -17,7 +17,10 @@ import sonia.blog.entity.Category;
 
 import java.util.List;
 
+import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.NoResultException;
+import javax.persistence.Query;
 
 /**
  *
@@ -79,6 +82,20 @@ public class JpaCategoryDAO extends JpaGenericDAO<Category>
    * Method description
    *
    *
+   * @param start
+   * @param max
+   *
+   * @return
+   */
+  public List<Category> findAll(int start, int max)
+  {
+    return findList("Category.findAll", start, max);
+  }
+
+  /**
+   * Method description
+   *
+   *
    * @param blog
    *
    * @return
@@ -86,5 +103,37 @@ public class JpaCategoryDAO extends JpaGenericDAO<Category>
   public List<Category> findAllByBlog(Blog blog)
   {
     return findList("Category.findAllByBlog", blog);
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param blog
+   *
+   * @return
+   */
+  public Category findFirstByBlog(Blog blog)
+  {
+    Category category = null;
+    EntityManager em = createEntityManager();
+    Query q = em.createNamedQuery("Category.findFirstByBlog");
+
+    q.setParameter("blog", blog);
+
+    try
+    {
+      category = (Category) q.getSingleResult();
+    }
+    catch (NoResultException ex) {}
+    finally
+    {
+      if (em != null)
+      {
+        em.close();
+      }
+    }
+
+    return category;
   }
 }

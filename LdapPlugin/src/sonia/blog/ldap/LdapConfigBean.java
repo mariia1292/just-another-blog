@@ -106,6 +106,18 @@ public class LdapConfigBean extends AbstractConfigBean
     config.set(CONFIG_LDAP_DISPLAYNAMEATTRIBUTE, displayNameAttribute);
   }
 
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  @Override
+  public boolean verify()
+  {
+    return true;
+  }
+
   //~--- get methods ----------------------------------------------------------
 
   /**

@@ -12,6 +12,7 @@ package sonia.blog.mapping;
 import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.app.BlogRequest;
 import sonia.blog.api.app.BlogResponse;
+import sonia.blog.api.dao.EntryDAO;
 import sonia.blog.entity.Blog;
 import sonia.blog.entity.Entry;
 import sonia.blog.wui.BlogBean;
@@ -26,9 +27,6 @@ import java.util.List;
 import java.util.logging.Level;
 
 import javax.faces.model.ListDataModel;
-
-import javax.persistence.EntityManager;
-import javax.persistence.Query;
 
 /**
  *
@@ -136,7 +134,6 @@ public class DateMappingEntry extends ScrollableMappingEntry
 
   /**
    * Method description
-   * TODO: replace with EntryDAO.findByBlogAndDate
    *
    * @param blog
    * @param startDate
@@ -144,30 +141,11 @@ public class DateMappingEntry extends ScrollableMappingEntry
    *
    * @return
    */
-  @SuppressWarnings("unchecked")
   private List<Entry> buildList(Blog blog, Date startDate, Date endDate)
   {
-    List<Entry> entries = null;
-    EntityManager em = BlogContext.getInstance().getEntityManager();
+    EntryDAO entryDAO = BlogContext.getDAOFactory().getEntryDAO();
 
-    try
-    {
-      Query q = em.createNamedQuery("Entry.findByBlogAndDate");
-
-      q.setParameter("blog", blog);
-      q.setParameter("start", startDate);
-      q.setParameter("end", endDate);
-      entries = q.getResultList();
-    }
-    finally
-    {
-      if (em != null)
-      {
-        em.close();
-      }
-    }
-
-    return entries;
+    return entryDAO.findAllByBlogAndDate(blog, startDate, endDate);
   }
 
   /**

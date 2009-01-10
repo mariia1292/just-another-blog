@@ -9,7 +9,7 @@ package sonia.blog.api.app;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import sonia.plugin.ServiceReference;
+import sonia.plugin.service.ServiceReference;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -28,12 +28,13 @@ public class DefaultLoginConfiguration extends Configuration
   /**
    * Constructs ...
    *
+   *
+   * @param serviceName
    */
-  public DefaultLoginConfiguration( String serviceName )
+  public DefaultLoginConfiguration(String serviceName)
   {
-    reference =
-      BlogContext.getInstance().getServiceRegistry().getServiceReference(
-        serviceName);
+    reference = BlogContext.getInstance().getServiceRegistry().get(
+      AppConfigurationEntry.class, serviceName);
   }
 
   //~--- methods --------------------------------------------------------------
@@ -59,10 +60,9 @@ public class DefaultLoginConfiguration extends Configuration
    *
    * @return
    */
-  @Override @SuppressWarnings("unchecked")
   public AppConfigurationEntry[] getAppConfigurationEntry(String moduleName)
   {
-    List<AppConfigurationEntry> entries = reference.getImplementations();
+    List<AppConfigurationEntry> entries = reference.getAll();
 
     return entries.toArray(new AppConfigurationEntry[0]);
   }
@@ -70,5 +70,5 @@ public class DefaultLoginConfiguration extends Configuration
   //~--- fields ---------------------------------------------------------------
 
   /** Field description */
-  private ServiceReference reference;
+  private ServiceReference<AppConfigurationEntry> reference;
 }

@@ -7,6 +7,10 @@
 
 package sonia.plugin;
 
+//~--- non-JDK imports --------------------------------------------------------
+
+import sonia.plugin.service.ServiceRegistry;
+
 //~--- JDK imports ------------------------------------------------------------
 
 import java.io.IOException;
@@ -204,6 +208,17 @@ public class PluginContext
   }
 
   //~--- set methods ----------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   * @param serviceRegistry
+   */
+  public void setServiceRegistry(ServiceRegistry serviceRegistry)
+  {
+    this.serviceRegistry = serviceRegistry;
+  }
 
   /**
    * Method description

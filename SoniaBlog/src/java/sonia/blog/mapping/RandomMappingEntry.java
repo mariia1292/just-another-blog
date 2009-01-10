@@ -12,6 +12,7 @@ package sonia.blog.mapping;
 import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.app.BlogRequest;
 import sonia.blog.api.app.BlogResponse;
+import sonia.blog.api.dao.EntryDAO;
 import sonia.blog.api.link.LinkBuilder;
 import sonia.blog.entity.Entry;
 import sonia.blog.entity.PermaObject;
@@ -21,9 +22,6 @@ import sonia.blog.wui.BlogBean;
 
 import java.util.List;
 import java.util.Random;
-
-import javax.persistence.EntityManager;
-import javax.persistence.Query;
 
 /**
  *
@@ -54,18 +52,13 @@ public class RandomMappingEntry extends AbstractMappingEntry
    *
    * @return
    */
-  @SuppressWarnings("unchecked")
   public boolean handleMapping(BlogRequest request, BlogResponse response,
                                String[] param)
   {
     String viewId = VIEW_DETAIL;
-    // TODO: replace with Entry.findByBlog()
-    EntityManager em = BlogContext.getInstance().getEntityManager();
-    Query q = em.createNamedQuery("Entry.findByBlog");
-
-    q.setParameter("blog", request.getCurrentBlog());
-
-    List<Entry> entries = q.getResultList();
+    EntryDAO entryDAO = BlogContext.getDAOFactory().getEntryDAO();
+    List<Entry> entries =
+      entryDAO.findAllActivesByBlog(request.getCurrentBlog());
 
     if ((entries != null) &&!entries.isEmpty())
     {

@@ -11,6 +11,7 @@ package sonia.blog.api.jsf.taglist;
 
 import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.app.BlogRequest;
+import sonia.blog.api.dao.TagDAO;
 import sonia.blog.api.link.LinkBuilder;
 import sonia.blog.api.util.TagWrapper;
 import sonia.blog.entity.Blog;
@@ -24,16 +25,11 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
-
-import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
-import javax.persistence.Query;
 
 /**
  *
@@ -57,7 +53,7 @@ public class TagListRenderer extends BaseRenderer
    *
    * @throws IOException
    */
-  @Override @SuppressWarnings("unchecked")
+  @Override
   public void encodeEnd(FacesContext context, UIComponent component)
           throws IOException
   {
@@ -73,7 +69,7 @@ public class TagListRenderer extends BaseRenderer
       BlogRequest request =
         (BlogRequest) context.getExternalContext().getRequest();
       Blog blog = request.getCurrentBlog();
-      EntityManager em = BlogContext.getInstance().getEntityManager();
+      TagDAO tagDAO = BlogContext.getDAOFactory().getTagDAO();
       ResponseWriter writer = context.getResponseWriter();
 
       writer.startElement("div", component);
@@ -92,29 +88,12 @@ public class TagListRenderer extends BaseRenderer
 
       writer.writeAttribute("id", id, null);
 
-      try
-      {
-        // TODO: replace with TagDAO.findByBlogAndCount
-        Query q = em.createNamedQuery("Tag.findByBlogAndCount");
+      List<TagWrapper> tags = tagDAO.findByBlogAndCount(blog);
 
-        q.setParameter("blog", blog);
-
-        List<TagWrapper> tags = q.getResultList();
-
-        if ((tags != null) &&!tags.isEmpty())
-        {
-          encodeTags(request, writer, tags, cmp.getMaxItems(),
-                     cmp.getMinPercentage(), cmp.getMaxPercentage());
-        }
-      }
-      catch (NoResultException ex) {}
-      catch (Exception ex)
+      if ((tags != null) &&!tags.isEmpty())
       {
-        logger.log(Level.SEVERE, null, ex);
-      }
-      finally
-      {
-        em.close();
+        encodeTags(request, writer, tags, cmp.getMaxItems(),
+                   cmp.getMinPercentage(), cmp.getMaxPercentage());
       }
 
       writer.endElement("div");

@@ -12,6 +12,10 @@ package sonia.blog.wui;
 import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.app.BlogRequest;
 import sonia.blog.api.app.Constants;
+import sonia.blog.api.dao.BlogDAO;
+import sonia.blog.api.dao.CategoryDAO;
+import sonia.blog.api.dao.DAOFactory;
+import sonia.blog.api.dao.MemberDAO;
 import sonia.blog.api.link.LinkBuilder;
 import sonia.blog.api.util.AbstractBean;
 import sonia.blog.entity.Blog;
@@ -27,11 +31,6 @@ import sonia.util.Util;
 //~--- JDK imports ------------------------------------------------------------
 
 import java.util.ResourceBundle;
-import java.util.logging.Level;
-
-import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
-import javax.persistence.Query;
 
 /**
  *
@@ -66,23 +65,12 @@ public class BlogCreationBean extends AbstractBean
     setServername();
 
     String result = SUCCESS;
-
-    // TODO replace with BlogDAO.findByServername
-    EntityManager em = BlogContext.getInstance().getEntityManager();
-    Blog b = null;
-    Query q = em.createNamedQuery("Blog.findByServername");
-
-    q.setParameter("servername", blog.getServername());
-
-    try
-    {
-      b = (Blog) q.getSingleResult();
-    }
-    catch (NoResultException ex) {}
+    BlogDAO blogDAO = BlogContext.getDAOFactory().getBlogDAO();
+    Blog b = blogDAO.findByServername(blog.getServername());
 
     if (b == null)
     {
-      result = saveBlog(em);
+      result = saveBlog(blogDAO);
     }
     else
     {
@@ -166,54 +154,55 @@ public class BlogCreationBean extends AbstractBean
    * Method description
    *
    *
-   * @param em
+   *
+   * @param blogDAO
    *
    * @return
    */
-  private String saveBlog(EntityManager em)
+  private String saveBlog(BlogDAO blogDAO)
   {
-    String result = SUCCESS;
+    String result = FAILURE;
 
     if (isPermitted())
     {
-      em.getTransaction().begin();
-
-      try
+      if (blogDAO.add(blog))
       {
         ResourceBundle label = getResourceBundle("label");
-        // TODO replace with BlogDAO.add
-        em.persist(blog);
-
         Category category = new Category();
 
         category.setName(label.getString("defaultCategory"));
         category.setBlog(blog);
-        // TODO replace with CategoryDAO.add
-        em.persist(category);
 
-        User user = getRequest().getUser();
-        BlogMember member = new BlogMember(blog, user, Role.ADMIN);
+        CategoryDAO categoryDAO = BlogContext.getDAOFactory().getCategoryDAO();
 
-        // TODO replace with MemberDAO.add
-        em.persist(member);
-        em.getTransaction().commit();
-      }
-      catch (Exception ex)
-      {
-        if (em.getTransaction().isActive())
+        if (categoryDAO.add(category))
         {
-          em.getTransaction().rollback();
-        }
+          User user = getRequest().getUser();
+          BlogMember member = new BlogMember(blog, user, Role.ADMIN);
+          MemberDAO memberDAO = DAOFactory.getInstance().getMemberDAO();
 
-        logger.log(Level.SEVERE, null, ex);
-        getMessageHandler().error("unknownError");
-        result = FAILURE;
+          if (memberDAO.add(member))
+          {
+            result = SUCCESS;
+          }
+          else
+          {
+            getMessageHandler().error("couldNotCreateMember");
+          }
+        }
+        else
+        {
+          getMessageHandler().error("couldNotCreateCategory");
+        }
+      }
+      else
+      {
+        getMessageHandler().error("couldNotCreateBlog");
       }
     }
     else
     {
       getMessageHandler().error("blogCreationDisabled");
-      result = FAILURE;
     }
 
     return result;

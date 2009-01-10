@@ -9,8 +9,11 @@ package sonia.blog.api.util;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import java.util.Comparator;
 import sonia.blog.entity.Tag;
+
+//~--- JDK imports ------------------------------------------------------------
+
+import java.util.Comparator;
 
 /**
  *

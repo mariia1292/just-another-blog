@@ -27,9 +27,6 @@ import java.util.logging.Logger;
 
 import javax.faces.context.FacesContext;
 
-import javax.persistence.EntityManager;
-import javax.persistence.Query;
-
 /**
  *
  * @author sdorra
@@ -83,21 +80,16 @@ public class GalleryMacro implements Macro
    *
    * @return
    */
-  @SuppressWarnings("unchecked")
   private String createImageGallery(FacesContext ctx, BlogRequest request,
                                     Entry entry)
   {
     String result = "";
-    BlogContext context = BlogContext.getInstance();
-    // TODO: replace with AttachmentDAO.findImagesFromEntry
-    EntityManager em = context.getEntityManager();
-    Query q = em.createNamedQuery("Attachment.findAllImagesByEntry");
-
-    q.setParameter("entry", entry);
 
     try
     {
-      List<Attachment> images = q.getResultList();
+      List<Attachment> images =
+        BlogContext.getDAOFactory().getAttachmentDAO().findAllImagesByEntry(
+            entry);
 
       ctx.getExternalContext().getRequestMap().put("test", "<h1>Hello</h1>");
 
@@ -154,10 +146,6 @@ public class GalleryMacro implements Macro
     catch (Exception ex)
     {
       logger.log(Level.SEVERE, null, ex);
-    }
-    finally
-    {
-      em.close();
     }
 
     return result;

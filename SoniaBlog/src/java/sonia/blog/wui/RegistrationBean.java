@@ -12,6 +12,8 @@ package sonia.blog.wui;
 import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.app.BlogRequest;
 import sonia.blog.api.app.Constants;
+import sonia.blog.api.dao.MemberDAO;
+import sonia.blog.api.dao.UserDAO;
 import sonia.blog.api.util.AbstractBean;
 import sonia.blog.entity.Blog;
 import sonia.blog.entity.BlogMember;
@@ -21,7 +23,7 @@ import sonia.blog.util.BlogUtil;
 
 import sonia.config.Configuration;
 
-import sonia.plugin.ServiceReference;
+import sonia.plugin.service.ServiceReference;
 
 import sonia.security.encryption.Encryption;
 
@@ -32,10 +34,6 @@ import sonia.util.Util;
 import java.util.logging.Level;
 
 import javax.mail.MessagingException;
-
-import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
-import javax.persistence.Query;
 
 /**
  *
@@ -62,24 +60,17 @@ public class RegistrationBean extends AbstractBean
   /**
    * Method description
    *
-   * @param em
+   *
+   * @param userDAO
    *
    * @return
    */
-  public String checkNameAndEmail(EntityManager em)
+  public String checkNameAndEmail(UserDAO userDAO)
   {
     String result = SUCCESS;
     User u = null;
 
-    try
-    {
-      // TODO: replace with UserDAO.findByName
-      Query q = em.createNamedQuery("User.findByName");
-
-      q.setParameter("name", user.getName());
-      u = (User) q.getSingleResult();
-    }
-    catch (NoResultException ex) {}
+    u = userDAO.findByName(user.getName());
 
     if (u != null)
     {
@@ -89,15 +80,7 @@ public class RegistrationBean extends AbstractBean
     }
     else
     {
-      try
-      {
-        // TODO: replace with UserDAO.findByEmail
-        Query q = em.createNamedQuery("User.findByEmail");
-
-        q.setParameter("email", user.getEmail());
-        u = (User) q.getSingleResult();
-      }
-      catch (NoResultException ex) {}
+      u = userDAO.findByEmail(user.getEmail());
 
       if (u != null)
       {
@@ -126,13 +109,13 @@ public class RegistrationBean extends AbstractBean
       {
         user.setPassword(encryptPassword(passwordRepeat));
 
-        EntityManager em = BlogContext.getInstance().getEntityManager();
+        UserDAO userDAO = BlogContext.getDAOFactory().getUserDAO();
 
-        result = checkNameAndEmail(em);
+        result = checkNameAndEmail(userDAO);
 
         if (result.equals(SUCCESS))
         {
-          result = createUser(em);
+          result = createUser(userDAO);
 
           if (sendAcknowledgeMail)
           {
@@ -141,11 +124,6 @@ public class RegistrationBean extends AbstractBean
         }
 
         redirect();
-
-        if (em != null)
-        {
-          em.close();
-        }
       }
       else
       {
@@ -215,41 +193,30 @@ public class RegistrationBean extends AbstractBean
   /**
    * Method description
    *
-   *
-   * @param em
+   * @param userDAO
    *
    * @return
    */
-  private String createUser(EntityManager em)
+  private String createUser(UserDAO userDAO)
   {
     String result = SUCCESS;
 
-    // TODO: replace with UserDAO.add and MemberDAO.add
-
-    em.getTransaction().begin();
-
-    try
+    if (userDAO.add(user))
     {
-      em.persist(user);
-
       Blog blog = getRequest().getCurrentBlog();
       Role role = getDefaultRole();
-      BlogMember member = new BlogMember(blog, user, role);
+      MemberDAO memberDAO = BlogContext.getDAOFactory().getMemberDAO();
 
-      em.persist(member);
-      em.getTransaction().commit();
-      getMessageHandler().info("registrationSuccess");
-    }
-    catch (Exception ex)
-    {
-      if (em.getTransaction().isActive())
+      if (memberDAO.add(new BlogMember(blog, user, role)))
       {
-        em.getTransaction().rollback();
+        getMessageHandler().info("registrationSuccess");
       }
-
-      logger.log(Level.SEVERE, null, ex);
-      getMessageHandler().error("unknownError");
+      else
+      {
+        getMessageHandler().error("unknownError");
+      }
     }
+    else {}
 
     return result;
   }
@@ -264,13 +231,13 @@ public class RegistrationBean extends AbstractBean
    */
   private String encryptPassword(String password)
   {
-    ServiceReference reference =
-      BlogContext.getInstance().getServiceRegistry().getServiceReference(
-          Constants.SERVCIE_ENCRYPTION);
+    ServiceReference<Encryption> reference =
+      BlogContext.getInstance().getServiceRegistry().get(Encryption.class,
+        Constants.SERVCIE_ENCRYPTION);
 
-    if ((reference != null) && (reference.getImplementation() != null))
+    if ((reference != null) && (reference.get() != null))
     {
-      Encryption enc = (Encryption) reference.getImplementation();
+      Encryption enc = reference.get();
 
       password = enc.encrypt(password);
     }

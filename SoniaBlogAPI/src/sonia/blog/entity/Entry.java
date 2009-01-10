@@ -45,11 +45,11 @@ import javax.persistence.TemporalType;
 @Entity @EntityListeners({ EntryListener.class }) @NamedQueries(
 {
   @NamedQuery(name = "Entry.findAll", query = "select e from Entry e") ,
-    @NamedQuery(name = "Entry.findAllActives",
+  @NamedQuery(name = "Entry.findAllActives",
               query = "select e from Entry e where e.published = true order by e.creationDate") ,
   @NamedQuery(name = "Entry.findAllActivesByBlog",
               query = "select e from Entry e join e.category c join c.blog b where b = :blog and e.published = true order by e.creationDate") ,
-  @NamedQuery(name = "Entry.findByBlog",
+  @NamedQuery(name = "Entry.findAllByBlog",
               query = "select e from Entry e join e.category c join c.blog b where b = :blog and e.published = true order by e.creationDate desc") ,
   @NamedQuery(name = "Entry.findByCategory",
               query = "select e from Entry as e where e.category = :category and e.published = true order by e.creationDate") ,

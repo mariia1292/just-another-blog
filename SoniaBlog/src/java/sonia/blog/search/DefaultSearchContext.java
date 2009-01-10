@@ -29,6 +29,7 @@ import org.apache.lucene.search.highlight.TokenSources;
 
 import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.app.Constants;
+import sonia.blog.api.dao.EntryDAO;
 import sonia.blog.api.search.SearchContext;
 import sonia.blog.api.search.SearchEntry;
 import sonia.blog.api.search.SearchException;
@@ -44,8 +45,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import javax.persistence.EntityManager;
 
 /**
  *
@@ -246,11 +245,9 @@ public class DefaultSearchContext implements SearchContext
      * Method description
      *
      */
-    @SuppressWarnings("unchecked")
     public void run()
     {
       IndexWriter writer = null;
-      EntityManager em = null;
 
       try
       {
@@ -262,15 +259,9 @@ public class DefaultSearchContext implements SearchContext
         }
 
         writer = new IndexWriter(file, new StandardAnalyzer(), true);
-        em = BlogContext.getInstance().getEntityManager();
 
-        // TODO: replace with EntryDAO.findAllActives()
-
-        javax.persistence.Query q = em.createNamedQuery("Entry.findAllActives");
-
-        q.setParameter("blog", blog);
-
-        List<Entry> entries = q.getResultList();
+        EntryDAO entryDAO = BlogContext.getDAOFactory().getEntryDAO();
+        List<Entry> entries = entryDAO.findAllActivesByBlog(blog);
 
         if (entries != null)
         {
@@ -311,11 +302,6 @@ public class DefaultSearchContext implements SearchContext
           {
             logger.log(Level.SEVERE, null, ex);
           }
-        }
-
-        if (em != null)
-        {
-          em.close();
         }
       }
     }

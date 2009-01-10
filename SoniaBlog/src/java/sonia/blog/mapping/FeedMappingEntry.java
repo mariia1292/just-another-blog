@@ -12,6 +12,8 @@ package sonia.blog.mapping;
 import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.app.BlogRequest;
 import sonia.blog.api.app.BlogResponse;
+import sonia.blog.api.dao.CommentDAO;
+import sonia.blog.api.dao.EntryDAO;
 import sonia.blog.api.link.LinkBuilder;
 import sonia.blog.api.mapping.MappingEntry;
 import sonia.blog.entity.Blog;
@@ -36,9 +38,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import javax.persistence.EntityManager;
-import javax.persistence.Query;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -92,7 +91,6 @@ public class FeedMappingEntry implements MappingEntry, ConfigurationListener
    *
    * @return
    */
-  @SuppressWarnings("unchecked")
   public boolean handleMapping(BlogRequest request, BlogResponse response,
                                String[] param)
   {
@@ -103,7 +101,6 @@ public class FeedMappingEntry implements MappingEntry, ConfigurationListener
       LinkBuilder linkBuilder = BlogContext.getInstance().getLinkBuilder();
       Blog blog = request.getCurrentBlog();
       String url = linkBuilder.buildLink(request, blog);
-      EntityManager em = BlogContext.getInstance().getEntityManager();
 
       try
       {
@@ -111,12 +108,8 @@ public class FeedMappingEntry implements MappingEntry, ConfigurationListener
 
         if (param[0].equals("entries"))
         {
-          // TODO: replace with EntryDAO.findAllActivesByBlog
-          Query q = em.createNamedQuery("Entry.findAllActivesByBlog");
-
-          q.setParameter("blog", blog);
-
-          List<Entry> entries = q.getResultList();
+          EntryDAO entryDAO = BlogContext.getDAOFactory().getEntryDAO();
+          List<Entry> entries = entryDAO.findAllActivesByBlog(blog);
 
           if (entries != null)
           {
@@ -134,12 +127,8 @@ public class FeedMappingEntry implements MappingEntry, ConfigurationListener
         }
         else if (param[0].equals("comments"))
         {
-          // TODO: replace with CommentDAO.findAllByBlog
-          Query q = em.createNamedQuery("Comment.findAllByBlog");
-
-          q.setParameter("blog", blog);
-
-          List<Comment> comments = q.getResultList();
+          CommentDAO commentDAO = BlogContext.getDAOFactory().getCommentDAO();
+          List<Comment> comments = commentDAO.findAllByBlog(blog);
 
           if (comments != null)
           {
@@ -167,8 +156,7 @@ public class FeedMappingEntry implements MappingEntry, ConfigurationListener
 
           channel.setPubDate(blog.getCreationDate());
           channel.setItems(items);
-
-          response.setContentType( "application/rss+xml" );
+          response.setContentType("application/rss+xml");
 
           FeedParser parser = FeedParser.getInstance(feedType);
 
@@ -178,10 +166,6 @@ public class FeedMappingEntry implements MappingEntry, ConfigurationListener
       catch (IOException ex)
       {
         logger.log(Level.SEVERE, null, ex);
-      }
-      finally
-      {
-        em.close();
       }
     }
     else

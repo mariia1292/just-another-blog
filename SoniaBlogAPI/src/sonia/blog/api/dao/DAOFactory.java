@@ -7,6 +7,13 @@
 
 package sonia.blog.api.dao;
 
+//~--- non-JDK imports --------------------------------------------------------
+
+import sonia.blog.api.app.BlogContext;
+import sonia.blog.api.app.Constants;
+
+import sonia.plugin.service.ServiceReference;
+
 /**
  *
  * @author sdorra
@@ -45,20 +52,28 @@ public abstract class DAOFactory
    */
   private static DAOFactory createDAOFactory()
   {
-    return null;
+    BlogContext context = BlogContext.getInstance();
+    ServiceReference<DAOFactory> reference =
+      context.getServiceRegistry().get(DAOFactory.class, Constants.SERVCIE_DAO);
+
+    return reference.get();
   }
 
   /**
    * Method description
    *
+   *
+   * @throws DAOException
    */
-  public abstract void close();
+  public abstract void close() throws DAOException;
 
   /**
    * Method description
    *
+   *
+   * @throws DAOException
    */
-  public abstract void init();
+  public abstract void init() throws DAOException;
 
   //~--- get methods ----------------------------------------------------------
 
@@ -100,7 +115,23 @@ public abstract class DAOFactory
    *
    * @return
    */
+  public abstract Object getConnection();
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
   public abstract EntryDAO getEntryDAO();
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  public abstract MemberDAO getMemberDAO();
 
   /**
    * Method description
@@ -117,6 +148,4 @@ public abstract class DAOFactory
    * @return
    */
   public abstract UserDAO getUserDAO();
-
-  public abstract MemberDAO getMemberDAO();
 }

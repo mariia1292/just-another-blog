@@ -21,8 +21,6 @@ import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 
-import javax.persistence.EntityManager;
-
 /**
  *
  * @author sdorra
@@ -50,20 +48,15 @@ public class CategoryConverter implements Converter
                             String value)
   {
     Object object = null;
-    // TODO: replace with CategoryDAO.find
-    EntityManager em = BlogContext.getInstance().getEntityManager();
 
     try
     {
-      object = em.find(Category.class, Long.parseLong(value));
+      object = BlogContext.getDAOFactory().getCategoryDAO().find(
+        Long.parseLong(value));
     }
     catch (NumberFormatException ex)
     {
       logger.log(Level.WARNING, null, ex);
-    }
-    finally
-    {
-      em.close();
     }
 
     return object;

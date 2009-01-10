@@ -43,4 +43,14 @@ public interface TagDAO extends GenericDAO<Tag>
    * @return
    */
   public List<TagWrapper> findByBlogAndCount(Blog blog);
+
+  /**
+   * Method description
+   *
+   *
+   *
+   * @param name
+   * @return
+   */
+  public Tag findByName(String name);
 }

@@ -69,6 +69,20 @@ public class JpaTagDAO extends JpaGenericDAO<Tag> implements TagDAO
    * Method description
    *
    *
+   * @param start
+   * @param max
+   *
+   * @return
+   */
+  public List<Tag> findAll(int start, int max)
+  {
+    return findList("Tag.findAll", start, max);
+  }
+
+  /**
+   * Method description
+   *
+   *
    * @param blog
    *
    * @return
@@ -78,25 +92,68 @@ public class JpaTagDAO extends JpaGenericDAO<Tag> implements TagDAO
     return findList("Tag.findAllByBlog", blog);
   }
 
+  /**
+   * Method description
+   *
+   *
+   * @param blog
+   *
+   * @return
+   */
   @SuppressWarnings("unchecked")
   public List<TagWrapper> findByBlogAndCount(Blog blog)
   {
     List<TagWrapper> tags = null;
     EntityManager em = createEntityManager();
+
     try
     {
       Query q = em.createNamedQuery("Tag.findByBlogAndCount");
+
       q.setParameter("blog", blog);
       tags = q.getResultList();
     }
-    catch (NoResultException ex){}
+    catch (NoResultException ex) {}
     finally
     {
-      if ( em != null )
+      if (em != null)
       {
         em.close();
       }
     }
+
     return tags;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param name
+   *
+   * @return
+   */
+  public Tag findByName(String name)
+  {
+    Tag tag = null;
+    EntityManager em = createEntityManager();
+    Query q = em.createNamedQuery("Tag.findByName");
+
+    q.setParameter("name", name);
+
+    try
+    {
+      tag = (Tag) q.getSingleResult();
+    }
+    catch (NoResultException ex) {}
+    finally
+    {
+      if (em != null)
+      {
+        em.close();
+      }
+    }
+
+    return tag;
   }
 }

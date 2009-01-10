@@ -15,16 +15,21 @@ import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.app.BlogRequest;
 import sonia.blog.api.app.Constants;
 import sonia.blog.api.app.ResourceManager;
+import sonia.blog.api.dao.AttachmentDAO;
+import sonia.blog.api.dao.BlogDAO;
+import sonia.blog.api.dao.CategoryDAO;
+import sonia.blog.api.dao.CommentDAO;
+import sonia.blog.api.dao.EntryDAO;
+import sonia.blog.api.dao.MemberDAO;
 import sonia.blog.api.navigation.NavigationProvider;
 import sonia.blog.api.search.SearchContext;
 import sonia.blog.api.template.Template;
 import sonia.blog.api.util.AbstractBean;
 import sonia.blog.entity.Blog;
 import sonia.blog.entity.BlogMember;
-import sonia.blog.entity.Category;
 import sonia.blog.entity.Role;
 
-import sonia.plugin.ServiceReference;
+import sonia.plugin.service.ServiceReference;
 
 import sonia.util.Util;
 
@@ -42,10 +47,6 @@ import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.DataModel;
 import javax.faces.model.ListDataModel;
 import javax.faces.model.SelectItem;
-
-import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
-import javax.persistence.Query;
 
 /**
  *
@@ -68,9 +69,8 @@ public class AdminBlogBean extends AbstractBean
    */
   public AdminBlogBean()
   {
-    actionReference =
-      BlogContext.getInstance().getServiceRegistry().getServiceReference(
-        Constants.NAVIGATION_BLOGACTION);
+    actionReference = BlogContext.getInstance().getServiceRegistry().get(
+      NavigationProvider.class, Constants.NAVIGATION_BLOGACTION);
   }
 
   //~--- methods --------------------------------------------------------------
@@ -79,32 +79,22 @@ public class AdminBlogBean extends AbstractBean
    * Method description
    *
    *
-   * @param em
+   *
+   * @param blogDAO
    *
    * @return
    */
-  public boolean checkServername(EntityManager em)
+  public boolean checkServername(BlogDAO blogDAO)
   {
     boolean result = true;
+    Blog b = blogDAO.findByServername(blog.getServername());
 
-    try
+    if ((b != null) &&!b.equals(blog))
     {
-
-      // TODO replace with BlogDAO.findByServername
-      Query q = em.createNamedQuery("Blog.findByServername");
-
-      q.setParameter("servername", blog.getServername());
-
-      Blog b = (Blog) q.getSingleResult();
-
-      if ((b != null) &&!b.equals(blog))
-      {
-        result = false;
-        getMessageHandler().error("blogform:servername", "nameAllreadyExists",
-                                  null, blog.getServername());
-      }
+      result = false;
+      getMessageHandler().error("blogform:servername", "nameAllreadyExists",
+                                null, blog.getServername());
     }
-    catch (NoResultException ex) {}
 
     return result;
   }
@@ -192,66 +182,82 @@ public class AdminBlogBean extends AbstractBean
     {
       if (!blog.equals(getRequest().getCurrentBlog()))
       {
-        EntityManager em = context.getEntityManager();
+        BlogDAO blogDAO = BlogContext.getDAOFactory().getBlogDAO();
 
-        em.getTransaction().begin();
-
-        try
+        if (blogDAO.remove(blog))
         {
-          List<Category> categories = blog.getCategories();
-
-          // TODO replace with CategoryDAO.remove
-          for (Category c : categories)
-          {
-            em.remove(em.merge(c));
-          }
-
-          List<BlogMember> members = blog.getMembers();
-
-          // TODO replace with MemberDAO.remove
-          for (BlogMember m : members)
-          {
-            em.remove(em.merge(m));
-          }
-
-          // TODO replace with BlogDAO.remove
-          em.remove(em.merge(blog));
-          em.getTransaction().commit();
-
-          File searchDir = resManager.getDirectory(Constants.RESOURCE_INDEX,
-                             blog, false);
-
-          if (searchDir.exists())
-          {
-            Util.delete(searchDir);
-          }
-
-          File attachmentDir =
-            resManager.getDirectory(Constants.RESOURCE_ATTACHMENT, blog, false);
-
-          if (attachmentDir.exists())
-          {
-            Util.delete(attachmentDir);
-          }
-
           getMessageHandler().info(null, "successBlogDelete", null,
                                    blog.getTitle());
         }
-        catch (Exception ex)
+        else
         {
-          if (em.getTransaction().isActive())
-          {
-            em.getTransaction().rollback();
-          }
-
-          logger.log(Level.SEVERE, null, ex);
+          result = FAILURE;
           getMessageHandler().error(null, "failureBlogDelete", null,
                                     blog.getTitle());
         }
-        finally
-        {
-          em.close();
-        }
+
+        /*
+         * EntityManager em = context.getEntityManager();
+         *
+         * em.getTransaction().begin();
+         *
+         * try
+         * {
+         * List<Category> categories = blog.getCategories();
+         *
+         * // TODO replace with CategoryDAO.remove
+         * for (Category c : categories)
+         * {
+         *   em.remove(em.merge(c));
+         * }
+         *
+         * List<BlogMember> members = blog.getMembers();
+         *
+         * // TODO replace with MemberDAO.remove
+         * for (BlogMember m : members)
+         * {
+         *   em.remove(em.merge(m));
+         * }
+         *
+         * // TODO replace with BlogDAO.remove
+         * em.remove(em.merge(blog));
+         * em.getTransaction().commit();
+         *
+         * File searchDir = resManager.getDirectory(Constants.RESOURCE_INDEX,
+         *                    blog, false);
+         *
+         * if (searchDir.exists())
+         * {
+         *   Util.delete(searchDir);
+         * }
+         *
+         * File attachmentDir =
+         *  resManager.getDirectory(Constants.RESOURCE_ATTACHMENT, blog, false);
+         *
+         * if (attachmentDir.exists())
+         * {
+         *   Util.delete(attachmentDir);
+         * }
+         *
+         * getMessageHandler().info(null, "successBlogDelete", null,
+         *                          blog.getTitle());
+         * }
+         * catch (Exception ex)
+         * {
+         * if (em.getTransaction().isActive())
+         * {
+         *   em.getTransaction().rollback();
+         * }
+         *
+         * logger.log(Level.SEVERE, null, ex);
+         * getMessageHandler().error(null, "failureBlogDelete", null,
+         *                           blog.getTitle());
+         * }
+         * finally
+         * {
+         * em.close();
+         * }
+         */
       }
       else
       {
@@ -283,30 +289,15 @@ public class AdminBlogBean extends AbstractBean
 
     if (member != null)
     {
-      EntityManager em = BlogContext.getInstance().getEntityManager();
-
-      // replace with MemberDAO.edit
-      em.getTransaction().begin();
-
       try
       {
-        member = em.merge(member);
-        em.getTransaction().commit();
+        BlogContext.getDAOFactory().getMemberDAO().edit(member);
         getMessageHandler().info("changeRoleSuccess");
       }
       catch (Exception ex)
       {
-        if (em.getTransaction().isActive())
-        {
-          em.getTransaction().rollback();
-        }
-
         logger.log(Level.SEVERE, null, ex);
         getMessageHandler().error("changeRoleFailure");
-      }
-      finally
-      {
-        em.close();
       }
     }
   }
@@ -320,38 +311,27 @@ public class AdminBlogBean extends AbstractBean
   public String save()
   {
     String result = SUCCESS;
-
-    // TODO replace with Blog.edit
-    EntityManager em = BlogContext.getInstance().getEntityManager();
+    BlogDAO blogDAO = BlogContext.getDAOFactory().getBlogDAO();
 
     try
     {
-      if (checkServername(em))
+      if (checkServername(blogDAO))
       {
-        em.getTransaction().begin();
-
         try
         {
           if (blog.getId() != null)
           {
-            blog = em.merge(blog);
+            blogDAO.edit(blog);
             getMessageHandler().info("updateBlogSuccess");
           }
           else
           {
-            em.persist(blog);
+            blogDAO.add(blog);
             getMessageHandler().info("createBlogSuccess");
           }
-
-          em.getTransaction().commit();
         }
         catch (Exception ex)
         {
-          if (em.getTransaction().isActive())
-          {
-            em.getTransaction().rollback();
-          }
-
           logger.log(Level.SEVERE, null, ex);
         }
       }
@@ -359,10 +339,6 @@ public class AdminBlogBean extends AbstractBean
     catch (Exception ex)
     {
       logger.log(Level.SEVERE, null, ex);
-    }
-    finally
-    {
-      em.close();
     }
 
     return result;
@@ -392,7 +368,7 @@ public class AdminBlogBean extends AbstractBean
     items.add(new NavigationMenuItem(label.getString("clearImageCache"),
                                      "#{AdminBlogBean.clearImageCache}"));
 
-    List<NavigationProvider> providers = actionReference.getImplementations();
+    List<NavigationProvider> providers = actionReference.getAll();
 
     if ((providers != null) &&!providers.isEmpty())
     {
@@ -410,13 +386,16 @@ public class AdminBlogBean extends AbstractBean
 
   /**
    * Method description
-   * TODO replace AttachmentDAO.countByBlog
    *
    * @return
    */
   public long getAttachmentCount()
   {
-    return countQuery("Attachment.countByBlog");
+    Blog b = getRequest().getCurrentBlog();
+    AttachmentDAO attachmentDAO =
+      BlogContext.getDAOFactory().getAttachmentDAO();
+
+    return attachmentDAO.countByBlog(b);
   }
 
   /**
@@ -440,23 +419,12 @@ public class AdminBlogBean extends AbstractBean
   {
     blogs = new ListDataModel();
 
-    // TODO BlogDAO.findAll
-    EntityManager em = BlogContext.getInstance().getEntityManager();
-    Query q = em.createNamedQuery("Blog.findAll");
+    BlogDAO blogDAO = BlogContext.getDAOFactory().getBlogDAO();
+    List<Blog> blogList = blogDAO.findAll();
 
-    try
+    if ((blogList != null) &&!blogList.isEmpty())
     {
-      List list = q.getResultList();
-
-      blogs.setWrappedData(list);
-    }
-    catch (Exception ex)
-    {
-      logger.log(Level.SEVERE, null, ex);
-    }
-    finally
-    {
-      em.close();
+      blogs.setWrappedData(blogList);
     }
 
     return blogs;
@@ -464,46 +432,54 @@ public class AdminBlogBean extends AbstractBean
 
   /**
    * Method description
-   * TODO replace with CategoryDAO.countByBlog
    *
    * @return
    */
   public long getCategoryCount()
   {
-    return countQuery("Category.countByBlog");
+    Blog b = getRequest().getCurrentBlog();
+    CategoryDAO categegoryDAO = BlogContext.getDAOFactory().getCategoryDAO();
+
+    return categegoryDAO.countByBlog(b);
   }
 
   /**
    * Method description
-   * TODO replace with CommentDAO.countByBlog
    *
    * @return
    */
   public long getCommentCount()
   {
-    return countQuery("Comment.countByBlog");
+    Blog b = getRequest().getCurrentBlog();
+    CommentDAO commentDAO = BlogContext.getDAOFactory().getCommentDAO();
+
+    return commentDAO.countByBlog(b);
   }
 
   /**
    * Method description
-   * TODO replace with EntryDAO.countByBlog
    *
    * @return
    */
   public long getEntryCount()
   {
-    return countQuery("Entry.countByBlog");
+    Blog b = getRequest().getCurrentBlog();
+    EntryDAO entryDAO = BlogContext.getDAOFactory().getEntryDAO();
+
+    return entryDAO.countByBlog(b);
   }
 
   /**
    * Method description
-   * TODO replace with MemberDAO.countByBlog
    *
    * @return
    */
   public long getMemberCount()
   {
-    return countQuery("BlogMember.countByBlog");
+    Blog b = getRequest().getCurrentBlog();
+    MemberDAO memberDAO = BlogContext.getDAOFactory().getMemberDAO();
+
+    return memberDAO.countByBlog(b);
   }
 
   /**
@@ -516,25 +492,12 @@ public class AdminBlogBean extends AbstractBean
   {
     members = new ListDataModel();
 
-    // TODO MemberDAO.findByBlog
-    EntityManager em = BlogContext.getInstance().getEntityManager();
-    Query q = em.createNamedQuery("BlogMember.findByBlog");
+    MemberDAO memberDAO = BlogContext.getDAOFactory().getMemberDAO();
+    List<BlogMember> memberList = memberDAO.findByBlog(blog);
 
-    q.setParameter("blog", blog);
-
-    try
+    if ((memberList != null) &&!memberList.isEmpty())
     {
-      List list = q.getResultList();
-
-      members.setWrappedData(list);
-    }
-    catch (Exception ex)
-    {
-      logger.log(Level.SEVERE, null, ex);
-    }
-    finally
-    {
-      em.close();
+      members.setWrappedData(memberList);
     }
 
     return members;
@@ -599,33 +562,10 @@ public class AdminBlogBean extends AbstractBean
     this.blog = blog;
   }
 
-  //~--- methods --------------------------------------------------------------
-
-  /**
-   * Method description
-   *
-   *
-   * @param queryName
-   *
-   * @return
-   */
-  private long countQuery(String queryName)
-  {
-    long result = 0;
-    EntityManager em = BlogContext.getInstance().getEntityManager();
-    Query q = em.createNamedQuery(queryName);
-
-    q.setParameter("blog", getRequest().getCurrentBlog());
-    result = (Long) q.getSingleResult();
-    em.close();
-
-    return result;
-  }
-
   //~--- fields ---------------------------------------------------------------
 
   /** Field description */
-  private ServiceReference actionReference;
+  private ServiceReference<NavigationProvider> actionReference;
 
   /** Field description */
   private Blog blog;

@@ -206,11 +206,11 @@ public abstract class SSOLoginModule implements LoginModule
   protected Subject subject;
 
   /** Field description */
-  private User user;
-
-  /** Field description */
   private CallbackHandler callbackHandler;
 
   /** Field description */
   private boolean commited = false;
+
+  /** Field description */
+  private User user;
 }

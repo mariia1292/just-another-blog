@@ -14,6 +14,7 @@ import sonia.blog.entity.Blog;
 import sonia.blog.entity.Category;
 import sonia.blog.entity.Entry;
 import sonia.blog.entity.Tag;
+import sonia.blog.entity.User;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -24,7 +25,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
-import sonia.blog.entity.User;
 
 /**
  *
@@ -85,6 +85,20 @@ public class JpaEntryDAO extends JpaGenericDAO<Entry> implements EntryDAO
    * Method description
    *
    *
+   * @param start
+   * @param max
+   *
+   * @return
+   */
+  public List<Entry> findAll(int start, int max)
+  {
+    return findList("Entry.findAll", start, max);
+  }
+
+  /**
+   * Method description
+   *
+   *
    * @return
    */
   public List<Entry> findAllActives()
@@ -110,12 +124,27 @@ public class JpaEntryDAO extends JpaGenericDAO<Entry> implements EntryDAO
    *
    *
    * @param blog
+   *
+   * @return
+   */
+  public List<Entry> findAllByBlog(Blog blog)
+  {
+    return findList("Entry.findAllByBlog", blog);
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param blog
    * @param startDate
    * @param endDate
    *
    * @return
    */
-  public List<Entry> findByBlogAndDate(Blog blog, Date startDate, Date endDate)
+  @SuppressWarnings("unchecked")
+  public List<Entry> findAllByBlogAndDate(Blog blog, Date startDate,
+          Date endDate)
   {
     List<Entry> entries = null;
     EntityManager em = createEntityManager();
@@ -150,7 +179,8 @@ public class JpaEntryDAO extends JpaGenericDAO<Entry> implements EntryDAO
    *
    * @return
    */
-  public List<Entry> findByBlogAndTag(Blog blog, Tag tag)
+  @SuppressWarnings("unchecked")
+  public List<Entry> findAllByBlogAndTag(Blog blog, Tag tag)
   {
     List<Entry> entries = null;
     EntityManager em = createEntityManager();
@@ -184,7 +214,7 @@ public class JpaEntryDAO extends JpaGenericDAO<Entry> implements EntryDAO
    * @return
    */
   @SuppressWarnings("unchecked")
-  public List<Entry> findByCategory(Category category)
+  public List<Entry> findAllByCategory(Category category)
   {
     List<Entry> entries = null;
     EntityManager em = createEntityManager();
@@ -219,7 +249,8 @@ public class JpaEntryDAO extends JpaGenericDAO<Entry> implements EntryDAO
    * @return
    */
   @SuppressWarnings("unchecked")
-  public List<Date> findCalendarDates(Blog blog, Date startDate, Date endDate)
+  public List<Date> findAllCalendarDates(Blog blog, Date startDate,
+          Date endDate)
   {
     List<Date> dates = null;
     EntityManager em = createEntityManager();
@@ -245,23 +276,33 @@ public class JpaEntryDAO extends JpaGenericDAO<Entry> implements EntryDAO
     return dates;
   }
 
+  /**
+   * Method description
+   *
+   *
+   * @param blog
+   * @param user
+   *
+   * @return
+   */
   @SuppressWarnings("unchecked")
   public List<Entry> findAllDraftsByBlogAndUser(Blog blog, User user)
   {
     List<Entry> entries = null;
-
     EntityManager em = createEntityManager();
-    Query q = em.createNamedQuery("User.findAllDraftsByBlogAndUser");
+    Query q = em.createNamedQuery("Entry.findAllDraftsByBlogAndUser");
+
     q.setParameter("blog", blog);
     q.setParameter("user", user);
+
     try
     {
       entries = q.getResultList();
     }
-    catch (NoResultException ex){}
+    catch (NoResultException ex) {}
     finally
     {
-      if ( em != null )
+      if (em != null)
       {
         em.close();
       }

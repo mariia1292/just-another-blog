@@ -11,20 +11,15 @@ package sonia.blog.wui;
 
 import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.app.Constants;
+import sonia.blog.api.dao.UserDAO;
 import sonia.blog.api.util.AbstractBean;
 import sonia.blog.entity.User;
 
 import sonia.config.XmlConfiguration;
 
-import sonia.plugin.ServiceReference;
+import sonia.plugin.service.ServiceReference;
 
 import sonia.security.encryption.Encryption;
-
-//~--- JDK imports ------------------------------------------------------------
-
-import java.util.logging.Level;
-
-import javax.persistence.EntityManager;
 
 /**
  *
@@ -72,13 +67,13 @@ public class UserSettingsBean extends AbstractBean
 
     if (passwordRetry.equals(user.getPassword()))
     {
-      ServiceReference reference =
-        BlogContext.getInstance().getServiceRegistry().getServiceReference(
-            Constants.SERVCIE_ENCRYPTION);
+      ServiceReference<Encryption> reference =
+        BlogContext.getInstance().getServiceRegistry().get(Encryption.class,
+          Constants.SERVCIE_ENCRYPTION);
 
       if (reference != null)
       {
-        Encryption enc = (Encryption) reference.getImplementation();
+        Encryption enc = reference.get();
 
         if (enc != null)
         {
@@ -149,12 +144,9 @@ public class UserSettingsBean extends AbstractBean
   {
     if (user == null)
     {
-      // TODO: replace with UserDAO.find
       Long id = getRequest().getUser().getId();
-      EntityManager em = BlogContext.getInstance().getEntityManager();
 
-      user = em.find(User.class, id);
-      em.close();
+      user = BlogContext.getDAOFactory().getUserDAO().find(id);
     }
 
     return user;
@@ -206,30 +198,16 @@ public class UserSettingsBean extends AbstractBean
   private String save()
   {
     String result = SUCCESS;
-    // TODO: replace with UserDAO.edit
-    EntityManager em = BlogContext.getInstance().getEntityManager();
+    UserDAO userDAO = BlogContext.getDAOFactory().getUserDAO();
 
-    em.getTransaction().begin();
-
-    try
+    if (userDAO.edit(user))
     {
-      user = em.merge(user);
-      em.getTransaction().commit();
       getMessageHandler().info("userSettingsUpdateSuccess");
     }
-    catch (Exception ex)
+    else
     {
-      if (em.getTransaction().isActive())
-      {
-        em.getTransaction().rollback();
-      }
-
-      logger.log(Level.SEVERE, null, ex);
+      result = FAILURE;
       getMessageHandler().error("unknownError");
-    }
-    finally
-    {
-      em.close();
     }
 
     return result;

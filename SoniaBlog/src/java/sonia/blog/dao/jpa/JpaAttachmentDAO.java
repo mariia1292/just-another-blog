@@ -83,13 +83,47 @@ public class JpaAttachmentDAO extends JpaGenericDAO<Attachment>
    * Method description
    *
    *
+   * @param start
+   * @param max
+   *
+   * @return
+   */
+  public List<Attachment> findAll(int start, int max)
+  {
+    return findList("Attachment.findAll", start, max);
+  }
+
+  /**
+   * Method description
+   *
+   *
    * @param entry
    *
    * @return
    */
+  @SuppressWarnings("unchecked")
   public List<Attachment> findAllByEntry(Entry entry)
   {
-    throw new UnsupportedOperationException("Not supported yet.");
+    List<Attachment> attachments = null;
+    EntityManager em = createEntityManager();
+    Query q = em.createNamedQuery("Attachment.findAllByEntry");
+
+    q.setParameter("entry", entry);
+
+    try
+    {
+      attachments = q.getResultList();
+    }
+    catch (NoResultException ex) {}
+    finally
+    {
+      if (em != null)
+      {
+        em.close();
+      }
+    }
+
+    return attachments;
   }
 
   /**

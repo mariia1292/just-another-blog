@@ -23,6 +23,8 @@ public interface GenericDAO<T>
    *
    *
    * @param item
+   *
+   * @return
    */
   public boolean add(T item);
 
@@ -39,6 +41,8 @@ public interface GenericDAO<T>
    *
    *
    * @param item
+   *
+   * @return
    */
   public boolean edit(T item);
 
@@ -64,7 +68,30 @@ public interface GenericDAO<T>
    * Method description
    *
    *
+   * @param start
+   * @param max
+   *
+   * @return
+   */
+  public List<T> findAll(int start, int max);
+
+  /**
+   * Method description
+   *
+   *
    * @param item
+   *
+   * @return
    */
   public boolean remove(T item);
+
+  //~--- get methods ----------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  public boolean isEmpty();
 }

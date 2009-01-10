@@ -53,6 +53,8 @@ public abstract class JpaGenericDAO<T> implements GenericDAO<T>
    *
    *
    * @param item
+   *
+   * @return
    */
   public boolean add(T item)
   {
@@ -74,7 +76,6 @@ public abstract class JpaGenericDAO<T> implements GenericDAO<T>
       }
 
       logger.log(Level.SEVERE, null, ex);
-
       result = false;
     }
     finally
@@ -84,6 +85,7 @@ public abstract class JpaGenericDAO<T> implements GenericDAO<T>
         em.close();
       }
     }
+
     return result;
   }
 
@@ -92,6 +94,8 @@ public abstract class JpaGenericDAO<T> implements GenericDAO<T>
    *
    *
    * @param item
+   *
+   * @return
    */
   public boolean edit(T item)
   {
@@ -113,7 +117,6 @@ public abstract class JpaGenericDAO<T> implements GenericDAO<T>
       }
 
       logger.log(Level.SEVERE, null, ex);
-
       result = false;
     }
     finally
@@ -123,6 +126,7 @@ public abstract class JpaGenericDAO<T> implements GenericDAO<T>
         em.close();
       }
     }
+
     return result;
   }
 
@@ -160,6 +164,8 @@ public abstract class JpaGenericDAO<T> implements GenericDAO<T>
    *
    *
    * @param item
+   *
+   * @return
    */
   public boolean remove(T item)
   {
@@ -181,7 +187,6 @@ public abstract class JpaGenericDAO<T> implements GenericDAO<T>
       }
 
       logger.log(Level.SEVERE, null, ex);
-
       result = false;
     }
     finally
@@ -191,8 +196,24 @@ public abstract class JpaGenericDAO<T> implements GenericDAO<T>
         em.close();
       }
     }
+
     return result;
   }
+
+  //~--- get methods ----------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  public boolean isEmpty()
+  {
+    return count() == 0;
+  }
+
+  //~--- methods --------------------------------------------------------------
 
   /**
    * Method description
@@ -266,8 +287,39 @@ public abstract class JpaGenericDAO<T> implements GenericDAO<T>
    *
    * @return
    */
-  @SuppressWarnings("unchecked")
   protected List<T> findList(String queryName, Blog blog)
+  {
+    return findList(queryName, blog, -1, -1);
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param queryName
+   * @param start
+   * @param max
+   *
+   * @return
+   */
+  protected List<T> findList(String queryName, int start, int max)
+  {
+    return findList(queryName, null, start, max);
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param queryName
+   * @param blog
+   * @param start
+   * @param max
+   *
+   * @return
+   */
+  @SuppressWarnings("unchecked")
+  protected List<T> findList(String queryName, Blog blog, int start, int max)
   {
     List<T> result = null;
     EntityManager em = createEntityManager();
@@ -276,6 +328,16 @@ public abstract class JpaGenericDAO<T> implements GenericDAO<T>
     if (blog != null)
     {
       q.setParameter("blog", blog);
+    }
+
+    if (start > 0)
+    {
+      q.setFirstResult(start);
+    }
+
+    if (max > 0)
+    {
+      q.setMaxResults(max);
     }
 
     try

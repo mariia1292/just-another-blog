@@ -11,6 +11,7 @@ package sonia.blog.wui;
 
 import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.app.Constants;
+import sonia.blog.api.dao.DAOFactory;
 import sonia.blog.api.util.AbstractBean;
 import sonia.blog.entity.Blog;
 import sonia.blog.entity.BlogMember;
@@ -22,7 +23,7 @@ import sonia.blog.entity.User;
 import sonia.config.StoreableConfiguration;
 import sonia.config.XmlConfiguration;
 
-import sonia.plugin.ServiceReference;
+import sonia.plugin.service.ServiceReference;
 
 import sonia.security.encryption.Encryption;
 
@@ -37,8 +38,6 @@ import java.sql.DriverManager;
 
 import java.util.ResourceBundle;
 import java.util.logging.Level;
-
-import javax.persistence.EntityManager;
 
 /**
  *
@@ -84,13 +83,13 @@ public class InstallBean extends AbstractBean
     if (admin.getPassword().equals(passwordRepeat))
     {
       BlogContext context = BlogContext.getInstance();
-      ServiceReference reference =
-        context.getServiceRegistry().getServiceReference(
-            Constants.SERVCIE_ENCRYPTION);
+      ServiceReference<Encryption> reference =
+        context.getServiceRegistry().get(Encryption.class,
+                                         Constants.SERVCIE_ENCRYPTION);
 
-      if ((reference != null) && (reference.getImplementation() != null))
+      if ((reference != null) && (reference.get() != null))
       {
-        Encryption enc = (Encryption) reference.getImplementation();
+        Encryption enc = reference.get();
 
         admin.setPassword(enc.encrypt(passwordRepeat));
       }
@@ -117,6 +116,7 @@ public class InstallBean extends AbstractBean
       // create first Entry
       ResourceBundle message = getResourceBundle("message");
       ResourceBundle label = getResourceBundle("label");
+      BlogMember member = new BlogMember(blog, admin, Role.ADMIN);
       Category category = new Category();
 
       category.setName(label.getString("defaultCategory"));
@@ -129,22 +129,70 @@ public class InstallBean extends AbstractBean
       entry.setTitle(message.getString("firstEntryTitle"));
       entry.setContent(message.getString("firstEntryContent"));
 
-      // TODO replace with various daos
-      EntityManager em = context.getEntityManager(true);
-
-      em.getTransaction().begin();
-
-      try
+      if (logger.isLoggable(Level.FINE))
       {
-        em.persist(admin);
-        em.persist(blog);
+        logger.fine("creating DAOFactory");
+      }
 
-        BlogMember member = new BlogMember(blog, admin, Role.ADMIN);
+      DAOFactory daoFactory = BlogContext.getDAOFactory();
 
-        em.persist(member);
-        em.persist(category);
-        em.persist(entry);
-        em.getTransaction().commit();
+      daoFactory.init();
+
+      boolean error = true;
+
+      if (daoFactory.getUserDAO().add(admin))
+      {
+        if (daoFactory.getBlogDAO().add(blog))
+        {
+          if (daoFactory.getMemberDAO().add(member))
+          {
+            if (daoFactory.getCategoryDAO().add(category))
+            {
+              if (daoFactory.getEntryDAO().add(entry))
+              {
+                error = false;
+              }
+              else
+              {
+                logger.severe("error during entry creation");
+
+                // cant create entry
+              }
+            }
+            else
+            {
+              logger.severe("error during category creation");
+
+              // cat create category
+            }
+          }
+          else
+          {
+            logger.severe("error during member creation");
+
+            // cant create member
+          }
+        }
+        else
+        {
+          logger.severe("error during blog creation");
+
+          // cant create blog
+        }
+      }
+      else
+      {
+        logger.severe("error during user creation");
+
+        // cant create user
+      }
+
+      if (error)
+      {
+        getMessageHandler().error("unknownError");
+      }
+      else
+      {
         configuration.set("defaultBlog", blog.getId());
 
         if (configuration instanceof StoreableConfiguration)
@@ -164,17 +212,6 @@ public class InstallBean extends AbstractBean
         String uri = context.getLinkBuilder().buildLink(getRequest(), "/");
 
         sendRedirect(uri);
-      }
-      catch (Exception ex)
-      {
-        if (em.getTransaction().isActive())
-        {
-          em.getTransaction().rollback();
-        }
-
-        result = FAILURE;
-        getMessageHandler().error("unknownError");
-        logger.log(Level.SEVERE, null, ex);
       }
     }
     else

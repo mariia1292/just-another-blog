@@ -10,14 +10,9 @@ package sonia.blog.wui;
 //~--- non-JDK imports --------------------------------------------------------
 
 import sonia.blog.api.app.BlogContext;
+import sonia.blog.api.dao.BlogDAO;
 import sonia.blog.api.util.AbstractBean;
 import sonia.blog.entity.Blog;
-
-//~--- JDK imports ------------------------------------------------------------
-
-import java.util.logging.Level;
-
-import javax.persistence.EntityManager;
 
 /**
  *
@@ -48,32 +43,16 @@ public class ConfigBean extends AbstractBean
   public String save()
   {
     String result = SUCCESS;
-    EntityManager em = BlogContext.getInstance().getEntityManager();
+    BlogDAO blogDAO = BlogContext.getDAOFactory().getBlogDAO();
 
-    em.getTransaction().begin();
-
-    try
+    if (blogDAO.edit(blog))
     {
-      // TODO replace with BlogDAO.edit
-      blog = em.merge(blog);
-      em.getTransaction().commit();
       getMessageHandler().info("unpdateConfigSuccess");
     }
-    catch (Exception ex)
+    else
     {
-      result = FAILURE;
-
-      if (em.getTransaction().isActive())
-      {
-        em.getTransaction().rollback();
-      }
-
-      logger.log(Level.SEVERE, null, ex);
       getMessageHandler().error("unpdateConfigFailure");
-    }
-    finally
-    {
-      em.close();
+      result = FAILURE;
     }
 
     return result;

@@ -10,6 +10,7 @@ package sonia.blog.ldap;
 //~--- non-JDK imports --------------------------------------------------------
 
 import sonia.blog.api.app.BlogContext;
+import sonia.blog.api.dao.UserDAO;
 import sonia.blog.entity.User;
 
 import sonia.config.ModifyableConfiguration;
@@ -38,10 +39,6 @@ import javax.naming.directory.DirContext;
 import javax.naming.directory.InitialDirContext;
 import javax.naming.directory.SearchControls;
 import javax.naming.directory.SearchResult;
-
-import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
-import javax.persistence.Query;
 
 import javax.security.auth.login.LoginException;
 
@@ -173,39 +170,32 @@ public class LdapLoginModule extends LoginModule
    * Method description
    *
    *
-   * @param em
+   *
+   * @param userDAO
    * @param lu
    *
    * @return
+   *
+   * @throws LoginException
    */
-  private User createUser(EntityManager em, LdapUser lu)
+  private User createUser(UserDAO userDAO, LdapUser lu) throws LoginException
   {
     User u = null;
 
-    em.getTransaction().begin();
+    u = new User();
+    u.setName(lu.getName());
+    u.setActive(Boolean.TRUE);
+    u.setSelfManaged(false);
+    u.setEmail(lu.getMail());
+    u.setPassword("ldap");
+    u.setDisplayName(lu.getDisplayName());
+    u.setLastLogin(new Date());
 
-    try
+    if (!userDAO.add(u))
     {
-      u = new User();
-      u.setName(lu.getName());
-      u.setActive(Boolean.TRUE);
-      u.setSelfManaged(false);
-      u.setEmail(lu.getMail());
-      u.setPassword("ldap");
-      u.setDisplayName(lu.getDisplayName());
-      u.setLastLogin(new Date());
-      em.persist(u);
-      em.getTransaction().commit();
-    }
-    catch (Exception ex)
-    {
-      if (em.getTransaction().isActive())
-      {
-        em.getTransaction().rollback();
-      }
+      logger.severe("error during user creation");
 
-      logger.log(Level.SEVERE, null, ex);
-      u = null;
+      throw new LoginException("error during user creation");
     }
 
     return u;
@@ -276,30 +266,25 @@ public class LdapLoginModule extends LoginModule
    * Method description
    *
    *
-   * @param em
+   *
+   * @param userDAO
    * @param user
    * @param lu
+   *
+   * @throws LoginException
    */
-  private void updateUser(EntityManager em, User user, LdapUser lu)
+  private void updateUser(UserDAO userDAO, User user, LdapUser lu)
+          throws LoginException
   {
     user.setDisplayName(lu.getDisplayName());
     user.setEmail(lu.getMail());
     user.setLastLogin(new Date());
-    em.getTransaction().begin();
 
-    try
+    if (!userDAO.edit(user))
     {
-      user = em.merge(user);
-      em.getTransaction().commit();
-    }
-    catch (Exception ex)
-    {
-      if (em.getTransaction().isActive())
-      {
-        em.getTransaction().rollback();
-      }
+      logger.severe("error during user update");
 
-      logger.log(Level.SEVERE, null, ex);
+      throw new LoginException("error during user update");
     }
   }
 
@@ -437,20 +422,13 @@ public class LdapLoginModule extends LoginModule
    * @param user
    *
    * @return
+   *
+   * @throws LoginException
    */
-  private User getUser(LdapUser user)
+  private User getUser(LdapUser user) throws LoginException
   {
-    User result = null;
-    EntityManager em = BlogContext.getInstance().getEntityManager();
-
-    try
-    {
-      Query q = em.createNamedQuery("User.findByName");
-
-      q.setParameter("name", user.getName());
-      result = (User) q.getSingleResult();
-    }
-    catch (NoResultException ex) {}
+    UserDAO userDAO = BlogContext.getDAOFactory().getUserDAO();
+    User result = userDAO.findByName(user.getName());
 
     if (result == null)
     {
@@ -459,7 +437,7 @@ public class LdapLoginModule extends LoginModule
         logger.info("creating user " + user.getName());
       }
 
-      result = createUser(em, user);
+      result = createUser(userDAO, user);
     }
     else if (!result.isActive())
     {
@@ -473,10 +451,8 @@ public class LdapLoginModule extends LoginModule
         logger.info("update user " + user.getName());
       }
 
-      updateUser(em, result, user);
+      updateUser(userDAO, result, user);
     }
-
-    em.close();
 
     return result;
   }

@@ -13,7 +13,7 @@ import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.app.Constants;
 import sonia.blog.api.util.AbstractBean;
 
-import sonia.plugin.ServiceReference;
+import sonia.plugin.service.ServiceReference;
 
 import sonia.util.Util;
 
@@ -22,9 +22,6 @@ import sonia.util.Util;
 import java.io.File;
 
 import java.util.List;
-
-import javax.persistence.EntityManager;
-import javax.persistence.Query;
 
 /**
  *
@@ -41,7 +38,7 @@ public class GlobalStatusBean extends AbstractBean
   {
     super();
     reference =
-      BlogContext.getInstance().getServiceRegistry().getServiceReference(
+      BlogContext.getInstance().getServiceRegistry().get(String.class,
         Constants.SERVCIE_GLOBALSTATUSROVIDER);
     resourceDir =
       BlogContext.getInstance().getResourceManager().getResourceDirectory();
@@ -51,19 +48,12 @@ public class GlobalStatusBean extends AbstractBean
 
   /**
    * Method description
-   * TODO: replace with AttachmentDAO.count
    *
    * @return
    */
   public long getAttachmentCount()
   {
-    EntityManager em = BlogContext.getInstance().getEntityManager();
-    Query q = em.createNamedQuery("Attachment.count");
-    Long result = (Long) q.getSingleResult();
-
-    em.close();
-
-    return result;
+    return BlogContext.getDAOFactory().getAttachmentDAO().count();
   }
 
   /**
@@ -87,70 +77,42 @@ public class GlobalStatusBean extends AbstractBean
 
   /**
    * Method description
-   * TODO: replace with BlogDAO.count
    *
    * @return
    */
   public long getBlogCount()
   {
-    EntityManager em = BlogContext.getInstance().getEntityManager();
-    Query q = em.createNamedQuery("Blog.count");
-    Long result = (Long) q.getSingleResult();
-
-    em.close();
-
-    return result;
+    return BlogContext.getDAOFactory().getBlogDAO().count();
   }
 
   /**
    * Method description
-   * TODO: replace with CategoryDAO.count
    *
    * @return
    */
   public long getCategoryCount()
   {
-    EntityManager em = BlogContext.getInstance().getEntityManager();
-    Query q = em.createNamedQuery("Category.count");
-    Long result = (Long) q.getSingleResult();
-
-    em.close();
-
-    return result;
+    return BlogContext.getDAOFactory().getCategoryDAO().count();
   }
 
   /**
    * Method description
-   * TODO: replace with CommentDAO.count
    *
    * @return
    */
   public long getCommentCount()
   {
-    EntityManager em = BlogContext.getInstance().getEntityManager();
-    Query q = em.createNamedQuery("Comment.count");
-    Long result = (Long) q.getSingleResult();
-
-    em.close();
-
-    return result;
+    return BlogContext.getDAOFactory().getCommentDAO().count();
   }
 
   /**
    * Method description
-   * TODO: replace with EntryDAO.count
    *
    * @return
    */
   public long getEntryCount()
   {
-    EntityManager em = BlogContext.getInstance().getEntityManager();
-    Query q = em.createNamedQuery("Entry.count");
-    Long result = (Long) q.getSingleResult();
-
-    em.close();
-
-    return result;
+    return BlogContext.getDAOFactory().getEntryDAO().count();
   }
 
   /**
@@ -204,50 +166,35 @@ public class GlobalStatusBean extends AbstractBean
    *
    * @return
    */
-  @SuppressWarnings("unchecked")
   public List<String> getStatusProviders()
   {
-    return reference.getImplementations();
+    return reference.getAll();
   }
 
   /**
    * Method description
-   * TODO: replace with TagDAO.count
    *
    * @return
    */
   public long getTagCount()
   {
-    EntityManager em = BlogContext.getInstance().getEntityManager();
-    Query q = em.createNamedQuery("Tag.count");
-    Long result = (Long) q.getSingleResult();
-
-    em.close();
-
-    return result;
+    return BlogContext.getDAOFactory().getTagDAO().count();
   }
 
   /**
    * Method description
-   * TODO: replace with UserDAO.count
    *
    * @return
    */
   public long getUserCount()
   {
-    EntityManager em = BlogContext.getInstance().getEntityManager();
-    Query q = em.createNamedQuery("User.count");
-    Long result = (Long) q.getSingleResult();
-
-    em.close();
-
-    return result;
+    return BlogContext.getDAOFactory().getUserDAO().count();
   }
 
   //~--- fields ---------------------------------------------------------------
 
   /** Field description */
-  private ServiceReference reference;
+  private ServiceReference<String> reference;
 
   /** Field description */
   private File resourceDir;

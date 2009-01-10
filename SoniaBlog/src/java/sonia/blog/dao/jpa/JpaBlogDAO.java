@@ -9,10 +9,17 @@ package sonia.blog.dao.jpa;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import sonia.blog.api.app.BlogContext;
+import sonia.blog.api.app.Constants;
+import sonia.blog.api.app.ResourceManager;
 import sonia.blog.api.dao.BlogDAO;
 import sonia.blog.entity.Blog;
 
+import sonia.util.Util;
+
 //~--- JDK imports ------------------------------------------------------------
+
+import java.io.File;
 
 import java.util.List;
 
@@ -67,6 +74,31 @@ public class JpaBlogDAO extends JpaGenericDAO<Blog> implements BlogDAO
    * Method description
    *
    *
+   * @param start
+   * @param max
+   *
+   * @return
+   */
+  public List<Blog> findAll(int start, int max)
+  {
+    return findList("Blog.findAll", start, max);
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  public List<Blog> findAllActives()
+  {
+    return findList("Blog.findAllActives");
+  }
+
+  /**
+   * Method description
+   *
+   *
    * @param servername
    *
    * @return
@@ -95,8 +127,44 @@ public class JpaBlogDAO extends JpaGenericDAO<Blog> implements BlogDAO
     return blog;
   }
 
-  public List<Blog> findAllActives()
+  /**
+   * Method description
+   *
+   *
+   * @param blog
+   *
+   * @return
+   */
+  @Override
+  public boolean remove(Blog blog)
   {
-    return findList("Blog.findAllActives");
+    boolean result = false;
+
+    if (super.remove(blog))
+    {
+      ResourceManager resManager =
+        BlogContext.getInstance().getResourceManager();
+      File indexDir = resManager.getDirectory(Constants.RESOURCE_INDEX, blog,
+                        false);
+
+      if (indexDir.exists())
+      {
+        logger.fine("removing directory " + indexDir.getPath());
+        Util.delete(indexDir);
+      }
+
+      File attachmentDir =
+        resManager.getDirectory(Constants.RESOURCE_ATTACHMENT, blog, false);
+
+      if (attachmentDir.exists())
+      {
+        logger.fine("removing directory " + attachmentDir.getPath());
+        Util.delete(attachmentDir);
+      }
+
+      result = true;
+    }
+
+    return result;
   }
 }

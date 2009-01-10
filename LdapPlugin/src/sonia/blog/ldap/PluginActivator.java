@@ -18,7 +18,7 @@ import sonia.config.XmlConfiguration;
 
 import sonia.plugin.Activator;
 import sonia.plugin.PluginContext;
-import sonia.plugin.ServiceReference;
+import sonia.plugin.service.ServiceReference;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -68,17 +68,18 @@ public class PluginActivator implements Activator, ConfigurationListener
   {
     if (configReference == null)
     {
-      configReference = context.getServiceRegistry().getServiceReference(
-        Constants.SERVCIE_GLOBALCONFIGPROVIDER);
+      configReference = context.getServiceRegistry().get(String.class,
+              Constants.SERVCIE_GLOBALCONFIGPROVIDER);
     }
 
     if (authReference == null)
     {
-      authReference = context.getServiceRegistry().getServiceReference(
-        Constants.SERVICE_AUTHENTICATION);
+      authReference =
+        context.getServiceRegistry().get(AppConfigurationEntry.class,
+                                         Constants.SERVICE_AUTHENTICATION);
     }
 
-    configReference.addImplementation("/view/ldap/config.xhtml");
+    configReference.add("/view/ldap/config.xhtml");
 
     XmlConfiguration config = BlogContext.getInstance().getConfiguration();
 
@@ -102,7 +103,7 @@ public class PluginActivator implements Activator, ConfigurationListener
   {
     if (configReference != null)
     {
-      configReference.removeImplementation("/view/ldap/config.xhtml");
+      configReference.remove("/view/ldap/config.xhtml");
     }
 
     BlogContext.getInstance().getConfiguration().removeListener(this);
@@ -117,7 +118,7 @@ public class PluginActivator implements Activator, ConfigurationListener
   {
     if (entry != null)
     {
-      authReference.removeImplementation(entry);
+      authReference.remove(entry);
     }
 
     active = false;
@@ -138,7 +139,7 @@ public class PluginActivator implements Activator, ConfigurationListener
           new HashMap<String, Object>());
     }
 
-    authReference.getImplementations().add(entry);
+    authReference.add(entry);
     active = true;
   }
 
@@ -148,10 +149,10 @@ public class PluginActivator implements Activator, ConfigurationListener
   private boolean active;
 
   /** Field description */
-  private ServiceReference authReference;
+  private ServiceReference<AppConfigurationEntry> authReference;
 
   /** Field description */
-  private ServiceReference configReference;
+  private ServiceReference<String> configReference;
 
   /** Field description */
   private AppConfigurationEntry entry;

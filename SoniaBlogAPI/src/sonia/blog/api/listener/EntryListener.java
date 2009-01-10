@@ -12,7 +12,7 @@ package sonia.blog.api.listener;
 import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.app.Constants;
 
-import sonia.plugin.ServiceReference;
+import sonia.plugin.service.ServiceReference;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -151,16 +151,15 @@ public class EntryListener extends EntityListener
   {
     if (reference == null)
     {
-      reference =
-        BlogContext.getInstance().getServiceRegistry().getServiceReference(
-          Constants.SERVICE_ENTRY_LISTENER);
+      reference = BlogContext.getInstance().getServiceRegistry().get(
+        EntityListener.class, Constants.SERVICE_ENTRY_LISTENER);
     }
 
-    return reference.getImplementations();
+    return reference.getAll();
   }
 
   //~--- fields ---------------------------------------------------------------
 
   /** Field description */
-  private ServiceReference reference;
+  private ServiceReference<EntityListener> reference;
 }

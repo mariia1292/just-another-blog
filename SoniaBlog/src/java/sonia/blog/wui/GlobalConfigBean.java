@@ -11,13 +11,14 @@ package sonia.blog.wui;
 
 import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.app.Constants;
+import sonia.blog.api.dao.BlogDAO;
 import sonia.blog.api.spam.SpamInputProtection;
 import sonia.blog.api.util.AbstractConfigBean;
 import sonia.blog.entity.Blog;
 
 import sonia.config.XmlConfiguration;
 
-import sonia.plugin.ServiceReference;
+import sonia.plugin.service.ServiceReference;
 
 import sonia.util.Util;
 
@@ -26,8 +27,6 @@ import sonia.util.Util;
 import java.util.List;
 
 import javax.faces.model.SelectItem;
-
-import javax.persistence.EntityManager;
 
 /**
  *
@@ -46,16 +45,15 @@ public class GlobalConfigBean extends AbstractConfigBean
 
     BlogContext context = BlogContext.getInstance();
 
-    reference = context.getServiceRegistry().getServiceReference(
-      Constants.SERVCIE_GLOBALCONFIGPROVIDER);
+    reference = context.getServiceRegistry().get(String.class,
+            Constants.SERVCIE_GLOBALCONFIGPROVIDER);
     spamInputServcieReference =
-      context.getServiceRegistry().getServiceReference(
-        Constants.SERVICE_SPAMPROTECTIONMETHOD);
+      context.getServiceRegistry().get(SpamInputProtection.class,
+                                       Constants.SERVICE_SPAMPROTECTIONMETHOD);
 
     if (spamInputMethod == null)
     {
-      spamInputMethod =
-        spamInputServcieReference.getImplementation().getClass().getName();
+      spamInputMethod = spamInputServcieReference.get().getClass().getName();
     }
   }
 
@@ -146,14 +144,11 @@ public class GlobalConfigBean extends AbstractConfigBean
    *
    * @return
    */
-  @SuppressWarnings("unchecked")
   public SelectItem[] getBlogItems()
   {
     SelectItem[] items = null;
-    // TODO: replace with BlogDAO.findAllActives
-    EntityManager em = BlogContext.getInstance().getEntityManager();
-    List<Blog> blogList =
-      em.createNamedQuery("Blog.findAllActives").getResultList();
+    BlogDAO blogDAO = BlogContext.getDAOFactory().getBlogDAO();
+    List<Blog> blogList = blogDAO.findAllActives();
 
     if ((blogList != null) &&!blogList.isEmpty())
     {
@@ -183,10 +178,9 @@ public class GlobalConfigBean extends AbstractConfigBean
    *
    * @return
    */
-  @SuppressWarnings("unchecked")
   public List<String> getConfigurationProviders()
   {
-    return reference.getImplementations();
+    return reference.getAll();
   }
 
   /**
@@ -294,12 +288,10 @@ public class GlobalConfigBean extends AbstractConfigBean
    *
    * @return
    */
-  @SuppressWarnings("unchecked")
   public SelectItem[] getSpamInputMethodItems()
   {
     SelectItem[] items = null;
-    List<SpamInputProtection> list =
-      spamInputServcieReference.getImplementations();
+    List<SpamInputProtection> list = spamInputServcieReference.getAll();
 
     if ((list != null) &&!list.isEmpty())
     {
@@ -577,7 +569,7 @@ public class GlobalConfigBean extends AbstractConfigBean
   private int passwordMinLength;
 
   /** Field description */
-  private ServiceReference reference;
+  private ServiceReference<String> reference;
 
   /** Field description */
   private boolean registerAcknowledgement;
@@ -598,7 +590,7 @@ public class GlobalConfigBean extends AbstractConfigBean
   private String spamInputMethod;
 
   /** Field description */
-  private ServiceReference spamInputServcieReference;
+  private ServiceReference<SpamInputProtection> spamInputServcieReference;
 
   /** Field description */
   private int sso;

@@ -15,6 +15,9 @@ import org.apache.myfaces.custom.navmenu.UINavigationMenuItem;
 import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.app.BlogRequest;
 import sonia.blog.api.app.Constants;
+import sonia.blog.api.dao.CategoryDAO;
+import sonia.blog.api.dao.CommentDAO;
+import sonia.blog.api.dao.TagDAO;
 import sonia.blog.api.link.LinkBuilder;
 import sonia.blog.api.mapping.MappingEntry;
 import sonia.blog.api.navigation.NavigationProvider;
@@ -25,14 +28,17 @@ import sonia.blog.api.spam.SpamInputProtection;
 import sonia.blog.api.template.Template;
 import sonia.blog.api.util.AbstractBean;
 import sonia.blog.entity.Blog;
+import sonia.blog.entity.Category;
 import sonia.blog.entity.Comment;
 import sonia.blog.entity.CommentAble;
 import sonia.blog.entity.ContentObject;
+import sonia.blog.entity.Entry;
+import sonia.blog.entity.Tag;
 
 import sonia.config.Configuration;
 import sonia.config.XmlConfiguration;
 
-import sonia.plugin.ServiceReference;
+import sonia.plugin.service.ServiceReference;
 
 import sonia.util.Util;
 
@@ -42,15 +48,11 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.model.DataModel;
 import javax.faces.model.ListDataModel;
-
-import javax.persistence.EntityManager;
-import javax.persistence.Query;
 
 /**
  *
@@ -73,7 +75,6 @@ public class BlogBean extends AbstractBean
 
   /**
    * Method description
-   * TODO relace with CommentDAO.add
    *
    *
    */
@@ -86,44 +87,30 @@ public class BlogBean extends AbstractBean
       comment.setAuthorAddress(getRequest().getRemoteAddr());
       ca.addComment(comment);
 
-      EntityManager em = BlogContext.getInstance().getEntityManager();
-
-      em.getTransaction().begin();
-
-      try
+      if (entry instanceof Entry)
       {
-        em.persist(comment);
-        entry = em.merge(entry);
+        CommentDAO commentDAO = BlogContext.getDAOFactory().getCommentDAO();
 
-        Comment newComment = new Comment();
-
-        newComment.setAuthorMail(comment.getAuthorMail());
-        newComment.setAuthorName(comment.getAuthorName());
-        newComment.setAuthorURL(comment.getAuthorURL());
-        comment = newComment;
-        em.getTransaction().commit();
-        getMessageHandler().info("createCommentSuccess");
-      }
-      catch (Exception ex)
-      {
-        if (em.getTransaction().isActive())
+        if (commentDAO.add(comment))
         {
-          em.getTransaction().rollback();
+          getMessageHandler().info("createCommentSuccess");
         }
-
-        logger.log(Level.SEVERE, null, ex);
-        getMessageHandler().error("createCommentFailure");
+        else
+        {
+          getMessageHandler().error("createCommentFailure");
+        }
       }
-      finally
+      else
       {
-        em.close();
+        getMessageHandler().error("commentOnlyOnEntries");
       }
 
-      /*
-       * String uri =
-       * BlogContext.getInstance().getLinkBuilder().buildLink(getRequest(), e);
-       * sendRedirect(uri);
-       */
+      Comment newComment = new Comment();
+
+      newComment.setAuthorMail(comment.getAuthorMail());
+      newComment.setAuthorName(comment.getAuthorName());
+      newComment.setAuthorURL(comment.getAuthorURL());
+      comment = newComment;
     }
     else
     {
@@ -146,7 +133,6 @@ public class BlogBean extends AbstractBean
 
   /**
    * Method description
-   * TODO replace with Category.findAllByBlog
    *
    * @return
    */
@@ -154,19 +140,14 @@ public class BlogBean extends AbstractBean
   {
     categories = new ListDataModel();
 
-    EntityManager em = BlogContext.getInstance().getEntityManager();
-    Query q = em.createNamedQuery("Category.findAllByBlog");
+    CategoryDAO categoryDAO = BlogContext.getDAOFactory().getCategoryDAO();
+    List<Category> categoryList =
+      categoryDAO.findAllByBlog(getRequest().getCurrentBlog());
 
-    q.setParameter("blog", getRequest().getCurrentBlog());
-
-    List list = q.getResultList();
-
-    if (list != null)
+    if ((categoryList != null) &&!categoryList.isEmpty())
     {
-      categories.setWrappedData(list);
+      categories.setWrappedData(categoryList);
     }
-
-    em.close();
 
     return categories;
   }
@@ -196,19 +177,18 @@ public class BlogBean extends AbstractBean
   public DataModel getComments()
   {
     DataModel comments = new ListDataModel();
-    EntityManager em = BlogContext.getInstance().getEntityManager();
-    Query q = em.createNamedQuery("Comment.findAllActivesByEntry");
 
-    q.setParameter("entry", entry);
-
-    List commentList = q.getResultList();
-
-    if (commentList != null)
+    if (entry instanceof Entry)
     {
-      comments.setWrappedData(commentList);
-    }
+      CommentDAO commentDAO = BlogContext.getDAOFactory().getCommentDAO();
+      List<Comment> commentList =
+        commentDAO.findAllActivesByEntry((Entry) entry);
 
-    em.close();
+      if ((commentList != null) &&!commentList.isEmpty())
+      {
+        comments.setWrappedData(commentList);
+      }
+    }
 
     return comments;
   }
@@ -308,12 +288,11 @@ public class BlogBean extends AbstractBean
     if (extraNavigationReference == null)
     {
       extraNavigationReference =
-        context.getServiceRegistry().getServiceReference(
-          Constants.NAVIGATION_EXTRA);
+        context.getServiceRegistry().get(NavigationProvider.class,
+                                         Constants.NAVIGATION_EXTRA);
     }
 
-    List<NavigationProvider> providers =
-      extraNavigationReference.getImplementations();
+    List<NavigationProvider> providers = extraNavigationReference.getAll();
 
     if ((providers != null) &&!providers.isEmpty())
     {
@@ -537,9 +516,8 @@ public class BlogBean extends AbstractBean
   {
     if (spamServiceReference == null)
     {
-      spamServiceReference =
-        BlogContext.getInstance().getServiceRegistry().getServiceReference(
-          Constants.SERVICE_SPAMPROTECTIONMETHOD);
+      spamServiceReference = BlogContext.getInstance().getServiceRegistry().get(
+        SpamInputProtection.class, Constants.SERVICE_SPAMPROTECTIONMETHOD);
     }
 
     SpamInputProtection method = null;
@@ -549,8 +527,7 @@ public class BlogBean extends AbstractBean
     {
       if (!configString.equalsIgnoreCase("none"))
       {
-        List<SpamInputProtection> list =
-          spamServiceReference.getImplementations();
+        List<SpamInputProtection> list = spamServiceReference.getAll();
 
         for (SpamInputProtection sp : list)
         {
@@ -570,7 +547,7 @@ public class BlogBean extends AbstractBean
     }
     else
     {
-      method = (SpamInputProtection) spamServiceReference.getImplementation();
+      method = spamServiceReference.get();
     }
 
     return method;
@@ -578,7 +555,6 @@ public class BlogBean extends AbstractBean
 
   /**
    * Method description
-   * TODO replace with TagDAO.findAllByBlog
    *
    * @return
    */
@@ -586,24 +562,12 @@ public class BlogBean extends AbstractBean
   {
     tags = new ListDataModel();
 
-    EntityManager em = BlogContext.getInstance().getEntityManager();
-    Query q = em.createNamedQuery("Tag.findAllByBlog");
+    TagDAO tagDAO = BlogContext.getDAOFactory().getTagDAO();
+    List<Tag> tagList = tagDAO.findAllByBlog(getRequest().getCurrentBlog());
 
-    q.setParameter("blog", getRequest().getCurrentBlog());
-
-    try
+    if ((tagList != null) &&!tagList.isEmpty())
     {
-      List list = q.getResultList();
-
-      tags.setWrappedData(list);
-    }
-    catch (Exception ex)
-    {
-      logger.log(Level.SEVERE, null, ex);
-    }
-    finally
-    {
-      em.close();
+      tags.setWrappedData(tagList);
     }
 
     return tags;
@@ -813,7 +777,7 @@ public class BlogBean extends AbstractBean
   private String searchString;
 
   /** Field description */
-  private ServiceReference spamServiceReference;
+  private ServiceReference<SpamInputProtection> spamServiceReference;
 
   /** Field description */
   private DataModel tags;

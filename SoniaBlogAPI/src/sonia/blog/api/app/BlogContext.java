@@ -10,6 +10,7 @@ package sonia.blog.api.app;
 //~--- non-JDK imports --------------------------------------------------------
 
 import sonia.blog.api.authentication.SSOCallbackHandler;
+import sonia.blog.api.dao.DAOFactory;
 import sonia.blog.api.link.LinkBuilder;
 import sonia.blog.api.mapping.MappingHandler;
 import sonia.blog.api.search.SearchContext;
@@ -21,8 +22,8 @@ import sonia.config.XmlConfiguration;
 import sonia.macro.MacroParser;
 
 import sonia.plugin.PluginContext;
-import sonia.plugin.ServiceReference;
-import sonia.plugin.ServiceRegistry;
+import sonia.plugin.service.ServiceReference;
+import sonia.plugin.service.ServiceRegistry;
 
 import sonia.security.authentication.LoginCallbackHandler;
 
@@ -33,14 +34,8 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
 
 import javax.security.auth.Subject;
 import javax.security.auth.login.Configuration;
@@ -74,6 +69,17 @@ public class BlogContext
   }
 
   //~--- get methods ----------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  public static DAOFactory getDAOFactory()
+  {
+    return DAOFactory.getInstance();
+  }
 
   /**
    * Method description
@@ -155,11 +161,7 @@ public class BlogContext
   public void destroy()
   {
     getPluginContext().shutdown();
-
-    if (entityManagerFactory != null)
-    {
-      entityManagerFactory.close();
-    }
+    getDAOFactory().close();
 
     if (installed &&!configuration.isEmpty())
     {
@@ -234,7 +236,7 @@ public class BlogContext
 
     if (id != null)
     {
-      blog = getEntityManager().find(Blog.class, id);
+      blog = getDAOFactory().getBlogDAO().find(id);
     }
 
     return blog;
@@ -245,53 +247,54 @@ public class BlogContext
    * TODO: remove
    *
    *
-   * @param recreate
    * @return
+   *
+   * public EntityManager getEntityManager(boolean recreate)
+   * {
+   * if (recreate || (entityManagerFactory == null))
+   * {
+   *   if (entityManagerFactory != null)
+   *   {
+   *     try
+   *     {
+   *       entityManagerFactory.close();
+   *     }
+   *     catch (Exception ex)
+   *     {
+   *       logger.log(Level.SEVERE, null, ex);
+   *     }
+   *   }
+   *
+   *   XmlConfiguration config = getConfiguration();
+   *   Map<String, String> parameters = new HashMap<String, String>();
+   *
+   *   parameters.put("toplink.jdbc.driver",
+   *                  config.getString(Constants.CONFIG_DB_DRIVER));
+   *   parameters.put("toplink.jdbc.url",
+   *                  config.getString(Constants.CONFIG_DB_URL));
+   *   parameters.put("toplink.jdbc.user",
+   *                  config.getString(Constants.CONFIG_DB_USERNAME));
+   *   parameters.put("toplink.jdbc.password",
+   *                  config.getString(Constants.CONFIG_DB_PASSWORD));
+   *   entityManagerFactory =
+   *     Persistence.createEntityManagerFactory("SoniaBlog-PU", parameters);
+   * }
+   *
+   * return entityManagerFactory.createEntityManager();
+   * }
    */
-  public EntityManager getEntityManager(boolean recreate)
-  {
-    if (recreate || (entityManagerFactory == null))
-    {
-      if (entityManagerFactory != null)
-      {
-        try
-        {
-          entityManagerFactory.close();
-        }
-        catch (Exception ex)
-        {
-          logger.log(Level.SEVERE, null, ex);
-        }
-      }
-
-      XmlConfiguration config = getConfiguration();
-      Map<String, String> parameters = new HashMap<String, String>();
-
-      parameters.put("toplink.jdbc.driver",
-                     config.getString(Constants.CONFIG_DB_DRIVER));
-      parameters.put("toplink.jdbc.url",
-                     config.getString(Constants.CONFIG_DB_URL));
-      parameters.put("toplink.jdbc.user",
-                     config.getString(Constants.CONFIG_DB_USERNAME));
-      parameters.put("toplink.jdbc.password",
-                     config.getString(Constants.CONFIG_DB_PASSWORD));
-      entityManagerFactory =
-        Persistence.createEntityManagerFactory("SoniaBlog-PU", parameters);
-    }
-
-    return entityManagerFactory.createEntityManager();
-  }
 
   /**
    * Method description
    * TODO: remove
    *
    * @return
+   *
+   * public EntityManager getEntityManager()
+   * {
+   * return getEntityManager(false);
+   * }
    */
-  public EntityManager getEntityManager()
-  {
-    return getEntityManager(false);
-  }
 
   /**
    * Method description
@@ -303,11 +306,11 @@ public class BlogContext
   {
     if (linkBuilder == null)
     {
-      linkBuilder =
-        getServiceRegistry().getServiceReference(Constants.SERVICE_LINKBUILDER);
+      linkBuilder = getServiceRegistry().get(LinkBuilder.class,
+              Constants.SERVICE_LINKBUILDER);
     }
 
-    return (LinkBuilder) linkBuilder.getImplementation();
+    return linkBuilder.get();
   }
 
   /**
@@ -331,11 +334,11 @@ public class BlogContext
   {
     if (mappingHandler == null)
     {
-      mappingHandler = getServiceRegistry().getServiceReference(
-        Constants.SERVICE_MAPPINGHANDLER);
+      mappingHandler = getServiceRegistry().get(MappingHandler.class,
+              Constants.SERVICE_MAPPINGHANDLER);
     }
 
-    return (MappingHandler) mappingHandler.getImplementation();
+    return mappingHandler.get();
   }
 
   /**
@@ -384,11 +387,11 @@ public class BlogContext
   {
     if (searchContext == null)
     {
-      searchContext = getServiceRegistry().getServiceReference(
-        Constants.SERVICE_SEARCHCONTEXT);
+      searchContext = getServiceRegistry().get(SearchContext.class,
+              Constants.SERVICE_SEARCHCONTEXT);
     }
 
-    return (SearchContext) searchContext.getImplementation();
+    return searchContext.get();
   }
 
   /**
@@ -464,13 +467,10 @@ public class BlogContext
   private XmlConfiguration configuration;
 
   /** Field description */
-  private EntityManagerFactory entityManagerFactory;
-
-  /** Field description */
   private boolean installed = false;
 
   /** Field description */
-  private ServiceReference linkBuilder;
+  private ServiceReference<LinkBuilder> linkBuilder;
 
   /** Field description */
   private Logger logger = Logger.getLogger(BlogContext.class.getName());
@@ -479,7 +479,7 @@ public class BlogContext
   private Configuration loginConfiguration;
 
   /** Field description */
-  private ServiceReference mappingHandler;
+  private ServiceReference<MappingHandler> mappingHandler;
 
   /** Field description */
   private PluginContext pluginContext;
@@ -488,7 +488,7 @@ public class BlogContext
   private ResourceManager resourceManager;
 
   /** Field description */
-  private ServiceReference searchContext;
+  private ServiceReference<SearchContext> searchContext;
 
   /** Field description */
   private ServletContext servletContext;

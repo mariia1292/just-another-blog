@@ -12,7 +12,11 @@ package sonia.blog.mapping;
 import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.app.BlogRequest;
 import sonia.blog.api.app.BlogResponse;
+import sonia.blog.api.dao.EntryDAO;
+import sonia.blog.api.dao.TagDAO;
+import sonia.blog.entity.Blog;
 import sonia.blog.entity.Entry;
+import sonia.blog.entity.Tag;
 import sonia.blog.wui.BlogBean;
 
 //~--- JDK imports ------------------------------------------------------------
@@ -22,9 +26,6 @@ import java.util.List;
 import java.util.logging.Level;
 
 import javax.faces.model.ListDataModel;
-
-import javax.persistence.EntityManager;
-import javax.persistence.Query;
 
 /**
  *
@@ -56,7 +57,7 @@ public class TagMappingEntry extends ScrollableMappingEntry
       try
       {
         long tagId = Long.parseLong(param[0]);
-        List<Entry> entries = buildList(tagId);
+        List<Entry> entries = buildList(request.getCurrentBlog(), tagId);
 
         if (entries != null)
         {
@@ -116,37 +117,19 @@ public class TagMappingEntry extends ScrollableMappingEntry
 
   /**
    * Method description
-   * TODO: replace with Entry.findByBlogAndTag
    *
+   *
+   * @param blog
    * @param tagId
    *
    * @return
    */
-  @SuppressWarnings("unchecked")
-  private List<Entry> buildList(long tagId)
+  private List<Entry> buildList(Blog blog, long tagId)
   {
-    List<Entry> list = null;
-    EntityManager em = BlogContext.getInstance().getEntityManager();
+    EntryDAO entryDAO = BlogContext.getDAOFactory().getEntryDAO();
+    TagDAO tagDAO = BlogContext.getDAOFactory().getTagDAO();
+    Tag tag = tagDAO.find(tagId);
 
-    try
-    {
-      Query q = em.createNamedQuery("Entry.findByTagId");
-
-      q.setParameter("tagId", tagId);
-      list = q.getResultList();
-    }
-    catch (Exception ex)
-    {
-      logger.log(Level.SEVERE, null, ex);
-    }
-    finally
-    {
-      if (em != null)
-      {
-        em.close();
-      }
-    }
-
-    return list;
+    return entryDAO.findAllByBlogAndTag(blog, tag);
   }
 }

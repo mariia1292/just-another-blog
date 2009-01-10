@@ -12,10 +12,18 @@ package sonia.blog.wui;
 import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.app.BlogRequest;
 import sonia.blog.api.app.Constants;
+import sonia.blog.api.dao.AttachmentDAO;
+import sonia.blog.api.dao.CategoryDAO;
+import sonia.blog.api.dao.CommentDAO;
+import sonia.blog.api.dao.EntryDAO;
+import sonia.blog.api.dao.MemberDAO;
 import sonia.blog.api.util.AbstractBean;
+import sonia.blog.entity.Blog;
+import sonia.blog.entity.Comment;
 import sonia.blog.entity.Entry;
+import sonia.blog.entity.User;
 
-import sonia.plugin.ServiceReference;
+import sonia.plugin.service.ServiceReference;
 
 import sonia.rss.Channel;
 import sonia.rss.FeedParser;
@@ -33,10 +41,6 @@ import java.util.logging.Level;
 import javax.faces.context.FacesContext;
 import javax.faces.model.DataModel;
 import javax.faces.model.ListDataModel;
-
-import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
-import javax.persistence.Query;
 
 /**
  *
@@ -74,24 +78,29 @@ public class DashboardBean extends AbstractBean
 
   /**
    * Method description
-   * TODO replace with AttachmentDAO.countByBlog
    *
    * @return
    */
   public long getAttachmentCount()
   {
-    return countQuery("Attachment.countByBlog");
+    Blog b = getRequest().getCurrentBlog();
+    AttachmentDAO attachmentDAO =
+      BlogContext.getDAOFactory().getAttachmentDAO();
+
+    return attachmentDAO.countByBlog(b);
   }
 
   /**
    * Method description
-   * TODO replace with CategoryDAO.countByBlog
    *
    * @return
    */
   public long getCategoryCount()
   {
-    return countQuery("Category.countByBlog");
+    Blog b = getRequest().getCurrentBlog();
+    CategoryDAO categegoryDAO = BlogContext.getDAOFactory().getCategoryDAO();
+
+    return categegoryDAO.countByBlog(b);
   }
 
   /**
@@ -126,19 +135,20 @@ public class DashboardBean extends AbstractBean
 
   /**
    * Method description
-   * TODO replace with CommentDAO.countByBlog
-   *
    *
    * @return
    */
   public long getCommentCount()
   {
-    return countQuery("Comment.countByBlog");
+    Blog b = getRequest().getCurrentBlog();
+    CommentDAO commentDAO = BlogContext.getDAOFactory().getCommentDAO();
+
+    return commentDAO.countByBlog(b);
   }
 
   /**
    * Method description
-   * TODO replace with CommentDAO.findAllByBlog
+   * TODO show only 5
    *
    * @return
    */
@@ -146,24 +156,15 @@ public class DashboardBean extends AbstractBean
   {
     if (comments == null)
     {
-      EntityManager em = BlogContext.getInstance().getEntityManager();
+      comments = new ListDataModel();
 
-      try
-      {
-        Query q = em.createNamedQuery("Comment.findAllByBlog");
+      CommentDAO commentDAO = BlogContext.getDAOFactory().getCommentDAO();
+      List<Comment> commentList =
+        commentDAO.findAllByBlog(getRequest().getCurrentBlog());
 
-        q.setParameter("blog", getRequest().getCurrentBlog());
-        q.setMaxResults(5);
-        comments = new ListDataModel(q.getResultList());
-      }
-      catch (NoResultException ex)
+      if ((commentList != null) &&!commentList.isEmpty())
       {
-
-        // do nothing
-      }
-      finally
-      {
-        em.close();
+        comments.setWrappedData(commentList);
       }
     }
 
@@ -172,26 +173,25 @@ public class DashboardBean extends AbstractBean
 
   /**
    * Method description
-   * TDOD replace with EntryDAO.findAllDraftsByBlogAndUser
    *
    * @return
    */
-  @SuppressWarnings("unchecked")
   public DataModel getDrafts()
   {
     if (drafts == null)
     {
+      drafts = new ListDataModel();
+
+      EntryDAO entryDAO = BlogContext.getDAOFactory().getEntryDAO();
       BlogRequest request = getRequest();
-      EntityManager em = BlogContext.getInstance().getEntityManager();
-      Query q = em.createNamedQuery("Entry.findAllDraftsByBlogAndUser");
+      Blog blog = request.getCurrentBlog();
+      User user = request.getUser();
+      List<Entry> draftList = entryDAO.findAllDraftsByBlogAndUser(blog, user);
 
-      q.setParameter("user", request.getUser());
-      q.setParameter("blog", request.getCurrentBlog());
-      q.setMaxResults(10);
-
-      List draftList = q.getResultList();
-
-      drafts = new ListDataModel(draftList);
+      if ((draftList != null) &&!draftList.isEmpty())
+      {
+        drafts.setWrappedData(draftList);
+      }
     }
 
     return drafts;
@@ -223,34 +223,38 @@ public class DashboardBean extends AbstractBean
   /**
    * Method description
    *
-   *
    * @return
    */
   public long getEntryCount()
   {
-    return countQuery("Entry.countByBlog");
+    Blog b = getRequest().getCurrentBlog();
+    EntryDAO entryDAO = BlogContext.getDAOFactory().getEntryDAO();
+
+    return entryDAO.countByBlog(b);
   }
 
   /**
    * Method description
-   *
    *
    * @return
    */
   public long getMemberCount()
   {
-    return countQuery("BlogMember.countByBlog");
+    Blog b = getRequest().getCurrentBlog();
+    MemberDAO memberDAO = BlogContext.getDAOFactory().getMemberDAO();
+
+    return memberDAO.countByBlog(b);
   }
 
   /**
    * Method description
-   *
+   * TODO: replace with TagDAO.countByBlog()
    *
    * @return
    */
   public long getTagCount()
   {
-    return 0;    // countQuery("Tag.countFromBlog");
+    return 0;
   }
 
   /**
@@ -259,42 +263,18 @@ public class DashboardBean extends AbstractBean
    *
    * @return
    */
-  @SuppressWarnings("unchecked")
   public List<String> getWidgets()
   {
     if (widgets == null)
     {
       ServiceReference dashboardWidgetReference =
-        BlogContext.getInstance().getServiceRegistry().getServiceReference(
-            Constants.SERVICE_DASHBOARDWIDGET);
+        BlogContext.getInstance().getServiceRegistry().get(String.class,
+          Constants.SERVICE_DASHBOARDWIDGET);
 
-      widgets = dashboardWidgetReference.getImplementations();
+      widgets = dashboardWidgetReference.getAll();
     }
 
     return widgets;
-  }
-
-  //~--- methods --------------------------------------------------------------
-
-  /**
-   * Method description
-   *
-   *
-   * @param queryName
-   *
-   * @return
-   */
-  private long countQuery(String queryName)
-  {
-    long result = 0;
-    EntityManager em = BlogContext.getInstance().getEntityManager();
-    Query q = em.createNamedQuery(queryName);
-
-    q.setParameter("blog", getRequest().getCurrentBlog());
-    result = (Long) q.getSingleResult();
-    em.close();
-
-    return result;
   }
 
   //~--- fields ---------------------------------------------------------------

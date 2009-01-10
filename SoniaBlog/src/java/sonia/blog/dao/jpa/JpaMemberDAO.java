@@ -82,6 +82,20 @@ public class JpaMemberDAO extends JpaGenericDAO<BlogMember> implements MemberDAO
    * Method description
    *
    *
+   * @param start
+   * @param max
+   *
+   * @return
+   */
+  public List<BlogMember> findAll(int start, int max)
+  {
+    return findList("BlogMember.findAll", start, max);
+  }
+
+  /**
+   * Method description
+   *
+   *
    * @param blog
    *
    * @return
@@ -100,9 +114,9 @@ public class JpaMemberDAO extends JpaGenericDAO<BlogMember> implements MemberDAO
    *
    * @return
    */
-  public List<BlogMember> findByBlogAndUser(Blog blog, User user)
+  public BlogMember findByBlogAndUser(Blog blog, User user)
   {
-    List<BlogMember> members = null;
+    BlogMember member = null;
     EntityManager em = createEntityManager();
 
     try
@@ -111,7 +125,7 @@ public class JpaMemberDAO extends JpaGenericDAO<BlogMember> implements MemberDAO
 
       q.setParameter("blog", blog);
       q.setParameter("user", user);
-      members = q.getResultList();
+      member = (BlogMember) q.getSingleResult();
     }
     catch (NoResultException ex) {}
     finally
@@ -122,7 +136,7 @@ public class JpaMemberDAO extends JpaGenericDAO<BlogMember> implements MemberDAO
       }
     }
 
-    return members;
+    return member;
   }
 
   /**

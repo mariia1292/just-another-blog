@@ -12,10 +12,11 @@ package sonia.blog.authentication;
 import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.app.Constants;
 import sonia.blog.api.authentication.RolePrincipal;
+import sonia.blog.api.dao.UserDAO;
 import sonia.blog.entity.Role;
 import sonia.blog.entity.User;
 
-import sonia.plugin.ServiceReference;
+import sonia.plugin.service.ServiceReference;
 
 import sonia.security.authentication.LoginModule;
 import sonia.security.encryption.Encryption;
@@ -28,12 +29,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
-import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
-import javax.persistence.Query;
 
 import javax.security.auth.login.LoginException;
 
@@ -57,7 +53,7 @@ public class DefaultLoginModule extends LoginModule
   public DefaultLoginModule()
   {
     reference =
-      BlogContext.getInstance().getServiceRegistry().getServiceReference(
+      BlogContext.getInstance().getServiceRegistry().get(Encryption.class,
         Constants.SERVCIE_ENCRYPTION);
   }
 
@@ -106,47 +102,20 @@ public class DefaultLoginModule extends LoginModule
 
     String passwordString = new String(password);
 
-    if ((reference != null) && (reference.getImplementation() != null))
+    if ((reference != null) && (reference.get() != null))
     {
-      Encryption enc = (Encryption) reference.getImplementation();
+      Encryption enc = reference.get();
 
       passwordString = enc.encrypt(passwordString);
     }
 
-    // TODO: replace with UserDAO.findByNameAndPassword()
-    EntityManager em = BlogContext.getInstance().getEntityManager();
-    Query q = em.createNamedQuery("User.findByNameAndPassword");
+    UserDAO userDAO = BlogContext.getDAOFactory().getUserDAO();
+    User u = userDAO.findByNameAndPassword(username, passwordString);
 
-    q.setParameter("name", username);
-    q.setParameter("password", passwordString);
-
-    User u = null;
-
-    try
+    if (u != null)
     {
-      u = (User) q.getSingleResult();
-      em.getTransaction().begin();
-
-      try
-      {
-        u.setLastLogin(new Date());
-        u = em.merge(u);
-        em.getTransaction().commit();
-      }
-      catch (Exception ex)
-      {
-        if (em.getTransaction().isActive())
-        {
-          em.getTransaction().rollback();
-        }
-
-        logger.log(Level.SEVERE, null, ex);
-      }
-    }
-    catch (NoResultException ex)
-    {
-
-      // do nothing
+      u.setLastLogin(new Date());
+      userDAO.edit(u);
     }
 
     return u;
@@ -155,5 +124,5 @@ public class DefaultLoginModule extends LoginModule
   //~--- fields ---------------------------------------------------------------
 
   /** Field description */
-  private ServiceReference reference;
+  private ServiceReference<Encryption> reference;
 }

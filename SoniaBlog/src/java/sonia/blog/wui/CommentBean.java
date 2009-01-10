@@ -10,22 +10,17 @@ package sonia.blog.wui;
 //~--- non-JDK imports --------------------------------------------------------
 
 import sonia.blog.api.app.BlogContext;
+import sonia.blog.api.dao.CommentDAO;
 import sonia.blog.api.util.AbstractBean;
-import sonia.blog.entity.Blog;
 import sonia.blog.entity.Comment;
-import sonia.blog.entity.Entry;
 
 //~--- JDK imports ------------------------------------------------------------
 
 import java.util.List;
-import java.util.logging.Level;
 
 import javax.faces.event.ActionEvent;
 import javax.faces.model.DataModel;
 import javax.faces.model.ListDataModel;
-
-import javax.persistence.EntityManager;
-import javax.persistence.Query;
 
 /**
  *
@@ -59,36 +54,15 @@ public class CommentBean extends AbstractBean
 
     if (comm != null)
     {
-      EntityManager em = BlogContext.getInstance().getEntityManager();
+      CommentDAO commentDAO = BlogContext.getDAOFactory().getCommentDAO();
 
-      em.getTransaction().begin();
-
-      try
+      if (commentDAO.remove(comm))
       {
-        Entry entry = comm.getEntry();
-
-        // TODO replace with CommentDAO.remove
-        em.remove(em.merge(comm));
-        entry.getComments().remove(comment);
-
-        // TODO repalce with EntryDAO.edit
-        em.merge(entry);
-        em.getTransaction().commit();
         getMessageHandler().info("removeCommentSuccess");
       }
-      catch (Exception ex)
+      else
       {
-        if (em.getTransaction().isActive())
-        {
-          em.getTransaction().rollback();
-        }
-
-        logger.log(Level.SEVERE, null, ex);
         getMessageHandler().error("removeCommentFailure");
-      }
-      finally
-      {
-        em.close();
       }
     }
   }
@@ -102,31 +76,17 @@ public class CommentBean extends AbstractBean
   public void toggleSpam(ActionEvent event)
   {
     Comment comm = (Comment) comments.getRowData();
-    EntityManager em = BlogContext.getInstance().getEntityManager();
+    CommentDAO commentDAO = BlogContext.getDAOFactory().getCommentDAO();
 
-    em.getTransaction().begin();
+    comm.setSpam(!comm.isSpam());
 
-    try
+    if (commentDAO.edit(comm))
     {
-      // TODO replace with CommentDAO.edit
-      comm.setSpam(!comm.isSpam());
-      em.merge(comm);
-      em.getTransaction().commit();
       getMessageHandler().info("toggleSpamSuccess");
     }
-    catch (Exception ex)
+    else
     {
-      if (em.getTransaction().isActive())
-      {
-        em.getTransaction().rollback();
-      }
-
-      logger.log(Level.SEVERE, null, ex);
       getMessageHandler().error("toggleSpamFailure");
-    }
-    finally
-    {
-      em.close();
     }
   }
 
@@ -145,7 +105,6 @@ public class CommentBean extends AbstractBean
 
   /**
    * Method description
-   * TODO replace with CommentDAO.findAllByBlog
    *
    * @return
    */
@@ -153,20 +112,14 @@ public class CommentBean extends AbstractBean
   {
     comments = new ListDataModel();
 
-    Blog blog = getRequest().getCurrentBlog();
-    EntityManager em = BlogContext.getInstance().getEntityManager();
-    Query q = em.createNamedQuery("Comment.findAllByBlog");
+    CommentDAO commentDAO = BlogContext.getDAOFactory().getCommentDAO();
+    List<Comment> commentList =
+      commentDAO.findAllByBlog(getRequest().getCurrentBlog());
 
-    q.setParameter("blog", blog);
-
-    List list = q.getResultList();
-
-    if (list != null)
+    if ((commentList != null) &&!commentList.isEmpty())
     {
-      comments.setWrappedData(list);
+      comments.setWrappedData(commentList);
     }
-
-    em.close();
 
     return comments;
   }

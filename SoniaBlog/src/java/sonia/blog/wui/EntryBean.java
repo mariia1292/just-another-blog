@@ -19,6 +19,11 @@ import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.app.BlogRequest;
 import sonia.blog.api.app.Constants;
 import sonia.blog.api.app.ResourceManager;
+import sonia.blog.api.dao.AttachmentDAO;
+import sonia.blog.api.dao.CategoryDAO;
+import sonia.blog.api.dao.DAOFactory;
+import sonia.blog.api.dao.EntryDAO;
+import sonia.blog.api.dao.TagDAO;
 import sonia.blog.api.template.Template;
 import sonia.blog.api.util.AbstractBean;
 import sonia.blog.entity.Attachment;
@@ -56,10 +61,6 @@ import javax.faces.event.ActionEvent;
 import javax.faces.model.DataModel;
 import javax.faces.model.ListDataModel;
 import javax.faces.model.SelectItem;
-
-import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
-import javax.persistence.Query;
 
 /**
  *
@@ -211,49 +212,29 @@ public class EntryBean extends AbstractBean
 
     if (id != null)
     {
-      // TODO replace with EntryDAO.remove
-      EntityManager em = BlogContext.getInstance().getEntityManager();
-
-      em.getTransaction().begin();
+      EntryDAO entryDAO = BlogContext.getDAOFactory().getEntryDAO();
 
       try
       {
-        List<Attachment> attachmentList = entry.getAttachments();
-
-        if (attachmentList != null)
+        if (entryDAO.remove(entry))
         {
-          for (Attachment a : attachmentList)
+          File attachmentDir = new File(getDirectory(), "" + id);
+
+          if (attachmentDir.exists())
           {
-            em.remove(em.merge(a));
+            Util.delete(attachmentDir);
           }
+
+          getMessageHandler().info("removeEntrySuccess");
         }
-
-        em.remove(em.merge(entry));
-        newEntry();
-        em.getTransaction().commit();
-
-        File attachmentDir = new File(getDirectory(), "" + id);
-
-        if (attachmentDir.exists())
+        else
         {
-          Util.delete(attachmentDir);
+          getMessageHandler().error("removeEntryFailure");
         }
-
-        getMessageHandler().info("removeEntrySuccess");
       }
       catch (Exception ex)
       {
-        if (em.getTransaction().isActive())
-        {
-          em.getTransaction().rollback();
-        }
-
         logger.log(Level.SEVERE, null, ex);
-        getMessageHandler().error("removeEntryFailure");
-      }
-      finally
-      {
-        em.close();
       }
     }
 
@@ -262,40 +243,28 @@ public class EntryBean extends AbstractBean
 
   /**
    * Method description
-   * TODO replace with AttachmentDAO.remove
    *
    * @param event
    */
   public void removeAttachment(ActionEvent event)
   {
     Attachment attachment = (Attachment) attachments.getRowData();
-    EntityManager em = BlogContext.getInstance().getEntityManager();
+    File file = new File(getDirectory(), attachment.getFilePath());
+    AttachmentDAO attachmentDAO =
+      BlogContext.getDAOFactory().getAttachmentDAO();
 
-    em.getTransaction().begin();
-
-    try
+    if (attachmentDAO.remove(attachment))
     {
-      em.remove(em.merge(attachment));
-
-      File file = new File(getDirectory(), attachment.getFilePath());
-
-      file.delete();
-      em.getTransaction().commit();
-      getMessageHandler().info("removeAttachmentSuccess");
-    }
-    catch (Exception ex)
-    {
-      if (em.getTransaction().isActive())
+      if (!file.delete())
       {
-        em.getTransaction().rollback();
+        logger.warning("could not remove file " + file.getAbsolutePath());
       }
 
-      logger.log(Level.SEVERE, null, ex);
-      getMessageHandler().error("removeAttachmentFailure");
+      getMessageHandler().info("removeAttachmentSuccess");
     }
-    finally
+    else
     {
-      em.close();
+      getMessageHandler().error("removeAttachmentFailure");
     }
   }
 
@@ -308,13 +277,11 @@ public class EntryBean extends AbstractBean
   public String save()
   {
     String result = SUCCESS;
-    EntityManager em = BlogContext.getInstance().getEntityManager();
-
-    em.getTransaction().begin();
+    EntryDAO entryDAO = BlogContext.getDAOFactory().getEntryDAO();
 
     try
     {
-      buildTagList(em);
+      buildTagList();
       cleanupContent();
 
       if (entry.getId() == null)
@@ -331,77 +298,63 @@ public class EntryBean extends AbstractBean
 
         if (entry.getCategory() == null)
         {
-          Category cat = findCategory(em, request.getCurrentBlog());
+          CategoryDAO categoryDAO = DAOFactory.getInstance().getCategoryDAO();
+          Category cat =
+            categoryDAO.findFirstByBlog(getRequest().getCurrentBlog());
 
           entry.setCategory(cat);
         }
 
         entry.setAuthor(author);
-        // TODO replace with EntryDAO.add
-        em.persist(entry);
-        getMessageHandler().info("createEntrySuccess");
+
+        if (entryDAO.add(entry))
+        {
+          getMessageHandler().info("createEntrySuccess");
+        }
+        else
+        {
+          result = FAILURE;
+          getMessageHandler().error("entryActionFailure");
+        }
       }
       else
       {
-        em.merge(entry);
-        getMessageHandler().info("updateEntrySuccess");
+        if (entryDAO.edit(entry))
+        {
+          getMessageHandler().info("updateEntrySuccess");
+        }
+        else
+        {
+          result = FAILURE;
+          getMessageHandler().error("entryActionFailure");
+        }
       }
-
-      em.getTransaction().commit();
     }
     catch (Exception ex)
     {
       logger.log(Level.WARNING, null, ex);
-
-      if (em.getTransaction().isActive())
-      {
-        em.getTransaction().rollback();
-      }
-
-      result = FAILURE;
-      getMessageHandler().error("entryActionFailure");
     }
-
-    em.close();
 
     return result;
   }
 
   /**
    * Method description
-   * TODO replace with AttachmentDAO.edit
    *
    * @return
    */
   public String saveAttachment()
   {
-    EntityManager em = BlogContext.getInstance().getEntityManager();
+    String result = SUCCESS;
+    AttachmentDAO attachmentDAO =
+      BlogContext.getDAOFactory().getAttachmentDAO();
 
-    em.getTransaction().begin();
-
-    try
+    if (!attachmentDAO.edit(attachment))
     {
-      attachment = em.merge(attachment);
-      em.getTransaction().commit();
-    }
-    catch (Exception ex)
-    {
-      logger.log(Level.SEVERE, null, ex);
-
-      if (em.getTransaction().isActive())
-      {
-        em.getTransaction().rollback();
-      }
-    }
-    finally
-    {
-      if (em != null)
-      {
-        em.close();
-      }
+      result = FAILURE;
     }
 
-    return SUCCESS;
+    return result;
   }
 
   /**
@@ -464,10 +417,6 @@ public class EntryBean extends AbstractBean
       attachment.setName(uploadedFile.getName());
       attachment.setDescription(uploadDescription);
 
-      EntityManager em = BlogContext.getInstance().getEntityManager();
-
-      em.getTransaction().begin();
-
       InputStream in = null;
       OutputStream out = null;
 
@@ -494,25 +443,23 @@ public class EntryBean extends AbstractBean
                           resourceDirectory.getAbsolutePath().length());
 
         attachment.setFilePath(path);
-        // TODO replace with AttachmentDAO.add
-        em.persist(attachment);
-        uploadDescription = null;
-        em.getTransaction().commit();
+
+        if (!BlogContext.getDAOFactory().getAttachmentDAO().add(attachment))
+        {
+          result = UPLOAD_FAILURE;
+        }
+        else
+        {
+          uploadDescription = null;
+        }
       }
       catch (Exception ex)
       {
-        if (em.getTransaction().isActive())
-        {
-          em.getTransaction().rollback();
-        }
-
         logger.log(Level.SEVERE, null, ex);
         result = UPLOAD_FAILURE;
       }
       finally
       {
-        em.close();
-
         try
         {
           if (in != null)
@@ -550,7 +497,6 @@ public class EntryBean extends AbstractBean
 
   /**
    * Method description
-   * AttachmentDAO.findAllByEntry
    *
    * @return
    */
@@ -560,19 +506,14 @@ public class EntryBean extends AbstractBean
 
     if ((entry != null) && (entry.getId() != null))
     {
-      EntityManager em = BlogContext.getInstance().getEntityManager();
-      Query q = em.createNamedQuery("Attachment.findAllByEntry");
+      AttachmentDAO attachmentDAO =
+        BlogContext.getDAOFactory().getAttachmentDAO();
+      List<Attachment> attachmentList = attachmentDAO.findAllByEntry(entry);
 
-      q.setParameter("entry", entry);
-
-      List list = q.getResultList();
-
-      if (list != null)
+      if ((attachmentList != null) &&!attachmentList.isEmpty())
       {
-        attachments.setWrappedData(list);
+        attachments.setWrappedData(attachmentList);
       }
-
-      em.close();
     }
 
     return attachments;
@@ -592,36 +533,36 @@ public class EntryBean extends AbstractBean
 
   /**
    * Method description
-   * TODO replace with CategoryDAO.findAllByBlog
    *
    * @return
    */
-  @SuppressWarnings("unchecked")
   public SelectItem[] getCategoryItems()
   {
     SelectItem[] items = null;
-    EntityManager em = BlogContext.getInstance().getEntityManager();
-    Query q = em.createNamedQuery("Category.findAllByBlog");
+    CategoryDAO categoryDAO = BlogContext.getDAOFactory().getCategoryDAO();
     Blog blog = getRequest().getCurrentBlog();
+    List<Category> categoryList = categoryDAO.findAllByBlog(blog);
 
-    q.setParameter("blog", blog);
-
-    List<Category> categoryList = q.getResultList();
-    int size = categoryList.size();
-
-    if (categoryList != null)
+    if ((categoryList != null) &&!categoryList.isEmpty())
     {
-      items = new SelectItem[size];
+      int size = categoryList.size();
 
-      for (int i = 0; i < size; i++)
+      if (categoryList != null)
       {
-        Category c = categoryList.get(i);
+        items = new SelectItem[size];
 
-        items[i] = new SelectItem(c, c.getName(), c.getDescription());
+        for (int i = 0; i < size; i++)
+        {
+          Category c = categoryList.get(i);
+
+          items[i] = new SelectItem(c, c.getName(), c.getDescription());
+        }
       }
     }
-
-    em.close();
+    else
+    {
+      items = new SelectItem[0];
+    }
 
     return items;
   }
@@ -645,7 +586,6 @@ public class EntryBean extends AbstractBean
 
   /**
    * Method description
-   * TODO replace with EntryDAO.findByBlog
    *
    * @return
    */
@@ -653,19 +593,14 @@ public class EntryBean extends AbstractBean
   {
     entries = new ListDataModel();
 
-    EntityManager em = BlogContext.getInstance().getEntityManager();
-    List list = null;
-    Query q = em.createNamedQuery("Entry.findByBlog");
+    EntryDAO entryDAO = BlogContext.getDAOFactory().getEntryDAO();
+    List<Entry> entryList =
+      entryDAO.findAllByBlog(getRequest().getCurrentBlog());
 
-    q.setParameter("blog", getRequest().getCurrentBlog());
-    list = q.getResultList();
-
-    if (list != null)
+    if ((entryList != null) &&!entryList.isEmpty())
     {
-      entries.setWrappedData(list);
+      entries.setWrappedData(entryList);
     }
-
-    em.close();
 
     return entries;
   }
@@ -705,7 +640,6 @@ public class EntryBean extends AbstractBean
 
   /**
    * Method description
-   * TODO replace with AttachmentDAO.findAllImagesByEntry
    *
    * @return
    */
@@ -715,23 +649,15 @@ public class EntryBean extends AbstractBean
 
     if (entry != null)
     {
-      EntityManager em = BlogContext.getInstance().getEntityManager();
-      Query q = em.createNamedQuery("Attachment.findAllImagesByEntry");
+      AttachmentDAO attachmentDAO =
+        BlogContext.getDAOFactory().getAttachmentDAO();
+      List<Attachment> attachmentList =
+        attachmentDAO.findAllImagesByEntry(entry);
 
-      q.setParameter("entry", entry);
-
-      try
+      if ((attachmentList != null) &&!attachmentList.isEmpty())
       {
-        List list = q.getResultList();
-
-        if (list != null)
-        {
-          images.setWrappedData(list);
-        }
+        images.setWrappedData(attachmentList);
       }
-      catch (NoResultException ex) {}
-
-      em.close();
     }
 
     return images;
@@ -904,15 +830,14 @@ public class EntryBean extends AbstractBean
 
   /**
    * Method description
-   * TODO replace with Tag.findByName
    *
-   * @param em
    *
    */
-  private void buildTagList(EntityManager em)
+  private void buildTagList()
   {
     List<Tag> tags = new ArrayList<Tag>();
     List<Tag> oldTags = entry.getTags();
+    TagDAO tagDAO = BlogContext.getDAOFactory().getTagDAO();
 
     if ((tagString != null) && (tagString.length() > 0))
     {
@@ -934,27 +859,13 @@ public class EntryBean extends AbstractBean
 
         if (t == null)
         {
-          Query q = em.createNamedQuery("Tag.findByName");
-
-          q.setParameter("name", tag);
-
-          try
-          {
-            t = (Tag) q.getSingleResult();
-          }
-          catch (NoResultException ex) {}
-          catch (Exception ex)
-          {
-            logger.log(Level.SEVERE, null, ex);
-
-            continue;
-          }
+          t = tagDAO.findByName(tag);
         }
 
         if (t == null)
         {
           t = new Tag(tag);
-          em.persist(t);
+          tagDAO.add(t);
         }
 
         tags.add(t);
@@ -969,11 +880,11 @@ public class EntryBean extends AbstractBean
 
         if (t.getEntries().isEmpty())
         {
-          em.remove(em.merge(t));
+          tagDAO.remove(t);
         }
         else
         {
-          em.merge(t);
+          tagDAO.edit(t);
         }
       }
     }
@@ -1020,24 +931,6 @@ public class EntryBean extends AbstractBean
    * Method description
    *
    *
-   * @param em
-   * @param blog
-   *
-   * @return
-   */
-  private Category findCategory(EntityManager em, Blog blog)
-  {
-    Query q = em.createNamedQuery("Category.findFirstFromBlog");
-
-    q.setParameter("blog", blog);
-
-    return (Category) q.getSingleResult();
-  }
-
-  /**
-   * Method description
-   *
-   *
    * @return
    */
   private String unzip()
@@ -1051,7 +944,6 @@ public class EntryBean extends AbstractBean
 
       if (in != null)
       {
-        EntityManager em = BlogContext.getInstance().getEntityManager();
         ZipInputStream zis = new ZipInputStream(in);
         ZipEntry ze = zis.getNextEntry();
         File root = getDirectory();
@@ -1070,8 +962,6 @@ public class EntryBean extends AbstractBean
           {
             try
             {
-              em.getTransaction().begin();
-
               File file = new File(dir, "" + System.currentTimeMillis());
 
               Util.copy(zis, new FileOutputStream(file));
@@ -1100,16 +990,14 @@ public class EntryBean extends AbstractBean
                 attachment.setDescription(uploadedFile.getName());
               }
 
-              em.persist(attachment);
-              em.getTransaction().commit();
+              if (!BlogContext.getDAOFactory().getAttachmentDAO().add(
+                      attachment))
+              {
+                result = UPLOAD_FAILURE;
+              }
             }
             catch (IOException ex)
             {
-              if (em.getTransaction().isActive())
-              {
-                em.getTransaction().rollback();
-              }
-
               logger.log(Level.SEVERE, null, ex);
             }
           }

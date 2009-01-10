@@ -29,9 +29,6 @@ import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 
-import javax.persistence.EntityManager;
-import javax.persistence.Query;
-
 /**
  *
  * @author sdorra
@@ -330,28 +327,10 @@ public class CalendarRenderer extends BaseRenderer
    *
    * @return
    */
-  @SuppressWarnings("unchecked")
   private List<Date> getEntryDates(Blog blog, Date startDate, Date endDate)
   {
-    List<Date> dates = null;
-    // TODO: Replace with EntryDAO.findCalendarDates()
-    EntityManager em = BlogContext.getInstance().getEntityManager();
-
-    try
-    {
-      Query q = em.createNamedQuery("Entry.calendar");
-
-      q.setParameter("blog", blog);
-      q.setParameter("start", startDate);
-      q.setParameter("end", endDate);
-      dates = q.getResultList();
-    }
-    finally
-    {
-      em.close();
-    }
-
-    return dates;
+    return BlogContext.getDAOFactory().getEntryDAO().findAllCalendarDates(blog,
+            startDate, endDate);
   }
 
   /**

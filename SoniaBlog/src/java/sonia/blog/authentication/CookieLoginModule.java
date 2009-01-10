@@ -9,15 +9,15 @@ package sonia.blog.authentication;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import java.util.Date;
 import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.app.BlogRequest;
 import sonia.blog.api.app.BlogResponse;
 import sonia.blog.api.app.Constants;
 import sonia.blog.api.authentication.SSOLoginModule;
+import sonia.blog.api.dao.UserDAO;
 import sonia.blog.entity.User;
 
-import sonia.plugin.ServiceReference;
+import sonia.plugin.service.ServiceReference;
 
 import sonia.security.cipher.Cipher;
 
@@ -25,11 +25,7 @@ import sonia.util.Util;
 
 //~--- JDK imports ------------------------------------------------------------
 
-import java.util.logging.Level;
-
-import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
-import javax.persistence.Query;
+import java.util.Date;
 
 import javax.security.auth.login.LoginException;
 
@@ -63,11 +59,11 @@ public class CookieLoginModule extends SSOLoginModule
     if (cipherReference == null)
     {
       cipherReference =
-        BlogContext.getInstance().getServiceRegistry().getServiceReference(
+        BlogContext.getInstance().getServiceRegistry().get(Cipher.class,
           Constants.SERVCIE_CIPHER);
     }
 
-    cipher = (Cipher) cipherReference.getImplementation();
+    cipher = cipherReference.get();
 
     Cookie[] cookies = request.getCookies();
 
@@ -139,43 +135,18 @@ public class CookieLoginModule extends SSOLoginModule
   private User login(BlogResponse response, Cookie cookie, String username,
                      String activationCode)
   {
-    User user = null;
     BlogContext context = BlogContext.getInstance();
-    EntityManager em = context.getEntityManager();
+    UserDAO userDAO = BlogContext.getDAOFactory().getUserDAO();
+    User user = userDAO.findByNameAndCode(username, activationCode);
 
-    try
+    if (user != null)
     {
-      // TODO: replace with UserDAO.findByNameAndCode()
-      Query q = em.createNamedQuery("User.findByNameAndCode");
-
-      q.setParameter("name", username);
-      q.setParameter("code", activationCode);
-      user = (User) q.getSingleResult();
-
-      if (user != null)
-      {
-        cookie.setMaxAge(
-            context.getConfiguration().getInteger(
-              Constants.CONFIG_COKKIETIME, Constants.DEFAULT_COOKIETIME));
-        response.addCookie(cookie);
-        em.getTransaction().begin();
-        user.setLastLogin(new Date());
-        user = em.merge(user);
-        em.getTransaction().commit();
-      }
-    }
-    catch (NoResultException ex) {}
-    catch (Exception ex)
-    {
-      if ( em.getTransaction().isActive() )
-      {
-        em.getTransaction().rollback();
-      }
-      logger.log(Level.SEVERE, null, ex);
-    }
-    finally
-    {
-      em.close();
+      cookie.setMaxAge(
+          context.getConfiguration().getInteger(
+            Constants.CONFIG_COKKIETIME, Constants.DEFAULT_COOKIETIME));
+      response.addCookie(cookie);
+      user.setLastLogin(new Date());
+      userDAO.edit(user);
     }
 
     return user;
@@ -184,5 +155,5 @@ public class CookieLoginModule extends SSOLoginModule
   //~--- fields ---------------------------------------------------------------
 
   /** Field description */
-  private ServiceReference cipherReference;
+  private ServiceReference<Cipher> cipherReference;
 }

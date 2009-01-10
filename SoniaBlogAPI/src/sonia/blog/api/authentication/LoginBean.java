@@ -13,6 +13,7 @@ import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.app.BlogRequest;
 import sonia.blog.api.app.BlogResponse;
 import sonia.blog.api.app.Constants;
+import sonia.blog.api.dao.MemberDAO;
 import sonia.blog.api.util.AbstractBean;
 import sonia.blog.entity.Blog;
 import sonia.blog.entity.BlogMember;
@@ -21,7 +22,7 @@ import sonia.blog.entity.User;
 
 import sonia.config.XmlConfiguration;
 
-import sonia.plugin.ServiceReference;
+import sonia.plugin.service.ServiceReference;
 
 import sonia.security.cipher.Cipher;
 
@@ -31,10 +32,6 @@ import sonia.util.Util;
 
 import java.util.Set;
 import java.util.logging.Level;
-
-import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
-import javax.persistence.Query;
 
 import javax.security.auth.login.LoginContext;
 import javax.security.auth.login.LoginException;
@@ -283,26 +280,11 @@ public class LoginBean extends AbstractBean
     if ((users != null) &&!users.isEmpty())
     {
       User user = users.iterator().next();
+
       // TODO: replace with MemberDAO.findByBlogAndUser
-      EntityManager em = BlogContext.getInstance().getEntityManager();
-
-      try
-      {
-        Query q = em.createNamedQuery("BlogMember.findByBlogAndUser");
-
-        q.setParameter("blog", blog);
-        q.setParameter("user", user);
-        member = (BlogMember) q.getSingleResult();
-      }
-      catch (NoResultException ex) {}
-      catch (Exception ex)
-      {
-        logger.log(Level.SEVERE, null, ex);
-      }
-      finally
-      {
-        em.close();
-      }
+      member =
+        BlogContext.getDAOFactory().getMemberDAO().findByBlogAndUser(blog,
+          user);
 
       if (member == null)
       {
@@ -318,25 +300,20 @@ public class LoginBean extends AbstractBean
   private void createCookie()
   {
     BlogContext context = BlogContext.getInstance();
-    // TODO: replace with
-    EntityManager em = context.getEntityManager();
 
     try
     {
-      Query q = em.createNamedQuery("User.findActiveByName");
-
-      q.setParameter("name", username);
-
-      User user = (User) q.getSingleResult();
+      User user =
+        BlogContext.getDAOFactory().getUserDAO().findActiveByName(username);
       String value = user.getName() + ":" + user.getActivationCode();
 
       if (cipherReference == null)
       {
-        cipherReference = context.getServiceRegistry().getServiceReference(
-          Constants.SERVCIE_CIPHER);
+        cipherReference = context.getServiceRegistry().get(Cipher.class,
+                Constants.SERVCIE_CIPHER);
       }
 
-      Cipher cipher = (Cipher) cipherReference.getImplementation();
+      Cipher cipher = cipherReference.get();
 
       if (cipher != null)
       {
@@ -354,10 +331,6 @@ public class LoginBean extends AbstractBean
     {
       logger.log(Level.SEVERE, null, ex);
     }
-    finally
-    {
-      em.close();
-    }
   }
 
   /**
@@ -369,31 +342,10 @@ public class LoginBean extends AbstractBean
    */
   private void createMembership(Blog blog, User user)
   {
-    // TODO: replace with MemberDAO.add
-    EntityManager em = BlogContext.getInstance().getEntityManager();
+    MemberDAO memberDAO = BlogContext.getDAOFactory().getMemberDAO();
+    Role role = getDefaultRole();
 
-    em.getTransaction().begin();
-
-    try
-    {
-      Role role = getDefaultRole();
-
-      em.persist(new BlogMember(blog, user, role));
-      em.getTransaction().commit();
-    }
-    catch (Exception ex)
-    {
-      if (em.getTransaction().isActive())
-      {
-        em.getTransaction().commit();
-      }
-
-      logger.log(Level.SEVERE, null, ex);
-    }
-    finally
-    {
-      em.close();
-    }
+    memberDAO.add(new BlogMember(blog, user, role));
   }
 
   /**
@@ -438,7 +390,7 @@ public class LoginBean extends AbstractBean
   //~--- fields ---------------------------------------------------------------
 
   /** Field description */
-  private ServiceReference cipherReference;
+  private ServiceReference<Cipher> cipherReference;
 
   /** Field description */
   private XmlConfiguration configuration;

@@ -12,6 +12,9 @@ package sonia.blog.mapping;
 import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.app.BlogRequest;
 import sonia.blog.api.app.BlogResponse;
+import sonia.blog.api.dao.CategoryDAO;
+import sonia.blog.api.dao.EntryDAO;
+import sonia.blog.entity.Category;
 import sonia.blog.entity.Entry;
 import sonia.blog.wui.BlogBean;
 
@@ -19,12 +22,8 @@ import sonia.blog.wui.BlogBean;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.logging.Level;
 
 import javax.faces.model.ListDataModel;
-
-import javax.persistence.EntityManager;
-import javax.persistence.Query;
 
 /**
  *
@@ -125,32 +124,12 @@ public class CategoryMappingEntry extends ScrollableMappingEntry
    *
    * @return
    */
-  @SuppressWarnings("unchecked")
   private List<Entry> buildList(long id)
   {
-    // TODO: replace with findByCategory
-    List<Entry> list = null;
-    EntityManager em = BlogContext.getInstance().getEntityManager();
+    EntryDAO entryDAO = BlogContext.getDAOFactory().getEntryDAO();
+    CategoryDAO categoryDAO = BlogContext.getDAOFactory().getCategoryDAO();
+    Category c = categoryDAO.find(id);
 
-    try
-    {
-      Query q = em.createNamedQuery("Entry.findByCategoryId");
-
-      q.setParameter("id", id);
-      list = q.getResultList();
-    }
-    catch (Exception ex)
-    {
-      logger.log(Level.SEVERE, null, ex);
-    }
-    finally
-    {
-      if (em != null)
-      {
-        em.close();
-      }
-    }
-
-    return list;
+    return entryDAO.findAllByCategory(c);
   }
 }

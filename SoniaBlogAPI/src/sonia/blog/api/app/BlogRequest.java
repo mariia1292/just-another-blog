@@ -10,6 +10,7 @@ package sonia.blog.api.app;
 //~--- non-JDK imports --------------------------------------------------------
 
 import sonia.blog.api.authentication.LoginBean;
+import sonia.blog.api.dao.BlogDAO;
 import sonia.blog.api.mapping.MappingEntry;
 import sonia.blog.entity.Blog;
 import sonia.blog.entity.BlogMember;
@@ -24,10 +25,6 @@ import java.security.Principal;
 
 import java.util.Set;
 import java.util.logging.Logger;
-
-import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
-import javax.persistence.Query;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
@@ -81,7 +78,6 @@ public class BlogRequest extends HttpServletRequestWrapper
 
   /**
    * Method description
-   * TODO: replace with BlogDAO.findByServername
    *
    * @return
    */
@@ -90,22 +86,14 @@ public class BlogRequest extends HttpServletRequestWrapper
     if (blog == null)
     {
       String servername = getServerName();
-      EntityManager em = BlogContext.getInstance().getEntityManager();
-      Query q = em.createNamedQuery("Blog.findByServername");
+      BlogDAO blogDAO = BlogContext.getDAOFactory().getBlogDAO();
 
-      q.setParameter("servername", servername);
+      blog = blogDAO.findByServername(servername);
 
-      try
+      if (blog == null)
       {
-        blog = (Blog) q.getSingleResult();
-      }
-      catch (NoResultException ex)
-      {
-        logger.info("blog " + servername + " not found, using default Blog");
         blog = BlogContext.getInstance().getDefaultBlog();
       }
-
-      em.close();
     }
 
     return blog;
@@ -295,19 +283,8 @@ public class BlogRequest extends HttpServletRequestWrapper
       {
         if (!searchForMember)
         {
-          // TODO: replace with MemberDAO.findByBlogAndUser
-          EntityManager em = BlogContext.getInstance().getEntityManager();
-          Query q = em.createNamedQuery("BlogMember.findByBlogAndUser");
-
-          q.setParameter("user", user);
-          q.setParameter("blog", getCurrentBlog());
-
-          try
-          {
-            member = (BlogMember) q.getSingleResult();
-          }
-          catch (NoResultException ex) {}
-
+          member = BlogContext.getDAOFactory().getMemberDAO().findByBlogAndUser(
+            getCurrentBlog(), user);
           searchForMember = true;
         }
 

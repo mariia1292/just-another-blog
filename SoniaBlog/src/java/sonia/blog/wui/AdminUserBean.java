@@ -11,28 +11,26 @@ package sonia.blog.wui;
 
 import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.app.Constants;
+import sonia.blog.api.dao.MemberDAO;
+import sonia.blog.api.dao.UserDAO;
 import sonia.blog.api.util.AbstractBean;
 import sonia.blog.entity.BlogMember;
 import sonia.blog.entity.Role;
 import sonia.blog.entity.User;
 
-import sonia.plugin.ServiceReference;
+import sonia.plugin.service.ServiceReference;
 
 import sonia.security.encryption.Encryption;
 
 //~--- JDK imports ------------------------------------------------------------
 
+import java.util.List;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
 
 import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.DataModel;
 import javax.faces.model.ListDataModel;
 import javax.faces.model.SelectItem;
-
-import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
-import javax.persistence.Query;
 
 /**
  *
@@ -77,30 +75,15 @@ public class AdminUserBean extends AbstractBean
 
     if (member != null)
     {
-      // TODO replace with MemberDAO.edit
-      EntityManager em = BlogContext.getInstance().getEntityManager();
+      MemberDAO memberDAO = BlogContext.getDAOFactory().getMemberDAO();
 
-      em.getTransaction().begin();
-
-      try
+      if (memberDAO.edit(member))
       {
-        member = em.merge(member);
-        em.getTransaction().commit();
         getMessageHandler().info("changeRoleSuccess");
       }
-      catch (Exception ex)
+      else
       {
-        if (em.getTransaction().isActive())
-        {
-          em.getTransaction().rollback();
-        }
-
-        logger.log(Level.SEVERE, null, ex);
         getMessageHandler().error("changeRoleFailure");
-      }
-      finally
-      {
-        em.close();
       }
     }
   }
@@ -114,33 +97,18 @@ public class AdminUserBean extends AbstractBean
   public String save()
   {
     String result = SUCCESS;
-    // TODO replace with UserDAO.edit
-    EntityManager em = BlogContext.getInstance().getEntityManager();
+    UserDAO userDAO = BlogContext.getDAOFactory().getUserDAO();
 
-    if (checkMail(em))
+    if (checkMail(userDAO))
     {
-      em.getTransaction().begin();
-
-      try
+      if (userDAO.edit(user))
       {
-        user = em.merge(user);
-        em.getTransaction().commit();
         getMessageHandler().info("userSettingsUpdateSuccess");
       }
-      catch (Exception ex)
+      else
       {
-        if (em.getTransaction().isActive())
-        {
-          em.getTransaction().rollback();
-        }
-
-        logger.log(Level.SEVERE, null, ex);
         result = FAILURE;
         getMessageHandler().error("unknownError");
-      }
-      finally
-      {
-        em.close();
       }
     }
     else
@@ -164,13 +132,13 @@ public class AdminUserBean extends AbstractBean
 
     if (passwordRetry.equals(user.getPassword()))
     {
-      ServiceReference reference =
-        BlogContext.getInstance().getServiceRegistry().getServiceReference(
-            Constants.SERVCIE_ENCRYPTION);
+      ServiceReference<Encryption> reference =
+        BlogContext.getInstance().getServiceRegistry().get(Encryption.class,
+          Constants.SERVCIE_ENCRYPTION);
 
       if (reference != null)
       {
-        Encryption enc = (Encryption) reference.getImplementation();
+        Encryption enc = reference.get();
 
         if (enc != null)
         {
@@ -192,7 +160,6 @@ public class AdminUserBean extends AbstractBean
 
   /**
    * Method description
-   * TODO replace with MemberDAO.findByUser
    *
    *
    * @return
@@ -201,22 +168,14 @@ public class AdminUserBean extends AbstractBean
   {
     if (members == null)
     {
-      EntityManager em = BlogContext.getInstance().getEntityManager();
+      members = new ListDataModel();
 
-      try
-      {
-        Query q = em.createNamedQuery("BlogMember.findByUser");
+      MemberDAO memberDAO = BlogContext.getDAOFactory().getMemberDAO();
+      List<BlogMember> memberList = memberDAO.findByUser(user);
 
-        q.setParameter("user", user);
-        members = new ListDataModel(q.getResultList());
-      }
-      catch (Exception ex)
+      if ((memberList != null) &&!memberList.isEmpty())
       {
-        logger.log(Level.SEVERE, null, ex);
-      }
-      finally
-      {
-        em.close();
+        members.setWrappedData(memberList);
       }
     }
 
@@ -273,24 +232,23 @@ public class AdminUserBean extends AbstractBean
    */
   public DataModel getUsers()
   {
-    EntityManager em = BlogContext.getInstance().getEntityManager();
+    users = new ListDataModel();
 
-    try
-    {
-      String query = onlyActive
-                     ? "User.findAllActives"
-                     : "User.findAll";
-      Query q = em.createNamedQuery(query);
+    List<User> userList = null;
+    UserDAO userDAO = BlogContext.getDAOFactory().getUserDAO();
 
-      users = new ListDataModel(q.getResultList());
-    }
-    catch (Exception ex)
+    if (onlyActive)
     {
-      logger.log(Level.SEVERE, null, ex);
+      userList = userDAO.findAllActives();
     }
-    finally
+    else
     {
-      em.close();
+      userList = userDAO.findAll();
+    }
+
+    if ((userList != null) &&!userList.isEmpty())
+    {
+      users.setWrappedData(userList);
     }
 
     return users;
@@ -368,24 +326,15 @@ public class AdminUserBean extends AbstractBean
 
   /**
    * Method description
-   * TODO replace with UserDAO.findByEmail
    *
-   * @param em
+   *
+   * @param userDAO
    *
    * @return
    */
-  private boolean checkMail(EntityManager em)
+  private boolean checkMail(UserDAO userDAO)
   {
-    User u = null;
-
-    try
-    {
-      Query q = em.createNamedQuery("User.findByEmail");
-
-      q.setParameter("email", user.getEmail());
-      u = (User) q.getSingleResult();
-    }
-    catch (NoResultException ex) {}
+    User u = userDAO.findByEmail(user.getEmail());
 
     return (u == null) || u.equals(user);
   }

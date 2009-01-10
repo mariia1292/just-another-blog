@@ -53,7 +53,7 @@ public interface MemberDAO extends GenericDAO<BlogMember>
    *
    * @return
    */
-  public List<BlogMember> findByBlogAndUser(Blog blog, User user);
+  public BlogMember findByBlogAndUser(Blog blog, User user);
 
   /**
    * Method description

@@ -82,9 +82,10 @@ public interface Constants
   public static String CONFIG_SMTPSERVER = "smtp.server";
 
   /** Field description */
-  public static String CONFIG_SMTPUSER = "smtp.user";
-
   public static String CONFIG_SMTPSTARTTLS = "smtp.starttls";
+
+  /** Field description */
+  public static String CONFIG_SMTPUSER = "smtp.user";
 
   /** Field description */
   public static final String CONFIG_SPAMMETHOD = "spam.method";
@@ -190,6 +191,9 @@ public interface Constants
 
   /** Field description */
   public static final String SERVCIE_CIPHER = "/app/cipher";
+
+  /** Field description */
+  public static final String SERVCIE_DAO = "/app/dao";
 
   /** Field description */
   public static final String SERVCIE_ENCRYPTION = "/app/encryption";
