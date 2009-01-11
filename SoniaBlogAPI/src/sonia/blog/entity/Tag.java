@@ -14,34 +14,11 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToMany;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
 
 /**
  *
  * @author sdorra
  */
-@Entity @NamedQueries(
-{
-  @NamedQuery(name = "Tag.findAll", query = "select t from Tag t") ,
-  @NamedQuery(name = "Tag.findByBlog",
-              query = "select t from Tag t join t.entries e join e.category c join c.blog b where b = :blog and e.published = true group by t") ,
-  @NamedQuery(name = "Tag.findByName",
-              query = "select t from Tag t join t.entries e join e.category c join c.blog b where e.published = true and t.name = :name group by t") ,
-  @NamedQuery(name = "Tag.count", query = "select count(t) from Tag t") ,
-
-  // TODO: repair Query
-  @NamedQuery(name = "Tag.countFromBlog",
-              query = "select count(t) from Tag t join t.entries e join e.category c join c.blog b where b = :blog group by t.name") ,
-  @NamedQuery(name = "Tag.findByBlogAndCount",
-              query = "select new sonia.blog.api.util.TagWrapper(t, count(t)) from Tag t join t.entries e join e.category c join c.blog b where b = :blog and e.published = true group by t")
-})
 public class Tag implements PermaObject, Serializable
 {
 
@@ -206,14 +183,11 @@ public class Tag implements PermaObject, Serializable
   //~--- fields ---------------------------------------------------------------
 
   /** Field description */
-  @ManyToMany(mappedBy = "tags")
   private List<Entry> entries;
 
   /** Field description */
-  @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
   /** Field description */
-  @Column(nullable = false, unique = true)
   private String name;
 }

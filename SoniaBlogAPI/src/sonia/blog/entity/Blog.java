@@ -9,7 +9,6 @@ package sonia.blog.entity;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import sonia.blog.api.listener.BlogListener;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -19,34 +18,11 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EntityListeners;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
-import javax.persistence.PrePersist;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 
 /**
  *
  * @author sdorra
  */
-@Entity @NamedQueries(
-{
-  @NamedQuery(name = "Blog.findByServername",
-              query = "select b from Blog as b where b.active = true and b.servername = :servername") ,
-  @NamedQuery(name = "Blog.findAll", query = "select b from Blog b") ,
-  @NamedQuery(name = "Blog.findAllActives",
-              query = "select b from Blog b where b.active = true") ,
-  @NamedQuery(name = "Blog.count", query = "select count(b) from Blog b")
-}) @EntityListeners({ BlogListener.class })
 public class Blog implements Serializable, PermaObject
 {
 
@@ -542,7 +518,6 @@ public class Blog implements Serializable, PermaObject
    * Method description
    *
    */
-  @PrePersist
   void prePersists()
   {
     creationDate = new Date();
@@ -563,19 +538,12 @@ public class Blog implements Serializable, PermaObject
   private boolean allowMacros = true;
 
   /** Field description */
-  @OneToMany(
-    fetch = FetchType.LAZY,
-    mappedBy = "blog",
-    cascade = CascadeType.REMOVE
-  )
   private List<Category> categories;
 
   /** Field description */
-  @Temporal(TemporalType.TIMESTAMP)
   private Date creationDate;
 
   /** Field description */
-  @Column(nullable = false, length = 50)
   private String dateFormat = "yyyy-MM-dd HH:mm";
 
   /** Field description */
@@ -588,7 +556,6 @@ public class Blog implements Serializable, PermaObject
   private int entriesPerPage = 20;
 
   /** Field description */
-  @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
   /** Field description */
@@ -598,19 +565,12 @@ public class Blog implements Serializable, PermaObject
   private int imageWidth = 640;
 
   /** Field description */
-  @OneToMany(
-    fetch = FetchType.LAZY,
-    mappedBy = "blog",
-    cascade = { CascadeType.MERGE, CascadeType.REMOVE }
-  )
   private List<BlogMember> members;
 
   /** Field description */
-  @Column(nullable = false, unique = true)
   private String servername;
 
   /** Field description */
-  @Column(nullable = false)
   private String template;
 
   /** Field description */

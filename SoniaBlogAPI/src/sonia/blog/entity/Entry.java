@@ -9,7 +9,6 @@ package sonia.blog.entity;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import sonia.blog.api.listener.EntryListener;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -19,62 +18,11 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EntityListeners;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Lob;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
-import javax.persistence.OrderBy;
-import javax.persistence.PrePersist;
-import javax.persistence.PreUpdate;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 
 /**
  *
  * @author sdorra
  */
-@Entity @EntityListeners({ EntryListener.class }) @NamedQueries(
-{
-  @NamedQuery(name = "Entry.findAll", query = "select e from Entry e") ,
-  @NamedQuery(name = "Entry.findAllActives",
-              query = "select e from Entry e where e.published = true order by e.creationDate") ,
-  @NamedQuery(name = "Entry.findAllActivesByBlog",
-              query = "select e from Entry e join e.category c join c.blog b where b = :blog and e.published = true order by e.creationDate") ,
-  @NamedQuery(name = "Entry.findAllByBlog",
-              query = "select e from Entry e join e.category c join c.blog b where b = :blog and e.published = true order by e.creationDate desc") ,
-  @NamedQuery(name = "Entry.findByCategory",
-              query = "select e from Entry as e where e.category = :category and e.published = true order by e.creationDate") ,
-  @NamedQuery(name = "Entry.findIdFromBlog",
-              query = "select e from Entry e join e.category c join c.blog b where b = :blog and e.id = :id and e.published = true order by e.creationDate") ,
-  @NamedQuery(name = "Entry.findFromBlog",
-              query = "select e from Entry e join e.category c join c.blog b where b = :blog order by e.creationDate desc") ,
-  @NamedQuery(name = "Entry.findByBlogAndTag",
-              query = "select e from Entry e join e.category c join c.blog b join e.tags t where e.published = true and b = :blog and t = :tag order by e.creationDate") ,
-  @NamedQuery(name = "Entry.findByTagId",
-              query = "select e from Entry e join e.tags t where e.published = true and t.id = :tagId order by e.creationDate") ,
-  @NamedQuery(name = "Entry.findByTagName",
-              query = "select e from Entry e join e.category c join c.blog b join e.tags t where b = :blog and e.published = true and t.name = :name order by e.creationDate") ,
-  @NamedQuery(name = "Entry.findByCategoryId",
-              query = "select e From Entry e join e.category c where c.id = :id and e.published = true order by e.creationDate") ,
-  @NamedQuery(name = "Entry.findByBlogAndDate",
-              query = "select e from Entry e join e.category c join c.blog b where b = :blog and e.published = true and e.creationDate between :start and :end order by e.creationDate") ,
-  @NamedQuery(name = "Entry.calendar",
-              query = "select e.creationDate from Entry e join e.category c join c.blog b where b = :blog and e.published = true and e.creationDate between :start and :end") ,
-  @NamedQuery(name = "Entry.count", query = "select count(e) from Entry e") ,
-  @NamedQuery(name = "Entry.findAllDraftsByBlogAndUser",
-              query = "select e from Entry e join e.category c join c.blog b where b = :blog and e.published = false and e.author = :user order by e.creationDate desc") ,
-  @NamedQuery(name = "Entry.countByBlog",
-              query = "select count(e) from Entry e join e.category c join c.blog b where b = :blog")
-})
 public class Entry implements Serializable, ContentObject, CommentAble
 {
 
@@ -497,7 +445,6 @@ public class Entry implements Serializable, ContentObject, CommentAble
    * Method description
    *
    */
-  @PrePersist
   void prePersists()
   {
     creationDate = new Date();
@@ -507,7 +454,6 @@ public class Entry implements Serializable, ContentObject, CommentAble
    * Method description
    *
    */
-  @PreUpdate
   void preUpdate()
   {
     lastUpdate = new Date();
@@ -516,51 +462,35 @@ public class Entry implements Serializable, ContentObject, CommentAble
   //~--- fields ---------------------------------------------------------------
 
   /** Field description */
-  @OneToMany(mappedBy = "entry",
-             cascade = { CascadeType.REMOVE, CascadeType.MERGE })
   private List<Attachment> attachments;
 
   /** Field description */
-  @ManyToOne(optional = false)
   private User author;
 
   /** Field description */
-  @ManyToOne
   private Category category;
 
   /** Field description */
-  @OneToMany(mappedBy = "entry",
-             cascade = { CascadeType.REMOVE, CascadeType.MERGE })
   private List<Comment> comments;
 
   /** Field description */
-  @Lob
   private String content;
 
   /** Field description */
-  @Temporal(TemporalType.TIMESTAMP) @Column(nullable = false)
   private Date creationDate;
 
   /** Field description */
-  @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
   /** Field description */
-  @Temporal(TemporalType.TIMESTAMP)
   private Date lastUpdate;
 
   /** Field description */
   private boolean published = true;
 
-  /** Field description */
-  @ManyToMany @OrderBy("name")
   private List<Tag> tags;
 
-  /** Field description */
-  @Column(length = 5000)
   private String teaser;
 
-  /** Field description */
-  @Column(nullable = false)
   private String title;
 }

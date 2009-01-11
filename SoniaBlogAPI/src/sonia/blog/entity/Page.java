@@ -14,22 +14,11 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Lob;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 
 /**
  *
  * @author sdorra
  */
-@Entity
 public class Page implements Serializable, ContentObject
 {
 
@@ -335,27 +324,21 @@ public class Page implements Serializable, ContentObject
   //~--- fields ---------------------------------------------------------------
 
   /** Field description */
-  @OneToMany(mappedBy = "page")
   private List<Attachment> attachments;
 
   /** Field description */
-  @ManyToOne
   private User author;
 
   /** Field description */
-  @Lob
   private String content;
 
   /** Field description */
-  @Temporal(TemporalType.TIMESTAMP)
   private Date creationDate;
 
   /** Field description */
-  @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
   /** Field description */
-  @ManyToOne(fetch = FetchType.LAZY)
   private Page parent;
 
   /** Field description */

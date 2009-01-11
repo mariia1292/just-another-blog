@@ -13,37 +13,11 @@ import java.io.Serializable;
 
 import java.util.Date;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
-import javax.persistence.PrePersist;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 
 /**
  *
  * @author sdorra
  */
-@Entity @NamedQueries(
-{
-  @NamedQuery(name = "BlogMember.findAll",
-              query = "select m from BlogMember as m") ,
-  @NamedQuery(name = "BlogMember.count",
-              query = "select count(m) from BlogMember as m") ,
-  @NamedQuery(name = "BlogMember.findByBlogAndUser",
-              query = "select m from BlogMember as m where m.blog = :blog and m.user = :user") ,
-  @NamedQuery(name = "BlogMember.findByUser",
-              query = "select m from BlogMember m where m.user = :user") ,
-  @NamedQuery(name = "BlogMember.findByBlog",
-              query = "select m from BlogMember m where m.blog = :blog") ,
-  @NamedQuery(name = "BlogMember.countByBlog",
-              query = "select count(m) from BlogMember m where m.blog = :blog")
-})
 public class BlogMember implements Serializable
 {
 
@@ -243,7 +217,6 @@ public class BlogMember implements Serializable
    * Method description
    *
    */
-  @PrePersist
   void prePersists()
   {
     registrationDate = new Date();
@@ -252,22 +225,17 @@ public class BlogMember implements Serializable
   //~--- fields ---------------------------------------------------------------
 
   /** Field description */
-  @ManyToOne(optional = false)
   private Blog blog;
 
   /** Field description */
-  @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
   /** Field description */
-  @Temporal(TemporalType.TIMESTAMP)
   private Date registrationDate;
 
   /** Field description */
-  @Column(name = "BlogRole", nullable = false)
   private Role role;
 
   /** Field description */
-  @ManyToOne(optional = false)
   private User user;
 }

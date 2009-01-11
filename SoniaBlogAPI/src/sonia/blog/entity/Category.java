@@ -14,39 +14,11 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
-import javax.persistence.PrePersist;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 
 /**
  *
  * @author sdorra
  */
-@Entity @NamedQueries(
-{
-  @NamedQuery(name = "Category.findAll", query = "select c from Category c") ,
-  @NamedQuery(name = "Category.findAllByBlog",
-              query = "select c from Category c where c.blog = :blog") ,
-  @NamedQuery(name = "Category.findIdFromBlog",
-              query = "select c from Category c where c.id = :id and c.blog = :blog") ,
-  @NamedQuery(name = "Category.count",
-              query = "select count(c) from Category c") ,
-  @NamedQuery(name = "Category.countByBlog",
-              query = "select count(c) from Category c where c.blog = :blog") ,
-  @NamedQuery(name = "Category.findFirstByBlog",
-              query = "select c from Category c where c.blog = :blog and c.id = ( select min(cat.id) from Category cat where cat.blog = :blog )")
-})
 public class Category implements Serializable, PermaObject
 {
 
@@ -245,7 +217,6 @@ public class Category implements Serializable, PermaObject
    * Method description
    *
    */
-  @PrePersist
   void prePersists()
   {
     creationDate = new Date();
@@ -254,29 +225,20 @@ public class Category implements Serializable, PermaObject
   //~--- fields ---------------------------------------------------------------
 
   /** Field description */
-  @ManyToOne(optional = false)
   private Blog blog;
 
   /** Field description */
-  @Temporal(TemporalType.TIMESTAMP) @Column(nullable = false)
   private Date creationDate;
 
   /** Field description */
   private String description;
 
   /** Field description */
-  @OneToMany(
-    fetch = FetchType.LAZY,
-    mappedBy = "category",
-    cascade = CascadeType.REMOVE
-  )
   private List<Entry> entries;
 
   /** Field description */
-  @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
   /** Field description */
-  @Column(nullable = false)
   private String name;
 }

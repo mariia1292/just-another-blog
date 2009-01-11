@@ -2,20 +2,72 @@
 <entity-mappings version="1.0" xmlns="http://java.sun.com/xml/ns/persistence/orm"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://java.sun.com/xml/ns/persistence/orm http://java.sun.com/xml/ns/persistence/orm_1_0.xsd">
-    <persistence-unit-metadata>
-        <persistence-unit-defaults>
-            <access>PROPERTY</access>
-        </persistence-unit-defaults>
-    </persistence-unit-metadata>
-    <package>sonia.blog.entity</package>
-    <entity metadata-complete="true" name="Blog"
-            class="sonia.blog.entity.Blog">
-        <named-query name="AutoPing.getAll">
-            <query>SELECT a FROM AutoPing a</query>
-        </named-query>
-        <attributes>
-            <id name="id" />
-            
-        </attributes>
-    </entity>
+  <persistence-unit-metadata>
+    <persistence-unit-defaults>
+      <access>FIELD</access>
+    </persistence-unit-defaults>
+  </persistence-unit-metadata>
+  <package>sonia.blog.entity</package>
+  <entity metadata-complete="true" name="Blog" class="sonia.blog.entity.Blog">
+    <named-query name="Blog.findByServername">
+      <query>
+        select b from Blog as b where b.active = true and b.servername = :servername
+      </query>
+    </named-query>
+    <named-query name="Blog.findAll">
+      <query>
+        select b from Blog b
+      </query>
+    </named-query>
+    <named-query name="Blog.findAllActives">
+      <query>
+        select b from Blog b where b.active = true
+      </query>
+    </named-query>
+    <named-query name="Blog.count">
+      <query>
+        select count(b) from Blog b
+      </query>
+    </named-query>
+    <entity-listeners>
+      <entity-listener class="sonia.blog.api.listener.BlogListener">
+        <pre-persist method-name="prePersists" />
+        <post-persist method-name="postPersists" />
+        <pre-remove method-name="preRemove" />
+        <post-remove method-name="postRemove" />
+        <pre-update method-name="preUpdate" />
+        <post-update method-name="postUpdate" />
+        <post-load method-name="postLoad" />
+      </entity-listener>
+    </entity-listeners>
+    <pre-persist method-name="prePersists" />
+    <attributes>
+      <id name="id">
+        <generated-value strategy="IDENTITY" />
+      </id>
+      <basic name="dateFormat">
+        <column nullable="false" length="50" />
+      </basic>
+      <basic name="creationDate">
+        <temporal>TIMESTAMP</temporal>
+      </basic>
+      <basic name="servername">
+        <column nullable="false" unique="true" />
+      </basic>
+      <basic name="template">
+        <column nullable="false" />
+      </basic>
+      <one-to-many name="members" fetch="LAZY" mapped-by="blog">
+        <cascade>
+          <cascade-merge />
+          <cascade-remove />
+        </cascade>
+      </one-to-many>
+      <one-to-many name="categories" fetch="LAZY" mapped-by="blog">
+        <cascade>
+          <cascade-remove />
+        </cascade>
+      </one-to-many>
+    </attributes>
+  </entity>
 </entity-mappings>

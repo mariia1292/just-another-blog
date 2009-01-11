@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entity-mappings version="1.0" xmlns="http://java.sun.com/xml/ns/persistence/orm"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/persistence/orm http://java.sun.com/xml/ns/persistence/orm_1_0.xsd">
+  <persistence-unit-metadata>
+    <persistence-unit-defaults>
+      <access>FIELD</access>
+    </persistence-unit-defaults>
+  </persistence-unit-metadata>
+  <package>sonia.blog.entity</package>
+  <entity metadata-complete="true" name="Entry" class="sonia.blog.entity.Entry">
+    <!--
+    @NamedQueries(
+    {
+      @NamedQuery(name = "Entry.findAll", query = "select e from Entry e") ,
+      @NamedQuery(name = "Entry.findAllActives",
+                  query = "select e from Entry e where e.published = true order by e.creationDate") ,
+      @NamedQuery(name = "Entry.findAllActivesByBlog",
+                  query = "select e from Entry e join e.category c join c.blog b where b = :blog and e.published = true order by e.creationDate") ,
+      @NamedQuery(name = "Entry.findAllByBlog",
+                  query = "select e from Entry e join e.category c join c.blog b where b = :blog and e.published = true order by e.creationDate desc") ,
+      @NamedQuery(name = "Entry.findByCategory",
+                  query = "select e from Entry as e where e.category = :category and e.published = true order by e.creationDate") ,
+      @NamedQuery(name = "Entry.findIdFromBlog",
+                  query = "select e from Entry e join e.category c join c.blog b where b = :blog and e.id = :id and e.published = true order by e.creationDate") ,
+      @NamedQuery(name = "Entry.findFromBlog",
+                  query = "select e from Entry e join e.category c join c.blog b where b = :blog order by e.creationDate desc") ,
+      @NamedQuery(name = "Entry.findByBlogAndTag",
+                  query = "select e from Entry e join e.category c join c.blog b join e.tags t where e.published = true and b = :blog and t = :tag order by e.creationDate") ,
+      @NamedQuery(name = "Entry.findByTagId",
+                  query = "select e from Entry e join e.tags t where e.published = true and t.id = :tagId order by e.creationDate") ,
+      @NamedQuery(name = "Entry.findByTagName",
+                  query = "select e from Entry e join e.category c join c.blog b join e.tags t where b = :blog and e.published = true and t.name = :name order by e.creationDate") ,
+      @NamedQuery(name = "Entry.findByCategoryId",
+                  query = "select e From Entry e join e.category c where c.id = :id and e.published = true order by e.creationDate") ,
+      @NamedQuery(name = "Entry.findByBlogAndDate",
+                  query = "select e from Entry e join e.category c join c.blog b where b = :blog and e.published = true and e.creationDate between :start and :end order by e.creationDate") ,
+      @NamedQuery(name = "Entry.calendar",
+                  query = "select e.creationDate from Entry e join e.category c join c.blog b where b = :blog and e.published = true and e.creationDate between :start and :end") ,
+      @NamedQuery(name = "Entry.count", query = "select count(e) from Entry e") ,
+      @NamedQuery(name = "Entry.findAllDraftsByBlogAndUser",
+                  query = "select e from Entry e join e.category c join c.blog b where b = :blog and e.published = false and e.author = :user order by e.creationDate desc") ,
+      @NamedQuery(name = "Entry.countByBlog",
+                  query = "select count(e) from Entry e join e.category c join c.blog b where b = :blog")
+    })
+    -->
+    <named-query name="Entry.findAll">
+      <query>
+        select e from Entry e
+      </query>
+    </named-query>
+    <named-query name="Entry.findAllActives">
+      <query>
+        select e from Entry e where e.published = true order by e.creationDate
+      </query>
+    </named-query>
+    <named-query name="Entry.findAllActivesByBlog">
+      <query>
+        select e from Entry e join e.category c join c.blog b where b = :blog and e.published = true order by e.creationDate
+      </query>
+    </named-query>
+    <named-query name="Entry.findAllByBlog">
+      <query>
+        select e from Entry e join e.category c join c.blog b where b = :blog and e.published = true order by e.creationDate desc
+      </query>
+    </named-query>
+    <named-query name="Entry.findByCategory">
+      <query>
+        select e from Entry as e where e.category = :category and e.published = true order by e.creationDate
+      </query>
+    </named-query>
+    <named-query name="Entry.findByBlogAndTag">
+      <query>
+        select e from Entry e join e.category c join c.blog b join e.tags t where e.published = true and b = :blog and t = :tag order by e.creationDate
+      </query>
+    </named-query>
+    <named-query name="Entry.findByTagId">
+      <query>
+        select e from Entry e join e.tags t where e.published = true and t.id = :tagId order by e.creationDate
+      </query>
+    </named-query>
+    <named-query name="Entry.findByTagName">
+      <query>
+        select e from Entry e join e.category c join c.blog b join e.tags t where b = :blog and e.published = true and t.name = :name order by e.creationDate
+      </query>
+    </named-query>
+    <named-query name="Entry.findByCategoryId">
+      <query>
+        select e From Entry e join e.category c where c.id = :id and e.published = true order by e.creationDate
+      </query>
+    </named-query>
+    <named-query name="Entry.findByBlogAndDate">
+      <query>
+        select e from Entry e join e.category c join c.blog b where b = :blog and e.published = true and e.creationDate between :start and :end order by e.creationDate
+      </query>
+    </named-query>
+    <named-query name="Entry.calendar">
+      <query>
+        select e.creationDate from Entry e join e.category c join c.blog b where b = :blog and e.published = true and e.creationDate between :start and :end
+      </query>
+    </named-query>
+    <named-query name="Entry.count">
+      <query>
+        select count(e) from Entry e
+      </query>
+    </named-query>
+    <named-query name="Entry.findAllDraftsByBlogAndUser">
+      <query>
+        select e from Entry e join e.category c join c.blog b where b = :blog and e.published = false and e.author = :user order by e.creationDate desc
+      </query>
+    </named-query>
+    <named-query name="Entry.countByBlog">
+      <query>
+        select count(e) from Entry e join e.category c join c.blog b where b = :blog
+      </query>
+    </named-query>
+    <entity-listeners>
+      <entity-listener class="sonia.blog.api.listener.EntryListener">
+        <pre-persist method-name="prePersists" />
+        <post-persist method-name="postPersists" />
+        <pre-remove method-name="preRemove" />
+        <post-remove method-name="postRemove" />
+        <pre-update method-name="preUpdate" />
+        <post-update method-name="postUpdate" />
+        <post-load method-name="postLoad" />
+      </entity-listener>
+    </entity-listeners>
+    <pre-persist method-name="prePersists" />
+    <pre-update method-name="preUpdate" />
+    <attributes>
+      <id name="id">
+        <generated-value strategy="IDENTITY" />
+      </id>
+      <basic name="title">
+        <column nullable="false" />
+      </basic>
+      <basic name="teaser">
+        <column length="5000" />
+      </basic>
+      <basic name="content">
+        <lob />
+      </basic>
+      <basic name="creationDate">
+        <column nullable="false" />
+        <temporal>TIMESTAMP</temporal>
+      </basic>
+      <basic name="lastUpdate">
+        <temporal>TIMESTAMP</temporal>
+      </basic>
+      <many-to-one name="author" optional="false" />
+      <many-to-one name="category" optional="false" />
+      <one-to-many name="attachments">
+        <cascade>
+          <cascade-merge />
+          <cascade-remove />
+        </cascade>
+      </one-to-many>
+      <one-to-many name="comments" mapped-by="entry">
+        <cascade>
+          <cascade-merge />
+          <cascade-remove />
+        </cascade>
+      </one-to-many>
+      <many-to-many name="tags">
+        <order-by>name</order-by>
+      </many-to-many>
+    </attributes>
+  </entity>
+</entity-mappings>

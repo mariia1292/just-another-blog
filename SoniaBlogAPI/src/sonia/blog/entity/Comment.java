@@ -9,7 +9,6 @@ package sonia.blog.entity;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import sonia.blog.api.listener.CommentListener;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -17,35 +16,11 @@ import java.io.Serializable;
 
 import java.util.Date;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EntityListeners;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
-import javax.persistence.PrePersist;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 
 /**
  *
  * @author sdorra
  */
-@Entity @EntityListeners({ CommentListener.class }) @NamedQueries(
-{
-  @NamedQuery(name = "Comment.findAll", query = "select c from Comment c") ,
-  @NamedQuery(name = "Comment.findAllByBlog",
-              query = "select c from Comment c join c.entry e join e.category ca join ca.blog b where b = :blog and e.published = true order by c.creationDate desc") ,
-  @NamedQuery(name = "Comment.findAllActivesByEntry",
-              query = "select c from Comment c join c.entry e where e = :entry and c.spam = false order by c.creationDate ") ,
-  @NamedQuery(name = "Comment.count",
-              query = "select count(c) from Comment c") ,
-  @NamedQuery(name = "Comment.countByBlog",
-              query = "select count(c) from Comment c join c.entry e join e.category cat join cat.blog b where b = :blog")
-})
 public class Comment implements Serializable, PermaObject
 {
 
@@ -311,7 +286,6 @@ public class Comment implements Serializable, PermaObject
    * Method description
    *
    */
-  @PrePersist
   void prePersists()
   {
     creationDate = new Date();
@@ -320,33 +294,27 @@ public class Comment implements Serializable, PermaObject
   //~--- fields ---------------------------------------------------------------
 
   /** Field description */
-  @Column(nullable = false)
   private String authorAddress;
 
   /** Field description */
   private String authorMail;
 
   /** Field description */
-  @Column(nullable = false)
   private String authorName;
 
   /** Field description */
   private String authorURL;
 
   /** Field description */
-  @Column(nullable = false, length = 2048)
   private String content;
 
   /** Field description */
-  @Temporal(TemporalType.TIMESTAMP)
   private Date creationDate;
 
   /** Field description */
-  @ManyToOne(optional = false)
   private Entry entry;
 
   /** Field description */
-  @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
   /** Field description */

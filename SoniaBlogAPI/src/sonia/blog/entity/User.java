@@ -16,41 +16,11 @@ import java.security.Principal;
 import java.util.Date;
 import java.util.Random;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
-import javax.persistence.PrePersist;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 
 /**
  *
  * @author sdorra
  */
-@Entity @Table(name = "BlogUser")
-@NamedQueries(
-{
-  @NamedQuery(name = "User.findByNameAndPassword",
-              query = "select u from User as u where u.active = true and u.name = :name and u.password = :password") ,
-  @NamedQuery(name = "User.findActiveByName",
-              query = "select u from User as u where u.active = true and u.name = :name") ,
-  @NamedQuery(name = "User.findByName",
-              query = "select u from User as u where u.name = :name") ,
-  @NamedQuery(name = "User.findByEmail",
-              query = "select u from User as u where u.active = true and u.email = :email") ,
-  @NamedQuery(name = "User.count", query = "select count(u) from User u") ,
-  @NamedQuery(name = "User.findByNameAndCode",
-              query = "select u from User u where u.active = true and u.name = :name and u.activationCode = :code") ,
-  @NamedQuery(name = "User.findAll",
-              query = "select u from User u order by u.name") ,
-  @NamedQuery(name = "User.findAllActives",
-              query = "select u from User u where u.active = true order by u.name")
-})
 public class User implements Serializable, Principal, PermaObject
 {
 
@@ -359,7 +329,6 @@ public class User implements Serializable, Principal, PermaObject
    * Method description
    *
    */
-  @PrePersist
   void prePersists()
   {
     registrationDate = new Date();
@@ -386,34 +355,27 @@ public class User implements Serializable, Principal, PermaObject
   private String activationCode;
 
   /** Field description */
-  @Column(nullable = false)
   private String displayName;
 
   /** Field description */
-  @Column(nullable = false, unique = true)
   private String email;
 
   /** Field description */
   private boolean globalAdmin;
 
   /** Field description */
-  @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
   /** Field description */
-  @Temporal(TemporalType.TIMESTAMP)
   private Date lastLogin;
 
   /** Field description */
-  @Column(nullable = false, unique = true)
   private String name;
 
   /** Field description */
-  @Column(nullable = false)
   private String password;
 
   /** Field description */
-  @Temporal(TemporalType.TIMESTAMP) @Column(nullable = false)
   private Date registrationDate;
 
   /** Field description */

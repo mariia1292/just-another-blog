@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entity-mappings version="1.0" xmlns="http://java.sun.com/xml/ns/persistence/orm"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/persistence/orm http://java.sun.com/xml/ns/persistence/orm_1_0.xsd">
+  <persistence-unit-metadata>
+    <persistence-unit-defaults>
+      <access>FIELD</access>
+    </persistence-unit-defaults>
+  </persistence-unit-metadata>
+  <package>sonia.blog.entity</package>
+  <!--
+  @NamedQueries(
+  {
+    @NamedQuery(name = "BlogMember.findAll",
+                query = "select m from BlogMember as m") ,
+    @NamedQuery(name = "BlogMember.count",
+                query = "select count(m) from BlogMember as m") ,
+    @NamedQuery(name = "BlogMember.findByBlogAndUser",
+                query = "select m from BlogMember as m where m.blog = :blog and m.user = :user") ,
+    @NamedQuery(name = "BlogMember.findByUser",
+                query = "select m from BlogMember m where m.user = :user") ,
+    @NamedQuery(name = "BlogMember.findByBlog",
+                query = "select m from BlogMember m where m.blog = :blog") ,
+    @NamedQuery(name = "BlogMember.countByBlog",
+                query = "select count(m) from BlogMember m where m.blog = :blog")
+  })
+  -->
+  <entity metadata-complete="true" name="BlogMember" class="sonia.blog.entity.BlogMember">
+  <named-query name="BlogMember.findAll">
+    <query>
+      select m from BlogMember as m
+    </query>
+  </named-query>
+  <named-query name="BlogMember.count">
+    <query>
+      select count(m) from BlogMember as m
+    </query>
+  </named-query>
+  <named-query name="BlogMember.findByBlogAndUser">
+    <query>
+      select m from BlogMember as m where m.blog = :blog and m.user = :user
+    </query>
+  </named-query>
+  <named-query name="BlogMember.findByUser">
+    <query>
+      select m from BlogMember m where m.user = :user
+    </query>
+  </named-query>
+  <named-query name="BlogMember.findByBlog">
+    <query>
+      select m from BlogMember m where m.blog = :blog
+    </query>
+  </named-query>
+  <named-query name="BlogMember.countByBlog">
+    <query>
+      select count(m) from BlogMember m where m.blog = :blog
+    </query>
+  </named-query>
+    <attributes>
+      <id name="id">
+        <generated-value strategy="IDENTITY" />
+      </id>
+      <basic name="registrationDate">
+        <column nullable="false" />
+        <temporal>TIMESTAMP</temporal>
+      </basic>
+      <basic name="role">
+        <column name="BlogRole" nullable="false" />
+        <enumerated>ORDINAL</enumerated>
+      </basic>
+      <many-to-one name="blog" optional="false" />
+      <many-to-one name="user" optional="false" />
+    </attributes>
+  </entity>
+</entity-mappings>

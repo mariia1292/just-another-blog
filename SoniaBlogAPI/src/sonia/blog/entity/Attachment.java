@@ -9,7 +9,6 @@ package sonia.blog.entity;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import sonia.blog.api.listener.AttachmentListener;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -17,38 +16,11 @@ import java.io.Serializable;
 
 import java.util.Date;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EntityListeners;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
-import javax.persistence.PrePersist;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 
 /**
  *
  * @author sdorra
  */
-@Entity @EntityListeners({ AttachmentListener.class }) @NamedQueries(
-{
-  @NamedQuery(name = "Attachment.findAllByEntry",
-              query = "select a from Attachment a join a.entry e where e = :entry order by a.creationDate desc") ,
-  @NamedQuery(name = "Attachment.findByBlogAndId",
-              query = "select a from Attachment a join a.entry e join e.category c join c.blog b where b = :blog and a.id = :id") ,
-  @NamedQuery(name = "Attachment.findAllImagesByEntry",
-              query = "select a from Attachment a join a.entry e where e = :entry and a.mimeType like 'image/%'") ,
-  @NamedQuery(name = "Attachment.count",
-              query = "select count(a) from Attachment a") ,
-  @NamedQuery(name = "Attachment.findAll",
-              query = "select a from Attachment a") ,
-  @NamedQuery(name = "Attachment.countByBlog",
-              query = "select count(a) from Attachment a join a.entry e join e.category c join c.blog b where b = :blog")
-})
 public class Attachment implements Serializable, PermaObject, FileObject
 {
 
@@ -313,7 +285,6 @@ public class Attachment implements Serializable, PermaObject, FileObject
    * Method description
    *
    */
-  @PrePersist
   void prePersists()
   {
     creationDate = new Date();
@@ -322,35 +293,29 @@ public class Attachment implements Serializable, PermaObject, FileObject
   //~--- fields ---------------------------------------------------------------
 
   /** Field description */
-  @Temporal(TemporalType.TIMESTAMP)
   private Date creationDate;
 
   /** Field description */
   private String description;
 
   /** Field description */
-  @ManyToOne
   private Entry entry;
 
   /** Field description */
-  @Column(nullable = false)
   private String filePath;
 
   /** Field description */
   private long fileSize;
 
   /** Field description */
-  @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
   /** Field description */
   private String mimeType;
 
   /** Field description */
-  @Column(nullable = false)
   private String name;
 
   /** Field description */
-  @ManyToOne
   private Page page;
 }

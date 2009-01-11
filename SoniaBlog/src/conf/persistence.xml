@@ -1,17 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <persistence version="1.0" xmlns="http://java.sun.com/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_1_0.xsd">
-    <persistence-unit name="SoniaBlog-PU" transaction-type="RESOURCE_LOCAL">
-        <provider>oracle.toplink.essentials.PersistenceProvider</provider>
-        <jar-file>../lib/SoniaBlogAPI.jar</jar-file>
-        <class>sonia.blog.entity.User</class>
-        <class>sonia.blog.entity.BlogMember</class>
-        <class>sonia.blog.entity.Attachment</class>
-        <class>sonia.blog.entity.Comment</class>
-        <class>sonia.blog.entity.Entry</class>
-        <class>sonia.blog.entity.Blog</class>
-        <exclude-unlisted-classes>true</exclude-unlisted-classes>
-        <properties>
-            <property name="toplink.ddl-generation" value="create-tables"/>
-        </properties>
-    </persistence-unit>
+  <persistence-unit name="SoniaBlog-PU" transaction-type="RESOURCE_LOCAL">
+    <provider>oracle.toplink.essentials.PersistenceProvider</provider>
+    
+    <mapping-file>/sonia/blog/dao/jpa/orm/Attachment.xml</mapping-file>
+    <mapping-file>/sonia/blog/dao/jpa/orm/Blog.xml</mapping-file>
+    <mapping-file>/sonia/blog/dao/jpa/orm/Category.xml</mapping-file>
+    <mapping-file>/sonia/blog/dao/jpa/orm/Comment.xml</mapping-file>
+    <mapping-file>/sonia/blog/dao/jpa/orm/Entry.xml</mapping-file>
+    <mapping-file>/sonia/blog/dao/jpa/orm/Member.xml</mapping-file>
+    <mapping-file>/sonia/blog/dao/jpa/orm/Page.xml</mapping-file>
+    <mapping-file>/sonia/blog/dao/jpa/orm/Tag.xml</mapping-file>
+    <mapping-file>/sonia/blog/dao/jpa/orm/User.xml</mapping-file>
+
+
+    <!--<jar-file>../lib/SoniaBlogAPI.jar</jar-file>-->
+        
+    <!--<class>sonia.blog.entity.User</class>
+    <class>sonia.blog.entity.BlogMember</class>
+    <class>sonia.blog.entity.Attachment</class>
+    <class>sonia.blog.entity.Comment</class>
+    <class>sonia.blog.entity.Entry</class>
+    <class>sonia.blog.entity.Blog</class>-->
+        
+    <exclude-unlisted-classes>true</exclude-unlisted-classes>
+
+    <properties>
+      <property name="toplink.ddl-generation" value="create-tables"/>
+      <property name="toplink.logging.level" value="FINEST" />
+    </properties>
+    
+  </persistence-unit>
 </persistence>
