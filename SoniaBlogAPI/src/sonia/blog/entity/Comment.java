@@ -7,15 +7,11 @@
 
 package sonia.blog.entity;
 
-//~--- non-JDK imports --------------------------------------------------------
-
-
 //~--- JDK imports ------------------------------------------------------------
 
 import java.io.Serializable;
 
 import java.util.Date;
-
 
 /**
  *

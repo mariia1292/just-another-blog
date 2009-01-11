@@ -7,9 +7,6 @@
 
 package sonia.blog.entity;
 
-//~--- non-JDK imports --------------------------------------------------------
-
-
 //~--- JDK imports ------------------------------------------------------------
 
 import java.io.Serializable;
@@ -17,7 +14,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
 
 /**
  *
@@ -488,9 +484,12 @@ public class Entry implements Serializable, ContentObject, CommentAble
   /** Field description */
   private boolean published = true;
 
+  /** Field description */
   private List<Tag> tags;
 
+  /** Field description */
   private String teaser;
 
+  /** Field description */
   private String title;
 }
