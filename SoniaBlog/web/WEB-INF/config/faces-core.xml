@@ -115,11 +115,11 @@
   </component>
 
   <component>
-    <display-name>tagList</display-name>
-    <component-type>sonia.blog.taglist</component-type>
-    <component-class>sonia.blog.api.jsf.taglist.TagListComponent</component-class>
+    <display-name>tagCloud</display-name>
+    <component-type>sonia.blog.tagcloud</component-type>
+    <component-class>sonia.blog.api.jsf.tagcloud.TagCloudComponent</component-class>
     <component-extension>
-      <renderer-type>sonia.blog.taglist.renderer</renderer-type>
+      <renderer-type>sonia.blog.tagcloud.renderer</renderer-type>
     </component-extension>
   </component>
 
@@ -160,9 +160,9 @@
       <renderer-class>sonia.blog.api.jsf.spam.SpamLabelRenderer</renderer-class>
     </renderer>
     <renderer>
-      <component-family>sonia.blog.taglist</component-family>
-      <renderer-type>sonia.blog.taglist.renderer</renderer-type>
-      <renderer-class>sonia.blog.api.jsf.taglist.TagListRenderer</renderer-class>
+      <component-family>sonia.blog.tagcloud</component-family>
+      <renderer-type>sonia.blog.tagcloud.renderer</renderer-type>
+      <renderer-class>sonia.blog.api.jsf.tagcloud.TagCloudRenderer</renderer-class>
     </renderer>
   </render-kit>
     

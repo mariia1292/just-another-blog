@@ -5,7 +5,7 @@
 
 
 
-package sonia.blog.api.jsf.taglist;
+package sonia.blog.api.jsf.tagcloud;
 
 //~--- non-JDK imports --------------------------------------------------------
 
@@ -35,12 +35,12 @@ import javax.faces.context.ResponseWriter;
  *
  * @author sdorra
  */
-public class TagListRenderer extends BaseRenderer
+public class TagCloudRenderer extends BaseRenderer
 {
 
   /** Field description */
   private static Logger logger =
-    Logger.getLogger(TagListRenderer.class.getName());
+    Logger.getLogger(TagCloudRenderer.class.getName());
 
   //~--- methods --------------------------------------------------------------
 
@@ -57,12 +57,12 @@ public class TagListRenderer extends BaseRenderer
   public void encodeEnd(FacesContext context, UIComponent component)
           throws IOException
   {
-    if (!(component instanceof TagListComponent))
+    if (!(component instanceof TagCloudComponent))
     {
       throw new IllegalArgumentException();
     }
 
-    TagListComponent cmp = (TagListComponent) component;
+    TagCloudComponent cmp = (TagCloudComponent) component;
 
     if (isRendered(context, cmp))
     {

@@ -5,7 +5,7 @@
   <uri>http://jab.nitilon.org/blog/</uri>
   <tag>
     <name>tagList</name>
-    <tag-class>sonia.blog.api.jsf.taglist.TagListTag</tag-class>
+    <tag-class>sonia.blog.api.jsf.tagcloud.TagCloudTag</tag-class>
     <body-content>empty</body-content>
     <attribute>
       <name>id</name>

@@ -5,7 +5,7 @@
 
 
 
-package sonia.blog.api.jsf.taglist;
+package sonia.blog.api.jsf.tagcloud;
 
 //~--- non-JDK imports --------------------------------------------------------
 
@@ -21,7 +21,7 @@ import javax.faces.context.FacesContext;
  *
  * @author sdorra
  */
-public class TagListComponent extends BaseComponent
+public class TagCloudComponent extends BaseComponent
 {
 
   /** Field description */
@@ -34,10 +34,10 @@ public class TagListComponent extends BaseComponent
   public static final int DEFAULT_MINPERCENTAGE = 75;
 
   /** Field description */
-  public static final String FAMILY = "sonia.blog.taglist";
+  public static final String FAMILY = "sonia.blog.tagcloud";
 
   /** Field description */
-  public static final String RENDERER = "sonia.blog.taglist.renderer";
+  public static final String RENDERER = "sonia.blog.tagcloud.renderer";
 
   //~--- constructors ---------------------------------------------------------
 
@@ -45,7 +45,7 @@ public class TagListComponent extends BaseComponent
    * Constructs ...
    *
    */
-  public TagListComponent()
+  public TagCloudComponent()
   {
     setRendererType(RENDERER);
   }

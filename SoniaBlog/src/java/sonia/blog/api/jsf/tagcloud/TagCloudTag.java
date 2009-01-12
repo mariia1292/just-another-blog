@@ -5,7 +5,7 @@
 
 
 
-package sonia.blog.api.jsf.taglist;
+package sonia.blog.api.jsf.tagcloud;
 
 //~--- non-JDK imports --------------------------------------------------------
 
@@ -21,7 +21,7 @@ import javax.faces.component.UIComponent;
  *
  * @author sdorra
  */
-public class TagListTag extends BaseTag
+public class TagCloudTag extends BaseTag
 {
 
   /**
@@ -33,7 +33,7 @@ public class TagListTag extends BaseTag
   @Override
   public String getComponentType()
   {
-    return TagListComponent.FAMILY;
+    return TagCloudComponent.FAMILY;
   }
 
   /**
@@ -45,7 +45,7 @@ public class TagListTag extends BaseTag
   @Override
   public String getRendererType()
   {
-    return TagListComponent.RENDERER;
+    return TagCloudComponent.RENDERER;
   }
 
   //~--- set methods ----------------------------------------------------------

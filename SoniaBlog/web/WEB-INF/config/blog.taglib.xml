@@ -62,10 +62,10 @@
     </tag>
 
     <tag>
-        <tag-name>tagList</tag-name>
+        <tag-name>tagCloud</tag-name>
         <component>
-            <component-type>sonia.blog.taglist</component-type>
-            <renderer-type>sonia.blog.taglist.renderer</renderer-type>
+            <component-type>sonia.blog.tagcloud</component-type>
+            <renderer-type>sonia.blog.tagcloud.renderer</renderer-type>
         </component>
     </tag>
 
