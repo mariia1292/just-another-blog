@@ -13,7 +13,6 @@ import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.app.Constants;
 import sonia.blog.api.dao.DAOFactory;
 import sonia.blog.api.link.LinkBuilder;
-import sonia.blog.api.listener.EntityListener;
 import sonia.blog.api.mapping.MappingHandler;
 import sonia.blog.api.navigation.NavigationProvider;
 import sonia.blog.api.search.SearchContext;
@@ -74,6 +73,7 @@ import javax.security.auth.login.AppConfigurationEntry;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
+import sonia.blog.api.dao.DAOListener;
 
 /**
  * Web application lifecycle listener.
@@ -298,13 +298,7 @@ public class BlogContextListener implements ServletContextListener
 
     registry.register(AppConfigurationEntry.class,
                       Constants.SERVICE_SSOAUTHENTICATION).add(ssoAuthEntry);
-    registry.register(EntityListener.class, Constants.SERVICE_BLOG_LISTENER);
-    registry.register(
-        EntityListener.class, Constants.SERVICE_ENTRY_LISTENER).add(
-        new IndexListener());
-    registry.register(EntityListener.class, Constants.SERVICE_COMMENT_LISTENER);
-    registry.register(EntityListener.class,
-                      Constants.SERVICE_ATTACHMENT_LISTENER);
+    
     registry.register(SearchContext.class, Constants.SERVICE_SEARCHCONTEXT).add(
         new DefaultSearchContext());
     registry.register(LinkBuilder.class, Constants.SERVICE_LINKBUILDER).add(
@@ -314,6 +308,17 @@ public class BlogContextListener implements ServletContextListener
     registry.register(
         SpamInputProtection.class, Constants.SERVICE_SPAMPROTECTIONMETHOD).add(
         new MathSpamProtection()).add(new CaptchaSpamProtection());
+
+    // register Listeners
+    registry.register(DAOListener.class, Constants.LISTENER_ATTACHMENT);
+    registry.register(DAOListener.class, Constants.LISTENER_BLOG);
+    registry.register(DAOListener.class, Constants.LISTENER_CATEGORY);
+    registry.register(DAOListener.class, Constants.LISTENER_COMMENT);
+    registry.register(DAOListener.class, Constants.LISTENER_ENTRY).add(new IndexListener());
+    registry.register(DAOListener.class, Constants.LISTENER_MEMBER);
+    registry.register(DAOListener.class, Constants.LISTENER_TAG);
+    registry.register(DAOListener.class, Constants.LISTENER_USER);
+
 
     // register NavigationProvider
     registry.register(NavigationProvider.class, Constants.NAVIGATION_EXTRA);

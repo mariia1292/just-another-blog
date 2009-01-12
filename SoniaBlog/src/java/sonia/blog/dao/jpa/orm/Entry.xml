@@ -114,17 +114,6 @@
         select count(e) from Entry e join e.category c join c.blog b where b = :blog
       </query>
     </named-query>
-    <entity-listeners>
-      <entity-listener class="sonia.blog.api.listener.EntryListener">
-        <pre-persist method-name="prePersists" />
-        <post-persist method-name="postPersists" />
-        <pre-remove method-name="preRemove" />
-        <post-remove method-name="postRemove" />
-        <pre-update method-name="preUpdate" />
-        <post-update method-name="postUpdate" />
-        <post-load method-name="postLoad" />
-      </entity-listener>
-    </entity-listeners>
     <pre-persist method-name="prePersists" />
     <pre-update method-name="preUpdate" />
     <attributes>

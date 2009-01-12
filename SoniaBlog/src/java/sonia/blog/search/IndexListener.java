@@ -18,7 +18,7 @@ import org.apache.lucene.index.Term;
 import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.app.Constants;
 import sonia.blog.api.app.ResourceManager;
-import sonia.blog.api.listener.EntityListener;
+import sonia.blog.api.dao.DAOListener;
 import sonia.blog.entity.Blog;
 import sonia.blog.entity.Category;
 import sonia.blog.entity.Entry;
@@ -34,7 +34,7 @@ import java.util.logging.Logger;
  *
  * @author sdorra
  */
-public class IndexListener extends EntityListener
+public class IndexListener implements DAOListener
 {
 
   /** Field description */
@@ -58,26 +58,58 @@ public class IndexListener extends EntityListener
    * Method description
    *
    *
-   * @param object
+   * @param action
+   * @param item
    */
-  @Override
-  public void postPersists(Object object)
+  public void handleEvent(Action action, Object item)
+  {
+    if (item instanceof Entry)
+    {
+      Entry entry = (Entry) item;
+
+      switch (action)
+      {
+        case POSTADD :
+          postPersists(entry);
+
+          break;
+
+        case POSTUPDATE :
+          postUpdate(entry);
+
+          break;
+
+        case POSTREMOVE :
+          postRemove(entry);
+
+          break;
+
+        default :
+
+        // do nothing
+      }
+    }
+  }
+
+  /**
+   * Method description
+   *
+   *
+   *
+   * @param entry
+   */
+  public void postPersists(Entry entry)
   {
     Document doc = null;
     File blogDir = null;
 
-    if (object instanceof Entry)
+    if (entry.isPublished())
     {
-      Entry entry = (Entry) object;
+      blogDir = getDirectory(entry);
 
-      if (entry.isPublished())
+      if (blogDir != null)
       {
-        blogDir = getDirectory(entry);
-
-        if (blogDir != null)
-        {
-          doc = SearchHelper.buildDocument(entry);
-        }
+        doc = SearchHelper.buildDocument(entry);
       }
     }
 
@@ -107,26 +139,21 @@ public class IndexListener extends EntityListener
    * Method description
    *
    *
-   * @param object
+   *
+   * @param entry
    */
-  @Override
-  public void postRemove(Object object)
+  public void postRemove(Entry entry)
   {
     File blogDir = null;
 
-    if (object instanceof Entry)
+    if (entry.isPublished())
     {
-      Entry entry = (Entry) object;
-
-      if (entry.isPublished())
-      {
-        blogDir = getDirectory(entry);
-      }
+      blogDir = getDirectory(entry);
     }
 
     if (blogDir != null)
     {
-      String tid = buildTypeId(object);
+      String tid = buildTypeId(entry);
 
       if (tid != null)
       {
@@ -150,35 +177,27 @@ public class IndexListener extends EntityListener
    * Method description
    *
    *
-   * @param object
+   *
+   * @param entry
    */
-  @Override
-  public void postUpdate(Object object)
+  public void postUpdate(Entry entry)
   {
-    postRemove(object);
-    postPersists(object);
+    postRemove(entry);
+    postPersists(entry);
   }
 
   /**
    * Method description
    *
    *
-   * @param object
+   *
+   * @param entry
    *
    * @return
    */
-  private String buildTypeId(Object object)
+  private String buildTypeId(Entry entry)
   {
-    String tid = null;
-
-    if (object instanceof Entry)
-    {
-      Entry entry = (Entry) object;
-
-      tid = Entry.class.getName() + "-" + entry.getId();
-    }
-
-    return tid;
+    return Entry.class.getName() + "-" + entry.getId();
   }
 
   //~--- get methods ----------------------------------------------------------

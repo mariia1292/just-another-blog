@@ -29,17 +29,6 @@
         select count(b) from Blog b
       </query>
     </named-query>
-    <entity-listeners>
-      <entity-listener class="sonia.blog.api.listener.BlogListener">
-        <pre-persist method-name="prePersists" />
-        <post-persist method-name="postPersists" />
-        <pre-remove method-name="preRemove" />
-        <post-remove method-name="postRemove" />
-        <pre-update method-name="preUpdate" />
-        <post-update method-name="postUpdate" />
-        <post-load method-name="postLoad" />
-      </entity-listener>
-    </entity-listeners>
     <pre-persist method-name="prePersists" />
     <attributes>
       <id name="id">

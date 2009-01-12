@@ -114,6 +114,8 @@ public interface Constants
   /** Field description */
   public static final int DEFAULT_PASSWORD_MINLENGTH = 6;
 
+  // Listeners
+
   /** Field description */
   public static final String LISTENER_ATTACHMENT = "/listener/attachment";
 
@@ -229,27 +231,16 @@ public interface Constants
   /** Field description */
   public static final String SERVCIE_GLOBALSTATUSROVIDER = "/status/global";
 
-  /** Field description */
-  public static final String SERVICE_ATTACHMENT_LISTENER =
-    "/listener/attachment";
 
   /** Field description */
   public static final String SERVICE_AUTHENTICATION = "/app/authentication";
 
-  /** Field description */
-  public static final String SERVICE_BLOG_LISTENER = "/listener/blog";
-
-  /** Field description */
-  public static final String SERVICE_COMMENT_LISTENER = "/listener/comment";
 
   /** Field description */
   public static final String SERVICE_CONTEXTLISTENER = "/contextListener";
 
   /** Field description */
   public static final String SERVICE_DASHBOARDWIDGET = "/dashboard/widget";
-
-  /** Field description */
-  public static final String SERVICE_ENTRY_LISTENER = "/listener/entry";
 
   /** Field description */
   public static final String SERVICE_LINKBUILDER = "/app/linkBuilder";
