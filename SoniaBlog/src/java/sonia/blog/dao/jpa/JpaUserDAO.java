@@ -9,6 +9,7 @@ package sonia.blog.dao.jpa;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import sonia.blog.api.app.Constants;
 import sonia.blog.api.dao.UserDAO;
 import sonia.blog.entity.User;
 
@@ -36,7 +37,7 @@ public class JpaUserDAO extends JpaGenericDAO<User> implements UserDAO
    */
   public JpaUserDAO(EntityManagerFactory entityManagerFactory)
   {
-    super(entityManagerFactory, User.class);
+    super(entityManagerFactory, User.class, Constants.LISTENER_USER);
   }
 
   //~--- methods --------------------------------------------------------------

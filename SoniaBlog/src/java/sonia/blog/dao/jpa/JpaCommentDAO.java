@@ -9,6 +9,7 @@ package sonia.blog.dao.jpa;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import sonia.blog.api.app.Constants;
 import sonia.blog.api.dao.CommentDAO;
 import sonia.blog.entity.Blog;
 import sonia.blog.entity.Comment;
@@ -38,7 +39,7 @@ public class JpaCommentDAO extends JpaGenericDAO<Comment> implements CommentDAO
    */
   public JpaCommentDAO(EntityManagerFactory entityManagerFactory)
   {
-    super(entityManagerFactory, Comment.class);
+    super(entityManagerFactory, Comment.class, Constants.LISTENER_COMMENT);
   }
 
   //~--- methods --------------------------------------------------------------

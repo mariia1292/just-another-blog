@@ -115,6 +115,30 @@ public interface Constants
   public static final int DEFAULT_PASSWORD_MINLENGTH = 6;
 
   /** Field description */
+  public static final String LISTENER_ATTACHMENT = "/listener/attachment";
+
+  /** Field description */
+  public static final String LISTENER_BLOG = "/listener/blog";
+
+  /** Field description */
+  public static final String LISTENER_CATEGORY = "/listener/category";
+
+  /** Field description */
+  public static final String LISTENER_COMMENT = "/listener/comment";
+
+  /** Field description */
+  public static final String LISTENER_ENTRY = "/listener/entry";
+
+  /** Field description */
+  public static final String LISTENER_MEMBER = "/listener/member";
+
+  /** Field description */
+  public static final String LISTENER_TAG = "/listener/tag";
+
+  /** Field description */
+  public static final String LISTENER_USER = "/listener/user";
+
+  /** Field description */
   public static final String LOGINMODULE_NAME = "BlogLoginModule";
 
   /*
@@ -128,7 +152,8 @@ public interface Constants
   public static final String NAVIGATION_AUTHOR = "/nav/author";
 
   /** Field description */
-  public static String NAVIGATION_BLOGACTION = "/nav/globaladmin/blog/action";
+  public static final String NAVIGATION_BLOGACTION =
+    "/nav/globaladmin/blog/action";
 
   /** Field description */
   public static final String NAVIGATION_EXTRA = "/nav/extra";

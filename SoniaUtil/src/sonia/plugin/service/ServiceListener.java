@@ -3,6 +3,8 @@
  * and open the template in the editor.
  */
 
+
+
 package sonia.plugin.service;
 
 /**
@@ -12,12 +14,10 @@ package sonia.plugin.service;
 public interface ServiceListener
 {
 
-
   /**
    * Method description
    *
    *
-   * @param path
    * @param reference
    */
   public void registered(ServiceReference reference);
@@ -26,9 +26,7 @@ public interface ServiceListener
    * Method description
    *
    *
-   * @param path
    * @param reference
    */
   public void unregistered(ServiceReference reference);
-
 }

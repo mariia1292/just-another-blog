@@ -9,6 +9,7 @@ package sonia.blog.dao.jpa;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import sonia.blog.api.app.Constants;
 import sonia.blog.api.dao.EntryDAO;
 import sonia.blog.entity.Blog;
 import sonia.blog.entity.Category;
@@ -41,7 +42,7 @@ public class JpaEntryDAO extends JpaGenericDAO<Entry> implements EntryDAO
    */
   public JpaEntryDAO(EntityManagerFactory entityManagerFactory)
   {
-    super(entityManagerFactory, Entry.class);
+    super(entityManagerFactory, Entry.class, Constants.LISTENER_ENTRY);
   }
 
   //~--- methods --------------------------------------------------------------

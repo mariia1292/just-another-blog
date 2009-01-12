@@ -9,6 +9,7 @@ package sonia.blog.dao.jpa;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import sonia.blog.api.app.Constants;
 import sonia.blog.api.dao.TagDAO;
 import sonia.blog.api.util.TagWrapper;
 import sonia.blog.entity.Blog;
@@ -38,7 +39,7 @@ public class JpaTagDAO extends JpaGenericDAO<Tag> implements TagDAO
    */
   public JpaTagDAO(EntityManagerFactory entityManagerFactory)
   {
-    super(entityManagerFactory, Tag.class);
+    super(entityManagerFactory, Tag.class, Constants.LISTENER_TAG);
   }
 
   //~--- methods --------------------------------------------------------------

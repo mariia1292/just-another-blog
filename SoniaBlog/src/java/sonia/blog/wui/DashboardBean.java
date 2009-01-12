@@ -267,7 +267,7 @@ public class DashboardBean extends AbstractBean
   {
     if (widgets == null)
     {
-      ServiceReference dashboardWidgetReference =
+      ServiceReference<String> dashboardWidgetReference =
         BlogContext.getInstance().getServiceRegistry().get(String.class,
           Constants.SERVICE_DASHBOARDWIDGET);
 

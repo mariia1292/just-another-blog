@@ -222,7 +222,7 @@ public class GlobalConfigBean extends AbstractConfigBean
    *
    * @return
    */
-  public ServiceReference getReference()
+  public ServiceReference<String> getReference()
   {
     return reference;
   }
@@ -320,7 +320,7 @@ public class GlobalConfigBean extends AbstractConfigBean
    *
    * @return
    */
-  public ServiceReference getSpamInputServcieReference()
+  public ServiceReference<SpamInputProtection> getSpamInputServcieReference()
   {
     return spamInputServcieReference;
   }
@@ -454,7 +454,7 @@ public class GlobalConfigBean extends AbstractConfigBean
    *
    * @param reference
    */
-  public void setReference(ServiceReference reference)
+  public void setReference(ServiceReference<String> reference)
   {
     this.reference = reference;
   }
@@ -532,7 +532,7 @@ public class GlobalConfigBean extends AbstractConfigBean
    * @param spamInputServcieReference
    */
   public void setSpamInputServcieReference(
-          ServiceReference spamInputServcieReference)
+          ServiceReference<SpamInputProtection> spamInputServcieReference)
   {
     this.spamInputServcieReference = spamInputServcieReference;
   }

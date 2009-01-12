@@ -43,7 +43,7 @@ public class JpaBlogDAO extends JpaGenericDAO<Blog> implements BlogDAO
    */
   public JpaBlogDAO(EntityManagerFactory entityManagerFactory)
   {
-    super(entityManagerFactory, Blog.class);
+    super(entityManagerFactory, Blog.class, Constants.LISTENER_BLOG);
   }
 
   //~--- methods --------------------------------------------------------------

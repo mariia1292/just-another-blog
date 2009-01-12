@@ -9,6 +9,7 @@ package sonia.blog.dao.jpa;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import sonia.blog.api.app.Constants;
 import sonia.blog.api.dao.AttachmentDAO;
 import sonia.blog.entity.Attachment;
 import sonia.blog.entity.Blog;
@@ -39,7 +40,8 @@ public class JpaAttachmentDAO extends JpaGenericDAO<Attachment>
    */
   public JpaAttachmentDAO(EntityManagerFactory entityManagerFactory)
   {
-    super(entityManagerFactory, Attachment.class);
+    super(entityManagerFactory, Attachment.class,
+          Constants.LISTENER_ATTACHMENT);
   }
 
   //~--- methods --------------------------------------------------------------

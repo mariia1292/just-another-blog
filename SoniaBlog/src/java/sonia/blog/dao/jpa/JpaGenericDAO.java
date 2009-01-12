@@ -9,8 +9,13 @@ package sonia.blog.dao.jpa;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import sonia.blog.api.app.BlogContext;
+import sonia.blog.api.dao.DAOListener;
+import sonia.blog.api.dao.DAOListener.Action;
 import sonia.blog.api.dao.GenericDAO;
 import sonia.blog.entity.Blog;
+
+import sonia.plugin.service.ServiceReference;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -37,13 +42,19 @@ public abstract class JpaGenericDAO<T> implements GenericDAO<T>
    *
    * @param entityManagerFactory
    * @param clazz
+   * @param servicePath
    */
   public JpaGenericDAO(EntityManagerFactory entityManagerFactory,
-                       Class<T> clazz)
+                       Class<T> clazz, String servicePath)
   {
     this.entityManagerFactory = entityManagerFactory;
     this.clazz = clazz;
     logger = Logger.getLogger(getClass().getName());
+
+    BlogContext context = BlogContext.getInstance();
+
+    reference = context.getServiceRegistry().get(DAOListener.class,
+            servicePath);
   }
 
   //~--- methods --------------------------------------------------------------
@@ -58,6 +69,8 @@ public abstract class JpaGenericDAO<T> implements GenericDAO<T>
    */
   public boolean add(T item)
   {
+    fireEvent(Action.PREADD, item);
+
     boolean result = true;
     EntityManager em = createEntityManager();
 
@@ -67,6 +80,7 @@ public abstract class JpaGenericDAO<T> implements GenericDAO<T>
     {
       em.persist(item);
       em.getTransaction().commit();
+      fireEvent(Action.POSTADD, item);
     }
     catch (Exception ex)
     {
@@ -99,6 +113,8 @@ public abstract class JpaGenericDAO<T> implements GenericDAO<T>
    */
   public boolean edit(T item)
   {
+    fireEvent(Action.PREUPDATE, item);
+
     boolean result = true;
     EntityManager em = createEntityManager();
 
@@ -108,6 +124,7 @@ public abstract class JpaGenericDAO<T> implements GenericDAO<T>
     {
       item = em.merge(item);
       em.getTransaction().commit();
+      fireEvent(Action.POSTUPDATE, item);
     }
     catch (Exception ex)
     {
@@ -169,6 +186,8 @@ public abstract class JpaGenericDAO<T> implements GenericDAO<T>
    */
   public boolean remove(T item)
   {
+    fireEvent(Action.PREREMOVE, item);
+
     boolean result = true;
     EntityManager em = createEntityManager();
 
@@ -178,6 +197,7 @@ public abstract class JpaGenericDAO<T> implements GenericDAO<T>
     {
       em.remove(em.merge(item));
       em.getTransaction().commit();
+      fireEvent(Action.POSTREMOVE, item);
     }
     catch (Exception ex)
     {
@@ -356,6 +376,26 @@ public abstract class JpaGenericDAO<T> implements GenericDAO<T>
     return result;
   }
 
+  /**
+   * Method description
+   *
+   *
+   * @param action
+   * @param object
+   */
+  protected void fireEvent(Action action, Object object)
+  {
+    List<DAOListener> listeners = reference.getAll();
+
+    if ((listeners != null) &&!listeners.isEmpty())
+    {
+      for (DAOListener listener : listeners)
+      {
+        listener.handleEvent(action, object);
+      }
+    }
+  }
+
   //~--- fields ---------------------------------------------------------------
 
   /** Field description */
@@ -366,4 +406,7 @@ public abstract class JpaGenericDAO<T> implements GenericDAO<T>
 
   /** Field description */
   private Class<T> clazz;
+
+  /** Field description */
+  private ServiceReference<DAOListener> reference;
 }
