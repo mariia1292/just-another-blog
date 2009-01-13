@@ -20,7 +20,7 @@ import java.util.logging.Logger;
  *
  * @author sdorra
  */
-public class JobQueue
+public class JobQueue<T extends Job>
 {
 
   /** Field description */
@@ -35,7 +35,7 @@ public class JobQueue
   public JobQueue()
   {
     this.listeners = new ArrayList<JobListener>();
-    this.jobs = new LinkedList<Job>();
+    this.jobs = new LinkedList<T>();
     this.stop = true;
     this.handlerCount = Runtime.getRuntime().availableProcessors() * 2;
     this.handlers = new ArrayList<JobHandler>();
@@ -54,7 +54,7 @@ public class JobQueue
    *
    * @param job
    */
-  public void add(Job job)
+  public void add(T job)
   {
     synchronized (jobs)
     {
@@ -167,7 +167,7 @@ public class JobQueue
    *
    * @return
    */
-  public Collection<Job> getJobs()
+  public Collection<T> getJobs()
   {
     return jobs;
   }
@@ -284,7 +284,7 @@ public class JobQueue
   //~--- fields ---------------------------------------------------------------
 
   /** Field description */
-  private final LinkedList<Job> jobs;
+  private final LinkedList<T> jobs;
 
   /** Field description */
   private final List<JobListener> listeners;

@@ -19,6 +19,8 @@ import sonia.blog.entity.Blog;
 
 import sonia.config.XmlConfiguration;
 
+import sonia.jobqueue.JobQueue;
+
 import sonia.macro.MacroParser;
 
 import sonia.plugin.PluginContext;
@@ -66,6 +68,7 @@ public class BlogContext
   public BlogContext()
   {
     this.pluginContext = new PluginContext();
+    this.jobQueue = new JobQueue<BlogJob>();
   }
 
   //~--- get methods ----------------------------------------------------------
@@ -199,11 +202,11 @@ public class BlogContext
    *
    * @return
    */
-  public XmlConfiguration getConfiguration()
+  public BlogConfiguration getConfiguration()
   {
     if (configuration == null)
     {
-      configuration = new XmlConfiguration();
+      configuration = new BlogConfiguration();
 
       File config = getConfigFile();
 
@@ -240,6 +243,17 @@ public class BlogContext
     }
 
     return blog;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  public JobQueue<BlogJob> getJobQueue()
+  {
+    return jobQueue;
   }
 
   /**
@@ -464,10 +478,13 @@ public class BlogContext
   //~--- fields ---------------------------------------------------------------
 
   /** Field description */
-  private XmlConfiguration configuration;
+  private BlogConfiguration configuration;
 
   /** Field description */
   private boolean installed = false;
+
+  /** Field description */
+  private JobQueue<BlogJob> jobQueue;
 
   /** Field description */
   private ServiceReference<LinkBuilder> linkBuilder;

@@ -73,6 +73,9 @@ public interface Constants
   public static final String CONFIG_RESOURCE_DIRECTORY = "resource.directory";
 
   /** Field description */
+  public static final String CONFIG_SECUREKEY = "app.securekey";
+
+  /** Field description */
   public static String CONFIG_SMTPPASSWORD = "smtp.password";
 
   /** Field description */
@@ -231,10 +234,8 @@ public interface Constants
   /** Field description */
   public static final String SERVCIE_GLOBALSTATUSROVIDER = "/status/global";
 
-
   /** Field description */
   public static final String SERVICE_AUTHENTICATION = "/app/authentication";
-
 
   /** Field description */
   public static final String SERVICE_CONTEXTLISTENER = "/contextListener";
