@@ -49,10 +49,34 @@ public interface AttachmentDAO extends GenericDAO<Attachment>
    *
    *
    * @param entry
+   * @param start
+   * @param max
+   *
+   * @return
+   */
+  public List<Attachment> findAllByEntry(Entry entry, int start, int max);
+
+  /**
+   * Method description
+   *
+   *
+   * @param entry
    *
    * @return
    */
   public List<Attachment> findAllImagesByEntry(Entry entry);
+
+  /**
+   * Method description
+   *
+   *
+   * @param entry
+   * @param start
+   * @param max
+   *
+   * @return
+   */
+  public List<Attachment> findAllImagesByEntry(Entry entry, int start, int max);
 
   /**
    * Method description

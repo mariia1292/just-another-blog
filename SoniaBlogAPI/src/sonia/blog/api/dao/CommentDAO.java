@@ -48,9 +48,33 @@ public interface CommentDAO extends GenericDAO<Comment>
    * Method description
    *
    *
+   * @param entry
+   * @param start
+   * @param max
+   *
+   * @return
+   */
+  public List<Comment> findAllActivesByEntry(Entry entry, int start, int max);
+
+  /**
+   * Method description
+   *
+   *
    * @param blog
    *
    * @return
    */
   public List<Comment> findAllByBlog(Blog blog);
+
+  /**
+   * Method description
+   *
+   *
+   * @param blog
+   * @param start
+   * @param max
+   *
+   * @return
+   */
+  public List<Comment> findAllByBlog(Blog blog, int start, int max);
 }

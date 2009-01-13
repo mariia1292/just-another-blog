@@ -160,7 +160,7 @@ public class DashboardBean extends AbstractBean
 
       CommentDAO commentDAO = BlogContext.getDAOFactory().getCommentDAO();
       List<Comment> commentList =
-        commentDAO.findAllByBlog(getRequest().getCurrentBlog());
+        commentDAO.findAllByBlog(getRequest().getCurrentBlog(), 0, 5);
 
       if ((commentList != null) &&!commentList.isEmpty())
       {
@@ -186,7 +186,7 @@ public class DashboardBean extends AbstractBean
       BlogRequest request = getRequest();
       Blog blog = request.getCurrentBlog();
       User user = request.getUser();
-      List<Entry> draftList = entryDAO.findAllDraftsByBlogAndUser(blog, user);
+      List<Entry> draftList = entryDAO.findAllDraftsByBlogAndUser(blog, user, 0, 5);
 
       if ((draftList != null) &&!draftList.isEmpty())
       {

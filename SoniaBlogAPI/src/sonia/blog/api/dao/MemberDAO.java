@@ -49,6 +49,18 @@ public interface MemberDAO extends GenericDAO<BlogMember>
    *
    *
    * @param blog
+   * @param start
+   * @param max
+   *
+   * @return
+   */
+  public List<BlogMember> findByBlog(Blog blog, int start, int max);
+
+  /**
+   * Method description
+   *
+   *
+   * @param blog
    * @param user
    *
    * @return
@@ -64,4 +76,16 @@ public interface MemberDAO extends GenericDAO<BlogMember>
    * @return
    */
   public List<BlogMember> findByUser(User user);
+
+  /**
+   * Method description
+   *
+   *
+   * @param user
+   * @param start
+   * @param max
+   *
+   * @return
+   */
+  public List<BlogMember> findByUser(User user, int start, int max);
 }

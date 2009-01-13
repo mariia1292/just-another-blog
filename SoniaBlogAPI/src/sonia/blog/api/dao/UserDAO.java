@@ -44,6 +44,17 @@ public interface UserDAO extends GenericDAO<User>
    * Method description
    *
    *
+   * @param start
+   * @param max
+   *
+   * @return
+   */
+  public List<User> findAllActives(int start, int max);
+
+  /**
+   * Method description
+   *
+   *
    * @param email
    *
    * @return

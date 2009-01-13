@@ -111,6 +111,20 @@ public class JpaEntryDAO extends JpaGenericDAO<Entry> implements EntryDAO
    * Method description
    *
    *
+   * @param start
+   * @param max
+   *
+   * @return
+   */
+  public List<Entry> findAllActives(int start, int max)
+  {
+    return findList("Entry.findAllActives", start, max);
+  }
+
+  /**
+   * Method description
+   *
+   *
    * @param blog
    *
    * @return
@@ -118,6 +132,21 @@ public class JpaEntryDAO extends JpaGenericDAO<Entry> implements EntryDAO
   public List<Entry> findAllActivesByBlog(Blog blog)
   {
     return findList("Entry.findAllActivesByBlog", blog);
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param blog
+   * @param start
+   * @param max
+   *
+   * @return
+   */
+  public List<Entry> findAllActivesByBlog(Blog blog, int start, int max)
+  {
+    return findList("Entry.findAllActivesByBlog", blog, start, max);
   }
 
   /**
@@ -138,25 +167,68 @@ public class JpaEntryDAO extends JpaGenericDAO<Entry> implements EntryDAO
    *
    *
    * @param blog
+   * @param start
+   * @param max
+   *
+   * @return
+   */
+  public List<Entry> findAllByBlog(Blog blog, int start, int max)
+  {
+    return findList("Entry.findAllByBlog", blog, start, max);
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param blog
    * @param startDate
    * @param endDate
    *
    * @return
    */
-  @SuppressWarnings("unchecked")
   public List<Entry> findAllByBlogAndDate(Blog blog, Date startDate,
           Date endDate)
   {
+    return findAllByBlogAndDate(blog, startDate, endDate, -1, -1);
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param blog
+   * @param startDate
+   * @param endDate
+   * @param start
+   * @param max
+   *
+   * @return
+   */
+  @SuppressWarnings("unchecked")
+  public List<Entry> findAllByBlogAndDate(Blog blog, Date startDate,
+          Date endDate, int start, int max)
+  {
     List<Entry> entries = null;
     EntityManager em = createEntityManager();
+    Query q = em.createNamedQuery("Entry.findByBlogAndDate");
+
+    q.setParameter("blog", blog);
+    q.setParameter("start", startDate);
+    q.setParameter("end", endDate);
+
+    if (start > 0)
+    {
+      q.setFirstResult(start);
+    }
+
+    if (max > 0)
+    {
+      q.setMaxResults(max);
+    }
 
     try
     {
-      Query q = em.createNamedQuery("Entry.findByBlogAndDate");
-
-      q.setParameter("blog", blog);
-      q.setParameter("start", startDate);
-      q.setParameter("end", endDate);
       entries = q.getResultList();
     }
     catch (NoResultException ex) {}
@@ -180,18 +252,44 @@ public class JpaEntryDAO extends JpaGenericDAO<Entry> implements EntryDAO
    *
    * @return
    */
-  @SuppressWarnings("unchecked")
   public List<Entry> findAllByBlogAndTag(Blog blog, Tag tag)
+  {
+    return findAllByBlogAndTag(blog, tag, -1, -1);
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param blog
+   * @param tag
+   * @param start
+   * @param max
+   *
+   * @return
+   */
+  @SuppressWarnings("unchecked")
+  public List<Entry> findAllByBlogAndTag(Blog blog, Tag tag, int start, int max)
   {
     List<Entry> entries = null;
     EntityManager em = createEntityManager();
+    Query q = em.createNamedQuery("Entry.findByBlogAndTag");
+
+    q.setParameter("blog", blog);
+    q.setParameter("tag", tag);
+
+    if (start > 0)
+    {
+      q.setFirstResult(start);
+    }
+
+    if (max > 0)
+    {
+      q.setMaxResults(max);
+    }
 
     try
     {
-      Query q = em.createNamedQuery("Entry.findByBlogAndTag");
-
-      q.setParameter("blog", blog);
-      q.setParameter("tag", tag);
       entries = q.getResultList();
     }
     catch (NoResultException ex) {}
@@ -214,17 +312,42 @@ public class JpaEntryDAO extends JpaGenericDAO<Entry> implements EntryDAO
    *
    * @return
    */
-  @SuppressWarnings("unchecked")
   public List<Entry> findAllByCategory(Category category)
+  {
+    return findAllByCategory(category, -1, -1);
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param category
+   * @param start
+   * @param max
+   *
+   * @return
+   */
+  @SuppressWarnings("unchecked")
+  public List<Entry> findAllByCategory(Category category, int start, int max)
   {
     List<Entry> entries = null;
     EntityManager em = createEntityManager();
+    Query q = em.createNamedQuery("Entry.findByCategory");
+
+    q.setParameter("category", category);
+
+    if (start > 0)
+    {
+      q.setFirstResult(start);
+    }
+
+    if (max > 0)
+    {
+      q.setMaxResults(max);
+    }
 
     try
     {
-      Query q = em.createNamedQuery("Entry.findByCategory");
-
-      q.setParameter("category", category);
       entries = q.getResultList();
     }
     catch (NoResultException ex) {}
@@ -249,9 +372,27 @@ public class JpaEntryDAO extends JpaGenericDAO<Entry> implements EntryDAO
    *
    * @return
    */
-  @SuppressWarnings("unchecked")
   public List<Date> findAllCalendarDates(Blog blog, Date startDate,
           Date endDate)
+  {
+    return findAllCalendarDates(blog, startDate, endDate, -1, -1);
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param blog
+   * @param startDate
+   * @param endDate
+   * @param start
+   * @param max
+   *
+   * @return
+   */
+  @SuppressWarnings("unchecked")
+  public List<Date> findAllCalendarDates(Blog blog, Date startDate,
+          Date endDate, int start, int max)
   {
     List<Date> dates = null;
     EntityManager em = createEntityManager();
@@ -288,6 +429,23 @@ public class JpaEntryDAO extends JpaGenericDAO<Entry> implements EntryDAO
    */
   @SuppressWarnings("unchecked")
   public List<Entry> findAllDraftsByBlogAndUser(Blog blog, User user)
+  {
+    return findAllDraftsByBlogAndUser(blog, user, -1, -1);
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param blog
+   * @param user
+   * @param start
+   * @param max
+   *
+   * @return
+   */
+  public List<Entry> findAllDraftsByBlogAndUser(Blog blog, User user,
+          int start, int max)
   {
     List<Entry> entries = null;
     EntityManager em = createEntityManager();

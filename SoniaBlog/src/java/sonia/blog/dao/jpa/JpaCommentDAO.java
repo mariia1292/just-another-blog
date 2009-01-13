@@ -101,14 +101,39 @@ public class JpaCommentDAO extends JpaGenericDAO<Comment> implements CommentDAO
    *
    * @return
    */
-  @SuppressWarnings("unchecked")
   public List<Comment> findAllActivesByEntry(Entry entry)
+  {
+    return findAllActivesByEntry(entry, -1, -1);
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param entry
+   * @param start
+   * @param max
+   *
+   * @return
+   */
+  @SuppressWarnings("unchecked")
+  public List<Comment> findAllActivesByEntry(Entry entry, int start, int max)
   {
     List<Comment> comments = null;
     EntityManager em = createEntityManager();
     Query q = em.createNamedQuery("Comment.findAllActivesByEntry");
 
     q.setParameter("entry", entry);
+
+    if (start > 0)
+    {
+      q.setFirstResult(start);
+    }
+
+    if (max > 0)
+    {
+      q.setMaxResults(max);
+    }
 
     try
     {
@@ -137,5 +162,20 @@ public class JpaCommentDAO extends JpaGenericDAO<Comment> implements CommentDAO
   public List<Comment> findAllByBlog(Blog blog)
   {
     return findList("Comment.findAllByBlog", blog);
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param blog
+   * @param start
+   * @param max
+   *
+   * @return
+   */
+  public List<Comment> findAllByBlog(Blog blog, int start, int max)
+  {
+    return findList("Comment.findAllByBlog", blog, start, max);
   }
 }

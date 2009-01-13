@@ -99,6 +99,20 @@ public class JpaBlogDAO extends JpaGenericDAO<Blog> implements BlogDAO
    * Method description
    *
    *
+   * @param start
+   * @param max
+   *
+   * @return
+   */
+  public List<Blog> findAllActives(int start, int max)
+  {
+    return findList("Blog.findAllActives", start, max);
+  }
+
+  /**
+   * Method description
+   *
+   *
    * @param servername
    *
    * @return

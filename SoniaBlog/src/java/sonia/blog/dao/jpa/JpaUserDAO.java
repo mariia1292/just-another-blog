@@ -125,6 +125,20 @@ public class JpaUserDAO extends JpaGenericDAO<User> implements UserDAO
    * Method description
    *
    *
+   * @param start
+   * @param max
+   *
+   * @return
+   */
+  public List<User> findAllActives(int start, int max)
+  {
+    return findList("User.findAllActives", start, max);
+  }
+
+  /**
+   * Method description
+   *
+   *
    * @param email
    *
    * @return

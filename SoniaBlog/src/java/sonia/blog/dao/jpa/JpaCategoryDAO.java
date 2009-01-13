@@ -98,6 +98,21 @@ public class JpaCategoryDAO extends JpaGenericDAO<Category>
    *
    *
    * @param blog
+   * @param start
+   * @param max
+   *
+   * @return
+   */
+  public List<Category> findAllByBlog(Blog blog, int start, int max)
+  {
+    return findList("Category.findAllByBlog", blog, start, max);
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param blog
    *
    * @return
    */

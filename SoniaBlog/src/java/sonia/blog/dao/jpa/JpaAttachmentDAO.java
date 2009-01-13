@@ -103,14 +103,39 @@ public class JpaAttachmentDAO extends JpaGenericDAO<Attachment>
    *
    * @return
    */
-  @SuppressWarnings("unchecked")
   public List<Attachment> findAllByEntry(Entry entry)
+  {
+    return findAllByEntry(entry, -1, -1);
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param entry
+   * @param start
+   * @param max
+   *
+   * @return
+   */
+  @SuppressWarnings("unchecked")
+  public List<Attachment> findAllByEntry(Entry entry, int start, int max)
   {
     List<Attachment> attachments = null;
     EntityManager em = createEntityManager();
     Query q = em.createNamedQuery("Attachment.findAllByEntry");
 
     q.setParameter("entry", entry);
+
+    if (start > 0)
+    {
+      q.setFirstResult(start);
+    }
+
+    if (max > 0)
+    {
+      q.setMaxResults(max);
+    }
 
     try
     {
@@ -136,17 +161,42 @@ public class JpaAttachmentDAO extends JpaGenericDAO<Attachment>
    *
    * @return
    */
-  @SuppressWarnings("unchecked")
   public List<Attachment> findAllImagesByEntry(Entry entry)
+  {
+    return findAllImagesByEntry(entry, -1, -1);
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param entry
+   * @param start
+   * @param max
+   *
+   * @return
+   */
+  @SuppressWarnings("unchecked")
+  public List<Attachment> findAllImagesByEntry(Entry entry, int start, int max)
   {
     List<Attachment> attachments = null;
     EntityManager em = createEntityManager();
+    Query q = em.createNamedQuery("Attachment.findAllImagesByEntry");
+
+    q.setParameter("entry", entry);
+
+    if (start > 0)
+    {
+      q.setFirstResult(start);
+    }
+
+    if (max > 0)
+    {
+      q.setMaxResults(max);
+    }
 
     try
     {
-      Query q = em.createNamedQuery("Attachment.findAllImagesByEntry");
-
-      q.setParameter("entry", entry);
       attachments = q.getResultList();
     }
     catch (NoResultException ex) {}

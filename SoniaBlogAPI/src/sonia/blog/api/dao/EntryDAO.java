@@ -49,11 +49,34 @@ public interface EntryDAO extends GenericDAO<Entry>
    * Method description
    *
    *
+   * @param start
+   * @param max
+   *
+   * @return
+   */
+  public List<Entry> findAllActives(int start, int max);
+
+  /**
+   * Method description
+   *
+   *
    * @param blog
    *
    * @return
    */
   public List<Entry> findAllActivesByBlog(Blog blog);
+
+  /**
+   * Method description
+   *
+   *
+   * @param blog
+   * @param start
+   * @param max
+   *
+   * @return
+   */
+  public List<Entry> findAllActivesByBlog(Blog blog, int start, int max);
 
   /**
    * Method description
@@ -65,6 +88,18 @@ public interface EntryDAO extends GenericDAO<Entry>
    * @return
    */
   public List<Entry> findAllByBlog(Blog blog);
+
+  /**
+   * Method description
+   *
+   *
+   * @param blog
+   * @param start
+   * @param max
+   *
+   * @return
+   */
+  public List<Entry> findAllByBlog(Blog blog, int start, int max);
 
   /**
    * Method description
@@ -84,6 +119,21 @@ public interface EntryDAO extends GenericDAO<Entry>
    *
    *
    * @param blog
+   * @param startDate
+   * @param endDate
+   * @param start
+   * @param max
+   *
+   * @return
+   */
+  public List<Entry> findAllByBlogAndDate(Blog blog, Date startDate,
+          Date endDate, int start, int max);
+
+  /**
+   * Method description
+   *
+   *
+   * @param blog
    * @param tag
    *
    * @return
@@ -94,11 +144,37 @@ public interface EntryDAO extends GenericDAO<Entry>
    * Method description
    *
    *
+   * @param blog
+   * @param tag
+   * @param start
+   * @param max
+   *
+   * @return
+   */
+  public List<Entry> findAllByBlogAndTag(Blog blog, Tag tag, int start,
+          int max);
+
+  /**
+   * Method description
+   *
+   *
    * @param category
    *
    * @return
    */
   public List<Entry> findAllByCategory(Category category);
+
+  /**
+   * Method description
+   *
+   *
+   * @param category
+   * @param start
+   * @param max
+   *
+   * @return
+   */
+  public List<Entry> findAllByCategory(Category category, int start, int max);
 
   /**
    * Method description
@@ -118,9 +194,38 @@ public interface EntryDAO extends GenericDAO<Entry>
    *
    *
    * @param blog
+   * @param startDate
+   * @param endDate
+   * @param start
+   * @param max
+   *
+   * @return
+   */
+  public List<Date> findAllCalendarDates(Blog blog, Date startDate,
+          Date endDate, int start, int max);
+
+  /**
+   * Method description
+   *
+   *
+   * @param blog
    * @param user
    *
    * @return
    */
   public List<Entry> findAllDraftsByBlogAndUser(Blog blog, User user);
+
+  /**
+   * Method description
+   *
+   *
+   * @param blog
+   * @param user
+   * @param start
+   * @param max
+   *
+   * @return
+   */
+  public List<Entry> findAllDraftsByBlogAndUser(Blog blog, User user,
+          int start, int max);
 }

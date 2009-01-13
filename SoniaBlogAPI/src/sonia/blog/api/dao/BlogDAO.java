@@ -34,6 +34,17 @@ public interface BlogDAO extends GenericDAO<Blog>
    * Method description
    *
    *
+   * @param start
+   * @param max
+   *
+   * @return
+   */
+  public List<Blog> findAllActives(int start, int max);
+
+  /**
+   * Method description
+   *
+   *
    * @param servername
    *
    * @return

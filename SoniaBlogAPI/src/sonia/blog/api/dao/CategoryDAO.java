@@ -48,6 +48,18 @@ public interface CategoryDAO extends GenericDAO<Category>
    *
    *
    * @param blog
+   * @param start
+   * @param max
+   *
+   * @return
+   */
+  public List<Category> findAllByBlog(Blog blog, int start, int max);
+
+  /**
+   * Method description
+   *
+   *
+   * @param blog
    *
    * @return
    */

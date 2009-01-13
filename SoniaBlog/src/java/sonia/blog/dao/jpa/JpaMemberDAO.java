@@ -111,6 +111,21 @@ public class JpaMemberDAO extends JpaGenericDAO<BlogMember> implements MemberDAO
    *
    *
    * @param blog
+   * @param start
+   * @param max
+   *
+   * @return
+   */
+  public List<BlogMember> findByBlog(Blog blog, int start, int max)
+  {
+    return findList("BlogMember.findByBlog", blog);
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param blog
    * @param user
    *
    * @return
@@ -119,13 +134,13 @@ public class JpaMemberDAO extends JpaGenericDAO<BlogMember> implements MemberDAO
   {
     BlogMember member = null;
     EntityManager em = createEntityManager();
+    Query q = em.createNamedQuery("BlogMember.findByBlogAndUser");
+
+    q.setParameter("blog", blog);
+    q.setParameter("user", user);
 
     try
     {
-      Query q = em.createNamedQuery("BlogMember.findByBlogAndUser");
-
-      q.setParameter("blog", blog);
-      q.setParameter("user", user);
       member = (BlogMember) q.getSingleResult();
     }
     catch (NoResultException ex) {}
@@ -148,17 +163,42 @@ public class JpaMemberDAO extends JpaGenericDAO<BlogMember> implements MemberDAO
    *
    * @return
    */
-  @SuppressWarnings("unchecked")
   public List<BlogMember> findByUser(User user)
+  {
+    return findByUser(user, -1, -1);
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param user
+   * @param start
+   * @param max
+   *
+   * @return
+   */
+  @SuppressWarnings("unchecked")
+  public List<BlogMember> findByUser(User user, int start, int max)
   {
     List<BlogMember> members = null;
     EntityManager em = createEntityManager();
+    Query q = em.createNamedQuery("BlogMember.findByUser");
+
+    q.setParameter("user", user);
+
+    if (start > 0)
+    {
+      q.setFirstResult(start);
+    }
+
+    if (max > 0)
+    {
+      q.setMaxResults(max);
+    }
 
     try
     {
-      Query q = em.createNamedQuery("BlogMember.findByUser");
-
-      q.setParameter("user", user);
       members = q.getResultList();
     }
     catch (NoResultException ex) {}
