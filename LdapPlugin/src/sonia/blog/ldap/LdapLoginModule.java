@@ -41,6 +41,7 @@ import javax.naming.directory.SearchControls;
 import javax.naming.directory.SearchResult;
 
 import javax.security.auth.login.LoginException;
+import sonia.blog.api.app.BlogConfiguration;
 
 /**
  *
@@ -207,7 +208,7 @@ public class LdapLoginModule extends LoginModule
    *
    * @param config
    */
-  private void load(ModifyableConfiguration config)
+  private void load(BlogConfiguration config)
   {
     String servername = config.getString(LdapConfigBean.CONFIG_LDAP_HOST);
     int port = config.getInteger(LdapConfigBean.CONFIG_LDAP_PORT, 389);
@@ -216,7 +217,7 @@ public class LdapLoginModule extends LoginModule
     searchDn = config.getString(LdapConfigBean.CONFIG_LDAP_BASEDN);
     ssl = config.getBoolean(LdapConfigBean.CONFIG_LDAP_SSL, Boolean.FALSE);
     bindUser = config.getString(LdapConfigBean.CONFIG_LDAP_USER);
-    bindPassword = config.getString(LdapConfigBean.CONFIG_LDAP_PASSWORD);
+    bindPassword = config.getEncString(LdapConfigBean.CONFIG_LDAP_PASSWORD);
     scope = config.getString(LdapConfigBean.CONFIG_LDAP_SCOPE);
     filter = config.getString(LdapConfigBean.CONFIG_LDAP_FILTER);
     nameAttribute = config.getString(LdapConfigBean.CONFIG_LDAP_NAMEATTRINUTE);

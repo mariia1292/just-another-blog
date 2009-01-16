@@ -9,6 +9,7 @@ package sonia.blog.api.authentication;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import sonia.blog.api.app.BlogConfiguration;
 import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.app.BlogRequest;
 import sonia.blog.api.app.BlogResponse;
@@ -24,11 +25,14 @@ import sonia.config.XmlConfiguration;
 
 import sonia.plugin.service.ServiceReference;
 
+import sonia.security.KeyGenerator;
 import sonia.security.cipher.Cipher;
 
 import sonia.util.Util;
 
 //~--- JDK imports ------------------------------------------------------------
+
+import java.io.IOException;
 
 import java.util.Set;
 import java.util.logging.Level;
@@ -317,7 +321,9 @@ public class LoginBean extends AbstractBean
 
       if (cipher != null)
       {
-        value = cipher.encode(Constants.SECRET_KEY, value);
+        char[] secretKey = getSecretKey();
+
+        value = cipher.encode(secretKey, value);
       }
 
       Cookie c = new Cookie(Constants.COOKIE_NAME, value);
@@ -385,6 +391,29 @@ public class LoginBean extends AbstractBean
     }
 
     return role;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   *
+   * @throws IOException
+   */
+  private char[] getSecretKey() throws IOException
+  {
+    BlogConfiguration config = BlogContext.getInstance().getConfiguration();
+    String key = config.getString(Constants.CONFIG_COOKIEKEY);
+
+    if (Util.isBlank(key))
+    {
+      key = KeyGenerator.generateKey(16);
+      config.set(Constants.CONFIG_COOKIEKEY, key);
+      config.store();
+    }
+
+    return key.toCharArray();
   }
 
   //~--- fields ---------------------------------------------------------------

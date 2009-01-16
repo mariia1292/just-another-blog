@@ -427,7 +427,6 @@ public class JpaEntryDAO extends JpaGenericDAO<Entry> implements EntryDAO
    *
    * @return
    */
-  @SuppressWarnings("unchecked")
   public List<Entry> findAllDraftsByBlogAndUser(Blog blog, User user)
   {
     return findAllDraftsByBlogAndUser(blog, user, -1, -1);
@@ -444,6 +443,7 @@ public class JpaEntryDAO extends JpaGenericDAO<Entry> implements EntryDAO
    *
    * @return
    */
+  @SuppressWarnings("unchecked")
   public List<Entry> findAllDraftsByBlogAndUser(Blog blog, User user,
           int start, int max)
   {

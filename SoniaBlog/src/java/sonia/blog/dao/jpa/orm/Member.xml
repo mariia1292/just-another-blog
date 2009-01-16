@@ -26,36 +26,37 @@
   })
   -->
   <entity metadata-complete="true" name="BlogMember" class="sonia.blog.entity.BlogMember">
-  <named-query name="BlogMember.findAll">
-    <query>
+    <named-query name="BlogMember.findAll">
+      <query>
       select m from BlogMember as m
-    </query>
-  </named-query>
-  <named-query name="BlogMember.count">
-    <query>
+      </query>
+    </named-query>
+    <named-query name="BlogMember.count">
+      <query>
       select count(m) from BlogMember as m
-    </query>
-  </named-query>
-  <named-query name="BlogMember.findByBlogAndUser">
-    <query>
+      </query>
+    </named-query>
+    <named-query name="BlogMember.findByBlogAndUser">
+      <query>
       select m from BlogMember as m where m.blog = :blog and m.user = :user
-    </query>
-  </named-query>
-  <named-query name="BlogMember.findByUser">
-    <query>
+      </query>
+    </named-query>
+    <named-query name="BlogMember.findByUser">
+      <query>
       select m from BlogMember m where m.user = :user
-    </query>
-  </named-query>
-  <named-query name="BlogMember.findByBlog">
-    <query>
+      </query>
+    </named-query>
+    <named-query name="BlogMember.findByBlog">
+      <query>
       select m from BlogMember m where m.blog = :blog
-    </query>
-  </named-query>
-  <named-query name="BlogMember.countByBlog">
-    <query>
+      </query>
+    </named-query>
+    <named-query name="BlogMember.countByBlog">
+      <query>
       select count(m) from BlogMember m where m.blog = :blog
-    </query>
-  </named-query>
+      </query>
+    </named-query>
+    <pre-persist method-name="prePersists" />
     <attributes>
       <id name="id">
         <generated-value strategy="IDENTITY" />

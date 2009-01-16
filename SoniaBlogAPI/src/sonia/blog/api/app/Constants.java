@@ -27,6 +27,9 @@ public interface Constants
   public static final String CONFIG_COKKIETIME = "cookie.time";
 
   /** Field description */
+  public static final String CONFIG_COOKIEKEY = "app.cookieKey";
+
+  /** Field description */
   public static final String CONFIG_DB_DRIVER = "db.driver";
 
   /** Field description */
@@ -124,6 +127,9 @@ public interface Constants
 
   /** Field description */
   public static final String LISTENER_BLOG = "/listener/blog";
+
+  /** Field description */
+  public static final String LISTENER_BLOGHITCOUNT = "/listener/member";
 
   /** Field description */
   public static final String LISTENER_CATEGORY = "/listener/category";

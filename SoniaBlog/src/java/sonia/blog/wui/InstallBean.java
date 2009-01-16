@@ -9,6 +9,7 @@ package sonia.blog.wui;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import sonia.blog.api.app.BlogConfiguration;
 import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.app.Constants;
 import sonia.blog.api.dao.DAOFactory;
@@ -94,12 +95,12 @@ public class InstallBean extends AbstractBean
         admin.setPassword(enc.encrypt(passwordRepeat));
       }
 
-      XmlConfiguration configuration = context.getConfiguration();
+      BlogConfiguration configuration = context.getConfiguration();
 
       configuration.set(Constants.CONFIG_DB_DRIVER, databaseDriver);
       configuration.set(Constants.CONFIG_DB_URL, databaseUrl);
       configuration.set(Constants.CONFIG_DB_USERNAME, databaseUsername);
-      configuration.set(Constants.CONFIG_DB_PASSWORD, databsePassword);
+      configuration.setEncString(Constants.CONFIG_DB_PASSWORD, databsePassword);
       configuration.set(Constants.CONFIG_RESOURCE_DIRECTORY, resourcePath);
 
       /*

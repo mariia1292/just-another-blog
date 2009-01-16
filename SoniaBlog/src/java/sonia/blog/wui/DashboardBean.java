@@ -186,7 +186,8 @@ public class DashboardBean extends AbstractBean
       BlogRequest request = getRequest();
       Blog blog = request.getCurrentBlog();
       User user = request.getUser();
-      List<Entry> draftList = entryDAO.findAllDraftsByBlogAndUser(blog, user, 0, 5);
+      List<Entry> draftList = entryDAO.findAllDraftsByBlogAndUser(blog, user,
+                                0, 5);
 
       if ((draftList != null) &&!draftList.isEmpty())
       {

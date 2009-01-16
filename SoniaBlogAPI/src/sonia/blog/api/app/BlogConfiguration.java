@@ -18,6 +18,15 @@ import sonia.security.cipher.Cipher;
 
 import sonia.util.Util;
 
+//~--- JDK imports ------------------------------------------------------------
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+
+import java.util.Date;
+
 /**
  *
  * @author sdorra
@@ -32,7 +41,79 @@ public class BlogConfiguration extends XmlConfiguration
   public BlogConfiguration()
   {
     super();
-    init();
+  }
+
+  //~--- methods --------------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   * @throws IOException
+   */
+  public void load() throws IOException
+  {
+    File file = BlogContext.getInstance().getConfigFile();
+
+    if (file.exists())
+    {
+      FileInputStream fis = new FileInputStream(file);
+
+      try
+      {
+        load(fis);
+      }
+      finally
+      {
+        if (fis != null)
+        {
+          fis.close();
+        }
+      }
+    }
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @throws IOException
+   */
+  public void store() throws IOException
+  {
+    File file = BlogContext.getInstance().getConfigFile();
+    File backupDir = new File(file.getParentFile(), "backup");
+
+    if (!backupDir.exists())
+    {
+      backupDir.mkdirs();
+    }
+
+    File backupFile = new File(backupDir,
+                               "config-" + new Date().getTime() + ".xml");
+
+    file.renameTo(backupFile);
+
+    FileOutputStream fos = new FileOutputStream(file);
+
+    try
+    {
+      store(fos);
+    }
+    catch (IOException ex)
+    {
+      if (!file.exists() && backupFile.exists())
+      {
+        backupFile.renameTo(file);
+      }
+    }
+    finally
+    {
+      if (fos != null)
+      {
+        fos.close();
+      }
+    }
   }
 
   //~--- get methods ----------------------------------------------------------
@@ -53,7 +134,7 @@ public class BlogConfiguration extends XmlConfiguration
 
     if (value != null)
     {
-      value = cipherReference.get().decode(secureKey, value);
+      value = getCipher().decode(secureKey, value);
     }
     else
     {
@@ -61,6 +142,19 @@ public class BlogConfiguration extends XmlConfiguration
     }
 
     return value;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param key
+   *
+   * @return
+   */
+  public String getEncString(String key)
+  {
+    return getEncString(key, null);
   }
 
   //~--- set methods ----------------------------------------------------------
@@ -76,24 +170,29 @@ public class BlogConfiguration extends XmlConfiguration
   {
     char[] secureKey = getKey();
 
-    value = cipherReference.get().decode(secureKey, value);
+    value = getCipher().encode(secureKey, value);
     set(key, value);
   }
 
-  //~--- methods --------------------------------------------------------------
+  //~--- get methods ----------------------------------------------------------
 
   /**
    * Method description
    *
+   *
+   * @return
    */
-  private void init()
+  private Cipher getCipher()
   {
-    cipherReference =
-      BlogContext.getInstance().getServiceRegistry().get(Cipher.class,
-        Constants.SERVCIE_CIPHER);
-  }
+    if (cipherReference == null)
+    {
+      cipherReference =
+        BlogContext.getInstance().getServiceRegistry().get(Cipher.class,
+          Constants.SERVCIE_CIPHER);
+    }
 
-  //~--- get methods ----------------------------------------------------------
+    return cipherReference.get();
+  }
 
   /**
    * Method description

@@ -14,6 +14,7 @@ import sonia.blog.api.app.BlogRequest;
 import sonia.blog.api.app.BlogResponse;
 import sonia.blog.api.app.Constants;
 import sonia.blog.api.authentication.LoginBean;
+import sonia.blog.entity.Blog;
 
 import sonia.config.XmlConfiguration;
 
@@ -86,6 +87,18 @@ public class BlogContextFilter implements Filter
       else if (value == Constants.SSO_EVERYREQUEST)
       {
         doSSOLogin(request, response);
+      }
+    }
+
+    if (BlogContext.getInstance().isInstalled())
+    {
+      if ((request.getSession() == null) || request.getSession().isNew())
+      {
+        Blog blog = request.getCurrentBlog();
+        if ( blog != null )
+        {
+          BlogContext.getDAOFactory().getBlogHitCountDAO().increase(blog);
+        }
       }
     }
 

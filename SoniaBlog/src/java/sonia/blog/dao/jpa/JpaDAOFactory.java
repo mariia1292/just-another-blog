@@ -9,10 +9,12 @@ package sonia.blog.dao.jpa;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import sonia.blog.api.app.BlogConfiguration;
 import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.app.Constants;
 import sonia.blog.api.dao.AttachmentDAO;
 import sonia.blog.api.dao.BlogDAO;
+import sonia.blog.api.dao.BlogHitCountDAO;
 import sonia.blog.api.dao.CategoryDAO;
 import sonia.blog.api.dao.CommentDAO;
 import sonia.blog.api.dao.DAOFactory;
@@ -20,8 +22,6 @@ import sonia.blog.api.dao.EntryDAO;
 import sonia.blog.api.dao.MemberDAO;
 import sonia.blog.api.dao.TagDAO;
 import sonia.blog.api.dao.UserDAO;
-
-import sonia.config.XmlConfiguration;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -58,7 +58,7 @@ public class JpaDAOFactory extends DAOFactory
   @Override
   public void init()
   {
-    XmlConfiguration config = BlogContext.getInstance().getConfiguration();
+    BlogConfiguration config = BlogContext.getInstance().getConfiguration();
     Map<String, String> parameters = new HashMap<String, String>();
 
     parameters.put("toplink.jdbc.driver",
@@ -68,7 +68,7 @@ public class JpaDAOFactory extends DAOFactory
     parameters.put("toplink.jdbc.user",
                    config.getString(Constants.CONFIG_DB_USERNAME));
     parameters.put("toplink.jdbc.password",
-                   config.getString(Constants.CONFIG_DB_PASSWORD));
+                   config.getEncString(Constants.CONFIG_DB_PASSWORD));
     entityManagerFactory =
       Persistence.createEntityManagerFactory("SoniaBlog-PU", parameters);
   }
@@ -97,6 +97,18 @@ public class JpaDAOFactory extends DAOFactory
   public BlogDAO getBlogDAO()
   {
     return new JpaBlogDAO(entityManagerFactory);
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  @Override
+  public BlogHitCountDAO getBlogHitCountDAO()
+  {
+    return new JpaBlogHitCountDAO(entityManagerFactory);
   }
 
   /**

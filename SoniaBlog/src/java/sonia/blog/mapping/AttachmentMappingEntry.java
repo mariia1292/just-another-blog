@@ -197,12 +197,14 @@ public class AttachmentMappingEntry
    *
    *
    *
+   *
+   * @param blog
    * @param source
    * @param target
    * @param maxWidth
    * @param maxHeight
    */
-  private void createImage(File source, File target, int maxWidth,
+  private void createImage(Blog blog, File source, File target, int maxWidth,
                            int maxHeight)
   {
     try
@@ -233,7 +235,7 @@ public class AttachmentMappingEntry
           width = height * ratio;
         }
 
-        resizeImage(source, target, (int) width, (int) height);
+        resizeImage(blog, source, target, (int) width, (int) height);
       }
     }
     catch (Exception ex)
@@ -394,7 +396,7 @@ public class AttachmentMappingEntry
       }
       else
       {
-        createImage(file, image, maxWidth, maxHeight);
+        createImage(blog, file, image, maxWidth, maxHeight);
       }
     }
 
@@ -405,6 +407,8 @@ public class AttachmentMappingEntry
    * Method description
    *
    *
+   *
+   * @param blog
    * @param source
    * @param target
    * @param width
@@ -412,9 +416,16 @@ public class AttachmentMappingEntry
    *
    * @throws IOException
    */
-  private void resizeImage(File source, File target, int width, int height)
+  private void resizeImage(Blog blog, File source, File target, int width,
+                           int height)
           throws IOException
   {
+
+/*    BlogJob job = new ImageResizingJob(blog, source, target, format, width,
+                                     height);
+
+    BlogContext.getInstance().getJobQueue().add(job);
+  */
     InputStream in = null;
     OutputStream out = null;
 

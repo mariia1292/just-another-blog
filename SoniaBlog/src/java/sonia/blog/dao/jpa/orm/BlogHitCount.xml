@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entity-mappings version="1.0" xmlns="http://java.sun.com/xml/ns/persistence/orm"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/persistence/orm http://java.sun.com/xml/ns/persistence/orm_1_0.xsd">
+  <persistence-unit-metadata>
+    <persistence-unit-defaults>
+      <access>FIELD</access>
+    </persistence-unit-defaults>
+  </persistence-unit-metadata>
+  <package>sonia.blog.entity</package>
+  <entity metadata-complete="true" name="BlogHitCount" class="sonia.blog.entity.BlogHitCount">
+    <named-query name="BlogHitCount.findAll">
+      <query>
+        select h from BlogHitCount h
+      </query>
+    </named-query>
+    <named-query name="BlogHitCount.count">
+      <query>
+        select count(h) from BlogHitCount h
+      </query>
+    </named-query>
+    <named-query name="BlogHitCount.findByBlogAndDate">
+      <query>
+        select h from BlogHitCount h where h.blog = :blog and h.date = :date
+      </query>
+    </named-query>
+    <attributes>
+      <id name="id">
+        <generated-value strategy="IDENTITY" />
+      </id>
+      <basic name="date">
+        <column nullable="false" />
+        <temporal>DATE</temporal>
+      </basic>
+      <many-to-one name="blog" />
+    </attributes>
+  </entity>
+</entity-mappings>

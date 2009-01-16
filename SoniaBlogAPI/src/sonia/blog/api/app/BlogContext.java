@@ -163,6 +163,7 @@ public class BlogContext
    */
   public void destroy()
   {
+    getJobQueue().stop();
     getPluginContext().shutdown();
     getDAOFactory().close();
 

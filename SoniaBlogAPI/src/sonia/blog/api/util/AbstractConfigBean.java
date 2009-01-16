@@ -9,16 +9,11 @@ package sonia.blog.api.util;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import sonia.blog.api.app.BlogConfiguration;
 import sonia.blog.api.app.BlogContext;
-
-import sonia.config.XmlConfiguration;
 
 //~--- JDK imports ------------------------------------------------------------
 
-import java.io.File;
-import java.io.FileOutputStream;
-
-import java.util.Date;
 import java.util.logging.Level;
 
 /**
@@ -47,7 +42,7 @@ public abstract class AbstractConfigBean extends AbstractBean
    *
    * @param config
    */
-  public abstract void load(XmlConfiguration config);
+  public abstract void load(BlogConfiguration config);
 
   /**
    * Method description
@@ -55,7 +50,7 @@ public abstract class AbstractConfigBean extends AbstractBean
    *
    * @param config
    */
-  public abstract void store(XmlConfiguration config);
+  public abstract void store(BlogConfiguration config);
 
   /**
    * Method description
@@ -79,33 +74,15 @@ public abstract class AbstractConfigBean extends AbstractBean
     {
       store(config);
 
-      File file = BlogContext.getInstance().getConfigFile();
-      File backupDir = new File(file.getParentFile(), "backup");
-
-      if (!backupDir.exists())
-      {
-        backupDir.mkdirs();
-      }
-
-      File backupFile = new File(backupDir,
-                                 "config-" + new Date().getTime() + ".xml");
-
       try
       {
-        file.renameTo(backupFile);
-        config.store(new FileOutputStream(file));
-        getMessageHandler().info("saveConfigSuccess");
+        config.store();
       }
       catch (Exception ex)
       {
         logger.log(Level.SEVERE, null, ex);
         getMessageHandler().error("unknownError");
         result = FAILURE;
-
-        if (!file.exists() && backupFile.exists())
-        {
-          backupFile.renameTo(file);
-        }
       }
     }
     else
@@ -119,5 +96,5 @@ public abstract class AbstractConfigBean extends AbstractBean
   //~--- fields ---------------------------------------------------------------
 
   /** Field description */
-  private XmlConfiguration config;
+  private BlogConfiguration config;
 }

@@ -9,9 +9,9 @@ package sonia.blog.ldap;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import sonia.blog.api.app.BlogConfiguration;
 import sonia.blog.api.util.AbstractConfigBean;
 
-import sonia.config.XmlConfiguration;
 
 /**
  *
@@ -66,13 +66,13 @@ public class LdapConfigBean extends AbstractConfigBean
    * @param config
    */
   @Override
-  public void load(XmlConfiguration config)
+  public void load(BlogConfiguration config)
   {
     host = config.getString(CONFIG_LDAP_HOST);
     port = config.getInteger(CONFIG_LDAP_PORT, 389);
     ssl = config.getBoolean(CONFIG_LDAP_SSL, Boolean.FALSE);
     user = config.getString(CONFIG_LDAP_USER);
-    password = config.getString(CONFIG_LDAP_PASSWORD);
+    password = config.getEncString(CONFIG_LDAP_PASSWORD);
     filter = config.getString(CONFIG_LDAP_FILTER);
     scope = config.getString(CONFIG_LDAP_SCOPE, "sub");
     enabled = config.getBoolean(CONFIG_LDAP_ENABLED, Boolean.FALSE);
@@ -90,13 +90,13 @@ public class LdapConfigBean extends AbstractConfigBean
    * @param config
    */
   @Override
-  public void store(XmlConfiguration config)
+  public void store(BlogConfiguration config)
   {
     config.set(CONFIG_LDAP_HOST, host);
     config.set(CONFIG_LDAP_PORT, port);
     config.set(CONFIG_LDAP_SSL, ssl);
     config.set(CONFIG_LDAP_USER, user);
-    config.set(CONFIG_LDAP_PASSWORD, password);
+    config.setEncString(CONFIG_LDAP_PASSWORD, password);
     config.set(CONFIG_LDAP_FILTER, filter);
     config.set(CONFIG_LDAP_SCOPE, scope);
     config.set(CONFIG_LDAP_ENABLED, enabled);

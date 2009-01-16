@@ -289,12 +289,22 @@ public class XmlConfiguration extends StringBasedConfiguration
    */
   public void set(String key, Object object)
   {
-    String value = parseString(object);
-
-    if (value != null)
+    if (object != null)
     {
-      properties.put(key, new String[] { value });
-      fireConfigChangedEvent(key);
+      String value = parseString(object);
+
+      if (value != null)
+      {
+        properties.put(key, new String[] { value });
+        fireConfigChangedEvent(key);
+      }
+    }
+    else
+    {
+      if (contains(key))
+      {
+        remove(key);
+      }
     }
   }
 

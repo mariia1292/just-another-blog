@@ -9,14 +9,13 @@ package sonia.blog.wui;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import sonia.blog.api.app.BlogConfiguration;
 import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.app.Constants;
 import sonia.blog.api.dao.BlogDAO;
 import sonia.blog.api.spam.SpamInputProtection;
 import sonia.blog.api.util.AbstractConfigBean;
 import sonia.blog.entity.Blog;
-
-import sonia.config.XmlConfiguration;
 
 import sonia.plugin.service.ServiceReference;
 
@@ -66,7 +65,7 @@ public class GlobalConfigBean extends AbstractConfigBean
    * @param config
    */
   @Override
-  public void load(XmlConfiguration config)
+  public void load(BlogConfiguration config)
   {
     allowRegistration = config.getBoolean(Constants.CONFIG_ALLOW_REGISTRATION,
             Boolean.FALSE);
@@ -83,7 +82,7 @@ public class GlobalConfigBean extends AbstractConfigBean
     smtpServer = config.getString(Constants.CONFIG_SMTPSERVER);
     smtpPort = config.getInteger(Constants.CONFIG_SMTPPORT, 25);
     smtpUsername = config.getString(Constants.CONFIG_SMTPUSER);
-    smtpPassword = config.getString(Constants.CONFIG_SMTPPASSWORD);
+    smtpPassword = config.getEncString(Constants.CONFIG_SMTPPASSWORD);
     registerAcknowledgement =
       config.getBoolean(Constants.CONFIG_REGISTERACKNOWLEDGEMENT, false);
   }
@@ -95,7 +94,7 @@ public class GlobalConfigBean extends AbstractConfigBean
    * @param config
    */
   @Override
-  public void store(XmlConfiguration config)
+  public void store(BlogConfiguration config)
   {
     config.set(Constants.CONFIG_ALLOW_REGISTRATION, allowRegistration);
     config.set(Constants.CONFIG_ALLOW_BLOGCREATION, allowBlogCreation);
@@ -108,7 +107,7 @@ public class GlobalConfigBean extends AbstractConfigBean
     config.set(Constants.CONFIG_SMTPSERVER, smtpServer);
     config.set(Constants.CONFIG_SMTPPORT, smtpPort);
     config.set(Constants.CONFIG_SMTPUSER, smtpUsername);
-    config.set(Constants.CONFIG_SMTPPASSWORD, smtpPassword);
+    config.setEncString(Constants.CONFIG_SMTPPASSWORD, smtpPassword);
     config.set(Constants.CONFIG_REGISTERACKNOWLEDGEMENT,
                registerAcknowledgement);
   }

@@ -226,6 +226,7 @@ public class EntryBean extends AbstractBean
           }
 
           getMessageHandler().info("removeEntrySuccess");
+          result = newEntry();
         }
         else
         {

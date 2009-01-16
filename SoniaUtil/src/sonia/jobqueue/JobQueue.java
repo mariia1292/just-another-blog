@@ -37,6 +37,7 @@ public class JobQueue<T extends Job>
     this.listeners = new ArrayList<JobListener>();
     this.jobs = new LinkedList<T>();
     this.stop = true;
+    this.sleepTime = 20000;
     this.handlerCount = Runtime.getRuntime().availableProcessors() * 2;
     this.handlers = new ArrayList<JobHandler>();
 

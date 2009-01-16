@@ -99,6 +99,14 @@ public abstract class DAOFactory
    *
    * @return
    */
+  public abstract BlogHitCountDAO getBlogHitCountDAO();
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
   public abstract CategoryDAO getCategoryDAO();
 
   /**

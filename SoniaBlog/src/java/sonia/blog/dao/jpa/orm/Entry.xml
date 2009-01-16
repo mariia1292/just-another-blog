@@ -61,7 +61,7 @@
     </named-query>
     <named-query name="Entry.findAllByBlog">
       <query>
-        select e from Entry e join e.category c join c.blog b where b = :blog and e.published = true order by e.creationDate desc
+        select e from Entry e join e.category c join c.blog b where b = :blog order by e.creationDate desc
       </query>
     </named-query>
     <named-query name="Entry.findByCategory">
