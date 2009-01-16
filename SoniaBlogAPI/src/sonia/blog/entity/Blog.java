@@ -19,13 +19,38 @@ import java.util.List;
  *
  * @author sdorra
  */
-public class Blog implements Serializable, PermaObject
+public class Blog implements Serializable, PermaObject, Comparable<Blog>
 {
 
   /** Field description */
   private static final long serialVersionUID = 2936020289259434092L;
 
   //~--- methods --------------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   * @param o
+   *
+   * @return
+   */
+  public int compareTo(Blog o)
+  {
+    int result = -1;
+
+    if (o != null)
+    {
+      result = o.title.compareTo(title);
+
+      if (result == 0)
+      {
+        result = creationDate.compareTo(o.creationDate);
+      }
+    }
+
+    return result;
+  }
 
   /**
    * Method description
@@ -83,7 +108,7 @@ public class Blog implements Serializable, PermaObject
   @Override
   public String toString()
   {
-    return "sonia.blop.entity.Blog[id=" + id + "]";
+    return title;
   }
 
   //~--- get methods ----------------------------------------------------------

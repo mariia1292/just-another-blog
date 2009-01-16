@@ -18,6 +18,9 @@ import sonia.util.Util;
 
 //~--- JDK imports ------------------------------------------------------------
 
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.Properties;
 
 import javax.mail.Authenticator;
@@ -34,6 +37,96 @@ import javax.mail.internet.MimeMessage;
  */
 public class BlogUtil
 {
+
+  /**
+   * Method description
+   *
+   *
+   * @param month
+   * @param year
+   *
+   * @return
+   */
+  public static Date createEndDate(int month, int year)
+  {
+    GregorianCalendar cal = new GregorianCalendar();
+
+    cal.set(Calendar.YEAR, year);
+    cal.set(Calendar.MONTH, month);
+    cal.set(Calendar.DAY_OF_MONTH, cal.getActualMaximum(Calendar.DAY_OF_MONTH));
+    cal.set(Calendar.HOUR_OF_DAY, 23);
+    cal.set(Calendar.MINUTE, 59);
+    cal.set(Calendar.SECOND, 59);
+
+    return cal.getTime();
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param year
+   *
+   * @return
+   */
+  public static Date createEndDate(int year)
+  {
+    GregorianCalendar cal = new GregorianCalendar();
+
+    cal.set(Calendar.YEAR, year);
+    cal.set(Calendar.MONTH, Calendar.DECEMBER);
+    cal.set(Calendar.DAY_OF_MONTH, cal.getActualMaximum(Calendar.DAY_OF_MONTH));
+    cal.set(Calendar.HOUR_OF_DAY, 23);
+    cal.set(Calendar.MINUTE, 59);
+    cal.set(Calendar.SECOND, 59);
+
+    return cal.getTime();
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param month
+   * @param year
+   *
+   * @return
+   */
+  public static Date createStartDate(int month, int year)
+  {
+    GregorianCalendar cal = new GregorianCalendar();
+
+    cal.set(Calendar.YEAR, year);
+    cal.set(Calendar.MONTH, month);
+    cal.set(Calendar.DAY_OF_MONTH, 1);
+    cal.set(Calendar.HOUR_OF_DAY, 0);
+    cal.set(Calendar.MINUTE, 0);
+    cal.set(Calendar.SECOND, 1);
+
+    return cal.getTime();
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param year
+   *
+   * @return
+   */
+  public static Date createStartDate(int year)
+  {
+    GregorianCalendar cal = new GregorianCalendar();
+
+    cal.set(Calendar.YEAR, year);
+    cal.set(Calendar.MONTH, Calendar.JANUARY);
+    cal.set(Calendar.DAY_OF_MONTH, 1);
+    cal.set(Calendar.HOUR_OF_DAY, 0);
+    cal.set(Calendar.MINUTE, 0);
+    cal.set(Calendar.SECOND, 1);
+
+    return cal.getTime();
+  }
 
   /**
    * Method description

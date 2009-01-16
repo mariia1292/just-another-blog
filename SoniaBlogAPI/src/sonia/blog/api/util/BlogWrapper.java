@@ -9,25 +9,25 @@ package sonia.blog.api.util;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import sonia.blog.entity.Tag;
+import sonia.blog.entity.Blog;
 
 /**
  *
  * @author sdorra
  */
-public class TagWrapper implements Comparable<TagWrapper>
+public class BlogWrapper implements Comparable<BlogWrapper>
 {
 
   /**
    * Constructs ...
    *
    *
-   * @param tag
+   * @param blog
    * @param count
    */
-  public TagWrapper(Tag tag, Long count)
+  public BlogWrapper(Blog blog, Long count)
   {
-    this.tag = tag;
+    this.blog = blog;
     this.count = count;
   }
 
@@ -41,7 +41,7 @@ public class TagWrapper implements Comparable<TagWrapper>
    *
    * @return
    */
-  public int compareTo(TagWrapper o)
+  public int compareTo(BlogWrapper o)
   {
     int result = -1;
 
@@ -51,7 +51,7 @@ public class TagWrapper implements Comparable<TagWrapper>
 
       if (result == 0)
       {
-        result = tag.getName().compareTo(o.tag.getName());
+        result = blog.compareTo(o.blog);
       }
     }
 
@@ -66,9 +66,9 @@ public class TagWrapper implements Comparable<TagWrapper>
    *
    * @return
    */
-  public Long getCount()
+  public Blog getBlog()
   {
-    return count;
+    return blog;
   }
 
   /**
@@ -77,16 +77,16 @@ public class TagWrapper implements Comparable<TagWrapper>
    *
    * @return
    */
-  public Tag getTag()
+  public Long getCount()
   {
-    return tag;
+    return count;
   }
 
   //~--- fields ---------------------------------------------------------------
 
   /** Field description */
-  private Long count;
+  private Blog blog;
 
   /** Field description */
-  private Tag tag;
+  private Long count;
 }

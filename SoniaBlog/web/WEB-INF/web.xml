@@ -114,7 +114,19 @@
     <url-pattern>*.jab</url-pattern>
   </servlet-mapping>
 
- <!-- JSF Library config -->
+  <!-- Chart Servlet -->
+
+  <servlet>
+    <servlet-name>ChartServlet</servlet-name>
+    <servlet-class>sonia.blog.wui.servlet.ChartServlet</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>ChartServlet</servlet-name>
+    <url-pattern>/chart</url-pattern>
+  </servlet-mapping>
+  
+  <!-- JSF Library config -->
 
   <jsp-config>
     <taglib>

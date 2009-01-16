@@ -9,9 +9,12 @@ package sonia.blog.dao.jpa;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import sonia.blog.api.app.Constants;
 import sonia.blog.api.dao.BlogHitCountDAO;
+import sonia.blog.api.util.BlogWrapper;
 import sonia.blog.entity.Blog;
 import sonia.blog.entity.BlogHitCount;
+import sonia.blog.util.BlogUtil;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -22,7 +25,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
-import sonia.blog.api.app.Constants;
 
 /**
  *
@@ -40,7 +42,8 @@ public class JpaBlogHitCountDAO extends JpaGenericDAO<BlogHitCount>
    */
   public JpaBlogHitCountDAO(EntityManagerFactory entityManagerFactory)
   {
-    super(entityManagerFactory, BlogHitCount.class, Constants.LISTENER_BLOGHITCOUNT);
+    super(entityManagerFactory, BlogHitCount.class,
+          Constants.LISTENER_BLOGHITCOUNT);
   }
 
   //~--- methods --------------------------------------------------------------
@@ -119,6 +122,39 @@ public class JpaBlogHitCountDAO extends JpaGenericDAO<BlogHitCount>
    * Method description
    *
    *
+   * @param month
+   * @param year
+   *
+   * @return
+   */
+  public List<BlogWrapper> findByMonth(int month, int year)
+  {
+    Date startDate = BlogUtil.createStartDate(month, year);
+    Date endDate = BlogUtil.createEndDate(month, year);
+
+    return findBetween(startDate, endDate);
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param year
+   *
+   * @return
+   */
+  public List<BlogWrapper> findByYear(int year)
+  {
+    Date startDate = BlogUtil.createStartDate(year);
+    Date endDate = BlogUtil.createEndDate(year);
+
+    return findBetween(startDate, endDate);
+  }
+
+  /**
+   * Method description
+   *
+   *
    * @param blog
    *
    * @return
@@ -139,6 +175,117 @@ public class JpaBlogHitCountDAO extends JpaGenericDAO<BlogHitCount>
     {
       blogHitCount.inc();
       edit(blogHitCount);
+    }
+
+    return result;
+  }
+
+  //~--- get methods ----------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   * @param blog
+   * @param month
+   * @param year
+   *
+   * @return
+   */
+  public Long getHitsByBlogAndMonth(Blog blog, int month, int year)
+  {
+    Date startDate = BlogUtil.createStartDate(month, year);
+    Date endDate = BlogUtil.createEndDate(month, year);
+
+    return getHitsByBlogBetween(blog, startDate, endDate);
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param blog
+   * @param year
+   *
+   * @return
+   */
+  public Long getHitsByBlogAndYear(Blog blog, int year)
+  {
+    Date startDate = BlogUtil.createStartDate(year);
+    Date endDate = BlogUtil.createEndDate(year);
+
+    return getHitsByBlogBetween(blog, startDate, endDate);
+  }
+
+  //~--- methods --------------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   * @param startDate
+   * @param endDate
+   *
+   * @return
+   */
+  @SuppressWarnings("unchecked")
+  private List<BlogWrapper> findBetween(Date startDate, Date endDate)
+  {
+    List<BlogWrapper> result = null;
+    EntityManager em = createEntityManager();
+    Query q = em.createNamedQuery("BlogHitCount.findBetween");
+
+    q.setParameter("start", startDate);
+    q.setParameter("end", endDate);
+
+    try
+    {
+      result = q.getResultList();
+    }
+    catch (NoResultException ex) {}
+    finally
+    {
+      if (em != null)
+      {
+        em.close();
+      }
+    }
+
+    return result;
+  }
+
+  //~--- get methods ----------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   * @param blog
+   * @param startDate
+   * @param endDate
+   *
+   * @return
+   */
+  private Long getHitsByBlogBetween(Blog blog, Date startDate, Date endDate)
+  {
+    Long result = 0l;
+    EntityManager em = createEntityManager();
+    Query q = em.createNamedQuery("BlogHitCount.getSumBetweenByBlog");
+
+    q.setParameter("blog", blog);
+    q.setParameter("start", startDate);
+    q.setParameter("end", endDate);
+
+    try
+    {
+      result = (Long) q.getSingleResult();
+    }
+    finally
+    {
+      if (em != null)
+      {
+        em.close();
+      }
     }
 
     return result;

@@ -12,6 +12,7 @@ package sonia.blog.api.jsf.calendar;
 import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.app.BlogRequest;
 import sonia.blog.entity.Blog;
+import sonia.blog.util.BlogUtil;
 
 import sonia.jsf.base.BaseComponent;
 import sonia.jsf.base.BaseRenderer;
@@ -76,8 +77,8 @@ public class CalendarRenderer extends BaseRenderer
       BlogRequest request =
         (BlogRequest) context.getExternalContext().getRequest();
       Blog blog = request.getCurrentBlog();
-      Date startDate = createStartDate(month - 1, year);
-      Date endDate = createEndDate(month - 1, year);
+      Date startDate = BlogUtil.createStartDate(month - 1, year);
+      Date endDate = BlogUtil.createEndDate(month - 1, year);
       List<Date> dates = getEntryDates(blog, startDate, endDate);
       ResponseWriter writer = context.getResponseWriter();
 
@@ -204,52 +205,6 @@ public class CalendarRenderer extends BaseRenderer
     }
 
     return link + "/index.jab";
-  }
-
-  /**
-   * Method description
-   *
-   *
-   *
-   * @param month
-   * @param year
-   * @return
-   */
-  private Date createEndDate(int month, int year)
-  {
-    GregorianCalendar cal = new GregorianCalendar();
-
-    cal.set(Calendar.YEAR, year);
-    cal.set(Calendar.MONTH, month);
-    cal.set(Calendar.DAY_OF_MONTH, cal.getActualMaximum(Calendar.DAY_OF_MONTH));
-    cal.set(Calendar.HOUR_OF_DAY, 23);
-    cal.set(Calendar.MINUTE, 59);
-    cal.set(Calendar.SECOND, 59);
-
-    return cal.getTime();
-  }
-
-  /**
-   * Method description
-   *
-   *
-   *
-   * @param month
-   * @param year
-   * @return
-   */
-  private Date createStartDate(int month, int year)
-  {
-    GregorianCalendar cal = new GregorianCalendar();
-
-    cal.set(Calendar.YEAR, year);
-    cal.set(Calendar.MONTH, month);
-    cal.set(Calendar.DAY_OF_MONTH, 1);
-    cal.set(Calendar.HOUR_OF_DAY, 0);
-    cal.set(Calendar.MINUTE, 0);
-    cal.set(Calendar.SECOND, 1);
-
-    return cal.getTime();
   }
 
   /**

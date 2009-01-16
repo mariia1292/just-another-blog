@@ -24,6 +24,16 @@
         select h from BlogHitCount h where h.blog = :blog and h.date = :date
       </query>
     </named-query>
+    <named-query name="BlogHitCount.findBetween">
+      <query>
+        select new sonia.blog.api.util.BlogWrapper( h.blog, sum( h.hitCount ) ) from BlogHitCount h where h.date between :start and :end group by h.blog
+      </query>
+    </named-query>
+    <named-query name="BlogHitCount.getSumBetweenByBlog">
+      <query>
+        select sum( h.hitCount ) from BlogHitCount h where h.blog = :blog and h.date between :start and :end group by h.blog
+      </query>
+    </named-query>
     <attributes>
       <id name="id">
         <generated-value strategy="IDENTITY" />
