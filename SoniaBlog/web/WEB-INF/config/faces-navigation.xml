@@ -40,7 +40,7 @@
   
   
   <navigation-rule>
-    <from-view-id>/personal/*</from-view-id>
+    <from-view-id>/*</from-view-id>
     <navigation-case>
       <from-outcome>entries</from-outcome>
       <to-view-id>/personal/author/entries.xhtml</to-view-id>

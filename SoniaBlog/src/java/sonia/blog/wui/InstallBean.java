@@ -22,7 +22,6 @@ import sonia.blog.entity.Role;
 import sonia.blog.entity.User;
 
 import sonia.config.StoreableConfiguration;
-import sonia.config.XmlConfiguration;
 
 import sonia.plugin.service.ServiceReference;
 
@@ -102,6 +101,11 @@ public class InstallBean extends AbstractBean
       configuration.set(Constants.CONFIG_DB_USERNAME, databaseUsername);
       configuration.setEncString(Constants.CONFIG_DB_PASSWORD, databsePassword);
       configuration.set(Constants.CONFIG_RESOURCE_DIRECTORY, resourcePath);
+
+      if (isDatabaseEmbedded())
+      {
+        configuration.set(Constants.CONFIG_DB_EMBEDDED, Boolean.TRUE);
+      }
 
       /*
        * try

@@ -1,0 +1,66 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:blog="http://jab.nitilon.org/blog/">
+
+  <body>
+
+    <ui:composition template="/personal/template.xhtml">
+
+      <ui:define name="title">
+        <h:outputText value="Development" />
+      </ui:define>
+
+      <ui:define name="content">
+
+        <h1>Development</h1>
+
+        <h:form>
+
+          <h:panelGrid columns="3">
+
+            <h:outputLabel for="users" value="Users" />
+            <h:inputText id="users" value="#{DevelBean.users}" />
+            <h:message for="blogs" />
+
+            <h:outputLabel for="blogs" value="Blogs pro User" />
+            <h:inputText id="blogs" value="#{DevelBean.blogs}" />
+            <h:message for="blogs" />
+
+            <h:outputLabel for="categories" value="Categories pro Blog " />
+            <h:inputText id="categories" value="#{DevelBean.categories}" />
+            <h:message for="categories" />
+
+            <h:outputLabel for="entries" value="Entries pro Categorie" />
+            <h:inputText id="entries" value="#{DevelBean.entries}" />
+            <h:message for="entries" />
+
+            <h:outputLabel for="comments" value="Comments pro Entry" />
+            <h:inputText id="comments" value="#{DevelBean.comments}" />
+            <h:message for="comments" />
+
+          </h:panelGrid>
+
+          <h:commandButton value="Create Sample Data" action="#{DevelBean.createSampleData}" />
+
+        </h:form>
+
+        <h:form rendered="#{DevelBean.databaseEmbedded}">
+
+          <h1>NetworDatabaseServer</h1>
+
+          <h:commandButton value="Start NetworkDatabaseServer" action="#{DevelBean.startDBNetworkServer}" disabled="#{DevelBean.DBNetworkServerRunning}" />
+          <h:commandButton value="Stop NetworkDatabaseServer" action="#{DevelBean.stopDBNetworkServer}" disabled="#{!DevelBean.DBNetworkServerRunning}" />
+
+        </h:form>
+
+      </ui:define>
+
+    </ui:composition>
+
+
+  </body>
+</html>

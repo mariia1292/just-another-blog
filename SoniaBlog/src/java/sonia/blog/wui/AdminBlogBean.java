@@ -391,11 +391,10 @@ public class AdminBlogBean extends AbstractBean
    */
   public long getAttachmentCount()
   {
-    Blog b = getRequest().getCurrentBlog();
     AttachmentDAO attachmentDAO =
       BlogContext.getDAOFactory().getAttachmentDAO();
 
-    return attachmentDAO.countByBlog(b);
+    return attachmentDAO.countByBlog(blog);
   }
 
   /**
@@ -437,10 +436,9 @@ public class AdminBlogBean extends AbstractBean
    */
   public long getCategoryCount()
   {
-    Blog b = getRequest().getCurrentBlog();
     CategoryDAO categegoryDAO = BlogContext.getDAOFactory().getCategoryDAO();
 
-    return categegoryDAO.countByBlog(b);
+    return categegoryDAO.countByBlog(blog);
   }
 
   /**
@@ -450,10 +448,9 @@ public class AdminBlogBean extends AbstractBean
    */
   public long getCommentCount()
   {
-    Blog b = getRequest().getCurrentBlog();
     CommentDAO commentDAO = BlogContext.getDAOFactory().getCommentDAO();
 
-    return commentDAO.countByBlog(b);
+    return commentDAO.countByBlog(blog);
   }
 
   /**
@@ -463,10 +460,9 @@ public class AdminBlogBean extends AbstractBean
    */
   public long getEntryCount()
   {
-    Blog b = getRequest().getCurrentBlog();
     EntryDAO entryDAO = BlogContext.getDAOFactory().getEntryDAO();
 
-    return entryDAO.countByBlog(b);
+    return entryDAO.countByBlog(blog);
   }
 
   /**
@@ -476,10 +472,9 @@ public class AdminBlogBean extends AbstractBean
    */
   public long getMemberCount()
   {
-    Blog b = getRequest().getCurrentBlog();
     MemberDAO memberDAO = BlogContext.getDAOFactory().getMemberDAO();
 
-    return memberDAO.countByBlog(b);
+    return memberDAO.countByBlog(blog);
   }
 
   /**

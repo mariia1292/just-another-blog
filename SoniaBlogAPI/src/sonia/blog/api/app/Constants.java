@@ -33,6 +33,9 @@ public interface Constants
   public static final String CONFIG_DB_DRIVER = "db.driver";
 
   /** Field description */
+  public static final String CONFIG_DB_EMBEDDED = "db.embedded";
+
+  /** Field description */
   public static final String CONFIG_DB_PASSWORD = "db.password";
 
   /** Field description */
