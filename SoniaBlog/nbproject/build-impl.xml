@@ -537,6 +537,7 @@ exists or setup the property manually. For example like this:
         <copyfiles files="${libs.facelets-1-1-14.classpath}" iftldtodir="${build.web.dir}/WEB-INF" manifestproperty="manifest.libs.facelets-1-1-14.classpath" todir="${dist.ear.dir}"/>
         <copyfiles files="${libs.PdfRenderer.classpath}" iftldtodir="${build.web.dir}/WEB-INF" manifestproperty="manifest.libs.PdfRenderer.classpath" todir="${dist.ear.dir}"/>
         <copyfiles files="${libs.JFreeChart.classpath}" iftldtodir="${build.web.dir}/WEB-INF" manifestproperty="manifest.libs.JFreeChart.classpath" todir="${dist.ear.dir}"/>
+        <copyfiles files="${libs.XML-RPC.classpath}" iftldtodir="${build.web.dir}/WEB-INF" manifestproperty="manifest.libs.XML-RPC.classpath" todir="${dist.ear.dir}"/>
         <copyfiles files="${libs.Lucene.classpath}" iftldtodir="${build.web.dir}/WEB-INF" manifestproperty="manifest.libs.Lucene.classpath" todir="${dist.ear.dir}"/>
         <copyfiles files="${libs.JTidy.classpath}" iftldtodir="${build.web.dir}/WEB-INF" manifestproperty="manifest.libs.JTidy.classpath" todir="${dist.ear.dir}"/>
         <copyfiles files="${reference.SoniaUtil.jar}" iftldtodir="${build.web.dir}/WEB-INF" manifestproperty="manifest.reference.SoniaUtil.jar" todir="${dist.ear.dir}"/>
@@ -548,7 +549,7 @@ exists or setup the property manually. For example like this:
         <copyfiles files="${reference.WebIntegrationPlugin.jar}" iftldtodir="${build.web.dir}/WEB-INF" manifestproperty="manifest.reference.WebIntegrationPlugin.jar" todir="${dist.ear.dir}"/>
         <mkdir dir="${build.web.dir}/META-INF"/>
         <manifest file="${build.web.dir}/META-INF/MANIFEST.MF" mode="update">
-            <attribute name="Class-Path" value="${manifest.libs.MyFaces-Tomahawk.classpath} ${manifest.libs.facelets-1-1-14.classpath} ${manifest.libs.PdfRenderer.classpath} ${manifest.libs.JFreeChart.classpath} ${manifest.libs.Lucene.classpath} ${manifest.libs.JTidy.classpath} ${manifest.reference.SoniaUtil.jar} ${manifest.reference.SoniaWebUtil.jar} ${manifest.reference.SoniaBlogAPI.jar} ${manifest.reference.DevelPlugin.jar} ${manifest.reference.OfficePlugin.jar} ${manifest.reference.LdapPlugin.jar} ${manifest.reference.WebIntegrationPlugin.jar} "/>
+            <attribute name="Class-Path" value="${manifest.libs.MyFaces-Tomahawk.classpath} ${manifest.libs.facelets-1-1-14.classpath} ${manifest.libs.PdfRenderer.classpath} ${manifest.libs.JFreeChart.classpath} ${manifest.libs.XML-RPC.classpath} ${manifest.libs.Lucene.classpath} ${manifest.libs.JTidy.classpath} ${manifest.reference.SoniaUtil.jar} ${manifest.reference.SoniaWebUtil.jar} ${manifest.reference.SoniaBlogAPI.jar} ${manifest.reference.DevelPlugin.jar} ${manifest.reference.OfficePlugin.jar} ${manifest.reference.LdapPlugin.jar} ${manifest.reference.WebIntegrationPlugin.jar} "/>
         </manifest>
     </target>
     <target depends="init" name="library-inclusion-in-archive" unless="dist.ear.dir">
@@ -556,6 +557,7 @@ exists or setup the property manually. For example like this:
         <copyfiles files="${libs.facelets-1-1-14.classpath}" todir="${build.web.dir}/WEB-INF/lib"/>
         <copyfiles files="${libs.PdfRenderer.classpath}" todir="${build.web.dir}/WEB-INF/lib"/>
         <copyfiles files="${libs.JFreeChart.classpath}" todir="${build.web.dir}/WEB-INF/lib"/>
+        <copyfiles files="${libs.XML-RPC.classpath}" todir="${build.web.dir}/WEB-INF/lib"/>
         <copyfiles files="${libs.Lucene.classpath}" todir="${build.web.dir}/WEB-INF/lib"/>
         <copyfiles files="${libs.JTidy.classpath}" todir="${build.web.dir}/WEB-INF/lib"/>
         <copyfiles files="${reference.SoniaUtil.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
