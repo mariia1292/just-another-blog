@@ -14,14 +14,24 @@ import org.apache.xmlrpc.common.XmlRpcNotAuthorizedException;
 
 import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.dao.BlogDAO;
+import sonia.blog.api.dao.CategoryDAO;
 import sonia.blog.api.dao.EntryDAO;
+import sonia.blog.api.dao.MemberDAO;
+import sonia.blog.api.link.LinkBuilder;
 import sonia.blog.entity.Blog;
+import sonia.blog.entity.BlogMember;
+import sonia.blog.entity.Category;
+import sonia.blog.entity.Entry;
+import sonia.blog.entity.Role;
+import sonia.blog.entity.User;
 
 //~--- JDK imports ------------------------------------------------------------
 
-import java.io.IOException;
-
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -63,20 +73,64 @@ public class Blogger
    *
    * @return
    *
-   * @throws IOException
+   *
+   * @throws Exception
    */
   public Boolean deletePost(String appKey, String postId, String username,
                             String password, Boolean publish)
-          throws IOException
+          throws Exception
   {
-    return false;
+    logger.info("Blogger.deletePost");
+
+    Boolean result = Boolean.FALSE;
+    LoginContext ctx = login(username, password);
+    EntryDAO entryDAO = BlogContext.getDAOFactory().getEntryDAO();
+    Entry entry = entryDAO.find(convertId(postId));
+
+    if (entry != null)
+    {
+      User user = getUser(ctx);
+      boolean prev = false;
+
+      if (entry.getAuthor().equals(user) || user.isGlobalAdmin())
+      {
+        prev = true;
+      }
+      else
+      {
+        Blog blog = entry.getCategory().getBlog();
+
+        prev = isAdmin(user, blog);
+      }
+
+      if (prev)
+      {
+        result = entryDAO.remove(entry);
+      }
+      else
+      {
+        throw new XmlRpcException("user has no access to the post");
+      }
+    }
+    else
+    {
+      throw new XmlRpcException("post not found");
+    }
+
+    if (ctx != null)
+    {
+      logout(ctx);
+    }
+
+    return result;
   }
 
   /**
    * Method description
    *
    *
-   * @param blogId
+   *
+   * @param postId
    * @param username
    * @param password
    * @param struct
@@ -86,12 +140,52 @@ public class Blogger
    *
    * @throws Exception
    */
-  public Boolean editPost(String blogId, String username, String password,
+  public Boolean editPost(String postId, String username, String password,
                           Map struct, Boolean publish)
           throws Exception
   {
-    Boolean result = Boolean.TRUE;
+    logger.info("Blogger.editPost");
+
+    Boolean result = Boolean.FALSE;
     LoginContext ctx = login(username, password);
+    EntryDAO entryDAO = BlogContext.getDAOFactory().getEntryDAO();
+    Entry entry = entryDAO.find(convertId(postId));
+
+    if (entry != null)
+    {
+      boolean prev = false;
+      User user = getUser(ctx);
+
+      if (user.equals(entry.getAuthor()) || user.isGlobalAdmin())
+      {
+        prev = true;
+      }
+      else
+      {
+        Blog blog = entry.getCategory().getBlog();
+
+        prev = isAdmin(user, blog);
+      }
+
+      if (prev)
+      {
+        String title = (String) struct.get("title");
+        String content = (String) struct.get("description");
+
+        entry.setTitle(title);
+        entry.setContent(content);
+        entry.setPublished(publish);
+        result = entryDAO.edit(entry);
+      }
+      else
+      {
+        throw new XmlRpcException("user has no access to the post");
+      }
+    }
+    else
+    {
+      throw new XmlRpcException("post not found");
+    }
 
     if (ctx != null)
     {
@@ -119,17 +213,48 @@ public class Blogger
                         Map struct, Boolean publish)
           throws Exception
   {
+    logger.info("Blogger.newPost");
+
     String result = null;
     LoginContext ctx = login(username, password);
+    User user = getUser(ctx);
     Blog blog = findBlog(blogId);
-    EntryDAO entryDAO = BlogContext.getDAOFactory().getEntryDAO();
+
+    if (isAuthor(user, blog))
+    {
+      EntryDAO entryDAO = BlogContext.getDAOFactory().getEntryDAO();
+      CategoryDAO categoryDAO = BlogContext.getDAOFactory().getCategoryDAO();
+      String title = (String) struct.get("title");
+      String content = (String) struct.get("description");
+      Category catgory = categoryDAO.findFirstByBlog(blog);
+      Entry entry = new Entry();
+
+      entry.setTitle(title);
+      entry.setContent(content);
+      entry.setCategory(catgory);
+      entry.setAuthor(user);
+      entry.setPublished(publish);
+
+      if (entryDAO.add(entry))
+      {
+        result = entry.getId().toString();
+      }
+      else
+      {
+        throw new XmlRpcException("unknown error");
+      }
+    }
+    else
+    {
+      throw new XmlRpcException("user has no rights to create posts");
+    }
 
     if (ctx != null)
     {
       logout(ctx);
     }
 
-    return result;    // database id
+    return result;
   }
 
   //~--- get methods ----------------------------------------------------------
@@ -152,6 +277,8 @@ public class Blogger
                             String password, String templateType)
           throws Exception
   {
+    logger.info("Blogger.getTemplate");
+
     String result = null;
 
     return result;
@@ -169,11 +296,63 @@ public class Blogger
    *
    * @throws Exception
    */
-  public Object[] getUserBlogs(String appkey, String username, String password)
+  public Map getUserInfo(String appkey, String username, String password)
           throws Exception
   {
-    Object[] result = null;
+    logger.info("Blogger.getUserInfo");
+
     LoginContext ctx = login(username, password);
+    User user = getUser(ctx);
+    Map result = new HashMap();
+
+    result.put("nickname", user.getDisplayName());
+    result.put("userid", user.getName());
+    result.put("email", user.getEmail());
+    logout(ctx);
+
+    return result;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param appkey
+   * @param username
+   * @param password
+   *
+   * @return
+   *
+   * @throws Exception
+   */
+  public Object getUsersBlogs(String appkey, String username, String password)
+          throws Exception
+  {
+    logger.info("Blogger.getUsersBlogs");
+
+    Vector result = new Vector();
+    LoginContext ctx = login(username, password);
+    User user = getUser(ctx);
+    LinkBuilder linkBuilder = BlogContext.getInstance().getLinkBuilder();
+    MemberDAO memberDAO = BlogContext.getDAOFactory().getMemberDAO();
+    List<BlogMember> memberList = memberDAO.findByUser(user);
+
+    for (BlogMember member : memberList)
+    {
+      Blog blog = member.getBlog();
+
+      if (blog.isActive())
+      {
+        Map blogMap = new HashMap();
+
+        // TODO: replace with linkBuilder
+        System.out.println("http://" + blog.getServername() + ":8080/jab/");
+        blogMap.put("url", "http://" + blog.getServername() + ":8080/jab/");
+        blogMap.put("blogid", blog.getId().toString());
+        blogMap.put("blogName", blog.getTitle());
+        result.add(blogMap);
+      }
+    }
 
     if (ctx != null)
     {
@@ -205,6 +384,8 @@ public class Blogger
                              String templateType)
           throws Exception
   {
+    logger.info("Blogger.setTemplate");
+
     Boolean result = Boolean.TRUE;
 
     return result;
@@ -319,6 +500,71 @@ public class Blogger
 
       throw new XmlRpcNotAuthorizedException("logout failure");
     }
+  }
+
+  //~--- get methods ----------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   * @param ctx
+   *
+   * @return
+   *
+   * @throws XmlRpcNotAuthorizedException
+   */
+  protected User getUser(LoginContext ctx) throws XmlRpcNotAuthorizedException
+  {
+    User user = null;
+    Set<User> userSet = ctx.getSubject().getPrincipals(User.class);
+
+    if ((userSet != null) &&!userSet.isEmpty())
+    {
+      user = userSet.iterator().next();
+    }
+    else
+    {
+      throw new XmlRpcNotAuthorizedException("invalid login");
+    }
+
+    return user;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param user
+   * @param blog
+   *
+   * @return
+   */
+  protected boolean isAdmin(User user, Blog blog)
+  {
+    MemberDAO memberDAO = BlogContext.getDAOFactory().getMemberDAO();
+    BlogMember member = memberDAO.findByBlogAndUser(blog, user);
+
+    return (member != null) && (member.getRole() == Role.ADMIN);
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param user
+   * @param blog
+   *
+   * @return
+   */
+  protected boolean isAuthor(User user, Blog blog)
+  {
+    MemberDAO memberDAO = BlogContext.getDAOFactory().getMemberDAO();
+    BlogMember member = memberDAO.findByBlogAndUser(blog, user);
+
+    return (member != null)
+           && ((member.getRole() == Role.ADMIN)
+               || (member.getRole() == Role.AUTHOR));
   }
 
   //~--- fields ---------------------------------------------------------------

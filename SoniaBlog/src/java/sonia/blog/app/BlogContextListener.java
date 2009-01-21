@@ -74,6 +74,7 @@ import javax.security.auth.login.AppConfigurationEntry;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
+import sonia.blog.mapping.remote.XMLRPCMappingEntry;
 
 /**
  * Web application lifecycle listener.
@@ -271,6 +272,7 @@ public class BlogContextListener implements ServletContextListener
     mappingHandler.addMappging("/search.jab", new SearchMappingEntry());
     mappingHandler.addMappging("/opensearch.xml", new OpenSearchMappingEntry());
     mappingHandler.addMappging("/date", new DateMappingEntry());
+    mappingHandler.addMappging("/xmlrpc", new XMLRPCMappingEntry());
     registry.register(DAOFactory.class,
                       Constants.SERVCIE_DAO).add(new JpaDAOFactory());
     registry.register(MappingHandler.class,
