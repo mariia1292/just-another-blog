@@ -17,9 +17,6 @@ import sonia.macro.MacroParser;
 import sonia.plugin.Activator;
 import sonia.plugin.PluginContext;
 
-//~--- JDK imports ------------------------------------------------------------
-
-
 /**
  *
  * @author sdorra

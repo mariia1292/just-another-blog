@@ -213,10 +213,10 @@ public class PdfViewerMappingEntry
   private File getDirectory(String directory, Blog blog)
   {
     ResourceManager resManager = BlogContext.getInstance().getResourceManager();
+    File attachmentDir = resManager.getDirectory(Constants.RESOURCE_ATTACHMENT,
+                           blog, false);
 
-    File attachmentDir = resManager.getDirectory( Constants.RESOURCE_ATTACHMENT, blog, false );
-
-    return new File( attachmentDir, "pdfviewer" + File.separator + directory );
+    return new File(attachmentDir, "pdfviewer" + File.separator + directory);
   }
 
   //~--- fields ---------------------------------------------------------------
