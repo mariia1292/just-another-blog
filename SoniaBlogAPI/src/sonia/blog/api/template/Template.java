@@ -41,12 +41,14 @@ public class Template
    */
   public String getContentCSS()
   {
+    String result = null;
+
     if (contentCSS != null)
     {
-      return "/template/" + path + "/" + contentCSS;
+      result = "/template/" + path + "/" + contentCSS;
     }
 
-    return contentCSS;
+    return result;
   }
 
   /**

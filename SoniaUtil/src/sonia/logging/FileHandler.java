@@ -94,7 +94,7 @@ public class FileHandler extends Handler implements PropertyChangeListener
   @Override
   public void publish(LogRecord record)
   {
-    if (file.length() >= (maxSize * 1024 * 1024))
+    if (file.length() >= (maxSize * 1024l * 1024l))
     {
       moveFile();
     }
@@ -241,25 +241,26 @@ public class FileHandler extends Handler implements PropertyChangeListener
    */
   private void moveFile()
   {
-    synchronized (writer)
+    writer.println("rotate log");
+    writer.close();
+
+    File moveFile = new File(directory,
+                             filename + "-" + dateFormat.format(new Date()));
+
+    if (!file.renameTo(moveFile))
     {
-      writer.println("rotate log");
-      writer.close();
+      throw new RuntimeException("could not rename the file");
+    }
 
-      File moveFile = new File(directory,
-                               filename + "-" + dateFormat.format(new Date()));
+    file = new File(directory, filename);
 
-      file.renameTo(moveFile);
-      file = new File(directory, filename);
-
-      try
-      {
-        writer = new PrintWriter(file);
-      }
-      catch (FileNotFoundException ex)
-      {
-        throw new RuntimeException(ex);
-      }
+    try
+    {
+      writer = new PrintWriter(file);
+    }
+    catch (FileNotFoundException ex)
+    {
+      throw new RuntimeException(ex);
     }
   }
 
@@ -278,7 +279,7 @@ public class FileHandler extends Handler implements PropertyChangeListener
   protected Formatter formatter;
 
   /** Field description */
-  protected int maxSize = 100;
+  protected long maxSize = 100;
 
   /** Field description */
   protected PrintWriter writer;

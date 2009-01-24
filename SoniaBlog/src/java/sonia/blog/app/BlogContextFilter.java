@@ -43,10 +43,6 @@ public class BlogContextFilter implements Filter
   /** Field description */
   public static final String SSO_SESSION_VAR = "jab.auth.sso";
 
-  /** Field description */
-  private static Logger logger =
-    Logger.getLogger(BlogContextFilter.class.getName());
-
   //~--- methods --------------------------------------------------------------
 
   /**
@@ -95,7 +91,8 @@ public class BlogContextFilter implements Filter
       if ((request.getSession() == null) || request.getSession().isNew())
       {
         Blog blog = request.getCurrentBlog();
-        if ( blog != null )
+
+        if (blog != null)
         {
           BlogContext.getDAOFactory().getBlogHitCountDAO().increase(blog);
         }

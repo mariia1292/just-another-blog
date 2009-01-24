@@ -23,7 +23,6 @@ import sonia.blog.wui.BlogBean;
 //~--- JDK imports ------------------------------------------------------------
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.logging.Level;
 

@@ -11,14 +11,12 @@ package sonia.blog.wui.servlet;
 
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
-import org.jfree.chart.encoders.SunJPEGEncoderAdapter;
 import org.jfree.chart.labels.StandardPieSectionLabelGenerator;
 import org.jfree.chart.plot.PiePlot3D;
 import org.jfree.data.general.DefaultPieDataset;
 
 import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.util.BlogWrapper;
-import sonia.blog.entity.Blog;
 
 //~--- JDK imports ------------------------------------------------------------
 

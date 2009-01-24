@@ -323,7 +323,7 @@ public class DefaultMacroParserDelegate
    * @version    Enter version here..., 08/09/18
    * @author     Enter your name here...
    */
-  private class MacroElement
+  private static class MacroElement
   {
 
     /**

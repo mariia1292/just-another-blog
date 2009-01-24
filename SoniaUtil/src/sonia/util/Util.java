@@ -68,7 +68,10 @@ public class Util
       }
     }
 
-    file.delete();
+    if (!file.delete())
+    {
+      throw new RuntimeException("could not delete file " + file.getPath());
+    }
   }
 
   /**
@@ -148,7 +151,7 @@ public class Util
    */
   public static String getContent(URL url) throws IOException
   {
-    String result = null;
+    StringBuffer result = null;
     URLConnection conn = url.openConnection();
     String type = conn.getContentType();
 
@@ -158,27 +161,39 @@ public class Util
       InputStream in = conn.getInputStream();
       BufferedReader reader = null;
 
-      if (isBlank(encoding))
+      try
       {
-        reader = new BufferedReader(new InputStreamReader(in));
+        if (isBlank(encoding))
+        {
+          reader = new BufferedReader(new InputStreamReader(in));
+        }
+        else
+        {
+          reader = new BufferedReader(new InputStreamReader(in, encoding));
+        }
+
+        result = new StringBuffer();
+
+        String line = reader.readLine();
+
+        while (line != null)
+        {
+          result.append(line + "\n");
+          line = reader.readLine();
+        }
       }
-      else
+      finally
       {
-        reader = new BufferedReader(new InputStreamReader(in, encoding));
-      }
-
-      result = "";
-
-      String line = reader.readLine();
-
-      while (line != null)
-      {
-        result += line + "\n";
-        line = reader.readLine();
+        if (reader != null)
+        {
+          reader.close();
+        }
       }
     }
 
-    return result;
+    return (result != null)
+           ? result.toString()
+           : null;
   }
 
   /**

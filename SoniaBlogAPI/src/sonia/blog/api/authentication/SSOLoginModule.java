@@ -71,9 +71,11 @@ public abstract class SSOLoginModule implements LoginModule
    */
   public boolean abort() throws LoginException
   {
+    boolean result = true;
+
     if (user == null)
     {
-      return false;
+      result = false;
     }
     else if (!commited)
     {
@@ -81,10 +83,10 @@ public abstract class SSOLoginModule implements LoginModule
     }
     else
     {
-      return logout();
+      result = logout();
     }
 
-    return true;
+    return result;
   }
 
   /**
@@ -97,21 +99,25 @@ public abstract class SSOLoginModule implements LoginModule
    */
   public boolean commit() throws LoginException
   {
-    if (user == null)
+    boolean result = true;
+
+    if (user != null)
     {
-      return false;
+      subject.getPrincipals().add(user);
+
+      if (user.isGlobalAdmin())
+      {
+        subject.getPrincipals().add(new RolePrincipal(Role.ADMIN));
+      }
+
+      commited = true;
+    }
+    else
+    {
+      result = false;
     }
 
-    subject.getPrincipals().add(user);
-
-    if (user.isGlobalAdmin())
-    {
-      subject.getPrincipals().add(new RolePrincipal(Role.ADMIN));
-    }
-
-    commited = true;
-
-    return true;
+    return result;
   }
 
   /**

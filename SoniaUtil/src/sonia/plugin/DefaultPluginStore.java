@@ -22,6 +22,12 @@ import java.util.logging.Logger;
 public class DefaultPluginStore implements PluginStore
 {
 
+  /** Field description */
+  private static Logger logger =
+    Logger.getLogger(DefaultPluginStore.class.getName());
+
+  //~--- constructors ---------------------------------------------------------
+
   /**
    * Constructs ...
    *
@@ -30,9 +36,9 @@ public class DefaultPluginStore implements PluginStore
   {
     storeDir = new File(System.getProperty("java.io.tmpdir"), "plugin.store");
 
-    if (!storeDir.exists())
+    if (!storeDir.exists() &&!storeDir.mkdirs())
     {
-      storeDir.mkdirs();
+      throw new RuntimeException("could not create store directory");
     }
   }
 
@@ -59,9 +65,9 @@ public class DefaultPluginStore implements PluginStore
   {
     File file = new File(storeDir, plugin.getName());
 
-    if (file.exists())
+    if (file.exists() &&!file.delete())
     {
-      file.delete();
+      throw new RuntimeException("could not delete file " + file.getPath());
     }
   }
 
@@ -83,8 +89,7 @@ public class DefaultPluginStore implements PluginStore
       }
       catch (IOException ex)
       {
-        Logger.getLogger(DefaultPluginStore.class.getName()).log(Level.SEVERE,
-                         null, ex);
+        logger.log(Level.SEVERE, null, ex);
       }
     }
   }

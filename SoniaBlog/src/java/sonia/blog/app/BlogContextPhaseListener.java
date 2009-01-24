@@ -28,10 +28,6 @@ public class BlogContextPhaseListener implements PhaseListener
   /** Field description */
   private static final long serialVersionUID = 1195642361741262521L;
 
-  /** Field description */
-  private static Logger logger =
-    Logger.getLogger(BlogContextPhaseListener.class.getName());
-
   //~--- methods --------------------------------------------------------------
 
   /**

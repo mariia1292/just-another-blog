@@ -216,7 +216,6 @@ public class RegistrationBean extends AbstractBean
         getMessageHandler().error("unknownError");
       }
     }
-    else {}
 
     return result;
   }

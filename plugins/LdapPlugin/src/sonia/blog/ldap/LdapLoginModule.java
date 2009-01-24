@@ -9,11 +9,10 @@ package sonia.blog.ldap;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import sonia.blog.api.app.BlogConfiguration;
 import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.dao.UserDAO;
 import sonia.blog.entity.User;
-
-import sonia.config.ModifyableConfiguration;
 
 import sonia.net.ssl.SSLSocketFactory;
 
@@ -41,7 +40,6 @@ import javax.naming.directory.SearchControls;
 import javax.naming.directory.SearchResult;
 
 import javax.security.auth.login.LoginException;
-import sonia.blog.api.app.BlogConfiguration;
 
 /**
  *

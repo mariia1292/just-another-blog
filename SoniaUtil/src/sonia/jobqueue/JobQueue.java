@@ -58,9 +58,9 @@ public class JobQueue<T extends Job>
    */
   public void add(T job)
   {
-    if ( logger.isLoggable( Level.FINEST ) )
+    if (logger.isLoggable(Level.FINEST))
     {
-      logger.finest( "adding job to jobqueue" );
+      logger.finest("adding job to jobqueue");
     }
 
     synchronized (jobs)
@@ -337,11 +337,6 @@ public class JobQueue<T extends Job>
     }
   }
 
-  LinkedList<T> getQueue()
-  {
-    return jobs;
-  }
-
   /**
    * Method description
    *
@@ -358,6 +353,19 @@ public class JobQueue<T extends Job>
     }
 
     return job;
+  }
+
+  //~--- get methods ----------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  LinkedList<T> getQueue()
+  {
+    return jobs;
   }
 
   //~--- fields ---------------------------------------------------------------

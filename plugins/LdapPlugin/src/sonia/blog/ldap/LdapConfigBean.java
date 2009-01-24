@@ -12,7 +12,6 @@ package sonia.blog.ldap;
 import sonia.blog.api.app.BlogConfiguration;
 import sonia.blog.api.util.AbstractConfigBean;
 
-
 /**
  *
  * @author sdorra

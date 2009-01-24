@@ -74,9 +74,11 @@ public abstract class LoginModule implements javax.security.auth.spi.LoginModule
    */
   public boolean abort() throws LoginException
   {
+    boolean result = true;
+
     if (user == null)
     {
-      return false;
+      result = false;
     }
     else if (!commited)
     {
@@ -84,10 +86,10 @@ public abstract class LoginModule implements javax.security.auth.spi.LoginModule
     }
     else
     {
-      return logout();
+      result = logout();
     }
 
-    return true;
+    return result;
   }
 
   /**
@@ -100,23 +102,27 @@ public abstract class LoginModule implements javax.security.auth.spi.LoginModule
    */
   public boolean commit() throws LoginException
   {
+    boolean result = true;
+
     if (user == null)
     {
-      return false;
+      result = false;
     }
-
-    subject.getPrincipals().add(user);
-
-    Collection<? extends Principal> roles = getRoles(user);
-
-    if ((roles != null) && (roles.size() > 0))
+    else
     {
-      subject.getPrincipals().addAll(roles);
+      subject.getPrincipals().add(user);
+
+      Collection<? extends Principal> roles = getRoles(user);
+
+      if ((roles != null) && (roles.size() > 0))
+      {
+        subject.getPrincipals().addAll(roles);
+      }
+
+      this.commited = true;
     }
 
-    this.commited = true;
-
-    return true;
+    return result;
   }
 
   /**

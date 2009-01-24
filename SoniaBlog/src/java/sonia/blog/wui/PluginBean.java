@@ -88,8 +88,6 @@ public class PluginBean extends AbstractBean
    */
   public DataModel getPlugins()
   {
-    List<Plugin> pl = context.getPlugins();
-
     plugins = new ListDataModel(context.getPlugins());
 
     return plugins;

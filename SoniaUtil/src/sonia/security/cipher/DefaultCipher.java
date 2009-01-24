@@ -68,6 +68,8 @@ public class DefaultCipher implements Cipher
    */
   public String decode(char[] secretKey, String value)
   {
+    String result = null;
+
     try
     {
       byte[] encodedInput = Convert.fromBase64(value);
@@ -85,14 +87,14 @@ public class DefaultCipher implements Cipher
 
       byte[] deoded = cipher.doFinal(encoded);
 
-      return new String(deoded, "UTF-8");
+      result = new String(deoded, "UTF-8");
     }
     catch (Exception ex)
     {
       ex.printStackTrace();
     }
 
-    return null;
+    return result;
   }
 
   /**
@@ -106,6 +108,8 @@ public class DefaultCipher implements Cipher
    */
   public String encode(char[] secretKey, String value)
   {
+    String res = null;
+
     try
     {
       byte[] salt = new byte[8];
@@ -124,14 +128,13 @@ public class DefaultCipher implements Cipher
 
       System.arraycopy(salt, 0, result, 0, 8);
       System.arraycopy(encodedInput, 0, result, 8, result.length - 8);
-
-      return Convert.toBase64(result);
+      res = Convert.toBase64(result);
     }
     catch (Exception ex)
     {
       ex.printStackTrace();
     }
 
-    return null;
+    return res;
   }
 }

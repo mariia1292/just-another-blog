@@ -39,6 +39,7 @@ import sonia.blog.mapping.RandomMappingEntry;
 import sonia.blog.mapping.ResourceMappingEntry;
 import sonia.blog.mapping.SearchMappingEntry;
 import sonia.blog.mapping.TagMappingEntry;
+import sonia.blog.mapping.remote.XMLRPCMappingEntry;
 import sonia.blog.search.DefaultSearchContext;
 import sonia.blog.search.IndexListener;
 import sonia.blog.spam.CaptchaSpamProtection;
@@ -74,7 +75,6 @@ import javax.security.auth.login.AppConfigurationEntry;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
-import sonia.blog.mapping.remote.XMLRPCMappingEntry;
 
 /**
  * Web application lifecycle listener.
@@ -149,7 +149,8 @@ public class BlogContextListener implements ServletContextListener
           listener.contextInitialized(event);
         }
       }
-      //context.getJobQueue().start();
+
+      // context.getJobQueue().start();
     }
     catch (IOException ex)
     {
@@ -214,8 +215,8 @@ public class BlogContextListener implements ServletContextListener
    */
   private void configureLogger() throws IOException
   {
-    Logger logger = Logger.getLogger("sonia.blog");
 
+    // Logger logger = Logger.getLogger("sonia.blog");
     // logger.setUseParentHandlers(false);
     // logger.addHandler(new LoggingHandler());
   }

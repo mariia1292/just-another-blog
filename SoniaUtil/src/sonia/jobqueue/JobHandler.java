@@ -90,6 +90,7 @@ public class JobHandler extends Thread
 
           queue.fireFinishedEvent(job, ex);
         }
+
         job.setFinished(true);
       }
       else
@@ -100,7 +101,8 @@ public class JobHandler extends Thread
           {
             logger.finest("JH" + handlerNumber + " is going in wait mode ");
           }
-          synchronized ( queue.getQueue() )
+
+          synchronized (queue.getQueue())
           {
             queue.getQueue().wait();
           }

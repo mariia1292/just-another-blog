@@ -299,6 +299,8 @@ public class CalendarRenderer extends BaseRenderer
    */
   private boolean hasEvent(int day, List<Date> dates)
   {
+    boolean result = false;
+
     for (Date date : dates)
     {
       GregorianCalendar cal = new GregorianCalendar();
@@ -307,11 +309,13 @@ public class CalendarRenderer extends BaseRenderer
 
       if (cal.get(Calendar.DAY_OF_MONTH) == day)
       {
-        return true;
+        result = true;
+
+        break;
       }
     }
 
-    return false;
+    return result;
   }
 
   //~--- fields ---------------------------------------------------------------

@@ -175,7 +175,6 @@ public class AdminBlogBean extends AbstractBean
   {
     String result = SUCCESS;
     BlogContext context = BlogContext.getInstance();
-    ResourceManager resManager = context.getResourceManager();
     Blog blog = (Blog) blogs.getRowData();
 
     if (blog != null)

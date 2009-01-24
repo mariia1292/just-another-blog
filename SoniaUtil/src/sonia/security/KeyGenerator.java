@@ -19,7 +19,7 @@ public class KeyGenerator
 {
 
   /** Field description */
-  public static final char CHARS[] =
+  private static final char CHARS[] =
   {
     'a', 'A', 'b', 'B', 'c', 'C', 'd', 'D', 'e', 'E', 'f', 'F', 'g', 'G', 'h',
     'H', 'k', 'K', 'm', 'M', 'n', 'N', 'p', 'P', 'r', 'R', 's', 'S', 't', 'T',
@@ -67,13 +67,13 @@ public class KeyGenerator
    */
   public static String generateKey(int length, char[] chars)
   {
-    String result = "";
+    StringBuffer result = new StringBuffer();
 
     for (int i = 0; i < length; i++)
     {
-      result += chars[random.nextInt(chars.length)];
+      result.append(chars[random.nextInt(chars.length)]);
     }
 
-    return result;
+    return result.toString();
   }
 }

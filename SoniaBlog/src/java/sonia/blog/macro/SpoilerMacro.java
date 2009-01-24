@@ -10,7 +10,6 @@ package sonia.blog.macro;
 //~--- non-JDK imports --------------------------------------------------------
 
 import sonia.blog.entity.ContentObject;
-import sonia.blog.entity.Entry;
 
 import sonia.macro.Macro;
 

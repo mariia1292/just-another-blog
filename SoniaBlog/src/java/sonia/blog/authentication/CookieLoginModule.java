@@ -9,7 +9,7 @@ package sonia.blog.authentication;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import java.io.IOException;
+import sonia.blog.api.app.BlogConfiguration;
 import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.app.BlogRequest;
 import sonia.blog.api.app.BlogResponse;
@@ -31,8 +31,6 @@ import java.util.Date;
 import javax.security.auth.login.LoginException;
 
 import javax.servlet.http.Cookie;
-import sonia.blog.api.app.BlogConfiguration;
-import sonia.security.KeyGenerator;
 
 /**
  *
@@ -81,9 +79,11 @@ public class CookieLoginModule extends SSOLoginModule
           if (cipher != null)
           {
             char[] secretKey = getSecretKey();
-            if ( secretKey == null )
+
+            if (secretKey == null)
             {
-              logger.severe( "CookieKey is null" );
+              logger.severe("CookieKey is null");
+
               throw new IllegalStateException("CookieKey is null");
             }
 
@@ -131,18 +131,6 @@ public class CookieLoginModule extends SSOLoginModule
     return user;
   }
 
-  private char[] getSecretKey()
-  {
-    char[] secretKey = null;
-    BlogConfiguration config = BlogContext.getInstance().getConfiguration();
-    String key = config.getString(Constants.CONFIG_COOKIEKEY);
-    if ( key != null )
-    {
-      secretKey = key.toCharArray();
-    }
-    return secretKey;
-  }
-
   /**
    * Method description
    *
@@ -172,6 +160,28 @@ public class CookieLoginModule extends SSOLoginModule
     }
 
     return user;
+  }
+
+  //~--- get methods ----------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  private char[] getSecretKey()
+  {
+    char[] secretKey = null;
+    BlogConfiguration config = BlogContext.getInstance().getConfiguration();
+    String key = config.getString(Constants.CONFIG_COOKIEKEY);
+
+    if (key != null)
+    {
+      secretKey = key.toCharArray();
+    }
+
+    return secretKey;
   }
 
   //~--- fields ---------------------------------------------------------------

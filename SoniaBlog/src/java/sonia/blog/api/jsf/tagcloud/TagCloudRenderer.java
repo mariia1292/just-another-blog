@@ -38,12 +38,6 @@ import javax.faces.context.ResponseWriter;
 public class TagCloudRenderer extends BaseRenderer
 {
 
-  /** Field description */
-  private static Logger logger =
-    Logger.getLogger(TagCloudRenderer.class.getName());
-
-  //~--- methods --------------------------------------------------------------
-
   /**
    * Method description
    *

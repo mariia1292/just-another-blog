@@ -92,14 +92,15 @@ public class InitParamConfiguration extends StringBasedConfiguration
    */
   public String[] getStrings(String key)
   {
-    String result = getString(key);
+    String[] result = null;
+    String value = getString(key);
 
-    if (result != null)
+    if (value != null)
     {
-      return result.split(";");
+      result = value.split(";");
     }
 
-    return new String[] { result };
+    return result;
   }
 
   /**

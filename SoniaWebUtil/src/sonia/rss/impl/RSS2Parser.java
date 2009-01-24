@@ -75,8 +75,56 @@ public class RSS2Parser extends FeedParser
 {
 
   /** Field description */
+  public static final String ATTRIBUTE_VERSION = "version";
+
+  /** Field description */
+  public static final String ATTRIBUTE_VERSION_VALUE = "2.0";
+
+  /** Field description */
+  public static final String ELEMENT_AUTHOR = "author";
+
+  /** Field description */
+  public static final String ELEMENT_CHANNEL = "channel";
+
+  /** Field description */
+  public static final String ELEMENT_COPYRIGHT = "copyright";
+
+  /** Field description */
+  public static final String ELEMENT_DESCRIPTION = "description";
+
+  /** Field description */
+  public static final String ELEMENT_GUID = "guid";
+
+  /** Field description */
+  public static final String ELEMENT_IMAGE = "image";
+
+  /** Field description */
+  public static final String ELEMENT_ITEM = "item";
+
+  /** Field description */
+  public static final String ELEMENT_LANGUAGE = "language";
+
+  /** Field description */
+  public static final String ELEMENT_LINK = "link";
+
+  /** Field description */
+  public static final String ELEMENT_PUBDATE = "pubDate";
+
+  /** Field description */
+  public static final String ELEMENT_RSS = "rss";
+
+  /** Field description */
+  public static final String ELEMENT_TITLE = "title";
+
+  /** Field description */
+  public static final String ELEMENT_URL = "url";
+
+  /** Field description */
   public static final SimpleDateFormat HTTP_DATE_FORMAT =
     new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss zzz", Locale.ENGLISH);
+
+  /** Field description */
+  public static final String TYPE = "RSS2";
 
   //~--- methods --------------------------------------------------------------
 
@@ -110,7 +158,7 @@ public class RSS2Parser extends FeedParser
         {
           Node child = children.item(i);
 
-          if (child.getNodeName().equals("channel"))
+          if (child.getNodeName().equals(ELEMENT_CHANNEL))
           {
             parseChannel(channel, child);
           }
@@ -154,19 +202,19 @@ public class RSS2Parser extends FeedParser
     try
     {
       Document doc = XmlUtil.createDocument();
-      Element rssEl = doc.createElement("rss");
+      Element rssEl = doc.createElement(ELEMENT_RSS);
 
-      rssEl.setAttribute("version", "2.0");
+      rssEl.setAttribute(ATTRIBUTE_VERSION, ATTRIBUTE_VERSION_VALUE);
       doc.appendChild(rssEl);
 
-      Element channelEl = doc.createElement("channel");
+      Element channelEl = doc.createElement(ELEMENT_CHANNEL);
 
       rssEl.appendChild(channelEl);
       appendBaseElements(channel, channelEl, doc);
 
       if (channel.getLanguage() != null)
       {
-        Element channelLanguageEl = doc.createElement("language");
+        Element channelLanguageEl = doc.createElement(ELEMENT_COPYRIGHT);
 
         channelLanguageEl.setTextContent(channel.getLanguage().toString());
         channelEl.appendChild(channelLanguageEl);
@@ -174,7 +222,7 @@ public class RSS2Parser extends FeedParser
 
       if (channel.getCopyright() != null)
       {
-        Element channelCopyrightEl = doc.createElement("copyright");
+        Element channelCopyrightEl = doc.createElement(ELEMENT_COPYRIGHT);
 
         channelCopyrightEl.setTextContent(channel.getCopyright());
         channelEl.appendChild(channelCopyrightEl);
@@ -182,7 +230,7 @@ public class RSS2Parser extends FeedParser
 
       if (channel.getPubDate() != null)
       {
-        Element channelPubDateEl = doc.createElement("pubDate");
+        Element channelPubDateEl = doc.createElement(ELEMENT_PUBDATE);
 
         channelPubDateEl.setTextContent(
             HTTP_DATE_FORMAT.format(channel.getPubDate()));
@@ -202,13 +250,13 @@ public class RSS2Parser extends FeedParser
       {
         for (Item item : items)
         {
-          Element itemEl = doc.createElement("item");
+          Element itemEl = doc.createElement(ELEMENT_ITEM);
 
           appendBaseElements(item, itemEl, doc);
 
           if (item.getAuthor() != null)
           {
-            Element itemAuthorEl = doc.createElement("author");
+            Element itemAuthorEl = doc.createElement(ELEMENT_AUTHOR);
 
             itemAuthorEl.setTextContent(item.getAuthor());
             itemEl.appendChild(itemAuthorEl);
@@ -216,7 +264,7 @@ public class RSS2Parser extends FeedParser
 
           if (item.getGuid() != null)
           {
-            Element itemGuidEl = doc.createElement("guid");
+            Element itemGuidEl = doc.createElement(ELEMENT_GUID);
 
             itemGuidEl.setTextContent(item.getGuid());
             itemEl.appendChild(itemGuidEl);
@@ -224,7 +272,7 @@ public class RSS2Parser extends FeedParser
 
           if (item.getPubDate() != null)
           {
-            Element itemPubDateEl = doc.createElement("pubDate");
+            Element itemPubDateEl = doc.createElement(ELEMENT_PUBDATE);
 
             itemPubDateEl.setTextContent(
                 HTTP_DATE_FORMAT.format(item.getPubDate()));
@@ -262,7 +310,7 @@ public class RSS2Parser extends FeedParser
   @Override
   public String getType()
   {
-    return "RSS2";
+    return TYPE;
   }
 
   //~--- methods --------------------------------------------------------------
@@ -278,17 +326,17 @@ public class RSS2Parser extends FeedParser
   private void appendBaseElements(AbstractBase item, Element parentEl,
                                   Document doc)
   {
-    Element channelTitleEl = doc.createElement("title");
+    Element channelTitleEl = doc.createElement(ELEMENT_TITLE);
 
     channelTitleEl.setTextContent(item.getTitle());
     parentEl.appendChild(channelTitleEl);
 
-    Element channelLinkEl = doc.createElement("link");
+    Element channelLinkEl = doc.createElement(ELEMENT_LINK);
 
     channelLinkEl.setTextContent(item.getLink().toString());
     parentEl.appendChild(channelLinkEl);
 
-    Element channelDescriptionEl = doc.createElement("description");
+    Element channelDescriptionEl = doc.createElement(ELEMENT_DESCRIPTION);
 
     channelDescriptionEl.setTextContent(item.getDescription());
     parentEl.appendChild(channelDescriptionEl);
@@ -305,15 +353,15 @@ public class RSS2Parser extends FeedParser
    */
   private Element createImageElement(Image image, Document doc)
   {
-    Element imageEl = doc.createElement("image");
-    Element urlEl = doc.createElement("url");
+    Element imageEl = doc.createElement(ELEMENT_IMAGE);
+    Element urlEl = doc.createElement(ELEMENT_URL);
 
     urlEl.setTextContent(image.getUrl().toString());
     imageEl.appendChild(urlEl);
 
     if (image.getTitle() != null)
     {
-      Element titleEl = doc.createElement("title");
+      Element titleEl = doc.createElement(ELEMENT_TITLE);
 
       titleEl.setTextContent(image.getTitle());
       imageEl.appendChild(titleEl);
@@ -321,7 +369,7 @@ public class RSS2Parser extends FeedParser
 
     if (image.getLink() != null)
     {
-      Element linkEl = doc.createElement("link");
+      Element linkEl = doc.createElement(ELEMENT_LINK);
 
       linkEl.setTextContent(image.getLink().toString());
       imageEl.appendChild(linkEl);
@@ -355,21 +403,21 @@ public class RSS2Parser extends FeedParser
         String name = child.getNodeName();
         String value = child.getTextContent();
 
-        if (name.equals("language"))
+        if (name.equals(ELEMENT_LANGUAGE))
         {
           channel.setLanguage(new Locale(value));
         }
-        else if (name.equals("copyright"))
+        else if (name.equals(ELEMENT_COPYRIGHT))
         {
           channel.setCopyright(value);
         }
-        else if (name.equals("image"))
+        else if (name.equals(ELEMENT_IMAGE))
         {
           Image image = parseImage(child);
 
           channel.setImage(image);
         }
-        else if (name.equals("item"))
+        else if (name.equals(ELEMENT_ITEM))
         {
           Item item = parsetItem(child);
 
@@ -407,15 +455,15 @@ public class RSS2Parser extends FeedParser
         String name = child.getNodeName();
         String value = child.getTextContent();
 
-        if (name.equals("url"))
+        if (name.equals(ELEMENT_URL))
         {
           image.setUrl(new URL(value));
         }
-        else if (name.equals("title"))
+        else if (name.equals(ELEMENT_TITLE))
         {
           image.setTitle(value);
         }
-        else if (name.equals("link"))
+        else if (name.equals(ELEMENT_LINK))
         {
           image.setLink(new URL(value));
         }
@@ -452,11 +500,11 @@ public class RSS2Parser extends FeedParser
       String name = child.getNodeName();
       String value = child.getNodeValue();
 
-      if (name.equals("author"))
+      if (name.equals(ELEMENT_AUTHOR))
       {
         item.setAuthor(value);
       }
-      else if (name.equals("guid"))
+      else if (name.equals(ELEMENT_GUID))
       {
         item.setGuid(value);
       }
@@ -490,19 +538,19 @@ public class RSS2Parser extends FeedParser
         String name = child.getNodeName();
         String value = child.getTextContent();
 
-        if (name.equals("title"))
+        if (name.equals(ELEMENT_TITLE))
         {
           item.setTitle(value);
         }
-        else if (name.equals("link"))
+        else if (name.equals(ELEMENT_LINK))
         {
           item.setLink(new URL(value));
         }
-        else if (name.equals("description"))
+        else if (name.equals(ELEMENT_DESCRIPTION))
         {
           item.setDescription(value);
         }
-        else if (name.equals("pubDate"))
+        else if (name.equals(ELEMENT_PUBDATE))
         {
           item.setPubDate(HTTP_DATE_FORMAT.parse(value));
         }

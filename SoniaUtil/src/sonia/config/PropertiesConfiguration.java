@@ -200,14 +200,15 @@ public class PropertiesConfiguration extends StringBasedConfiguration
    */
   public String[] getStrings(String key)
   {
-    String result = properties.getProperty(key);
+    String[] result = null;
+    String value = properties.getProperty(key);
 
-    if (result != null)
+    if (value != null)
     {
-      return result.split(delimeter);
+      result = value.split(delimeter);
     }
 
-    return new String[] { result };
+    return result;
   }
 
   /**
@@ -250,7 +251,7 @@ public class PropertiesConfiguration extends StringBasedConfiguration
    */
   public void set(String key, Object[] object)
   {
-    String value = "";
+    StringBuffer buffer = new StringBuffer();
     int s = object.length;
 
     for (int i = 0; i < s; i++)
@@ -259,18 +260,18 @@ public class PropertiesConfiguration extends StringBasedConfiguration
 
       if (!isBlank(v))
       {
-        value += v;
+        buffer.append(v);
       }
 
       if (i < s)
       {
-        value += delimeter;
+        buffer.append(delimeter);
       }
     }
 
-    if (!isBlank(value))
+    if (buffer.length() > 0)
     {
-      properties.setProperty(key, value);
+      properties.setProperty(key, buffer.toString());
       fireConfigChangedEvent(key);
     }
   }

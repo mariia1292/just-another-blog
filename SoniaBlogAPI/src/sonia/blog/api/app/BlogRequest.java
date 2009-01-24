@@ -24,6 +24,7 @@ import java.io.UnsupportedEncodingException;
 import java.security.Principal;
 
 import java.util.Set;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.servlet.http.HttpServletRequest;
@@ -92,6 +93,11 @@ public class BlogRequest extends HttpServletRequestWrapper
 
       if (blog == null)
       {
+        if (logger.isLoggable(Level.INFO))
+        {
+          logger.info("blog " + servername + " not found, using default blog");
+        }
+
         blog = BlogContext.getInstance().getDefaultBlog();
       }
     }

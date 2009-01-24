@@ -17,7 +17,6 @@ import sonia.blog.api.dao.BlogDAO;
 import sonia.blog.api.dao.CategoryDAO;
 import sonia.blog.api.dao.EntryDAO;
 import sonia.blog.api.dao.MemberDAO;
-import sonia.blog.api.link.LinkBuilder;
 import sonia.blog.entity.Blog;
 import sonia.blog.entity.BlogMember;
 import sonia.blog.entity.Category;
@@ -296,14 +295,15 @@ public class Blogger
    *
    * @throws Exception
    */
-  public Map<String,String> getUserInfo(String appkey, String username, String password)
+  public Map<String, String> getUserInfo(String appkey, String username,
+          String password)
           throws Exception
   {
     logger.info("Blogger.getUserInfo");
 
     LoginContext ctx = login(username, password);
     User user = getUser(ctx);
-    Map<String,String> result = new HashMap<String,String>();
+    Map<String, String> result = new HashMap<String, String>();
 
     result.put("nickname", user.getDisplayName());
     result.put("userid", user.getName());
@@ -330,10 +330,11 @@ public class Blogger
   {
     logger.info("Blogger.getUsersBlogs");
 
-    Vector<Map<String,String>> result = new Vector<Map<String,String>>();
+    Vector<Map<String, String>> result = new Vector<Map<String, String>>();
     LoginContext ctx = login(username, password);
     User user = getUser(ctx);
-    LinkBuilder linkBuilder = BlogContext.getInstance().getLinkBuilder();
+
+    // LinkBuilder linkBuilder = BlogContext.getInstance().getLinkBuilder();
     MemberDAO memberDAO = BlogContext.getDAOFactory().getMemberDAO();
     List<BlogMember> memberList = memberDAO.findByUser(user);
 
@@ -343,7 +344,7 @@ public class Blogger
 
       if (blog.isActive())
       {
-        Map<String,String> blogMap = new HashMap<String,String>();
+        Map<String, String> blogMap = new HashMap<String, String>();
 
         // TODO: replace with linkBuilder
         System.out.println("http://" + blog.getServername() + ":8080/jab/");

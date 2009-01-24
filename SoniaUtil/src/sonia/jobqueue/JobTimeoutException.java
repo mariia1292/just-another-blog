@@ -3,6 +3,8 @@
  * and open the template in the editor.
  */
 
+
+
 package sonia.jobqueue;
 
 /**
@@ -11,6 +13,7 @@ package sonia.jobqueue;
  */
 public class JobTimeoutException extends JobException
 {
-  private static final long serialVersionUID = -2149969116801936399L;
 
+  /** Field description */
+  private static final long serialVersionUID = -2149969116801936399L;
 }

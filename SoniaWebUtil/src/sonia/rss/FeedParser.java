@@ -41,20 +41,22 @@ public abstract class FeedParser
    */
   public static FeedParser getInstance(String type)
   {
+    FeedParser parser = null;
+
     if (parserList == null)
     {
       parserList = ServiceLocator.locateServices(FeedParser.class);
     }
 
-    for (FeedParser parser : parserList)
+    for (FeedParser p : parserList)
     {
-      if (parser.getType().equalsIgnoreCase(type))
+      if (p.getType().equalsIgnoreCase(type))
       {
-        return parser;
+        parser = p;
       }
     }
 
-    return null;
+    return parser;
   }
 
   //~--- methods --------------------------------------------------------------

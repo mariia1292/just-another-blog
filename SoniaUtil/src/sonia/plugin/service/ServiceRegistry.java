@@ -49,6 +49,20 @@ public class ServiceRegistry
    * Method description
    *
    *
+   * @param listener
+   */
+  public void addListener(ServiceListener listener)
+  {
+    synchronized (listeners)
+    {
+      listeners.add(listener);
+    }
+  }
+
+  /**
+   * Method description
+   *
+   *
    * @param clazz
    * @param path
    *
@@ -57,6 +71,20 @@ public class ServiceRegistry
   public <T>ServiceReference<T> register(Class<T> clazz, String path)
   {
     return register(clazz, path, true);
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param listener
+   */
+  public void removeListener(ServiceListener listener)
+  {
+    synchronized (listeners)
+    {
+      listeners.remove(listener);
+    }
   }
 
   /**
@@ -109,20 +137,6 @@ public class ServiceRegistry
    * Method description
    *
    *
-   * @param listener
-   */
-  private void addListener(ServiceListener listener)
-  {
-    synchronized (listeners)
-    {
-      listeners.add(listener);
-    }
-  }
-
-  /**
-   * Method description
-   *
-   *
    * @param clazz
    * @param path
    * @param check
@@ -154,20 +168,6 @@ public class ServiceRegistry
     return reference;
   }
 
-  /**
-   * Method description
-   *
-   *
-   * @param listener
-   */
-  private void removeListener(ServiceListener listener)
-  {
-    synchronized (listeners)
-    {
-      listeners.remove(listener);
-    }
-  }
-
   //~--- inner classes --------------------------------------------------------
 
   /**
@@ -177,7 +177,7 @@ public class ServiceRegistry
    * @version    Enter version here..., 09/01/10
    * @author     Enter your name here...
    */
-  private class ServiceKey
+  private static class ServiceKey
   {
 
     /**
@@ -197,7 +197,7 @@ public class ServiceRegistry
 
     /**
      * Method description
-     *
+     * TODO: only one return
      *
      * @param obj
      *

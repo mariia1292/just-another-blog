@@ -180,7 +180,6 @@ public class MetaWeblog extends Blogger
     LoginContext ctx = login(username, password);
     Blog blog = findBlog(blogId);
     EntryDAO entryDAO = BlogContext.getDAOFactory().getEntryDAO();
-    
     List<Entry> entries = entryDAO.findAllActivesByBlog(blog, 0, max);
 
     for (Entry entry : entries)

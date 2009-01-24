@@ -9,8 +9,6 @@ package sonia.blog.mapping.remote;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import java.io.BufferedOutputStream;
-import java.io.ByteArrayOutputStream;
 import org.apache.xmlrpc.XmlRpcException;
 import org.apache.xmlrpc.server.PropertyHandlerMapping;
 import org.apache.xmlrpc.webserver.XmlRpcServletServer;
@@ -25,12 +23,10 @@ import sonia.blog.entity.PermaObject;
 
 import java.io.IOException;
 
-import java.io.InputStream;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.servlet.http.HttpServletResponse;
-import sonia.util.Util;
 
 /**
  *
