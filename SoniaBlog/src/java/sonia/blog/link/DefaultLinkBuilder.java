@@ -12,12 +12,10 @@ package sonia.blog.link;
 import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.app.BlogRequest;
 import sonia.blog.api.link.LinkBuilder;
-import sonia.blog.api.search.SearchEntry;
 import sonia.blog.entity.Attachment;
 import sonia.blog.entity.Blog;
 import sonia.blog.entity.Category;
 import sonia.blog.entity.ContentObject;
-import sonia.blog.entity.Entry;
 import sonia.blog.entity.PermaObject;
 import sonia.blog.entity.Tag;
 

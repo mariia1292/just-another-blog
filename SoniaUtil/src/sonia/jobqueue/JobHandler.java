@@ -16,7 +16,7 @@ import java.util.logging.Logger;
  *
  * @author sdorra
  */
-public class JobHandler implements Runnable
+public class JobHandler extends Thread
 {
 
   /** Field description */
@@ -49,6 +49,7 @@ public class JobHandler implements Runnable
    * Method description
    *
    */
+  @Override
   public void run()
   {
     if (logger.isLoggable(Level.FINE))
@@ -89,6 +90,7 @@ public class JobHandler implements Runnable
 
           queue.fireFinishedEvent(job, ex);
         }
+        job.setFinished(true);
       }
       else
       {
@@ -96,11 +98,12 @@ public class JobHandler implements Runnable
         {
           if (logger.isLoggable(Level.FINEST))
           {
-            logger.finest("JH" + handlerNumber + " is going to sleep for "
-                          + queue.getSleepTime());
+            logger.finest("JH" + handlerNumber + " is going in wait mode ");
           }
-
-          Thread.sleep(queue.getSleepTime());
+          synchronized ( queue.getQueue() )
+          {
+            queue.getQueue().wait();
+          }
         }
         catch (InterruptedException ex)
         {
@@ -119,7 +122,7 @@ public class JobHandler implements Runnable
    * Method description
    *
    */
-  void stop()
+  void stopWork()
   {
     this.stop = true;
 

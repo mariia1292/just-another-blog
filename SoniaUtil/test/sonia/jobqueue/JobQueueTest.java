@@ -34,7 +34,7 @@ public class JobQueueTest
   {
     Logger.getLogger("sonia").setLevel(Level.FINEST);
 
-    JobQueue queue = new JobQueue();
+    JobQueue<SleepJob> queue = new JobQueue<SleepJob>();
     queue.addListener(new SleepJobListener());
 
     for (int i = 0; i < 100; i++)
@@ -55,7 +55,7 @@ public class JobQueueTest
 
     int i=0;
 
-    for ( Job job : queue.getJobs() )
+    for ( SleepJob job : queue.getJobs() )
     {
       i++;
     }

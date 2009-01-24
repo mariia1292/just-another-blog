@@ -19,6 +19,27 @@ public class BlogHitCount
 {
 
   /**
+   * Constructs ...
+   *
+   */
+  public BlogHitCount() {}
+
+  /**
+   * Constructs ...
+   *
+   *
+   * @param blog
+   * @param date
+   */
+  public BlogHitCount(Blog blog, Date date)
+  {
+    this.blog = blog;
+    this.date = date;
+  }
+
+  //~--- methods --------------------------------------------------------------
+
+  /**
    * Method description
    *
    *
@@ -92,17 +113,12 @@ public class BlogHitCount
     return hash;
   }
 
-  public BlogHitCount()
+  /**
+   * Method description
+   *
+   */
+  public void inc()
   {
-  }
-
-  public BlogHitCount(Blog blog, Date date)
-  {
-    this.blog = blog;
-    this.date = date;
-  }
-
-  public void inc(){
     this.hitCount++;
   }
 

@@ -37,7 +37,8 @@ public class JobQueue<T extends Job>
     this.listeners = new ArrayList<JobListener>();
     this.jobs = new LinkedList<T>();
     this.stop = true;
-    this.sleepTime = 20000;
+    this.sleepTime = 500;
+    this.timeoutLimit = 60;
     this.handlerCount = Runtime.getRuntime().availableProcessors() * 2;
     this.handlers = new ArrayList<JobHandler>();
 
@@ -57,9 +58,15 @@ public class JobQueue<T extends Job>
    */
   public void add(T job)
   {
+    if ( logger.isLoggable( Level.FINEST ) )
+    {
+      logger.finest( "adding job to jobqueue" );
+    }
+
     synchronized (jobs)
     {
       jobs.offer(job);
+      jobs.notify();
     }
   }
 
@@ -93,11 +100,56 @@ public class JobQueue<T extends Job>
    * Method description
    *
    *
+   * @param job
+   *
+   * @return
+   */
+  public boolean contains(T job)
+  {
+    return jobs.contains(job);
+  }
+
+  /**
+   * Method description
+   *
+   *
    * @return
    */
   public int count()
   {
     return this.jobs.size();
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param job
+   *
+   * @throws JobTimeoutException
+   */
+  public void processs(T job) throws JobTimeoutException
+  {
+    add(job);
+
+    int counter = 0;
+
+    while (!job.isFinished() && (counter < timeoutLimit))
+    {
+      try
+      {
+        Thread.sleep(sleepTime);
+      }
+      catch (InterruptedException ex)
+      {
+        logger.log(Level.SEVERE, null, ex);
+      }
+    }
+
+    if (counter >= timeoutLimit)
+    {
+      throw new JobTimeoutException();
+    }
   }
 
   /**
@@ -127,10 +179,9 @@ public class JobQueue<T extends Job>
 
     for (int i = 0; i < handlerCount; i++)
     {
-      JobHandler handler = new JobHandler(this, handlerCount);
-      Thread t = new Thread(handler);
+      JobHandler handler = new JobHandler(this, i);
 
-      t.start();
+      handler.start();
       handlers.add(handler);
     }
   }
@@ -145,7 +196,7 @@ public class JobQueue<T extends Job>
 
     for (JobHandler handler : handlers)
     {
-      handler.stop();
+      handler.stopWork();
     }
   }
 
@@ -190,6 +241,17 @@ public class JobQueue<T extends Job>
    *
    * @return
    */
+  public int getTimeoutLimit()
+  {
+    return timeoutLimit;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
   public boolean isRunning()
   {
     return !stop;
@@ -217,6 +279,17 @@ public class JobQueue<T extends Job>
   public void setSleepTime(long sleepTime)
   {
     this.sleepTime = sleepTime;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param timeoutLimit
+   */
+  public void setTimeoutLimit(int timeoutLimit)
+  {
+    this.timeoutLimit = timeoutLimit;
   }
 
   //~--- methods --------------------------------------------------------------
@@ -264,6 +337,11 @@ public class JobQueue<T extends Job>
     }
   }
 
+  LinkedList<T> getQueue()
+  {
+    return jobs;
+  }
+
   /**
    * Method description
    *
@@ -301,4 +379,7 @@ public class JobQueue<T extends Job>
 
   /** Field description */
   private boolean stop;
+
+  /** Field description */
+  private int timeoutLimit;
 }
