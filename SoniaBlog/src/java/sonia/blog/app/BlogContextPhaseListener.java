@@ -10,7 +10,6 @@ package sonia.blog.app;
 //~--- JDK imports ------------------------------------------------------------
 
 import java.util.Iterator;
-import java.util.logging.Logger;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;

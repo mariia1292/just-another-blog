@@ -17,8 +17,6 @@ import sonia.plugin.PluginContext;
 
 //~--- JDK imports ------------------------------------------------------------
 
-import java.util.List;
-
 import javax.faces.model.DataModel;
 import javax.faces.model.ListDataModel;
 

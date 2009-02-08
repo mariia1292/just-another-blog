@@ -22,10 +22,8 @@ import org.jfree.data.general.DefaultPieDataset;
 
 import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.app.BlogRequest;
-import sonia.blog.api.dao.EntryDAO;
 import sonia.blog.api.util.BlogWrapper;
 import sonia.blog.entity.Blog;
-import sonia.blog.entity.Entry;
 
 import sonia.util.Util;
 
