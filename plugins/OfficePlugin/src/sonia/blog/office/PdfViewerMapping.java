@@ -15,7 +15,7 @@ import sonia.blog.api.app.BlogResponse;
 import sonia.blog.api.app.Constants;
 import sonia.blog.api.app.ResourceManager;
 import sonia.blog.api.link.LinkBuilder;
-import sonia.blog.api.mapping.MappingEntry;
+import sonia.blog.api.mapping.FinalMapping;
 import sonia.blog.entity.Blog;
 import sonia.blog.entity.PermaObject;
 
@@ -34,20 +34,20 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 import java.util.logging.Level;
-import java.util.logging.Logger;
 
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletResponse;
 
 /**
  *
  * @author sdorra
  */
-public class PdfViewerMappingEntry
-        implements MappingEntry, ConfigurationListener
+public class PdfViewerMapping extends FinalMapping
+        implements ConfigurationListener
 {
 
   /** Field description */
-  public static final String PATH = "macros/pdfviewer/";
+  public static final String REGEX = "^/macros/pdfviewer/([0-9]+)$";
 
   //~--- constructors ---------------------------------------------------------
 
@@ -56,7 +56,7 @@ public class PdfViewerMappingEntry
    *
    *
    */
-  public PdfViewerMappingEntry()
+  public PdfViewerMapping()
   {
     XmlConfiguration config = BlogContext.getInstance().getConfiguration();
 
@@ -83,6 +83,8 @@ public class PdfViewerMappingEntry
     }
   }
 
+  //~--- methods --------------------------------------------------------------
+
   /**
    * Method description
    *
@@ -91,13 +93,14 @@ public class PdfViewerMappingEntry
    * @param response
    * @param param
    *
-   * @return
+   * @throws IOException
+   * @throws ServletException
    */
-  public boolean handleMapping(BlogRequest request, BlogResponse response,
-                               String[] param)
+  @Override
+  protected void handleFinalMapping(BlogRequest request, BlogResponse response,
+                                    String[] param)
+          throws IOException, ServletException
   {
-    boolean notFound = true;
-
     if ((param != null) && (param.length > 1))
     {
       String directory = param[0];
@@ -150,56 +153,15 @@ public class PdfViewerMappingEntry
                 }
               }
 
-              notFound = false;
+              response.sendError(HttpServletResponse.SC_NOT_FOUND);
             }
           }
         }
       }
     }
-
-    if (notFound)
-    {
-      try
-      {
-        response.sendError(HttpServletResponse.SC_NOT_FOUND);
-      }
-      catch (IOException ex)
-      {
-        logger.log(Level.SEVERE, null, ex);
-      }
-    }
-
-    return false;
   }
 
   //~--- get methods ----------------------------------------------------------
-
-  /**
-   * Method description
-   *
-   *
-   * @param request
-   * @param linkBuilder
-   * @param object
-   *
-   * @return
-   */
-  public String getUri(BlogRequest request, LinkBuilder linkBuilder,
-                       PermaObject object)
-  {
-    return null;
-  }
-
-  /**
-   * Method description
-   *
-   *
-   * @return
-   */
-  public boolean isNavigationRendered()
-  {
-    return false;
-  }
 
   /**
    * Method description
@@ -220,10 +182,6 @@ public class PdfViewerMappingEntry
   }
 
   //~--- fields ---------------------------------------------------------------
-
-  /** Field description */
-  private Logger logger =
-    Logger.getLogger(PdfViewerMappingEntry.class.getName());
 
   /** Field description */
   private String mimeType;

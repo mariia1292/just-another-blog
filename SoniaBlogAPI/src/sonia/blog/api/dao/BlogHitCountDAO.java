@@ -10,6 +10,7 @@ package sonia.blog.api.dao;
 //~--- non-JDK imports --------------------------------------------------------
 
 import sonia.blog.api.util.BlogWrapper;
+import sonia.blog.api.util.HitWrapper;
 import sonia.blog.entity.Blog;
 import sonia.blog.entity.BlogHitCount;
 
@@ -91,4 +92,14 @@ public interface BlogHitCountDAO extends GenericDAO<BlogHitCount>
    * @return
    */
   public Long getHitsByBlogAndYear(Blog blog, int year);
+
+  /**
+   * Method description
+   *
+   *
+   * @param blog
+   *
+   * @return
+   */
+  public List<HitWrapper> getHitsPerMonthByBlog(Blog blog);
 }

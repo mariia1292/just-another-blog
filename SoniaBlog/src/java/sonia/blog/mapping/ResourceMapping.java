@@ -11,9 +11,7 @@ package sonia.blog.mapping;
 
 import sonia.blog.api.app.BlogRequest;
 import sonia.blog.api.app.BlogResponse;
-import sonia.blog.api.link.LinkBuilder;
-import sonia.blog.api.mapping.MappingEntry;
-import sonia.blog.entity.PermaObject;
+import sonia.blog.api.mapping.FinalMapping;
 
 import sonia.util.Util;
 
@@ -26,20 +24,19 @@ import java.io.OutputStream;
 import java.net.URLConnection;
 
 import java.util.logging.Level;
-import java.util.logging.Logger;
 
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletResponse;
 
 /**
  *
  * @author sdorra
  */
-public class ResourceMappingEntry implements MappingEntry
+public class ResourceMapping extends FinalMapping
 {
 
   /** Field description */
-  private static Logger logger =
-    Logger.getLogger(ResourceMappingEntry.class.getName());
+  private static final String PATHPREFIX = "/jab/resource/";
 
   //~--- methods --------------------------------------------------------------
 
@@ -51,22 +48,19 @@ public class ResourceMappingEntry implements MappingEntry
    * @param response
    * @param param
    *
-   * @return
+   * @throws IOException
+   * @throws ServletException
    */
-  public boolean handleMapping(BlogRequest request, BlogResponse response,
-                               String[] param)
+  @Override
+  protected void handleFinalMapping(BlogRequest request, BlogResponse response,
+                                    String[] param)
+          throws IOException, ServletException
   {
     if ((param != null) && (param.length > 0))
     {
-      String uri = "/jab/resource";
-
-      for (String p : param)
-      {
-        uri += "/" + p;
-      }
-
-      String name = param[param.length - 1];
-      String mimeType = URLConnection.getFileNameMap().getContentTypeFor(name);
+      String path = param[0];
+      String uri = PATHPREFIX + path;
+      String mimeType = URLConnection.getFileNameMap().getContentTypeFor(path);
 
       response.setContentType(mimeType);
 
@@ -109,36 +103,5 @@ public class ResourceMappingEntry implements MappingEntry
         }
       }
     }
-
-    return false;
-  }
-
-  //~--- get methods ----------------------------------------------------------
-
-  /**
-   * Method description
-   *
-   *
-   * @param request
-   * @param linkBuilder
-   * @param object
-   *
-   * @return
-   */
-  public String getUri(BlogRequest request, LinkBuilder linkBuilder,
-                       PermaObject object)
-  {
-    return null;
-  }
-
-  /**
-   * Method description
-   *
-   *
-   * @return
-   */
-  public boolean isNavigationRendered()
-  {
-    return false;
   }
 }

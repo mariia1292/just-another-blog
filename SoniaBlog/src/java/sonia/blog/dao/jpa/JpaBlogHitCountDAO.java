@@ -12,13 +12,17 @@ package sonia.blog.dao.jpa;
 import sonia.blog.api.app.Constants;
 import sonia.blog.api.dao.BlogHitCountDAO;
 import sonia.blog.api.util.BlogWrapper;
+import sonia.blog.api.util.HitWrapper;
 import sonia.blog.entity.Blog;
 import sonia.blog.entity.BlogHitCount;
 import sonia.blog.util.BlogUtil;
 
 //~--- JDK imports ------------------------------------------------------------
 
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -217,7 +221,90 @@ public class JpaBlogHitCountDAO extends JpaGenericDAO<BlogHitCount>
     return getHitsByBlogBetween(blog, startDate, endDate);
   }
 
+  /**
+   * Method description
+   *
+   *
+   * @param blog
+   *
+   * @return
+   */
+  @SuppressWarnings("unchecked")
+  public List<HitWrapper> getHitsPerMonthByBlog(Blog blog)
+  {
+    List<HitWrapper> result = null;
+    EntityManager em = createEntityManager();
+    Query q = em.createNamedQuery("BlogHitCount.findByBlog");
+
+    q.setParameter("blog", blog);
+
+    try
+    {
+      List<BlogHitCount> hitCounts = q.getResultList();
+
+      result = buildHitWrapper(hitCounts);
+    }
+    catch (NoResultException ex) {}
+    finally
+    {
+      if (em != null)
+      {
+        em.close();
+      }
+    }
+
+    return result;
+  }
+
   //~--- methods --------------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   * @param hitCounts
+   *
+   * @return
+   */
+  private List<HitWrapper> buildHitWrapper(List<BlogHitCount> hitCounts)
+  {
+    List<HitWrapper> wrappers = new ArrayList<HitWrapper>();
+
+    for (BlogHitCount hitCount : hitCounts)
+    {
+      Calendar cal = new GregorianCalendar();
+
+      cal.setTime(hitCount.getDate());
+
+      int year = cal.get(Calendar.YEAR);
+      int month = cal.get(Calendar.MONTH) + 1;
+      HitWrapper wrapper = null;
+
+      for (HitWrapper w : wrappers)
+      {
+        if ((w.getYear() == year) && (w.getMonth() == month))
+        {
+          wrapper = w;
+
+          break;
+        }
+      }
+
+      if (wrapper == null)
+      {
+        wrapper = new HitWrapper(year, month, hitCount.getHitCount());
+        wrappers.add(wrapper);
+      }
+      else
+      {
+        long count = wrapper.getCount();
+
+        wrapper.setCount(count + hitCount.getHitCount());
+      }
+    }
+
+    return wrappers;
+  }
 
   /**
    * Method description

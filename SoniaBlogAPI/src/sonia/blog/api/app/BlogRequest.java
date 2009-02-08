@@ -11,7 +11,7 @@ package sonia.blog.api.app;
 
 import sonia.blog.api.authentication.LoginBean;
 import sonia.blog.api.dao.BlogDAO;
-import sonia.blog.api.mapping.MappingEntry;
+import sonia.blog.api.mapping.Mapping;
 import sonia.blog.entity.Blog;
 import sonia.blog.entity.BlogMember;
 import sonia.blog.entity.Role;
@@ -130,7 +130,7 @@ public class BlogRequest extends HttpServletRequestWrapper
    *
    * @return
    */
-  public MappingEntry getMapping()
+  public Mapping getMapping()
   {
     return mapping;
   }
@@ -344,7 +344,7 @@ public class BlogRequest extends HttpServletRequestWrapper
    *
    * @param mapping
    */
-  public void setMapping(MappingEntry mapping)
+  public void setMapping(Mapping mapping)
   {
     this.mapping = mapping;
   }
@@ -380,7 +380,7 @@ public class BlogRequest extends HttpServletRequestWrapper
   private String encoding;
 
   /** Field description */
-  private MappingEntry mapping;
+  private Mapping mapping;
 
   /** Field description */
   private BlogMember member;

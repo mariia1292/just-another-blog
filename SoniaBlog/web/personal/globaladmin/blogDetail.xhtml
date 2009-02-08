@@ -41,6 +41,10 @@
 
         </h:panelGrid>
 
+        <h2><h:outputText value="#{label.statistic}" /></h2>
+
+        <h:graphicImage value="/chart/blogUsage.png?blogId=#{AdminBlogBean.blog.id}" />
+
         <h2><h:outputText value="#{label.configuration}" /></h2>
 
         <h:form id="blogform">

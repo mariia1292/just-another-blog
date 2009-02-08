@@ -19,9 +19,9 @@
       <ui:define name="content">
 
         <h:panelGroup layout="block" styleClass="entryNavigation" rendered="#{BlogBean.navigationRendered}">
-          <blog:link value="#{label.prev}" object="#{BlogBean.nextEntry}" disabled="#{BlogBean.nextEntry == null}" />
+          <blog:link value="#{label.prev}" href="#{BlogBean.previousUri}" disabled="#{BlogBean.previousUri == null}" />
           <h:outputText value=" | " />
-          <blog:link value="#{label.next}" object="#{BlogBean.prevEntry}" disabled="#{BlogBean.prevEntry == null}" />
+          <blog:link value="#{label.next}" href="#{BlogBean.nextUri}" disabled="#{BlogBean.nextUri == null}" />
         </h:panelGroup>
 
         <h1><h:outputText value="#{BlogBean.entry.title}" /></h1>

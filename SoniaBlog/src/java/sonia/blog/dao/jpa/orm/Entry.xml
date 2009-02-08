@@ -114,6 +114,88 @@
         select count(e) from Entry e join e.category c join c.blog b where b = :blog
       </query>
     </named-query>
+    <named-query name="Entry.prev">
+      <query>
+        select e from Entry e join e.category c join c.blog b
+        where
+          e.published = :published
+        and
+          b = :blog
+        and
+          e.creationDate = (select max(e2.creationDate) from Entry e2 where e2.creationDate &lt; :date)
+        order by
+          e.creationDate, e.title
+      </query>
+    </named-query>
+    <named-query name="Entry.next">
+      <query>
+        select e from Entry e join e.category c join c.blog b
+        where
+          e.published = :published
+        and
+          b = :blog
+        and
+          e.creationDate = (select min(e2.creationDate) from Entry e2 where e2.creationDate &gt; :date )
+        order by
+          e.creationDate, e.title
+      </query>
+    </named-query>
+    <named-query name="Entry.categoryPrev">
+      <query>
+        select e from Entry e join e.category c
+        where
+          e.published = :published
+        and
+          c = :category
+        and
+          e.creationDate = (select max(e2.creationDate) from Entry e2 where e2.creationDate &lt; :date)
+        order by
+          e.creationDate, e.title
+      </query>
+    </named-query>
+    <named-query name="Entry.categoryNext">
+      <query>
+        select e from Entry e join e.category c
+        where
+          e.published = :published
+        and
+          c = :category
+        and
+          e.creationDate = (select min(e2.creationDate) from Entry e2 where e2.creationDate &gt; :date)
+        order by
+          e.creationDate, e.title
+      </query>
+    </named-query>
+    <named-query name="Entry.tagPrev">
+      <query>
+        select e from Entry e join e.category c join c.blog b join e.tags t
+        where
+          e.published = :published
+        and
+          b = :blog
+        and
+          t = :tag
+        and
+          e.creationDate = (select max(e2.creationDate) from Entry e2 where e2.creationDate &lt; :date)
+        order by
+          e.creationDate, e.title
+      </query>
+    </named-query>
+    <named-query name="Entry.tagNext">
+      <query>
+        select e from Entry e join e.category c join c.blog b join e.tags t
+        where
+          e.published = :published
+        and
+          b = :blog
+        and
+          t = :tag
+        and
+          e.creationDate = (select min(e2.creationDate) from Entry e2 where e2.creationDate &gt; :date)
+        order by
+          e.creationDate, e.title
+      </query>
+    </named-query>
     <pre-persist method-name="prePersists" />
     <pre-update method-name="preUpdate" />
     <attributes>

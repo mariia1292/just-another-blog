@@ -469,4 +469,188 @@ public class JpaEntryDAO extends JpaGenericDAO<Entry> implements EntryDAO
 
     return entries;
   }
+
+  //~--- get methods ----------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   * @param blog
+   * @param entry
+   * @param published
+   *
+   * @return
+   */
+  public Entry getNextEntry(Blog blog, Entry entry, Boolean published)
+  {
+    Entry nextEntry = null;
+    EntityManager em = createEntityManager();
+    Query q = em.createNamedQuery("Entry.next");
+
+    q.setParameter("blog", blog);
+    q.setParameter("published", published);
+    q.setParameter("date", entry.getCreationDate());
+
+    try
+    {
+      nextEntry = (Entry) q.getSingleResult();
+    }
+    catch (NoResultException ex) {}
+
+    return nextEntry;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param category
+   * @param entry
+   * @param published
+   *
+   * @return
+   */
+  public Entry getNextEntry(Category category, Entry entry, Boolean published)
+  {
+    Entry nextEntry = null;
+    EntityManager em = createEntityManager();
+    Query q = em.createNamedQuery("Entry.categoryNext");
+
+    q.setParameter("category", category);
+    q.setParameter("published", published);
+    q.setParameter("date", entry.getCreationDate());
+
+    try
+    {
+      nextEntry = (Entry) q.getSingleResult();
+    }
+    catch (NoResultException ex) {}
+
+    return nextEntry;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   *
+   * @param blog
+   * @param tag
+   * @param entry
+   * @param published
+   *
+   * @return
+   */
+  public Entry getNextEntry(Blog blog, Tag tag, Entry entry, Boolean published)
+  {
+    Entry nextEntry = null;
+    EntityManager em = createEntityManager();
+    Query q = em.createNamedQuery("Entry.tagNext");
+
+    q.setParameter("tag", tag);
+    q.setParameter("blog", blog);
+    q.setParameter("published", published);
+    q.setParameter("date", entry.getCreationDate());
+
+    try
+    {
+      nextEntry = (Entry) q.getSingleResult();
+    }
+    catch (NoResultException ex) {}
+
+    return nextEntry;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param blog
+   * @param entry
+   * @param published
+   *
+   * @return
+   */
+  public Entry getPreviousEntry(Blog blog, Entry entry, Boolean published)
+  {
+    Entry nextEntry = null;
+    EntityManager em = createEntityManager();
+    Query q = em.createNamedQuery("Entry.prev");
+
+    q.setParameter("blog", blog);
+    q.setParameter("published", published);
+    q.setParameter("date", entry.getCreationDate());
+
+    try
+    {
+      nextEntry = (Entry) q.getSingleResult();
+    }
+    catch (NoResultException ex) {}
+
+    return nextEntry;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param category
+   * @param entry
+   * @param published
+   *
+   * @return
+   */
+  public Entry getPreviousEntry(Category category, Entry entry,
+                                Boolean published)
+  {
+    Entry nextEntry = null;
+    EntityManager em = createEntityManager();
+    Query q = em.createNamedQuery("Entry.categoryPrev");
+
+    q.setParameter("category", category);
+    q.setParameter("published", published);
+    q.setParameter("date", entry.getCreationDate());
+
+    try
+    {
+      nextEntry = (Entry) q.getSingleResult();
+    }
+    catch (NoResultException ex) {}
+
+    return nextEntry;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   *
+   * @param blog
+   * @param tag
+   * @param entry
+   * @param published
+   *
+   * @return
+   */
+  public Entry getPreviousEntry(Blog blog, Tag tag, Entry entry,
+                                Boolean published)
+  {
+    Entry nextEntry = null;
+    EntityManager em = createEntityManager();
+    Query q = em.createNamedQuery("Entry.tagPrev");
+
+    q.setParameter("tag", tag);
+    q.setParameter("blog", blog);
+    q.setParameter("published", published);
+    q.setParameter("date", entry.getCreationDate());
+
+    try
+    {
+      nextEntry = (Entry) q.getSingleResult();
+    }
+    catch (NoResultException ex) {}
+
+    return nextEntry;
+  }
 }

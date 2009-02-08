@@ -228,4 +228,84 @@ public interface EntryDAO extends GenericDAO<Entry>
    */
   public List<Entry> findAllDraftsByBlogAndUser(Blog blog, User user,
           int start, int max);
+
+  //~--- get methods ----------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   * @param blog
+   * @param entry
+   * @param published
+   *
+   * @return
+   */
+  public Entry getNextEntry(Blog blog, Entry entry, Boolean published);
+
+  /**
+   * Method description
+   *
+   *
+   * @param category
+   * @param entry
+   * @param published
+   *
+   * @return
+   */
+  public Entry getNextEntry(Category category, Entry entry, Boolean published);
+
+  /**
+   * Method description
+   *
+   *
+   *
+   * @param blog
+   * @param tag
+   * @param entry
+   * @param published
+   *
+   * @return
+   */
+  public Entry getNextEntry(Blog blog, Tag tag, Entry entry, Boolean published);
+
+  /**
+   * Method description
+   *
+   *
+   * @param blog
+   * @param entry
+   * @param published
+   *
+   * @return
+   */
+  public Entry getPreviousEntry(Blog blog, Entry entry, Boolean published);
+
+  /**
+   * Method description
+   *
+   *
+   * @param category
+   * @param entry
+   * @param published
+   *
+   * @return
+   */
+  public Entry getPreviousEntry(Category category, Entry entry,
+                                Boolean published);
+
+  /**
+   * Method description
+   *
+   *
+   *
+   * @param blog
+   * @param tag
+   * @param entry
+   * @param published
+   *
+   * @return
+   */
+  public Entry getPreviousEntry(Blog blog, Tag tag, Entry entry,
+                                Boolean published);
 }

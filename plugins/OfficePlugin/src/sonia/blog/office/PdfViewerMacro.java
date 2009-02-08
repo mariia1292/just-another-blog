@@ -320,7 +320,7 @@ public class PdfViewerMacro implements Macro, ConfigurationListener
     result += "<span id=\"" + name + "\">\n";
 
     String path = pdfDir.getName() + "/";
-    String baseLink = linkBase + PdfViewerMappingEntry.PATH + path;
+    String baseLink = linkBase + PdfViewerMapping.REGEX + path;
 
     if ((files != null) && (files.length > 0))
     {

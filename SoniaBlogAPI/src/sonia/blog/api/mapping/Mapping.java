@@ -11,14 +11,18 @@ package sonia.blog.api.mapping;
 
 import sonia.blog.api.app.BlogRequest;
 import sonia.blog.api.app.BlogResponse;
-import sonia.blog.api.link.LinkBuilder;
-import sonia.blog.entity.PermaObject;
+
+//~--- JDK imports ------------------------------------------------------------
+
+import java.io.IOException;
+
+import javax.servlet.ServletException;
 
 /**
  *
  * @author sdorra
  */
-public interface MappingEntry
+public interface Mapping
 {
 
   /**
@@ -26,13 +30,17 @@ public interface MappingEntry
    *
    *
    * @param request
-   * @param response
+   * @param resonse
    * @param param
    *
    * @return
+   *
+   * @throws IOException
+   * @throws ServletException
    */
-  public boolean handleMapping(BlogRequest request, BlogResponse response,
-                               String[] param);
+  public boolean handleMapping(BlogRequest request, BlogResponse resonse,
+                               String[] param)
+          throws IOException, ServletException;
 
   //~--- get methods ----------------------------------------------------------
 
@@ -40,20 +48,7 @@ public interface MappingEntry
    * Method description
    *
    *
-   * @param request
-   * @param linkBuilder
-   * @param object
-   *
    * @return
    */
-  public String getUri(BlogRequest request, LinkBuilder linkBuilder,
-                       PermaObject object);
-
-  /**
-   * Method description
-   *
-   *
-   * @return
-   */
-  public boolean isNavigationRendered();
+  public MappingNavigation getMappingNavigation();
 }

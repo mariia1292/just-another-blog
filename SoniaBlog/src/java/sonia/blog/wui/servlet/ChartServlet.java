@@ -11,12 +11,23 @@ package sonia.blog.wui.servlet;
 
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
+import org.jfree.chart.axis.NumberAxis;
 import org.jfree.chart.labels.StandardPieSectionLabelGenerator;
+import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.plot.PiePlot3D;
+import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.chart.renderer.category.LineAndShapeRenderer;
+import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.data.general.DefaultPieDataset;
 
 import sonia.blog.api.app.BlogContext;
+import sonia.blog.api.app.BlogRequest;
+import sonia.blog.api.dao.EntryDAO;
 import sonia.blog.api.util.BlogWrapper;
+import sonia.blog.entity.Blog;
+import sonia.blog.entity.Entry;
+
+import sonia.util.Util;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -26,6 +37,7 @@ import java.awt.image.BufferedImage;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.PrintWriter;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -105,6 +117,94 @@ public class ChartServlet extends HttpServlet
                                 HttpServletResponse response)
           throws ServletException, IOException
   {
+    String typeParam = request.getParameter("type");
+
+    if (!Util.isBlank(typeParam))
+    {
+      if (typeParam.equals("pie"))
+      {
+        createPieChart(response);
+      }
+      else if (typeParam.equals("line"))
+      {
+        createLineChart(response);
+      }
+    }
+
+    createTest(request, response);
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param response
+   *
+   * @throws IOException
+   */
+  private void createLineChart(HttpServletResponse response) throws IOException
+  {
+    response.setContentType("image/png");
+
+    DefaultCategoryDataset dataset = new DefaultCategoryDataset();
+
+    dataset.addValue(212, "Classes", "JDK 1.0");
+    dataset.addValue(504, "Classes", "JDK 1.1");
+    dataset.addValue(1520, "Classes", "SDK 1.2");
+    dataset.addValue(1842, "Classes", "SDK 1.3");
+    dataset.addValue(2991, "Classes", "SDK 1.4");
+
+    JFreeChart chart = ChartFactory.createLineChart(null, "date", "requests",
+                         dataset, PlotOrientation.VERTICAL, false, false,
+                         false);
+
+    chart.setBackgroundPaint(Color.white);
+
+    CategoryPlot plot = (CategoryPlot) chart.getPlot();
+
+    plot.setBackgroundPaint(Color.lightGray);
+    plot.setRangeGridlinePaint(Color.white);
+
+    NumberAxis rangeAxis = (NumberAxis) plot.getRangeAxis();
+
+    rangeAxis.setStandardTickUnits(NumberAxis.createIntegerTickUnits());
+
+    LineAndShapeRenderer renderer = (LineAndShapeRenderer) plot.getRenderer();
+
+    renderer.setBaseShapesVisible(true);
+    renderer.setDrawOutlines(true);
+    renderer.setUseFillPaint(true);
+    renderer.setBaseFillPaint(Color.white);
+
+    OutputStream out = null;
+
+    try
+    {
+      out = response.getOutputStream();
+
+      BufferedImage img = chart.createBufferedImage(600, 250);
+
+      ImageIO.write(img, "png", out);
+    }
+    finally
+    {
+      if (out != null)
+      {
+        out.close();
+      }
+    }
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param response
+   *
+   * @throws IOException
+   */
+  private void createPieChart(HttpServletResponse response) throws IOException
+  {
     response.setContentType("image/png");
 
     OutputStream out = null;
@@ -160,5 +260,72 @@ public class ChartServlet extends HttpServlet
         out.close();
       }
     }
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param req
+   * @param response
+   *
+   * @throws IOException
+   */
+  private void createTest(HttpServletRequest req, HttpServletResponse response)
+          throws IOException
+  {
+    BlogRequest request = new BlogRequest(req);
+    long id = 1l;
+    String idParam = request.getParameter("id");
+
+    if (!Util.isBlank(idParam))
+    {
+      try
+      {
+        id = Long.parseLong(idParam);
+      }
+      catch (NumberFormatException ex)
+      {
+        ex.printStackTrace();
+      }
+    }
+
+    Blog blog = request.getCurrentBlog();
+
+    response.setContentType("text/html");
+
+    PrintWriter writer = response.getWriter();
+
+    writer.println("<html>");
+    writer.println("  <head>");
+    writer.println("    <title>Test</title>");
+    writer.println("  </head>");
+    writer.println("  <body>");
+    writer.println("    <h1>Test</h1>");
+
+    /*
+     * EntryDAO entryDAO = BlogContext.getDAOFactory().getEntryDAO();
+     * Entry entry = entryDAO.find(id);
+     * Entry[] entries = entryDAO.getPrevAndNextEntry(blog, entry, true);
+     *
+     * writer.println("    <ul>");
+     *
+     * if (entries[0] != null)
+     * {
+     * writer.println("      <li>prev:" + entries[0].getTitle() + "</li>");
+     * }
+     *
+     * writer.println("      <li>" + entry.getTitle() + "</li>");
+     *
+     * if (entries[1] != null)
+     * {
+     * writer.println("      <li>next: " + entries[1].getTitle() + "</li>");
+     * }
+     *
+     * writer.println("    </ul>");
+     */
+    writer.println("  </body>");
+    writer.println("</html>");
+    writer.close();
   }
 }

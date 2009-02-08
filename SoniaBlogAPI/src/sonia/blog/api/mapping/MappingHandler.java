@@ -12,6 +12,15 @@ package sonia.blog.api.mapping;
 import sonia.blog.api.app.BlogRequest;
 import sonia.blog.api.app.BlogResponse;
 
+//~--- JDK imports ------------------------------------------------------------
+
+import java.io.IOException;
+import java.io.InputStream;
+
+import java.util.Map;
+
+import javax.servlet.ServletException;
+
 /**
  *
  * @author sdorra
@@ -20,23 +29,25 @@ public interface MappingHandler
 {
 
   /**
-   * Method description
+   *  Method description
    *
    *
-   * @param path
-   * @param entry
+   *
+   *  @param regex
+   *  @param mapping
    */
-  public void addMappging(String path, MappingEntry entry);
+  public void add(String regex, Class<? extends Mapping> mapping);
 
   /**
    * Method description
    *
    *
-   * @param path
+   *
+   * @param regex
    *
    * @return
    */
-  public boolean containsPath(String path);
+  public boolean contains(String regex);
 
   /**
    * Method description
@@ -46,14 +57,49 @@ public interface MappingHandler
    * @param response
    *
    * @return
+   *
+   * @throws IOException
+   * @throws ServletException
    */
-  public boolean handleMapping(BlogRequest request, BlogResponse response);
+  public boolean handleMapping(BlogRequest request, BlogResponse response)
+          throws IOException, ServletException;
 
   /**
    * Method description
    *
    *
-   * @param path
+   * @param in
+   *
+   * @throws IOException
    */
-  public void removeMapping(String path);
+  public void load(InputStream in) throws IOException;
+
+  /**
+   * Method description
+   *
+   *
+   *
+   * @param regex
+   */
+  public void remove(String regex);
+
+  //~--- get methods ----------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   * @param regex
+   *
+   * @return
+   */
+  public Class<? extends Mapping> get(String regex);
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  public Map<String, Class<? extends Mapping>> getAll();
 }

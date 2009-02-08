@@ -19,7 +19,8 @@ import sonia.blog.api.dao.CategoryDAO;
 import sonia.blog.api.dao.CommentDAO;
 import sonia.blog.api.dao.TagDAO;
 import sonia.blog.api.link.LinkBuilder;
-import sonia.blog.api.mapping.MappingEntry;
+import sonia.blog.api.mapping.Mapping;
+import sonia.blog.api.mapping.MappingNavigation;
 import sonia.blog.api.navigation.NavigationProvider;
 import sonia.blog.api.search.SearchContext;
 import sonia.blog.api.search.SearchEntry;
@@ -60,6 +61,11 @@ import javax.faces.model.ListDataModel;
  */
 public class BlogBean extends AbstractBean
 {
+
+  /** Field description */
+  public static final String NAME = "BlogBean";
+
+  //~--- constructors ---------------------------------------------------------
 
   /**
    * Constructs ...
@@ -334,47 +340,19 @@ public class BlogBean extends AbstractBean
    *
    * @return
    */
-  public ContentObject getNextEntry()
-  {
-    ContentObject co = null;
-
-    if (entry != null)
-    {
-      int pos = entries.indexOf(entry);
-
-      if (pos >= 0)
-      {
-        pos++;
-
-        if (pos < entries.size())
-        {
-          co = entries.get(pos);
-        }
-      }
-    }
-
-    return co;
-  }
-
-  /**
-   * Method description
-   *
-   *
-   * @return
-   */
   public String getNextUri()
   {
     String nextUri = null;
+    BlogRequest request = getRequest();
+    Mapping mapping = request.getMapping();
 
-    if (entries != null)
+    if (mapping != null)
     {
-      BlogRequest request = getRequest();
-      int page = getCurrentPage() + 1;
-      int entriesPerPage = request.getCurrentBlog().getEntriesPerPage();
+      MappingNavigation navigation = mapping.getMappingNavigation();
 
-      if (entries.size() > (page * entriesPerPage))
+      if (navigation != null)
       {
-        nextUri = getPageUri(request, page);
+        nextUri = navigation.getNextUri();
       }
     }
 
@@ -419,42 +397,19 @@ public class BlogBean extends AbstractBean
    *
    * @return
    */
-  public ContentObject getPrevEntry()
-  {
-    ContentObject co = null;
-
-    if (entry != null)
-    {
-      int pos = entries.indexOf(entry);
-
-      if (pos > 0)
-      {
-        pos--;
-        co = entries.get(pos);
-      }
-    }
-
-    return co;
-  }
-
-  /**
-   * Method description
-   *
-   *
-   * @return
-   */
-  public String getPrevUri()
+  public String getPreviousUri()
   {
     String prevUri = null;
+    BlogRequest request = getRequest();
+    Mapping mapping = request.getMapping();
 
-    if (entries != null)
+    if (mapping != null)
     {
-      BlogRequest request = getRequest();
-      int page = getCurrentPage();
+      MappingNavigation navigation = mapping.getMappingNavigation();
 
-      if (page > 0)
+      if (navigation != null)
       {
-        prevUri = getPageUri(request, page - 1);
+        prevUri = navigation.getPreviousUri();
       }
     }
 
@@ -605,11 +560,11 @@ public class BlogBean extends AbstractBean
   public boolean isNavigationRendered()
   {
     boolean result = false;
-    MappingEntry mapping = getRequest().getMapping();
+    Mapping mapping = getRequest().getMapping();
 
     if (mapping != null)
     {
-      result = mapping.isNavigationRendered();
+      result = mapping.getMappingNavigation() != null;
     }
 
     return result;

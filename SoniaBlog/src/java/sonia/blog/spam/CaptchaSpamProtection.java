@@ -13,10 +13,9 @@ import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.app.BlogRequest;
 import sonia.blog.api.app.BlogResponse;
 import sonia.blog.api.link.LinkBuilder;
-import sonia.blog.api.mapping.MappingEntry;
+import sonia.blog.api.mapping.FinalMapping;
 import sonia.blog.api.mapping.MappingHandler;
 import sonia.blog.api.spam.SpamInputProtection;
-import sonia.blog.entity.PermaObject;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -30,12 +29,12 @@ import java.io.OutputStream;
 
 import java.util.Random;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javax.faces.context.ResponseWriter;
 
 import javax.imageio.ImageIO;
 
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletResponse;
 
 /**
@@ -69,11 +68,10 @@ public class CaptchaSpamProtection implements SpamInputProtection
   private static final int WIDTH = 134;
 
   /** Field description */
-  private static Logger logger =
-    Logger.getLogger(CaptchaSpamProtection.class.getName());
+  private static final Random RANDOM = new Random();
 
   /** Field description */
-  private static final Random RANDOM = new Random();
+  private static final long serialVersionUID = -7729920336258957980L;
 
   //~--- constructors ---------------------------------------------------------
 
@@ -85,9 +83,9 @@ public class CaptchaSpamProtection implements SpamInputProtection
   {
     MappingHandler handler = BlogContext.getInstance().getMappingHandler();
 
-    if (!handler.containsPath("/captcha.jab"))
+    if (!handler.contains("^/captcha.jab$"))
     {
-      handler.addMappging("/captcha.jab", new CaptchaMappingHandler());
+      handler.add("^/captcha.jab$", CaptchaMapping.class);
     }
   }
 
@@ -147,7 +145,7 @@ public class CaptchaSpamProtection implements SpamInputProtection
    *
    * @author     sdorra
    */
-  private class CaptchaMappingHandler implements MappingEntry
+  private static class CaptchaMapping extends FinalMapping
   {
 
     /**
@@ -158,10 +156,13 @@ public class CaptchaSpamProtection implements SpamInputProtection
      * @param response
      * @param param
      *
-     * @return
+     * @throws IOException
+     * @throws ServletException
      */
-    public boolean handleMapping(BlogRequest request, BlogResponse response,
-                                 String[] param)
+    @Override
+    protected void handleFinalMapping(BlogRequest request,
+                                      BlogResponse response, String[] param)
+            throws IOException, ServletException
     {
       OutputStream out = null;
 
@@ -219,37 +220,6 @@ public class CaptchaSpamProtection implements SpamInputProtection
           logger.log(Level.SEVERE, null, ex);
         }
       }
-
-      return false;
-    }
-
-    //~--- get methods --------------------------------------------------------
-
-    /**
-     * Method description
-     *
-     *
-     * @param request
-     * @param linkBuilder
-     * @param object
-     *
-     * @return
-     */
-    public String getUri(BlogRequest request, LinkBuilder linkBuilder,
-                         PermaObject object)
-    {
-      return null;
-    }
-
-    /**
-     * Method description
-     *
-     *
-     * @return
-     */
-    public boolean isNavigationRendered()
-    {
-      return false;
     }
   }
 }

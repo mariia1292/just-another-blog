@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+    Document   : mapping.xml
+    Created on : January 25, 2009, 3:43 PM
+    Author     : sdorra
+    Description:
+        Purpose of the document follows.
+-->
+
+<mappings>
+
+  <mapping>
+    <regex>^/list/([0-9)]*)(?:index)*\.jab$</regex>
+    <class>sonia.blog.mapping.ListMapping</class>
+  </mapping>
+
+  <mapping>
+    <regex>^/category/([0-9)]*)/([0-9)]*)(?:index)*\.jab$</regex>
+    <class>sonia.blog.mapping.CategoryMapping</class>
+  </mapping>
+
+  <mapping>
+    <regex>^/tag/([0-9)]*)/([0-9)]*)(?:index)*\.jab$</regex>
+    <class>sonia.blog.mapping.TagMapping</class>
+  </mapping>
+
+  <mapping>
+    <regex>^/attachment/([0-9)]*)$</regex>
+    <class>sonia.blog.mapping.AttachmentMapping</class>
+  </mapping>
+
+  <mapping>
+    <regex>^/date/([0-9-)]*)/([0-9)]*)(?:index)*\.jab$</regex>
+    <class>sonia.blog.mapping.DateMapping</class>
+  </mapping>
+
+  <mapping>
+    <regex>^/feed/([a-zA-Z]*)[/]?([0-9-)]*)\.(rss|rss2|atom)$</regex>
+    <class>sonia.blog.mapping.FeedMapping</class>
+  </mapping>
+
+  <mapping>
+    <regex>^/opensearch.xml$</regex>
+    <class>sonia.blog.mapping.OpenSearchMapping</class>
+  </mapping>
+
+  <mapping>
+    <regex>^/search.jab$</regex>
+    <class>sonia.blog.mapping.SearchMapping</class>
+  </mapping>
+
+  <mapping>
+    <regex>^/random.jab$</regex>
+    <class>sonia.blog.mapping.RandomMapping</class>
+  </mapping>
+  
+  <mapping>
+    <regex>^/resource/(.*)$</regex>
+    <class>sonia.blog.mapping.RandomMapping</class>
+  </mapping>
+
+  <mapping>
+    <regex>^/chart/blog/usage.jab$</regex>
+    <class>sonia.blog.mapping.chart.BlogUsageChartMapping</class>
+  </mapping>
+
+</mappings>

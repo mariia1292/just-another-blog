@@ -10,6 +10,7 @@ package sonia.util;
 //~--- JDK imports ------------------------------------------------------------
 
 import java.awt.Dimension;
+import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 
@@ -168,8 +169,10 @@ public class ImageUtil
                           Image.SCALE_SMOOTH);
     BufferedImage outputImage = new BufferedImage(width, height,
                                   BufferedImage.TYPE_INT_RGB);
+    Graphics g = outputImage.getGraphics();
 
-    outputImage.getGraphics().drawImage(scaledImage, 0, 0, width, height, null);
+    g.drawImage(scaledImage, 0, 0, width, height, null);
+    g.dispose();
     ImageIO.write(outputImage, format, out);
   }
 }

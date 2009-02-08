@@ -28,18 +28,7 @@ import sonia.blog.macro.FLVMacro;
 import sonia.blog.macro.GalleryMacro;
 import sonia.blog.macro.HelloWorldMacro;
 import sonia.blog.macro.SpoilerMacro;
-import sonia.blog.mapping.AttachmentMappingEntry;
-import sonia.blog.mapping.CategoryMappingEntry;
-import sonia.blog.mapping.DateMappingEntry;
 import sonia.blog.mapping.DefaultMappingHandler;
-import sonia.blog.mapping.FeedMappingEntry;
-import sonia.blog.mapping.ListMappingEntry;
-import sonia.blog.mapping.OpenSearchMappingEntry;
-import sonia.blog.mapping.RandomMappingEntry;
-import sonia.blog.mapping.ResourceMappingEntry;
-import sonia.blog.mapping.SearchMappingEntry;
-import sonia.blog.mapping.TagMappingEntry;
-import sonia.blog.mapping.remote.XMLRPCMappingEntry;
 import sonia.blog.search.DefaultSearchContext;
 import sonia.blog.search.IndexListener;
 import sonia.blog.spam.CaptchaSpamProtection;
@@ -61,6 +50,7 @@ import sonia.security.encryption.MD5Encryption;
 //~--- JDK imports ------------------------------------------------------------
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FilenameFilter;
 import java.io.IOException;
 
@@ -68,7 +58,6 @@ import java.net.URLConnection;
 
 import java.util.HashMap;
 import java.util.List;
-import java.util.logging.Logger;
 
 import javax.security.auth.login.AppConfigurationEntry;
 
@@ -263,17 +252,7 @@ public class BlogContextListener implements ServletContextListener
     ServiceRegistry registry = context.getPluginContext().getServiceRegistry();
     MappingHandler mappingHandler = new DefaultMappingHandler();
 
-    mappingHandler.addMappging("/list", new ListMappingEntry());
-    mappingHandler.addMappging("/tags", new TagMappingEntry());
-    mappingHandler.addMappging("/categories", new CategoryMappingEntry());
-    mappingHandler.addMappging("/random.jab", new RandomMappingEntry());
-    mappingHandler.addMappging("/attachment", new AttachmentMappingEntry());
-    mappingHandler.addMappging("/resource/", new ResourceMappingEntry());
-    mappingHandler.addMappging("/feed", new FeedMappingEntry());
-    mappingHandler.addMappging("/search.jab", new SearchMappingEntry());
-    mappingHandler.addMappging("/opensearch.xml", new OpenSearchMappingEntry());
-    mappingHandler.addMappging("/date", new DateMappingEntry());
-    mappingHandler.addMappging("/xmlrpc", new XMLRPCMappingEntry());
+    loadMappingFile(context, mappingHandler);
     registry.register(DAOFactory.class,
                       Constants.SERVCIE_DAO).add(new JpaDAOFactory());
     registry.register(MappingHandler.class,
@@ -338,6 +317,46 @@ public class BlogContextListener implements ServletContextListener
         "/personal/widgets/rss.xhtml").add(
         "/personal/widgets/comments.xhtml").add(
         "/personal/widgets/drafts.xhtml").add("/personal/widgets/status.xhtml");
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param context
+   * @param mappingHandler
+   */
+  private void loadMappingFile(BlogContext context,
+                               MappingHandler mappingHandler)
+  {
+    File file =
+      new File(context.getServletContext().getRealPath(Constants.MAPPING_FILE));
+
+    if (file.exists())
+    {
+      FileInputStream fis = null;
+
+      try
+      {
+        fis = new FileInputStream(file);
+        mappingHandler.load(fis);
+      }
+      catch (IOException ex)
+      {
+        ex.printStackTrace();
+      }
+      finally
+      {
+        try
+        {
+          fis.close();
+        }
+        catch (IOException ex)
+        {
+          ex.printStackTrace();
+        }
+      }
+    }
   }
 
   //~--- get methods ----------------------------------------------------------

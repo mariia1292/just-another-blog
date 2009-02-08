@@ -10,18 +10,17 @@ package sonia.blog.mapping;
 //~--- non-JDK imports --------------------------------------------------------
 
 import sonia.blog.api.app.BlogContext;
+import sonia.blog.api.app.BlogJob;
 import sonia.blog.api.app.BlogRequest;
 import sonia.blog.api.app.BlogResponse;
 import sonia.blog.api.app.Constants;
 import sonia.blog.api.dao.AttachmentDAO;
-import sonia.blog.api.link.LinkBuilder;
-import sonia.blog.api.mapping.MappingEntry;
+import sonia.blog.api.mapping.FinalMapping;
 import sonia.blog.entity.Attachment;
 import sonia.blog.entity.Blog;
-import sonia.blog.entity.PermaObject;
 import sonia.blog.entity.Role;
+import sonia.blog.util.ImageResizingJob;
 
-import sonia.config.ConfigurationListener;
 import sonia.config.ModifyableConfiguration;
 import sonia.config.XmlConfiguration;
 
@@ -40,23 +39,22 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 import java.util.logging.Level;
-import java.util.logging.Logger;
 
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletResponse;
 
 /**
  *
  * @author sdorra
  */
-public class AttachmentMappingEntry
-        implements MappingEntry, ConfigurationListener
+public class AttachmentMapping extends FinalMapping
 {
 
   /**
    * Constructs ...
    *
    */
-  public AttachmentMappingEntry()
+  public AttachmentMapping()
   {
     loadConfig();
   }
@@ -86,11 +84,16 @@ public class AttachmentMappingEntry
    * @param response
    * @param param
    *
-   * @return
+   * @throws IOException
+   * @throws ServletException
    */
-  public boolean handleMapping(BlogRequest request, BlogResponse response,
-                               String[] param)
+  @Override
+  protected void handleFinalMapping(BlogRequest request, BlogResponse response,
+                                    String[] param)
+          throws IOException, ServletException
   {
+    boolean found = true;
+
     if ((param != null) && (param.length > 0))
     {
       try
@@ -110,53 +113,25 @@ public class AttachmentMappingEntry
         }
         else
         {
-          sendNotFound(response);
+          found = false;
         }
       }
       catch (NumberFormatException ex)
       {
         logger.log(Level.FINE, null, ex);
-        sendNotFound(response);
+        found = false;
       }
     }
     else
     {
-      sendNotFound(response);
+      found = false;
     }
 
-    return false;
+    if (!found)
+    {
+      response.sendError(HttpServletResponse.SC_NOT_FOUND);
+    }
   }
-
-  //~--- get methods ----------------------------------------------------------
-
-  /**
-   * Method description
-   *
-   *
-   * @param request
-   * @param linkBuilder
-   * @param object
-   *
-   * @return
-   */
-  public String getUri(BlogRequest request, LinkBuilder linkBuilder,
-                       PermaObject object)
-  {
-    return null;
-  }
-
-  /**
-   * Method description
-   *
-   *
-   * @return
-   */
-  public boolean isNavigationRendered()
-  {
-    return true;
-  }
-
-  //~--- methods --------------------------------------------------------------
 
   /**
    * Method description
@@ -267,9 +242,12 @@ public class AttachmentMappingEntry
    * @param request
    * @param response
    * @param attachment
+   *
+   * @throws IOException
    */
   private void printAttachment(BlogRequest request, BlogResponse response,
                                Attachment attachment)
+          throws IOException
   {
     File file = getFile(attachment);
 
@@ -287,7 +265,7 @@ public class AttachmentMappingEntry
     }
     else
     {
-      sendNotFound(response);
+      response.sendError(HttpServletResponse.SC_NOT_FOUND);
     }
   }
 
@@ -420,57 +398,40 @@ public class AttachmentMappingEntry
                            int height)
           throws IOException
   {
+    BlogJob job = new ImageResizingJob(blog, source, target, format, width,
+                                       height);
 
-/*    BlogJob job = new ImageResizingJob(blog, source, target, format, width,
-                                     height);
+    BlogContext.getInstance().getJobQueue().processs(job);
 
-    BlogContext.getInstance().getJobQueue().add(job);
-  */
-    InputStream in = null;
-    OutputStream out = null;
-
-    try
-    {
-      if (logger.isLoggable(Level.INFO))
-      {
-        logger.info("resize image " + source.getName() + " (resolution "
-                    + width + "x" + height + ")");
-      }
-
-      in = new FileInputStream(source);
-      out = new FileOutputStream(target);
-      ImageUtil.resize(in, out, format, width, height);
-    }
-    finally
-    {
-      if (in != null)
-      {
-        in.close();
-      }
-
-      if (out != null)
-      {
-        out.close();
-      }
-    }
-  }
-
-  /**
-   * Method description
-   *
-   *
-   * @param response
-   */
-  private void sendNotFound(BlogResponse response)
-  {
-    try
-    {
-      response.sendError(HttpServletResponse.SC_NOT_FOUND);
-    }
-    catch (IOException ex)
-    {
-      logger.log(Level.SEVERE, null, ex);
-    }
+    /*
+     * InputStream in = null;
+     * OutputStream out = null;
+     *
+     * try
+     * {
+     *   if (logger.isLoggable(Level.INFO))
+     *   {
+     *     logger.info("resize image " + source.getName() + " (resolution "
+     *                 + width + "x" + height + ")");
+     *   }
+     *
+     *   in = new FileInputStream(source);
+     *   out = new FileOutputStream(target);
+     *   ImageUtil.resize(in, out, format, width, height);
+     * }
+     * finally
+     * {
+     *   if (in != null)
+     *   {
+     *     in.close();
+     *   }
+     *
+     *   if (out != null)
+     *   {
+     *     out.close();
+     *   }
+     * }
+     */
   }
 
   //~--- get methods ----------------------------------------------------------
@@ -540,10 +501,6 @@ public class AttachmentMappingEntry
 
   /** Field description */
   private String format;
-
-  /** Field description */
-  private Logger logger =
-    Logger.getLogger(AbstractMappingEntry.class.getName());
 
   /** Field description */
   private String mimeType;

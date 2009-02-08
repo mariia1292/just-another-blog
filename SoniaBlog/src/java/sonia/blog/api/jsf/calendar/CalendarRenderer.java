@@ -77,8 +77,8 @@ public class CalendarRenderer extends BaseRenderer
       BlogRequest request =
         (BlogRequest) context.getExternalContext().getRequest();
       Blog blog = request.getCurrentBlog();
-      Date startDate = BlogUtil.createStartDate(month - 1, year);
-      Date endDate = BlogUtil.createEndDate(month - 1, year);
+      Date startDate = BlogUtil.createStartDate(year, month - 1);
+      Date endDate = BlogUtil.createEndDate(year, month - 1);
       List<Date> dates = getEntryDates(blog, startDate, endDate);
       ResponseWriter writer = context.getResponseWriter();
 

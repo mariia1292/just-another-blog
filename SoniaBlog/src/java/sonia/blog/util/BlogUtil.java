@@ -10,6 +10,8 @@ package sonia.blog.util;
 //~--- non-JDK imports --------------------------------------------------------
 
 import sonia.blog.api.app.BlogContext;
+import sonia.blog.api.app.BlogRequest;
+import sonia.blog.api.app.BlogRuntimeException;
 import sonia.blog.api.app.Constants;
 
 import sonia.config.XmlConfiguration;
@@ -31,6 +33,8 @@ import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
+import javax.servlet.http.HttpSession;
+
 /**
  *
  * @author sdorra
@@ -42,18 +46,42 @@ public class BlogUtil
    * Method description
    *
    *
-   * @param month
    * @param year
+   * @param month
+   * @param day
    *
    * @return
    */
-  public static Date createEndDate(int month, int year)
+  public static Date createEndDate(Integer year, Integer month, Integer day)
   {
+    if (year == null)
+    {
+      throw new IllegalArgumentException("year is null");
+    }
+
     GregorianCalendar cal = new GregorianCalendar();
 
     cal.set(Calendar.YEAR, year);
-    cal.set(Calendar.MONTH, month);
-    cal.set(Calendar.DAY_OF_MONTH, cal.getActualMaximum(Calendar.DAY_OF_MONTH));
+
+    if (month != null)
+    {
+      cal.set(Calendar.MONTH, month);
+    }
+    else
+    {
+      cal.set(Calendar.MONTH, Calendar.DECEMBER);
+    }
+
+    if (day != null)
+    {
+      cal.set(Calendar.DAY_OF_MONTH, day);
+    }
+    else
+    {
+      cal.set(Calendar.DAY_OF_MONTH,
+              cal.getActualMaximum(Calendar.DAY_OF_MONTH));
+    }
+
     cal.set(Calendar.HOUR_OF_DAY, 23);
     cal.set(Calendar.MINUTE, 59);
     cal.set(Calendar.SECOND, 59);
@@ -65,22 +93,27 @@ public class BlogUtil
    * Method description
    *
    *
+   * @param month
    * @param year
    *
    * @return
    */
-  public static Date createEndDate(int year)
+  public static Date createEndDate(Integer year, Integer month)
   {
-    GregorianCalendar cal = new GregorianCalendar();
+    return createEndDate(year, month, null);
+  }
 
-    cal.set(Calendar.YEAR, year);
-    cal.set(Calendar.MONTH, Calendar.DECEMBER);
-    cal.set(Calendar.DAY_OF_MONTH, cal.getActualMaximum(Calendar.DAY_OF_MONTH));
-    cal.set(Calendar.HOUR_OF_DAY, 23);
-    cal.set(Calendar.MINUTE, 59);
-    cal.set(Calendar.SECOND, 59);
-
-    return cal.getTime();
+  /**
+   * Method description
+   *
+   *
+   * @param year
+   *
+   * @return
+   */
+  public static Date createEndDate(Integer year)
+  {
+    return createEndDate(year, null, null);
   }
 
   /**
@@ -92,18 +125,9 @@ public class BlogUtil
    *
    * @return
    */
-  public static Date createStartDate(int month, int year)
+  public static Date createStartDate(Integer year, Integer month)
   {
-    GregorianCalendar cal = new GregorianCalendar();
-
-    cal.set(Calendar.YEAR, year);
-    cal.set(Calendar.MONTH, month);
-    cal.set(Calendar.DAY_OF_MONTH, 1);
-    cal.set(Calendar.HOUR_OF_DAY, 0);
-    cal.set(Calendar.MINUTE, 0);
-    cal.set(Calendar.SECOND, 1);
-
-    return cal.getTime();
+    return createStartDate(year, month, null);
   }
 
   /**
@@ -114,13 +138,50 @@ public class BlogUtil
    *
    * @return
    */
-  public static Date createStartDate(int year)
+  public static Date createStartDate(Integer year)
   {
+    return createStartDate(year, null, null);
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param year
+   * @param month
+   * @param day
+   *
+   * @return
+   */
+  public static Date createStartDate(Integer year, Integer month, Integer day)
+  {
+    if (year == null)
+    {
+      throw new IllegalArgumentException("year is null");
+    }
+
     GregorianCalendar cal = new GregorianCalendar();
 
     cal.set(Calendar.YEAR, year);
-    cal.set(Calendar.MONTH, Calendar.JANUARY);
-    cal.set(Calendar.DAY_OF_MONTH, 1);
+
+    if (month != null)
+    {
+      cal.set(Calendar.MONTH, month);
+    }
+    else
+    {
+      cal.set(Calendar.MONTH, Calendar.JANUARY);
+    }
+
+    if (day != null)
+    {
+      cal.set(Calendar.DAY_OF_MONTH, day);
+    }
+    else
+    {
+      cal.set(Calendar.DAY_OF_MONTH, 1);
+    }
+
     cal.set(Calendar.HOUR_OF_DAY, 0);
     cal.set(Calendar.MINUTE, 0);
     cal.set(Calendar.SECOND, 1);
@@ -190,5 +251,54 @@ public class BlogUtil
     msg.setSubject(subject);
     msg.setText(text);
     Transport.send(msg);
+  }
+
+  //~--- get methods ----------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   * @param request
+   * @param type
+   * @param name
+   *
+   * @return
+   */
+  @SuppressWarnings("unchecked")
+  public static <T>T getSessionBean(BlogRequest request, Class<T> type,
+                                    String name)
+  {
+    T result = null;
+    HttpSession session = request.getSession(true);
+    Object obj = session.getAttribute(name);
+
+    if (obj != null)
+    {
+      if (!type.isInstance(obj))
+      {
+        throw new BlogRuntimeException("session object " + name
+                                       + " is not an instance of "
+                                       + type.getName());
+      }
+      else
+      {
+        result = (T) obj;
+      }
+    }
+    else
+    {
+      try
+      {
+        result = type.newInstance();
+        session.setAttribute(name, result);
+      }
+      catch (Exception ex)
+      {
+        throw new BlogRuntimeException("could not create new SessionBean", ex);
+      }
+    }
+
+    return result;
   }
 }

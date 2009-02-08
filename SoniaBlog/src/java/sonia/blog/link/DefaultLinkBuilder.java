@@ -12,6 +12,8 @@ package sonia.blog.link;
 import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.app.BlogRequest;
 import sonia.blog.api.link.LinkBuilder;
+import sonia.blog.api.mapping.Mapping;
+import sonia.blog.api.mapping.MappingNavigation;
 import sonia.blog.entity.Attachment;
 import sonia.blog.entity.Blog;
 import sonia.blog.entity.Category;
@@ -113,9 +115,16 @@ public class DefaultLinkBuilder implements LinkBuilder
 
       if (object instanceof ContentObject)
       {
-        if (request.getMapping() != null)
+        Mapping mapping = request.getMapping();
+
+        if (mapping != null)
         {
-          link = request.getMapping().getUri(request, this, object);
+          MappingNavigation navigation = mapping.getMappingNavigation();
+
+          if (navigation != null)
+          {
+            link = navigation.getDetailUri(object);
+          }
         }
         else
         {
@@ -124,11 +133,11 @@ public class DefaultLinkBuilder implements LinkBuilder
       }
       else if (object instanceof Category)
       {
-        link += "categories/" + object.getId() + "/index.jab";
+        link += "category/" + object.getId() + "/index.jab";
       }
       else if (object instanceof Tag)
       {
-        link += "tags/" + ((Tag) object).getId() + "/index.jab";
+        link += "tag/" + ((Tag) object).getId() + "/index.jab";
       }
       else if (object instanceof Attachment)
       {

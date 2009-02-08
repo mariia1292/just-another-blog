@@ -93,5 +93,13 @@ public abstract class FeedParser
    *
    * @return
    */
+  public abstract String getMimeType();
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
   public abstract String getType();
 }

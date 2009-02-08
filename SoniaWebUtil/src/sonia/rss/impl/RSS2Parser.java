@@ -120,6 +120,9 @@ public class RSS2Parser extends FeedParser
   public static final String ELEMENT_URL = "url";
 
   /** Field description */
+  public static final String MIMETYPE = "application/rss+xml";
+
+  /** Field description */
   public static final SimpleDateFormat HTTP_DATE_FORMAT =
     new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss zzz", Locale.ENGLISH);
 
@@ -300,6 +303,18 @@ public class RSS2Parser extends FeedParser
   }
 
   //~--- get methods ----------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  @Override
+  public String getMimeType()
+  {
+    return MIMETYPE;
+  }
 
   /**
    * Method description

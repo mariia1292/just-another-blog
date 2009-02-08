@@ -155,6 +155,9 @@ public interface Constants
   /** Field description */
   public static final String LOGINMODULE_NAME = "BlogLoginModule";
 
+  /** Field description */
+  public static final String MAPPING_FILE = "/WEB-INF/config/mapping.xml";
+
   /*
    * Navigation
    */
@@ -278,4 +281,13 @@ public interface Constants
 
   /** Field description */
   public static final int SSO_ONEPERSESSION = 1;
+
+  /** Field description */
+  public static final String TEMPLATE_DETAIL = "detail.xhtml";
+
+  /** Field description */
+  public static final String TEMPLATE_ERROR = "error.xhtml";
+
+  /** Field description */
+  public static final String TEMPLATE_LIST = "list.xhtml";
 }

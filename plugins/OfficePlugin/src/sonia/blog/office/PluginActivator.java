@@ -35,8 +35,8 @@ public class PluginActivator implements Activator
     BlogContext ctx = BlogContext.getInstance();
 
     mappingHandler = ctx.getMappingHandler();
-    mappingHandler.addMappging("/" + PdfViewerMappingEntry.PATH,
-                               new PdfViewerMappingEntry());
+    mappingHandler.add(PdfViewerMapping.REGEX,
+                               PdfViewerMapping.class);
     parser = MacroParser.getInstance();
     parser.putMacro(PdfViewerMacro.NAME, new PdfViewerMacro());
     parser.putMacro(CodeMacro.NAME, new CodeMacro());
@@ -52,7 +52,7 @@ public class PluginActivator implements Activator
   {
     parser.removeMacro(CodeMacro.NAME);
     parser.removeMacro(PdfViewerMacro.NAME);
-    mappingHandler.removeMapping("/" + PdfViewerMappingEntry.PATH);
+    mappingHandler.remove(PdfViewerMapping.REGEX);
   }
 
   //~--- fields ---------------------------------------------------------------
