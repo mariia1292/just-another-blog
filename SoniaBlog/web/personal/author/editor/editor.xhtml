@@ -57,12 +57,12 @@
               <h:message for="tags" />
             </h:panelGroup>
             
-            <h:outputLabel for="category" value="#{label.category}" />
+            <h:outputLabel for="categories" value="#{label.categories}" />
             <h:panelGroup>
-              <h:selectOneMenu id="category" value="#{EntryBean.entry.category}" converter="converter.category">
+              <h:selectManyCheckbox id="categories" value="#{EntryBean.entry.categories}" converter="converter.category">
                 <f:selectItems value="#{EntryBean.categoryItems}" />
-              </h:selectOneMenu>
-              <h:message for="category" />
+              </h:selectManyCheckbox>
+              <h:message for="categories" />
             </h:panelGroup>
             
             <h:outputLabel for="content" value="#{label.content}" />

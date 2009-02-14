@@ -31,12 +31,52 @@ public class Entry implements Serializable, ContentObject, CommentAble
    * Method description
    *
    *
+   * @param category
+   */
+  public void addCateogory(Category category)
+  {
+    if (categories == null)
+    {
+      categories = new ArrayList<Category>();
+    }
+
+    categories.add(category);
+    if ( ! category.getEntries().contains(this) )
+    {
+      categories.remove(this);
+    }
+  }
+
+  /**
+   * Method description
+   *
+   *
    * @param comment
    */
   public void addComment(Comment comment)
   {
     getComments().add(comment);
     comment.setEntry(this);
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param category
+   *
+   * @return
+   */
+  public boolean containsCategory(Category category)
+  {
+    boolean result = false;
+
+    if (categories != null)
+    {
+      result = categories.contains(category);
+    }
+
+    return result;
   }
 
   /**
@@ -84,6 +124,31 @@ public class Entry implements Serializable, ContentObject, CommentAble
              : 0);
 
     return hash;
+  }
+
+  /**
+   * Method description
+   *
+   */
+  public void publish()
+  {
+    published = true;
+    publishingDate = new Date();
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param category
+   */
+  public void removeCategory(Category category)
+  {
+    if (categories != null)
+    {
+      categories.remove(category);
+    }
+    category.getEntries().remove(this);
   }
 
   /**
@@ -180,9 +245,20 @@ public class Entry implements Serializable, ContentObject, CommentAble
    *
    * @return
    */
-  public Category getCategory()
+  public Blog getBlog()
   {
-    return category;
+    return blog;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  public List<Category> getCategories()
+  {
+    return categories;
   }
 
   /**
@@ -269,6 +345,17 @@ public class Entry implements Serializable, ContentObject, CommentAble
    *
    * @return
    */
+  public Date getPublishingDate()
+  {
+    return publishingDate;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
   public List<Tag> getTags()
   {
     if (tags == null)
@@ -307,6 +394,17 @@ public class Entry implements Serializable, ContentObject, CommentAble
    *
    * @return
    */
+  public boolean isAllowComments()
+  {
+    return allowComments;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
   public boolean isOnlyContent()
   {
     return (teaser == null) || (teaser.trim().length() == 0);
@@ -324,6 +422,17 @@ public class Entry implements Serializable, ContentObject, CommentAble
   }
 
   //~--- set methods ----------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   * @param allowComments
+   */
+  public void setAllowComments(boolean allowComments)
+  {
+    this.allowComments = allowComments;
+  }
 
   /**
    * Method description
@@ -351,11 +460,22 @@ public class Entry implements Serializable, ContentObject, CommentAble
    * Method description
    *
    *
-   * @param category
+   * @param blog
    */
-  public void setCategory(Category category)
+  public void setBlog(Blog blog)
   {
-    this.category = category;
+    this.blog = blog;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param categories
+   */
+  public void setCategories(List<Category> categories)
+  {
+    this.categories = categories;
   }
 
   /**
@@ -400,6 +520,17 @@ public class Entry implements Serializable, ContentObject, CommentAble
   public void setPublished(boolean published)
   {
     this.published = published;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param publishingDate
+   */
+  public void setPublishingDate(Date publishingDate)
+  {
+    this.publishingDate = publishingDate;
   }
 
   /**
@@ -464,7 +595,10 @@ public class Entry implements Serializable, ContentObject, CommentAble
   private User author;
 
   /** Field description */
-  private Category category;
+  private Blog blog;
+
+  /** Field description */
+  private List<Category> categories;
 
   /** Field description */
   private List<Comment> comments;
@@ -482,7 +616,13 @@ public class Entry implements Serializable, ContentObject, CommentAble
   private Date lastUpdate;
 
   /** Field description */
-  private boolean published = true;
+  private boolean published = false;
+
+  /** Field description */
+  private boolean allowComments = true;
+
+  /** Field description */
+  private Date publishingDate;
 
   /** Field description */
   private List<Tag> tags;

@@ -10,6 +10,7 @@ package sonia.blog.app;
 //~--- non-JDK imports --------------------------------------------------------
 
 import sonia.blog.api.app.BlogContext;
+import sonia.blog.api.app.BlogRequestListener;
 import sonia.blog.api.app.Constants;
 import sonia.blog.api.dao.DAOFactory;
 import sonia.blog.api.dao.DAOListener;
@@ -301,6 +302,8 @@ public class BlogContextListener implements ServletContextListener
     registry.register(DAOListener.class, Constants.LISTENER_MEMBER);
     registry.register(DAOListener.class, Constants.LISTENER_TAG);
     registry.register(DAOListener.class, Constants.LISTENER_USER);
+    registry.register(BlogRequestListener.class,
+                      Constants.SERVICE_REQUESTLISTENER);
 
     // register NavigationProvider
     registry.register(NavigationProvider.class, Constants.NAVIGATION_EXTRA);

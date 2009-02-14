@@ -490,7 +490,7 @@ public class JpaEntryDAO extends JpaGenericDAO<Entry> implements EntryDAO
 
     q.setParameter("blog", blog);
     q.setParameter("published", published);
-    q.setParameter("date", entry.getCreationDate());
+    q.setParameter("date", entry.getPublishingDate());
 
     try
     {
@@ -519,7 +519,7 @@ public class JpaEntryDAO extends JpaGenericDAO<Entry> implements EntryDAO
 
     q.setParameter("category", category);
     q.setParameter("published", published);
-    q.setParameter("date", entry.getCreationDate());
+    q.setParameter("date", entry.getPublishingDate());
 
     try
     {
@@ -551,7 +551,7 @@ public class JpaEntryDAO extends JpaGenericDAO<Entry> implements EntryDAO
     q.setParameter("tag", tag);
     q.setParameter("blog", blog);
     q.setParameter("published", published);
-    q.setParameter("date", entry.getCreationDate());
+    q.setParameter("date", entry.getPublishingDate());
 
     try
     {
@@ -580,7 +580,7 @@ public class JpaEntryDAO extends JpaGenericDAO<Entry> implements EntryDAO
 
     q.setParameter("blog", blog);
     q.setParameter("published", published);
-    q.setParameter("date", entry.getCreationDate());
+    q.setParameter("date", entry.getPublishingDate());
 
     try
     {
@@ -610,7 +610,7 @@ public class JpaEntryDAO extends JpaGenericDAO<Entry> implements EntryDAO
 
     q.setParameter("category", category);
     q.setParameter("published", published);
-    q.setParameter("date", entry.getCreationDate());
+    q.setParameter("date", entry.getPublishingDate());
 
     try
     {
@@ -643,7 +643,7 @@ public class JpaEntryDAO extends JpaGenericDAO<Entry> implements EntryDAO
     q.setParameter("tag", tag);
     q.setParameter("blog", blog);
     q.setParameter("published", published);
-    q.setParameter("date", entry.getCreationDate());
+    q.setParameter("date", entry.getPublishingDate());
 
     try
     {

@@ -9,9 +9,9 @@
   </persistence-unit-metadata>
   <package>sonia.blog.entity</package>
   <entity metadata-complete="true" name="Blog" class="sonia.blog.entity.Blog">
-    <named-query name="Blog.findByServername">
+    <named-query name="Blog.findByIdentifier">
       <query>
-        select b from Blog as b where b.active = true and b.servername = :servername
+        select b from Blog as b where b.active = true and b.identifier = :identifier
       </query>
     </named-query>
     <named-query name="Blog.findAll">
@@ -34,13 +34,17 @@
       <id name="id">
         <generated-value strategy="IDENTITY" />
       </id>
+      <basic name="title">
+        <column nullable="false" length="250" />
+      </basic>
       <basic name="dateFormat">
         <column nullable="false" length="50" />
       </basic>
       <basic name="creationDate">
+        <column nullable="false" />
         <temporal>TIMESTAMP</temporal>
       </basic>
-      <basic name="servername">
+      <basic name="identifier">
         <column nullable="false" unique="true" />
       </basic>
       <basic name="template">
@@ -53,6 +57,11 @@
         </cascade>
       </one-to-many>
       <one-to-many name="categories" fetch="LAZY" mapped-by="blog">
+        <cascade>
+          <cascade-remove />
+        </cascade>
+      </one-to-many>
+      <one-to-many name="entries" fetch="LAZY" mapped-by="blog">
         <cascade>
           <cascade-remove />
         </cascade>

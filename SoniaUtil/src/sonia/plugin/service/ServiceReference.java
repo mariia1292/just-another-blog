@@ -102,6 +102,19 @@ public class ServiceReference<T>
    *
    * @return
    */
+  public boolean contains(T implementation)
+  {
+    return implementations.contains(implementation);
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param implementation
+   *
+   * @return
+   */
   public ServiceReference<T> remove(T implementation)
   {
     implementations.remove(implementation);

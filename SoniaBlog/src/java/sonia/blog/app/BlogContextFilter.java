@@ -11,12 +11,15 @@ package sonia.blog.app;
 
 import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.app.BlogRequest;
+import sonia.blog.api.app.BlogRequestListener;
 import sonia.blog.api.app.BlogResponse;
 import sonia.blog.api.app.Constants;
 import sonia.blog.api.authentication.LoginBean;
 import sonia.blog.entity.Blog;
 
 import sonia.config.XmlConfiguration;
+
+import sonia.plugin.service.ServiceReference;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -67,6 +70,11 @@ public class BlogContextFilter implements Filter
     BlogRequest request = new BlogRequest((HttpServletRequest) req);
     BlogResponse response = new BlogResponse((HttpServletResponse) resp);
 
+    for (BlogRequestListener listener : listenerReference.getAll())
+    {
+      listener.beforeMapping(request);
+    }
+
     if (request.getUserPrincipal() == null)
     {
       int value = configuration.getInteger(Constants.CONFIG_SSO,
@@ -102,6 +110,11 @@ public class BlogContextFilter implements Filter
     {
       chain.doFilter(request, response);
     }
+
+    for (BlogRequestListener listener : listenerReference.getAll())
+    {
+      listener.afterMapping(request);
+    }
   }
 
   /**
@@ -115,6 +128,8 @@ public class BlogContextFilter implements Filter
   public void init(FilterConfig config) throws ServletException
   {
     configuration = BlogContext.getInstance().getConfiguration();
+    listenerReference = BlogContext.getInstance().getServiceRegistry().get(
+      BlogRequestListener.class, Constants.SERVICE_REQUESTLISTENER);
   }
 
   /**
@@ -142,4 +157,7 @@ public class BlogContextFilter implements Filter
 
   /** Field description */
   private XmlConfiguration configuration;
+
+  /** Field description */
+  private ServiceReference<BlogRequestListener> listenerReference;
 }

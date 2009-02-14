@@ -9,41 +9,6 @@
   </persistence-unit-metadata>
   <package>sonia.blog.entity</package>
   <entity metadata-complete="true" name="Entry" class="sonia.blog.entity.Entry">
-    <!--
-    @NamedQueries(
-    {
-      @NamedQuery(name = "Entry.findAll", query = "select e from Entry e") ,
-      @NamedQuery(name = "Entry.findAllActives",
-                  query = "select e from Entry e where e.published = true order by e.creationDate") ,
-      @NamedQuery(name = "Entry.findAllActivesByBlog",
-                  query = "select e from Entry e join e.category c join c.blog b where b = :blog and e.published = true order by e.creationDate") ,
-      @NamedQuery(name = "Entry.findAllByBlog",
-                  query = "select e from Entry e join e.category c join c.blog b where b = :blog and e.published = true order by e.creationDate desc") ,
-      @NamedQuery(name = "Entry.findByCategory",
-                  query = "select e from Entry as e where e.category = :category and e.published = true order by e.creationDate") ,
-      @NamedQuery(name = "Entry.findIdFromBlog",
-                  query = "select e from Entry e join e.category c join c.blog b where b = :blog and e.id = :id and e.published = true order by e.creationDate") ,
-      @NamedQuery(name = "Entry.findFromBlog",
-                  query = "select e from Entry e join e.category c join c.blog b where b = :blog order by e.creationDate desc") ,
-      @NamedQuery(name = "Entry.findByBlogAndTag",
-                  query = "select e from Entry e join e.category c join c.blog b join e.tags t where e.published = true and b = :blog and t = :tag order by e.creationDate") ,
-      @NamedQuery(name = "Entry.findByTagId",
-                  query = "select e from Entry e join e.tags t where e.published = true and t.id = :tagId order by e.creationDate") ,
-      @NamedQuery(name = "Entry.findByTagName",
-                  query = "select e from Entry e join e.category c join c.blog b join e.tags t where b = :blog and e.published = true and t.name = :name order by e.creationDate") ,
-      @NamedQuery(name = "Entry.findByCategoryId",
-                  query = "select e From Entry e join e.category c where c.id = :id and e.published = true order by e.creationDate") ,
-      @NamedQuery(name = "Entry.findByBlogAndDate",
-                  query = "select e from Entry e join e.category c join c.blog b where b = :blog and e.published = true and e.creationDate between :start and :end order by e.creationDate") ,
-      @NamedQuery(name = "Entry.calendar",
-                  query = "select e.creationDate from Entry e join e.category c join c.blog b where b = :blog and e.published = true and e.creationDate between :start and :end") ,
-      @NamedQuery(name = "Entry.count", query = "select count(e) from Entry e") ,
-      @NamedQuery(name = "Entry.findAllDraftsByBlogAndUser",
-                  query = "select e from Entry e join e.category c join c.blog b where b = :blog and e.published = false and e.author = :user order by e.creationDate desc") ,
-      @NamedQuery(name = "Entry.countByBlog",
-                  query = "select count(e) from Entry e join e.category c join c.blog b where b = :blog")
-    })
-    -->
     <named-query name="Entry.findAll">
       <query>
         select e from Entry e
@@ -51,52 +16,52 @@
     </named-query>
     <named-query name="Entry.findAllActives">
       <query>
-        select e from Entry e where e.published = true order by e.creationDate
+        select e from Entry e where e.published = true order by e.publishingDate desc
       </query>
     </named-query>
     <named-query name="Entry.findAllActivesByBlog">
       <query>
-        select e from Entry e join e.category c join c.blog b where b = :blog and e.published = true order by e.creationDate
+        select e from Entry e join e.blog b where b = :blog and e.published = true order by e.publishingDate desc
       </query>
     </named-query>
     <named-query name="Entry.findAllByBlog">
       <query>
-        select e from Entry e join e.category c join c.blog b where b = :blog order by e.creationDate desc
+        select e from Entry e join e.blog b where b = :blog order by e.creationDate desc
       </query>
     </named-query>
     <named-query name="Entry.findByCategory">
       <query>
-        select e from Entry as e where e.category = :category and e.published = true order by e.creationDate
+        select e from Entry as e where e.categories = :category and e.published = true order by e.publishingDate desc
       </query>
     </named-query>
     <named-query name="Entry.findByBlogAndTag">
       <query>
-        select e from Entry e join e.category c join c.blog b join e.tags t where e.published = true and b = :blog and t = :tag order by e.creationDate
+        select e from Entry e join e.blog b join e.tags t where e.published = true and b = :blog and t = :tag order by e.publishingDate desc
       </query>
     </named-query>
     <named-query name="Entry.findByTagId">
       <query>
-        select e from Entry e join e.tags t where e.published = true and t.id = :tagId order by e.creationDate
+        select e from Entry e join e.tags t where e.published = true and t.id = :tagId order by e.publishingDate desc
       </query>
     </named-query>
     <named-query name="Entry.findByTagName">
       <query>
-        select e from Entry e join e.category c join c.blog b join e.tags t where b = :blog and e.published = true and t.name = :name order by e.creationDate
+        select e from Entry e join e.blog b join e.tags t where b = :blog and e.published = true and t.name = :name order by e.publishingDate desc
       </query>
     </named-query>
     <named-query name="Entry.findByCategoryId">
       <query>
-        select e From Entry e join e.category c where c.id = :id and e.published = true order by e.creationDate
+        select e From Entry e join e.categories c where c.id = :id and e.published = true order by e.publishingDate desc
       </query>
     </named-query>
     <named-query name="Entry.findByBlogAndDate">
       <query>
-        select e from Entry e join e.category c join c.blog b where b = :blog and e.published = true and e.creationDate between :start and :end order by e.creationDate
+        select e from Entry e join e.blog b where b = :blog and e.published = true and e.creationDate between :start and :end order by e.publishingDate desc
       </query>
     </named-query>
     <named-query name="Entry.calendar">
       <query>
-        select e.creationDate from Entry e join e.category c join c.blog b where b = :blog and e.published = true and e.creationDate between :start and :end
+        select e.creationDate from Entry e join e.blog b where b = :blog and e.published = true and e.creationDate between :start and :end
       </query>
     </named-query>
     <named-query name="Entry.count">
@@ -106,69 +71,69 @@
     </named-query>
     <named-query name="Entry.findAllDraftsByBlogAndUser">
       <query>
-        select e from Entry e join e.category c join c.blog b where b = :blog and e.published = false and e.author = :user order by e.creationDate desc
+        select e from Entry e join e.blog b where b = :blog and e.published = false and e.author = :user order by e.creationDate desc
       </query>
     </named-query>
     <named-query name="Entry.countByBlog">
       <query>
-        select count(e) from Entry e join e.category c join c.blog b where b = :blog
+        select count(e) from Entry e join e.blog b where b = :blog
       </query>
     </named-query>
     <named-query name="Entry.prev">
       <query>
-        select e from Entry e join e.category c join c.blog b
+        select e from Entry e join e.blog b
         where
           e.published = :published
         and
           b = :blog
         and
-          e.creationDate = (select max(e2.creationDate) from Entry e2 where e2.creationDate &lt; :date)
+          e.publishingDate = (select max(e2.publishingDate) from Entry e2 where e2.publishingDate &lt; :date)
         order by
-          e.creationDate, e.title
+          e.publishingDate desc, e.title
       </query>
     </named-query>
     <named-query name="Entry.next">
       <query>
-        select e from Entry e join e.category c join c.blog b
+        select e from Entry e join e.blog b
         where
           e.published = :published
         and
           b = :blog
         and
-          e.creationDate = (select min(e2.creationDate) from Entry e2 where e2.creationDate &gt; :date )
+          e.publishingDate = (select min(e2.publishingDate) from Entry e2 where e2.publishingDate &gt; :date )
         order by
-          e.creationDate, e.title
+          e.publishingDate, e.title
       </query>
     </named-query>
     <named-query name="Entry.categoryPrev">
       <query>
-        select e from Entry e join e.category c
+        select e from Entry e join e.categories c
         where
           e.published = :published
         and
           c = :category
         and
-          e.creationDate = (select max(e2.creationDate) from Entry e2 where e2.creationDate &lt; :date)
+          e.publishingDate = (select max(e2.publishingDate) from Entry e2 where e2.publishingDate &lt; :date)
         order by
-          e.creationDate, e.title
+          e.publishingDate desc, e.title
       </query>
     </named-query>
     <named-query name="Entry.categoryNext">
       <query>
-        select e from Entry e join e.category c
+        select e from Entry e join e.categories c
         where
           e.published = :published
         and
           c = :category
         and
-          e.creationDate = (select min(e2.creationDate) from Entry e2 where e2.creationDate &gt; :date)
+          e.publishingDate = (select min(e2.publishingDate) from Entry e2 where e2.publishingDate &gt; :date)
         order by
-          e.creationDate, e.title
+          e.publishingDate desc, e.title
       </query>
     </named-query>
     <named-query name="Entry.tagPrev">
       <query>
-        select e from Entry e join e.category c join c.blog b join e.tags t
+        select e from Entry e join e.blog b join e.tags t
         where
           e.published = :published
         and
@@ -176,14 +141,14 @@
         and
           t = :tag
         and
-          e.creationDate = (select max(e2.creationDate) from Entry e2 where e2.creationDate &lt; :date)
+          e.publishingDate = (select max(e2.publishingDate) from Entry e2 where e2.publishingDate &lt; :date)
         order by
-          e.creationDate, e.title
+          e.publishingDate desc, e.title
       </query>
     </named-query>
     <named-query name="Entry.tagNext">
       <query>
-        select e from Entry e join e.category c join c.blog b join e.tags t
+        select e from Entry e join e.blog b join e.tags t
         where
           e.published = :published
         and
@@ -191,9 +156,9 @@
         and
           t = :tag
         and
-          e.creationDate = (select min(e2.creationDate) from Entry e2 where e2.creationDate &gt; :date)
+          e.publishingDate = (select min(e2.publishingDate) from Entry e2 where e2.publishingDate &gt; :date)
         order by
-          e.creationDate, e.title
+          e.publishingDate desc, e.title
       </query>
     </named-query>
     <pre-persist method-name="prePersists" />
@@ -218,9 +183,12 @@
       <basic name="lastUpdate">
         <temporal>TIMESTAMP</temporal>
       </basic>
+      <basic name="publishingDate">
+        <temporal>TIMESTAMP</temporal>
+      </basic>
       <many-to-one name="author" optional="false" />
-      <many-to-one name="category" optional="false" />
-      <one-to-many name="attachments">
+      <many-to-one name="blog" optional="false" fetch="LAZY" />
+      <one-to-many name="attachments" mapped-by="entry">
         <cascade>
           <cascade-merge />
           <cascade-remove />
@@ -232,7 +200,10 @@
           <cascade-remove />
         </cascade>
       </one-to-many>
-      <many-to-many name="tags">
+      <many-to-many name="categories" fetch="LAZY">
+        <order-by>name</order-by>
+      </many-to-many>
+      <many-to-many name="tags" fetch="LAZY">
         <order-by>name</order-by>
       </many-to-many>
     </attributes>

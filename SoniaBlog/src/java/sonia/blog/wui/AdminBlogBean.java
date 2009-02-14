@@ -14,7 +14,6 @@ import org.apache.myfaces.custom.navmenu.NavigationMenuItem;
 import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.app.BlogRequest;
 import sonia.blog.api.app.Constants;
-import sonia.blog.api.app.ResourceManager;
 import sonia.blog.api.dao.AttachmentDAO;
 import sonia.blog.api.dao.BlogDAO;
 import sonia.blog.api.dao.CategoryDAO;
@@ -87,13 +86,13 @@ public class AdminBlogBean extends AbstractBean
   public boolean checkServername(BlogDAO blogDAO)
   {
     boolean result = true;
-    Blog b = blogDAO.findByServername(blog.getServername());
+    Blog b = blogDAO.findByIdentifier(blog.getIdentifier());
 
     if ((b != null) &&!b.equals(blog))
     {
       result = false;
       getMessageHandler().error("blogform:servername", "nameAllreadyExists",
-                                null, blog.getServername());
+                                null, blog.getIdentifier());
     }
 
     return result;

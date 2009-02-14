@@ -169,17 +169,6 @@ public class Attachment implements Serializable, PermaObject, FileObject
    *
    * @return
    */
-  public Page getPage()
-  {
-    return page;
-  }
-
-  /**
-   * Method description
-   *
-   *
-   * @return
-   */
   public long getSize()
   {
     return fileSize;
@@ -257,17 +246,6 @@ public class Attachment implements Serializable, PermaObject, FileObject
    * Method description
    *
    *
-   * @param page
-   */
-  public void setPage(Page page)
-  {
-    this.page = page;
-  }
-
-  /**
-   * Method description
-   *
-   *
    * @param size
    */
   public void setSize(long size)
@@ -311,7 +289,4 @@ public class Attachment implements Serializable, PermaObject, FileObject
 
   /** Field description */
   private String name;
-
-  /** Field description */
-  private Page page;
 }

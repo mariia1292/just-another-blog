@@ -270,6 +270,8 @@ public interface Constants
   /** Field description */
   public static final String SERVICE_SSOAUTHENTICATION = "/app/sso";
 
+  public static final String SERVICE_REQUESTLISTENER = "/listener/request";
+
   /** Field description */
   public static final String SSOLOGINMODULE_NAME = "BlogSSOLoginModule";
 

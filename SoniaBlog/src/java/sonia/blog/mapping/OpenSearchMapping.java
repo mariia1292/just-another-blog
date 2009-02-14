@@ -77,7 +77,7 @@ public class OpenSearchMapping extends FinalMapping
       writer.println("\t\t" + link + "template/jab/images/icon-16.gif");
       writer.println("\t</Image>");
       writer.println("\t<Image width=\"32\" height=\"32\">");
-      writer.println("\\tt" + link + "template/jab/images/icon-32.gif");
+      writer.println("\t\t" + link + "template/jab/images/icon-32.gif");
       writer.println("\t</Image>");
       writer.println("\t<Image width=\"64\" height=\"64\">");
       writer.println("\t\t" + link + "template/jab/images/icon-64.gif");

@@ -213,20 +213,15 @@ public class IndexListener implements DAOListener
   private File getDirectory(Entry entry)
   {
     File result = null;
-    Category catgory = entry.getCategory();
+    Blog blog = entry.getBlog();
 
-    if (catgory != null)
+    if (blog != null)
     {
-      Blog blog = catgory.getBlog();
+      Long id = blog.getId();
 
-      if (blog != null)
+      if (id != null)
       {
-        Long id = blog.getId();
-
-        if (id != null)
-        {
-          result = resourceManager.getDirectory(Constants.RESOURCE_INDEX, blog);
-        }
+        result = resourceManager.getDirectory(Constants.RESOURCE_INDEX, blog);
       }
     }
 

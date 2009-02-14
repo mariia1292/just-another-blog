@@ -9,7 +9,6 @@
     <mapping-file>/sonia/blog/dao/jpa/orm/Comment.xml</mapping-file>
     <mapping-file>/sonia/blog/dao/jpa/orm/Entry.xml</mapping-file>
     <mapping-file>/sonia/blog/dao/jpa/orm/Member.xml</mapping-file>
-    <mapping-file>/sonia/blog/dao/jpa/orm/Page.xml</mapping-file>
     <mapping-file>/sonia/blog/dao/jpa/orm/Tag.xml</mapping-file>
     <mapping-file>/sonia/blog/dao/jpa/orm/User.xml</mapping-file>
     <mapping-file>/sonia/blog/dao/jpa/orm/BlogHitCount.xml</mapping-file>

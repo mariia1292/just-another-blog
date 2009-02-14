@@ -158,7 +158,7 @@ public class GlobalConfigBean extends AbstractConfigBean
       for (int i = 0; i < s; i++)
       {
         Blog blog = blogList.get(i);
-        String label = blog.getTitle() + " (" + blog.getServername() + ")";
+        String label = blog.getTitle() + " (" + blog.getIdentifier() + ")";
 
         items[i] = new SelectItem(blog.getId(), label);
       }

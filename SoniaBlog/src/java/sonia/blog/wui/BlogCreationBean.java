@@ -66,7 +66,7 @@ public class BlogCreationBean extends AbstractBean
 
     String result = SUCCESS;
     BlogDAO blogDAO = BlogContext.getDAOFactory().getBlogDAO();
-    Blog b = blogDAO.findByServername(blog.getServername());
+    Blog b = blogDAO.findByIdentifier(blog.getIdentifier());
 
     if (b == null)
     {
@@ -75,7 +75,7 @@ public class BlogCreationBean extends AbstractBean
     else
     {
       getMessageHandler().error("blogform:servername", "nameAllreadyExists",
-                                null, blog.getServername());
+                                null, blog.getIdentifier());
       result = FAILURE;
     }
 
@@ -232,14 +232,14 @@ public class BlogCreationBean extends AbstractBean
    */
   private void setServername()
   {
-    String servername = blog.getServername();
+    String servername = blog.getIdentifier();
 
     if (!Util.isBlank(domain))
     {
       servername += "." + domain;
     }
 
-    blog.setServername(servername);
+    blog.setIdentifier(servername);
   }
 
   //~--- fields ---------------------------------------------------------------

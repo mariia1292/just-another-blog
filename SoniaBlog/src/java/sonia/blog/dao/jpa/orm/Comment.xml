@@ -9,20 +9,6 @@
   </persistence-unit-metadata>
   <package>sonia.blog.entity</package>
   <entity metadata-complete="true" name="Comment" class="sonia.blog.entity.Comment">
-    <!--
-    @NamedQueries(
-    {
-      @NamedQuery(name = "Comment.findAll", query = "select c from Comment c") ,
-      @NamedQuery(name = "Comment.findAllByBlog",
-                  query = "select c from Comment c join c.entry e join e.category ca join ca.blog b where b = :blog and e.published = true order by c.creationDate desc") ,
-      @NamedQuery(name = "Comment.findAllActivesByEntry",
-                  query = "select c from Comment c join c.entry e where e = :entry and c.spam = false order by c.creationDate") ,
-      @NamedQuery(name = "Comment.count",
-                  query = "select count(c) from Comment c") ,
-      @NamedQuery(name = "Comment.countByBlog",
-                  query = "select count(c) from Comment c join c.entry e join e.category cat join cat.blog b where b = :blog")
-    })
-    -->
     <named-query name="Comment.findAll">
       <query>
         select c from Comment c
@@ -30,7 +16,7 @@
     </named-query>
     <named-query name="Comment.findAllByBlog">
       <query>
-        select c from Comment c join c.entry e join e.category ca join ca.blog b where b = :blog and e.published = true order by c.creationDate desc
+        select c from Comment c join c.entry e join e.blog b where b = :blog and e.published = true order by c.creationDate desc
       </query>
     </named-query>
     <named-query name="Comment.findAllActivesByEntry">
@@ -45,7 +31,7 @@
     </named-query>
     <named-query name="Comment.countByBlog">
       <query>
-        select count(c) from Comment c join c.entry e join e.category cat join cat.blog b where b = :blog
+        select count(c) from Comment c join c.entry e join e.blog b where b = :blog
       </query>
     </named-query>
     <pre-persist method-name="prePersists" />

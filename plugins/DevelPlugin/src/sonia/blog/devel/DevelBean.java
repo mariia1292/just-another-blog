@@ -12,6 +12,7 @@ package sonia.blog.devel;
 import org.apache.derby.drda.NetworkServerControl;
 
 import sonia.blog.api.app.BlogContext;
+import sonia.blog.api.app.BlogRequestListener;
 import sonia.blog.api.app.Constants;
 import sonia.blog.api.dao.BlogDAO;
 import sonia.blog.api.dao.CategoryDAO;
@@ -42,6 +43,9 @@ import java.util.Date;
 import java.util.Random;
 import java.util.logging.Level;
 
+import javax.faces.event.ValueChangeEvent;
+
+
 /**
  *
  * @author sdorra
@@ -56,6 +60,9 @@ public class DevelBean extends AbstractBean
   public DevelBean()
   {
     super();
+    perfRequestListener = new PerfRequestListener();
+    listenerReference = BlogContext.getInstance().getServiceRegistry().get(
+      BlogRequestListener.class, Constants.SERVICE_REQUESTLISTENER);
   }
 
   //~--- methods --------------------------------------------------------------
@@ -94,7 +101,7 @@ public class DevelBean extends AbstractBean
       {
         Blog blog = new Blog();
 
-        blog.setServername("blog" + j);
+        blog.setIdentifier("blog" + j);
         blog.setTitle("Blog " + j);
         blog.setTemplate("jab");
         blog.setEmail("user" + j + "@jab.de");
@@ -119,7 +126,7 @@ public class DevelBean extends AbstractBean
             Entry entry = new Entry();
 
             entry.setAuthor(user);
-            entry.setCategory(category);
+            entry.addCateogory(category);
             entry.setPublished(true);
             entry.setTitle("Entry " + l);
 
@@ -203,6 +210,40 @@ public class DevelBean extends AbstractBean
     return result;
   }
 
+  /**
+   * Method description
+   *
+   *
+   * @param event
+   */
+  public void toggleRequestListener(ValueChangeEvent event)
+  {
+    if (Boolean.TRUE.equals(event.getNewValue()))
+    {
+      if (!listenerReference.getAll().contains(perfRequestListener))
+      {
+        listenerReference.add(perfRequestListener);
+      }
+    }
+    else
+    {
+      if (listenerReference.getAll().contains(perfRequestListener))
+      {
+        listenerReference.remove(perfRequestListener);
+      }
+
+      try
+      {
+        perfRequestListener.store();
+      }
+      catch (Exception ex)
+      {
+        logger.log(Level.SEVERE, null, ex);
+        getMessageHandler().error(ex.getMessage());
+      }
+    }
+  }
+
   //~--- get methods ----------------------------------------------------------
 
   /**
@@ -283,6 +324,17 @@ public class DevelBean extends AbstractBean
         Constants.CONFIG_DB_EMBEDDED, Boolean.FALSE);
   }
 
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  public boolean isRequestListener()
+  {
+    return requestListener;
+  }
+
   //~--- set methods ----------------------------------------------------------
 
   /**
@@ -327,6 +379,17 @@ public class DevelBean extends AbstractBean
   public void setEntries(int entries)
   {
     this.entries = entries;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param requestListener
+   */
+  public void setRequestListener(boolean requestListener)
+  {
+    this.requestListener = requestListener;
   }
 
   /**
@@ -398,6 +461,15 @@ public class DevelBean extends AbstractBean
 
   /** Field description */
   private int entries = 10;
+
+  /** Field description */
+  private ServiceReference<BlogRequestListener> listenerReference;
+
+  /** Field description */
+  private PerfRequestListener perfRequestListener;
+
+  /** Field description */
+  private boolean requestListener = false;
 
   /** Field description */
   private int users = 20;

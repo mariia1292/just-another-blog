@@ -181,6 +181,8 @@ public class EntryBean extends AbstractBean
   public String newEntry()
   {
     entry = new Entry();
+    Blog blog = getRequest().getCurrentBlog();
+    entry.setBlog(blog);
     tagString = "";
 
     return EDITOR;
@@ -194,7 +196,7 @@ public class EntryBean extends AbstractBean
    */
   public String publish()
   {
-    entry.setPublished(true);
+    entry.publish();
 
     return save();
   }
@@ -297,13 +299,13 @@ public class EntryBean extends AbstractBean
           entry.setTitle("NewEntry " + getDateString(request, new Date()));
         }
 
-        if (entry.getCategory() == null)
+        if (entry.getCategories() == null)
         {
           CategoryDAO categoryDAO = DAOFactory.getInstance().getCategoryDAO();
           Category cat =
             categoryDAO.findFirstByBlog(getRequest().getCurrentBlog());
 
-          entry.setCategory(cat);
+          entry.addCateogory(cat);
         }
 
         entry.setAuthor(author);

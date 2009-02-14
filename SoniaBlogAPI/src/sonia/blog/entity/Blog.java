@@ -179,6 +179,17 @@ public class Blog implements Serializable, PermaObject, Comparable<Blog>
    *
    * @return
    */
+  public List<Entry> getEntries()
+  {
+    return entries;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
   public int getEntriesPerPage()
   {
     return entriesPerPage;
@@ -193,6 +204,17 @@ public class Blog implements Serializable, PermaObject, Comparable<Blog>
   public Long getId()
   {
     return id;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  public String getIdentifier()
+  {
+    return identifier;
   }
 
   /**
@@ -231,17 +253,6 @@ public class Blog implements Serializable, PermaObject, Comparable<Blog>
     }
 
     return members;
-  }
-
-  /**
-   * Method description
-   *
-   *
-   * @return
-   */
-  public String getServername()
-  {
-    return servername;
   }
 
   /**
@@ -427,6 +438,17 @@ public class Blog implements Serializable, PermaObject, Comparable<Blog>
    * Method description
    *
    *
+   * @param entries
+   */
+  public void setEntries(List<Entry> entries)
+  {
+    this.entries = entries;
+  }
+
+  /**
+   * Method description
+   *
+   *
    * @param entriesPerPage
    */
   public void setEntriesPerPage(int entriesPerPage)
@@ -443,6 +465,17 @@ public class Blog implements Serializable, PermaObject, Comparable<Blog>
   public void setId(Long id)
   {
     this.id = id;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param identifier
+   */
+  public void setIdentifier(String identifier)
+  {
+    this.identifier = identifier;
   }
 
   /**
@@ -476,17 +509,6 @@ public class Blog implements Serializable, PermaObject, Comparable<Blog>
   public void setMembers(List<BlogMember> members)
   {
     this.members = members;
-  }
-
-  /**
-   * Method description
-   *
-   *
-   * @param servername
-   */
-  public void setServername(String servername)
-  {
-    this.servername = servername;
   }
 
   /**
@@ -574,10 +596,16 @@ public class Blog implements Serializable, PermaObject, Comparable<Blog>
   private String email;
 
   /** Field description */
+  private List<Entry> entries;
+
+  /** Field description */
   private int entriesPerPage = 20;
 
   /** Field description */
   private Long id;
+
+  /** Field description */
+  private String identifier;
 
   /** Field description */
   private int imageHeight = 0;
@@ -587,9 +615,6 @@ public class Blog implements Serializable, PermaObject, Comparable<Blog>
 
   /** Field description */
   private List<BlogMember> members;
-
-  /** Field description */
-  private String servername;
 
   /** Field description */
   private String template;

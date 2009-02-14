@@ -11,6 +11,7 @@ package sonia.blog.entity;
 
 import java.io.Serializable;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -128,6 +129,10 @@ public class Category implements Serializable, PermaObject
    */
   public List<Entry> getEntries()
   {
+    if ( entries == null )
+    {
+      entries = new ArrayList<Entry>();
+    }
     return entries;
   }
 

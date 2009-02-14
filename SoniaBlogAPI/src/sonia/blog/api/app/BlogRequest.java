@@ -89,7 +89,7 @@ public class BlogRequest extends HttpServletRequestWrapper
       String servername = getServerName();
       BlogDAO blogDAO = BlogContext.getDAOFactory().getBlogDAO();
 
-      blog = blogDAO.findByServername(servername);
+      blog = blogDAO.findByIdentifier(servername);
 
       if (blog == null)
       {

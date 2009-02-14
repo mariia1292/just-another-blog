@@ -97,7 +97,7 @@ public class Blogger
       }
       else
       {
-        Blog blog = entry.getCategory().getBlog();
+        Blog blog = entry.getBlog();
 
         prev = isAdmin(user, blog);
       }
@@ -161,7 +161,7 @@ public class Blogger
       }
       else
       {
-        Blog blog = entry.getCategory().getBlog();
+        Blog blog = entry.getBlog();
 
         prev = isAdmin(user, blog);
       }
@@ -230,7 +230,7 @@ public class Blogger
 
       entry.setTitle(title);
       entry.setContent(content);
-      entry.setCategory(catgory);
+      entry.addCateogory(catgory);
       entry.setAuthor(user);
       entry.setPublished(publish);
 
@@ -347,8 +347,8 @@ public class Blogger
         Map<String, String> blogMap = new HashMap<String, String>();
 
         // TODO: replace with linkBuilder
-        System.out.println("http://" + blog.getServername() + ":8080/jab/");
-        blogMap.put("url", "http://" + blog.getServername() + ":8080/jab/");
+        System.out.println("http://" + blog.getIdentifier() + ":8080/jab/");
+        blogMap.put("url", "http://" + blog.getIdentifier() + ":8080/jab/");
         blogMap.put("blogid", blog.getId().toString());
         blogMap.put("blogName", blog.getTitle());
         result.add(blogMap);

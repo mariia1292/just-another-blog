@@ -35,6 +35,7 @@ public class JobQueueTest
     Logger.getLogger("sonia").setLevel(Level.FINEST);
 
     JobQueue<SleepJob> queue = new JobQueue<SleepJob>();
+
     queue.addListener(new SleepJobListener());
 
     for (int i = 0; i < 100; i++)
@@ -43,50 +44,27 @@ public class JobQueueTest
     }
 
     queue.start();
-
-    System.out.println( queue.count() );
+    System.out.println(queue.count());
 
     for (int i = 100; i < 200; i++)
     {
       queue.add(new SleepJob(i));
     }
 
-    System.out.println( queue.count() );
+    System.out.println(queue.count());
 
-    int i=0;
+    int i = 0;
 
-    for ( SleepJob job : queue.getJobs() )
+    for (SleepJob job : queue.getJobs())
     {
       i++;
     }
 
-    System.out.println( i );
-
-
+    System.out.println(i);
     Thread.sleep(1000 * 60 * 1);
   }
 
   //~--- inner classes --------------------------------------------------------
-
-  private class SleepJobListener implements JobListener {
-
-    public void aborted(Job job, JobException ex)
-    {
-      System.out.println( "abort " + job.getClass().getName() );
-      ex.printStackTrace();
-    }
-
-    public void finished(Job job)
-    {
-      System.out.println( "finish " + job.getClass().getName() );
-    }
-
-    public void started(Job job)
-    {
-      System.out.println( "start " + job.getClass().getName() );
-    }
-    
-  }
 
   /**
    * Class description
@@ -95,7 +73,7 @@ public class JobQueueTest
    * @version    Enter version here..., 09/01/12
    * @author     Enter your name here...
    */
-  private class SleepJob implements Job
+  private class SleepJob extends Job
   {
 
     /** Field description */
@@ -142,5 +120,52 @@ public class JobQueueTest
 
     /** Field description */
     private int id;
+  }
+
+
+  /**
+   * Class description
+   *
+   *
+   * @version    Enter version here..., 09/02/14
+   * @author     Enter your name here...
+   */
+  private class SleepJobListener implements JobListener
+  {
+
+    /**
+     * Method description
+     *
+     *
+     * @param job
+     * @param ex
+     */
+    public void aborted(Job job, JobException ex)
+    {
+      System.out.println("abort " + job.getClass().getName());
+      ex.printStackTrace();
+    }
+
+    /**
+     * Method description
+     *
+     *
+     * @param job
+     */
+    public void finished(Job job)
+    {
+      System.out.println("finish " + job.getClass().getName());
+    }
+
+    /**
+     * Method description
+     *
+     *
+     * @param job
+     */
+    public void started(Job job)
+    {
+      System.out.println("start " + job.getClass().getName());
+    }
   }
 }

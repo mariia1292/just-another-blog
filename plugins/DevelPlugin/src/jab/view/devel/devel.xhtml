@@ -18,6 +18,20 @@
 
         <h1>Development</h1>
 
+        <h2>Performance</h2>
+
+        <h:form>
+
+          <h:selectBooleanCheckbox id="requestListener"
+                                   value="#{DevelBean.requestListener}"
+                                   valueChangeListener="#{DevelBean.toggleRequestListener}"
+                                   onchange="submit();" />
+          <h:outputLabel for="requestListener" value="Request-Monitor" />
+
+        </h:form>
+
+        <h2>SampleData</h2>
+
         <h:form>
 
           <h:panelGrid columns="3">
@@ -50,7 +64,7 @@
 
         <h:form rendered="#{DevelBean.databaseEmbedded}">
 
-          <h1>NetworDatabaseServer</h1>
+          <h2>NetworDatabaseServer</h2>
 
           <h:commandButton value="Start NetworkDatabaseServer" action="#{DevelBean.startDBNetworkServer}" disabled="#{DevelBean.DBNetworkServerRunning}" />
           <h:commandButton value="Stop NetworkDatabaseServer" action="#{DevelBean.stopDBNetworkServer}" disabled="#{!DevelBean.DBNetworkServerRunning}" />

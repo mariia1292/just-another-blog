@@ -57,7 +57,7 @@ public class DefaultMacroParserTest
    *
    *
    * @version    Enter version here..., 08/09/18
-   * @author     Enter your name here...    
+   * @author     Enter your name here...
    */
   private class SampleMacro implements Macro
   {

@@ -9,23 +9,6 @@
   </persistence-unit-metadata>
   <package>sonia.blog.entity</package>
   <entity metadata-complete="true" name="Attachment" class="sonia.blog.entity.Attachment">
-    <!--
-    @NamedQueries(
-    {
-      @NamedQuery(name = "Attachment.findAllByEntry",
-                  query = "select a from Attachment a join a.entry e where e = :entry order by a.creationDate desc") ,
-      @NamedQuery(name = "Attachment.findByBlogAndId",
-                  query = "select a from Attachment a join a.entry e join e.category c join c.blog b where b = :blog and a.id = :id") ,
-      @NamedQuery(name = "Attachment.findAllImagesByEntry",
-                  query = "select a from Attachment a join a.entry e where e = :entry and a.mimeType like 'image/%'") ,
-      @NamedQuery(name = "Attachment.count",
-                  query = "select count(a) from Attachment a") ,
-      @NamedQuery(name = "Attachment.findAll",
-                  query = "select a from Attachment a") ,
-      @NamedQuery(name = "Attachment.countByBlog",
-                  query = "select count(a) from Attachment a join a.entry e join e.category c join c.blog b where b = :blog")
-    })
-    -->
     <named-query name="Attachment.findAllByEntry">
       <query>
         select a from Attachment a join a.entry e where e = :entry order by a.creationDate desc
@@ -33,7 +16,7 @@
     </named-query>
     <named-query name="Attachment.findByBlogAndId">
       <query>
-        select a from Attachment a join a.entry e join e.category c join c.blog b where b = :blog and a.id = :id
+        select a from Attachment a join a.entry e join e.blog b where b = :blog and a.id = :id
       </query>
     </named-query>
     <named-query name="Attachment.findAllImagesByEntry">
@@ -53,7 +36,7 @@
     </named-query>
     <named-query name="Attachment.countByBlog">
       <query>
-        select count(a) from Attachment a join a.entry e join e.category c join c.blog b where b = :blog
+        select count(a) from Attachment a join a.entry e join e.blog b where b = :blog
       </query>
     </named-query>
     <pre-persist method-name="prePersists" />
@@ -64,15 +47,20 @@
       <basic name="name">
         <column nullable="false" />
       </basic>
+      <basic name="mimeType">
+        <column nullable="false" />
+      </basic>
       <basic name="filePath">
+        <column nullable="false" />
+      </basic>
+      <basic name="fileSize">
         <column nullable="false" />
       </basic>
       <basic name="creationDate">
         <column nullable="false" />
         <temporal>TIMESTAMP</temporal>
       </basic>
-      <many-to-one name="entry" />
-      <many-to-one name="page" />
+      <many-to-one name="entry" fetch="LAZY" />
     </attributes>
   </entity>
 </entity-mappings>

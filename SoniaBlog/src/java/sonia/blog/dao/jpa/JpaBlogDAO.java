@@ -113,20 +113,21 @@ public class JpaBlogDAO extends JpaGenericDAO<Blog> implements BlogDAO
    * Method description
    *
    *
-   * @param servername
+   *
+   * @param identifier
    *
    * @return
    */
-  public Blog findByServername(String servername)
+  public Blog findByIdentifier(String identifier)
   {
     Blog blog = null;
     EntityManager em = createEntityManager();
 
     try
     {
-      Query q = em.createNamedQuery("Blog.findByServername");
+      Query q = em.createNamedQuery("Blog.findByIdentifier");
 
-      q.setParameter("servername", servername);
+      q.setParameter("identifier", identifier);
       blog = (Blog) q.getSingleResult();
     }
     catch (NoResultException ex) {}

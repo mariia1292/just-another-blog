@@ -66,7 +66,7 @@ public class InstallBean extends AbstractBean
     blog = new Blog();
     blog.setAllowComments(true);
     blog.setActive(true);
-    blog.setServername(getRequest().getServerName());
+    blog.setIdentifier(getRequest().getServerName());
     blog.setTemplate("jab");
   }
 
@@ -129,8 +129,11 @@ public class InstallBean extends AbstractBean
 
       Entry entry = new Entry();
 
-      entry.setCategory(category);
+      entry.setBlog(blog);
+      entry.addCateogory(category);
       entry.setAuthor(admin);
+      entry.publish();
+
       entry.setTitle(message.getString("firstEntryTitle"));
       entry.setContent(message.getString("firstEntryContent"));
 

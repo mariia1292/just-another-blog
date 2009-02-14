@@ -9,22 +9,12 @@
   </persistence-unit-metadata>
   <package>sonia.blog.entity</package>
   <entity metadata-complete="true" name="Category" class="sonia.blog.entity.Category">
-    <!--
-    @NamedQueries(
-    {
-      @NamedQuery(name = "Category.findAll", query = "select c from Category c") ,
-      @NamedQuery(name = "Category.findAllByBlog",
-                  query = "select c from Category c where c.blog = :blog") ,
-      @NamedQuery(name = "Category.findIdFromBlog",
-                  query = "select c from Category c where c.id = :id and c.blog = :blog") ,
-      @NamedQuery(name = "Category.count",
-                  query = "select count(c) from Category c") ,
-      @NamedQuery(name = "Category.countByBlog",
-                  query = "select count(c) from Category c where c.blog = :blog") ,
-      @NamedQuery(name = "Category.findFirstByBlog",
-                  query = "select c from Category c where c.blog = :blog and c.id = ( select min(cat.id) from Category cat where cat.blog = :blog )")
-    })
-    -->
+    <table>
+      <unique-constraint>
+        <column-name>NAME</column-name>
+        <column-name>BLOG</column-name>
+      </unique-constraint>
+    </table>
     <named-query name="Category.findAll">
       <query>
         select c from Category c
@@ -63,11 +53,7 @@
         <temporal>TIMESTAMP</temporal>
       </basic>
       <many-to-one name="blog" fetch="LAZY" optional="false" />
-      <one-to-many name="entries" fetch="LAZY" mapped-by="category">
-        <cascade>
-          <cascade-remove />
-        </cascade>
-      </one-to-many>
+      <many-to-many name="entries" fetch="LAZY" mapped-by="categories" />
     </attributes>
   </entity>
 </entity-mappings>

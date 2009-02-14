@@ -69,11 +69,11 @@ public class DefaultLinkBuilder implements LinkBuilder
 
       if (blog != null)
       {
-        prefix += blog.getServername();
+        prefix += blog.getIdentifier();
       }
       else if (BlogContext.getInstance().isInstalled())
       {
-        prefix += request.getCurrentBlog().getServername();
+        prefix += request.getCurrentBlog().getIdentifier();
       }
       else
       {

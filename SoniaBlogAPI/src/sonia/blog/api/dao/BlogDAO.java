@@ -49,5 +49,5 @@ public interface BlogDAO extends GenericDAO<Blog>
    *
    * @return
    */
-  public Blog findByServername(String servername);
+  public Blog findByIdentifier(String identifier);
 }

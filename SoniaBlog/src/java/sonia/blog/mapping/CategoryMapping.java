@@ -132,7 +132,7 @@ public class CategoryMapping extends ScrollableFilterMapping
     EntryDAO entryDAO = BlogContext.getDAOFactory().getEntryDAO();
     Entry entry = entryDAO.find(entryId);
 
-    if ((entry != null) && entry.getCategory().equals(category))
+    if ((entry != null) && entry.containsCategory(category))
     {
       if (logger.isLoggable(Level.FINER))
       {
