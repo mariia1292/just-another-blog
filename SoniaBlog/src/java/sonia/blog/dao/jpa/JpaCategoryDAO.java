@@ -152,4 +152,31 @@ public class JpaCategoryDAO extends JpaGenericDAO<Category>
 
     return category;
   }
+
+  public Category get(Blog blog, String name)
+  {
+    Category category = null;
+
+    EntityManager em = createEntityManager();
+    Query q = em.createNamedQuery("Category.getByBlogAndName");
+    q.setParameter("blog", blog);
+    q.setParameter("name", name);
+
+    try
+    {
+      category = (Category) q.getSingleResult();
+    }
+    catch ( NoResultException ex )
+    {
+      
+    }
+    finally
+    {
+       if (em != null)
+      {
+        em.close();
+      }
+    }
+    return category;
+  }
 }

@@ -64,4 +64,17 @@ public interface CategoryDAO extends GenericDAO<Category>
    * @return
    */
   public Category findFirstByBlog(Blog blog);
+
+  //~--- get methods ----------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   * @param blog
+   * @param name
+   *
+   * @return
+   */
+  public Category get(Blog blog, String name);
 }

@@ -26,6 +26,7 @@ import sonia.blog.entity.User;
 
 //~--- JDK imports ------------------------------------------------------------
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -148,6 +149,7 @@ public class Blogger
     Boolean result = Boolean.FALSE;
     LoginContext ctx = login(username, password);
     EntryDAO entryDAO = BlogContext.getDAOFactory().getEntryDAO();
+    CategoryDAO categoryDAO = BlogContext.getDAOFactory().getCategoryDAO();
     Entry entry = entryDAO.find(convertId(postId));
 
     if (entry != null)
@@ -170,10 +172,66 @@ public class Blogger
       {
         String title = (String) struct.get("title");
         String content = (String) struct.get("description");
+        Object[] categoryArray = (Object[]) struct.get("categories");
+
+        for (Object obj : categoryArray)
+        {
+          boolean found = false;
+          String name = obj.toString();
+
+          for (Category category : entry.getCategories())
+          {
+            if (category.getName().equals(name))
+            {
+              found = true;
+
+              break;
+            }
+          }
+
+          if (!found)
+          {
+            Category category = categoryDAO.get(entry.getBlog(), name);
+
+            if (category != null)
+            {
+              entry.addCateogory(category);
+            }
+          }
+        }
+
+        List<Category> removeList = new ArrayList<Category>();
+
+        for (Category category : entry.getCategories())
+        {
+          boolean found = false;
+
+          for (Object obj : categoryArray)
+          {
+            String name = obj.toString();
+
+            if (category.getName().equals(name))
+            {
+              found = true;
+
+              break;
+            }
+          }
+
+          if (!found)
+          {
+            removeList.add(category);
+          }
+        }
+
+        for (Category c : removeList)
+        {
+          entry.removeCategory(c);
+        }
 
         entry.setTitle(title);
         entry.setContent(content);
-        entry.setPublished(publish);
+        entry.publish();
         result = entryDAO.edit(entry);
       }
       else
@@ -225,14 +283,38 @@ public class Blogger
       CategoryDAO categoryDAO = BlogContext.getDAOFactory().getCategoryDAO();
       String title = (String) struct.get("title");
       String content = (String) struct.get("description");
-      Category catgory = categoryDAO.findFirstByBlog(blog);
-      Entry entry = new Entry();
 
+      // Category catgory = categoryDAO.findFirstByBlog(blog);
+      Entry entry = new Entry();
+      Object[] categories = (Object[]) struct.get("categories");
+
+      for (Object obj : categories)
+      {
+        String name = obj.toString();
+        Category cat = categoryDAO.get(blog, name);
+
+        if (cat != null)
+        {
+          entry.addCateogory(cat);
+        }
+        else if (logger.isLoggable(Level.INFO))
+        {
+          logger.info("category " + name + " not found at blog " + blogId);
+        }
+      }
+
+      if ((entry.getCategories() == null) || entry.getCategories().isEmpty())
+      {
+        Category cat = categoryDAO.findFirstByBlog(blog);
+
+        entry.addCateogory(cat);
+      }
+
+      entry.setBlog(blog);
       entry.setTitle(title);
       entry.setContent(content);
-      entry.addCateogory(catgory);
       entry.setAuthor(user);
-      entry.setPublished(publish);
+      entry.publish();
 
       if (entryDAO.add(entry))
       {

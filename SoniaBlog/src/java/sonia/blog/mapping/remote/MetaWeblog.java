@@ -138,7 +138,7 @@ public class MetaWeblog extends Blogger
     LoginContext ctx = login(username, password);
     EntryDAO entryDAO = BlogContext.getDAOFactory().getEntryDAO();
     Entry entry = entryDAO.find(convertId(postId));
-    Map<String, String> result = null;
+    Map<String, Object> result = null;
 
     if (entry != null)
     {
@@ -176,7 +176,7 @@ public class MetaWeblog extends Blogger
   {
     logger.info("metaWeblog.getRecentPosts");
 
-    Vector<Map<String, String>> result = new Vector<Map<String, String>>();
+    Vector<Map<String, Object>> result = new Vector<Map<String, Object>>();
     LoginContext ctx = login(username, password);
     Blog blog = findBlog(blogId);
     EntryDAO entryDAO = BlogContext.getDAOFactory().getEntryDAO();
@@ -202,9 +202,9 @@ public class MetaWeblog extends Blogger
    *
    * @return
    */
-  protected Map<String, String> createPost(Entry entry)
+  protected Map<String, Object> createPost(Entry entry)
   {
-    Map<String, String> result = new HashMap<String, String>();
+    Map<String, Object> result = new HashMap<String, Object>();
 
     // TODO replace with real Link
     result.put("postid", entry.getId().toString());
@@ -214,6 +214,20 @@ public class MetaWeblog extends Blogger
     result.put("description", entry.getContent());
     result.put("userid", entry.getAuthorName());
     result.put("author", entry.getAuthor().getEmail());
+
+    List<Category> categoryList = entry.getCategories();
+
+    if (categoryList != null)
+    {
+      Vector<String> categories = new Vector<String>();
+
+      for (Category cat : categoryList)
+      {
+        categories.add(cat.getName());
+      }
+
+      result.put("categories", categories);
+    }
 
     return result;
   }

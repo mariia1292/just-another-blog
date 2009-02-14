@@ -30,14 +30,14 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author sdorra
  */
-public class XMLRPCMappingEntry extends FinalMapping
+public class XMLRPCMapping extends FinalMapping
 {
 
   /**
    * Constructs ...
    *
    */
-  public XMLRPCMappingEntry()
+  public XMLRPCMapping()
   {
     super();
     server = new XmlRpcServletServer();
