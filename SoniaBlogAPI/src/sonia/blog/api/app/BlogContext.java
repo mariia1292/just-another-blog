@@ -11,6 +11,7 @@ package sonia.blog.api.app;
 
 import sonia.blog.api.authentication.SSOCallbackHandler;
 import sonia.blog.api.dao.DAOFactory;
+import sonia.blog.api.dao.cache.CacheManager;
 import sonia.blog.api.link.LinkBuilder;
 import sonia.blog.api.mapping.MappingHandler;
 import sonia.blog.api.search.SearchContext;
@@ -181,6 +182,17 @@ public class BlogContext
   }
 
   //~--- get methods ----------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  public CacheManager getCacheManager()
+  {
+    return getDAOFactory().getCacheManager();
+  }
 
   /**
    * Method description

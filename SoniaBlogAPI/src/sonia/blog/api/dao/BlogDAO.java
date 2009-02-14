@@ -45,7 +45,8 @@ public interface BlogDAO extends GenericDAO<Blog>
    * Method description
    *
    *
-   * @param servername
+   *
+   * @param identifier
    *
    * @return
    */

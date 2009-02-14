@@ -22,6 +22,7 @@ import sonia.blog.api.dao.EntryDAO;
 import sonia.blog.api.dao.MemberDAO;
 import sonia.blog.api.dao.TagDAO;
 import sonia.blog.api.dao.UserDAO;
+import sonia.blog.api.dao.cache.CacheManager;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -109,6 +110,18 @@ public class JpaDAOFactory extends DAOFactory
   public BlogHitCountDAO getBlogHitCountDAO()
   {
     return new JpaBlogHitCountDAO(entityManagerFactory);
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  @Override
+  public CacheManager getCacheManager()
+  {
+    return null;
   }
 
   /**
