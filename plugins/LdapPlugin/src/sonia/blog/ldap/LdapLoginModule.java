@@ -427,7 +427,7 @@ public class LdapLoginModule extends LoginModule
   private User getUser(LdapUser user) throws LoginException
   {
     UserDAO userDAO = BlogContext.getDAOFactory().getUserDAO();
-    User result = userDAO.findByName(user.getName());
+    User result = userDAO.get(user.getName());
 
     if (result == null)
     {

@@ -146,7 +146,7 @@ public class UserSettingsBean extends AbstractBean
     {
       Long id = getRequest().getUser().getId();
 
-      user = BlogContext.getDAOFactory().getUserDAO().find(id);
+      user = BlogContext.getDAOFactory().getUserDAO().get(id);
     }
 
     return user;

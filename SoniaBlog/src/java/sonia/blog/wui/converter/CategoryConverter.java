@@ -51,8 +51,8 @@ public class CategoryConverter implements Converter
 
     try
     {
-      object = BlogContext.getDAOFactory().getCategoryDAO().find(
-        Long.parseLong(value));
+      object =
+        BlogContext.getDAOFactory().getCategoryDAO().get(Long.parseLong(value));
     }
     catch (NumberFormatException ex)
     {

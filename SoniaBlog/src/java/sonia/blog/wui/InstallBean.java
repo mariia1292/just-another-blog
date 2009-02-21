@@ -15,7 +15,6 @@ import sonia.blog.api.app.Constants;
 import sonia.blog.api.dao.DAOFactory;
 import sonia.blog.api.util.AbstractBean;
 import sonia.blog.entity.Blog;
-import sonia.blog.entity.BlogMember;
 import sonia.blog.entity.Category;
 import sonia.blog.entity.Entry;
 import sonia.blog.entity.Role;
@@ -121,7 +120,6 @@ public class InstallBean extends AbstractBean
       // create first Entry
       ResourceBundle message = getResourceBundle("message");
       ResourceBundle label = getResourceBundle("label");
-      BlogMember member = new BlogMember(blog, admin, Role.ADMIN);
       Category category = new Category();
 
       category.setName(label.getString("defaultCategory"));
@@ -133,7 +131,6 @@ public class InstallBean extends AbstractBean
       entry.addCateogory(category);
       entry.setAuthor(admin);
       entry.publish();
-
       entry.setTitle(message.getString("firstEntryTitle"));
       entry.setContent(message.getString("firstEntryContent"));
 
@@ -152,33 +149,26 @@ public class InstallBean extends AbstractBean
       {
         if (daoFactory.getBlogDAO().add(blog))
         {
-          if (daoFactory.getMemberDAO().add(member))
-          {
-            if (daoFactory.getCategoryDAO().add(category))
-            {
-              if (daoFactory.getEntryDAO().add(entry))
-              {
-                error = false;
-              }
-              else
-              {
-                logger.severe("error during entry creation");
+          daoFactory.getUserDAO().setRole(blog, admin, Role.ADMIN);
 
-                // cant create entry
-              }
+          if (daoFactory.getCategoryDAO().add(category))
+          {
+            if (daoFactory.getEntryDAO().add(entry))
+            {
+              error = false;
             }
             else
             {
-              logger.severe("error during category creation");
+              logger.severe("error during entry creation");
 
-              // cat create category
+              // cant create entry
             }
           }
           else
           {
-            logger.severe("error during member creation");
+            logger.severe("error during category creation");
 
-            // cant create member
+            // cat create category
           }
         }
         else

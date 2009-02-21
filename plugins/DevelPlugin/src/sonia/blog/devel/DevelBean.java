@@ -19,11 +19,9 @@ import sonia.blog.api.dao.CategoryDAO;
 import sonia.blog.api.dao.CommentDAO;
 import sonia.blog.api.dao.DAOFactory;
 import sonia.blog.api.dao.EntryDAO;
-import sonia.blog.api.dao.MemberDAO;
 import sonia.blog.api.dao.UserDAO;
 import sonia.blog.api.util.AbstractBean;
 import sonia.blog.entity.Blog;
-import sonia.blog.entity.BlogMember;
 import sonia.blog.entity.Category;
 import sonia.blog.entity.Comment;
 import sonia.blog.entity.Entry;
@@ -83,7 +81,6 @@ public class DevelBean extends AbstractBean
     BlogDAO blogDAO = daoFactory.getBlogDAO();
     EntryDAO entryDAO = daoFactory.getEntryDAO();
     CommentDAO commentDAO = daoFactory.getCommentDAO();
-    MemberDAO memberDAO = daoFactory.getMemberDAO();
     CategoryDAO categoryDAO = daoFactory.getCategoryDAO();
 
     for (int i = 0; i < blogs; i++)
@@ -108,9 +105,7 @@ public class DevelBean extends AbstractBean
         blog.setDescription("Description Blog " + j);
         blogDAO.add(blog);
 
-        BlogMember member = new BlogMember(blog, user, Role.ADMIN);
-
-        memberDAO.add(member);
+        userDAO.setRole(blog, user, Role.ADMIN);
 
         for (int k = 0; k < categories; k++)
         {

@@ -14,12 +14,10 @@ import sonia.blog.api.app.BlogRequest;
 import sonia.blog.api.app.Constants;
 import sonia.blog.api.dao.BlogDAO;
 import sonia.blog.api.dao.CategoryDAO;
-import sonia.blog.api.dao.DAOFactory;
-import sonia.blog.api.dao.MemberDAO;
+import sonia.blog.api.dao.UserDAO;
 import sonia.blog.api.link.LinkBuilder;
 import sonia.blog.api.util.AbstractBean;
 import sonia.blog.entity.Blog;
-import sonia.blog.entity.BlogMember;
 import sonia.blog.entity.Category;
 import sonia.blog.entity.Role;
 import sonia.blog.entity.User;
@@ -31,6 +29,7 @@ import sonia.util.Util;
 //~--- JDK imports ------------------------------------------------------------
 
 import java.util.ResourceBundle;
+import java.util.logging.Level;
 
 /**
  *
@@ -178,15 +177,16 @@ public class BlogCreationBean extends AbstractBean
         if (categoryDAO.add(category))
         {
           User user = getRequest().getUser();
-          BlogMember member = new BlogMember(blog, user, Role.ADMIN);
-          MemberDAO memberDAO = DAOFactory.getInstance().getMemberDAO();
+          UserDAO userDAO = BlogContext.getDAOFactory().getUserDAO();
 
-          if (memberDAO.add(member))
+          try
           {
+            userDAO.setRole(blog, user, Role.ADMIN);
             result = SUCCESS;
           }
-          else
+          catch ( /* TODO replace with DAOException */Exception ex)
           {
+            logger.log(Level.SEVERE, null, ex);
             getMessageHandler().error("couldNotCreateMember");
           }
         }

@@ -77,31 +77,6 @@ public class JpaEntryDAO extends JpaGenericDAO<Entry> implements EntryDAO
    *
    * @return
    */
-  public List<Entry> findAll()
-  {
-    return findList("Entry.findAll");
-  }
-
-  /**
-   * Method description
-   *
-   *
-   * @param start
-   * @param max
-   *
-   * @return
-   */
-  public List<Entry> findAll(int start, int max)
-  {
-    return findList("Entry.findAll", start, max);
-  }
-
-  /**
-   * Method description
-   *
-   *
-   * @return
-   */
   public List<Entry> findAllActives()
   {
     return findList("Entry.findAllActives");
@@ -471,6 +446,31 @@ public class JpaEntryDAO extends JpaGenericDAO<Entry> implements EntryDAO
   }
 
   //~--- get methods ----------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  public List<Entry> getAll()
+  {
+    return findList("Entry.findAll");
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param start
+   * @param max
+   *
+   * @return
+   */
+  public List<Entry> getAll(int start, int max)
+  {
+    return findList("Entry.findAll", start, max);
+  }
 
   /**
    * Method description

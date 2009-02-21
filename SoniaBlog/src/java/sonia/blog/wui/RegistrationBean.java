@@ -12,11 +12,9 @@ package sonia.blog.wui;
 import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.app.BlogRequest;
 import sonia.blog.api.app.Constants;
-import sonia.blog.api.dao.MemberDAO;
 import sonia.blog.api.dao.UserDAO;
 import sonia.blog.api.util.AbstractBean;
 import sonia.blog.entity.Blog;
-import sonia.blog.entity.BlogMember;
 import sonia.blog.entity.Role;
 import sonia.blog.entity.User;
 import sonia.blog.util.BlogUtil;
@@ -70,7 +68,7 @@ public class RegistrationBean extends AbstractBean
     String result = SUCCESS;
     User u = null;
 
-    u = userDAO.findByName(user.getName());
+    u = userDAO.get(user.getName());
 
     if (u != null)
     {
@@ -80,7 +78,7 @@ public class RegistrationBean extends AbstractBean
     }
     else
     {
-      u = userDAO.findByEmail(user.getEmail());
+      u = userDAO.getByMail(user.getEmail());
 
       if (u != null)
       {
@@ -205,13 +203,13 @@ public class RegistrationBean extends AbstractBean
     {
       Blog blog = getRequest().getCurrentBlog();
       Role role = getDefaultRole();
-      MemberDAO memberDAO = BlogContext.getDAOFactory().getMemberDAO();
 
-      if (memberDAO.add(new BlogMember(blog, user, role)))
+      try
       {
+        userDAO.setRole(blog, user, role);
         getMessageHandler().info("registrationSuccess");
       }
-      else
+      catch ( /* TDOD replace with DAOException */Exception ex)
       {
         getMessageHandler().error("unknownError");
       }

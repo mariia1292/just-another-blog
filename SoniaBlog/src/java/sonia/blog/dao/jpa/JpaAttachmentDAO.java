@@ -74,31 +74,6 @@ public class JpaAttachmentDAO extends JpaGenericDAO<Attachment>
    * Method description
    *
    *
-   * @return
-   */
-  public List<Attachment> findAll()
-  {
-    return findList("Attachment.findAll");
-  }
-
-  /**
-   * Method description
-   *
-   *
-   * @param start
-   * @param max
-   *
-   * @return
-   */
-  public List<Attachment> findAll(int start, int max)
-  {
-    return findList("Attachment.findAll", start, max);
-  }
-
-  /**
-   * Method description
-   *
-   *
    * @param entry
    *
    * @return
@@ -243,5 +218,32 @@ public class JpaAttachmentDAO extends JpaGenericDAO<Attachment>
     }
 
     return attachment;
+  }
+
+  //~--- get methods ----------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  public List<Attachment> getAll()
+  {
+    return findList("Attachment.findAll");
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param start
+   * @param max
+   *
+   * @return
+   */
+  public List<Attachment> getAll(int start, int max)
+  {
+    return findList("Attachment.findAll", start, max);
   }
 }

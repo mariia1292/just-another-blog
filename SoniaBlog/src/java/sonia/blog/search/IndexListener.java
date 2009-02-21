@@ -20,7 +20,6 @@ import sonia.blog.api.app.Constants;
 import sonia.blog.api.app.ResourceManager;
 import sonia.blog.api.dao.DAOListener;
 import sonia.blog.entity.Blog;
-import sonia.blog.entity.Category;
 import sonia.blog.entity.Entry;
 
 //~--- JDK imports ------------------------------------------------------------

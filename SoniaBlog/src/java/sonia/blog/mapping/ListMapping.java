@@ -115,7 +115,7 @@ public class ListMapping extends ScrollableFilterMapping
   {
     String result = null;
     EntryDAO entryDAO = BlogContext.getDAOFactory().getEntryDAO();
-    Entry entry = entryDAO.find(id);
+    Entry entry = entryDAO.get(id);
 
     if ((entry != null) && entry.isPublished())
     {

@@ -181,7 +181,9 @@ public class EntryBean extends AbstractBean
   public String newEntry()
   {
     entry = new Entry();
+
     Blog blog = getRequest().getCurrentBlog();
+
     entry.setBlog(blog);
     tagString = "";
 

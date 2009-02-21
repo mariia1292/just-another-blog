@@ -145,7 +145,7 @@ public class DateMapping extends ScrollableFilterMapping
   {
     Blog blog = request.getCurrentBlog();
     EntryDAO entryDAO = BlogContext.getDAOFactory().getEntryDAO();
-    Entry entry = entryDAO.find(id);
+    Entry entry = entryDAO.get(id);
 
     if (entry == null)
     {

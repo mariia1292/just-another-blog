@@ -54,7 +54,7 @@ public interface GenericDAO<T>
    *
    * @return
    */
-  public T find(Long id);
+  public T get(Long id);
 
   /**
    * Method description
@@ -62,7 +62,7 @@ public interface GenericDAO<T>
    *
    * @return
    */
-  public List<T> findAll();
+  public List<T> getAll();
 
   /**
    * Method description
@@ -73,7 +73,7 @@ public interface GenericDAO<T>
    *
    * @return
    */
-  public List<T> findAll(int start, int max);
+  public List<T> getAll(int start, int max);
 
   /**
    * Method description

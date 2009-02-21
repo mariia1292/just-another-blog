@@ -151,35 +151,6 @@ public abstract class JpaGenericDAO<T> implements GenericDAO<T>
    * Method description
    *
    *
-   * @param id
-   *
-   * @return
-   */
-  public T find(Long id)
-  {
-    T item = null;
-    EntityManager em = createEntityManager();
-
-    try
-    {
-      item = em.find(clazz, id);
-    }
-    catch (NoResultException ex) {}
-    finally
-    {
-      if (em != null)
-      {
-        em.close();
-      }
-    }
-
-    return item;
-  }
-
-  /**
-   * Method description
-   *
-   *
    * @param item
    *
    * @return
@@ -221,6 +192,35 @@ public abstract class JpaGenericDAO<T> implements GenericDAO<T>
   }
 
   //~--- get methods ----------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   * @param id
+   *
+   * @return
+   */
+  public T get(Long id)
+  {
+    T item = null;
+    EntityManager em = createEntityManager();
+
+    try
+    {
+      item = em.find(clazz, id);
+    }
+    catch (NoResultException ex) {}
+    finally
+    {
+      if (em != null)
+      {
+        em.close();
+      }
+    }
+
+    return item;
+  }
 
   /**
    * Method description
@@ -289,6 +289,99 @@ public abstract class JpaGenericDAO<T> implements GenericDAO<T>
    * Method description
    *
    *
+   *
+   * @param em
+   * @param q
+   *
+   * @return
+   */
+  protected List<T> excecuteListQuery(EntityManager em, Query q)
+  {
+    return excecuteListQuery(clazz, em, q);
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param type
+   * @param em
+   * @param q
+   *
+   * @return
+   */
+  @SuppressWarnings("unchecked")
+  protected <O>List<O> excecuteListQuery(Class<O> type, EntityManager em,
+          Query q)
+  {
+    List<O> resultList = null;
+
+    try
+    {
+      resultList = q.getResultList();
+    }
+    catch (NoResultException ex) {}
+    finally
+    {
+      if (em != null)
+      {
+        em.close();
+      }
+    }
+
+    return resultList;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   *
+   * @param em
+   * @param q
+   *
+   * @return
+   */
+  protected T excecuteQuery(EntityManager em, Query q)
+  {
+    return excecuteQuery(clazz, em, q);
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param type
+   * @param em
+   * @param q
+   *
+   * @return
+   */
+  @SuppressWarnings("unchecked")
+  protected <O>O excecuteQuery(Class<O> type, EntityManager em, Query q)
+  {
+    O item = null;
+
+    try
+    {
+      item = (O) q.getSingleResult();
+    }
+    catch (NoResultException ex) {}
+    finally
+    {
+      if (em != null)
+      {
+        em.close();
+      }
+    }
+
+    return item;
+  }
+
+  /**
+   * Method description
+   *
+   *
    * @param queryName
    *
    * @return
@@ -341,7 +434,6 @@ public abstract class JpaGenericDAO<T> implements GenericDAO<T>
   @SuppressWarnings("unchecked")
   protected List<T> findList(String queryName, Blog blog, int start, int max)
   {
-    List<T> result = null;
     EntityManager em = createEntityManager();
     Query q = em.createNamedQuery(queryName);
 
@@ -360,20 +452,7 @@ public abstract class JpaGenericDAO<T> implements GenericDAO<T>
       q.setMaxResults(max);
     }
 
-    try
-    {
-      result = q.getResultList();
-    }
-    catch (NoResultException ex) {}
-    finally
-    {
-      if (em != null)
-      {
-        em.close();
-      }
-    }
-
-    return result;
+    return excecuteListQuery(em, q);
   }
 
   /**

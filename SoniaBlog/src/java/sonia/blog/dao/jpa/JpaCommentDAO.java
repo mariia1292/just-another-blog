@@ -72,31 +72,6 @@ public class JpaCommentDAO extends JpaGenericDAO<Comment> implements CommentDAO
    * Method description
    *
    *
-   * @return
-   */
-  public List<Comment> findAll()
-  {
-    return findList("Comment.findAll");
-  }
-
-  /**
-   * Method description
-   *
-   *
-   * @param start
-   * @param max
-   *
-   * @return
-   */
-  public List<Comment> findAll(int start, int max)
-  {
-    return findList("Comment.findAll", start, max);
-  }
-
-  /**
-   * Method description
-   *
-   *
    * @param entry
    *
    * @return
@@ -177,5 +152,32 @@ public class JpaCommentDAO extends JpaGenericDAO<Comment> implements CommentDAO
   public List<Comment> findAllByBlog(Blog blog, int start, int max)
   {
     return findList("Comment.findAllByBlog", blog, start, max);
+  }
+
+  //~--- get methods ----------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  public List<Comment> getAll()
+  {
+    return findList("Comment.findAll");
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param start
+   * @param max
+   *
+   * @return
+   */
+  public List<Comment> getAll(int start, int max)
+  {
+    return findList("Comment.findAll", start, max);
   }
 }

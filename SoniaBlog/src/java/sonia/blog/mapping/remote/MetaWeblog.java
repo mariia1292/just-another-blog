@@ -137,7 +137,7 @@ public class MetaWeblog extends Blogger
 
     LoginContext ctx = login(username, password);
     EntryDAO entryDAO = BlogContext.getDAOFactory().getEntryDAO();
-    Entry entry = entryDAO.find(convertId(postId));
+    Entry entry = entryDAO.get(convertId(postId));
     Map<String, Object> result = null;
 
     if (entry != null)

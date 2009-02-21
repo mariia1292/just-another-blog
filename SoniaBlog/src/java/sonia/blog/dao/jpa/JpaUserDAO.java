@@ -11,6 +11,9 @@ package sonia.blog.dao.jpa;
 
 import sonia.blog.api.app.Constants;
 import sonia.blog.api.dao.UserDAO;
+import sonia.blog.entity.Blog;
+import sonia.blog.entity.BlogMember;
+import sonia.blog.entity.Role;
 import sonia.blog.entity.User;
 
 //~--- JDK imports ------------------------------------------------------------
@@ -19,7 +22,6 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import javax.persistence.NoResultException;
 import javax.persistence.Query;
 
 /**
@@ -57,32 +59,75 @@ public class JpaUserDAO extends JpaGenericDAO<User> implements UserDAO
    * Method description
    *
    *
-   * @param name
+   * @param blog
    *
    * @return
    */
-  public User findActiveByName(String name)
+  public long count(Blog blog)
   {
-    User user = null;
+    return countQuery("BlogMember.countByBlog", blog);
+  }
+
+  //~--- get methods ----------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   * @param username
+   * @param active
+   *
+   * @return
+   */
+  public User get(String username, boolean active)
+  {
     EntityManager em = createEntityManager();
-    Query q = em.createNamedQuery("User.findActiveByName");
+    Query q = em.createNamedQuery("User.getByNameAndActive");
 
-    q.setParameter("name", name);
+    q.setParameter("name", username);
+    q.setParameter("active", active);
 
-    try
-    {
-      user = (User) q.getSingleResult();
-    }
-    catch (NoResultException ex) {}
-    finally
-    {
-      if (em != null)
-      {
-        em.close();
-      }
-    }
+    return excecuteQuery(em, q);
+  }
 
-    return user;
+  /**
+   * Method description
+   *
+   *
+   * @param username
+   *
+   * @return
+   */
+  public User get(String username)
+  {
+    EntityManager em = createEntityManager();
+    Query q = em.createNamedQuery("User.getByName");
+
+    q.setParameter("name", username);
+
+    return excecuteQuery(em, q);
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param username
+   * @param password
+   * @param active
+   *
+   * @return
+   */
+  public User get(String username, String password, boolean active)
+  {
+    EntityManager em = createEntityManager();
+    Query q = em.createNamedQuery("User.getByNamePasswordAndActive");
+
+    q.setParameter("name", username);
+    q.setParameter("password", password);
+    q.setParameter("active", active);
+
+    return excecuteQuery(em, q);
   }
 
   /**
@@ -91,9 +136,9 @@ public class JpaUserDAO extends JpaGenericDAO<User> implements UserDAO
    *
    * @return
    */
-  public List<User> findAll()
+  public List<User> getAll()
   {
-    return findList("User.findAll");
+    return findList("User.getAll");
   }
 
   /**
@@ -105,162 +150,150 @@ public class JpaUserDAO extends JpaGenericDAO<User> implements UserDAO
    *
    * @return
    */
-  public List<User> findAll(int start, int max)
+  public List<User> getAll(int start, int max)
   {
-    return findList("User.findAll", start, max);
+    return findList("User.getAll", start, max);
   }
 
   /**
    * Method description
    *
    *
-   * @return
-   */
-  public List<User> findAllActives()
-  {
-    return findList("User.findAllActives");
-  }
-
-  /**
-   * Method description
-   *
-   *
+   * @param active
    * @param start
    * @param max
    *
    * @return
    */
-  public List<User> findAllActives(int start, int max)
+  public List<User> getAll(boolean active, int start, int max)
   {
-    return findList("User.findAllActives", start, max);
+    EntityManager em = createEntityManager();
+    Query q = em.createNamedQuery("User.getAllByActive");
+
+    q.setParameter("active", active);
+    q.setFirstResult(start);
+    q.setMaxResults(max);
+
+    return excecuteListQuery(em, q);
   }
 
   /**
    * Method description
    *
    *
-   * @param email
+   * @param mail
    *
    * @return
    */
-  public User findByEmail(String email)
+  public User getByMail(String mail)
   {
-    User user = null;
     EntityManager em = createEntityManager();
-    Query q = em.createNamedQuery("User.findByEmail");
+    Query q = em.createNamedQuery("User.getByMail");
 
-    q.setParameter("email", email);
+    q.setParameter("mail", mail);
 
-    try {}
-    catch (NoResultException ex) {}
-    finally
-    {
-      if (em != null)
-      {
-        em.close();
-      }
-    }
-
-    return user;
+    return excecuteQuery(em, q);
   }
 
   /**
    * Method description
    *
    *
-   * @param name
-   *
-   * @return
-   */
-  public User findByName(String name)
-  {
-    User user = null;
-    EntityManager em = createEntityManager();
-    Query q = em.createNamedQuery("User.findByName");
-
-    q.setParameter("name", name);
-
-    try
-    {
-      user = (User) q.getSingleResult();
-    }
-    catch (NoResultException ex) {}
-    finally
-    {
-      if (em != null)
-      {
-        em.close();
-      }
-    }
-
-    return user;
-  }
-
-  /**
-   * Method description
-   *
-   *
-   * @param name
+   * @param username
    * @param code
    *
    * @return
    */
-  public User findByNameAndCode(String name, String code)
+  public User getByNameAndCode(String username, String code)
   {
-    User user = null;
     EntityManager em = createEntityManager();
+    Query q = em.createNamedQuery("User.getByNameAndCode");
 
-    try
-    {
-      Query q = em.createNamedQuery("User.findByNameAndCode");
+    q.setParameter("name", username);
+    q.setParameter("code", code);
 
-      q.setParameter("name", name);
-      q.setParameter("code", code);
-      user = (User) q.getSingleResult();
-    }
-    catch (NoResultException ex) {}
-    finally
-    {
-      if (em != null)
-      {
-        em.close();
-      }
-    }
-
-    return user;
+    return excecuteQuery(em, q);
   }
 
   /**
    * Method description
    *
    *
-   * @param name
-   * @param password
+   * @param blog
+   * @param start
+   * @param max
    *
    * @return
    */
-  public User findByNameAndPassword(String name, String password)
+  public List<BlogMember> getMembers(Blog blog, int start, int max)
   {
-    User user = null;
     EntityManager em = createEntityManager();
-    Query q = em.createNamedQuery("User.findByNameAndPassword");
+    Query q = em.createNamedQuery("BlogMember.getAllByBalogAndActive");
 
-    q.setParameter("name", name);
-    q.setParameter("password", password);
+    return excecuteListQuery(BlogMember.class, em, q);
+  }
 
-    try
-    {
-      user = (User) q.getSingleResult();
-    }
-    catch (NoResultException ex) {}
-    finally
-    {
-      if (em != null)
-      {
-        em.close();
-      }
-    }
+  /**
+   * Method description
+   *
+   *
+   * @param blog
+   * @param active
+   * @param start
+   * @param max
+   *
+   * @return
+   */
+  public List<BlogMember> getMembers(Blog blog, boolean active, int start,
+                                     int max)
+  {
+    EntityManager em = createEntityManager();
+    Query q = em.createNamedQuery("BlogMember.getAllByBalogAndActive");
 
-    return user;
+    return excecuteListQuery(BlogMember.class, em, q);
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param user
+   * @param start
+   * @param max
+   *
+   * @return
+   */
+  public List<BlogMember> getMembers(User user, int start, int max)
+  {
+    throw new UnsupportedOperationException("Not supported yet.");
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param blog
+   * @param user
+   *
+   * @return
+   */
+  public Role getRole(Blog blog, User user)
+  {
+    throw new UnsupportedOperationException("Not supported yet.");
+  }
+
+  //~--- set methods ----------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   * @param blog
+   * @param user
+   * @param role
+   */
+  public void setRole(Blog blog, User user, Role role)
+  {
+    throw new UnsupportedOperationException("Not supported yet.");
   }
 }

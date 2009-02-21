@@ -16,7 +16,7 @@ import sonia.blog.api.dao.AttachmentDAO;
 import sonia.blog.api.dao.CategoryDAO;
 import sonia.blog.api.dao.CommentDAO;
 import sonia.blog.api.dao.EntryDAO;
-import sonia.blog.api.dao.MemberDAO;
+import sonia.blog.api.dao.UserDAO;
 import sonia.blog.api.util.AbstractBean;
 import sonia.blog.entity.Blog;
 import sonia.blog.entity.Comment;
@@ -242,9 +242,9 @@ public class DashboardBean extends AbstractBean
   public long getMemberCount()
   {
     Blog b = getRequest().getCurrentBlog();
-    MemberDAO memberDAO = BlogContext.getDAOFactory().getMemberDAO();
+    UserDAO userDAO = BlogContext.getDAOFactory().getUserDAO();
 
-    return memberDAO.countByBlog(b);
+    return userDAO.count(b);
   }
 
   /**

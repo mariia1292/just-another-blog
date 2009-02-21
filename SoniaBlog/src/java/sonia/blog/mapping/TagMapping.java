@@ -84,7 +84,7 @@ public class TagMapping extends ScrollableFilterMapping
       {
         Long tagId = Long.parseLong(param[0]);
         TagDAO tagDAO = BlogContext.getDAOFactory().getTagDAO();
-        Tag tag = tagDAO.find(tagId);
+        Tag tag = tagDAO.get(tagId);
         Blog blog = request.getCurrentBlog();
 
         if ((tag != null))
@@ -131,7 +131,7 @@ public class TagMapping extends ScrollableFilterMapping
   {
     String result = null;
     EntryDAO entryDAO = BlogContext.getDAOFactory().getEntryDAO();
-    Entry entry = entryDAO.find(entryId);
+    Entry entry = entryDAO.get(entryId);
 
     if (entry != null)
     {

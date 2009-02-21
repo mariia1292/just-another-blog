@@ -46,7 +46,6 @@ import sonia.util.Util;
 //~--- JDK imports ------------------------------------------------------------
 
 import java.util.ArrayList;
-import java.util.Enumeration;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -665,38 +664,6 @@ public class BlogBean extends AbstractBean
   public void setSearchString(String searchString)
   {
     this.searchString = searchString;
-  }
-
-  //~--- get methods ----------------------------------------------------------
-
-  /**
-   * Method description
-   *
-   *
-   * @param request
-   * @param page
-   *
-   * @return
-   */
-  @SuppressWarnings("unchecked")
-  private String getPageUri(BlogRequest request, int page)
-  {
-    String uri =
-      request.getRequestURI().substring(request.getContextPath().length())
-      + "?page=" + page;
-    Enumeration<String> enm = request.getParameterNames();
-
-    while (enm.hasMoreElements())
-    {
-      String name = enm.nextElement();
-
-      if (!name.equals("page"))
-      {
-        uri += "&" + name + "=" + request.getParameter(name);
-      }
-    }
-
-    return uri;
   }
 
   //~--- fields ---------------------------------------------------------------

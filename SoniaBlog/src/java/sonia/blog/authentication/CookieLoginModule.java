@@ -147,9 +147,9 @@ public class CookieLoginModule extends SSOLoginModule
   {
     BlogContext context = BlogContext.getInstance();
     UserDAO userDAO = BlogContext.getDAOFactory().getUserDAO();
-    User user = userDAO.findByNameAndCode(username, activationCode);
+    User user = userDAO.getByNameAndCode(username, activationCode);
 
-    if (user != null)
+    if ((user != null) && user.isActive())
     {
       cookie.setMaxAge(
           context.getConfiguration().getInteger(

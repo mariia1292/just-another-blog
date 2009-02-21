@@ -161,7 +161,7 @@ public class FeedMapping extends FinalMapping
     List<Item> items = null;
     DAOFactory factory = BlogContext.getDAOFactory();
     CategoryDAO categoryDAO = factory.getCategoryDAO();
-    Category category = categoryDAO.find(id);
+    Category category = categoryDAO.get(id);
 
     if (category != null)
     {
@@ -235,7 +235,7 @@ public class FeedMapping extends FinalMapping
 
     if (id != null)
     {
-      Entry entry = entryDAO.find(id);
+      Entry entry = entryDAO.get(id);
 
       if ((entry != null) && entry.isPublished())
       {
@@ -379,7 +379,7 @@ public class FeedMapping extends FinalMapping
     List<Item> items = null;
     DAOFactory factory = BlogContext.getDAOFactory();
     TagDAO tagDAO = factory.getTagDAO();
-    Tag tag = tagDAO.find(id);
+    Tag tag = tagDAO.get(id);
 
     if (tag != null)
     {

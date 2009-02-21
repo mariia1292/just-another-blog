@@ -16,7 +16,7 @@ import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.dao.BlogDAO;
 import sonia.blog.api.dao.CategoryDAO;
 import sonia.blog.api.dao.EntryDAO;
-import sonia.blog.api.dao.MemberDAO;
+import sonia.blog.api.dao.UserDAO;
 import sonia.blog.entity.Blog;
 import sonia.blog.entity.BlogMember;
 import sonia.blog.entity.Category;
@@ -85,7 +85,7 @@ public class Blogger
     Boolean result = Boolean.FALSE;
     LoginContext ctx = login(username, password);
     EntryDAO entryDAO = BlogContext.getDAOFactory().getEntryDAO();
-    Entry entry = entryDAO.find(convertId(postId));
+    Entry entry = entryDAO.get(convertId(postId));
 
     if (entry != null)
     {
@@ -150,7 +150,7 @@ public class Blogger
     LoginContext ctx = login(username, password);
     EntryDAO entryDAO = BlogContext.getDAOFactory().getEntryDAO();
     CategoryDAO categoryDAO = BlogContext.getDAOFactory().getCategoryDAO();
-    Entry entry = entryDAO.find(convertId(postId));
+    Entry entry = entryDAO.get(convertId(postId));
 
     if (entry != null)
     {
@@ -417,8 +417,10 @@ public class Blogger
     User user = getUser(ctx);
 
     // LinkBuilder linkBuilder = BlogContext.getInstance().getLinkBuilder();
-    MemberDAO memberDAO = BlogContext.getDAOFactory().getMemberDAO();
-    List<BlogMember> memberList = memberDAO.findByUser(user);
+    UserDAO userDAO = BlogContext.getDAOFactory().getUserDAO();
+
+    // TODO scrolling
+    List<BlogMember> memberList = userDAO.getMembers(user, 0, 1000);
 
     for (BlogMember member : memberList)
     {
@@ -515,7 +517,7 @@ public class Blogger
   protected Blog findBlog(String blogId) throws XmlRpcException
   {
     BlogDAO blogDAO = BlogContext.getDAOFactory().getBlogDAO();
-    Blog blog = blogDAO.find(convertId(blogId));
+    Blog blog = blogDAO.get(convertId(blogId));
 
     if (blog == null)
     {
@@ -625,10 +627,10 @@ public class Blogger
    */
   protected boolean isAdmin(User user, Blog blog)
   {
-    MemberDAO memberDAO = BlogContext.getDAOFactory().getMemberDAO();
-    BlogMember member = memberDAO.findByBlogAndUser(blog, user);
+    UserDAO userDAO = BlogContext.getDAOFactory().getUserDAO();
+    Role role = userDAO.getRole(blog, user);
 
-    return (member != null) && (member.getRole() == Role.ADMIN);
+    return (role != null) && (role == Role.ADMIN);
   }
 
   /**
@@ -642,12 +644,10 @@ public class Blogger
    */
   protected boolean isAuthor(User user, Blog blog)
   {
-    MemberDAO memberDAO = BlogContext.getDAOFactory().getMemberDAO();
-    BlogMember member = memberDAO.findByBlogAndUser(blog, user);
+    UserDAO userDAO = BlogContext.getDAOFactory().getUserDAO();
+    Role role = userDAO.getRole(blog, user);
 
-    return (member != null)
-           && ((member.getRole() == Role.ADMIN)
-               || (member.getRole() == Role.AUTHOR));
+    return (role != null) && ((role == Role.ADMIN) || (role == Role.AUTHOR));
   }
 
   //~--- fields ---------------------------------------------------------------

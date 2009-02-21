@@ -94,7 +94,7 @@ public abstract class ChartMapping extends FinalMapping
             Long blogId = Long.parseLong(blogIdParam);
             BlogDAO blogDAO = BlogContext.getDAOFactory().getBlogDAO();
 
-            blog = blogDAO.find(blogId);
+            blog = blogDAO.get(blogId);
 
             if (blog == null)
             {

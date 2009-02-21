@@ -9,6 +9,9 @@ package sonia.blog.api.dao;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import sonia.blog.entity.Blog;
+import sonia.blog.entity.BlogMember;
+import sonia.blog.entity.Role;
 import sonia.blog.entity.User;
 
 //~--- JDK imports ------------------------------------------------------------
@@ -26,71 +29,138 @@ public interface UserDAO extends GenericDAO<User>
    * Method description
    *
    *
-   * @param name
+   * @param blog
    *
    * @return
    */
-  public User findActiveByName(String name);
+  public long count(Blog blog);
+
+  //~--- get methods ----------------------------------------------------------
 
   /**
    * Method description
    *
    *
+   * @param username
+   * @param active
+   *
    * @return
    */
-  public List<User> findAllActives();
+  public User get(String username, boolean active);
 
   /**
    * Method description
    *
    *
+   * @param username
+   *
+   * @return
+   */
+  public User get(String username);
+
+  /**
+   * Method description
+   *
+   *
+   * @param username
+   * @param password
+   * @param active
+   *
+   * @return
+   */
+  public User get(String username, String password, boolean active);
+
+  /**
+   * Method description
+   *
+   *
+   * @param active
    * @param start
    * @param max
    *
    * @return
    */
-  public List<User> findAllActives(int start, int max);
+  public List<User> getAll(boolean active, int start, int max);
 
   /**
    * Method description
    *
    *
-   * @param email
+   * @param mail
    *
    * @return
    */
-  public User findByEmail(String email);
+  public User getByMail(String mail);
 
   /**
    * Method description
    *
    *
-   *
-   * @param name
-   *
-   * @return
-   */
-  public User findByName(String name);
-
-  /**
-   * Method description
-   *
-   *
-   * @param name
+   * @param username
    * @param code
    *
    * @return
    */
-  public User findByNameAndCode(String name, String code);
+  public User getByNameAndCode(String username, String code);
 
   /**
    * Method description
    *
    *
-   * @param name
-   * @param password
+   * @param blog
+   * @param start
+   * @param max
    *
    * @return
    */
-  public User findByNameAndPassword(String name, String password);
+  public List<BlogMember> getMembers(Blog blog, int start, int max);
+
+  /**
+   * Method description
+   *
+   *
+   * @param blog
+   * @param active
+   * @param start
+   * @param max
+   *
+   * @return
+   */
+  public List<BlogMember> getMembers(Blog blog, boolean active, int start,
+                                     int max);
+
+  /**
+   * Method description
+   *
+   *
+   * @param user
+   * @param start
+   * @param max
+   *
+   * @return
+   */
+  public List<BlogMember> getMembers(User user, int start, int max);
+
+  /**
+   * Method description
+   *
+   *
+   * @param blog
+   * @param user
+   *
+   * @return
+   */
+  public Role getRole(Blog blog, User user);
+
+  //~--- set methods ----------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   * @param blog
+   * @param user
+   * @param role
+   */
+  public void setRole(Blog blog, User user, Role role);
 }

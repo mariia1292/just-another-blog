@@ -59,31 +59,6 @@ public class JpaTagDAO extends JpaGenericDAO<Tag> implements TagDAO
    * Method description
    *
    *
-   * @return
-   */
-  public List<Tag> findAll()
-  {
-    return findList("Tag.findAll");
-  }
-
-  /**
-   * Method description
-   *
-   *
-   * @param start
-   * @param max
-   *
-   * @return
-   */
-  public List<Tag> findAll(int start, int max)
-  {
-    return findList("Tag.findAll", start, max);
-  }
-
-  /**
-   * Method description
-   *
-   *
    * @param blog
    *
    * @return
@@ -196,5 +171,32 @@ public class JpaTagDAO extends JpaGenericDAO<Tag> implements TagDAO
     }
 
     return tag;
+  }
+
+  //~--- get methods ----------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  public List<Tag> getAll()
+  {
+    return findList("Tag.findAll");
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param start
+   * @param max
+   *
+   * @return
+   */
+  public List<Tag> getAll(int start, int max)
+  {
+    return findList("Tag.findAll", start, max);
   }
 }

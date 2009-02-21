@@ -72,31 +72,6 @@ public class JpaCategoryDAO extends JpaGenericDAO<Category>
    * Method description
    *
    *
-   * @return
-   */
-  public List<Category> findAll()
-  {
-    return findList("Category.findAll");
-  }
-
-  /**
-   * Method description
-   *
-   *
-   * @param start
-   * @param max
-   *
-   * @return
-   */
-  public List<Category> findAll(int start, int max)
-  {
-    return findList("Category.findAll", start, max);
-  }
-
-  /**
-   * Method description
-   *
-   *
    * @param blog
    * @param start
    * @param max
@@ -153,12 +128,23 @@ public class JpaCategoryDAO extends JpaGenericDAO<Category>
     return category;
   }
 
+  //~--- get methods ----------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   * @param blog
+   * @param name
+   *
+   * @return
+   */
   public Category get(Blog blog, String name)
   {
     Category category = null;
-
     EntityManager em = createEntityManager();
     Query q = em.createNamedQuery("Category.getByBlogAndName");
+
     q.setParameter("blog", blog);
     q.setParameter("name", name);
 
@@ -166,17 +152,40 @@ public class JpaCategoryDAO extends JpaGenericDAO<Category>
     {
       category = (Category) q.getSingleResult();
     }
-    catch ( NoResultException ex )
-    {
-      
-    }
+    catch (NoResultException ex) {}
     finally
     {
-       if (em != null)
+      if (em != null)
       {
         em.close();
       }
     }
+
     return category;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  public List<Category> getAll()
+  {
+    return findList("Category.findAll");
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param start
+   * @param max
+   *
+   * @return
+   */
+  public List<Category> getAll(int start, int max)
+  {
+    return findList("Category.findAll", start, max);
   }
 }

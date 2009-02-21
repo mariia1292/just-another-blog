@@ -14,10 +14,8 @@ import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.app.BlogRequest;
 import sonia.blog.api.app.BlogResponse;
 import sonia.blog.api.app.Constants;
-import sonia.blog.api.dao.MemberDAO;
 import sonia.blog.api.util.AbstractBean;
 import sonia.blog.entity.Blog;
-import sonia.blog.entity.BlogMember;
 import sonia.blog.entity.Role;
 import sonia.blog.entity.User;
 
@@ -41,6 +39,7 @@ import javax.security.auth.login.LoginContext;
 import javax.security.auth.login.LoginException;
 
 import javax.servlet.http.Cookie;
+import sonia.blog.api.dao.UserDAO;
 
 /**
  *
@@ -278,21 +277,22 @@ public class LoginBean extends AbstractBean
    */
   private void checkMembership(Blog blog)
   {
-    BlogMember member = null;
+    Role role = null;
     Set<User> users = loginContext.getSubject().getPrincipals(User.class);
 
     if ((users != null) &&!users.isEmpty())
     {
       User user = users.iterator().next();
 
-      // TODO: replace with MemberDAO.findByBlogAndUser
-      member =
-        BlogContext.getDAOFactory().getMemberDAO().findByBlogAndUser(blog,
-          user);
+      UserDAO userDAO = BlogContext.getDAOFactory().getUserDAO();
 
-      if (member == null)
+      role =
+    userDAO.getRole(blog, user);
+
+      if ( role == null )
       {
-        createMembership(blog, user);
+        role = getDefaultRole();
+        userDAO.setRole(blog, user, role);
       }
     }
   }
@@ -308,7 +308,7 @@ public class LoginBean extends AbstractBean
     try
     {
       User user =
-        BlogContext.getDAOFactory().getUserDAO().findActiveByName(username);
+        BlogContext.getDAOFactory().getUserDAO().get(username, true);
       String value = user.getName() + ":" + user.getActivationCode();
 
       if (cipherReference == null)
@@ -339,20 +339,6 @@ public class LoginBean extends AbstractBean
     }
   }
 
-  /**
-   * Method description
-   *
-   *
-   * @param blog
-   * @param user
-   */
-  private void createMembership(Blog blog, User user)
-  {
-    MemberDAO memberDAO = BlogContext.getDAOFactory().getMemberDAO();
-    Role role = getDefaultRole();
-
-    memberDAO.add(new BlogMember(blog, user, role));
-  }
 
   /**
    * Method description

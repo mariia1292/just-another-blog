@@ -65,31 +65,6 @@ public class JpaBlogDAO extends JpaGenericDAO<Blog> implements BlogDAO
    *
    * @return
    */
-  public List<Blog> findAll()
-  {
-    return findList("Blog.findAll");
-  }
-
-  /**
-   * Method description
-   *
-   *
-   * @param start
-   * @param max
-   *
-   * @return
-   */
-  public List<Blog> findAll(int start, int max)
-  {
-    return findList("Blog.findAll", start, max);
-  }
-
-  /**
-   * Method description
-   *
-   *
-   * @return
-   */
   public List<Blog> findAllActives()
   {
     return findList("Blog.findAllActives");
@@ -181,5 +156,32 @@ public class JpaBlogDAO extends JpaGenericDAO<Blog> implements BlogDAO
     }
 
     return result;
+  }
+
+  //~--- get methods ----------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  public List<Blog> getAll()
+  {
+    return findList("Blog.findAll");
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param start
+   * @param max
+   *
+   * @return
+   */
+  public List<Blog> getAll(int start, int max)
+  {
+    return findList("Blog.findAll", start, max);
   }
 }

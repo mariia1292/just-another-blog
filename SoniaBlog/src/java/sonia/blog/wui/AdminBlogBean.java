@@ -19,7 +19,7 @@ import sonia.blog.api.dao.BlogDAO;
 import sonia.blog.api.dao.CategoryDAO;
 import sonia.blog.api.dao.CommentDAO;
 import sonia.blog.api.dao.EntryDAO;
-import sonia.blog.api.dao.MemberDAO;
+import sonia.blog.api.dao.UserDAO;
 import sonia.blog.api.navigation.NavigationProvider;
 import sonia.blog.api.search.SearchContext;
 import sonia.blog.api.template.Template;
@@ -27,6 +27,7 @@ import sonia.blog.api.util.AbstractBean;
 import sonia.blog.entity.Blog;
 import sonia.blog.entity.BlogMember;
 import sonia.blog.entity.Role;
+import sonia.blog.entity.User;
 
 import sonia.plugin.service.ServiceReference;
 
@@ -173,7 +174,6 @@ public class AdminBlogBean extends AbstractBean
   public String remove()
   {
     String result = SUCCESS;
-    BlogContext context = BlogContext.getInstance();
     Blog blog = (Blog) blogs.getRowData();
 
     if (blog != null)
@@ -282,14 +282,15 @@ public class AdminBlogBean extends AbstractBean
   public void roleChanged(ValueChangeEvent event)
   {
     BlogMember member = (BlogMember) members.getRowData();
+    User user = member.getUser();
+    Blog blog = member.getBlog();
+    Role role = (Role) event.getNewValue();
 
-    member.setRole((Role) event.getNewValue());
-
-    if (member != null)
+    if (role != null)
     {
       try
       {
-        BlogContext.getDAOFactory().getMemberDAO().edit(member);
+        BlogContext.getDAOFactory().getUserDAO().setRole(blog, user, role);
         getMessageHandler().info("changeRoleSuccess");
       }
       catch (Exception ex)
@@ -417,7 +418,7 @@ public class AdminBlogBean extends AbstractBean
     blogs = new ListDataModel();
 
     BlogDAO blogDAO = BlogContext.getDAOFactory().getBlogDAO();
-    List<Blog> blogList = blogDAO.findAll();
+    List<Blog> blogList = blogDAO.getAll();
 
     if ((blogList != null) &&!blogList.isEmpty())
     {
@@ -470,9 +471,9 @@ public class AdminBlogBean extends AbstractBean
    */
   public long getMemberCount()
   {
-    MemberDAO memberDAO = BlogContext.getDAOFactory().getMemberDAO();
+    UserDAO userDAO = BlogContext.getDAOFactory().getUserDAO();
 
-    return memberDAO.countByBlog(blog);
+    return userDAO.count(blog);
   }
 
   /**
@@ -485,8 +486,9 @@ public class AdminBlogBean extends AbstractBean
   {
     members = new ListDataModel();
 
-    MemberDAO memberDAO = BlogContext.getDAOFactory().getMemberDAO();
-    List<BlogMember> memberList = memberDAO.findByBlog(blog);
+    // TODO scrolling
+    UserDAO userDAO = BlogContext.getDAOFactory().getUserDAO();
+    List<BlogMember> memberList = userDAO.getMembers(blog, 0, 1000);
 
     if ((memberList != null) &&!memberList.isEmpty())
     {

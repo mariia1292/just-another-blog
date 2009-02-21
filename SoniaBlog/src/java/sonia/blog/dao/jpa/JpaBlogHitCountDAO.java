@@ -67,31 +67,6 @@ public class JpaBlogHitCountDAO extends JpaGenericDAO<BlogHitCount>
    * Method description
    *
    *
-   * @return
-   */
-  public List<BlogHitCount> findAll()
-  {
-    return findList("BlogHitCount.findAll");
-  }
-
-  /**
-   * Method description
-   *
-   *
-   * @param start
-   * @param max
-   *
-   * @return
-   */
-  public List<BlogHitCount> findAll(int start, int max)
-  {
-    return findList("BlogHitCount.findAll", start, max);
-  }
-
-  /**
-   * Method description
-   *
-   *
    * @param blog
    * @param date
    *
@@ -185,6 +160,31 @@ public class JpaBlogHitCountDAO extends JpaGenericDAO<BlogHitCount>
   }
 
   //~--- get methods ----------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  public List<BlogHitCount> getAll()
+  {
+    return findList("BlogHitCount.findAll");
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param start
+   * @param max
+   *
+   * @return
+   */
+  public List<BlogHitCount> getAll(int start, int max)
+  {
+    return findList("BlogHitCount.findAll", start, max);
+  }
 
   /**
    * Method description

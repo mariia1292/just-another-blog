@@ -273,12 +273,13 @@ public class BlogRequest extends HttpServletRequestWrapper
    * Method description
    *
    *
-   * @param role
+   *
+   * @param roleName
    *
    * @return
    */
   @Override
-  public boolean isUserInRole(String role)
+  public boolean isUserInRole(String roleName)
   {
     boolean result = false;
     User user = (User) getUserPrincipal();
@@ -289,14 +290,15 @@ public class BlogRequest extends HttpServletRequestWrapper
       {
         if (!searchForMember)
         {
-          member = BlogContext.getDAOFactory().getMemberDAO().findByBlogAndUser(
-            getCurrentBlog(), user);
+          role =
+            BlogContext.getDAOFactory().getUserDAO().getRole(getCurrentBlog(),
+              user);
           searchForMember = true;
         }
 
-        if (member != null)
+        if (role != null)
         {
-          result = role.equalsIgnoreCase(member.getRole().name());
+          result = roleName.equalsIgnoreCase(role.name());
         }
       }
       else
@@ -383,10 +385,10 @@ public class BlogRequest extends HttpServletRequestWrapper
   private Mapping mapping;
 
   /** Field description */
-  private BlogMember member;
+  private String redirect;
 
   /** Field description */
-  private String redirect;
+  private Role role;
 
   /** Field description */
   private boolean searchForMember = false;

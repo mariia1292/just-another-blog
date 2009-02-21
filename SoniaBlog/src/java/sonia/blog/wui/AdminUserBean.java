@@ -11,9 +11,9 @@ package sonia.blog.wui;
 
 import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.app.Constants;
-import sonia.blog.api.dao.MemberDAO;
 import sonia.blog.api.dao.UserDAO;
 import sonia.blog.api.util.AbstractBean;
+import sonia.blog.entity.Blog;
 import sonia.blog.entity.BlogMember;
 import sonia.blog.entity.Role;
 import sonia.blog.entity.User;
@@ -26,6 +26,7 @@ import sonia.security.encryption.Encryption;
 
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
 
 import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.DataModel;
@@ -70,19 +71,22 @@ public class AdminUserBean extends AbstractBean
   public void roleChanged(ValueChangeEvent event)
   {
     BlogMember member = (BlogMember) members.getRowData();
-
-    member.setRole((Role) event.getNewValue());
+    Blog blog = member.getBlog();
+    User user = member.getUser();
+    Role role = (Role) event.getNewValue();
 
     if (member != null)
     {
-      MemberDAO memberDAO = BlogContext.getDAOFactory().getMemberDAO();
-
-      if (memberDAO.edit(member))
+      try
       {
+        UserDAO userDAO = BlogContext.getDAOFactory().getUserDAO();
+
+        userDAO.setRole(blog, user, role);
         getMessageHandler().info("changeRoleSuccess");
       }
-      else
+      catch (Exception ex)
       {
+        logger.log(Level.SEVERE, null, ex);
         getMessageHandler().error("changeRoleFailure");
       }
     }
@@ -170,8 +174,10 @@ public class AdminUserBean extends AbstractBean
     {
       members = new ListDataModel();
 
-      MemberDAO memberDAO = BlogContext.getDAOFactory().getMemberDAO();
-      List<BlogMember> memberList = memberDAO.findByUser(user);
+      UserDAO userDAO = BlogContext.getDAOFactory().getUserDAO();
+
+      // TODO scrolling
+      List<BlogMember> memberList = userDAO.getMembers(user, 0, 1000);
 
       if ((memberList != null) &&!memberList.isEmpty())
       {
@@ -237,13 +243,14 @@ public class AdminUserBean extends AbstractBean
     List<User> userList = null;
     UserDAO userDAO = BlogContext.getDAOFactory().getUserDAO();
 
+    // TODO scrolling
     if (onlyActive)
     {
-      userList = userDAO.findAllActives();
+      userList = userDAO.getAll(true, 0, 1000);
     }
     else
     {
-      userList = userDAO.findAll();
+      userList = userDAO.getAll(0, 1000);
     }
 
     if ((userList != null) &&!userList.isEmpty())
@@ -334,7 +341,7 @@ public class AdminUserBean extends AbstractBean
    */
   private boolean checkMail(UserDAO userDAO)
   {
-    User u = userDAO.findByEmail(user.getEmail());
+    User u = userDAO.getByMail(user.getEmail());
 
     return (u == null) || u.equals(user);
   }

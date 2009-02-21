@@ -15,9 +15,19 @@
         <column-name>BLOG</column-name>
       </unique-constraint>
     </table>
-    <named-query name="BlogMember.findAll">
+     <named-query name="BlogMember.countByBlog">
       <query>
-      select m from BlogMember as m
+      select count(m) from BlogMember m where m.blog = :blog
+      </query>
+    </named-query>
+    <named-query name="BlogMember.getAllByBalogAndActive">
+      <query>
+      select m from BlogMember as m where m.blog = :blog and m.user.active = :active
+      </query>
+    </named-query>
+    <named-query name="BlogMember.getAllByBalogAndActive">
+      <query>
+      select m from BlogMember as m where m.blog = :blog and m.user.active = :active
       </query>
     </named-query>
     <named-query name="BlogMember.count">

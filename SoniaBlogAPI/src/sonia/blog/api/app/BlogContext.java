@@ -252,7 +252,7 @@ public class BlogContext
 
     if (id != null)
     {
-      blog = getDAOFactory().getBlogDAO().find(id);
+      blog = getDAOFactory().getBlogDAO().get(id);
     }
 
     return blog;

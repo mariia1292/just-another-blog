@@ -162,7 +162,7 @@ public class DefaultSearchEntry implements SearchEntry
         EntryDAO entryDAO = BlogContext.getDAOFactory().getEntryDAO();
         Long id = Long.parseLong(document.get("id"));
 
-        result = entryDAO.find(id);
+        result = entryDAO.get(id);
       }
     }
     catch (Exception ex)

@@ -110,7 +110,7 @@ public class DefaultLoginModule extends LoginModule
     }
 
     UserDAO userDAO = BlogContext.getDAOFactory().getUserDAO();
-    User u = userDAO.findByNameAndPassword(username, passwordString);
+    User u = userDAO.get(username, passwordString, true);
 
     if (u != null)
     {

@@ -10,10 +10,12 @@ package sonia.blog.wui;
 //~--- non-JDK imports --------------------------------------------------------
 
 import sonia.blog.api.app.BlogContext;
-import sonia.blog.api.dao.MemberDAO;
+import sonia.blog.api.dao.UserDAO;
 import sonia.blog.api.util.AbstractBean;
+import sonia.blog.entity.Blog;
 import sonia.blog.entity.BlogMember;
 import sonia.blog.entity.Role;
+import sonia.blog.entity.User;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -42,18 +44,20 @@ public class MemberBean extends AbstractBean
   public void roleChanged(ValueChangeEvent event)
   {
     BlogMember member = (BlogMember) members.getRowData();
-
-    member.setRole((Role) event.getNewValue());
+    User user = member.getUser();
+    Blog blog = member.getBlog();
+    Role role = (Role) event.getNewValue();
 
     if (member != null)
     {
-      MemberDAO memberDAO = BlogContext.getDAOFactory().getMemberDAO();
-
-      if (memberDAO.edit(member))
+      try
       {
+        UserDAO userDAO = BlogContext.getDAOFactory().getUserDAO();
+
+        userDAO.setRole(blog, user, role);
         getMessageHandler().info("changeRoleSuccess");
       }
-      else
+      catch (Exception ex)
       {
         getMessageHandler().error("changeRoleFailure");
       }
@@ -71,9 +75,10 @@ public class MemberBean extends AbstractBean
   {
     members = new ListDataModel();
 
-    MemberDAO memberDAO = BlogContext.getDAOFactory().getMemberDAO();
+    // TODO scrolling
+    UserDAO userDAO = BlogContext.getDAOFactory().getUserDAO();
     List<BlogMember> memberList =
-      memberDAO.findByBlog(getRequest().getCurrentBlog());
+      userDAO.getMembers(getRequest().getCurrentBlog(), 0, 1000);
 
     if ((memberList != null) &&!memberList.isEmpty())
     {

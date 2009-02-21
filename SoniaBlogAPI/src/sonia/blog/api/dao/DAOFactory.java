@@ -11,14 +11,12 @@ package sonia.blog.api.dao;
 
 import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.app.Constants;
-import sonia.blog.api.dao.cache.Cache;
 import sonia.blog.api.dao.cache.CacheManager;
 
 import sonia.plugin.service.ServiceReference;
 
 //~--- JDK imports ------------------------------------------------------------
 
-import java.util.List;
 
 /**
  *
@@ -146,14 +144,6 @@ public abstract class DAOFactory
    * @return
    */
   public abstract EntryDAO getEntryDAO();
-
-  /**
-   * Method description
-   *
-   *
-   * @return
-   */
-  public abstract MemberDAO getMemberDAO();
 
   /**
    * Method description
