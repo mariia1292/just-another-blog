@@ -487,8 +487,8 @@ public class AdminBlogBean extends AbstractBean
     members = new ListDataModel();
 
     // TODO scrolling
-    UserDAO userDAO = BlogContext.getDAOFactory().getUserDAO();
-    List<BlogMember> memberList = userDAO.getMembers(blog, 0, 1000);
+    BlogDAO blogDAO = BlogContext.getDAOFactory().getBlogDAO();
+    List<BlogMember> memberList = blogDAO.getMembers(blog, 0, 1000);
 
     if ((memberList != null) &&!memberList.isEmpty())
     {

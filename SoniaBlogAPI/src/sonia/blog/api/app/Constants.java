@@ -261,6 +261,8 @@ public interface Constants
   /** Field description */
   public static final String SERVICE_MAPPINGHANDLER = "/app/mappingHandler";
 
+  public static final String SERVICE_INJECTIONPROVIDER = "/app/injectionProvider";
+
   /** Field description */
   public static final String SERVICE_SEARCHCONTEXT = "/app/searchContext";
 

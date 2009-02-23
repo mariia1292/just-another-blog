@@ -37,7 +37,7 @@
     </named-query>
         <named-query name="User.getAllByActive">
       <query>
-        select u from User u where u.active = true order by u.name
+        select u from User u where u.active = :active order by u.name
       </query>
     </named-query>
     <named-query name="User.getByMail">

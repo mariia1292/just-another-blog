@@ -249,7 +249,7 @@ public class PropertiesConfiguration extends StringBasedConfiguration
    * @param key
    * @param object
    */
-  public void set(String key, Object[] object)
+  public void setMulti(String key, Object[] object)
   {
     StringBuffer buffer = new StringBuffer();
     int s = object.length;

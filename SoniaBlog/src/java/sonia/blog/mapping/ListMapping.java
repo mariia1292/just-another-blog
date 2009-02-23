@@ -178,11 +178,6 @@ public class ListMapping extends ScrollableFilterMapping
       logger.finer("set entry list(" + entries.size() + ") to BlogBean");
     }
 
-    BlogBean blogBean = BlogUtil.getSessionBean(request, BlogBean.class,
-                          BlogBean.NAME);
-
-    blogBean.setPageEntries(new ListDataModel(entries));
-
     if (start > 0)
     {
       int page = getCurrentPage(request);
@@ -202,7 +197,14 @@ public class ListMapping extends ScrollableFilterMapping
       {
         nextUri = getPageUri(request, page);
       }
+
+      entries = entries.subList(0, end);
     }
+
+    BlogBean blogBean = BlogUtil.getSessionBean(request, BlogBean.class,
+                          BlogBean.NAME);
+
+    blogBean.setPageEntries(new ListDataModel(entries));
 
     LinkBuilder linkBuilder = BlogContext.getInstance().getLinkBuilder();
     String link = linkBuilder.buildLink(request, "/list/");

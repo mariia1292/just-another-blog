@@ -14,6 +14,7 @@ import org.apache.derby.drda.NetworkServerControl;
 import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.app.BlogRequestListener;
 import sonia.blog.api.app.Constants;
+import sonia.blog.api.app.ResourceManager;
 import sonia.blog.api.dao.BlogDAO;
 import sonia.blog.api.dao.CategoryDAO;
 import sonia.blog.api.dao.CommentDAO;
@@ -28,6 +29,7 @@ import sonia.blog.entity.Entry;
 import sonia.blog.entity.Role;
 import sonia.blog.entity.User;
 
+import sonia.plugin.service.Service;
 import sonia.plugin.service.ServiceReference;
 import sonia.plugin.service.ServiceRegistry;
 
@@ -35,14 +37,18 @@ import sonia.security.encryption.Encryption;
 
 //~--- JDK imports ------------------------------------------------------------
 
+import java.io.File;
+import java.io.FilenameFilter;
 import java.io.PrintWriter;
+
+import java.text.SimpleDateFormat;
 
 import java.util.Date;
 import java.util.Random;
 import java.util.logging.Level;
 
 import javax.faces.event.ValueChangeEvent;
-
+import javax.faces.model.SelectItem;
 
 /**
  *
@@ -50,6 +56,12 @@ import javax.faces.event.ValueChangeEvent;
  */
 public class DevelBean extends AbstractBean
 {
+
+  /** Field description */
+  private static SimpleDateFormat sdf =
+    new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+  //~--- constructors ---------------------------------------------------------
 
   /**
    * Constructs ...
@@ -59,8 +71,6 @@ public class DevelBean extends AbstractBean
   {
     super();
     perfRequestListener = new PerfRequestListener();
-    listenerReference = BlogContext.getInstance().getServiceRegistry().get(
-      BlogRequestListener.class, Constants.SERVICE_REQUESTLISTENER);
   }
 
   //~--- methods --------------------------------------------------------------
@@ -104,7 +114,6 @@ public class DevelBean extends AbstractBean
         blog.setEmail("user" + j + "@jab.de");
         blog.setDescription("Description Blog " + j);
         blogDAO.add(blog);
-
         userDAO.setRole(blog, user, Role.ADMIN);
 
         for (int k = 0; k < categories; k++)
@@ -291,6 +300,17 @@ public class DevelBean extends AbstractBean
    *
    * @return
    */
+  public File getStatisticFile()
+  {
+    return statisticFile;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
   public int getUsers()
   {
     return users;
@@ -391,6 +411,17 @@ public class DevelBean extends AbstractBean
    * Method description
    *
    *
+   * @param statistikFile
+   */
+  public void setStatisticFile(File statisticFile)
+  {
+    this.statisticFile = statisticFile;
+  }
+
+  /**
+   * Method description
+   *
+   *
    * @param users
    */
   public void setUsers(int users)
@@ -440,6 +471,58 @@ public class DevelBean extends AbstractBean
     return reference.get();
   }
 
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  public SelectItem[] getStatisticFiles()
+  {
+    SelectItem[] items = null;
+    ResourceManager resManager = BlogContext.getInstance().getResourceManager();
+    File directory = resManager.getDirectory("plugin" + File.separator
+                       + "devel");
+
+    if (directory.exists())
+    {
+      File[] files = directory.listFiles(new FilenameFilter()
+      {
+        public boolean accept(File dir, String name)
+        {
+          return name.endsWith(".xml");
+        }
+      });
+      int size = files.length;
+
+      items = new SelectItem[size];
+
+      for (int i = 0; i < size; i++)
+      {
+        try
+        {
+          String name = files[i].getName();
+
+          if (name.length() > 4)
+          {
+            name = name.substring(0, name.length() - 4);
+
+            long time = Long.parseLong(name);
+
+            name = sdf.format(new Date(time));
+            items[i] = new SelectItem(files[i], name);
+          }
+        }
+        catch (NumberFormatException ex)
+        {
+          logger.log(Level.WARNING, null, ex);
+        }
+      }
+    }
+
+    return items;
+  }
+
   //~--- fields ---------------------------------------------------------------
 
   /** Field description */
@@ -458,6 +541,7 @@ public class DevelBean extends AbstractBean
   private int entries = 10;
 
   /** Field description */
+  @Service(Constants.SERVICE_REQUESTLISTENER)
   private ServiceReference<BlogRequestListener> listenerReference;
 
   /** Field description */
@@ -465,6 +549,9 @@ public class DevelBean extends AbstractBean
 
   /** Field description */
   private boolean requestListener = false;
+
+  /** Field description */
+  private File statisticFile;
 
   /** Field description */
   private int users = 20;

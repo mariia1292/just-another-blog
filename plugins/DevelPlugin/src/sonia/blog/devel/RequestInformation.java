@@ -36,7 +36,7 @@ public class RequestInformation
    */
   public RequestInformation(BlogRequest request)
   {
-    this.endTime = System.currentTimeMillis();
+    this.endTime = System.nanoTime();
     this.requestUri = request.getRequestURI();
     this.startTime = (Long) request.getAttribute(STARTTIME_VAR);
   }
@@ -65,7 +65,7 @@ public class RequestInformation
       {
         startTime = Long.parseLong(value);
       }
-      else if (name.equals("endTime"))
+      else if (name.equals("end-time"))
       {
         endTime = Long.parseLong(value);
       }
@@ -97,7 +97,7 @@ public class RequestInformation
    */
   public static void setStartTime(BlogRequest request)
   {
-    request.setAttribute(STARTTIME_VAR, System.currentTimeMillis());
+    request.setAttribute(STARTTIME_VAR, System.nanoTime());
   }
 
   //~--- methods --------------------------------------------------------------
@@ -150,6 +150,7 @@ public class RequestInformation
    */
   public long getRequestTime()
   {
+    System.out.println( endTime + " - " + startTime + " = "+ (endTime - startTime) );
     return endTime - startTime;
   }
 

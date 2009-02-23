@@ -9,6 +9,8 @@ package sonia.plugin;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import sonia.injection.InjectionProvider;
+
 import sonia.plugin.service.ServiceRegistry;
 
 //~--- JDK imports ------------------------------------------------------------
@@ -180,6 +182,17 @@ public class PluginContext
    *
    * @return
    */
+  public InjectionProvider getInjectionProvider()
+  {
+    return injectionProvider;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
   public List<Plugin> getPlugins()
   {
     return new ArrayList<Plugin>(plugins.values());
@@ -208,6 +221,17 @@ public class PluginContext
   }
 
   //~--- set methods ----------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   * @param injectionProvider
+   */
+  public void setInjectionProvider(InjectionProvider injectionProvider)
+  {
+    this.injectionProvider = injectionProvider;
+  }
 
   /**
    * Method description
@@ -274,6 +298,9 @@ public class PluginContext
 
   /** Field description */
   private final List<PluginStateListener> listeners;
+
+  /** Field description */
+  private InjectionProvider injectionProvider;
 
   /** Field description */
   private Map<String, Plugin> plugins;

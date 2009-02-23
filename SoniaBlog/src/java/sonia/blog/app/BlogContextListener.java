@@ -35,11 +35,18 @@ import sonia.blog.search.IndexListener;
 import sonia.blog.spam.CaptchaSpamProtection;
 import sonia.blog.spam.MathSpamProtection;
 
+import sonia.config.Config;
+import sonia.config.ConfigInjector;
+
+import sonia.injection.InjectionProvider;
+
 import sonia.macro.MacroParser;
 
 import sonia.net.FileNameMap;
 
 import sonia.plugin.DefaultPluginStore;
+import sonia.plugin.service.Service;
+import sonia.plugin.service.ServiceInjector;
 import sonia.plugin.service.ServiceReference;
 import sonia.plugin.service.ServiceRegistry;
 
@@ -109,6 +116,7 @@ public class BlogContextListener implements ServletContextListener
 
       context.setServletContext(event.getServletContext());
       initFileNameMap();
+      initInjectionProvider(context);
       initServices(context);
       initMacros();
       configureLogger();
@@ -220,6 +228,23 @@ public class BlogContextListener implements ServletContextListener
     FileNameMap nameMap = new FileNameMap();
 
     URLConnection.setFileNameMap(nameMap);
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param context
+   */
+  private void initInjectionProvider(BlogContext context)
+  {
+    InjectionProvider provider = context.getInjectionProvider();
+
+    context.getPluginContext().setInjectionProvider(provider);
+    provider.registerInjector(
+        Service.class, new ServiceInjector(context.getServiceRegistry()));
+    provider.registerInjector(Config.class,
+                              new ConfigInjector(context.getConfiguration()));
   }
 
   /**

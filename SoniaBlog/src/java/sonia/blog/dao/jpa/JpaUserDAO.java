@@ -19,9 +19,11 @@ import sonia.blog.entity.User;
 //~--- JDK imports ------------------------------------------------------------
 
 import java.util.List;
+import java.util.logging.Level;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.NoResultException;
 import javax.persistence.Query;
 
 /**
@@ -219,44 +221,6 @@ public class JpaUserDAO extends JpaGenericDAO<User> implements UserDAO
    * Method description
    *
    *
-   * @param blog
-   * @param start
-   * @param max
-   *
-   * @return
-   */
-  public List<BlogMember> getMembers(Blog blog, int start, int max)
-  {
-    EntityManager em = createEntityManager();
-    Query q = em.createNamedQuery("BlogMember.getAllByBalogAndActive");
-
-    return excecuteListQuery(BlogMember.class, em, q);
-  }
-
-  /**
-   * Method description
-   *
-   *
-   * @param blog
-   * @param active
-   * @param start
-   * @param max
-   *
-   * @return
-   */
-  public List<BlogMember> getMembers(Blog blog, boolean active, int start,
-                                     int max)
-  {
-    EntityManager em = createEntityManager();
-    Query q = em.createNamedQuery("BlogMember.getAllByBalogAndActive");
-
-    return excecuteListQuery(BlogMember.class, em, q);
-  }
-
-  /**
-   * Method description
-   *
-   *
    * @param user
    * @param start
    * @param max
@@ -265,7 +229,14 @@ public class JpaUserDAO extends JpaGenericDAO<User> implements UserDAO
    */
   public List<BlogMember> getMembers(User user, int start, int max)
   {
-    throw new UnsupportedOperationException("Not supported yet.");
+    EntityManager em = createEntityManager();
+    Query q = em.createNamedQuery("BlogMember.getAllByUser");
+
+    q.setParameter("user", user);
+    q.setFirstResult(start);
+    q.setMaxResults(max);
+
+    return excecuteListQuery(BlogMember.class, em, q);
   }
 
   /**
@@ -279,7 +250,21 @@ public class JpaUserDAO extends JpaGenericDAO<User> implements UserDAO
    */
   public Role getRole(Blog blog, User user)
   {
-    throw new UnsupportedOperationException("Not supported yet.");
+    EntityManager em = createEntityManager();
+    Query q = em.createNamedQuery("BlogMember.getByBlogAndUser");
+
+    q.setParameter("blog", blog);
+    q.setParameter("user", user);
+
+    Role role = null;
+    BlogMember member = excecuteQuery(BlogMember.class, em, q);
+
+    if (member != null)
+    {
+      role = member.getRole();
+    }
+
+    return role;
   }
 
   //~--- set methods ----------------------------------------------------------
@@ -294,6 +279,47 @@ public class JpaUserDAO extends JpaGenericDAO<User> implements UserDAO
    */
   public void setRole(Blog blog, User user, Role role)
   {
-    throw new UnsupportedOperationException("Not supported yet.");
+    EntityManager em = createEntityManager();
+    Query q = em.createNamedQuery("BlogMember.getByBlogAndUser");
+
+    q.setParameter("blog", blog);
+    q.setParameter("user", user);
+
+    BlogMember member = null;
+
+    try
+    {
+      member = (BlogMember) q.getSingleResult();
+    }
+    catch (NoResultException ex) {}
+
+    em.getTransaction().begin();
+
+    try
+    {
+      if (member == null)
+      {
+        member = new BlogMember(blog, user, role);
+        em.persist(member);
+      }
+      else
+      {
+        member.setRole(role);
+        em.merge(member);
+      }
+
+      em.getTransaction().commit();
+    }
+    catch (Exception ex)
+    {
+      logger.log(Level.SEVERE, null, ex);
+    }
+    finally
+    {
+      if (em != null)
+      {
+        em.close();
+      }
+    }
   }
 }

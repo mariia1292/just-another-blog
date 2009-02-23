@@ -53,6 +53,7 @@ import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.model.DataModel;
 import javax.faces.model.ListDataModel;
+import sonia.plugin.service.Service;
 
 /**
  *
@@ -249,7 +250,6 @@ public class BlogBean extends AbstractBean
    *
    * @return
    */
-  @SuppressWarnings("unchecked")
   public List<NavigationMenuItem> getExtraNavigation()
   {
     BlogContext context = BlogContext.getInstance();
@@ -288,13 +288,6 @@ public class BlogBean extends AbstractBean
 
       navigation.add(new NavigationMenuItem(bundle.getString("logout"),
               "#{LoginBean.logout}"));
-    }
-
-    if (extraNavigationReference == null)
-    {
-      extraNavigationReference =
-        context.getServiceRegistry().get(NavigationProvider.class,
-                                         Constants.NAVIGATION_EXTRA);
     }
 
     List<NavigationProvider> providers = extraNavigationReference.getAll();
@@ -468,12 +461,6 @@ public class BlogBean extends AbstractBean
   @SuppressWarnings("unchecked")
   public SpamInputProtection getSpamInputMethod()
   {
-    if (spamServiceReference == null)
-    {
-      spamServiceReference = BlogContext.getInstance().getServiceRegistry().get(
-        SpamInputProtection.class, Constants.SERVICE_SPAMPROTECTIONMETHOD);
-    }
-
     SpamInputProtection method = null;
     String configString = config.getString(Constants.CONFIG_SPAMMETHOD);
 
@@ -684,7 +671,8 @@ public class BlogBean extends AbstractBean
   private ContentObject entry;
 
   /** Field description */
-  private ServiceReference extraNavigationReference;
+  @Service(Constants.NAVIGATION_EXTRA)
+  private ServiceReference<NavigationProvider> extraNavigationReference;
 
   /** Field description */
   private UINavigationMenuItem overviewItem;
@@ -699,6 +687,7 @@ public class BlogBean extends AbstractBean
   private String searchString;
 
   /** Field description */
+  @Service(Constants.SERVICE_SPAMPROTECTIONMETHOD)
   private ServiceReference<SpamInputProtection> spamServiceReference;
 
   /** Field description */

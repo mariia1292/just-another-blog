@@ -25,9 +25,9 @@
       select m from BlogMember as m where m.blog = :blog and m.user.active = :active
       </query>
     </named-query>
-    <named-query name="BlogMember.getAllByBalogAndActive">
+    <named-query name="BlogMember.getAllByBlog">
       <query>
-      select m from BlogMember as m where m.blog = :blog and m.user.active = :active
+      select m from BlogMember as m where m.blog = :blog
       </query>
     </named-query>
     <named-query name="BlogMember.count">
@@ -35,12 +35,12 @@
       select count(m) from BlogMember as m
       </query>
     </named-query>
-    <named-query name="BlogMember.findByBlogAndUser">
+    <named-query name="BlogMember.getByBlogAndUser">
       <query>
       select m from BlogMember as m where m.blog = :blog and m.user = :user
       </query>
     </named-query>
-    <named-query name="BlogMember.findByUser">
+    <named-query name="BlogMember.getAllByUser">
       <query>
       select m from BlogMember m where m.user = :user
       </query>

@@ -20,9 +20,9 @@
 
           <h:panelGrid columns="3">
 
-            <h:outputLabel for="servername" value="#{label.servername}" />
+            <h:outputLabel for="servername" value="#{label.identifier}" />
             <h:panelGroup>
-              <h:inputText id="servername" value="#{BlogCreationBean.blog.servername}" required="true">
+              <h:inputText id="servername" value="#{BlogCreationBean.blog.identifier}" required="true">
                 <f:validator validatorId="validator.domain" />
               </h:inputText>
               <h:outputText value=" .#{BlogCreationBean.domain}" rendered="#{!empty BlogCreationBean.domain}" />

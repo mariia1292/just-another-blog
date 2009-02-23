@@ -10,6 +10,7 @@ package sonia.blog.api.dao;
 //~--- non-JDK imports --------------------------------------------------------
 
 import sonia.blog.entity.Blog;
+import sonia.blog.entity.BlogMember;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -51,4 +52,32 @@ public interface BlogDAO extends GenericDAO<Blog>
    * @return
    */
   public Blog findByIdentifier(String identifier);
+
+  //~--- get methods ----------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   * @param blog
+   * @param start
+   * @param max
+   *
+   * @return
+   */
+  public List<BlogMember> getMembers(Blog blog, int start, int max);
+
+  /**
+   * Method description
+   *
+   *
+   * @param blog
+   * @param active
+   * @param start
+   * @param max
+   *
+   * @return
+   */
+  public List<BlogMember> getMembers(Blog blog, boolean active, int start,
+                                     int max);
 }

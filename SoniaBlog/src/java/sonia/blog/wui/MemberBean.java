@@ -10,6 +10,7 @@ package sonia.blog.wui;
 //~--- non-JDK imports --------------------------------------------------------
 
 import sonia.blog.api.app.BlogContext;
+import sonia.blog.api.dao.BlogDAO;
 import sonia.blog.api.dao.UserDAO;
 import sonia.blog.api.util.AbstractBean;
 import sonia.blog.entity.Blog;
@@ -76,9 +77,9 @@ public class MemberBean extends AbstractBean
     members = new ListDataModel();
 
     // TODO scrolling
-    UserDAO userDAO = BlogContext.getDAOFactory().getUserDAO();
+    BlogDAO blogDAO = BlogContext.getDAOFactory().getBlogDAO();
     List<BlogMember> memberList =
-      userDAO.getMembers(getRequest().getCurrentBlog(), 0, 1000);
+      blogDAO.getMembers(getRequest().getCurrentBlog(), 0, 1000);
 
     if ((memberList != null) &&!memberList.isEmpty())
     {

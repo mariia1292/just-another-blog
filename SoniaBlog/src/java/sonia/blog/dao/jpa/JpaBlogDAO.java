@@ -14,6 +14,7 @@ import sonia.blog.api.app.Constants;
 import sonia.blog.api.app.ResourceManager;
 import sonia.blog.api.dao.BlogDAO;
 import sonia.blog.entity.Blog;
+import sonia.blog.entity.BlogMember;
 
 import sonia.util.Util;
 
@@ -183,5 +184,52 @@ public class JpaBlogDAO extends JpaGenericDAO<Blog> implements BlogDAO
   public List<Blog> getAll(int start, int max)
   {
     return findList("Blog.findAll", start, max);
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param blog
+   * @param start
+   * @param max
+   *
+   * @return
+   */
+  public List<BlogMember> getMembers(Blog blog, int start, int max)
+  {
+    EntityManager em = createEntityManager();
+    Query q = em.createNamedQuery("BlogMember.getAllByBlog");
+
+    q.setParameter("blog", blog);
+    q.setFirstResult(start);
+    q.setMaxResults(max);
+
+    return excecuteListQuery(BlogMember.class, em, q);
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param blog
+   * @param active
+   * @param start
+   * @param max
+   *
+   * @return
+   */
+  public List<BlogMember> getMembers(Blog blog, boolean active, int start,
+                                     int max)
+  {
+    EntityManager em = createEntityManager();
+    Query q = em.createNamedQuery("BlogMember.getAllByBalogAndActive");
+
+    q.setParameter("blog", blog);
+    q.setParameter("active", active);
+    q.setFirstResult(start);
+    q.setMaxResults(max);
+
+    return excecuteListQuery(BlogMember.class, em, q);
   }
 }

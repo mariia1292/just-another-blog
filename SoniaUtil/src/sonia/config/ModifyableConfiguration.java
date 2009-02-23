@@ -56,5 +56,5 @@ public interface ModifyableConfiguration extends Configuration
    * @param key
    * @param object
    */
-  public void set(String key, Object[] object);
+  public void setMulti(String key, Object[] object);
 }

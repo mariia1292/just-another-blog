@@ -221,7 +221,7 @@ public class SearchMapping extends ScrollableFilterMapping
   private String handleListView(BlogRequest request, List<SearchEntry> entries,
                                 int start, int max)
   {
-    List<SearchEntry> list = entries.subList(start, max);
+    List<SearchEntry> list = null;
 
     // TODO: setEntries to BlogBean
     return buildTemplateViewId(request, Constants.TEMPLATE_LIST);

@@ -14,10 +14,8 @@ import sonia.blog.api.app.BlogRequest;
 import sonia.blog.api.app.BlogResponse;
 import sonia.blog.api.app.Constants;
 import sonia.blog.api.app.ResourceManager;
-import sonia.blog.api.link.LinkBuilder;
 import sonia.blog.api.mapping.FinalMapping;
 import sonia.blog.entity.Blog;
-import sonia.blog.entity.PermaObject;
 
 import sonia.config.ConfigurationListener;
 import sonia.config.ModifyableConfiguration;
@@ -82,8 +80,6 @@ public class PdfViewerMapping extends FinalMapping
                                   Constants.DEFAULT_IMAGE_MIMETYPE);
     }
   }
-
-  //~--- methods --------------------------------------------------------------
 
   /**
    * Method description

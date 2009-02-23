@@ -20,6 +20,8 @@ import sonia.blog.entity.Blog;
 
 import sonia.config.XmlConfiguration;
 
+import sonia.injection.InjectionProvider;
+
 import sonia.jobqueue.JobQueue;
 
 import sonia.macro.MacroParser;
@@ -46,6 +48,7 @@ import javax.security.auth.login.LoginContext;
 import javax.security.auth.login.LoginException;
 
 import javax.servlet.ServletContext;
+import sonia.injection.DefaultInjectionProvider;
 
 /**
  *
@@ -68,6 +71,7 @@ public class BlogContext
    */
   public BlogContext()
   {
+    this.injectionProvider = new DefaultInjectionProvider();
     this.pluginContext = new PluginContext();
     this.jobQueue = new JobQueue<BlogJob>();
   }
@@ -257,6 +261,19 @@ public class BlogContext
 
     return blog;
   }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  public InjectionProvider getInjectionProvider()
+  {
+    return injectionProvider;
+  }
+
+  private InjectionProvider injectionProvider;
 
   /**
    * Method description

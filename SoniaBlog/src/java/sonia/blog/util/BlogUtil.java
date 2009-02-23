@@ -13,6 +13,7 @@ import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.app.BlogRequest;
 import sonia.blog.api.app.BlogRuntimeException;
 import sonia.blog.api.app.Constants;
+import sonia.blog.api.util.AbstractBean;
 
 import sonia.config.XmlConfiguration;
 
@@ -291,6 +292,12 @@ public class BlogUtil
       try
       {
         result = type.newInstance();
+
+        if (result instanceof AbstractBean)
+        {
+          ((AbstractBean) result).init();
+        }
+
         session.setAttribute(name, result);
       }
       catch (Exception ex)

@@ -188,7 +188,12 @@ public class PluginReader
         {
           try
           {
-            plugin.setActivator((Activator) Class.forName(value).newInstance());
+            Activator activator = (Activator) Class.forName(value).newInstance();
+            if ( context.getInjectionProvider() != null )
+            {
+              context.getInjectionProvider().inject(activator);
+            }
+            plugin.setActivator(activator);
           }
           catch (Exception ex)
           {

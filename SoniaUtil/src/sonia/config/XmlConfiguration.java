@@ -315,7 +315,7 @@ public class XmlConfiguration extends StringBasedConfiguration
    * @param key
    * @param object
    */
-  public void set(String key, Object[] object)
+  public void setMulti(String key, Object[] object)
   {
     int s = object.length;
     String[] value = new String[s];

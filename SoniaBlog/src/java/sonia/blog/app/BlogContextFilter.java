@@ -81,7 +81,7 @@ public class BlogContextFilter implements Filter
                     Constants.SSO_ONEPERSESSION);
 
       if ((value == Constants.SSO_ONEPERSESSION)
-          || (request.getSession(true).getAttribute(SSO_SESSION_VAR) == null))
+          && (request.getSession(true).getAttribute(SSO_SESSION_VAR) == null))
       {
         doSSOLogin(request, response);
         request.getSession().setAttribute(SSO_SESSION_VAR, Boolean.TRUE);

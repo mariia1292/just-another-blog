@@ -43,7 +43,7 @@
 
         <h2><h:outputText value="#{label.statistic}" /></h2>
 
-        <h:graphicImage value="/chart/blogUsage.png?blogId=#{AdminBlogBean.blog.id}" />
+        <h:graphicImage value="/chart/blog/usage.png?blogId=#{AdminBlogBean.blog.id}" />
 
         <h2><h:outputText value="#{label.configuration}" /></h2>
 
@@ -51,8 +51,8 @@
 
           <h:panelGrid columns="3">
 
-            <h:outputLabel for="servername" value="#{label.servername}" />
-            <h:inputText id="servername" value="#{AdminBlogBean.blog.servername}" required="true">
+            <h:outputLabel for="servername" value="#{label.identifier}" />
+            <h:inputText id="servername" value="#{AdminBlogBean.blog.identifier}" required="true">
               <f:validator validatorId="validator.domain" />
             </h:inputText>
             <h:message for="servername" />

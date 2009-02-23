@@ -61,7 +61,7 @@
   </mapping>
 
   <mapping>
-    <regex>^/chart/blog/usage.jab$</regex>
+    <regex>^/chart/blog/usage.png$</regex>
     <class>sonia.blog.mapping.chart.BlogUsageChartMapping</class>
   </mapping>
 

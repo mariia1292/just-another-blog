@@ -18,7 +18,17 @@
 
         <h1>Performance-Statistic</h1>
 
-        
+        <h:form>
+
+          <h:selectOneMenu value="#{DevelBean.statisticFile}">
+
+            <f:selectItems value="#{DevelBean.statisticFiles}" />
+
+          </h:selectOneMenu>
+
+          <h:commandButton value="Print Statistik" />
+
+        </h:form>
 
       </ui:define>
 
