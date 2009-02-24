@@ -39,6 +39,7 @@ import sonia.blog.entity.Tag;
 import sonia.config.Configuration;
 import sonia.config.XmlConfiguration;
 
+import sonia.plugin.service.Service;
 import sonia.plugin.service.ServiceReference;
 
 import sonia.util.Util;
@@ -53,7 +54,6 @@ import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.model.DataModel;
 import javax.faces.model.ListDataModel;
-import sonia.plugin.service.Service;
 
 /**
  *

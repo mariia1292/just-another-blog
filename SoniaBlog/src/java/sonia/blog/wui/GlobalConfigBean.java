@@ -16,6 +16,7 @@ import sonia.blog.api.dao.BlogDAO;
 import sonia.blog.api.spam.SpamInputProtection;
 import sonia.blog.api.util.AbstractConfigBean;
 import sonia.blog.entity.Blog;
+import sonia.blog.util.BlogUtil;
 
 import sonia.plugin.service.ServiceReference;
 
@@ -25,6 +26,7 @@ import sonia.util.Util;
 
 import java.util.List;
 
+import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
 
 /**
@@ -85,6 +87,10 @@ public class GlobalConfigBean extends AbstractConfigBean
     smtpPassword = config.getEncString(Constants.CONFIG_SMTPPASSWORD);
     registerAcknowledgement =
       config.getBoolean(Constants.CONFIG_REGISTERACKNOWLEDGEMENT, false);
+    defaultLocale = config.getString(Constants.CONFIG_DEFAULT_LOCALE,
+                                     Constants.DEFAULT_LOCALE.toString());
+    defaultTimeZone = config.getString(Constants.CONFIG_DEFAULT_TIMEZONE,
+                                       Constants.DEFAULT_TIMEZONE.getID());
   }
 
   /**
@@ -110,6 +116,8 @@ public class GlobalConfigBean extends AbstractConfigBean
     config.setEncString(Constants.CONFIG_SMTPPASSWORD, smtpPassword);
     config.set(Constants.CONFIG_REGISTERACKNOWLEDGEMENT,
                registerAcknowledgement);
+    config.set(Constants.CONFIG_DEFAULT_LOCALE, defaultLocale);
+    config.set(Constants.CONFIG_DEFAULT_TIMEZONE, defaultTimeZone);
   }
 
   /**
@@ -199,9 +207,42 @@ public class GlobalConfigBean extends AbstractConfigBean
    *
    * @return
    */
+  public String getDefaultLocale()
+  {
+    return defaultLocale;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  public String getDefaultTimeZone()
+  {
+    return defaultTimeZone;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
   public String getDomain()
   {
     return domain;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  public SelectItem[] getLocaleItems()
+  {
+    return BlogUtil.getLocaleItems(FacesContext.getCurrentInstance());
   }
 
   /**
@@ -341,6 +382,17 @@ public class GlobalConfigBean extends AbstractConfigBean
    *
    * @return
    */
+  public SelectItem[] getTimeZoneItems()
+  {
+    return BlogUtil.getTimeZoneItems();
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
   public boolean isAllowBlogCreation()
   {
     return allowBlogCreation;
@@ -423,6 +475,28 @@ public class GlobalConfigBean extends AbstractConfigBean
   public void setDefaultBlog(Long defaultBlog)
   {
     this.defaultBlog = defaultBlog;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param defaultLocale
+   */
+  public void setDefaultLocale(String defaultLocale)
+  {
+    this.defaultLocale = defaultLocale;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param defaultTimeZone
+   */
+  public void setDefaultTimeZone(String defaultTimeZone)
+  {
+    this.defaultTimeZone = defaultTimeZone;
   }
 
   /**
@@ -560,6 +634,12 @@ public class GlobalConfigBean extends AbstractConfigBean
 
   /** Field description */
   private Long defaultBlog;
+
+  /** Field description */
+  private String defaultLocale;
+
+  /** Field description */
+  private String defaultTimeZone;
 
   /** Field description */
   private String domain;

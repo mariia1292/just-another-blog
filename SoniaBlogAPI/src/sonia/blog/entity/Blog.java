@@ -11,9 +11,15 @@ package sonia.blog.entity;
 
 import java.io.Serializable;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
+import java.util.TimeZone;
+import sonia.blog.api.app.BlogContext;
 
 /**
  *
@@ -157,6 +163,21 @@ public class Blog implements Serializable, PermaObject, Comparable<Blog>
    *
    * @return
    */
+  public DateFormat getDateFormatter()
+  {
+    SimpleDateFormat sdf = new SimpleDateFormat(dateFormat, getLocale());
+
+    sdf.setTimeZone(getTimeZone());
+
+    return sdf;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
   public String getDescription()
   {
     return description;
@@ -245,6 +266,17 @@ public class Blog implements Serializable, PermaObject, Comparable<Blog>
    *
    * @return
    */
+  public Locale getLocale()
+  {
+    return new Locale(locale);
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
   public List<BlogMember> getMembers()
   {
     if (members == null)
@@ -286,6 +318,17 @@ public class Blog implements Serializable, PermaObject, Comparable<Blog>
   public int getThumbnailWidth()
   {
     return thumbnailWidth;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  public TimeZone getTimeZone()
+  {
+    return TimeZone.getTimeZone(timeZone);
   }
 
   /**
@@ -504,6 +547,17 @@ public class Blog implements Serializable, PermaObject, Comparable<Blog>
    * Method description
    *
    *
+   * @param locale
+   */
+  public void setLocale(Locale locale)
+  {
+    this.locale = locale.toString();
+  }
+
+  /**
+   * Method description
+   *
+   *
    * @param members
    */
   public void setMembers(List<BlogMember> members)
@@ -548,6 +602,17 @@ public class Blog implements Serializable, PermaObject, Comparable<Blog>
    * Method description
    *
    *
+   * @param timeZone
+   */
+  public void setTimeZone(TimeZone timeZone)
+  {
+    this.timeZone = timeZone.getID();
+  }
+
+  /**
+   * Method description
+   *
+   *
    * @param title
    */
   public void setTitle(String title)
@@ -564,6 +629,14 @@ public class Blog implements Serializable, PermaObject, Comparable<Blog>
   void prePersists()
   {
     creationDate = new Date();
+    if ( locale == null )
+    {
+      locale = BlogContext.getInstance().getDefaultLocale().toString();
+    }
+    if ( timeZone == null )
+    {
+      timeZone = BlogContext.getInstance().getDefaultTimeZone().getID();
+    }
   }
 
   //~--- fields ---------------------------------------------------------------
@@ -614,6 +687,9 @@ public class Blog implements Serializable, PermaObject, Comparable<Blog>
   private int imageWidth = 640;
 
   /** Field description */
+  private String locale;
+
+  /** Field description */
   private List<BlogMember> members;
 
   /** Field description */
@@ -624,6 +700,9 @@ public class Blog implements Serializable, PermaObject, Comparable<Blog>
 
   /** Field description */
   private int thumbnailWidth = 200;
+
+  /** Field description */
+  private String timeZone;
 
   /** Field description */
   private String title;

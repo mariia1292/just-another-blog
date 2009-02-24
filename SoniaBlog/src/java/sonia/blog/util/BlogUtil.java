@@ -21,10 +21,19 @@ import sonia.util.Util;
 
 //~--- JDK imports ------------------------------------------------------------
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Locale;
 import java.util.Properties;
+import java.util.TimeZone;
+
+import javax.faces.context.FacesContext;
+import javax.faces.model.SelectItem;
 
 import javax.mail.Authenticator;
 import javax.mail.Message;
@@ -34,6 +43,7 @@ import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 /**
@@ -260,6 +270,54 @@ public class BlogUtil
    * Method description
    *
    *
+   * @param object
+   *
+   * @return
+   */
+  public static BlogRequest getBlogRequest(Object object)
+  {
+    BlogRequest request = null;
+
+    if (object instanceof BlogRequest)
+    {
+      request = (BlogRequest) object;
+    }
+    else if (object instanceof HttpServletRequest)
+    {
+      request = new BlogRequest((HttpServletRequest) object);
+    }
+
+    return request;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   *
+   * @param context
+   * @return
+   */
+  public static SelectItem[] getLocaleItems(FacesContext context)
+  {
+    List<SelectItem> items = new ArrayList<SelectItem>();
+    Iterator<Locale> localeIterator =
+      context.getApplication().getSupportedLocales();
+
+    while (localeIterator.hasNext())
+    {
+      Locale locale = localeIterator.next();
+
+      items.add(new SelectItem(locale.toString(), locale.getDisplayName(locale)));
+    }
+
+    return items.toArray(new SelectItem[0]);
+  }
+
+  /**
+   * Method description
+   *
+   *
    * @param request
    * @param type
    * @param name
@@ -307,5 +365,32 @@ public class BlogUtil
     }
 
     return result;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  public static SelectItem[] getTimeZoneItems()
+  {
+    SelectItem[] items = null;
+    String[] ids = TimeZone.getAvailableIDs();
+
+    Arrays.sort(ids);
+
+    int s = ids.length;
+
+    items = new SelectItem[s];
+
+    for (int i = 0; i < s; i++)
+    {
+      TimeZone timeZone = TimeZone.getTimeZone(ids[i]);
+
+      items[i] = new SelectItem(timeZone.getID(), timeZone.getID());
+    }
+
+    return items;
   }
 }

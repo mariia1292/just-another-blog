@@ -7,6 +7,9 @@
 
 package sonia.blog.api.app;
 
+import java.util.Locale;
+import java.util.TimeZone;
+
 /**
  *
  * @author sdorra
@@ -15,6 +18,10 @@ public interface Constants
 {
 
   /** Field description */
+  public static final String CONFIG_DEFAULT_LOCALE = "default.locale";
+
+  public static final String CONFIG_DEFAULT_TIMEZONE = "default.timezone";
+
   public static final String CONFIG_ALLOW_BLOGCREATION = "allow.blogCreation";
 
   /** Field description */
@@ -107,6 +114,10 @@ public interface Constants
 
   /** Field description */
   public static final int DEFAULT_COOKIETIME = 60 * 60 * 24 * 31;
+
+  public static final Locale DEFAULT_LOCALE = Locale.GERMAN;
+
+  public static final TimeZone DEFAULT_TIMEZONE  = TimeZone.getTimeZone("Europe/Paris");
 
   /** Field description */
   public static final String DEFAULT_ENCODING = "UTF-8";

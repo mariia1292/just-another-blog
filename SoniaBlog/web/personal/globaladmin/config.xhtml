@@ -47,12 +47,6 @@
             </h:selectOneRadio>
             <h:message for="spamInputMethod" />
 
-            <h:outputLabel for="defaultBlog" value="#{label.defaultBlog}" />
-            <h:selectOneMenu id="defaultBlog" value="#{GlobalConfigBean.defaultBlog}">
-              <f:selectItems value="#{GlobalConfigBean.blogItems}" />
-            </h:selectOneMenu>
-            <h:message for="defaultBlog" />
-
             <h:outputLabel for="sso" value="#{label.sso}" />
             <h:selectOneRadio id="sso" value="#{GlobalConfigBean.sso}" styleClass="list">
               <f:selectItem itemLabel="#{label.disabled}" itemValue="0" />
@@ -72,6 +66,37 @@
           <h:commandButton action="#{GlobalConfigBean.save}" value="#{label.save}" />
 
         </h:form>
+
+        <h2><h:outputText value="#{label.defaultConfig}" /></h2>
+
+        <h:form id="defaultForm">
+
+          <h:panelGrid columns="3">
+
+            <h:outputLabel for="defaultBlog" value="#{label.defaultBlog}" />
+            <h:selectOneMenu id="defaultBlog" value="#{GlobalConfigBean.defaultBlog}">
+              <f:selectItems value="#{GlobalConfigBean.blogItems}" />
+            </h:selectOneMenu>
+            <h:message for="defaultBlog" />
+
+            <h:outputLabel for="locale" value="#{label.locale}" />
+            <h:selectOneMenu id="locale" value="#{GlobalConfigBean.defaultLocale}" required="true">
+              <f:selectItems value="#{GlobalConfigBean.localeItems}" />
+            </h:selectOneMenu>
+            <h:message for="locale" />
+
+            <h:outputLabel for="timeZone" value="#{label.timeZone}" />
+            <h:selectOneMenu id="timeZone" value="#{GlobalConfigBean.defaultTimeZone}" required="true">
+              <f:selectItems value="#{GlobalConfigBean.timeZoneItems}" />
+            </h:selectOneMenu>
+            <h:message for="timeZone" />
+
+          </h:panelGrid>
+
+          <h:commandButton action="#{GlobalConfigBean.save}" value="#{label.save}" />
+
+        </h:form>
+
 
         <h2><h:outputText value="#{label.mailConfig}" /></h2>
 

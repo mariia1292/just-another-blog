@@ -2,7 +2,8 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://java.sun.com/jsf/facelets"
-      xmlns:h="http://java.sun.com/jsf/html">
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core">
 
   <body>
 
@@ -55,6 +56,25 @@
             <h:message for="resourceDir" />
 
           </h:panelGrid>
+
+          <h2><h:outputLabel value="#{label.defaultConfig}" /></h2>
+
+          <h:panelGrid columns="3">
+
+            <h:outputLabel for="locale" value="#{label.locale}" />
+            <h:selectOneMenu id="locale" value="#{InstallBean.defaultLocale}" required="true">
+              <f:selectItems value="#{InstallBean.localeItems}" />
+            </h:selectOneMenu>
+            <h:message for="locale" />
+
+            <h:outputLabel for="timeZone" value="#{label.timeZone}" />
+            <h:selectOneMenu id="timeZone" value="#{InstallBean.defaultTimeZone}" required="true">
+              <f:selectItems value="#{InstallBean.timeZoneItems}" />
+            </h:selectOneMenu>
+            <h:message for="timeZone" />
+
+          </h:panelGrid>
+
 
           <h:commandButton value="#{label.step2}" action="#{InstallBean.next}" />
 

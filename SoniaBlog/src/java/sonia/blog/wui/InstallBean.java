@@ -19,6 +19,7 @@ import sonia.blog.entity.Category;
 import sonia.blog.entity.Entry;
 import sonia.blog.entity.Role;
 import sonia.blog.entity.User;
+import sonia.blog.util.BlogUtil;
 
 import sonia.config.StoreableConfiguration;
 
@@ -37,6 +38,9 @@ import java.sql.DriverManager;
 
 import java.util.ResourceBundle;
 import java.util.logging.Level;
+
+import javax.faces.context.FacesContext;
+import javax.faces.model.SelectItem;
 
 /**
  *
@@ -59,6 +63,8 @@ public class InstallBean extends AbstractBean
     databaseUsername = "root";
     resourcePath = BlogContext.getInstance().getServletContext().getRealPath(
       "WEB-INF/resources");
+    defaultLocale = Constants.DEFAULT_LOCALE.toString();
+    defaultTimeZone = Constants.DEFAULT_TIMEZONE.getID();
     admin = new User();
     admin.setGlobalAdmin(true);
     admin.setActive(true);
@@ -105,6 +111,9 @@ public class InstallBean extends AbstractBean
       {
         configuration.set(Constants.CONFIG_DB_EMBEDDED, Boolean.TRUE);
       }
+
+      configuration.set(Constants.CONFIG_DEFAULT_LOCALE, defaultLocale);
+      configuration.set(Constants.CONFIG_DEFAULT_TIMEZONE, defaultTimeZone);
 
       /*
        * try
@@ -358,6 +367,39 @@ public class InstallBean extends AbstractBean
    *
    * @return
    */
+  public String getDefaultLocale()
+  {
+    return defaultLocale;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  public String getDefaultTimeZone()
+  {
+    return defaultTimeZone;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  public SelectItem[] getLocaleItems()
+  {
+    return BlogUtil.getLocaleItems(FacesContext.getCurrentInstance());
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
   public String getPasswordRepeat()
   {
     return passwordRepeat;
@@ -372,6 +414,17 @@ public class InstallBean extends AbstractBean
   public String getResourcePath()
   {
     return resourcePath;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  public SelectItem[] getTimeZoneItems()
+  {
+    return BlogUtil.getTimeZoneItems();
   }
 
   /**
@@ -468,6 +521,28 @@ public class InstallBean extends AbstractBean
    * Method description
    *
    *
+   * @param defaultLocale
+   */
+  public void setDefaultLocale(String defaultLocale)
+  {
+    this.defaultLocale = defaultLocale;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param defaultTimeZone
+   */
+  public void setDefaultTimeZone(String defaultTimeZone)
+  {
+    this.defaultTimeZone = defaultTimeZone;
+  }
+
+  /**
+   * Method description
+   *
+   *
    * @param passwordRepeat
    */
   public void setPasswordRepeat(String passwordRepeat)
@@ -536,6 +611,12 @@ public class InstallBean extends AbstractBean
 
   /** Field description */
   private String databsePassword;
+
+  /** Field description */
+  private String defaultLocale;
+
+  /** Field description */
+  private String defaultTimeZone;
 
   /** Field description */
   private String passwordRepeat;

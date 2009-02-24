@@ -40,12 +40,11 @@ public class SimpleFormatter extends Formatter
   public String format(LogRecord record)
   {
     StringBuffer result = new StringBuffer();
+    Date date = new Date(record.getMillis());
 
-    result.append(dateFormat.format(new Date(record.getMillis())));
-    result.append(" ");
-    result.append(record.getLevel().getName());
-    result.append(" ");
-    result.append("[" + record.getLoggerName() + "]");
+    result.append(dateFormat.format(date));
+    result.append(" ").append(record.getLevel().getName()).append(" ");
+    result.append("[").append(record.getLoggerName()).append("]");
     result.append(" ");
 
     String message = record.getMessage();
@@ -57,12 +56,12 @@ public class SimpleFormatter extends Formatter
     }
     else if ((message != null) && (thrown != null))
     {
-      result.append(message + "\n");
+      result.append(message).append("\n");
       buildThrown(result, record, thrown);
     }
     else if ((message == null) && (thrown != null))
     {
-      result.append(thrown.getMessage() + "\n");
+      result.append(thrown.getMessage()).append("\n");
       buildThrown(result, record, thrown);
     }
 
@@ -88,14 +87,15 @@ public class SimpleFormatter extends Formatter
       buildThrown(result, record, thrown.getCause());
     }
 
-    result.append("Exception in thread " + record.getThreadID() + " "
-                  + thrown.getMessage() + "\n");
+    result.append("Exception in thread ").append(record.getThreadID());
+    result.append(" ").append(thrown.getMessage()).append("\n");
 
     for (StackTraceElement element : thrown.getStackTrace())
     {
-      result.append("\tat " + element.getClassName() + "."
-                    + element.getMethodName() + "(" + element.getFileName()
-                    + ":" + element.getLineNumber() + ")\n");
+      result.append("  at ").append(element.getClassName()).append(".");
+      result.append(element.getMethodName()).append("(");
+      result.append(element.getFileName()).append(":");
+      result.append(element.getLineNumber()).append("\n");
     }
 
     return result.toString();

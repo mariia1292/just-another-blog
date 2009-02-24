@@ -84,7 +84,7 @@ public class BlogRequest extends HttpServletRequestWrapper
    */
   public Blog getCurrentBlog()
   {
-    if (blog == null)
+    if ((blog == null) && BlogContext.getInstance().isInstalled())
     {
       String servername = getServerName();
       BlogDAO blogDAO = BlogContext.getDAOFactory().getBlogDAO();
