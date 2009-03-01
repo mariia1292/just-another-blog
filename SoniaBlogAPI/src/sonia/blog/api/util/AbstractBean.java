@@ -56,6 +56,28 @@ public class AbstractBean
     this.logger = Logger.getLogger(getClass().getName());
   }
 
+  //~--- methods --------------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   */
+  @PostConstruct
+  public void init()
+  {
+    if (logger == null)
+    {
+      logger = Logger.getLogger(getClass().getName());
+    }
+
+    if (logger.isLoggable(Level.FINEST))
+    {
+      logger.finest("init, calling InjectionProvider");
+    }
+
+    BlogContext.getInstance().getInjectionProvider().inject(this);
+  }
+
   //~--- get methods ----------------------------------------------------------
 
   /**
@@ -85,26 +107,6 @@ public class AbstractBean
   }
 
   //~--- methods --------------------------------------------------------------
-
-  /**
-   * Method description
-   *
-   */
-  @PostConstruct
-  public void init()
-  {
-    if (logger == null)
-    {
-      logger = Logger.getLogger(getClass().getName());
-    }
-
-    if (logger.isLoggable(Level.FINEST))
-    {
-      logger.finest("init, calling InjectionProvider");
-    }
-
-    BlogContext.getInstance().getInjectionProvider().inject(this);
-  }
 
   /**
    * Method description

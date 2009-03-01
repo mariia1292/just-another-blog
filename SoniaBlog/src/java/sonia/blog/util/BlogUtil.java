@@ -13,9 +13,14 @@ import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.app.BlogRequest;
 import sonia.blog.api.app.BlogRuntimeException;
 import sonia.blog.api.app.Constants;
+import sonia.blog.api.editor.AttachmentHandler;
 import sonia.blog.api.util.AbstractBean;
+import sonia.blog.entity.Attachment;
 
 import sonia.config.XmlConfiguration;
+
+import sonia.plugin.service.ServiceReference;
+import sonia.plugin.service.ServiceRegistry;
 
 import sonia.util.Util;
 
@@ -301,6 +306,9 @@ public class BlogUtil
   public static SelectItem[] getLocaleItems(FacesContext context)
   {
     List<SelectItem> items = new ArrayList<SelectItem>();
+
+    items.add(new SelectItem("---", "---"));
+
     Iterator<Locale> localeIterator =
       context.getApplication().getSupportedLocales();
 
@@ -308,7 +316,7 @@ public class BlogUtil
     {
       Locale locale = localeIterator.next();
 
-      items.add(new SelectItem(locale.toString(), locale.getDisplayName(locale)));
+      items.add(new SelectItem(locale, locale.getDisplayName(locale)));
     }
 
     return items.toArray(new SelectItem[0]);
@@ -388,7 +396,7 @@ public class BlogUtil
     {
       TimeZone timeZone = TimeZone.getTimeZone(ids[i]);
 
-      items[i] = new SelectItem(timeZone.getID(), timeZone.getID());
+      items[i] = new SelectItem(timeZone, timeZone.getID());
     }
 
     return items;

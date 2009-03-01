@@ -129,10 +129,11 @@ public class Category implements Serializable, PermaObject
    */
   public List<Entry> getEntries()
   {
-    if ( entries == null )
+    if (entries == null)
     {
       entries = new ArrayList<Entry>();
     }
+
     return entries;
   }
 

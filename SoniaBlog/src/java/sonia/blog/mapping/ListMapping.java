@@ -96,6 +96,11 @@ public class ListMapping extends ScrollableFilterMapping
       result = handleListView(request, start, end);
     }
 
+    if (logger.isLoggable(Level.FINER))
+    {
+      logger.finer("FilterMapping result is " + result);
+    }
+
     return result;
   }
 

@@ -33,8 +33,6 @@ import sonia.plugin.service.ServiceRegistry;
 
 import sonia.security.authentication.LoginCallbackHandler;
 
-import sonia.util.Util;
-
 //~--- JDK imports ------------------------------------------------------------
 
 import java.io.File;
@@ -42,8 +40,6 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-import java.util.Locale;
-import java.util.TimeZone;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -264,63 +260,6 @@ public class BlogContext
     }
 
     return blog;
-  }
-
-  /**
-   * Method description
-   *
-   *
-   * @return
-   */
-  public Locale getDefaultLocale()
-  {
-    Locale locale = null;
-
-    if (isInstalled())
-    {
-      String l = getConfiguration().getString(Constants.CONFIG_DEFAULT_LOCALE);
-
-      if (!Util.isBlank(l))
-      {
-        locale = new Locale(l);
-      }
-    }
-
-    if (locale == null)
-    {
-      locale = Constants.DEFAULT_LOCALE;
-    }
-
-    return locale;
-  }
-
-  /**
-   * Method description
-   *
-   *
-   * @return
-   */
-  public TimeZone getDefaultTimeZone()
-  {
-    TimeZone timeZone = null;
-
-    if (isInstalled())
-    {
-      String t =
-        getConfiguration().getString(Constants.CONFIG_DEFAULT_TIMEZONE);
-
-      if (!Util.isBlank(t))
-      {
-        timeZone = TimeZone.getTimeZone(t);
-      }
-    }
-
-    if (timeZone == null)
-    {
-      timeZone = Constants.DEFAULT_TIMEZONE;
-    }
-
-    return timeZone;
   }
 
   /**

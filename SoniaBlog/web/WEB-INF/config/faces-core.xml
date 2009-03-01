@@ -11,6 +11,16 @@
     <converter-class>sonia.blog.wui.converter.CategoryConverter</converter-class>
   </converter>
 
+  <converter>
+    <converter-id>converter.locale</converter-id>
+    <converter-class>sonia.blog.wui.converter.LocaleConverter</converter-class>
+  </converter>
+
+  <converter>
+    <converter-id>converter.timeZone</converter-id>
+    <converter-class>sonia.blog.wui.converter.TimeZoneConverter</converter-class>
+  </converter>
+
   <validator>
     <validator-id>validator.url</validator-id>
     <validator-class>sonia.blog.api.jsf.validator.URLValidator</validator-class>
@@ -127,6 +137,15 @@
     </component-extension>
   </component>
 
+  <component>
+    <display-name>selectAction</display-name>
+    <component-type>sonia.blog.selectAction</component-type>
+    <component-class>sonia.blog.api.jsf.select.SelectActionComponent</component-class>
+    <component-extension>
+      <renderer-type>sonia.blog.selectAction.renderer</renderer-type>
+    </component-extension>
+  </component>
+
   <render-kit>
     <renderer>
       <component-family>sonia.blog.link</component-family>
@@ -167,6 +186,11 @@
       <component-family>sonia.blog.tagcloud</component-family>
       <renderer-type>sonia.blog.tagcloud.renderer</renderer-type>
       <renderer-class>sonia.blog.api.jsf.tagcloud.TagCloudRenderer</renderer-class>
+    </renderer>
+    <renderer>
+      <component-family>sonia.blog.selectAction</component-family>
+      <renderer-type>sonia.blog.selectAction.renderer</renderer-type>
+      <renderer-class>sonia.blog.api.jsf.select.SelectActionRenderer</renderer-class>
     </renderer>
   </render-kit>
     

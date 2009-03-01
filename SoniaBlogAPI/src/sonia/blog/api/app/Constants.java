@@ -7,6 +7,8 @@
 
 package sonia.blog.api.app;
 
+//~--- JDK imports ------------------------------------------------------------
+
 import java.util.Locale;
 import java.util.TimeZone;
 
@@ -18,10 +20,6 @@ public interface Constants
 {
 
   /** Field description */
-  public static final String CONFIG_DEFAULT_LOCALE = "default.locale";
-
-  public static final String CONFIG_DEFAULT_TIMEZONE = "default.timezone";
-
   public static final String CONFIG_ALLOW_BLOGCREATION = "allow.blogCreation";
 
   /** Field description */
@@ -115,10 +113,6 @@ public interface Constants
   /** Field description */
   public static final int DEFAULT_COOKIETIME = 60 * 60 * 24 * 31;
 
-  public static final Locale DEFAULT_LOCALE = Locale.GERMAN;
-
-  public static final TimeZone DEFAULT_TIMEZONE  = TimeZone.getTimeZone("Europe/Paris");
-
   /** Field description */
   public static final String DEFAULT_ENCODING = "UTF-8";
 
@@ -132,7 +126,14 @@ public interface Constants
   public static final String DEFAULT_IMAGE_MIMETYPE = "image/jpeg";
 
   /** Field description */
+  public static final Locale DEFAULT_LOCALE = Locale.GERMAN;
+
+  /** Field description */
   public static final int DEFAULT_PASSWORD_MINLENGTH = 6;
+
+  /** Field description */
+  public static final TimeZone DEFAULT_TIMEZONE =
+    TimeZone.getTimeZone("Europe/Paris");
 
   // Listeners
 
@@ -258,6 +259,10 @@ public interface Constants
   public static final String SERVCIE_GLOBALSTATUSROVIDER = "/status/global";
 
   /** Field description */
+  public static final String SERVICE_ATTACHMENTHANDLER =
+    "/editor/attachmentHandler";
+
+  /** Field description */
   public static final String SERVICE_AUTHENTICATION = "/app/authentication";
 
   /** Field description */
@@ -267,12 +272,17 @@ public interface Constants
   public static final String SERVICE_DASHBOARDWIDGET = "/dashboard/widget";
 
   /** Field description */
+  public static final String SERVICE_INJECTIONPROVIDER =
+    "/app/injectionProvider";
+
+  /** Field description */
   public static final String SERVICE_LINKBUILDER = "/app/linkBuilder";
 
   /** Field description */
   public static final String SERVICE_MAPPINGHANDLER = "/app/mappingHandler";
 
-  public static final String SERVICE_INJECTIONPROVIDER = "/app/injectionProvider";
+  /** Field description */
+  public static final String SERVICE_REQUESTLISTENER = "/listener/request";
 
   /** Field description */
   public static final String SERVICE_SEARCHCONTEXT = "/app/searchContext";
@@ -282,8 +292,6 @@ public interface Constants
 
   /** Field description */
   public static final String SERVICE_SSOAUTHENTICATION = "/app/sso";
-
-  public static final String SERVICE_REQUESTLISTENER = "/listener/request";
 
   /** Field description */
   public static final String SSOLOGINMODULE_NAME = "BlogSSOLoginModule";

@@ -7,6 +7,10 @@
 
 package sonia.blog.entity;
 
+//~--- non-JDK imports --------------------------------------------------------
+
+import sonia.util.Util;
+
 //~--- JDK imports ------------------------------------------------------------
 
 import java.io.Serializable;
@@ -19,7 +23,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
-import sonia.blog.api.app.BlogContext;
 
 /**
  *
@@ -268,7 +271,14 @@ public class Blog implements Serializable, PermaObject, Comparable<Blog>
    */
   public Locale getLocale()
   {
-    return new Locale(locale);
+    Locale result = null;
+
+    if (!Util.isBlank(locale))
+    {
+      result = new Locale(locale);
+    }
+
+    return result;
   }
 
   /**
@@ -551,7 +561,14 @@ public class Blog implements Serializable, PermaObject, Comparable<Blog>
    */
   public void setLocale(Locale locale)
   {
-    this.locale = locale.toString();
+    if (locale != null)
+    {
+      this.locale = locale.toString();
+    }
+    else
+    {
+      this.locale = null;
+    }
   }
 
   /**
@@ -629,13 +646,10 @@ public class Blog implements Serializable, PermaObject, Comparable<Blog>
   void prePersists()
   {
     creationDate = new Date();
-    if ( locale == null )
+
+    if (timeZone == null)
     {
-      locale = BlogContext.getInstance().getDefaultLocale().toString();
-    }
-    if ( timeZone == null )
-    {
-      timeZone = BlogContext.getInstance().getDefaultTimeZone().getID();
+      timeZone = TimeZone.getDefault().getID();
     }
   }
 

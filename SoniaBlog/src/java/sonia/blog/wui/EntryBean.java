@@ -32,6 +32,7 @@ import sonia.blog.entity.Category;
 import sonia.blog.entity.Entry;
 import sonia.blog.entity.Tag;
 import sonia.blog.entity.User;
+import sonia.blog.util.AttachmentWrapper;
 
 import sonia.util.Util;
 
@@ -44,8 +45,10 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
 
 import java.net.URLConnection;
+import java.net.URLDecoder;
 
 import java.text.SimpleDateFormat;
 
@@ -161,11 +164,11 @@ public class EntryBean extends AbstractBean
   public String editAttachment()
   {
     String result = FAILURE;
+    AttachmentWrapper wrapper = (AttachmentWrapper) attachments.getRowData();
 
-    attachment = (Attachment) attachments.getRowData();
-
-    if (attachment != null)
+    if (wrapper != null)
     {
+      attachment = wrapper.getAttachment();
       result = SUCCESS;
     }
 
@@ -514,10 +517,31 @@ public class EntryBean extends AbstractBean
       AttachmentDAO attachmentDAO =
         BlogContext.getDAOFactory().getAttachmentDAO();
       List<Attachment> attachmentList = attachmentDAO.findAllByEntry(entry);
+      String content = getRequest().getParameter("content");
+
+      if (!Util.isBlank(content))
+      {
+        try
+        {
+          content = URLDecoder.decode(content, "UTF-8");
+        }
+        catch (UnsupportedEncodingException ex)
+        {
+          logger.log(Level.SEVERE, null, ex);
+        }
+      }
 
       if ((attachmentList != null) &&!attachmentList.isEmpty())
       {
-        attachments.setWrappedData(attachmentList);
+        List<AttachmentWrapper> wrapperList =
+          new ArrayList<AttachmentWrapper>();
+
+        for (Attachment a : attachmentList)
+        {
+          wrapperList.add(new AttachmentWrapper(a, content));
+        }
+
+        attachments.setWrappedData(wrapperList);
       }
     }
 

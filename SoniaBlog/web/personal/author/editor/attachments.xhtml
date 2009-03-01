@@ -1,6 +1,7 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:blog="http://jab.nitilon.org/blog/"
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:f="http://java.sun.com/jsf/core">
@@ -29,16 +30,16 @@
 
         <div class="attachments">
 
-          <h:form>
+          <h:form id="attachmentForm">
 
-            <h:dataTable styleClass="full" value="#{EntryBean.attachments}" var="Attachment">
+            <h:dataTable styleClass="full" value="#{EntryBean.attachments}" var="Wrapper">
 
               <h:column>
                 <f:facet name="header">
                   <h:outputText value="#{label.name}" />
                 </f:facet>
-                <a href="#" onclick="AttachmentDialog.insert('attachment/#{Attachment.id}','#{Attachment.name}')">
-                  <h:outputText value="#{Attachment.name}" />
+                <a href="#" onclick="AttachmentDialog.insertLink('attachment/#{Wrapper.attachment.id}','#{Wrapper.attachment.name}')">
+                  <h:outputText value="#{Wrapper.attachment.name}" />
                 </a>
               </h:column>
 
@@ -46,30 +47,31 @@
                 <f:facet name="header">
                   <h:outputText value="#{label.mimeType}" />
                 </f:facet>
-                <h:outputText value="#{Attachment.mimeType}" />
+                <h:outputText value="#{Wrapper.attachment.mimeType}" />
               </h:column>
 
               <h:column>
                 <f:facet name="header">
                   <h:outputText value="#{label.description}" />
                 </f:facet>
-                <h:outputText value="#{Attachment.description}" />
+                <h:outputText value="#{Wrapper.attachment.description}" />
               </h:column>
 
               <h:column>
                 <f:facet name="header">
                   <h:outputText value="#{label.size}" />
                 </f:facet>
-                <h:outputText value="#{Attachment.size}" />
+                <h:outputText value="#{Wrapper.attachment.size}" />
               </h:column>
 
               <h:column>
                 <f:facet name="header">
                   <h:outputText value="#{label.creationDate}" />
                 </f:facet>
-                <h:outputText value="#{Attachment.creationDate}">
-                  <f:convertDateTime pattern="yyyy-MM-dd HH:mm:ss" />
-                </h:outputText>
+                <blog:selectAction onchange="AttachmentDialog.insert({0})" actions="#{Wrapper.attachmentHandlers}">
+                  <f:param name="selection" value="#{param['selection']}" />
+                  <f:param name="attachment" value="#{Wrapper.attachment}" />
+                </blog:selectAction>
               </h:column>
 
               <h:column>

@@ -69,4 +69,12 @@
         </component>
     </tag>
 
+    <tag>
+        <tag-name>selectAction</tag-name>
+        <component>
+            <component-type>sonia.blog.selectAction</component-type>
+            <renderer-type>sonia.blog.selectAction.renderer</renderer-type>
+        </component>
+    </tag>
+
 </facelet-taglib>

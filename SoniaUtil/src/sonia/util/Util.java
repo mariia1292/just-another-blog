@@ -200,6 +200,44 @@ public class Util
    * Method description
    *
    *
+   * @param filename
+   *
+   * @return
+   */
+  public static String getExtension(String filename)
+  {
+    String ext = null;
+
+    if (!isBlank(filename))
+    {
+      int index = filename.lastIndexOf(".");
+
+      if (index > 0)
+      {
+        ext = filename.substring(index + 1);
+      }
+    }
+
+    return ext;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param file
+   *
+   * @return
+   */
+  public static String getExtension(File file)
+  {
+    return getExtension(file.getName());
+  }
+
+  /**
+   * Method description
+   *
+   *
    * @param file
    *
    * @return

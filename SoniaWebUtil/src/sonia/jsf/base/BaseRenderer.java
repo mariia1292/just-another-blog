@@ -9,6 +9,12 @@ package sonia.jsf.base;
 
 //~--- JDK imports ------------------------------------------------------------
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.faces.component.UIComponent;
+import javax.faces.component.UIParameter;
 import javax.faces.context.FacesContext;
 import javax.faces.render.Renderer;
 
@@ -28,7 +34,7 @@ public class BaseRenderer extends Renderer
    *
    * @return
    */
-  public String buildRelativeLink(FacesContext context, String link)
+  protected String buildRelativeLink(FacesContext context, String link)
   {
     if (link.startsWith("/"))
     {
@@ -46,11 +52,40 @@ public class BaseRenderer extends Renderer
    * Method description
    *
    *
+   * @param component
+   *
+   * @return
+   */
+  protected Map<String, ?> getParameters(UIComponent component)
+  {
+    Map<String, Object> map = new HashMap<String, Object>();
+    List<UIComponent> children = component.getChildren();
+
+    if (children != null)
+    {
+      for (UIComponent child : children)
+      {
+        if (child instanceof UIParameter)
+        {
+          UIParameter param = (UIParameter) child;
+
+          map.put(param.getName(), param.getValue());
+        }
+      }
+    }
+
+    return map;
+  }
+
+  /**
+   * Method description
+   *
+   *
    * @param value
    *
    * @return
    */
-  public boolean isBlank(String value)
+  protected boolean isBlank(String value)
   {
     return (value == null) || (value.length() == 0);
   }
@@ -64,7 +99,7 @@ public class BaseRenderer extends Renderer
    *
    * @return
    */
-  public boolean isRendered(FacesContext context, BaseComponent component)
+  protected boolean isRendered(FacesContext context, BaseComponent component)
   {
     boolean result = false;
 

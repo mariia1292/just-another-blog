@@ -9,7 +9,6 @@ package sonia.blog.wui.resolver;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.app.BlogRequest;
 import sonia.blog.entity.Blog;
 import sonia.blog.util.BlogUtil;
@@ -70,7 +69,7 @@ public class BlogViewHandler extends FaceletViewHandler
 
     if (locale == null)
     {
-      locale = BlogContext.getInstance().getDefaultLocale();
+      locale = super.calculateLocale(context);
     }
 
     return locale;

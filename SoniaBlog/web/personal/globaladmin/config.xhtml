@@ -79,18 +79,6 @@
             </h:selectOneMenu>
             <h:message for="defaultBlog" />
 
-            <h:outputLabel for="locale" value="#{label.locale}" />
-            <h:selectOneMenu id="locale" value="#{GlobalConfigBean.defaultLocale}" required="true">
-              <f:selectItems value="#{GlobalConfigBean.localeItems}" />
-            </h:selectOneMenu>
-            <h:message for="locale" />
-
-            <h:outputLabel for="timeZone" value="#{label.timeZone}" />
-            <h:selectOneMenu id="timeZone" value="#{GlobalConfigBean.defaultTimeZone}" required="true">
-              <f:selectItems value="#{GlobalConfigBean.timeZoneItems}" />
-            </h:selectOneMenu>
-            <h:message for="timeZone" />
-
           </h:panelGrid>
 
           <h:commandButton action="#{GlobalConfigBean.save}" value="#{label.save}" />

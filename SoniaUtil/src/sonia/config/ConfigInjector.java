@@ -72,10 +72,11 @@ public class ConfigInjector implements Injector
         value = getValue(key, type, false);
       }
 
-      if ( logger.isLoggable( Level.FINER ) )
+      if (logger.isLoggable(Level.FINER))
       {
         StringBuffer msg = new StringBuffer();
-        msg.append( "injecting " ).append(value).append( " from ");
+
+        msg.append("injecting ").append(value).append(" from ");
         msg.append(key).append(" in field ").append(field.getName());
         logger.finer(msg.toString());
       }

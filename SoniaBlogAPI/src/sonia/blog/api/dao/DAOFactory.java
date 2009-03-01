@@ -15,9 +15,6 @@ import sonia.blog.api.dao.cache.CacheManager;
 
 import sonia.plugin.service.ServiceReference;
 
-//~--- JDK imports ------------------------------------------------------------
-
-
 /**
  *
  * @author sdorra

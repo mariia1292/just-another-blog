@@ -4,7 +4,7 @@ var AttachmentDialog = {
   init : function() {
   },
 
-  insert : function(url,name) {
+  insertLink : function(url,name) {
     url = tinyMCEPopup.editor.documentBaseURI.toAbsolute(url);
     var c = tinyMCEPopup.editor.selection.getContent();
     if ( c != "" )
@@ -22,7 +22,13 @@ var AttachmentDialog = {
 
     tinyMCEPopup.editor.execCommand('mceInsertContent', false, content);
     tinyMCEPopup.close();
+  },
+
+  insert : function(value) {
+    tinyMCEPopup.editor.execCommand('mceInsertContent', false, value);
+    tinyMCEPopup.close();
   }
+
 
 };
 

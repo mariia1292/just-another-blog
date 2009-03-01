@@ -82,12 +82,13 @@ public class BlogUsageChartMapping extends ChartMapping
     ResourceBundle label =
       ResourceBundle.getBundle("sonia.blog.resources.label");
     DefaultCategoryDataset dataset = new DefaultCategoryDataset();
+    String hitLable = label.getString("hits");
 
     for (HitWrapper hit : hitsPerMonth)
     {
       String columnName = hit.getMonth() + "-" + hit.getYear();
 
-      dataset.addValue(hit.getCount(), label.getString("hits"), columnName);
+      dataset.addValue(hit.getCount(), hitLable, columnName);
     }
 
     JFreeChart chart = ChartFactory.createLineChart(null,

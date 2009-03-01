@@ -57,25 +57,6 @@
 
           </h:panelGrid>
 
-          <h2><h:outputLabel value="#{label.defaultConfig}" /></h2>
-
-          <h:panelGrid columns="3">
-
-            <h:outputLabel for="locale" value="#{label.locale}" />
-            <h:selectOneMenu id="locale" value="#{InstallBean.defaultLocale}" required="true">
-              <f:selectItems value="#{InstallBean.localeItems}" />
-            </h:selectOneMenu>
-            <h:message for="locale" />
-
-            <h:outputLabel for="timeZone" value="#{label.timeZone}" />
-            <h:selectOneMenu id="timeZone" value="#{InstallBean.defaultTimeZone}" required="true">
-              <f:selectItems value="#{InstallBean.timeZoneItems}" />
-            </h:selectOneMenu>
-            <h:message for="timeZone" />
-
-          </h:panelGrid>
-
-
           <h:commandButton value="#{label.step2}" action="#{InstallBean.next}" />
 
         </h:form>

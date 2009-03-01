@@ -77,6 +77,18 @@
             </h:selectOneMenu>
             <h:message for="template" />
 
+            <h:outputLabel for="locale" value="#{label.locale}" />
+            <h:selectOneMenu id="locale" value="#{AdminBlogBean.blog.locale}" converter="converter.locale">
+              <f:selectItems value="#{AdminBlogBean.localeItems}" />
+            </h:selectOneMenu>
+            <h:message for="locale" />
+
+            <h:outputLabel for="timeZone" value="#{label.timeZone}" />
+            <h:selectOneMenu id="timeZone" value="#{AdminBlogBean.blog.timeZone}" converter="converter.timeZone">
+              <f:selectItems value="#{AdminBlogBean.timeZoneItems}" />
+            </h:selectOneMenu>
+            <h:message for="timeZone" />
+
             <h:outputLabel for="allowMacros" value="#{label.allowMacros}" />
             <h:selectBooleanCheckbox id="allowMacros" value="#{AdminBlogBean.blog.allowMacros}" />
             <h:message for="allowMacros" />

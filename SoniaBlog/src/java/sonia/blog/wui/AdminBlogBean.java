@@ -28,6 +28,7 @@ import sonia.blog.entity.Blog;
 import sonia.blog.entity.BlogMember;
 import sonia.blog.entity.Role;
 import sonia.blog.entity.User;
+import sonia.blog.util.BlogUtil;
 
 import sonia.plugin.service.ServiceReference;
 
@@ -467,6 +468,17 @@ public class AdminBlogBean extends AbstractBean
   /**
    * Method description
    *
+   *
+   * @return
+   */
+  public SelectItem[] getLocaleItems()
+  {
+    return BlogUtil.getLocaleItems(FacesContext.getCurrentInstance());
+  }
+
+  /**
+   * Method description
+   *
    * @return
    */
   public long getMemberCount()
@@ -537,11 +549,22 @@ public class AdminBlogBean extends AbstractBean
     {
       Template template = templates.get(i);
 
-      items[i] = new SelectItem(template.getName(), template.getPath(),
+      items[i] = new SelectItem(template.getPath(), template.getName(),
                                 template.getDescription());
     }
 
     return items;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  public SelectItem[] getTimeZoneItems()
+  {
+    return BlogUtil.getTimeZoneItems();
   }
 
   //~--- set methods ----------------------------------------------------------

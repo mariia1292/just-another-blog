@@ -13,6 +13,12 @@ import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.dao.BlogDAO;
 import sonia.blog.api.util.AbstractBean;
 import sonia.blog.entity.Blog;
+import sonia.blog.util.BlogUtil;
+
+//~--- JDK imports ------------------------------------------------------------
+
+import javax.faces.context.FacesContext;
+import javax.faces.model.SelectItem;
 
 /**
  *
@@ -71,6 +77,28 @@ public class ConfigBean extends AbstractBean
     blog = getRequest().getCurrentBlog();
 
     return blog;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  public SelectItem[] getLocaleItems()
+  {
+    return BlogUtil.getLocaleItems(FacesContext.getCurrentInstance());
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  public SelectItem[] getTimeZoneItems()
+  {
+    return BlogUtil.getTimeZoneItems();
   }
 
   /**

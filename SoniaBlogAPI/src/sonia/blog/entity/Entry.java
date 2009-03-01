@@ -41,7 +41,8 @@ public class Entry implements Serializable, ContentObject, CommentAble
     }
 
     categories.add(category);
-    if ( ! category.getEntries().contains(this) )
+
+    if (!category.getEntries().contains(this))
     {
       categories.remove(this);
     }
@@ -148,6 +149,7 @@ public class Entry implements Serializable, ContentObject, CommentAble
     {
       categories.remove(category);
     }
+
     category.getEntries().remove(this);
   }
 

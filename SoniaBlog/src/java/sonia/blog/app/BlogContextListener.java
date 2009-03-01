@@ -14,6 +14,7 @@ import sonia.blog.api.app.BlogRequestListener;
 import sonia.blog.api.app.Constants;
 import sonia.blog.api.dao.DAOFactory;
 import sonia.blog.api.dao.DAOListener;
+import sonia.blog.api.editor.AttachmentHandler;
 import sonia.blog.api.link.LinkBuilder;
 import sonia.blog.api.mapping.MappingHandler;
 import sonia.blog.api.navigation.NavigationProvider;
@@ -22,6 +23,8 @@ import sonia.blog.api.spam.SpamInputProtection;
 import sonia.blog.authentication.CookieLoginModule;
 import sonia.blog.authentication.DefaultLoginModule;
 import sonia.blog.dao.jpa.JpaDAOFactory;
+import sonia.blog.editor.FlowPlayerHandler;
+import sonia.blog.editor.LinkHandler;
 import sonia.blog.link.DefaultLinkBuilder;
 import sonia.blog.macro.AttachmentMacro;
 import sonia.blog.macro.BlogsMacro;
@@ -345,6 +348,9 @@ public class BlogContextListener implements ServletContextListener
         "/personal/widgets/rss.xhtml").add(
         "/personal/widgets/comments.xhtml").add(
         "/personal/widgets/drafts.xhtml").add("/personal/widgets/status.xhtml");
+    registry.register(
+        AttachmentHandler.class, Constants.SERVICE_ATTACHMENTHANDLER).add(
+        new LinkHandler()).add(new FlowPlayerHandler());
   }
 
   /**

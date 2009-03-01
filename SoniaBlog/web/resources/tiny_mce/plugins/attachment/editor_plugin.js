@@ -20,14 +20,16 @@
 		 */
     init : function(ed, url) {
       
-      var id = ed.getParam( "entry_id" );
-      var address = url + '/../../../../personal/author/editor/attachments.jab';
-      if ( id != null && id != "" )
-      {
-        address += "?id=" + id;
-      }
+      
       // Register the command so that it can be invoked by using tinyMCE.activeEditor.execCommand('mceExample');
       ed.addCommand('mceAttachment', function() {
+        var address = url + '/../../../../personal/author/editor/attachments.jab';
+        var content = ed.selection.getContent();
+        if ( content != null && content != "" )
+        {
+          address += "?selection=" + encodeURI( content );
+        }
+        
         ed.windowManager.open({
           file : address,
           width : 720 + parseInt(ed.getLang('attachment.delta_width', 0)),

@@ -14,6 +14,7 @@ import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.app.BlogRequest;
 import sonia.blog.api.app.BlogResponse;
 import sonia.blog.api.app.Constants;
+import sonia.blog.api.dao.UserDAO;
 import sonia.blog.api.util.AbstractBean;
 import sonia.blog.entity.Blog;
 import sonia.blog.entity.Role;
@@ -39,7 +40,6 @@ import javax.security.auth.login.LoginContext;
 import javax.security.auth.login.LoginException;
 
 import javax.servlet.http.Cookie;
-import sonia.blog.api.dao.UserDAO;
 
 /**
  *
@@ -283,13 +283,11 @@ public class LoginBean extends AbstractBean
     if ((users != null) &&!users.isEmpty())
     {
       User user = users.iterator().next();
-
       UserDAO userDAO = BlogContext.getDAOFactory().getUserDAO();
 
-      role =
-    userDAO.getRole(blog, user);
+      role = userDAO.getRole(blog, user);
 
-      if ( role == null )
+      if (role == null)
       {
         role = getDefaultRole();
         userDAO.setRole(blog, user, role);
@@ -307,8 +305,7 @@ public class LoginBean extends AbstractBean
 
     try
     {
-      User user =
-        BlogContext.getDAOFactory().getUserDAO().get(username, true);
+      User user = BlogContext.getDAOFactory().getUserDAO().get(username, true);
       String value = user.getName() + ":" + user.getActivationCode();
 
       if (cipherReference == null)
@@ -338,7 +335,6 @@ public class LoginBean extends AbstractBean
       logger.log(Level.SEVERE, null, ex);
     }
   }
-
 
   /**
    * Method description

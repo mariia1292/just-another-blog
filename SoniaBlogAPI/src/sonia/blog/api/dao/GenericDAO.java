@@ -50,6 +50,18 @@ public interface GenericDAO<T>
    * Method description
    *
    *
+   * @param item
+   *
+   * @return
+   */
+  public boolean remove(T item);
+
+  //~--- get methods ----------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
    * @param id
    *
    * @return
@@ -74,18 +86,6 @@ public interface GenericDAO<T>
    * @return
    */
   public List<T> getAll(int start, int max);
-
-  /**
-   * Method description
-   *
-   *
-   * @param item
-   *
-   * @return
-   */
-  public boolean remove(T item);
-
-  //~--- get methods ----------------------------------------------------------
 
   /**
    * Method description
