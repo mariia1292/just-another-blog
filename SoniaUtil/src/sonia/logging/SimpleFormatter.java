@@ -87,8 +87,8 @@ public class SimpleFormatter extends Formatter
       buildThrown(result, record, thrown.getCause());
     }
 
-    result.append("Exception in thread ").append(record.getThreadID());
-    result.append(" ").append(thrown.getMessage()).append("\n");
+    result.append(thrown.getClass().getName());
+    result.append(": ").append(thrown.getMessage()).append("\n");
 
     for (StackTraceElement element : thrown.getStackTrace())
     {

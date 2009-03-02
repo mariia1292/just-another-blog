@@ -10,12 +10,16 @@ package sonia.blog.office;
 //~--- non-JDK imports --------------------------------------------------------
 
 import sonia.blog.api.app.BlogContext;
+import sonia.blog.api.app.Constants;
+import sonia.blog.api.editor.AttachmentHandler;
 import sonia.blog.api.mapping.MappingHandler;
 
 import sonia.macro.MacroParser;
 
 import sonia.plugin.Activator;
 import sonia.plugin.PluginContext;
+import sonia.plugin.service.Service;
+import sonia.plugin.service.ServiceReference;
 
 /**
  *
@@ -39,6 +43,16 @@ public class PluginActivator implements Activator
     parser = MacroParser.getInstance();
     parser.putMacro(PdfViewerMacro.NAME, new PdfViewerMacro());
     parser.putMacro(CodeMacro.NAME, new CodeMacro());
+
+    if (handler == null)
+    {
+      handler = new PdfHandler();
+    }
+
+    if ((handlerReference != null) &&!handlerReference.contains(handler))
+    {
+      handlerReference.add(handler);
+    }
   }
 
   /**
@@ -52,9 +66,21 @@ public class PluginActivator implements Activator
     parser.removeMacro(CodeMacro.NAME);
     parser.removeMacro(PdfViewerMacro.NAME);
     mappingHandler.remove(PdfViewerMapping.REGEX);
+
+    if ((handler != null) && (handlerReference != null))
+    {
+      handlerReference.add(handler);
+    }
   }
 
   //~--- fields ---------------------------------------------------------------
+
+  /** Field description */
+  private PdfHandler handler;
+
+  /** Field description */
+  @Service(Constants.SERVICE_ATTACHMENTHANDLER)
+  private ServiceReference<AttachmentHandler> handlerReference;
 
   /** Field description */
   private MappingHandler mappingHandler;

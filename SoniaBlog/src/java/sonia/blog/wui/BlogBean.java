@@ -277,8 +277,13 @@ public class BlogBean extends AbstractBean
     }
     else
     {
-      navigation.add(new NavigationMenuItem(bundle.getString("personal"),
-              "dashboard"));
+      String dashboardLink = linkBuilder.buildLink(request,
+                               "/personal/dashboard.jab");
+      NavigationMenuItem dashboardItem = new NavigationMenuItem();
+
+      dashboardItem.setLabel(bundle.getString("personal"));
+      dashboardItem.setExternalLink(dashboardLink);
+      navigation.add(dashboardItem);
 
       if (config.getBoolean(Constants.CONFIG_ALLOW_BLOGCREATION, Boolean.FALSE))
       {

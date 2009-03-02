@@ -20,6 +20,7 @@ import java.util.List;
 
 import javax.faces.model.DataModel;
 import javax.faces.model.ListDataModel;
+import sonia.blog.entity.Entry;
 
 /**
  *

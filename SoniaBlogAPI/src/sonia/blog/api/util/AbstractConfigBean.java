@@ -77,11 +77,12 @@ public abstract class AbstractConfigBean extends AbstractBean
       try
       {
         config.store();
+        getMessageHandler().info( "successStoreConfig" );
       }
       catch (Exception ex)
       {
         logger.log(Level.SEVERE, null, ex);
-        getMessageHandler().error("unknownError");
+        getMessageHandler().error("failureStoreConfig");
         result = FAILURE;
       }
     }

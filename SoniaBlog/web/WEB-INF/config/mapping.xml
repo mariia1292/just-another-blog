@@ -57,7 +57,7 @@
   
   <mapping>
     <regex>^/resource/(.*)$</regex>
-    <class>sonia.blog.mapping.RandomMapping</class>
+    <class>sonia.blog.mapping.ResourceMapping</class>
   </mapping>
 
   <mapping>

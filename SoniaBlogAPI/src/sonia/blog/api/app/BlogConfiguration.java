@@ -168,9 +168,13 @@ public class BlogConfiguration extends XmlConfiguration
    */
   public void setEncString(String key, String value)
   {
-    char[] secureKey = getKey();
+    if (value != null)
+    {
+      char[] secureKey = getKey();
 
-    value = getCipher().encode(secureKey, value);
+      value = getCipher().encode(secureKey, value);
+    }
+
     set(key, value);
   }
 

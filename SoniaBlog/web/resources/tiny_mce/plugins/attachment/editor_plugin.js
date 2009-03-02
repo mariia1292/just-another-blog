@@ -27,7 +27,7 @@
         var content = ed.selection.getContent();
         if ( content != null && content != "" )
         {
-          address += "?selection=" + encodeURI( content );
+          address += "?selection=" + encodeURIComponent(content);
         }
         
         ed.windowManager.open({

@@ -17,9 +17,7 @@ import sonia.blog.api.app.ResourceManager;
 import sonia.blog.api.mapping.FinalMapping;
 import sonia.blog.entity.Blog;
 
-import sonia.config.ConfigurationListener;
-import sonia.config.ModifyableConfiguration;
-import sonia.config.XmlConfiguration;
+import sonia.config.Config;
 
 import sonia.util.Util;
 
@@ -41,45 +39,12 @@ import javax.servlet.http.HttpServletResponse;
  * @author sdorra
  */
 public class PdfViewerMapping extends FinalMapping
-        implements ConfigurationListener
 {
 
   /** Field description */
-  public static final String REGEX = "^/macros/pdfviewer/([0-9]+)$";
-
-  //~--- constructors ---------------------------------------------------------
-
-  /**
-   * Constructs ...
-   *
-   *
-   */
-  public PdfViewerMapping()
-  {
-    XmlConfiguration config = BlogContext.getInstance().getConfiguration();
-
-    mimeType = config.getString(Constants.CONFIG_IMAGEMIMETYPE,
-                                Constants.DEFAULT_IMAGE_MIMETYPE);
-    config.addListener(this);
-  }
+  public static final String REGEX = "^/macros/pdfviewer/([0-9]+)/(.*)$";
 
   //~--- methods --------------------------------------------------------------
-
-  /**
-   * Method description
-   *
-   *
-   * @param config
-   * @param key
-   */
-  public void configChanged(ModifyableConfiguration config, String key)
-  {
-    if (key.equals(Constants.CONFIG_IMAGEMIMETYPE))
-    {
-      mimeType = config.getString(Constants.CONFIG_IMAGEMIMETYPE,
-                                  Constants.DEFAULT_IMAGE_MIMETYPE);
-    }
-  }
 
   /**
    * Method description
@@ -97,6 +62,11 @@ public class PdfViewerMapping extends FinalMapping
                                     String[] param)
           throws IOException, ServletException
   {
+    if (Util.isBlank(mimeType))
+    {
+      mimeType = Constants.DEFAULT_IMAGE_MIMETYPE;
+    }
+
     if ((param != null) && (param.length > 1))
     {
       String directory = param[0];
@@ -148,12 +118,30 @@ public class PdfViewerMapping extends FinalMapping
                   logger.log(Level.SEVERE, null, ex);
                 }
               }
-
+            }
+            else
+            {
               response.sendError(HttpServletResponse.SC_NOT_FOUND);
             }
           }
+          else
+          {
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+          }
+        }
+        else
+        {
+          response.sendError(HttpServletResponse.SC_NOT_FOUND);
         }
       }
+      else
+      {
+        response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+      }
+    }
+    else
+    {
+      response.sendError(HttpServletResponse.SC_BAD_REQUEST);
     }
   }
 
@@ -180,5 +168,6 @@ public class PdfViewerMapping extends FinalMapping
   //~--- fields ---------------------------------------------------------------
 
   /** Field description */
+  @Config(Constants.CONFIG_IMAGEMIMETYPE)
   private String mimeType;
 }

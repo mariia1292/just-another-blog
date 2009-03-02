@@ -15,6 +15,7 @@ import org.w3c.dom.NodeList;
 
 import org.xml.sax.SAXException;
 
+import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.app.BlogRequest;
 import sonia.blog.api.app.BlogResponse;
 import sonia.blog.api.mapping.Mapping;
@@ -158,6 +159,7 @@ public class DefaultMappingHandler implements MappingHandler
       try
       {
         mapping = mappingClass.newInstance();
+        BlogContext.getInstance().getInjectionProvider().inject(mapping);
       }
       catch (Exception ex)
       {

@@ -43,6 +43,8 @@ import sonia.config.ConfigInjector;
 
 import sonia.injection.InjectionProvider;
 
+import sonia.logging.SimpleFormatter;
+
 import sonia.macro.MacroParser;
 
 import sonia.net.FileNameMap;
@@ -69,6 +71,9 @@ import java.net.URLConnection;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.logging.ConsoleHandler;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.security.auth.login.AppConfigurationEntry;
 
@@ -119,10 +124,10 @@ public class BlogContextListener implements ServletContextListener
 
       context.setServletContext(event.getServletContext());
       initFileNameMap();
+      configureLogger();
       initInjectionProvider(context);
       initServices(context);
       initMacros();
-      configureLogger();
 
       if (context.isInstalled())
       {
@@ -216,10 +221,16 @@ public class BlogContextListener implements ServletContextListener
    */
   private void configureLogger() throws IOException
   {
+    SimpleFormatter formatter = new SimpleFormatter();
+    Logger logger = Logger.getLogger("sonia");
 
-    // Logger logger = Logger.getLogger("sonia.blog");
-    // logger.setUseParentHandlers(false);
-    // logger.addHandler(new LoggingHandler());
+    logger.setUseParentHandlers(false);
+
+    ConsoleHandler handler = new ConsoleHandler();
+
+    handler.setFormatter(formatter);
+    handler.setLevel(Level.FINEST);
+    logger.addHandler(handler);
   }
 
   /**
