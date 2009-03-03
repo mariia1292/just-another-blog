@@ -55,10 +55,9 @@ public abstract class AbstractBlogMacro implements Macro
    *
    * @return
    */
-  protected abstract String excecute(FacesContext facesContext,
+  protected abstract String doBody(FacesContext facesContext,
                                      String linkBase, ContentObject object,
-                                     String body,
-                                     Map<String, String> parameters);
+                                     String body);
 
   /**
    * Method description
@@ -70,8 +69,7 @@ public abstract class AbstractBlogMacro implements Macro
    *
    * @return
    */
-  public String excecute(Map<String, ?> environment, String body,
-                         Map<String, String> parameters)
+  public String doBody(Map<String, ?> environment, String body)
   {
     String result = null;
     ContentObject object = (ContentObject) environment.get("object");
@@ -80,7 +78,7 @@ public abstract class AbstractBlogMacro implements Macro
 
     if ((object != null) && (facesContext != null))
     {
-      result = excecute(facesContext, linkBase, object, body, parameters);
+      result = doBody(facesContext, linkBase, object, body);
     }
     else
     {

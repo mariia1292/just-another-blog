@@ -22,7 +22,7 @@ var ImageDialog = {
   },
 
   insertGallery : function() {
-    tinyMCEPopup.editor.execCommand('mceInsertContent', false, "{gallery /}");
+    tinyMCEPopup.editor.execCommand('mceInsertContent', false, "{gallery}{/gallery}");
     tinyMCEPopup.close();
   }
 

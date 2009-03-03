@@ -74,7 +74,8 @@ public class FlowPlayerHandler extends AttachmentHandler
   {
     StringBuffer result = new StringBuffer();
 
-    result.append("{flvviewer|id=").append(attachment.getId()).append("/}");
+    result.append("{flvviewer:id=").append(attachment.getId());
+    result.append("}{/flvviewer}");
 
     return result.toString();
   }

@@ -21,7 +21,7 @@ import sonia.macro.Macro;
 
 //~--- JDK imports ------------------------------------------------------------
 
-import java.text.SimpleDateFormat;
+import java.text.DateFormat;
 
 import java.util.List;
 import java.util.Map;
@@ -39,12 +39,10 @@ public class AttachmentMacro implements Macro
    *
    * @param environment
    * @param body
-   * @param parameters
    *
    * @return
    */
-  public String excecute(Map<String, ?> environment, String body,
-                         Map<String, String> parameters)
+  public String doBody(Map<String, ?> environment, String body)
   {
     String result = "";
     BlogRequest request = (BlogRequest) environment.get("request");
@@ -59,31 +57,18 @@ public class AttachmentMacro implements Macro
       if ((attachments != null) &&!attachments.isEmpty())
       {
         LinkBuilder linkBuilder = BlogContext.getInstance().getLinkBuilder();
-        SimpleDateFormat sdf = null;
-
-        if (blog.getDateFormat() != null)
-        {
-          sdf = new SimpleDateFormat(blog.getDateFormat());
-        }
-        else
-        {
-          sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-        }
+        DateFormat dateFormat = blog.getDateFormatter();
 
         result += "<table";
-
-        String style = parameters.get("style");
 
         if (style != null)
         {
           result += " style=\"" + style + "\"";
         }
 
-        String clazz = parameters.get("class");
-
-        if (clazz != null)
+        if (styleClass != null)
         {
-          result += " class=\"" + clazz + "\"";
+          result += " class=\"" + styleClass + "\"";
         }
 
         result += ">";
@@ -114,7 +99,7 @@ public class AttachmentMacro implements Macro
 
           result += "<td>" + description + "</td>\n";
           result += "<td>" + attachment.getSize() + "</td>\n";
-          result += "<td>" + sdf.format(attachment.getCreationDate())
+          result += "<td>" + dateFormat.format(attachment.getCreationDate())
                     + "</td>\n";
           result += "</tr>\n";
         }
@@ -126,4 +111,36 @@ public class AttachmentMacro implements Macro
 
     return result;
   }
+
+  //~--- set methods ----------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   * @param style
+   */
+  public void setStyle(String style)
+  {
+    this.style = style;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param styleClass
+   */
+  public void setStyleClass(String styleClass)
+  {
+    this.styleClass = styleClass;
+  }
+
+  //~--- fields ---------------------------------------------------------------
+
+  /** Field description */
+  private String style;
+
+  /** Field description */
+  private String styleClass;
 }

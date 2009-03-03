@@ -13,15 +13,13 @@ import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.app.BlogRequest;
 import sonia.blog.api.app.Constants;
 import sonia.blog.api.dao.AttachmentDAO;
+import sonia.blog.api.util.AbstractBlogMacro;
 import sonia.blog.entity.Attachment;
 import sonia.blog.entity.Blog;
+import sonia.blog.entity.ContentObject;
 import sonia.blog.entity.Entry;
 
-import sonia.config.ConfigurationListener;
-import sonia.config.ModifyableConfiguration;
-import sonia.config.XmlConfiguration;
-
-import sonia.macro.Macro;
+import sonia.config.Config;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -41,9 +39,9 @@ import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 
-import java.util.Map;
 import java.util.logging.Level;
-import java.util.logging.Logger;
+
+import javax.faces.context.FacesContext;
 
 import javax.imageio.ImageIO;
 
@@ -51,7 +49,7 @@ import javax.imageio.ImageIO;
  *
  * @author sdorra
  */
-public class PdfViewerMacro implements Macro, ConfigurationListener
+public class PdfViewerMacro extends AbstractBlogMacro
 {
 
   /** Field description */
@@ -60,23 +58,17 @@ public class PdfViewerMacro implements Macro, ConfigurationListener
   /** Field description */
   private static String PDFMIMETYPE = "application/pdf";
 
-  /** Field description */
-  private static Logger logger =
-    Logger.getLogger(PdfViewerMacro.class.getName());
-
-  //~--- constructors ---------------------------------------------------------
+  //~--- set methods ----------------------------------------------------------
 
   /**
-   * Constructs ...
+   * Method description
    *
    *
+   * @param id
    */
-  public PdfViewerMacro()
+  public void setId(String id)
   {
-    XmlConfiguration config = BlogContext.getInstance().getConfiguration();
-
-    config.addListener(this);
-    loadConfiguration(config);
+    this.id = id;
   }
 
   //~--- methods --------------------------------------------------------------
@@ -85,45 +77,42 @@ public class PdfViewerMacro implements Macro, ConfigurationListener
    * Method description
    *
    *
-   * @param config
-   * @param key
-   */
-  public void configChanged(ModifyableConfiguration config, String key)
-  {
-    if (key.startsWith("image"))
-    {
-      loadConfiguration(config);
-    }
-  }
-
-  /**
-   * Method description
-   *
-   *
-   * @param environment
+   * @param facesContext
+   * @param linkBase
+   * @param object
    * @param body
-   * @param parameters
    *
    * @return
    */
-  public String excecute(Map<String, ?> environment, String body,
-                         Map<String, String> parameters)
+  @Override
+  protected String doBody(FacesContext facesContext, String linkBase,
+                          ContentObject object, String body)
   {
     String result = null;
-    Object object = environment.get("object");
-    Blog blog = (Blog) environment.get("blog");
-    BlogRequest request = (BlogRequest) environment.get("request");
-    String linkBase = (String) environment.get("linkBase");
+
+    if (extension == null)
+    {
+      extension = Constants.DEFAULT_IMAGE_EXTENSION;
+    }
+
+    if (format == null)
+    {
+      format = Constants.DEFAULT_IMAGE_FORMAT;
+    }
+
+    Blog blog = getCurrentBlog(facesContext);
+    BlogRequest request = getRequest(facesContext);
     BlogContext context = BlogContext.getInstance();
 
     if ((object != null) && (object instanceof Entry))
     {
-      if ((parameters != null) && (parameters.containsKey("id")))
+      if (id != null)
       {
-        Long id = Long.parseLong(parameters.get("id"));
+        Long attachmentId = Long.parseLong(id);
         AttachmentDAO attachmentDAO =
           BlogContext.getDAOFactory().getAttachmentDAO();
-        Attachment attachment = attachmentDAO.findByBlogAndId(blog, id);
+        Attachment attachment = attachmentDAO.findByBlogAndId(blog,
+                                  attachmentId);
 
         if (attachment.getMimeType().equalsIgnoreCase(PDFMIMETYPE))
         {
@@ -132,7 +121,7 @@ public class PdfViewerMacro implements Macro, ConfigurationListener
 
           if (attachmentFile.exists())
           {
-            result = createPdfImageGallery(request, linkBase, id,
+            result = createPdfImageGallery(request, linkBase, attachmentId,
                                            attachmentFile, body);
           }
           else
@@ -157,6 +146,18 @@ public class PdfViewerMacro implements Macro, ConfigurationListener
 
     return result;
   }
+
+  /**
+   * Field description
+   *
+   * @param request
+   * @param linkBase
+   * @param id
+   * @param attachmentFile
+   * @param body
+   *
+   * @return
+   */
 
   /**
    * Method description
@@ -268,20 +269,6 @@ public class PdfViewerMacro implements Macro, ConfigurationListener
    * Method description
    *
    *
-   * @param config
-   */
-  private void loadConfiguration(ModifyableConfiguration config)
-  {
-    extension = config.getString(Constants.CONFIG_IMAGEEXTENSION,
-                                 Constants.DEFAULT_IMAGE_EXTENSION);
-    format = config.getString(Constants.CONFIG_IMAGEFORMAT,
-                              Constants.DEFAULT_IMAGE_FORMAT);
-  }
-
-  /**
-   * Method description
-   *
-   *
    *
    * @param request
    * @param linkBase
@@ -369,8 +356,13 @@ public class PdfViewerMacro implements Macro, ConfigurationListener
   //~--- fields ---------------------------------------------------------------
 
   /** Field description */
+  @Config(Constants.CONFIG_IMAGEEXTENSION)
   private String extension;
 
   /** Field description */
+  @Config(Constants.CONFIG_IMAGEFORMAT)
   private String format;
+
+  /** Field description */
+  private String id;
 }

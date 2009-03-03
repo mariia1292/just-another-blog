@@ -41,8 +41,8 @@ public class PluginActivator implements Activator
     mappingHandler = ctx.getMappingHandler();
     mappingHandler.add(PdfViewerMapping.REGEX, PdfViewerMapping.class);
     parser = MacroParser.getInstance();
-    parser.putMacro(PdfViewerMacro.NAME, new PdfViewerMacro());
-    parser.putMacro(CodeMacro.NAME, new CodeMacro());
+    parser.putMacro(PdfViewerMacro.NAME, PdfViewerMacro.class);
+    parser.putMacro(CodeMacro.NAME, CodeMacro.class);
 
     if (handler == null)
     {

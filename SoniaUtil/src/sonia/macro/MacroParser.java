@@ -9,7 +9,7 @@ package sonia.macro;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import sonia.macro.def.DefaultMacroParser;
+import sonia.injection.InjectionProvider;
 
 import sonia.util.ServiceLocator;
 
@@ -41,7 +41,7 @@ public abstract class MacroParser
     if (instance == null)
     {
       instance = ServiceLocator.locateService(MacroParser.class,
-              new DefaultMacroParser());
+              new RegexMacroParser());
     }
 
     return instance;
@@ -67,7 +67,7 @@ public abstract class MacroParser
    * @param name
    * @param macro
    */
-  public void putMacro(String name, Macro macro)
+  public void putMacro(String name, Class<? extends Macro> macro)
   {
     macros.put(name, macro);
   }
@@ -89,17 +89,45 @@ public abstract class MacroParser
    * Method description
    *
    *
+   * @return
+   */
+  public InjectionProvider getInjectionProvider()
+  {
+    return injectionProvider;
+  }
+
+  /**
+   * Method description
+   *
+   *
    * @param name
    *
    * @return
    */
-  public Macro getMacro(String name)
+  public Class<? extends Macro> getMacro(String name)
   {
     return macros.get(name);
+  }
+
+  //~--- set methods ----------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   * @param injectionProvider
+   */
+  public void setInjectionProvider(InjectionProvider injectionProvider)
+  {
+    this.injectionProvider = injectionProvider;
   }
 
   //~--- fields ---------------------------------------------------------------
 
   /** Field description */
-  protected Map<String, Macro> macros = new HashMap<String, Macro>();
+  protected InjectionProvider injectionProvider;
+
+  /** Field description */
+  protected Map<String, Class<? extends Macro>> macros =
+    new HashMap<String, Class<? extends Macro>>();
 }

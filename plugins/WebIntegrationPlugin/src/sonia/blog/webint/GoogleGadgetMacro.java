@@ -16,8 +16,6 @@ import sonia.util.Util;
 
 //~--- JDK imports ------------------------------------------------------------
 
-import java.util.Map;
-
 import javax.faces.context.FacesContext;
 
 /**
@@ -30,6 +28,19 @@ public class GoogleGadgetMacro extends AbstractBlogMacro
   /** Field description */
   public static final String NAME = "googleGadget";
 
+  //~--- set methods ----------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   * @param url
+   */
+  public void setUrl(String url)
+  {
+    this.url = url;
+  }
+
   //~--- methods --------------------------------------------------------------
 
   /**
@@ -40,21 +51,17 @@ public class GoogleGadgetMacro extends AbstractBlogMacro
    * @param linkBase
    * @param object
    * @param body
-   * @param parameters
    *
    * @return
    */
   @Override
-  protected String excecute(FacesContext facesContext, String linkBase,
-                            ContentObject object, String body,
-                            Map<String, String> parameters)
+  protected String doBody(FacesContext facesContext, String linkBase,
+                          ContentObject object, String body)
   {
     String result = null;
 
-    if (!parameters.containsKey("url"))
+    if (url != null)
     {
-      String url = parameters.get("url");
-
       if (!Util.isBlank(url))
       {
         result = "<script src=\"" + url + "\"></script>";
@@ -71,4 +78,9 @@ public class GoogleGadgetMacro extends AbstractBlogMacro
 
     return result;
   }
+
+  //~--- fields ---------------------------------------------------------------
+
+  /** Field description */
+  private String url;
 }

@@ -18,8 +18,6 @@ import sonia.blog.entity.ContentObject;
 
 //~--- JDK imports ------------------------------------------------------------
 
-import java.util.Map;
-
 import javax.faces.context.FacesContext;
 
 /**
@@ -33,50 +31,80 @@ public class FLVMacro extends AbstractBlogMacro
    * Method description
    *
    *
+   * @param height
+   */
+  public void setHeight(String height)
+  {
+    this.height = height;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param id
+   */
+  public void setId(String id)
+  {
+    this.id = id;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param width
+   */
+  public void setWidth(String width)
+  {
+    this.width = width;
+  }
+
+  //~--- methods --------------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
    * @param facesContext
    * @param linkBase
    * @param object
    * @param body
-   * @param parameters
    *
    * @return
    */
   @Override
-  protected String excecute(FacesContext facesContext, String linkBase,
-                            ContentObject object, String body,
-                            Map<String, String> parameters)
+  protected String doBody(FacesContext facesContext, String linkBase,
+                          ContentObject object, String body)
   {
     String result = null;
 
     if (isEntry(object))
     {
-      if (parameters.containsKey("id"))
+      if (id != null)
       {
-        String idString = parameters.get("id");
-
         try
         {
-          long id = Long.parseLong(idString);
           BlogRequest request = getRequest(facesContext);
           Blog blog = request.getCurrentBlog();
-          Attachment attchment = findAttachment(blog, id);
+          Attachment attchment = findAttachment(blog, Long.parseLong(id));
 
           if (attchment != null)
           {
-            int width = 480;
-            int height = 360;
+            int w = 480;
+            int h = 360;
 
-            if (parameters.containsKey("width"))
+            if (width != null)
             {
-              width = Integer.parseInt(parameters.get("width"));
+              w = Integer.parseInt(width);
             }
 
-            if (parameters.containsKey("height"))
+            if (height != null)
             {
-              height = Integer.parseInt(parameters.get("height"));
+              h = Integer.parseInt(height);
             }
 
-            result = renderPlayer(request, attchment, linkBase, width, height);
+            result = renderPlayer(request, attchment, linkBase, w, h);
           }
           else
           {
@@ -162,4 +190,15 @@ public class FLVMacro extends AbstractBlogMacro
 
     return result;
   }
+
+  //~--- fields ---------------------------------------------------------------
+
+  /** Field description */
+  private String height;
+
+  /** Field description */
+  private String id;
+
+  /** Field description */
+  private String width;
 }

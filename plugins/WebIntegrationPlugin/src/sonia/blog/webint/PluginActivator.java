@@ -31,20 +31,10 @@ public class PluginActivator implements Activator
    */
   public void start(PluginContext context)
   {
-    if (googleGadgetMacro == null)
-    {
-      googleGadgetMacro = new GoogleGadgetMacro();
-    }
-
-    if (flickrMacro == null)
-    {
-      flickrMacro = new FlickrMacro();
-    }
-
     MacroParser parser = MacroParser.getInstance();
 
-    parser.putMacro(GoogleGadgetMacro.NAME, googleGadgetMacro);
-    parser.putMacro(FlickrMacro.NAME, flickrMacro);
+    parser.putMacro(GoogleGadgetMacro.NAME, GoogleGadgetMacro.class);
+    parser.putMacro(FlickrMacro.NAME, FlickrMacro.class);
   }
 
   /**
@@ -60,12 +50,4 @@ public class PluginActivator implements Activator
     parser.removeMacro(GoogleGadgetMacro.NAME);
     parser.removeMacro(FlickrMacro.NAME);
   }
-
-  //~--- fields ---------------------------------------------------------------
-
-  /** Field description */
-  private FlickrMacro flickrMacro;
-
-  /** Field description */
-  private GoogleGadgetMacro googleGadgetMacro;
 }

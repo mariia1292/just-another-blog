@@ -19,7 +19,6 @@ import java.net.URL;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.logging.Level;
 
 import javax.faces.context.FacesContext;
@@ -37,6 +36,30 @@ public class FlickrMacro extends AbstractBlogMacro implements FlickrAPI
   /** Field description */
   public static final String NAME = "flickr";
 
+  //~--- get methods ----------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  public String getPerPage()
+  {
+    return perPage;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  public String getTags()
+  {
+    return tags;
+  }
+
   //~--- methods --------------------------------------------------------------
 
   /**
@@ -47,26 +70,24 @@ public class FlickrMacro extends AbstractBlogMacro implements FlickrAPI
    * @param linkBase
    * @param object
    * @param body
-   * @param parameters
    *
    * @return
    */
   @Override
-  protected String excecute(FacesContext facesContext, String linkBase,
-                            ContentObject object, String body,
-                            Map<String, String> parameters)
+  protected String doBody(FacesContext facesContext, String linkBase,
+                          ContentObject object, String body)
   {
     String result = null;
     String restUrl = null;
 
-    if (parameters.containsKey("tags"))
+    if (tags != null)
     {
       restUrl = API_URL + "?" + PARAM_METHOD + "=" + METHOD_SEARCH + "&"
-                + PARAM_TAGS + "=" + parameters.get("tags");
+                + PARAM_TAGS + "=" + tags;
 
-      if (parameters.containsKey("perPage"))
+      if (perPage != null)
       {
-        restUrl += "&" + PARAM_PERPAGE + "=" + parameters.get("perPage");
+        restUrl += "&" + PARAM_PERPAGE + "=" + perPage;
       }
     }
 
@@ -147,4 +168,12 @@ public class FlickrMacro extends AbstractBlogMacro implements FlickrAPI
 
     return result;
   }
+
+  //~--- fields ---------------------------------------------------------------
+
+  /** Field description */
+  private String perPage;
+
+  /** Field description */
+  private String tags;
 }

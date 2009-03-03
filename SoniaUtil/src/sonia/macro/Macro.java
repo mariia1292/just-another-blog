@@ -24,10 +24,8 @@ public interface Macro
    *
    * @param environment
    * @param body
-   * @param parameters
    *
    * @return
    */
-  public String excecute(Map<String, ?> environment, String body,
-                         Map<String, String> parameters);
+  public String doBody(Map<String, ?> environment, String body);
 }

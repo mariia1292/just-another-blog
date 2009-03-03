@@ -30,22 +30,16 @@ public class SpoilerMacro implements Macro
    *
    * @param environment
    * @param body
-   * @param parameters
    *
    * @return
    */
-  public String excecute(Map<String, ?> environment, String body,
-                         Map<String, String> parameters)
+  public String doBody(Map<String, ?> environment, String body)
   {
-    String title = parameters.get("title");
-
     if (title == null)
     {
       title = "spoiler";
     }
 
-    String style = parameters.get("style");
-    String clazz = parameters.get("class");
     ContentObject object = (ContentObject) environment.get("object");
     String js = "var div = this.parentNode.getElementsByTagName('div')[0]";
 
@@ -64,9 +58,9 @@ public class SpoilerMacro implements Macro
       result += " style=\"" + style + "\"";
     }
 
-    if (clazz != null)
+    if (styleClass != null)
     {
-      result += " class=\"" + clazz + "\"";
+      result += " class=\"" + styleClass + "\"";
     }
 
     result += ">";
@@ -79,4 +73,50 @@ public class SpoilerMacro implements Macro
 
     return result;
   }
+
+  //~--- set methods ----------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   * @param style
+   */
+  public void setStyle(String style)
+  {
+    this.style = style;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param styleClass
+   */
+  public void setStyleClass(String styleClass)
+  {
+    this.styleClass = styleClass;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param title
+   */
+  public void setTitle(String title)
+  {
+    this.title = title;
+  }
+
+  //~--- fields ---------------------------------------------------------------
+
+  /** Field description */
+  private String style;
+
+  /** Field description */
+  private String styleClass;
+
+  /** Field description */
+  private String title;
 }

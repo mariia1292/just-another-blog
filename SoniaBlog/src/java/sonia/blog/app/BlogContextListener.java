@@ -269,16 +269,12 @@ public class BlogContextListener implements ServletContextListener
   {
     MacroParser parser = MacroParser.getInstance();
 
-    parser.putMacro("hello", new HelloWorldMacro());
-    parser.putMacro("gallery", new GalleryMacro());
-    parser.putMacro("spoiler", new SpoilerMacro());
-    parser.putMacro("blogs", new BlogsMacro());
-    parser.putMacro("flvviewer", new FLVMacro());
-
-    AttachmentMacro am = new AttachmentMacro();
-
-    parser.putMacro("attachments", am);
-    parser.putMacro("attachment", am);
+    parser.putMacro("hello", HelloWorldMacro.class);
+    parser.putMacro("gallery", GalleryMacro.class);
+    parser.putMacro("spoiler", SpoilerMacro.class);
+    parser.putMacro("blogs", BlogsMacro.class);
+    parser.putMacro("flvviewer", FLVMacro.class);
+    parser.putMacro("attachments", AttachmentMacro.class);
   }
 
   /**

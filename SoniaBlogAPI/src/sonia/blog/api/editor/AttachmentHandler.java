@@ -61,8 +61,6 @@ public abstract class AttachmentHandler implements SelectAction
     Attachment attachment = (Attachment) param.get("attachment");
     String selection = (String) param.get("selection");
 
-    System.out.append( selection );
-
     return getOutput(request, selection, attachment);
   }
 }

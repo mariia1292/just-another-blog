@@ -73,7 +73,7 @@ public class PdfHandler extends AttachmentHandler
                   : attachment.getName();
     StringBuffer result = new StringBuffer();
 
-    result.append("{pdfviewer|id=").append(attachment.getId()).append("}");
+    result.append("{pdfviewer:id=").append(attachment.getId()).append("}");
     result.append(text).append("{/pdfviewer}");
 
     return result.toString();

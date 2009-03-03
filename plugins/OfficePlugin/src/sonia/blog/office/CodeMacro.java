@@ -9,58 +9,45 @@ package sonia.blog.office;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import sonia.macro.Macro;
-
-import sonia.util.Util;
+import sonia.blog.api.util.AbstractBlogMacro;
+import sonia.blog.entity.ContentObject;
 
 //~--- JDK imports ------------------------------------------------------------
 
-import java.util.Map;
+import javax.faces.context.FacesContext;
 
 /**
  *
  * @author sdorra
  */
-public class CodeMacro implements Macro
+public class CodeMacro extends AbstractBlogMacro
 {
 
   /** Field description */
   public static final String NAME = "code";
 
-  //~--- methods --------------------------------------------------------------
+  //~--- set methods ----------------------------------------------------------
 
   /**
    * Method description
    *
    *
-   * @param environment
-   * @param body
-   * @param parameters
-   *
-   * @return
+   * @param controls
    */
-  public String excecute(Map<String, ?> environment, String body,
-                         Map<String, String> parameters)
+  public void setControls(String controls)
   {
-    String lang = parameters.get("lang");
+    this.controls = controls;
+  }
 
-    if (Util.isBlank(lang))
-    {
-      lang = "java";
-    }
-
-    String linkPrefix = (String) environment.get("linkBase");
-
-    linkPrefix += "resource/dp/syntax/";
-
-    String gutterString = parameters.get("gutter");
-    boolean gutter = (!Util.isBlank(gutterString)
-                      && gutterString.equals("true"));
-    String controlString = parameters.get("controls");
-    boolean controls = (!Util.isBlank(controlString)
-                        && controlString.equals("true"));
-
-    return buildBody(lang, linkPrefix, body, gutter, controls);
+  /**
+   * Method description
+   *
+   *
+   * @param gutter
+   */
+  public void setGutter(String gutter)
+  {
+    this.gutter = gutter;
   }
 
   /**
@@ -68,85 +55,100 @@ public class CodeMacro implements Macro
    *
    *
    * @param lang
-   * @param linkPrefix
+   */
+  public void setLang(String lang)
+  {
+    this.lang = lang;
+  }
+
+  //~--- methods --------------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   * @param facesContext
+   * @param linkBase
+   * @param object
    * @param body
-   * @param gutter
-   * @param controls
    *
    * @return
    */
-  private String buildBody(String lang, String linkPrefix, String body,
-                           boolean gutter, boolean controls)
+  @Override
+  protected String doBody(FacesContext facesContext, String linkBase,
+                          ContentObject object, String body)
   {
+    linkBase += "resource/dp/syntax/";
+
     String result = "";
 
-    result += "<link type=\"text/css\" rel=\"stylesheet\" href=\"" + linkPrefix
+    result += "<link type=\"text/css\" rel=\"stylesheet\" href=\"" + linkBase
               + "css/SyntaxHighlighter.css\"></link>\n";
-    result += "<script language=\"javascript\" src=\"" + linkPrefix
+    result += "<script language=\"javascript\" src=\"" + linkBase
               + "js/shCore.js\"></script>\n";
     lang = lang.toLowerCase();
 
     if (lang.equals("csharp") || lang.equals("c#") || lang.equals("c-sharp"))
     {
-      result += "<script language=\"javascript\" src=\"" + linkPrefix
+      result += "<script language=\"javascript\" src=\"" + linkBase
                 + "js/shBrushCsharp.js\"></script>\n";
     }
     else if (lang.equals("cpp") || lang.equals("c++") || lang.equals("c"))
     {
-      result += "<script language=\"javascript\" src=\"" + linkPrefix
+      result += "<script language=\"javascript\" src=\"" + linkBase
                 + "js/shBrushCpp.js\"></script>\n";
     }
     else if (lang.equals("css"))
     {
-      result += "<script language=\"javascript\" src=\"" + linkPrefix
+      result += "<script language=\"javascript\" src=\"" + linkBase
                 + "js/shBrushCss.js\"></script>\n";
     }
     else if (lang.equals("delphi") || lang.equals("pascal"))
     {
-      result += "<script language=\"javascript\" src=\"" + linkPrefix
+      result += "<script language=\"javascript\" src=\"" + linkBase
                 + "js/shBrushDelphi.js\"></script>\n";
     }
     else if (lang.equals("js") || lang.equals("javascript")
              || lang.equals("jscript"))
     {
-      result += "<script language=\"javascript\" src=\"" + linkPrefix
+      result += "<script language=\"javascript\" src=\"" + linkBase
                 + "js/shBrushJScript.js\"></script>\n";
     }
     else if (lang.equals("java"))
     {
-      result += "<script language=\"javascript\" src=\"" + linkPrefix
+      result += "<script language=\"javascript\" src=\"" + linkBase
                 + "js/shBrushJava.js\"></script>\n";
     }
     else if (lang.equals("php"))
     {
-      result += "<script language=\"javascript\" src=\"" + linkPrefix
+      result += "<script language=\"javascript\" src=\"" + linkBase
                 + "js/shBrushPhp.js\"></script>\n";
     }
     else if (lang.equals("python") || lang.equals("py"))
     {
-      result += "<script language=\"javascript\" src=\"" + linkPrefix
+      result += "<script language=\"javascript\" src=\"" + linkBase
                 + "js/shBrushPython.js\"></script>\n";
     }
     else if (lang.equals("ruby") || lang.equals("ror") || lang.equals("rb")
              || lang.equals("rails"))
     {
-      result += "<script language=\"javascript\" src=\"" + linkPrefix
+      result += "<script language=\"javascript\" src=\"" + linkBase
                 + "js/shBrushRuby.js\"></script>\n";
     }
     else if (lang.equals("sql"))
     {
-      result += "<script language=\"javascript\" src=\"" + linkPrefix
+      result += "<script language=\"javascript\" src=\"" + linkBase
                 + "js/shBrushSql.js\"></script>\n";
     }
     else if (lang.equals("vb") || lang.equals("vb.net"))
     {
-      result += "<script language=\"javascript\" src=\"" + linkPrefix
+      result += "<script language=\"javascript\" src=\"" + linkBase
                 + "js/shBrushVb.js\"></script>\n";
     }
     else if (lang.equals("xml") || lang.equals("html") || lang.equals("xhtml")
              || lang.equals("xslt"))
     {
-      result += "<script language=\"javascript\" src=\"" + linkPrefix
+      result += "<script language=\"javascript\" src=\"" + linkBase
                 + "js/shBrushXml.js\"></script>\n";
     }
 
@@ -161,4 +163,15 @@ public class CodeMacro implements Macro
 
     return result;
   }
+
+  //~--- fields ---------------------------------------------------------------
+
+  /** Field description */
+  private String controls = "false";
+
+  /** Field description */
+  private String gutter = "false";
+
+  /** Field description */
+  private String lang = "java";
 }
