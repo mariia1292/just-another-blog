@@ -220,7 +220,7 @@ public class DateMapping extends ScrollableFilterMapping
         nextUri = getPageUri(request, page);
       }
 
-      entries.subList(0, end);
+      entries = entries.subList(0, end);
     }
 
     BlogBean blogBean = BlogUtil.getSessionBean(request, BlogBean.class,

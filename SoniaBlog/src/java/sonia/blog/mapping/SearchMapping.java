@@ -20,6 +20,8 @@ import sonia.blog.api.search.SearchContext;
 import sonia.blog.api.search.SearchEntry;
 import sonia.blog.api.search.SearchException;
 import sonia.blog.entity.Blog;
+import sonia.blog.util.BlogUtil;
+import sonia.blog.wui.BlogBean;
 
 import sonia.util.Util;
 
@@ -29,6 +31,8 @@ import java.io.IOException;
 
 import java.util.List;
 import java.util.logging.Level;
+
+import javax.faces.model.ListDataModel;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpSession;
@@ -127,7 +131,7 @@ public class SearchMapping extends ScrollableFilterMapping
       {
         try
         {
-          long hit = Long.parseLong(hitParam);
+          int hit = Integer.parseInt(hitParam);
 
           result = handleDetailView(request, searchParam, entries, hit);
         }
@@ -138,7 +142,7 @@ public class SearchMapping extends ScrollableFilterMapping
       }
       else
       {
-        result = handleListView(request, entries, start, max);
+        result = handleListView(request, searchParam, entries, start, max);
       }
     }
 
@@ -157,7 +161,7 @@ public class SearchMapping extends ScrollableFilterMapping
    * @return
    */
   private String handleDetailView(BlogRequest request, String searchParam,
-                                  List<SearchEntry> entries, long hit)
+                                  List<SearchEntry> entries, int hit)
   {
     String result = null;
     int index = -1;
@@ -178,25 +182,29 @@ public class SearchMapping extends ScrollableFilterMapping
     {
       result = buildTemplateViewId(request, Constants.TEMPLATE_DETAIL);
 
-      // TODO: setEntry to BlogBean
+      BlogBean blogBean = BlogUtil.getSessionBean(request, BlogBean.class,
+                            BlogBean.NAME);
+
+      blogBean.setEntry(entry.getData());
+
       LinkBuilder builder = BlogContext.getInstance().getLinkBuilder();
-      String prefix = builder.buildLink(request, "/search.jsf");
+      String prefix = builder.buildLink(request, "/search.jab");
 
       prefix += "?search=" + searchParam + "&hit=";
 
       String previousUri = null;
       String nextUri = null;
 
-      if (index > 0)
+      if (hit > 0)
       {
-        SearchEntry pe = entries.get(index - 1);
+        SearchEntry pe = entries.get(hit - 1);
 
         previousUri = prefix + pe.getId();
       }
 
-      if (index < entries.size())
+      if ((hit + 1) < entries.size())
       {
-        SearchEntry ne = entries.get(index + 1);
+        SearchEntry ne = entries.get(hit + 1);
 
         nextUri = prefix + ne.getId();
       }
@@ -212,18 +220,71 @@ public class SearchMapping extends ScrollableFilterMapping
    *
    *
    * @param request
+   * @param searchParam
    * @param entries
    * @param start
-   * @param max
+   * @param end
    *
    * @return
    */
-  private String handleListView(BlogRequest request, List<SearchEntry> entries,
-                                int start, int max)
+  private String handleListView(BlogRequest request, String searchParam,
+                                List<SearchEntry> entries, int start, int end)
   {
-    List<SearchEntry> list = null;
+    Blog blog = request.getCurrentBlog();
+    String prevUri = null;
+    String nextUri = null;
 
-    // TODO: setEntries to BlogBean
+    if (logger.isLoggable(Level.FINER))
+    {
+      logger.finer("set entry list(" + entries.size() + ") to BlogBean");
+    }
+
+    if (start > 0)
+    {
+      int page = getCurrentPage(request);
+
+      if (page > 0)
+      {
+        prevUri = getPageUri(request, page - 1);
+      }
+    }
+
+    int size = entries.size();
+
+    if ((entries != null) && (size > end - start))
+    {
+      int page = getCurrentPage(request) + 1;
+      int entriesPerPage = blog.getEntriesPerPage();
+
+      if (size > (page * entriesPerPage))
+      {
+        nextUri = getPageUri(request, page);
+      }
+
+      if (size < end)
+      {
+        end = size;
+      }
+
+      entries = entries.subList(start, end);
+    }
+
+    StringBuffer detailPattern = new StringBuffer();
+
+    detailPattern.append("/search.jab?search=").append(searchParam);
+    detailPattern.append("&hit={0}");
+
+    LinkBuilder linkBuilder = BlogContext.getInstance().getLinkBuilder();
+    String pattern = linkBuilder.buildLink(request, detailPattern.toString());
+    BlogBean blogBean = BlogUtil.getSessionBean(request, BlogBean.class,
+                          BlogBean.NAME);
+
+
+      blogBean.setPageEntries(new ListDataModel(entries));
+
+
+    navigation = new SimpleMappingNavigation(prevUri, nextUri, pattern);
+
     return buildTemplateViewId(request, Constants.TEMPLATE_LIST);
   }
 

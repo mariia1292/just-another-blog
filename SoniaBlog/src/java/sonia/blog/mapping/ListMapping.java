@@ -193,14 +193,23 @@ public class ListMapping extends ScrollableFilterMapping
       }
     }
 
-    if ((entries != null) && (entries.size() > end - start))
+    int size = entries.size();
+
+    if ((entries != null) && (size > end - start))
     {
-      int page = getCurrentPage(request) + 1;
+      int page = getCurrentPage(request);
       int entriesPerPage = blog.getEntriesPerPage();
 
-      if (entries.size() > (page * entriesPerPage))
+      if (size > (page * entriesPerPage))
       {
-        nextUri = getPageUri(request, page);
+        nextUri = getPageUri(request, page + 1);
+      }
+
+      size--;
+
+      if (size < end)
+      {
+        end = size;
       }
 
       entries = entries.subList(0, end);
