@@ -61,7 +61,7 @@ public class InjectionProviderTest
     reference.add(new ServiceTest());
     reference.add(new ServiceTest());
 
-    InjectionProvider injectionProvicer = InjectionProvider.getInstance();
+    InjectionProvider injectionProvicer = new DefaultInjectionProvider();
 
     injectionProvicer.registerInjector(Service.class,
                                        new ServiceInjector(registry));

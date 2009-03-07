@@ -9,7 +9,6 @@ package sonia.macro;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-
 import sonia.util.Util;
 
 //~--- JDK imports ------------------------------------------------------------
@@ -52,7 +51,7 @@ public class RegexMacroParser extends MacroParser
    */
   public String parseText(Map<String, ?> environment, String text)
   {
-    Pattern p = Pattern.compile(REGEX);
+    Pattern p = Pattern.compile(REGEX, Pattern.DOTALL);
     Matcher m = p.matcher(text);
     Map<String, String> replaceMap = new HashMap<String, String>();
 
@@ -194,6 +193,15 @@ public class RegexMacroParser extends MacroParser
     {
       try
       {
+        if (logger.isLoggable(Level.FINER))
+        {
+          StringBuffer msg = new StringBuffer();
+
+          msg.append("invoke method ").append(method.getName());
+          msg.append(" with parameter ").append(value);
+          logger.finer(msg.toString());
+        }
+
         method.invoke(macro, value);
       }
       catch (Exception ex)
