@@ -259,6 +259,7 @@ public class BlogContextListener implements ServletContextListener
         Service.class, new ServiceInjector(context.getServiceRegistry()));
     provider.registerInjector(Config.class,
                               new ConfigInjector(context.getConfiguration()));
+    context.getMacroParser().setInjectionProvider(provider);
   }
 
   /**

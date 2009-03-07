@@ -72,22 +72,25 @@ public class ConfigInjector implements Injector
         value = getValue(key, type, false);
       }
 
-      if (logger.isLoggable(Level.FINER))
+      if ((value != null) || config.injectNullValues())
       {
-        StringBuffer msg = new StringBuffer();
+        if (logger.isLoggable(Level.FINER))
+        {
+          StringBuffer msg = new StringBuffer();
 
-        msg.append("injecting ").append(value).append(" from ");
-        msg.append(key).append(" in field ").append(field.getName());
-        logger.finer(msg.toString());
-      }
+          msg.append("injecting ").append(value).append(" from ");
+          msg.append(key).append(" in field ").append(field.getName());
+          logger.finer(msg.toString());
+        }
 
-      try
-      {
-        field.set(object, value);
-      }
-      catch (IllegalAccessException ex)
-      {
-        logger.log(Level.SEVERE, null, ex);
+        try
+        {
+          field.set(object, value);
+        }
+        catch (IllegalAccessException ex)
+        {
+          logger.log(Level.SEVERE, null, ex);
+        }
       }
     }
   }

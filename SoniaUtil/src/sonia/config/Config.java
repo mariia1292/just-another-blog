@@ -23,4 +23,5 @@ import java.lang.annotation.Target;
 public @interface Config
 {
   String value();
+  boolean injectNullValues() default false;
 }
