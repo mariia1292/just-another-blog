@@ -44,10 +44,15 @@ import java.util.List;
 
 import javax.imageio.ImageIO;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import sonia.blog.api.dao.DAOFactory;
+import sonia.blog.dao.jpa.JpaDAOFactory;
+import sonia.blog.entity.User;
 
 /**
  *
@@ -115,7 +120,7 @@ public class ChartServlet extends HttpServlet
                                 HttpServletResponse response)
           throws ServletException, IOException
   {
-    String typeParam = request.getParameter("type");
+    /*String typeParam = request.getParameter("type");
 
     if (!Util.isBlank(typeParam))
     {
@@ -129,7 +134,41 @@ public class ChartServlet extends HttpServlet
       }
     }
 
-    createTest(request, response);
+    createTest(request, response);*/
+
+    JpaDAOFactory dao = (JpaDAOFactory) DAOFactory.getInstance();
+    EntityManagerFactory emf = dao.getEntityManagerFactory();
+    EntityManager em = emf.createEntityManager();
+    em.getTransaction().begin();
+    try
+    {
+      for ( int i=0; i<1000; i++ )
+      {
+        User u = new User();
+        u.setActive(true);
+        u.setDisplayName( "Benutzer " + (i+1) );
+        u.setEmail( "mail" + (i+1) + "@jab-test.de" );
+        u.setGlobalAdmin(false);
+        u.setName( "user" + (i+1) );
+        u.setPassword("hallo123");
+        u.setSelfManaged(false);
+        em.persist(u);
+      }
+
+
+      em.getTransaction().commit();
+    }
+    catch ( Exception ex )
+    {
+      em.getTransaction().rollback();
+      ex.printStackTrace();
+    }
+    finally
+    {
+      em.close();
+    }
+
+
   }
 
   /**

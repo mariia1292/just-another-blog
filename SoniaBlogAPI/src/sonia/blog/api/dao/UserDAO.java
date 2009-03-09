@@ -35,6 +35,37 @@ public interface UserDAO extends GenericDAO<User>
    */
   public long count(Blog blog);
 
+  /**
+   * Method description
+   *
+   *
+   * @param filter
+   *
+   * @return
+   */
+  public long count(String filter);
+
+  /**
+   * Method description
+   *
+   *
+   * @param filter
+   * @param active
+   *
+   * @return
+   */
+  public long count(String filter, boolean active);
+
+  /**
+   * Method description
+   *
+   *
+   * @param active
+   *
+   * @return
+   */
+  public long count(boolean active);
+
   //~--- get methods ----------------------------------------------------------
 
   /**
@@ -69,6 +100,31 @@ public interface UserDAO extends GenericDAO<User>
    * @return
    */
   public User get(String username, String password, boolean active);
+
+  /**
+   * Method description
+   *
+   *
+   * @param filter
+   * @param start
+   * @param max
+   *
+   * @return
+   */
+  public List<User> getAll(String filter, int start, int max);
+
+  /**
+   * Method description
+   *
+   *
+   * @param filter
+   * @param active
+   * @param start
+   * @param max
+   *
+   * @return
+   */
+  public List<User> getAll(String filter, boolean active, int start, int max);
 
   /**
    * Method description

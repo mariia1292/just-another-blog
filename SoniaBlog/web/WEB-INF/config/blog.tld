@@ -9,50 +9,50 @@
     <body-content>empty</body-content>
     <attribute>
       <name>id</name>
-      <rtexprvalue>true</rtexprvalue>
       <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
       <type>java.lang.Object</type>
     </attribute>
     <attribute>
       <name>style</name>
-      <rtexprvalue>true</rtexprvalue>
       <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
       <type>java.lang.Object</type>
     </attribute>
     <attribute>
       <name>styleClass</name>
-      <rtexprvalue>true</rtexprvalue>
       <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
       <type>java.lang.Object</type>
     </attribute>
     <attribute>
       <name>role</name>
-      <rtexprvalue>true</rtexprvalue>
       <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
       <type>java.lang.Object</type>
     </attribute>
     <attribute>
       <name>rendered</name>
-      <rtexprvalue>true</rtexprvalue>
       <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
       <type>java.lang.Object</type>
     </attribute>
     <attribute>
       <name>minPercentage</name>
-      <rtexprvalue>true</rtexprvalue>
       <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
       <type>java.lang.Object</type>
     </attribute>
     <attribute>
       <name>maxPercentage</name>
-      <rtexprvalue>true</rtexprvalue>
       <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
       <type>java.lang.Object</type>
     </attribute>
     <attribute>
       <name>maxItems</name>
-      <rtexprvalue>true</rtexprvalue>
       <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
       <type>java.lang.Object</type>
     </attribute>
   </tag>
@@ -62,14 +62,14 @@
     <body-content>empty</body-content>
     <attribute>
       <name>id</name>
-      <rtexprvalue>true</rtexprvalue>
       <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
       <type>java.lang.Object</type>
     </attribute>
     <attribute>
       <name>method</name>
-      <rtexprvalue>true</rtexprvalue>
       <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
       <type>java.lang.Object</type>
     </attribute>
   </tag>
@@ -79,8 +79,8 @@
     <body-content>empty</body-content>
     <attribute>
       <name>id</name>
-      <rtexprvalue>true</rtexprvalue>
       <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
       <type>java.lang.Object</type>
     </attribute>
   </tag>
@@ -90,26 +90,26 @@
     <body-content>JSP</body-content>
     <attribute>
       <name>style</name>
-      <rtexprvalue>true</rtexprvalue>
       <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
       <type>java.lang.Object</type>
     </attribute>
     <attribute>
       <name>styleClass</name>
-      <rtexprvalue>true</rtexprvalue>
       <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
       <type>java.lang.Object</type>
     </attribute>
     <attribute>
       <name>role</name>
-      <rtexprvalue>true</rtexprvalue>
       <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
       <type>java.lang.Object</type>
     </attribute>
     <attribute>
       <name>rendered</name>
-      <rtexprvalue>true</rtexprvalue>
       <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
       <type>java.lang.Object</type>
     </attribute>
   </tag>
@@ -119,38 +119,38 @@
     <body-content>JSP</body-content>
     <attribute>
       <name>style</name>
-      <rtexprvalue>true</rtexprvalue>
       <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
       <type>java.lang.Object</type>
     </attribute>
     <attribute>
       <name>styleClass</name>
-      <rtexprvalue>true</rtexprvalue>
       <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
       <type>java.lang.Object</type>
     </attribute>
     <attribute>
       <name>role</name>
-      <rtexprvalue>true</rtexprvalue>
       <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
       <type>java.lang.Object</type>
     </attribute>
     <attribute>
       <name>object</name>
-      <rtexprvalue>true</rtexprvalue>
       <required>true</required>
+      <rtexprvalue>true</rtexprvalue>
       <type>java.lang.Object</type>
     </attribute>
     <attribute>
       <name>teaser</name>
-      <rtexprvalue>true</rtexprvalue>
       <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
       <type>java.lang.Object</type>
     </attribute>
     <attribute>
       <name>rendered</name>
-      <rtexprvalue>true</rtexprvalue>
       <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
       <type>java.lang.Object</type>
     </attribute>
   </tag>
@@ -160,56 +160,56 @@
     <body-content>JSP</body-content>
     <attribute>
       <name>style</name>
-      <rtexprvalue>true</rtexprvalue>
       <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
       <type>java.lang.Object</type>
     </attribute>
     <attribute>
       <name>styleClass</name>
-      <rtexprvalue>true</rtexprvalue>
       <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
       <type>java.lang.Object</type>
     </attribute>
     <attribute>
       <name>title</name>
-      <rtexprvalue>true</rtexprvalue>
       <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
       <type>java.lang.Object</type>
     </attribute>
     <attribute>
       <name>target</name>
-      <rtexprvalue>true</rtexprvalue>
       <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
       <type>java.lang.Object</type>
     </attribute>
     <attribute>
       <name>value</name>
-      <rtexprvalue>true</rtexprvalue>
       <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
       <type>java.lang.Object</type>
     </attribute>
     <attribute>
       <name>role</name>
-      <rtexprvalue>true</rtexprvalue>
       <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
       <type>java.lang.Object</type>
     </attribute>
     <attribute>
       <name>href</name>
-      <rtexprvalue>true</rtexprvalue>
       <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
       <type>java.lang.String</type>
     </attribute>
     <attribute>
       <name>object</name>
-      <rtexprvalue>true</rtexprvalue>
       <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
       <type>java.lang.Object</type>
     </attribute>
     <attribute>
       <name>disabled</name>
-      <rtexprvalue>true</rtexprvalue>
       <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
       <type>java.lang.Object</type>
     </attribute>
   </tag>
@@ -219,50 +219,50 @@
     <body-content>JSP</body-content>
     <attribute>
       <name>style</name>
-      <rtexprvalue>true</rtexprvalue>
       <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
       <type>java.lang.Object</type>
     </attribute>
     <attribute>
       <name>styleClass</name>
-      <rtexprvalue>true</rtexprvalue>
       <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
       <type>java.lang.Object</type>
     </attribute>
     <attribute>
       <name>title</name>
-      <rtexprvalue>true</rtexprvalue>
       <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
       <type>java.lang.Object</type>
     </attribute>
     <attribute>
       <name>target</name>
-      <rtexprvalue>true</rtexprvalue>
       <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
       <type>java.lang.Object</type>
     </attribute>
     <attribute>
       <name>value</name>
-      <rtexprvalue>true</rtexprvalue>
       <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
       <type>java.lang.Object</type>
     </attribute>
     <attribute>
       <name>label</name>
-      <rtexprvalue>true</rtexprvalue>
       <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
       <type>java.lang.Object</type>
     </attribute>
     <attribute>
       <name>role</name>
-      <rtexprvalue>true</rtexprvalue>
       <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
       <type>java.lang.Object</type>
     </attribute>
     <attribute>
       <name>target</name>
-      <rtexprvalue>true</rtexprvalue>
       <required>true</required>
+      <rtexprvalue>true</rtexprvalue>
       <type>java.lang.String</type>
     </attribute>
   </tag>
@@ -272,151 +272,204 @@
     <body-content>JSP</body-content>
     <attribute>
       <name>title</name>
-      <rtexprvalue>true</rtexprvalue>
       <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
       <type>java.lang.Object</type>
     </attribute>
     <attribute>
       <name>href</name>
-      <rtexprvalue>true</rtexprvalue>
       <required>true</required>
+      <rtexprvalue>true</rtexprvalue>
       <type>java.lang.Object</type>
     </attribute>
     <attribute>
       <name>type</name>
-      <rtexprvalue>true</rtexprvalue>
       <required>true</required>
+      <rtexprvalue>true</rtexprvalue>
       <type>java.lang.Object</type>
     </attribute>
     <attribute>
       <name>iePatch</name>
-      <rtexprvalue>true</rtexprvalue>
       <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
       <type>java.lang.Object</type>
     </attribute>
     <attribute>
       <name>role</name>
-      <rtexprvalue>true</rtexprvalue>
       <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
       <type>java.lang.Object</type>
     </attribute>
     <attribute>
       <name>rendered</name>
-      <rtexprvalue>true</rtexprvalue>
       <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
       <type>java.lang.Object</type>
     </attribute>
   </tag>
   <tag>
     <name>selectAction</name>
     <tag-class>sonia.blog.api.jsf.select.SelectActionTag</tag-class>
-    <body-content>EMPTY</body-content>
+    <body-content>empty</body-content>
     <attribute>
       <name>style</name>
-      <rtexprvalue>true</rtexprvalue>
       <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
       <type>java.lang.Object</type>
     </attribute>
     <attribute>
       <name>styleClass</name>
-      <rtexprvalue>true</rtexprvalue>
       <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
       <type>java.lang.Object</type>
     </attribute>
     <attribute>
       <name>role</name>
-      <rtexprvalue>true</rtexprvalue>
       <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
       <type>java.lang.Object</type>
     </attribute>
     <attribute>
       <name>rendered</name>
-      <rtexprvalue>true</rtexprvalue>
       <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
       <type>java.lang.Object</type>
     </attribute>
     <attribute>
       <name>actions</name>
-      <rtexprvalue>true</rtexprvalue>
       <required>true</required>
+      <rtexprvalue>true</rtexprvalue>
       <type>java.lang.Object</type>
     </attribute>
     <attribute>
       <name>onblur</name>
-      <rtexprvalue>true</rtexprvalue>
       <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
       <type>java.lang.Object</type>
     </attribute>
     <attribute>
       <name>onchange</name>
-      <rtexprvalue>true</rtexprvalue>
       <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
       <type>java.lang.Object</type>
     </attribute>
     <attribute>
       <name>onclick</name>
-      <rtexprvalue>true</rtexprvalue>
       <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
       <type>java.lang.Object</type>
     </attribute>
     <attribute>
       <name>ondblclick</name>
-      <rtexprvalue>true</rtexprvalue>
       <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
       <type>java.lang.Object</type>
     </attribute>
     <attribute>
       <name>onfocus</name>
-      <rtexprvalue>true</rtexprvalue>
       <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
       <type>java.lang.Object</type>
     </attribute>
     <attribute>
       <name>onkeydown</name>
-      <rtexprvalue>true</rtexprvalue>
       <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
       <type>java.lang.Object</type>
     </attribute>
     <attribute>
       <name>onkeypress</name>
-      <rtexprvalue>true</rtexprvalue>
       <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
       <type>java.lang.Object</type>
     </attribute>
     <attribute>
       <name>onkeyup</name>
-      <rtexprvalue>true</rtexprvalue>
       <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
       <type>java.lang.Object</type>
     </attribute>
     <attribute>
       <name>onmousedown</name>
-      <rtexprvalue>true</rtexprvalue>
       <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
       <type>java.lang.Object</type>
     </attribute>
     <attribute>
       <name>onmousemove</name>
-      <rtexprvalue>true</rtexprvalue>
       <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
       <type>java.lang.Object</type>
     </attribute>
     <attribute>
       <name>onmouseout</name>
-      <rtexprvalue>true</rtexprvalue>
       <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
       <type>java.lang.Object</type>
     </attribute>
     <attribute>
       <name>onmouseover</name>
-      <rtexprvalue>true</rtexprvalue>
       <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
       <type>java.lang.Object</type>
     </attribute>
     <attribute>
       <name>onmouseup</name>
-      <rtexprvalue>true</rtexprvalue>
       <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.Object</type>
+    </attribute>
+  </tag>
+  <tag>
+    <name>pager</name>
+    <tag-class>sonia.blog.api.jsf.pager.PagerTag</tag-class>
+    <body-content>empty</body-content>
+    <attribute>
+      <name>for</name>
+      <required>true</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.Object</type>
+    </attribute>
+    <attribute>
+      <name>showPages</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.Object</type>
+    </attribute>
+    <attribute>
+      <name>style</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.Object</type>
+    </attribute>
+    <attribute>
+      <name>styleClass</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.Object</type>
+    </attribute>
+    <attribute>
+      <name>selectedStyle</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.Object</type>
+    </attribute>
+    <attribute>
+      <name>selectedStyleClass</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.Object</type>
+    </attribute>
+    <attribute>
+      <name>role</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.Object</type>
+    </attribute>
+    <attribute>
+      <name>rendered</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
       <type>java.lang.Object</type>
     </attribute>
   </tag>

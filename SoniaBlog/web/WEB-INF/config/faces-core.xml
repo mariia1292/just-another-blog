@@ -146,6 +146,15 @@
     </component-extension>
   </component>
 
+  <component>
+    <display-name>pager</display-name>
+    <component-type>sonia.blog.pager</component-type>
+    <component-class>sonia.blog.api.jsf.pager.PagerComponent</component-class>
+    <component-extension>
+      <renderer-type>sonia.blog.pager.renderer</renderer-type>
+    </component-extension>
+  </component>
+
   <render-kit>
     <renderer>
       <component-family>sonia.blog.link</component-family>
@@ -191,6 +200,11 @@
       <component-family>sonia.blog.selectAction</component-family>
       <renderer-type>sonia.blog.selectAction.renderer</renderer-type>
       <renderer-class>sonia.blog.api.jsf.select.SelectActionRenderer</renderer-class>
+    </renderer>
+    <renderer>
+      <component-family>sonia.blog.pager</component-family>
+      <renderer-type>sonia.blog.pager.renderer</renderer-type>
+      <renderer-class>sonia.blog.api.jsf.pager.PagerRenderer</renderer-class>
     </renderer>
   </render-kit>
     

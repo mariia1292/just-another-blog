@@ -17,10 +17,13 @@ import sonia.blog.entity.Blog;
 import sonia.blog.entity.BlogMember;
 import sonia.blog.entity.Role;
 import sonia.blog.entity.User;
+import sonia.blog.wui.model.UserDataModel;
 
 import sonia.plugin.service.ServiceReference;
 
 import sonia.security.encryption.Encryption;
+
+import sonia.util.Util;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -168,6 +171,17 @@ public class AdminUserBean extends AbstractBean
    *
    * @return
    */
+  public String getFilter()
+  {
+    return filter;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
   public DataModel getMembers()
   {
     if (members == null)
@@ -238,26 +252,44 @@ public class AdminUserBean extends AbstractBean
    */
   public DataModel getUsers()
   {
-    users = new ListDataModel();
-
-    List<User> userList = null;
-    UserDAO userDAO = BlogContext.getDAOFactory().getUserDAO();
-
-    // TODO scrolling
-    if (onlyActive)
+    if (!Util.isBlank(filter) && onlyActive)
     {
-      userList = userDAO.getAll(true, 0, 1000);
+      users = new UserDataModel(20, filter, onlyActive);
+    }
+    else if (!Util.isBlank(filter))
+    {
+      users = new UserDataModel(20, filter);
+    }
+    else if (onlyActive)
+    {
+      users = new UserDataModel(20, onlyActive);
     }
     else
     {
-      userList = userDAO.getAll(0, 1000);
+      users = new UserDataModel(20);
     }
 
-    if ((userList != null) &&!userList.isEmpty())
-    {
-      users.setWrappedData(userList);
-    }
-
+    /*
+     * users = new ListDataModel();
+     *
+     * List<User> userList = null;
+     * UserDAO userDAO = BlogContext.getDAOFactory().getUserDAO();
+     *
+     * // TODO scrolling
+     * if (onlyActive)
+     * {
+     * userList = userDAO.getAll(true, 0, 1000);
+     * }
+     * else
+     * {
+     * userList = userDAO.getAll(0, 1000);
+     * }
+     *
+     * if ((userList != null) &&!userList.isEmpty())
+     * {
+     * users.setWrappedData(userList);
+     * }
+     */
     return users;
   }
 
@@ -273,6 +305,17 @@ public class AdminUserBean extends AbstractBean
   }
 
   //~--- set methods ----------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   * @param filter
+   */
+  public void setFilter(String filter)
+  {
+    this.filter = filter;
+  }
 
   /**
    * Method description
@@ -347,6 +390,9 @@ public class AdminUserBean extends AbstractBean
   }
 
   //~--- fields ---------------------------------------------------------------
+
+  /** Field description */
+  private String filter;
 
   /** Field description */
   private DataModel members;

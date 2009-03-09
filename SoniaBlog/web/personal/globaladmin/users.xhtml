@@ -5,7 +5,9 @@
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:blog="http://jab.nitilon.org/blog/"
-      xmlns:c="http://java.sun.com/jstl/core">
+      xmlns:c="http://java.sun.com/jstl/core"
+      xmlns:t="http://myfaces.apache.org/tomahawk"
+      xmlns:u1="http://jab.nitilon.org/blog/">
 
   <body>
 
@@ -23,16 +25,27 @@
 
         <h:form>
 
-          <h:selectBooleanCheckbox value="#{AdminUserBean.onlyActive}" onchange="submit();" />
-          <h:outputText value=" #{label.showOnlyActives}" />
+          <h:panelGrid columns="3">
+
+            <h:outputLabel for="activeOnly" value=" #{label.showOnlyActives}" />
+            <h:selectBooleanCheckbox id="activeOnly" value="#{AdminUserBean.onlyActive}" />
+            <h:message for="activeOnly" />
+
+            <h:outputLabel for="filter" value="#{label.filter}" />
+            <h:inputText id="filter" value="#{AdminUserBean.filter}"  />
+            <h:message for="filter" />
+
+          </h:panelGrid>
+
+          <h:commandButton value="#{label.save}" />
 
         </h:form>
 
         <h2><h:outputText value="#{label.users}" /></h2>
 
-        <h:form>
+        <h:form id="userForm">
 
-          <h:dataTable value="#{AdminUserBean.users}" var="User">
+          <h:dataTable id="userTable" rows="20" value="#{AdminUserBean.users}" var="User">
 
             <h:column>
               <f:facet name="header">
@@ -81,6 +94,8 @@
             </h:column>
 
           </h:dataTable>
+
+          <blog:pager for="userForm:userTable" showPages="10" selectedStyle="font-weight: bold;" />
 
         </h:form>
 

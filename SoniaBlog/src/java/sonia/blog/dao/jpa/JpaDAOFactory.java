@@ -165,6 +165,17 @@ public class JpaDAOFactory extends DAOFactory
    *
    * @return
    */
+  public EntityManagerFactory getEntityManagerFactory()
+  {
+    return entityManagerFactory;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
   @Override
   public EntryDAO getEntryDAO()
   {

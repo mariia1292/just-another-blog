@@ -50,6 +50,31 @@
         select u from User u where u.name = :name and u.activationCode = :code
       </query>
     </named-query>
+    <named-query name="User.countByFilter">
+      <query>
+        select count(u) from User u where u.name like :filter
+      </query>
+    </named-query>
+    <named-query name="User.countByFilterAndActive">
+      <query>
+        select count(u) from User u where u.active = :active and u.name like :filter
+      </query>
+    </named-query>
+    <named-query name="User.countByActive">
+      <query>
+        select count(u) from User u where u.active = :active
+      </query>
+    </named-query>
+    <named-query name="User.getAllByFilter">
+      <query>
+        select u from User u where u.name like :filter
+      </query>
+    </named-query>
+    <named-query name="User.getAllByFilterAndActive">
+      <query>
+        select u from User u where u.active = :active and u.name like :filter
+      </query>
+    </named-query>
     <pre-persist method-name="prePersists" />
     <attributes>
       <id name="id">

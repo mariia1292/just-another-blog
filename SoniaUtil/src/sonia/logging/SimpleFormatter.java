@@ -42,27 +42,30 @@ public class SimpleFormatter extends Formatter
     StringBuffer result = new StringBuffer();
     Date date = new Date(record.getMillis());
 
-    result.append(dateFormat.format(date));
-    result.append(" ").append(record.getLevel().getName()).append(" ");
-    result.append("[").append(record.getLoggerName()).append("]");
-    result.append(" ");
+    if (dateFormat != null)
+    {
+      result.append(dateFormat.format(date));
+      result.append(" ").append(record.getLevel().getName()).append(" ");
+      result.append("[").append(record.getLoggerName()).append("]");
+      result.append(" ");
 
-    String message = record.getMessage();
-    Throwable thrown = record.getThrown();
+      String message = record.getMessage();
+      Throwable thrown = record.getThrown();
 
-    if ((message != null) && (thrown == null))
-    {
-      result.append(message);
-    }
-    else if ((message != null) && (thrown != null))
-    {
-      result.append(message).append("\n");
-      buildThrown(result, record, thrown);
-    }
-    else if ((message == null) && (thrown != null))
-    {
-      result.append(thrown.getMessage()).append("\n");
-      buildThrown(result, record, thrown);
+      if ((message != null) && (thrown == null))
+      {
+        result.append(message);
+      }
+      else if ((message != null) && (thrown != null))
+      {
+        result.append(message).append("\n");
+        buildThrown(result, record, thrown);
+      }
+      else if ((message == null) && (thrown != null))
+      {
+        result.append(thrown.getMessage()).append("\n");
+        buildThrown(result, record, thrown);
+      }
     }
 
     return result.toString();

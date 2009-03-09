@@ -77,4 +77,12 @@
         </component>
     </tag>
 
+    <tag>
+        <tag-name>pager</tag-name>
+        <component>
+            <component-type>sonia.blog.pager</component-type>
+            <renderer-type>sonia.blog.pager.renderer</renderer-type>
+        </component>
+    </tag>
+
 </facelet-taglib>

@@ -70,6 +70,101 @@ public class JpaUserDAO extends JpaGenericDAO<User> implements UserDAO
     return countQuery("BlogMember.countByBlog", blog);
   }
 
+  /**
+   * Method description
+   *
+   *
+   * @param filter
+   *
+   * @return
+   */
+  public long count(String filter)
+  {
+    long result = -1;
+    EntityManager em = createEntityManager();
+    Query q = em.createNamedQuery("User.countByFilter");
+
+    q.setParameter("filter", filter);
+
+    try
+    {
+      result = (Long) q.getSingleResult();
+    }
+    finally
+    {
+      if (em != null)
+      {
+        em.close();
+      }
+    }
+
+    return result;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param filter
+   * @param active
+   *
+   * @return
+   */
+  public long count(String filter, boolean active)
+  {
+    long result = -1;
+    EntityManager em = createEntityManager();
+    Query q = em.createNamedQuery("User.countByFilterAndActive");
+
+    q.setParameter("filter", filter);
+    q.setParameter("active", active);
+
+    try
+    {
+      result = (Long) q.getSingleResult();
+    }
+    finally
+    {
+      if (em != null)
+      {
+        em.close();
+      }
+    }
+
+    return result;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param active
+   *
+   * @return
+   */
+  public long count(boolean active)
+  {
+    long result = -1;
+    EntityManager em = createEntityManager();
+    Query q = em.createNamedQuery("User.countByActive");
+
+    q.setParameter("active", active);
+
+    try
+    {
+      result = (Long) q.getSingleResult();
+    }
+    finally
+    {
+      if (em != null)
+      {
+        em.close();
+      }
+    }
+
+    return result;
+  }
+
   //~--- get methods ----------------------------------------------------------
 
   /**
@@ -172,6 +267,52 @@ public class JpaUserDAO extends JpaGenericDAO<User> implements UserDAO
     EntityManager em = createEntityManager();
     Query q = em.createNamedQuery("User.getAllByActive");
 
+    q.setParameter("active", active);
+    q.setFirstResult(start);
+    q.setMaxResults(max);
+
+    return excecuteListQuery(em, q);
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param filter
+   * @param start
+   * @param max
+   *
+   * @return
+   */
+  public List<User> getAll(String filter, int start, int max)
+  {
+    EntityManager em = createEntityManager();
+    Query q = em.createNamedQuery("User.getAllByFilter");
+
+    q.setParameter("filter", filter);
+    q.setFirstResult(start);
+    q.setMaxResults(max);
+
+    return excecuteListQuery(em, q);
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param filter
+   * @param active
+   * @param start
+   * @param max
+   *
+   * @return
+   */
+  public List<User> getAll(String filter, boolean active, int start, int max)
+  {
+    EntityManager em = createEntityManager();
+    Query q = em.createNamedQuery("User.getAllByFilterAndActive");
+
+    q.setParameter("filter", filter);
     q.setParameter("active", active);
     q.setFirstResult(start);
     q.setMaxResults(max);

@@ -139,6 +139,10 @@ public class RegexMacroParser extends MacroParser
     {
       method = clazz.getDeclaredMethod(name, String.class);
     }
+    catch ( NoSuchMethodException ex)
+    {
+      // do nothing
+    }
     catch (Exception ex)
     {
       logger.log(Level.WARNING, null, ex);
