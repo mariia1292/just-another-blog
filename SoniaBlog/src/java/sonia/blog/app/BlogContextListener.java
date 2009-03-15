@@ -12,8 +12,10 @@ package sonia.blog.app;
 import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.app.BlogRequestListener;
 import sonia.blog.api.app.Constants;
+import sonia.blog.api.app.Context;
 import sonia.blog.api.dao.DAOFactory;
 import sonia.blog.api.dao.DAOListener;
+import sonia.blog.api.dao.Dao;
 import sonia.blog.api.editor.AttachmentHandler;
 import sonia.blog.api.link.LinkBuilder;
 import sonia.blog.api.mapping.MappingHandler;
@@ -42,6 +44,7 @@ import sonia.config.Config;
 import sonia.config.ConfigInjector;
 
 import sonia.injection.InjectionProvider;
+import sonia.injection.ObjectInjector;
 
 import sonia.logging.SimpleFormatter;
 
@@ -125,14 +128,15 @@ public class BlogContextListener implements ServletContextListener
       context.setServletContext(event.getServletContext());
       initFileNameMap();
       configureLogger();
-      initInjectionProvider(context);
       initServices(context);
-      initMacros();
-
+      
       if (context.isInstalled())
       {
         BlogContext.getDAOFactory().init();
       }
+
+      initInjectionProvider(context);
+      initMacros();
 
       File pluginStore = context.getResourceManager().getDirectory(
                              Constants.RESOURCE_PLUGINSTORE);
@@ -259,6 +263,9 @@ public class BlogContextListener implements ServletContextListener
         Service.class, new ServiceInjector(context.getServiceRegistry()));
     provider.registerInjector(Config.class,
                               new ConfigInjector(context.getConfiguration()));
+    provider.registerInjector(Context.class, new ObjectInjector(context));
+    provider.registerInjector(Dao.class,
+                              new ObjectInjector(BlogContext.getDAOFactory()));
     context.getMacroParser().setInjectionProvider(provider);
   }
 

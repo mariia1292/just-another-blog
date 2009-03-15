@@ -3,10 +3,17 @@
  * and open the template in the editor.
  */
 
+
+
 package sonia.blog.api.util;
 
-import java.util.Map;
+//~--- non-JDK imports --------------------------------------------------------
+
 import sonia.blog.api.app.BlogRequest;
+
+//~--- JDK imports ------------------------------------------------------------
+
+import java.util.Map;
 
 /**
  *
@@ -14,6 +21,23 @@ import sonia.blog.api.app.BlogRequest;
  */
 public interface SelectAction
 {
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
   public String getLable();
-  public String getOutput( BlogRequest request, Map<String,?> param );
+
+  /**
+   * Method description
+   *
+   *
+   * @param request
+   * @param param
+   *
+   * @return
+   */
+  public String getOutput(BlogRequest request, Map<String, ?> param);
 }

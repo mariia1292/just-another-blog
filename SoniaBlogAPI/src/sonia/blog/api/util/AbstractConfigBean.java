@@ -77,7 +77,7 @@ public abstract class AbstractConfigBean extends AbstractBean
       try
       {
         config.store();
-        getMessageHandler().info( "successStoreConfig" );
+        getMessageHandler().info("successStoreConfig");
       }
       catch (Exception ex)
       {

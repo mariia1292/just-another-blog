@@ -9,13 +9,12 @@ package sonia.blog.wui;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import sonia.blog.api.app.BlogConfiguration;
 import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.app.Constants;
 import sonia.blog.api.dao.UserDAO;
 import sonia.blog.api.util.AbstractBean;
 import sonia.blog.entity.User;
-
-import sonia.config.XmlConfiguration;
 
 import sonia.plugin.service.ServiceReference;
 
@@ -36,7 +35,7 @@ public class UserSettingsBean extends AbstractBean
   {
     super();
 
-    XmlConfiguration config = BlogContext.getInstance().getConfiguration();
+    BlogConfiguration config = BlogContext.getInstance().getConfiguration();
 
     passwordMinLength = config.getInteger(Constants.CONFIG_PASSWORD_MINLENGTH,
             Constants.DEFAULT_PASSWORD_MINLENGTH);

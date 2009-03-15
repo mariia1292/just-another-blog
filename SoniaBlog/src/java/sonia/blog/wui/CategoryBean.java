@@ -13,6 +13,7 @@ import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.dao.CategoryDAO;
 import sonia.blog.api.util.AbstractBean;
 import sonia.blog.entity.Category;
+import sonia.blog.entity.Entry;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -20,7 +21,6 @@ import java.util.List;
 
 import javax.faces.model.DataModel;
 import javax.faces.model.ListDataModel;
-import sonia.blog.entity.Entry;
 
 /**
  *

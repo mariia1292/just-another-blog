@@ -18,8 +18,6 @@ import sonia.blog.api.search.SearchContext;
 import sonia.blog.api.template.TemplateManager;
 import sonia.blog.entity.Blog;
 
-import sonia.config.XmlConfiguration;
-
 import sonia.injection.DefaultInjectionProvider;
 import sonia.injection.InjectionProvider;
 
@@ -404,7 +402,7 @@ public class BlogContext
   {
     if (resourceManager == null)
     {
-      XmlConfiguration config = getConfiguration();
+      BlogConfiguration config = getConfiguration();
       String resourcePath =
         config.getString(Constants.CONFIG_RESOURCE_DIRECTORY);
 

@@ -9,18 +9,12 @@ package sonia.blog.util;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import sonia.blog.api.app.BlogConfiguration;
 import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.app.BlogRequest;
 import sonia.blog.api.app.BlogRuntimeException;
 import sonia.blog.api.app.Constants;
-import sonia.blog.api.editor.AttachmentHandler;
 import sonia.blog.api.util.AbstractBean;
-import sonia.blog.entity.Attachment;
-
-import sonia.config.XmlConfiguration;
-
-import sonia.plugin.service.ServiceReference;
-import sonia.plugin.service.ServiceRegistry;
 
 import sonia.util.Util;
 
@@ -220,7 +214,7 @@ public class BlogUtil
                               String text)
           throws MessagingException
   {
-    XmlConfiguration config = BlogContext.getInstance().getConfiguration();
+    BlogConfiguration config = BlogContext.getInstance().getConfiguration();
     Properties props = new Properties(System.getProperties());
     String server = config.getString(Constants.CONFIG_SMTPSERVER);
 

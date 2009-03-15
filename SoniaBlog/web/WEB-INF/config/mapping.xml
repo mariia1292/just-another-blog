@@ -70,4 +70,9 @@
     <class>sonia.blog.mapping.remote.XMLRPCMapping</class>
   </mapping>
 
+  <mapping>
+    <regex>^/trackback/([0-9]*)$</regex>
+    <class>sonia.blog.mapping.remote.TrackbackMapping</class>
+  </mapping>
+
 </mappings>

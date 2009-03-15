@@ -13,6 +13,7 @@ import java.lang.annotation.Annotation;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
@@ -52,6 +53,15 @@ public abstract class InjectionProvider
   public void registerInjector(Class<? extends Annotation> annotation,
                                Injector injector)
   {
+    if (logger.isLoggable(Level.FINEST))
+    {
+      StringBuffer msg = new StringBuffer();
+
+      msg.append("register injector ").append(injector.getClass().getName());
+      msg.append(" for ").append(annotation.getClass().getName());
+      logger.finest(msg.toString());
+    }
+
     injectorMap.put(annotation, injector);
   }
 
@@ -63,6 +73,15 @@ public abstract class InjectionProvider
    */
   public void unregisterInjector(Class<? extends Annotation> annotation)
   {
+    if (logger.isLoggable(Level.FINEST))
+    {
+      StringBuffer msg = new StringBuffer();
+
+      msg.append("unregister Injector for ");
+      msg.append(annotation.getClass().getName());
+      logger.finest(msg.toString());
+    }
+
     injectorMap.remove(annotation);
   }
 

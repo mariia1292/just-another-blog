@@ -51,13 +51,11 @@ public abstract class AbstractBlogMacro implements Macro
    * @param linkBase
    * @param object
    * @param body
-   * @param parameters
    *
    * @return
    */
-  protected abstract String doBody(FacesContext facesContext,
-                                     String linkBase, ContentObject object,
-                                     String body);
+  protected abstract String doBody(FacesContext facesContext, String linkBase,
+                                   ContentObject object, String body);
 
   /**
    * Method description
@@ -65,7 +63,6 @@ public abstract class AbstractBlogMacro implements Macro
    *
    * @param environment
    * @param body
-   * @param parameters
    *
    * @return
    */

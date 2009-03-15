@@ -9,6 +9,7 @@ package sonia.blog.app;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import sonia.blog.api.app.BlogConfiguration;
 import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.app.BlogRequest;
 import sonia.blog.api.app.BlogRequestListener;
@@ -16,8 +17,6 @@ import sonia.blog.api.app.BlogResponse;
 import sonia.blog.api.app.Constants;
 import sonia.blog.api.authentication.LoginBean;
 import sonia.blog.entity.Blog;
-
-import sonia.config.XmlConfiguration;
 
 import sonia.plugin.service.ServiceReference;
 
@@ -156,7 +155,7 @@ public class BlogContextFilter implements Filter
   //~--- fields ---------------------------------------------------------------
 
   /** Field description */
-  private XmlConfiguration configuration;
+  private BlogConfiguration configuration;
 
   /** Field description */
   private ServiceReference<BlogRequestListener> listenerReference;

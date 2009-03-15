@@ -166,22 +166,17 @@ public class ListMapping extends ScrollableFilterMapping
    *
    * @param request
    * @param start
-   * @param end
+   * @param max
    *
    * @return
    */
-  private String handleListView(BlogRequest request, int start, int end)
+  private String handleListView(BlogRequest request, int start, int max)
   {
     Blog blog = request.getCurrentBlog();
     EntryDAO entryDAO = BlogContext.getDAOFactory().getEntryDAO();
-    List<Entry> entries = entryDAO.findAllActivesByBlog(blog, start, end + 1);
+    List<Entry> entries = entryDAO.findAllActivesByBlog(blog, start, max + 1);
     String prevUri = null;
     String nextUri = null;
-
-    if (logger.isLoggable(Level.FINER))
-    {
-      logger.finer("set entry list(" + entries.size() + ") to BlogBean");
-    }
 
     if (start > 0)
     {
@@ -195,28 +190,26 @@ public class ListMapping extends ScrollableFilterMapping
 
     int size = entries.size();
 
-    if ((entries != null) && (size > end - start))
+    if ((entries != null) && (size > max))
     {
       int page = getCurrentPage(request);
-      int entriesPerPage = blog.getEntriesPerPage();
 
-      if (size > (page * entriesPerPage))
-      {
-        nextUri = getPageUri(request, page + 1);
-      }
-
-      size--;
-
-      if (size < end)
-      {
-        end = size;
-      }
-
-      entries = entries.subList(0, end);
+      nextUri = getPageUri(request, page + 1);
     }
+    else if (size < max)
+    {
+      max = size;
+    }
+
+    entries = entries.subList(0, max);
 
     BlogBean blogBean = BlogUtil.getSessionBean(request, BlogBean.class,
                           BlogBean.NAME);
+
+    if (logger.isLoggable(Level.FINER))
+    {
+      logger.finer("set entry list(" + entries.size() + ") to BlogBean");
+    }
 
     blogBean.setPageEntries(new ListDataModel(entries));
 

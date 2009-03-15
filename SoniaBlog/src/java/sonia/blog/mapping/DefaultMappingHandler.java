@@ -149,9 +149,9 @@ public class DefaultMappingHandler implements MappingHandler
 
     if (mappingClass != null)
     {
-      if (logger.isLoggable(Level.FINE))
+      if (logger.isLoggable(Level.FINER))
       {
-        logger.fine("handle mapping using " + mappingClass.getName());
+        logger.finer("handle mapping using " + mappingClass.getName());
       }
 
       Mapping mapping = null;

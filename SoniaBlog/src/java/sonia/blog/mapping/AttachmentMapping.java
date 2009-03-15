@@ -19,8 +19,7 @@ import sonia.blog.entity.Attachment;
 import sonia.blog.entity.Blog;
 import sonia.blog.entity.Role;
 
-import sonia.config.ModifyableConfiguration;
-import sonia.config.XmlConfiguration;
+import sonia.config.Config;
 
 import sonia.util.ImageUtil;
 import sonia.util.Util;
@@ -47,32 +46,6 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class AttachmentMapping extends FinalMapping
 {
-
-  /**
-   * Constructs ...
-   *
-   */
-  public AttachmentMapping()
-  {
-    loadConfig();
-  }
-
-  //~--- methods --------------------------------------------------------------
-
-  /**
-   * Method description
-   *
-   *
-   * @param config
-   * @param key
-   */
-  public void configChanged(ModifyableConfiguration config, String key)
-  {
-    if (key.startsWith("image"))
-    {
-      loadConfig();
-    }
-  }
 
   /**
    * Method description
@@ -215,22 +188,6 @@ public class AttachmentMapping extends FinalMapping
     {
       throw new RuntimeException(ex);
     }
-  }
-
-  /**
-   * Method description
-   *
-   */
-  private void loadConfig()
-  {
-    XmlConfiguration config = BlogContext.getInstance().getConfiguration();
-
-    format = config.getString(Constants.CONFIG_IMAGEFORMAT,
-                              Constants.DEFAULT_IMAGE_FORMAT);
-    extension = config.getString(Constants.CONFIG_IMAGEEXTENSION,
-                                 Constants.DEFAULT_IMAGE_EXTENSION);
-    mimeType = config.getString(Constants.CONFIG_IMAGEMIMETYPE,
-                                Constants.DEFAULT_IMAGE_MIMETYPE);
   }
 
   /**
@@ -495,11 +452,14 @@ public class AttachmentMapping extends FinalMapping
   //~--- fields ---------------------------------------------------------------
 
   /** Field description */
-  private String extension;
+  @Config(Constants.CONFIG_IMAGEEXTENSION)
+  private String extension = Constants.DEFAULT_IMAGE_EXTENSION;
 
   /** Field description */
-  private String format;
+  @Config(Constants.CONFIG_IMAGEFORMAT)
+  private String format = Constants.DEFAULT_IMAGE_FORMAT;
 
   /** Field description */
-  private String mimeType;
+  @Config(Constants.CONFIG_IMAGEMIMETYPE)
+  private String mimeType = Constants.DEFAULT_IMAGE_MIMETYPE;
 }

@@ -40,12 +40,15 @@ public abstract class AttachmentHandler implements SelectAction
    * Method description
    *
    *
+   *
+   * @param request
    * @param selection
    * @param attachment
    *
    * @return
    */
-  protected abstract String getOutput(BlogRequest request, String selection, Attachment attachment);
+  protected abstract String getOutput(BlogRequest request, String selection,
+          Attachment attachment);
 
   /**
    * Method description

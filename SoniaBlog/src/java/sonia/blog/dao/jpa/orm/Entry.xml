@@ -16,52 +16,105 @@
     </named-query>
     <named-query name="Entry.findAllActives">
       <query>
-        select e from Entry e where e.published = true order by e.publishingDate desc
+        select e from Entry e
+        where
+          e.published = true
+        order by e.publishingDate desc
       </query>
     </named-query>
     <named-query name="Entry.findAllActivesByBlog">
       <query>
-        select e from Entry e join e.blog b where b = :blog and e.published = true order by e.publishingDate desc
+        select e from Entry e join e.blog b
+        where
+          b = :blog
+        and
+          e.published = true
+        order by e.publishingDate desc
       </query>
     </named-query>
     <named-query name="Entry.findAllByBlog">
       <query>
-        select e from Entry e join e.blog b where b = :blog order by e.creationDate desc
+        select e from Entry e join e.blog b
+        where
+          b = :blog
+        order by e.creationDate desc
       </query>
     </named-query>
     <named-query name="Entry.findByCategory">
       <query>
-        select e from Entry as e where e.categories = :category and e.published = true order by e.publishingDate desc
+        select e from Entry as e 
+        where
+          e.categories = :category
+        and
+          e.published = true
+        order by e.publishingDate desc
       </query>
     </named-query>
     <named-query name="Entry.findByBlogAndTag">
       <query>
-        select e from Entry e join e.blog b join e.tags t where e.published = true and b = :blog and t = :tag order by e.publishingDate desc
+        select e from Entry e join e.blog b join e.tags t 
+        where
+          e.published = true
+        and
+          b = :blog
+        and
+          t = :tag
+        order by e.publishingDate desc
       </query>
     </named-query>
     <named-query name="Entry.findByTagId">
       <query>
-        select e from Entry e join e.tags t where e.published = true and t.id = :tagId order by e.publishingDate desc
+        select e from Entry e join e.tags t
+        where
+          e.published = true
+        and
+          t.id = :tagId
+        order by e.publishingDate desc
       </query>
     </named-query>
     <named-query name="Entry.findByTagName">
       <query>
-        select e from Entry e join e.blog b join e.tags t where b = :blog and e.published = true and t.name = :name order by e.publishingDate desc
+        select e from Entry e join e.blog b join e.tags t
+        where
+          b = :blog
+        and
+          e.published = true
+        and
+          t.name = :name
+        order by e.publishingDate desc
       </query>
     </named-query>
     <named-query name="Entry.findByCategoryId">
       <query>
-        select e From Entry e join e.categories c where c.id = :id and e.published = true order by e.publishingDate desc
+        select e From Entry e join e.categories c
+        where
+          c.id = :id
+        and
+          e.published = true
+        order by e.publishingDate desc
       </query>
     </named-query>
     <named-query name="Entry.findByBlogAndDate">
       <query>
-        select e from Entry e join e.blog b where b = :blog and e.published = true and e.creationDate between :start and :end order by e.publishingDate desc
+        select e from Entry e join e.blog b
+        where
+          b = :blog
+        and
+          e.published = true
+        and
+          e.creationDate between :start and :end
+        order by e.publishingDate desc
       </query>
     </named-query>
     <named-query name="Entry.calendar">
       <query>
-        select e.creationDate from Entry e join e.blog b where b = :blog and e.published = true and e.creationDate between :start and :end
+        select e.creationDate from Entry e join e.blog b 
+        where
+          b = :blog
+        and
+          e.published = true
+        and
+          e.creationDate between :start and :end
       </query>
     </named-query>
     <named-query name="Entry.count">
@@ -71,12 +124,21 @@
     </named-query>
     <named-query name="Entry.findAllDraftsByBlogAndUser">
       <query>
-        select e from Entry e join e.blog b where b = :blog and e.published = false and e.author = :user order by e.creationDate desc
+        select e from Entry e join e.blog b
+        where
+          b = :blog
+        and
+          e.published = false
+        and
+          e.author = :user
+        order by e.creationDate desc
       </query>
     </named-query>
     <named-query name="Entry.countByBlog">
       <query>
-        select count(e) from Entry e join e.blog b where b = :blog
+        select count(e) from Entry e join e.blog b 
+        where
+          b = :blog
       </query>
     </named-query>
     <named-query name="Entry.prev">
@@ -87,7 +149,13 @@
         and
           b = :blog
         and
-          e.publishingDate = (select max(e2.publishingDate) from Entry e2 where e2.publishingDate &lt; :date)
+          e.publishingDate = ( select max(e2.publishingDate) from Entry e2 join e2.blog b2
+                               where
+                                 e2.published = :published 
+                               and
+                                 b2 = :blog
+                               and
+                                 e2.publishingDate &lt; :date)
         order by
           e.publishingDate desc, e.title
       </query>
@@ -100,7 +168,13 @@
         and
           b = :blog
         and
-          e.publishingDate = (select min(e2.publishingDate) from Entry e2 where e2.publishingDate &gt; :date )
+          e.publishingDate = ( select min(e2.publishingDate) from Entry e2 join e2.blog b2
+                               where
+                                 e2.published = :published
+                               and
+                                 b2 = :blog
+                               and
+                                 e2.publishingDate &gt; :date )
         order by
           e.publishingDate, e.title
       </query>
@@ -113,7 +187,13 @@
         and
           c = :category
         and
-          e.publishingDate = (select max(e2.publishingDate) from Entry e2 where e2.publishingDate &lt; :date)
+          e.publishingDate = ( select max(e2.publishingDate) from Entry e2 join e2.categories c2
+                               where
+                                 e2.published = :published
+                               and
+                                 c2 = :categories
+                               and
+                                 e2.publishingDate &lt; :date )
         order by
           e.publishingDate desc, e.title
       </query>
@@ -126,7 +206,13 @@
         and
           c = :category
         and
-          e.publishingDate = (select min(e2.publishingDate) from Entry e2 where e2.publishingDate &gt; :date)
+          e.publishingDate = ( select min(e2.publishingDate) from Entry e2 join e2.categories c2
+                               where
+                                 e2.published = :published
+                               and
+                                 c2 = :category
+                               and
+                                 e2.publishingDate &gt; :date )
         order by
           e.publishingDate desc, e.title
       </query>
@@ -141,7 +227,15 @@
         and
           t = :tag
         and
-          e.publishingDate = (select max(e2.publishingDate) from Entry e2 where e2.publishingDate &lt; :date)
+          e.publishingDate = ( select max(e2.publishingDate) from Entry e2 join e2.blog b2 join e2.tags t2
+                               where
+                                 e2.published = :published
+                               and
+                                 b2 = :blog
+                               and
+                                 t2 = :tag
+                               and
+                                 e2.publishingDate &lt; :date )
         order by
           e.publishingDate desc, e.title
       </query>
@@ -156,7 +250,15 @@
         and
           t = :tag
         and
-          e.publishingDate = (select min(e2.publishingDate) from Entry e2 where e2.publishingDate &gt; :date)
+          e.publishingDate = ( select min(e2.publishingDate) from Entry e2 join e2.blog b2 join e2.tags t2
+                               where
+                                 e2.published = :published
+                               and
+                                 b2 = :blog
+                               and
+                                 t2 = :tag
+                               and
+                                 e2.publishingDate &gt; :date )
         order by
           e.publishingDate desc, e.title
       </query>

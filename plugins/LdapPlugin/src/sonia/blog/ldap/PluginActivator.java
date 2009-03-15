@@ -14,7 +14,6 @@ import sonia.blog.api.app.Constants;
 
 import sonia.config.ConfigurationListener;
 import sonia.config.ModifyableConfiguration;
-import sonia.config.XmlConfiguration;
 
 import sonia.plugin.Activator;
 import sonia.plugin.PluginContext;
@@ -25,6 +24,7 @@ import sonia.plugin.service.ServiceReference;
 import java.util.HashMap;
 
 import javax.security.auth.login.AppConfigurationEntry;
+import sonia.blog.api.app.BlogConfiguration;
 
 /**
  *
@@ -81,7 +81,7 @@ public class PluginActivator implements Activator, ConfigurationListener
 
     configReference.add("/view/ldap/config.xhtml");
 
-    XmlConfiguration config = BlogContext.getInstance().getConfiguration();
+    BlogConfiguration config = BlogContext.getInstance().getConfiguration();
 
     config.addListener(this);
     active = config.getBoolean(LdapConfigBean.CONFIG_LDAP_ENABLED,

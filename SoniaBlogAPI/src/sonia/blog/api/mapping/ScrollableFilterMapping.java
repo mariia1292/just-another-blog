@@ -97,7 +97,7 @@ public abstract class ScrollableFilterMapping extends FilterMapping
       }
 
       result = handleScrollableFilterMapping(request, response, param, start,
-              start + max);
+              max);
     }
     else
     {

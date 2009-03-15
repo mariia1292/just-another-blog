@@ -203,6 +203,7 @@ public class PagerRenderer extends BaseRenderer
       for (int i = startPage; i < endPage; i++)
       {
         boolean selected = i == currentPage;
+
         writeLink(writer, pager, formId, id, "" + (i + 1), selected);
       }
 
@@ -267,29 +268,34 @@ public class PagerRenderer extends BaseRenderer
    *
    *
    * @param writer
-   * @param component
+   * @param pager
    * @param formId
    * @param id
    * @param value
+   * @param selected
    *
    * @throws IOException
    */
   private void writeLink(ResponseWriter writer, PagerComponent pager,
-                         String formId, String id, String value, boolean selected)
+                         String formId, String id, String value,
+                         boolean selected)
           throws IOException
   {
     writer.writeText(" ", null);
     writer.startElement("a", pager);
 
-    if ( selected )
+    if (selected)
     {
       String style = pager.getSelectedStyle();
-      if ( ! Util.isBlank(style) )
+
+      if (!Util.isBlank(style))
       {
         writer.writeAttribute("style", style, null);
       }
+
       String styleClass = pager.getSelectedStyleClass();
-      if ( ! Util.isBlank( styleClass ) )
+
+      if (!Util.isBlank(styleClass))
       {
         writer.writeAttribute("class", styleClass, null);
       }

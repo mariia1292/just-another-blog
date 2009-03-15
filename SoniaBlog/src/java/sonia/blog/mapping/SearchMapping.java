@@ -279,10 +279,7 @@ public class SearchMapping extends ScrollableFilterMapping
     BlogBean blogBean = BlogUtil.getSessionBean(request, BlogBean.class,
                           BlogBean.NAME);
 
-
-      blogBean.setPageEntries(new ListDataModel(entries));
-
-
+    blogBean.setPageEntries(new ListDataModel(entries));
     navigation = new SimpleMappingNavigation(prevUri, nextUri, pattern);
 
     return buildTemplateViewId(request, Constants.TEMPLATE_LIST);

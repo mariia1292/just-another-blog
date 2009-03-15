@@ -12,9 +12,11 @@ package sonia.blog.wui;
 import org.apache.myfaces.custom.navmenu.NavigationMenuItem;
 import org.apache.myfaces.custom.navmenu.UINavigationMenuItem;
 
+import sonia.blog.api.app.BlogConfiguration;
 import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.app.BlogRequest;
 import sonia.blog.api.app.Constants;
+import sonia.blog.api.app.Context;
 import sonia.blog.api.dao.CategoryDAO;
 import sonia.blog.api.dao.CommentDAO;
 import sonia.blog.api.dao.TagDAO;
@@ -35,9 +37,6 @@ import sonia.blog.entity.CommentAble;
 import sonia.blog.entity.ContentObject;
 import sonia.blog.entity.Entry;
 import sonia.blog.entity.Tag;
-
-import sonia.config.Configuration;
-import sonia.config.XmlConfiguration;
 
 import sonia.plugin.service.Service;
 import sonia.plugin.service.ServiceReference;
@@ -64,18 +63,6 @@ public class BlogBean extends AbstractBean
 
   /** Field description */
   public static final String NAME = "BlogBean";
-
-  //~--- constructors ---------------------------------------------------------
-
-  /**
-   * Constructs ...
-   *
-   */
-  public BlogBean()
-  {
-    super();
-    config = BlogContext.getInstance().getConfiguration();
-  }
 
   //~--- methods --------------------------------------------------------------
 
@@ -253,7 +240,6 @@ public class BlogBean extends AbstractBean
   public List<NavigationMenuItem> getExtraNavigation()
   {
     BlogContext context = BlogContext.getInstance();
-    Configuration config = context.getConfiguration();
     List<NavigationMenuItem> navigation = new ArrayList<NavigationMenuItem>();
     ResourceBundle bundle = getResourceBundle("label");
     BlogRequest request = getRequest();
@@ -667,7 +653,8 @@ public class BlogBean extends AbstractBean
   private Comment comment;
 
   /** Field description */
-  private XmlConfiguration config;
+  @Context
+  private BlogConfiguration config;
 
   /** Field description */
   private List<? extends ContentObject> entries;
