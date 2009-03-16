@@ -21,7 +21,7 @@
     </named-query>
     <named-query name="Tag.findByName">
       <query>
-        select t from Tag t join t.entries e where e.published = true and t.name = :name group by t
+        select t from Tag t where t.name = :name
       </query>
     </named-query>
     <named-query name="Tag.count">

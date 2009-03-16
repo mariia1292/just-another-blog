@@ -7,6 +7,10 @@
 
 package sonia.blog.entity;
 
+//~--- non-JDK imports --------------------------------------------------------
+
+import sonia.util.Util;
+
 //~--- JDK imports ------------------------------------------------------------
 
 import java.io.Serializable;
@@ -477,7 +481,18 @@ public class Entry implements Serializable, ContentObject, CommentAble
    */
   public void setCategories(List<Category> categories)
   {
-    this.categories = categories;
+    if (Util.hasContent(this.categories))
+    {
+      for (Category c : this.categories)
+      {
+        if (!categories.contains(c))
+        {
+          c.getEntries().remove(this);
+        }
+      }
+    }
+
+    this.categories = new ArrayList<Category>(categories);
   }
 
   /**

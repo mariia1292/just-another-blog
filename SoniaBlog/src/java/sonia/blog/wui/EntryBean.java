@@ -53,9 +53,12 @@ import java.net.URLDecoder;
 import java.text.SimpleDateFormat;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
@@ -868,11 +871,12 @@ public class EntryBean extends AbstractBean
     List<Tag> oldTags = entry.getTags();
     TagDAO tagDAO = BlogContext.getDAOFactory().getTagDAO();
 
-    if ((tagString != null) && (tagString.length() > 0))
+    if (! Util.isBlank(tagString))
     {
-      String[] tagArray = tagString.split(",");
+      Set<String> tagSet = Util.createSet(tagString, ",");
 
-      for (String tag : tagArray)
+
+      for (String tag : tagSet)
       {
         tag = tag.trim();
 

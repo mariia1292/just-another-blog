@@ -31,6 +31,16 @@ public interface EntryDAO extends GenericDAO<Entry>
    * Method description
    *
    *
+   * @param category
+   *
+   * @return
+   */
+  public long count(Category category);
+
+  /**
+   * Method description
+   *
+   *
    * @param blog
    *
    * @return

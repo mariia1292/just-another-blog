@@ -9,11 +9,11 @@ package sonia.blog.wui;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.dao.CategoryDAO;
+import sonia.blog.api.dao.Dao;
+import sonia.blog.api.dao.EntryDAO;
 import sonia.blog.api.util.AbstractBean;
 import sonia.blog.entity.Category;
-import sonia.blog.entity.Entry;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -76,11 +76,10 @@ public class CategoryBean extends AbstractBean
   {
     String result = SUCCESS;
     Category cat = (Category) categories.getRowData();
-    CategoryDAO categoryDAO = BlogContext.getDAOFactory().getCategoryDAO();
 
-    if (cat.getEntries().isEmpty())
+    if (entryDAO.count(cat) == 0)
     {
-      if (categoryDAO.edit(cat))
+      if (categoryDAO.remove(cat))
       {
         getMessageHandler().info("removeCategorySuccess");
       }
@@ -108,7 +107,6 @@ public class CategoryBean extends AbstractBean
   public String save()
   {
     String result = SUCCESS;
-    CategoryDAO categoryDAO = BlogContext.getDAOFactory().getCategoryDAO();
 
     category.setBlog(getRequest().getCurrentBlog());
 
@@ -151,7 +149,6 @@ public class CategoryBean extends AbstractBean
   {
     categories = new ListDataModel();
 
-    CategoryDAO categoryDAO = BlogContext.getDAOFactory().getCategoryDAO();
     List<Category> categoryList =
       categoryDAO.findAllByBlog(getRequest().getCurrentBlog());
 
@@ -205,4 +202,12 @@ public class CategoryBean extends AbstractBean
 
   /** Field description */
   private Category category;
+
+  /** Field description */
+  @Dao
+  private CategoryDAO categoryDAO;
+
+  /** Field description */
+  @Dao
+  private EntryDAO entryDAO;
 }

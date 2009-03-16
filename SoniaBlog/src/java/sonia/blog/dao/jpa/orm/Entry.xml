@@ -141,6 +141,13 @@
           b = :blog
       </query>
     </named-query>
+    <named-query name="Entry.countByCategory">
+      <query>
+        select count(e) from Entry e
+        where
+          e.categories = :category
+      </query>
+    </named-query>
     <named-query name="Entry.prev">
       <query>
         select e from Entry e join e.blog b
@@ -344,6 +351,9 @@
       </one-to-many>
       <many-to-many name="categories" fetch="LAZY">
         <order-by>name</order-by>
+        <cascade>
+          <cascade-merge />
+        </cascade>
       </many-to-many>
       <many-to-many name="tags" fetch="LAZY">
         <order-by>name</order-by>

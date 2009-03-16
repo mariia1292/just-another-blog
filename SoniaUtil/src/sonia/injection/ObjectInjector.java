@@ -110,7 +110,7 @@ public class ObjectInjector implements Injector
 
       for (Method m : methods)
       {
-        if (m.getReturnType().isAssignableFrom(type)
+        if (type.isAssignableFrom(m.getReturnType())
             && ((m.getParameterTypes() == null)
                 || (m.getParameterTypes().length == 0)))
         {

@@ -62,6 +62,24 @@ public class JpaEntryDAO extends JpaGenericDAO<Entry> implements EntryDAO
    * Method description
    *
    *
+   * @param category
+   *
+   * @return
+   */
+  public long count(Category category)
+  {
+    EntityManager em = createEntityManager();
+    Query q = em.createNamedQuery("Entry.countByCategory");
+
+    q.setParameter("category", category);
+
+    return excecuteQuery(Long.class, em, q);
+  }
+
+  /**
+   * Method description
+   *
+   *
    * @param blog
    *
    * @return

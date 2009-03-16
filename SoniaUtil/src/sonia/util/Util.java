@@ -21,12 +21,23 @@ import java.net.URLConnection;
 
 import java.text.NumberFormat;
 
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /**
  *
  * @author sdorra
  */
 public class Util
 {
+
+  /** Field description */
+  private static Logger logger = Logger.getLogger(Util.class.getName());
+
+  //~--- methods --------------------------------------------------------------
 
   /**
    * Method description
@@ -45,6 +56,81 @@ public class Util
     {
       out.write(buffer, 0, len);
     }
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param collection
+   *
+   * @return
+   */
+  public static <T>Set<T> createSet(Collection<T> collection)
+  {
+    Set<T> set = new HashSet<T>();
+
+    for (T o : collection)
+    {
+      if (!set.add(o) && logger.isLoggable(Level.FINEST))
+      {
+        StringBuffer msg = new StringBuffer();
+
+        msg.append("remove duplicate ").append(o);
+        logger.finest(msg.toString());
+      }
+    }
+
+    return set;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param text
+   * @param delimiter
+   *
+   * @return
+   */
+  public static Set<String> createSet(String text, String delimiter)
+  {
+    Set<String> set = new HashSet<String>();
+    String[] items = text.split(delimiter);
+
+    for (String o : items)
+    {
+      o = o.trim();
+      set.add(o);
+    }
+
+    return set;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param array
+   *
+   * @return
+   */
+  public static <T>Set<T> createSet(T[] array)
+  {
+    Set<T> set = new HashSet<T>();
+
+    for (T o : array)
+    {
+      if (!set.add(o) && logger.isLoggable(Level.FINEST))
+      {
+        StringBuffer msg = new StringBuffer();
+
+        msg.append("remove duplicate ").append(o);
+        logger.finest(msg.toString());
+      }
+    }
+
+    return set;
   }
 
   /**
@@ -271,8 +357,47 @@ public class Util
    *
    * @return
    */
+  public static boolean hasContent(String value)
+  {
+    return (value != null) && (value.length() > 0);
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param collection
+   *
+   * @return
+   */
+  public static boolean hasContent(Collection<?> collection)
+  {
+    return (collection != null) &&!collection.isEmpty();
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param value
+   *
+   * @return
+   */
   public static boolean isBlank(String value)
   {
     return (value == null) || (value.length() == 0);
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param collection
+   *
+   * @return
+   */
+  public static boolean isEmpty(Collection<?> collection)
+  {
+    return (collection == null) || collection.isEmpty();
   }
 }
