@@ -567,6 +567,40 @@ public class JpaEntryDAO extends JpaGenericDAO<Entry> implements EntryDAO
    *
    *
    * @param blog
+   * @param startDate
+   * @param endDate
+   * @param entry
+   * @param published
+   *
+   * @return
+   */
+  public Entry getNextEntry(Blog blog, Date startDate, Date endDate,
+                            Entry entry, Boolean published)
+  {
+    Entry nextEntry = null;
+    EntityManager em = createEntityManager();
+    Query q = em.createNamedQuery("Entry.dateNext");
+
+    q.setParameter("start", startDate);
+    q.setParameter("end", endDate);
+    q.setParameter("blog", blog);
+    q.setParameter("published", published);
+    q.setParameter("date", entry.getPublishingDate());
+
+    try
+    {
+      nextEntry = (Entry) q.getSingleResult();
+    }
+    catch (NoResultException ex) {}
+
+    return nextEntry;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param blog
    * @param entry
    * @param published
    *
@@ -652,5 +686,39 @@ public class JpaEntryDAO extends JpaGenericDAO<Entry> implements EntryDAO
     catch (NoResultException ex) {}
 
     return nextEntry;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param blog
+   * @param startDate
+   * @param endDate
+   * @param entry
+   * @param published
+   *
+   * @return
+   */
+  public Entry getPreviousEntry(Blog blog, Date startDate, Date endDate,
+                                Entry entry, Boolean published)
+  {
+    Entry prevEntry = null;
+    EntityManager em = createEntityManager();
+    Query q = em.createNamedQuery("Entry.datePrev");
+
+    q.setParameter("start", startDate);
+    q.setParameter("end", endDate);
+    q.setParameter("blog", blog);
+    q.setParameter("published", published);
+    q.setParameter("date", entry.getPublishingDate());
+
+    try
+    {
+      prevEntry = (Entry) q.getSingleResult();
+    }
+    catch (NoResultException ex) {}
+
+    return prevEntry;
   }
 }

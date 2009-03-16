@@ -23,7 +23,8 @@ public class FlowPlayerHandler extends AttachmentHandler
 {
 
   /** Field description */
-  private static final String EXTENSION = "flv";
+  private static final String EXTENSIONS[] = new String[] { "flv", "f4v", "f4p",
+          "f4a", "f4b" };
 
   /** Field description */
   private static final String LABEL = "FlowPlayer";
@@ -40,9 +41,20 @@ public class FlowPlayerHandler extends AttachmentHandler
    */
   public boolean appendHandler(Attachment attachment)
   {
+    boolean result = false;
     String ext = Util.getExtension(attachment.getName());
 
-    return EXTENSION.equalsIgnoreCase(ext);
+    for (String extension : EXTENSIONS)
+    {
+      if (extension.equalsIgnoreCase(ext))
+      {
+        result = true;
+
+        break;
+      }
+    }
+
+    return result;
   }
 
   //~--- get methods ----------------------------------------------------------

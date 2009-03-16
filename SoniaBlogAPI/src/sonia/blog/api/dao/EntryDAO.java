@@ -274,6 +274,36 @@ public interface EntryDAO extends GenericDAO<Entry>
    *
    *
    * @param blog
+   * @param startDate
+   * @param endDate
+   * @param entry
+   * @param published
+   *
+   * @return
+   */
+  public Entry getNextEntry(Blog blog, Date startDate, Date endDate,
+                            Entry entry, Boolean published);
+
+  /**
+   * Method description
+   *
+   *
+   * @param blog
+   * @param startDate
+   * @param endDate
+   * @param entry
+   * @param published
+   *
+   * @return
+   */
+  public Entry getPreviousEntry(Blog blog, Date startDate, Date endDate,
+                                Entry entry, Boolean published);
+
+  /**
+   * Method description
+   *
+   *
+   * @param blog
    * @param entry
    * @param published
    *

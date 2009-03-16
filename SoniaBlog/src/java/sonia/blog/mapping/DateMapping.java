@@ -104,7 +104,9 @@ public class DateMapping extends ScrollableFilterMapping
         {
           Long id = Long.parseLong(param[1]);
 
-          result = handleDetailView(request, response, id, startDate, endDate);
+          result = handleDetailView(request, response,
+                                    "/date/" + param[0] + "/", id, startDate,
+                                    endDate);
         }
         else
         {
@@ -131,6 +133,7 @@ public class DateMapping extends ScrollableFilterMapping
    *
    * @param request
    * @param response
+   * @param uriPrefix
    * @param id
    * @param startDate
    * @param endDate
@@ -140,7 +143,8 @@ public class DateMapping extends ScrollableFilterMapping
    * @throws IOException
    */
   private String handleDetailView(BlogRequest request, BlogResponse response,
-                                  Long id, Date startDate, Date endDate)
+                                  String uriPrefix, Long id, Date startDate,
+                                  Date endDate)
           throws IOException
   {
     Blog blog = request.getCurrentBlog();
@@ -162,11 +166,31 @@ public class DateMapping extends ScrollableFilterMapping
       logger.finer("set entry(" + entry.getId() + ") to BlogBean");
     }
 
-    // TODO: find next and previous
     BlogBean blogBean = BlogUtil.getSessionBean(request, BlogBean.class,
                           BlogBean.NAME);
 
     blogBean.setEntry(entry);
+
+    Entry next = entryDAO.getNextEntry(blog, startDate, endDate, entry, true);
+    Entry prev = entryDAO.getPreviousEntry(blog, startDate, endDate, entry,
+                   true);
+    LinkBuilder linkBuilder = BlogContext.getInstance().getLinkBuilder();
+    String nextUri = null;
+    String prevUri = null;
+
+    if (prev != null)
+    {
+      prevUri = uriPrefix + prev.getId() + ".jab";
+      prevUri = linkBuilder.buildLink(request, prevUri);
+    }
+
+    if (next != null)
+    {
+      nextUri = uriPrefix + next.getId() + ".jab";
+      nextUri = linkBuilder.buildLink(request, nextUri);
+    }
+
+    navigation = new SimpleMappingNavigation(prevUri, nextUri);
 
     return buildTemplateViewId(blog, Constants.TEMPLATE_DETAIL);
   }
