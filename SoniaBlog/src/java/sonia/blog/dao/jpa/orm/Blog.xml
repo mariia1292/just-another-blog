@@ -9,9 +9,14 @@
   </persistence-unit-metadata>
   <package>sonia.blog.entity</package>
   <entity metadata-complete="true" name="Blog" class="sonia.blog.entity.Blog">
-    <named-query name="Blog.findByIdentifier">
+    <named-query name="Blog.getByIdentifier">
       <query>
-        select b from Blog as b where b.active = true and b.identifier = :identifier
+        select b from Blog as b where b.identifier = :identifier
+      </query>
+    </named-query>
+        <named-query name="Blog.getByIdentifierAndActive">
+      <query>
+        select b from Blog as b where b.active = :active and b.identifier = :identifier
       </query>
     </named-query>
     <named-query name="Blog.findAll">
@@ -19,9 +24,9 @@
         select b from Blog b
       </query>
     </named-query>
-    <named-query name="Blog.findAllActives">
+    <named-query name="Blog.getByActive">
       <query>
-        select b from Blog b where b.active = true
+        select b from Blog b where b.active = :active
       </query>
     </named-query>
     <named-query name="Blog.count">

@@ -65,7 +65,7 @@ public class BlogCreationBean extends AbstractBean
 
     String result = SUCCESS;
     BlogDAO blogDAO = BlogContext.getDAOFactory().getBlogDAO();
-    Blog b = blogDAO.findByIdentifier(blog.getIdentifier());
+    Blog b = blogDAO.get(blog.getIdentifier());
 
     if (b == null)
     {

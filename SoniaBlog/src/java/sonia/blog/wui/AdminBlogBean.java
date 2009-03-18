@@ -88,7 +88,7 @@ public class AdminBlogBean extends AbstractBean
   public boolean checkServername(BlogDAO blogDAO)
   {
     boolean result = true;
-    Blog b = blogDAO.findByIdentifier(blog.getIdentifier());
+    Blog b = blogDAO.get(blog.getIdentifier());
 
     if ((b != null) &&!b.equals(blog))
     {

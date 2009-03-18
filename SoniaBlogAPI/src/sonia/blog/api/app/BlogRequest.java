@@ -13,7 +13,6 @@ import sonia.blog.api.authentication.LoginBean;
 import sonia.blog.api.dao.BlogDAO;
 import sonia.blog.api.mapping.Mapping;
 import sonia.blog.entity.Blog;
-import sonia.blog.entity.BlogMember;
 import sonia.blog.entity.Role;
 import sonia.blog.entity.User;
 
@@ -89,7 +88,7 @@ public class BlogRequest extends HttpServletRequestWrapper
       String servername = getServerName();
       BlogDAO blogDAO = BlogContext.getDAOFactory().getBlogDAO();
 
-      blog = blogDAO.findByIdentifier(servername);
+      blog = blogDAO.get(servername, true);
 
       if (blog == null)
       {
