@@ -1,0 +1,47 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:t="http://myfaces.apache.org/tomahawk">
+  <head>
+    <script type="text/javascript" src="${facesContext.externalContext.requestContextPath}/resources/tiny_mce/tiny_mce_popup.js"></script>
+    <ui:insert name="head" />
+  </head>
+  <body>
+
+    <h:messages />
+
+    <ui:insert name="content" />
+
+    <ui:insert name="footer">
+      <hr />
+
+      <h3><h:outputText value="#{label.uploadFiles}" /></h3>
+
+      <div class="upload">
+
+        <h:form enctype="multipart/form-data">
+
+          <h:panelGrid columns="2">
+
+            <h:outputText value="#{label.description}" />
+            <h:outputText value="#{label.file}" />
+
+            <h:inputText value="#{EntryBean.uploadDescription}" />
+            <t:inputFileUpload value="#{EntryBean.uploadedFile}" />
+
+          </h:panelGrid>
+          
+          <h:selectBooleanCheckbox id="unzip" value="#{EntryBean.unzipFiles}" />
+          <h:outputLabel for="unzip" value="#{label.unzipFiles}" /><br />
+          <h:commandButton value="#{label.upload}" action="#{EntryBean.upload}" />
+
+        </h:form>
+
+      </div>
+    </ui:insert>
+
+  </body>
+</html>
+

@@ -1,0 +1,63 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:t="http://myfaces.apache.org/tomahawk"
+      xmlns:h="http://java.sun.com/jsf/html">
+
+  <body>
+
+    <ui:composition template="/template/admin/template.xhtml">
+
+      <ui:define name="info">
+
+        <h:panelGroup>
+
+          <h3><h:outputText value="#{label.user}" /></h3>
+          <h:form id="readerNavForm">
+            <t:panelNavigation2 id="readerNav" layout="list">
+              <t:navigationMenuItems value="#{PersonalBean.readerNavigation}" />
+            </t:panelNavigation2>
+          </h:form>
+
+        </h:panelGroup>
+
+        <h:panelGroup rendered="#{PersonalBean.author}">
+
+          <h3><h:outputText value="#{label.author}" /></h3>
+          <h:form id="authorNavForm">
+            <t:panelNavigation2 id="authorNav" layout="list">
+              <t:navigationMenuItems value="#{PersonalBean.authorNavigation}" />
+            </t:panelNavigation2>
+          </h:form>
+
+        </h:panelGroup>
+
+        <h:panelGroup rendered="#{PersonalBean.admin}">
+
+          <h3><h:outputText value="#{label.administration}" /></h3>
+          <h:form id="adminNavForma">
+            <t:panelNavigation2 id="adminNav" layout="list">
+              <t:navigationMenuItems value="#{PersonalBean.adminNavigation}" />
+            </t:panelNavigation2>
+          </h:form>
+
+        </h:panelGroup>
+
+        <h:panelGroup rendered="#{PersonalBean.gloablAdmin}">
+
+          <h3><h:outputText value="#{label.globalAdministration}" /></h3>
+          <h:form id="globalAdminNavForm">
+            <t:panelNavigation2 id="globalAdminNav" layout="list">
+              <t:navigationMenuItems value="#{PersonalBean.globalAdminNavigation}" />
+            </t:panelNavigation2>
+          </h:form>
+
+        </h:panelGroup>
+
+      </ui:define>
+
+    </ui:composition>
+
+  </body>
+</html>

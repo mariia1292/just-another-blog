@@ -1,0 +1,80 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:blog="http://jab.nitilon.org/blog/">
+
+  <body>
+
+    <ui:composition>
+
+      <h2><h:outputText value="#{ldapMsg.ldapConfig}" /></h2>
+
+      <h:form>
+
+        <h:panelGrid columns="3">
+
+          <h:outputLabel for="enabled" value="#{ldapMsg.enabled}" />
+          <h:selectBooleanCheckbox id="enabled" value="#{LdapConfigBean.enabled}" />
+          <h:message for="enabled" />
+
+          <h:outputLabel for="host" value="#{ldapMsg.host}" />
+          <h:inputText id="host" value="#{LdapConfigBean.host}" />
+          <h:message for="host" />
+
+          <h:outputLabel for="port" value="#{ldapMsg.port}" />
+          <h:inputText id="port" value="#{LdapConfigBean.port}" />
+          <h:message for="port" />
+
+          <h:outputLabel for="ssl" value="#{ldapMsg.ssl}" />
+          <h:selectBooleanCheckbox id="ssl" value="#{LdapConfigBean.ssl}" />
+          <h:message for="ssl" />
+
+          <h:outputLabel for="user" value="#{ldapMsg.user}" />
+          <h:inputText id="user" value="#{LdapConfigBean.user}" />
+          <h:message for="user" />
+
+          <h:outputLabel for="password" value="#{ldapMsg.password}" />
+          <h:inputSecret id="password" value="#{LdapConfigBean.password}" />
+          <h:message for="password" />
+
+          <h:outputLabel for="baseDn" value="#{ldapMsg.baseDn}" />
+          <h:inputText id="baseDn" value="#{LdapConfigBean.baseDn}" />
+          <h:message for="baseDn" />
+
+          <h:outputLabel for="filter" value="#{ldapMsg.filter}" />
+          <h:inputText id="filter" value="#{LdapConfigBean.filter}" />
+          <h:message for="filter" />
+
+          <h:outputLabel for="scope" value="#{ldapMsg.scope}" />
+          <h:selectOneMenu id="scope" value="#{LdapConfigBean.scope}">
+            <f:selectItem itemValue="object" itemLabel="Object" />
+            <f:selectItem itemValue="one" itemLabel="One" />
+            <f:selectItem itemValue="sub" itemLabel="Sub" />
+          </h:selectOneMenu>
+          <h:message for="scope" />
+
+          <h:outputLabel for="nameAttribute" value="#{ldapMsg.nameAttribute}" />
+          <h:inputText id="nameAttribute" value="#{LdapConfigBean.nameAttribute}" />
+          <h:message for="nameAttribute" />
+
+          <h:outputLabel for="displayNameAttribute" value="#{ldapMsg.displayNameAttribute}" />
+          <h:inputText id="displayNameAttribute" value="#{LdapConfigBean.displayNameAttribute}" />
+          <h:message for="displayNameAttribute" />
+
+          <h:outputLabel for="mailAttribute" value="#{ldapMsg.mailAttribute}" />
+          <h:inputText id="mailAttribute" value="#{LdapConfigBean.mailAttribute}" />
+          <h:message for="mailAttribute" />
+
+        </h:panelGrid>
+
+        <h:commandButton action="#{LdapConfigBean.save}" value="#{label.save}" />
+
+      </h:form>
+
+    </ui:composition>
+
+  </body>
+</html>

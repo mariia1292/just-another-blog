@@ -1,0 +1,77 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core">
+  
+  <body>
+    
+    <ui:composition template="../template.xhtml">
+      
+      <ui:define name="title">
+        <h:outputText value="#{label.comments}" />
+      </ui:define>
+      
+      <ui:define name="content">
+      
+        <h1><h:outputText value="#{label.comments}" /></h1>
+        
+        <h:form>
+          
+          <h:dataTable value="#{CommentBean.comments}" var="Comment">
+            
+            <h:column>
+              <f:facet name="header">
+                <h:outputText value="#{label.address}" />
+              </f:facet>
+              <h:outputText value="#{Comment.authorAddress}" />
+            </h:column>
+            
+            <h:column>
+              <f:facet name="header">
+                <h:outputText value="#{label.entry}" />
+              </f:facet>
+              <h:outputText value="#{Comment.entry.title}" />
+            </h:column>
+            
+            <h:column>
+              <f:facet name="header">
+                <h:outputText value="#{label.comment}" />
+              </f:facet>
+              <h:outputText value="#{Comment.authorName}: " />
+              <h:outputText value="#{Comment.content}" />
+            </h:column>
+            
+            <h:column>
+              <f:facet name="header">
+                <h:outputText value="#{label.details}" />
+              </f:facet>
+              <h:commandLink value="#{label.details}" action="#{CommentBean.details}" />
+            </h:column>
+            
+            <h:column>
+              <f:facet name="header">
+                <h:outputText value="#{label.spam}" />
+              </f:facet>
+              <h:commandLink value="#{label.noSpam}" actionListener="#{CommentBean.toggleSpam}" rendered="#{Comment.spam}" />
+              <h:commandLink value="#{label.spam}" actionListener="#{CommentBean.toggleSpam}" rendered="#{!Comment.spam}" />
+            </h:column>
+            
+            <h:column>
+              <f:facet name="header">
+                <h:outputText value="#{label.remove}" />
+              </f:facet>
+              <h:commandLink value="#{label.remove}" actionListener="#{CommentBean.remove}" />
+            </h:column>
+            
+          </h:dataTable>
+          
+        </h:form>
+        
+      </ui:define>
+      
+    </ui:composition>
+    
+  </body>
+</html>

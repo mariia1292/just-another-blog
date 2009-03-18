@@ -1,0 +1,60 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+  <body>
+
+    <ui:composition template="./template/admin/template.xhtml">
+
+      <ui:define name="title">
+        <h:outputText value="#{label.registration}" />
+      </ui:define>
+      
+      <ui:define name="content">
+
+        <h1><h:outputText value="#{label.registration}" /></h1>
+
+        <h:form id="regform">
+
+          <h:panelGrid columns="3">
+
+            <h:outputLabel for="username" value="#{label.username}" />
+            <h:inputText id="username" value="#{RegistrationBean.user.name}" required="true" />
+            <h:message for="username" />
+
+            <h:outputLabel for="displayName" value="#{label.displayName}" />
+            <h:inputText id="displayName" value="#{RegistrationBean.user.displayName}" required="true" />
+            <h:message for="displayName" />
+
+            <h:outputLabel for="email" value="#{label.email}" />
+            <h:inputText id="email" value="#{RegistrationBean.user.email}" required="true">
+              <f:validator validatorId="validator.mail" />
+            </h:inputText>
+            <h:message for="email" />
+
+            <h:outputLabel for="password" value="#{label.password}" />
+            <h:inputSecret id="password" value="#{RegistrationBean.user.password}" required="true" />
+            <h:message for="password" />
+
+            <h:outputLabel for="passwordRepeat" value="#{label.passwordRepeat}" />
+            <h:inputSecret id="passwordRepeat" value="#{RegistrationBean.passwordRepeat}" required="true" />
+            <h:message for="passwordRepeat" />
+
+          </h:panelGrid>
+
+          <h:commandButton value="#{label.save}" action="#{RegistrationBean.save}" />
+
+        </h:form>
+
+      </ui:define>
+
+      <ui:define name="info">
+      </ui:define>
+
+    </ui:composition>
+
+  </body>
+</html>

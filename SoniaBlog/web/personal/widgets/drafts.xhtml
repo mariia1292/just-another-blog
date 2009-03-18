@@ -1,0 +1,37 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core">
+  <body>
+
+    <ui:composition>
+
+      <h3><h:outputText value="#{label.drafts}" /></h3>
+
+      <h:form>
+
+        <h:dataTable styleClass="small" value="#{DashboardBean.drafts}" var="Draft">
+
+          <h:column>
+            <h:outputText value="#{Draft.creationDate}">
+              <f:convertDateTime pattern="#{BlogBean.blog.dateFormat}" />
+            </h:outputText>
+          </h:column>
+
+          <h:column>
+            <h:commandLink value="#{Draft.title}" action="#{DashboardBean.editDraft}" />
+          </h:column>
+
+        </h:dataTable>
+
+        <h:outputText value="#{message.noDraftsFound}" rendered="#{DashboardBean.drafts.rowCount == 0}" />
+
+      </h:form>
+
+    </ui:composition>
+
+  </body>
+</html>
+

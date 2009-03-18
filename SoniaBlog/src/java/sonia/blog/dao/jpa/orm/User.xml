@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entity-mappings version="1.0" xmlns="http://java.sun.com/xml/ns/persistence/orm"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/persistence/orm http://java.sun.com/xml/ns/persistence/orm_1_0.xsd">
+  <persistence-unit-metadata>
+    <persistence-unit-defaults>
+      <access>FIELD</access>
+    </persistence-unit-defaults>
+  </persistence-unit-metadata>
+  <package>sonia.blog.entity</package>
+  <entity metadata-complete="true" name="User" class="sonia.blog.entity.User">
+    <table name="BlogUser" />
+    <named-query name="User.count">
+      <query>
+        select count(u) from User u
+      </query>
+    </named-query>
+    <named-query name="User.getByNameAndActive">
+      <query>
+        select u from User as u where u.active = :active and u.name = :name
+      </query>
+    </named-query>
+    <named-query name="User.getByName">
+      <query>
+        select u from User as u where u.name = :name
+      </query>
+    </named-query>
+    <named-query name="User.getByNamePasswordAndActive">
+      <query>
+        select u from User as u where u.active = :active and u.name = :name and u.password = :password
+      </query>
+    </named-query>
+        <named-query name="User.getAll">
+      <query>
+        select u from User u order by u.name
+      </query>
+    </named-query>
+        <named-query name="User.getAllByActive">
+      <query>
+        select u from User u where u.active = :active order by u.name
+      </query>
+    </named-query>
+    <named-query name="User.getByMail">
+      <query>
+        select u from User as u where u.email = :mail
+      </query>
+    </named-query>
+    <named-query name="User.getByNameAndCode">
+      <query>
+        select u from User u where u.name = :name and u.activationCode = :code
+      </query>
+    </named-query>
+    <named-query name="User.countByFilter">
+      <query>
+        select count(u) from User u where u.name like :filter
+      </query>
+    </named-query>
+    <named-query name="User.countByFilterAndActive">
+      <query>
+        select count(u) from User u where u.active = :active and u.name like :filter
+      </query>
+    </named-query>
+    <named-query name="User.countByActive">
+      <query>
+        select count(u) from User u where u.active = :active
+      </query>
+    </named-query>
+    <named-query name="User.getAllByFilter">
+      <query>
+        select u from User u where u.name like :filter
+      </query>
+    </named-query>
+    <named-query name="User.getAllByFilterAndActive">
+      <query>
+        select u from User u where u.active = :active and u.name like :filter
+      </query>
+    </named-query>
+    <pre-persist method-name="prePersists" />
+    <attributes>
+      <id name="id">
+        <generated-value strategy="IDENTITY" />
+      </id>
+      <basic name="displayName">
+        <column nullable="false" />
+      </basic>
+      <basic name="email">
+        <column nullable="false" unique="true" />
+      </basic>
+      <basic name="lastLogin">
+        <temporal>TIMESTAMP</temporal>
+      </basic>
+      <basic name="name">
+        <column nullable="false" unique="true" />
+      </basic>
+      <basic name="password">
+        <column nullable="false" />
+      </basic>
+      <basic name="activationCode">
+        <column nullable="false" />
+      </basic>
+      <basic name="registrationDate">
+        <column nullable="false" />
+        <temporal>TIMESTAMP</temporal>
+      </basic>
+    </attributes>
+  </entity>
+</entity-mappings>

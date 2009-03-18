@@ -1,0 +1,107 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:blog="http://jab.nitilon.org/blog/"
+      xmlns:c="http://java.sun.com/jstl/core"
+      xmlns:t="http://myfaces.apache.org/tomahawk"
+      xmlns:u1="http://jab.nitilon.org/blog/">
+
+  <body>
+
+    <ui:composition template="../template.xhtml">
+
+      <ui:define name="title">
+        <h:outputText value="#{label.userAdministration}" />
+      </ui:define>
+
+      <ui:define name="content">
+
+        <h1><h:outputText value="#{label.userAdministration}" /></h1>
+
+        <h2><h:outputText value="#{label.options}" /></h2>
+
+        <h:form>
+
+          <h:panelGrid columns="3">
+
+            <h:outputLabel for="activeOnly" value=" #{label.showOnlyActives}" />
+            <h:selectBooleanCheckbox id="activeOnly" value="#{AdminUserBean.onlyActive}" />
+            <h:message for="activeOnly" />
+
+            <h:outputLabel for="filter" value="#{label.filter}" />
+            <h:inputText id="filter" value="#{AdminUserBean.filter}"  />
+            <h:message for="filter" />
+
+          </h:panelGrid>
+
+          <h:commandButton value="#{label.save}" />
+
+        </h:form>
+
+        <h2><h:outputText value="#{label.users}" /></h2>
+
+        <h:form id="userForm">
+
+          <h:dataTable id="userTable" rows="20" value="#{AdminUserBean.users}" var="User">
+
+            <h:column>
+              <f:facet name="header">
+                <h:outputText value="#{label.name}" />
+              </f:facet>
+              <h:commandLink value="#{User.name}" action="#{AdminUserBean.detail}" />
+            </h:column>
+
+            <h:column>
+              <f:facet name="header">
+                <h:outputText value="#{label.displayName}" />
+              </f:facet>
+              <h:outputText value="#{User.displayName}" />
+            </h:column>
+
+            <h:column>
+              <f:facet name="header">
+                <h:outputText value="#{label.registrationDate}" />
+              </f:facet>
+              <h:outputText value="#{User.registrationDate}">
+                <f:convertDateTime pattern="#{BlogBean.blog.dateFormat}" />
+              </h:outputText>
+            </h:column>
+
+            <h:column>
+              <f:facet name="header">
+                <h:outputText value="#{label.lastLogin}" />
+              </f:facet>
+              <h:outputText value="#{User.lastLogin}">
+                <f:convertDateTime pattern="#{BlogBean.blog.dateFormat}" />
+              </h:outputText>
+            </h:column>
+
+            <h:column>
+              <f:facet name="header">
+                <h:outputText value="#{label.globalAdmin}" />
+              </f:facet>
+              <h:selectBooleanCheckbox value="#{User.globalAdmin}" readonly="true" onclick="return false" />
+            </h:column>
+
+            <h:column>
+              <f:facet name="header">
+                <h:outputText value="#{label.active}" />
+              </f:facet>
+              <h:selectBooleanCheckbox value="#{User.active}" readonly="true" onclick="return false" />
+            </h:column>
+
+          </h:dataTable>
+
+          <blog:pager for="userForm:userTable" showPages="10" selectedStyle="font-weight: bold;" />
+
+        </h:form>
+
+      </ui:define>
+
+    </ui:composition>
+
+  </body>
+</html>

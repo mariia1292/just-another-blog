@@ -1,0 +1,64 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:t="http://myfaces.apache.org/tomahawk"
+      xmlns:c="http://java.sun.com/jstl/core">
+
+  <body>
+
+    <ui:composition template="../template.xhtml">
+
+      <ui:define name="title">
+        <h:outputText value="#{label.entries}" />
+      </ui:define>
+
+      <ui:define name="content">
+
+        <h1><h:outputText value="#{label.entries}" /></h1>
+
+        <h:form>
+
+            <h:dataTable styleClass="full" value="#{EntryBean.entries}" var="Entry">
+              
+              <h:column>
+                <f:facet name="header">
+                  <h:outputText value="#{label.title}" />
+                </f:facet>
+                <h:commandLink value="#{Entry.title}" action="#{EntryBean.edit}" />
+              </h:column>
+
+              <h:column>
+                <f:facet name="header">
+                  <h:outputText value="#{label.author}" />
+                </f:facet>
+                <h:outputText value="#{Entry.authorName}" />
+              </h:column>
+
+              <h:column>
+                <f:facet name="header">
+                  <h:outputText value="#{label.creationDate}" />
+                </f:facet>
+                <h:outputText value="#{Entry.creationDate}">
+                  <f:convertDateTime pattern="#{BlogBean.blog.dateFormat}" />
+                </h:outputText>
+              </h:column>
+
+              <h:column>
+                <f:facet name="header">
+                  <h:outputText value="#{label.published}" />
+                </f:facet>
+                <h:selectBooleanCheckbox value="#{Entry.published}" />
+              </h:column>
+              
+              </h:dataTable>
+        </h:form>
+
+      </ui:define>
+
+    </ui:composition>
+
+  </body>
+</html>

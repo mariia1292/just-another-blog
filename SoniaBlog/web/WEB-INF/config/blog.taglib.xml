@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE facelet-taglib PUBLIC "-//Sun Microsystems, Inc.//DTD Facelet Taglib 1.0//EN" "http://java.sun.com/dtd/facelet-taglib_1_0.dtd">
+
+<facelet-taglib>
+
+    <namespace>http://jab.nitilon.org/blog/</namespace>
+    
+    <tag>
+        <tag-name>content</tag-name>
+        <component>
+            <component-type>sonia.blog.content</component-type>
+            <renderer-type>sonia.blog.content.renderer</renderer-type>
+        </component>
+    </tag>
+
+    <tag>
+        <tag-name>calendar</tag-name>
+        <component>
+            <component-type>sonia.blog.calendar</component-type>
+            <renderer-type>sonia.blog.calendar.renderer</renderer-type>
+        </component>
+    </tag>
+
+    <tag>
+        <tag-name>resource</tag-name>
+        <component>
+            <component-type>sonia.blog.resource</component-type>
+            <renderer-type>sonia.blog.resource.renderer</renderer-type>
+        </component>
+    </tag>
+    
+    <tag>
+        <tag-name>link</tag-name>
+        <component>
+            <component-type>sonia.blog.link</component-type>
+            <renderer-type>sonia.blog.link.renderer</renderer-type>
+        </component>
+    </tag>
+    
+    <tag>
+        <tag-name>search</tag-name>
+        <component>
+            <component-type>sonia.blog.search</component-type>
+            <renderer-type>sonia.blog.search.renderer</renderer-type>
+        </component>
+    </tag>
+
+    <tag>
+        <tag-name>spamLabel</tag-name>
+        <component>
+            <component-type>sonia.blog.spamLabel</component-type>
+            <renderer-type>sonia.blog.spamLabel.renderer</renderer-type>
+        </component>
+    </tag>
+
+    <tag>
+        <tag-name>spamInput</tag-name>
+        <component>
+            <component-type>sonia.blog.spamInput</component-type>
+            <renderer-type>sonia.blog.spamInput.renderer</renderer-type>
+        </component>
+    </tag>
+
+    <tag>
+        <tag-name>tagCloud</tag-name>
+        <component>
+            <component-type>sonia.blog.tagcloud</component-type>
+            <renderer-type>sonia.blog.tagcloud.renderer</renderer-type>
+        </component>
+    </tag>
+
+    <tag>
+        <tag-name>selectAction</tag-name>
+        <component>
+            <component-type>sonia.blog.selectAction</component-type>
+            <renderer-type>sonia.blog.selectAction.renderer</renderer-type>
+        </component>
+    </tag>
+
+    <tag>
+        <tag-name>pager</tag-name>
+        <component>
+            <component-type>sonia.blog.pager</component-type>
+            <renderer-type>sonia.blog.pager.renderer</renderer-type>
+        </component>
+    </tag>
+
+</facelet-taglib>
