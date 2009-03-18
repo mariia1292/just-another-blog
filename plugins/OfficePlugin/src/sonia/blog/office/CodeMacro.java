@@ -191,7 +191,7 @@ public class CodeMacro extends AbstractBlogMacro
    *
    * @return
    */
-  @Override
+  @Override @SuppressWarnings("unchecked")
   protected String doBody(FacesContext facesContext, String linkBase,
                           ContentObject object, String body)
   {
