@@ -150,7 +150,7 @@ public class CategoryBean extends AbstractBean
     categories = new ListDataModel();
 
     List<Category> categoryList =
-      categoryDAO.findAllByBlog(getRequest().getCurrentBlog());
+      categoryDAO.getAll(getRequest().getCurrentBlog());
 
     if ((categoryList != null) &&!categoryList.isEmpty())
     {

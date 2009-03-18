@@ -96,7 +96,7 @@ public class MetaWeblog extends Blogger
                                                 Map<String, String>>();
     Blog blog = findBlog(blogId);
     CategoryDAO categoryDAO = BlogContext.getDAOFactory().getCategoryDAO();
-    List<Category> categories = categoryDAO.findAllByBlog(blog);
+    List<Category> categories = categoryDAO.getAll(blog);
 
     for (Category category : categories)
     {

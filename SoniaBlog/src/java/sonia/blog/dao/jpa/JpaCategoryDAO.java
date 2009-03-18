@@ -63,7 +63,7 @@ public class JpaCategoryDAO extends JpaGenericDAO<Category>
    *
    * @return
    */
-  public long countByBlog(Blog blog)
+  public long count(Blog blog)
   {
     return countQuery("Category.countByBlog", blog);
   }
@@ -78,7 +78,7 @@ public class JpaCategoryDAO extends JpaGenericDAO<Category>
    *
    * @return
    */
-  public List<Category> findAllByBlog(Blog blog, int start, int max)
+  public List<Category> getAll(Blog blog, int start, int max)
   {
     return findList("Category.findAllByBlog", blog, start, max);
   }
@@ -91,7 +91,7 @@ public class JpaCategoryDAO extends JpaGenericDAO<Category>
    *
    * @return
    */
-  public List<Category> findAllByBlog(Blog blog)
+  public List<Category> getAll(Blog blog)
   {
     return findList("Category.findAllByBlog", blog);
   }
@@ -104,7 +104,7 @@ public class JpaCategoryDAO extends JpaGenericDAO<Category>
    *
    * @return
    */
-  public Category findFirstByBlog(Blog blog)
+  public Category getFirst(Blog blog)
   {
     Category category = null;
     EntityManager em = createEntityManager();
