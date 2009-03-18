@@ -17,7 +17,7 @@ import sonia.jobqueue.Job;
  *
  * @author sdorra
  */
-public abstract class BlogJob extends Job
+public interface BlogJob extends Job
 {
 
   /**
@@ -26,7 +26,7 @@ public abstract class BlogJob extends Job
    *
    * @return
    */
-  public abstract Blog getBlog();
+  public Blog getBlog();
 
   /**
    * Method description
@@ -34,7 +34,7 @@ public abstract class BlogJob extends Job
    *
    * @return
    */
-  public abstract String getDescription();
+  public String getDescription();
 
   /**
    * Method description
@@ -42,5 +42,5 @@ public abstract class BlogJob extends Job
    *
    * @return
    */
-  public abstract String getName();
+  public String getName();
 }

@@ -72,6 +72,7 @@ public class BlogContext
     this.injectionProvider = new DefaultInjectionProvider();
     this.pluginContext = new PluginContext();
     this.jobQueue = new JobQueue<BlogJob>();
+    this.jobQueue.start();
   }
 
   //~--- get methods ----------------------------------------------------------
