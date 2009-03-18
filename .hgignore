@@ -1,0 +1,13 @@
+# netbeans temp & private files
+/build/
+/dist/
+/private/
+^.*-private.properties$
+
+# MacOS X Files
+^\.DS_Store$
+^\._\.DS_Store$
+^\._\.
+^Desktop DB$
+^Desktop DF$
+^\.hotfiles\.btree$
