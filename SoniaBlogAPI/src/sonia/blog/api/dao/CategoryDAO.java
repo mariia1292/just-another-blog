@@ -31,7 +31,7 @@ public interface CategoryDAO extends GenericDAO<Category>
    *
    * @return
    */
-  public long countByBlog(Blog blog);
+  public long count(Blog blog);
 
   /**
    * Method description
@@ -41,7 +41,7 @@ public interface CategoryDAO extends GenericDAO<Category>
    *
    * @return
    */
-  public List<Category> findAllByBlog(Blog blog);
+  public List<Category> getAll(Blog blog);
 
   /**
    * Method description
@@ -53,7 +53,7 @@ public interface CategoryDAO extends GenericDAO<Category>
    *
    * @return
    */
-  public List<Category> findAllByBlog(Blog blog, int start, int max);
+  public List<Category> getAll(Blog blog, int start, int max);
 
   /**
    * Method description
@@ -63,7 +63,7 @@ public interface CategoryDAO extends GenericDAO<Category>
    *
    * @return
    */
-  public Category findFirstByBlog(Blog blog);
+  public Category getFirst(Blog blog);
 
   //~--- get methods ----------------------------------------------------------
 

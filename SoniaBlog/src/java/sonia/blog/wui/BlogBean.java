@@ -135,7 +135,7 @@ public class BlogBean extends AbstractBean
 
     CategoryDAO categoryDAO = BlogContext.getDAOFactory().getCategoryDAO();
     List<Category> categoryList =
-      categoryDAO.findAllByBlog(getRequest().getCurrentBlog());
+      categoryDAO.getAll(getRequest().getCurrentBlog());
 
     if ((categoryList != null) &&!categoryList.isEmpty())
     {

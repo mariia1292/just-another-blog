@@ -53,8 +53,6 @@ import java.net.URLDecoder;
 import java.text.SimpleDateFormat;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -311,7 +309,7 @@ public class EntryBean extends AbstractBean
         {
           CategoryDAO categoryDAO = DAOFactory.getInstance().getCategoryDAO();
           Category cat =
-            categoryDAO.findFirstByBlog(getRequest().getCurrentBlog());
+            categoryDAO.getFirst(getRequest().getCurrentBlog());
 
           entry.addCateogory(cat);
         }
@@ -573,7 +571,7 @@ public class EntryBean extends AbstractBean
     SelectItem[] items = null;
     CategoryDAO categoryDAO = BlogContext.getDAOFactory().getCategoryDAO();
     Blog blog = getRequest().getCurrentBlog();
-    List<Category> categoryList = categoryDAO.findAllByBlog(blog);
+    List<Category> categoryList = categoryDAO.getAll(blog);
 
     if ((categoryList != null) &&!categoryList.isEmpty())
     {

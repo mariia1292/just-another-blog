@@ -438,7 +438,7 @@ public class AdminBlogBean extends AbstractBean
   {
     CategoryDAO categegoryDAO = BlogContext.getDAOFactory().getCategoryDAO();
 
-    return categegoryDAO.countByBlog(blog);
+    return categegoryDAO.count(blog);
   }
 
   /**

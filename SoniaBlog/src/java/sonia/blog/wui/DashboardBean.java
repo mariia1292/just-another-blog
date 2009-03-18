@@ -100,7 +100,7 @@ public class DashboardBean extends AbstractBean
     Blog b = getRequest().getCurrentBlog();
     CategoryDAO categegoryDAO = BlogContext.getDAOFactory().getCategoryDAO();
 
-    return categegoryDAO.countByBlog(b);
+    return categegoryDAO.count(b);
   }
 
   /**

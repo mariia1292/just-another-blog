@@ -305,7 +305,7 @@ public class Blogger
 
       if ((entry.getCategories() == null) || entry.getCategories().isEmpty())
       {
-        Category cat = categoryDAO.findFirstByBlog(blog);
+        Category cat = categoryDAO.getFirst(blog);
 
         entry.addCateogory(cat);
       }
