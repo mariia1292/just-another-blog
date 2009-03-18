@@ -31,7 +31,7 @@ import java.util.logging.Logger;
  *
  * @author sdorra
  */
-public class ImageResizingJob extends BlogJob
+public class ImageResizingJob implements BlogJob
 {
 
   /** Field description */

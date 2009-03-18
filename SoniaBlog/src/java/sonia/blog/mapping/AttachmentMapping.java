@@ -10,6 +10,7 @@ package sonia.blog.mapping;
 //~--- non-JDK imports --------------------------------------------------------
 
 import sonia.blog.api.app.BlogContext;
+import sonia.blog.api.app.BlogJob;
 import sonia.blog.api.app.BlogRequest;
 import sonia.blog.api.app.BlogResponse;
 import sonia.blog.api.app.Constants;
@@ -18,6 +19,7 @@ import sonia.blog.api.mapping.FinalMapping;
 import sonia.blog.entity.Attachment;
 import sonia.blog.entity.Blog;
 import sonia.blog.entity.Role;
+import sonia.blog.util.ImageResizingJob;
 
 import sonia.config.Config;
 
@@ -353,40 +355,40 @@ public class AttachmentMapping extends FinalMapping
                            int height)
           throws IOException
   {
+    BlogJob job = new ImageResizingJob(blog, source, target, format, width,
+                                       height);
+
+    BlogContext.getInstance().getJobQueue().processs(job);
 
     /*
-     * BlogJob job = new ImageResizingJob(blog, source, target, format, width,
-     *                                  height);
+     * InputStream in = null;
+     * OutputStream out = null;
      *
-     * BlogContext.getInstance().getJobQueue().processs(job);
+     * try
+     * {
+     * if (logger.isLoggable(Level.INFO))
+     * {
+     *   logger.info("resize image " + source.getName() + " (resolution "
+     *               + width + "x" + height + ")");
+     * }
+     *
+     * in = new FileInputStream(source);
+     * out = new FileOutputStream(target);
+     * ImageUtil.resize(in, out, format, width, height);
+     * }
+     * finally
+     * {
+     * if (in != null)
+     * {
+     *   in.close();
+     * }
+     *
+     * if (out != null)
+     * {
+     *   out.close();
+     * }
+     * }
      */
-    InputStream in = null;
-    OutputStream out = null;
-
-    try
-    {
-      if (logger.isLoggable(Level.INFO))
-      {
-        logger.info("resize image " + source.getName() + " (resolution "
-                    + width + "x" + height + ")");
-      }
-
-      in = new FileInputStream(source);
-      out = new FileOutputStream(target);
-      ImageUtil.resize(in, out, format, width, height);
-    }
-    finally
-    {
-      if (in != null)
-      {
-        in.close();
-      }
-
-      if (out != null)
-      {
-        out.close();
-      }
-    }
   }
 
   //~--- get methods ----------------------------------------------------------

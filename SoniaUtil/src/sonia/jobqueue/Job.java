@@ -15,7 +15,7 @@ import java.io.Serializable;
  *
  * @author sdorra
  */
-public abstract class Job implements Serializable
+public interface Job extends Serializable
 {
 
   /**
@@ -26,34 +26,4 @@ public abstract class Job implements Serializable
    */
   public abstract void excecute() throws JobException;
 
-  //~--- get methods ----------------------------------------------------------
-
-  /**
-   * Method description
-   *
-   *
-   * @return
-   */
-  public boolean isFinished()
-  {
-    return finished;
-  }
-
-  //~--- set methods ----------------------------------------------------------
-
-  /**
-   * Method description
-   *
-   *
-   * @param finished
-   */
-  void setFinished(boolean finished)
-  {
-    this.finished = finished;
-  }
-
-  //~--- fields ---------------------------------------------------------------
-
-  /** Field description */
-  private boolean finished = false;
 }

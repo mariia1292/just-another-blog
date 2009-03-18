@@ -37,7 +37,6 @@ public class JobQueue<T extends Job>
     this.listeners = new ArrayList<JobListener>();
     this.jobs = new LinkedList<T>();
     this.stop = true;
-    this.sleepTime = 500;
     this.timeoutLimit = 60;
     this.handlerCount = Runtime.getRuntime().availableProcessors() * 2;
     this.handlers = new ArrayList<JobHandler>();
@@ -126,29 +125,21 @@ public class JobQueue<T extends Job>
    *
    * @param job
    *
-   * @throws JobTimeoutException
    */
-  public void processs(T job) throws JobTimeoutException
+  public void processs(T job)
   {
     add(job);
 
-    int counter = 0;
-
-    while (!job.isFinished() && (counter < timeoutLimit))
+    try
     {
-      try
+      synchronized (job)
       {
-        Thread.sleep(sleepTime);
-      }
-      catch (InterruptedException ex)
-      {
-        logger.log(Level.SEVERE, null, ex);
+        job.wait(1000l * timeoutLimit);
       }
     }
-
-    if (counter >= timeoutLimit)
+    catch (InterruptedException ex)
     {
-      throw new JobTimeoutException();
+      logger.log(Level.SEVERE, null, ex);
     }
   }
 
@@ -230,17 +221,6 @@ public class JobQueue<T extends Job>
    *
    * @return
    */
-  public long getSleepTime()
-  {
-    return sleepTime;
-  }
-
-  /**
-   * Method description
-   *
-   *
-   * @return
-   */
   public int getTimeoutLimit()
   {
     return timeoutLimit;
@@ -268,17 +248,6 @@ public class JobQueue<T extends Job>
   public void setHandlerCount(int handlerCount)
   {
     this.handlerCount = handlerCount;
-  }
-
-  /**
-   * Method description
-   *
-   *
-   * @param sleepTime
-   */
-  public void setSleepTime(long sleepTime)
-  {
-    this.sleepTime = sleepTime;
   }
 
   /**
@@ -381,9 +350,6 @@ public class JobQueue<T extends Job>
 
   /** Field description */
   private List<JobHandler> handlers;
-
-  /** Field description */
-  private long sleepTime;
 
   /** Field description */
   private boolean stop;
