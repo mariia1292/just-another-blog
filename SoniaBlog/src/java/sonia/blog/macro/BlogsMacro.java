@@ -43,7 +43,7 @@ public class BlogsMacro implements Macro
     String result = "";
     BlogRequest request = (BlogRequest) environment.get("request");
     BlogDAO blogDAO = BlogContext.getDAOFactory().getBlogDAO();
-    List<Blog> blogs = blogDAO.findAllActives();
+    List<Blog> blogs = blogDAO.getAll(true, 0, 100);
 
     if ((blogs != null) &&!blogs.isEmpty())
     {

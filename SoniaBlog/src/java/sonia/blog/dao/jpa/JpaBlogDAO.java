@@ -26,7 +26,6 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import javax.persistence.NoResultException;
 import javax.persistence.Query;
 
 /**
@@ -58,64 +57,6 @@ public class JpaBlogDAO extends JpaGenericDAO<Blog> implements BlogDAO
   public long count()
   {
     return countQuery("Blog.count");
-  }
-
-  /**
-   * Method description
-   *
-   *
-   * @return
-   */
-  public List<Blog> findAllActives()
-  {
-    return findList("Blog.findAllActives");
-  }
-
-  /**
-   * Method description
-   *
-   *
-   * @param start
-   * @param max
-   *
-   * @return
-   */
-  public List<Blog> findAllActives(int start, int max)
-  {
-    return findList("Blog.findAllActives", start, max);
-  }
-
-  /**
-   * Method description
-   *
-   *
-   *
-   * @param identifier
-   *
-   * @return
-   */
-  public Blog findByIdentifier(String identifier)
-  {
-    Blog blog = null;
-    EntityManager em = createEntityManager();
-
-    try
-    {
-      Query q = em.createNamedQuery("Blog.findByIdentifier");
-
-      q.setParameter("identifier", identifier);
-      blog = (Blog) q.getSingleResult();
-    }
-    catch (NoResultException ex) {}
-    finally
-    {
-      if (em != null)
-      {
-        em.close();
-      }
-    }
-
-    return blog;
   }
 
   /**
@@ -165,6 +106,44 @@ public class JpaBlogDAO extends JpaGenericDAO<Blog> implements BlogDAO
    * Method description
    *
    *
+   * @param identifier
+   * @param active
+   *
+   * @return
+   */
+  public Blog get(String identifier, boolean active)
+  {
+    EntityManager em = createEntityManager();
+    Query q = em.createNamedQuery("Blog.getByIdentifierAndActive");
+
+    q.setParameter("identifier", identifier);
+    q.setParameter("active", active);
+
+    return excecuteQuery(em, q);
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param identifier
+   *
+   * @return
+   */
+  public Blog get(String identifier)
+  {
+    EntityManager em = createEntityManager();
+    Query q = em.createNamedQuery("Blog.getByIdentifier");
+
+    q.setParameter("identifier", identifier);
+
+    return excecuteQuery(em, q);
+  }
+
+  /**
+   * Method description
+   *
+   *
    * @return
    */
   public List<Blog> getAll()
@@ -184,6 +163,28 @@ public class JpaBlogDAO extends JpaGenericDAO<Blog> implements BlogDAO
   public List<Blog> getAll(int start, int max)
   {
     return findList("Blog.findAll", start, max);
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param active
+   * @param start
+   * @param max
+   *
+   * @return
+   */
+  public List<Blog> getAll(boolean active, int start, int max)
+  {
+    EntityManager em = createEntityManager();
+    Query q = em.createNamedQuery("Blog.getByActive");
+
+    q.setParameter("active", active);
+    q.setFirstResult(start);
+    q.setMaxResults(max);
+
+    return excecuteListQuery(em, q);
   }
 
   /**
