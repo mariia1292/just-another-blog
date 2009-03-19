@@ -38,7 +38,7 @@
             <h:column>
 
               <h:outputText value="#{Comment.authorName}" rendered="#{Comment.authorURL == null}" />
-              <h:outputLink target="_blank" value="#{Comment.authorURL}" rendered="#{Comment.authorURL != null}">
+              <h:outputLink rel="nofollow" target="_blank" value="#{Comment.authorURL}" rendered="#{Comment.authorURL != null}">
                 <h:outputText value="#{Comment.authorName}" />
               </h:outputLink>
               <h:outputText value=": #{Comment.content}" escape="#{!BlogBean.blog.allowHtmlComments}" />
