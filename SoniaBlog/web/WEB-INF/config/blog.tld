@@ -422,6 +422,17 @@
   </tag>
   <tag>
     <name>pager</name>
+    <tag-class>sonia.blog.api.jsf.trackback.TrackBackTag</tag-class>
+    <body-content>empty</body-content>
+    <attribute>
+      <name>object</name>
+      <required>true</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.Object</type>
+    </attribute>
+  </tag>
+  <tag>
+    <name>pager</name>
     <tag-class>sonia.blog.api.jsf.pager.PagerTag</tag-class>
     <body-content>empty</body-content>
     <attribute>

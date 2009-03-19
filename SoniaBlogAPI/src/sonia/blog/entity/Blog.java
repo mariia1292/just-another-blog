@@ -277,6 +277,10 @@ public class Blog implements Serializable, PermaObject, Comparable<Blog>
     {
       result = new Locale(locale);
     }
+    else
+    {
+      result = Locale.getDefault();
+    }
 
     return result;
   }
@@ -338,7 +342,18 @@ public class Blog implements Serializable, PermaObject, Comparable<Blog>
    */
   public TimeZone getTimeZone()
   {
-    return TimeZone.getTimeZone(timeZone);
+    TimeZone result = null;
+
+    if (timeZone != null)
+    {
+      result = TimeZone.getTimeZone(timeZone);
+    }
+    else
+    {
+      result = TimeZone.getDefault();
+    }
+
+    return result;
   }
 
   /**

@@ -23,6 +23,8 @@
           <blog:link value="#{label.next}" href="#{BlogBean.nextUri}" disabled="#{BlogBean.nextUri == null}" />
         </h:panelGroup>
 
+        <blog:trackback object="#{BlogBean.entry}" />
+
         <h1><h:outputText value="#{BlogBean.entry.title}" /></h1>
 
         <blog:content object="#{BlogBean.entry}" />
