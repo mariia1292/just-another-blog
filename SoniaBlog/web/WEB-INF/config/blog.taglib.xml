@@ -78,6 +78,14 @@
     </tag>
 
     <tag>
+        <tag-name>trackback</tag-name>
+        <component>
+            <component-type>sonia.blog.trackback</component-type>
+            <renderer-type>sonia.blog.trackback.renderer</renderer-type>
+        </component>
+    </tag>
+
+    <tag>
         <tag-name>pager</tag-name>
         <component>
             <component-type>sonia.blog.pager</component-type>
