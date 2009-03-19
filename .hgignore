@@ -11,3 +11,6 @@
 ^Desktop DB$
 ^Desktop DF$
 ^\.hotfiles\.btree$
+\.orig$
+~$
+\.bak$
