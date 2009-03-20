@@ -9,8 +9,11 @@ package sonia.blog.macro;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.app.BlogRequest;
+import sonia.blog.api.app.Context;
+import sonia.blog.api.dao.AttachmentDAO;
+import sonia.blog.api.dao.Dao;
+import sonia.blog.api.link.LinkBuilder;
 import sonia.blog.api.util.AbstractBlogMacro;
 import sonia.blog.entity.Attachment;
 import sonia.blog.entity.Blog;
@@ -33,7 +36,7 @@ public class FLVMacro extends AbstractBlogMacro
    *
    * @param height
    */
-  public void setHeight(String height)
+  public void setHeight(Integer height)
   {
     this.height = height;
   }
@@ -44,7 +47,7 @@ public class FLVMacro extends AbstractBlogMacro
    *
    * @param id
    */
-  public void setId(String id)
+  public void setId(Long id)
   {
     this.id = id;
   }
@@ -55,7 +58,7 @@ public class FLVMacro extends AbstractBlogMacro
    *
    * @param width
    */
-  public void setWidth(String width)
+  public void setWidth(Integer width)
   {
     this.width = width;
   }
@@ -83,37 +86,17 @@ public class FLVMacro extends AbstractBlogMacro
     {
       if (id != null)
       {
-        try
+        BlogRequest request = getRequest(facesContext);
+        Blog blog = request.getCurrentBlog();
+        Attachment attchment = attachmentDAO.findByBlogAndId(blog, id);
+
+        if (attchment != null)
         {
-          BlogRequest request = getRequest(facesContext);
-          Blog blog = request.getCurrentBlog();
-          Attachment attchment = findAttachment(blog, Long.parseLong(id));
-
-          if (attchment != null)
-          {
-            int w = 480;
-            int h = 360;
-
-            if (width != null)
-            {
-              w = Integer.parseInt(width);
-            }
-
-            if (height != null)
-            {
-              h = Integer.parseInt(height);
-            }
-
-            result = renderPlayer(request, attchment, linkBase, w, h);
-          }
-          else
-          {
-            result = "-- cant find attachment --";
-          }
+          result = renderPlayer(request, attchment, linkBase, width, height);
         }
-        catch (NumberFormatException ex)
+        else
         {
-          result = "-- id, width or height is no number --";
+          result = "-- cant find attachment --";
         }
       }
       else
@@ -132,20 +115,6 @@ public class FLVMacro extends AbstractBlogMacro
   /**
    * Method description
    *
-   * @param blog
-   * @param id
-   *
-   * @return
-   */
-  private Attachment findAttachment(Blog blog, long id)
-  {
-    return BlogContext.getDAOFactory().getAttachmentDAO().findByBlogAndId(blog,
-            id);
-  }
-
-  /**
-   * Method description
-   *
    *
    * @param request
    * @param attchment
@@ -159,46 +128,51 @@ public class FLVMacro extends AbstractBlogMacro
                               String linkBase, int width, int height)
   {
     String playerPath = linkBase + "resources/flowplayer/";
-    String attachmentLink =
-      BlogContext.getInstance().getLinkBuilder().buildLink(request, attchment);
-    String result = "";
+    String attachmentLink = linkBuilder.buildLink(request, attchment);
+    StringBuffer result = new StringBuffer();
 
     if (request.getAttribute("sonia.blog.flvplayer") == null)
     {
-      result = "<script type=\"text/javascript\" src=\"" + playerPath
-               + "flowplayer-3.0.1.min.js\"></script>";
+      result.append("<script type=\"text/javascript\" src=\"");
+      result.append(playerPath);
+      result.append("flowplayer-3.0.1.min.js\"></script>");
       request.setAttribute("sonia.blog.flvplayer", Boolean.TRUE);
     }
 
-    result += "<a id=\"flvplayer_" + attchment.getId() + "\" href=\""
-              + attachmentLink + "\" style=\"display: block; width: " + width
-              + "px; height: " + height + "px\"></a>";
-    result += "<script type=\"text/javascript\">\n";
+    result.append("<a id=\"flvplayer_").append(attchment.getId());
+    result.append("\" href=\"").append(attachmentLink);
+    result.append("\" style=\"display: block; width: ").append(width);
+    result.append("px; height: ").append(height).append("px\"></a>");
+    result.append("<script type=\"text/javascript\">\n");
+    result.append("$f(\"flvplayer_").append(+attchment.getId());
+    result.append("\", \"").append(playerPath);
+    result.append("flowplayer-3.0.1.swf\", {\n");
+    result.append("clip: {\n");
+    result.append("url: '").append(attachmentLink).append("',\n");
+    result.append("autoPlay: false\n");
+    result.append("}\n");
+    result.append("});\n");
+    result.append("</script>\n");
 
-    /*
-     * result += "flowplayer(\"flvplayer_" + attchment.getId() + "\", \""
-     *         + playerPath + "flowplayer-3.0.1.swf\");\n";
-     */
-    result += "$f(\"flvplayer_" + attchment.getId() + "\", \"" + playerPath
-              + "flowplayer-3.0.1.swf\", {\n";
-    result += "clip: {\n";
-    result += "url: '" + attachmentLink + "',\n";
-    result += "autoPlay: false\n";
-    result += "}\n";
-    result += "});\n";
-    result += "</script>\n";
-
-    return result;
+    return result.toString();
   }
 
   //~--- fields ---------------------------------------------------------------
 
   /** Field description */
-  private String height;
+  @Dao
+  private AttachmentDAO attachmentDAO;
 
   /** Field description */
-  private String id;
+  private Integer height = 360;
 
   /** Field description */
-  private String width;
+  private Long id;
+
+  /** Field description */
+  @Context
+  private LinkBuilder linkBuilder;
+
+  /** Field description */
+  private Integer width = 480;
 }

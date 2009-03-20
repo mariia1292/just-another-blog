@@ -15,6 +15,8 @@ import sonia.util.Util;
 
 import java.lang.reflect.Method;
 
+import java.math.BigInteger;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
@@ -92,6 +94,64 @@ public class RegexMacroParser extends MacroParser
    * Method description
    *
    *
+   * @param type
+   * @param value
+   *
+   * @return
+   */
+  protected Object convertValue(Class<?> type, String value)
+  {
+    Object result = null;
+
+    try
+    {
+
+    if (type.isAssignableFrom(String.class))
+    {
+      result = value;
+    }
+    else if (type.isAssignableFrom(Short.class))
+    {
+      result = value;
+    }
+    else if (type.isAssignableFrom(Integer.class))
+    {
+      result = Integer.parseInt(value);
+    }
+    else if (type.isAssignableFrom(Long.class))
+    {
+      result = Long.parseLong(value);
+    }
+    else if (type.isAssignableFrom(BigInteger.class))
+    {
+      result = new BigInteger(value);
+    }
+    else if (type.isAssignableFrom(Float.class))
+    {
+      result = Float.parseFloat(value);
+    }
+    else if (type.isAssignableFrom(Double.class))
+    {
+      result = Double.parseDouble(value);
+    }
+    else if (type.isAssignableFrom(Boolean.class))
+    {
+      result = Boolean.parseBoolean(value);
+    }
+
+    }
+    catch (NumberFormatException ex)
+    {
+      logger.log( Level.FINER, null, ex );
+    }
+
+    return result;
+  }
+
+  /**
+   * Method description
+   *
+   *
    * @param name
    *
    * @return
@@ -134,19 +194,18 @@ public class RegexMacroParser extends MacroParser
   {
     Method method = null;
     String name = "set" + key.toUpperCase().charAt(0) + key.substring(1);
+    Method[] methods = clazz.getMethods();
 
-    try
+    if (methods != null)
     {
-      method = clazz.getDeclaredMethod(name, String.class);
-    }
-    catch (NoSuchMethodException ex)
-    {
-
-      // do nothing
-    }
-    catch (Exception ex)
-    {
-      logger.log(Level.WARNING, null, ex);
+      for (Method m : methods)
+      {
+        if (m.getName().equals(name))
+        {
+          method = m;
+          break;
+        }
+      }
     }
 
     return method;
@@ -196,22 +255,41 @@ public class RegexMacroParser extends MacroParser
 
     if (method != null)
     {
-      try
+      Class<?>[] paramTypes = method.getParameterTypes();
+
+      if ((paramTypes != null) && (paramTypes.length == 1))
       {
-        if (logger.isLoggable(Level.FINER))
+        Class<?> paramType = paramTypes[0];
+        Object injectValue = convertValue(paramType, value);
+
+        if (injectValue != null)
         {
-          StringBuffer msg = new StringBuffer();
+          try
+          {
+            if (logger.isLoggable(Level.FINER))
+            {
+              StringBuffer msg = new StringBuffer();
 
-          msg.append("invoke method ").append(method.getName());
-          msg.append(" with parameter ").append(value);
-          logger.finer(msg.toString());
+              msg.append("invoke method ").append(method.getName());
+              msg.append(" with parameter ").append(injectValue);
+              logger.finer(msg.toString());
+            }
+
+            method.invoke(macro, injectValue);
+          }
+          catch (Exception ex)
+          {
+            logger.log(Level.SEVERE, null, ex);
+          }
         }
+        else
+        {
+          StringBuffer log = new StringBuffer();
 
-        method.invoke(macro, value);
-      }
-      catch (Exception ex)
-      {
-        logger.log(Level.SEVERE, null, ex);
+          log.append("type ").append(paramType.getName());
+          log.append(" is not supported");
+          logger.fine(log.toString());
+        }
       }
     }
     else
