@@ -64,12 +64,39 @@ public abstract class MacroParser
    * Method description
    *
    *
+   * @param key
+   * @param value
+   *
+   * @return
+   */
+  public ParameterConverter putConverter(Class<?> key, ParameterConverter value)
+  {
+    return converter.put(key, value);
+  }
+
+  /**
+   * Method description
+   *
+   *
    * @param name
    * @param macro
    */
   public void putMacro(String name, Class<? extends Macro> macro)
   {
     macros.put(name, macro);
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param key
+   *
+   * @return
+   */
+  public ParameterConverter removeConverter(Object key)
+  {
+    return converter.remove(key);
   }
 
   /**
@@ -84,6 +111,19 @@ public abstract class MacroParser
   }
 
   //~--- get methods ----------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   * @param key
+   *
+   * @return
+   */
+  public ParameterConverter getConverter(Object key)
+  {
+    return converter.get(key);
+  }
 
   /**
    * Method description
@@ -123,6 +163,10 @@ public abstract class MacroParser
   }
 
   //~--- fields ---------------------------------------------------------------
+
+  /** Field description */
+  protected Map<Class<?>, ParameterConverter> converter =
+    new HashMap<Class<?>, ParameterConverter>();
 
   /** Field description */
   protected InjectionProvider injectionProvider;

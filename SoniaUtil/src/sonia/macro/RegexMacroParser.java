@@ -105,44 +105,55 @@ public class RegexMacroParser extends MacroParser
 
     try
     {
+      if (type.isAssignableFrom(String.class))
+      {
+        result = value;
+      }
+      else if (type.isAssignableFrom(Short.class))
+      {
+        result = value;
+      }
+      else if (type.isAssignableFrom(Integer.class))
+      {
+        result = Integer.parseInt(value);
+      }
+      else if (type.isAssignableFrom(Long.class))
+      {
+        result = Long.parseLong(value);
+      }
+      else if (type.isAssignableFrom(BigInteger.class))
+      {
+        result = new BigInteger(value);
+      }
+      else if (type.isAssignableFrom(Float.class))
+      {
+        result = Float.parseFloat(value);
+      }
+      else if (type.isAssignableFrom(Double.class))
+      {
+        result = Double.parseDouble(value);
+      }
+      else if (type.isAssignableFrom(Boolean.class))
+      {
+        result = Boolean.parseBoolean(value);
+      }
+      else
+      {
+        ParameterConverter conv = getConverter(type);
 
-    if (type.isAssignableFrom(String.class))
-    {
-      result = value;
-    }
-    else if (type.isAssignableFrom(Short.class))
-    {
-      result = value;
-    }
-    else if (type.isAssignableFrom(Integer.class))
-    {
-      result = Integer.parseInt(value);
-    }
-    else if (type.isAssignableFrom(Long.class))
-    {
-      result = Long.parseLong(value);
-    }
-    else if (type.isAssignableFrom(BigInteger.class))
-    {
-      result = new BigInteger(value);
-    }
-    else if (type.isAssignableFrom(Float.class))
-    {
-      result = Float.parseFloat(value);
-    }
-    else if (type.isAssignableFrom(Double.class))
-    {
-      result = Double.parseDouble(value);
-    }
-    else if (type.isAssignableFrom(Boolean.class))
-    {
-      result = Boolean.parseBoolean(value);
-    }
-
+        if (conv != null)
+        {
+          result = conv.convert(value);
+        }
+      }
     }
     catch (NumberFormatException ex)
     {
-      logger.log( Level.FINER, null, ex );
+      logger.log(Level.FINER, null, ex);
+    }
+    catch (ConvertException ex)
+    {
+      logger.log(Level.FINER, null, ex);
     }
 
     return result;
@@ -203,6 +214,7 @@ public class RegexMacroParser extends MacroParser
         if (m.getName().equals(name))
         {
           method = m;
+
           break;
         }
       }
