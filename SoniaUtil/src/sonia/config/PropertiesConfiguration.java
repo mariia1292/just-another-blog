@@ -187,7 +187,7 @@ public class PropertiesConfiguration extends StringBasedConfiguration
    */
   public String getString(String key)
   {
-    return properties.getProperty(key);
+    return resolveVariable(properties.getProperty(key));
   }
 
   /**
@@ -208,7 +208,7 @@ public class PropertiesConfiguration extends StringBasedConfiguration
       result = value.split(delimeter);
     }
 
-    return result;
+    return resolveVariables(result);
   }
 
   /**

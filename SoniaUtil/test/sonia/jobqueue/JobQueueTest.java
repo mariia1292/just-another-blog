@@ -61,7 +61,7 @@ public class JobQueueTest
     }
 
     System.out.println(i);
-    Thread.sleep(1000 * 60 * 1);
+    //Thread.sleep(1000 * 60 * 1);
   }
 
   //~--- inner classes --------------------------------------------------------
@@ -73,7 +73,7 @@ public class JobQueueTest
    * @version    Enter version here..., 09/01/12
    * @author     Enter your name here...
    */
-  private class SleepJob extends Job
+  private class SleepJob implements Job
   {
 
     /** Field description */

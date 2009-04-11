@@ -7,6 +7,10 @@
 
 package sonia.config;
 
+//~--- JDK imports ------------------------------------------------------------
+
+import java.util.regex.Pattern;
+
 /**
  *
  * @author sdorra
@@ -339,8 +343,25 @@ public abstract class ConfigurationBase implements Configuration
     this.exceptionHandler = exceptionHandler;
   }
 
+  /**
+   * Method description
+   *
+   *
+   * @param variableResolver
+   */
+  public void setVariableResolver(VariableResolver variableResolver)
+  {
+    this.variableResolver = variableResolver;
+  }
+
   //~--- fields ---------------------------------------------------------------
 
   /** Field description */
   protected ExceptionHandler exceptionHandler;
+
+  /** Field description */
+  protected static Pattern variablePattern = Pattern.compile("\\$\\{([a-zA-Z0-9-\\._]+)\\}");
+
+  /** Field description */
+  protected VariableResolver variableResolver;
 }

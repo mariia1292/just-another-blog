@@ -11,6 +11,7 @@ package sonia.config;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
 
 /**
  *
@@ -415,6 +416,74 @@ public abstract class StringBasedConfiguration extends ConfigurationBase
     }
 
     return result;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param value
+   *
+   * @return
+   */
+  protected String resolveVariable(String value)
+  {
+    if ((variableResolver != null) &&!isBlank(value))
+    {
+      Matcher m = variablePattern.matcher(value);
+
+      while (m.find())
+      {
+        String key = m.group(1);
+        int delim = key.indexOf('.');
+        String provider = null;
+        String variable = null;
+
+        if (delim > 0)
+        {
+          provider = key.substring(0, delim);
+          variable = key.substring(delim + 1);
+        }
+        else
+        {
+          variable = key;
+        }
+
+        String replacement = variableResolver.resolveVariable(this, provider,
+                               variable);
+
+        if (replacement == null)
+        {
+          replacement = "";
+        }
+
+        value = m.replaceFirst(replacement);
+        m = variablePattern.matcher(value);
+      }
+    }
+
+    return value;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param values
+   *
+   * @return
+   */
+  protected String[] resolveVariables(String[] values)
+  {
+    if ((variableResolver != null) && (values != null) && (values.length > 0))
+    {
+      for (int i = 0; i < values.length; i++)
+      {
+        values[i] = resolveVariable(values[i]);
+      }
+    }
+
+    return values;
   }
 
   //~--- get methods ----------------------------------------------------------

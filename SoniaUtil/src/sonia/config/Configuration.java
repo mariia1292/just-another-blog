@@ -361,4 +361,12 @@ public interface Configuration
    * @param exceptionHandler
    */
   public void setExceptionHandler(ExceptionHandler exceptionHandler);
+
+  /**
+   * Method description
+   *
+   *
+   * @param variableResolver
+   */
+  public void setVariableResolver(VariableResolver variableResolver);
 }
