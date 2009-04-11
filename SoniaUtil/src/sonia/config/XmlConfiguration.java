@@ -244,7 +244,7 @@ public class XmlConfiguration extends StringBasedConfiguration
   public String getString(String key)
   {
     String result = null;
-    String[] values = properties.get(key);
+    String[] values = getStrings(key);
 
     if ((values != null) && (values.length > 0))
     {
@@ -264,7 +264,7 @@ public class XmlConfiguration extends StringBasedConfiguration
    */
   public String[] getStrings(String key)
   {
-    return properties.get(key);
+    return resolveVariables( properties.get(key) );
   }
 
   /**
