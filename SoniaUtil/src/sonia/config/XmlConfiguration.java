@@ -241,6 +241,53 @@ public class XmlConfiguration extends StringBasedConfiguration
    *
    * @return
    */
+  public String getSecureString(String key)
+  {
+    if ((cipher == null) || (cipherKey == null))
+    {
+      throw new IllegalStateException("no cipher or cipherkey found");
+    }
+
+    String result = null;
+    String[] values = properties.get(key);
+
+    if ((values != null) && (values.length > 0))
+    {
+      result = cipher.decode(cipherKey, values[0]);
+    }
+
+    return result;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param key
+   * @param def
+   *
+   * @return
+   */
+  public String getSecureString(String key, String def)
+  {
+    String result = getSecureString(key);
+
+    if (result == null)
+    {
+      result = def;
+    }
+
+    return result;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param key
+   *
+   * @return
+   */
   public String getString(String key)
   {
     String result = null;
@@ -264,7 +311,7 @@ public class XmlConfiguration extends StringBasedConfiguration
    */
   public String[] getStrings(String key)
   {
-    return resolveVariables( properties.get(key) );
+    return resolveVariables(properties.get(key));
   }
 
   /**
@@ -327,6 +374,24 @@ public class XmlConfiguration extends StringBasedConfiguration
 
     properties.put(key, value);
     fireConfigChangedEvent(key);
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param key
+   * @param value
+   */
+  public void setSecureString(String key, String value)
+  {
+    if ((cipher == null) || (cipherKey == null))
+    {
+      throw new IllegalStateException("no cipher or cipherkey found");
+    }
+
+    value = cipher.encode(cipherKey, value);
+    set(key, value);
   }
 
   //~--- methods --------------------------------------------------------------

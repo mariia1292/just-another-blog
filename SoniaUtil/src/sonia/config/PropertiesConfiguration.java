@@ -182,6 +182,53 @@ public class PropertiesConfiguration extends StringBasedConfiguration
    *
    *
    * @param key
+   * @param def
+   *
+   * @return
+   */
+  public String getSecureString(String key, String def)
+  {
+    String result = getSecureString(key);
+
+    if (result == null)
+    {
+      result = def;
+    }
+
+    return result;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param key
+   *
+   * @return
+   */
+  public String getSecureString(String key)
+  {
+    if ((cipher == null) || (cipherKey == null))
+    {
+      throw new IllegalStateException("no cipher or cipherkey found");
+    }
+
+    String result = null;
+    String value = properties.getProperty(key);
+
+    if ((value != null) && (value.length() > 0))
+    {
+      result = cipher.decode(cipherKey, value);
+    }
+
+    return result;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param key
    *
    * @return
    */
@@ -274,6 +321,24 @@ public class PropertiesConfiguration extends StringBasedConfiguration
       properties.setProperty(key, buffer.toString());
       fireConfigChangedEvent(key);
     }
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param key
+   * @param value
+   */
+  public void setSecureString(String key, String value)
+  {
+    if ((cipher == null) || (cipherKey == null))
+    {
+      throw new IllegalStateException("no cipher or cipherkey found");
+    }
+
+    value = cipher.encode(cipherKey, value);
+    set(key, value);
   }
 
   //~--- methods --------------------------------------------------------------
