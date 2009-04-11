@@ -7,6 +7,10 @@
 
 package sonia.config;
 
+//~--- non-JDK imports --------------------------------------------------------
+
+import sonia.security.cipher.Cipher;
+
 //~--- JDK imports ------------------------------------------------------------
 
 import java.util.regex.Pattern;
@@ -15,8 +19,15 @@ import java.util.regex.Pattern;
  *
  * @author sdorra
  */
-public abstract class ConfigurationBase implements Configuration
+public abstract class ConfigurationBase
+        implements Configuration, SecureConfiguration
 {
+
+  /** Field description */
+  protected static Pattern variablePattern =
+    Pattern.compile("\\$\\{([a-zA-Z0-9-\\._]+)\\}");
+
+  //~--- get methods ----------------------------------------------------------
 
   /**
    * Method description
@@ -336,6 +347,28 @@ public abstract class ConfigurationBase implements Configuration
    * Method description
    *
    *
+   * @param key
+   */
+  public void setChipherKey(char[] key)
+  {
+    this.cipherKey = key;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param cipher
+   */
+  public void setCipher(Cipher cipher)
+  {
+    this.cipher = cipher;
+  }
+
+  /**
+   * Method description
+   *
+   *
    * @param exceptionHandler
    */
   public void setExceptionHandler(ExceptionHandler exceptionHandler)
@@ -357,10 +390,13 @@ public abstract class ConfigurationBase implements Configuration
   //~--- fields ---------------------------------------------------------------
 
   /** Field description */
-  protected ExceptionHandler exceptionHandler;
+  protected Cipher cipher;
 
   /** Field description */
-  protected static Pattern variablePattern = Pattern.compile("\\$\\{([a-zA-Z0-9-\\._]+)\\}");
+  protected char[] cipherKey;
+
+  /** Field description */
+  protected ExceptionHandler exceptionHandler;
 
   /** Field description */
   protected VariableResolver variableResolver;

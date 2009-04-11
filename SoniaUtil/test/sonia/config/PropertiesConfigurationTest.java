@@ -21,7 +21,7 @@ public class PropertiesConfigurationTest extends ConfigurationTestBase
    * @return
    */
   @Override
-  protected ModifyableConfiguration init()
+  protected SecureConfiguration init()
   {
     return new PropertiesConfiguration();
   }

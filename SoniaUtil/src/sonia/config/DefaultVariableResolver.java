@@ -55,11 +55,11 @@ public class DefaultVariableResolver implements VariableResolver
     }
     else if (PROVIDER_ENVIRONMENT.equals(provider))
     {
-      result = System.getenv( variable );
+      result = System.getenv(variable);
     }
     else if (PROVIDER_CONFIG.equals(provider))
     {
-      result = configuration.getString( variable, "" );
+      result = configuration.getString(variable, "");
     }
 
     if (logger.isLoggable(Level.FINER))
@@ -67,7 +67,7 @@ public class DefaultVariableResolver implements VariableResolver
       StringBuffer log = new StringBuffer();
 
       log.append("resolve ").append(provider).append(".").append(variable);
-      log.append( " to " ).append( result );
+      log.append(" to ").append(result);
     }
 
     return result;

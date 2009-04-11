@@ -21,7 +21,7 @@ public class XmlConfigurationTest extends ConfigurationTestBase
    * @return
    */
   @Override
-  protected ModifyableConfiguration init()
+  protected SecureConfiguration init()
   {
     return new XmlConfiguration();
   }

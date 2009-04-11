@@ -11,6 +11,8 @@ package sonia.config;
 
 import org.junit.Test;
 
+import sonia.security.cipher.DefaultCipher;
+
 import static org.junit.Assert.*;
 
 /**
@@ -37,7 +39,21 @@ public abstract class ConfigurationTestBase
    *
    * @return
    */
-  protected abstract ModifyableConfiguration init();
+  protected abstract SecureConfiguration init();
+
+  /**
+   * Method description
+   *
+   */
+  @Test
+  public void cipherTest()
+  {
+    config.setChipherKey("SoniaUtil".toCharArray());
+    config.setCipher(new DefaultCipher());
+    config.setSecureString("test6", "CipherHello");
+    assertFalse("CipherHello".equals(config.getString("test6")));
+    assertEquals("CipherHello", config.getSecureString("test6"));
+  }
 
   /**
    * Method description
@@ -76,5 +92,5 @@ public abstract class ConfigurationTestBase
   //~--- fields ---------------------------------------------------------------
 
   /** Field description */
-  private ModifyableConfiguration config;
+  private SecureConfiguration config;
 }
