@@ -147,6 +147,7 @@ public class GlobalConfigBean extends AbstractConfigBean
   {
     SelectItem[] items = null;
     BlogDAO blogDAO = BlogContext.getDAOFactory().getBlogDAO();
+
     // TODO: scrolling
     List<Blog> blogList = blogDAO.getAll(true, 0, 100);
 

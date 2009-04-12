@@ -7,23 +7,38 @@
 
 package sonia.security.cipher;
 
+//~--- non-JDK imports --------------------------------------------------------
+
+import sonia.security.KeyGenerator;
+
 /**
  *
  * @author sdorra
  */
-public interface Cipher
+public abstract class Cipher
 {
 
   /**
-   * Method description
+   * Constructs ...
+   *
+   */
+  public Cipher()
+  {
+    this.key = KeyGenerator.generateKey(16).toCharArray();
+  }
+
+  /**
+   * Constructs ...
    *
    *
    * @param key
-   * @param value
-   *
-   * @return
    */
-  public String decode(char[] key, String value);
+  public Cipher(char[] key)
+  {
+    this.key = key;
+  }
+
+  //~--- methods --------------------------------------------------------------
 
   /**
    * Method description
@@ -34,5 +49,47 @@ public interface Cipher
    *
    * @return
    */
-  public String encode(char[] key, String value);
+  public abstract String decode(char[] key, String value);
+
+  /**
+   * Method description
+   *
+   *
+   * @param key
+   * @param value
+   *
+   * @return
+   */
+  public abstract String encode(char[] key, String value);
+
+  /**
+   * Method description
+   *
+   *
+   * @param value
+   *
+   * @return
+   */
+  public String decode(String value)
+  {
+    return decode(key, value);
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param value
+   *
+   * @return
+   */
+  public String encode(String value)
+  {
+    return encode(key, value);
+  }
+
+  //~--- fields ---------------------------------------------------------------
+
+  /** Field description */
+  private char[] key;
 }

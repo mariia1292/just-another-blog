@@ -308,8 +308,7 @@ public class EntryBean extends AbstractBean
         if (entry.getCategories() == null)
         {
           CategoryDAO categoryDAO = DAOFactory.getInstance().getCategoryDAO();
-          Category cat =
-            categoryDAO.getFirst(getRequest().getCurrentBlog());
+          Category cat = categoryDAO.getFirst(getRequest().getCurrentBlog());
 
           entry.addCateogory(cat);
         }
@@ -869,10 +868,9 @@ public class EntryBean extends AbstractBean
     List<Tag> oldTags = entry.getTags();
     TagDAO tagDAO = BlogContext.getDAOFactory().getTagDAO();
 
-    if (! Util.isBlank(tagString))
+    if (!Util.isBlank(tagString))
     {
       Set<String> tagSet = Util.createSet(tagString, ",");
-
 
       for (String tag : tagSet)
       {

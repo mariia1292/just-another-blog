@@ -45,14 +45,6 @@ public interface SecureConfiguration extends ModifyableConfiguration
    * Method description
    *
    *
-   * @param key
-   */
-  public void setChipherKey(char[] key);
-
-  /**
-   * Method description
-   *
-   *
    * @param cipher
    */
   public void setCipher(Cipher cipher);

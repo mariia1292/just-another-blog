@@ -17,6 +17,9 @@ import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import javax.crypto.SecretKey;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
@@ -26,7 +29,7 @@ import javax.crypto.spec.PBEParameterSpec;
  *
  * @author sdorra
  */
-public class DefaultCipher implements Cipher
+public class DefaultCipher extends Cipher
 {
 
   /** Field description */
@@ -34,6 +37,10 @@ public class DefaultCipher implements Cipher
 
   /** Field description */
   private static SecureRandom random = new SecureRandom();
+
+  /** Field description */
+  private static Logger logger =
+    Logger.getLogger(DefaultCipher.class.getName());
 
   //~--- methods --------------------------------------------------------------
 
@@ -91,7 +98,9 @@ public class DefaultCipher implements Cipher
     }
     catch (Exception ex)
     {
-      ex.printStackTrace();
+      logger.log(Level.SEVERE, null, ex);
+
+      throw new CipherException(ex);
     }
 
     return result;
@@ -132,7 +141,9 @@ public class DefaultCipher implements Cipher
     }
     catch (Exception ex)
     {
-      ex.printStackTrace();
+      logger.log(Level.SEVERE, null, ex);
+
+      throw new CipherException(ex);
     }
 
     return res;
