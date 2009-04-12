@@ -215,7 +215,7 @@ public class LdapLoginModule extends LoginModule
     searchDn = config.getString(LdapConfigBean.CONFIG_LDAP_BASEDN);
     ssl = config.getBoolean(LdapConfigBean.CONFIG_LDAP_SSL, Boolean.FALSE);
     bindUser = config.getString(LdapConfigBean.CONFIG_LDAP_USER);
-    bindPassword = config.getEncString(LdapConfigBean.CONFIG_LDAP_PASSWORD);
+    bindPassword = config.getSecureString(LdapConfigBean.CONFIG_LDAP_PASSWORD);
     scope = config.getString(LdapConfigBean.CONFIG_LDAP_SCOPE);
     filter = config.getString(LdapConfigBean.CONFIG_LDAP_FILTER);
     nameAttribute = config.getString(LdapConfigBean.CONFIG_LDAP_NAMEATTRINUTE);

@@ -68,7 +68,7 @@ public class JpaDAOFactory extends DAOFactory
     parameters.put("toplink.jdbc.user",
                    config.getString(Constants.CONFIG_DB_USERNAME));
     parameters.put("toplink.jdbc.password",
-                   config.getEncString(Constants.CONFIG_DB_PASSWORD));
+                   config.getSecureString(Constants.CONFIG_DB_PASSWORD));
     entityManagerFactory =
       Persistence.createEntityManagerFactory("SoniaBlog-PU", parameters);
   }

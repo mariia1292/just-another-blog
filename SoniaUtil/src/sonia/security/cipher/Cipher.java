@@ -88,6 +88,19 @@ public abstract class Cipher
     return encode(key, value);
   }
 
+  //~--- set methods ----------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   * @param key
+   */
+  public void setKey(char[] key)
+  {
+    this.key = key;
+  }
+
   //~--- fields ---------------------------------------------------------------
 
   /** Field description */

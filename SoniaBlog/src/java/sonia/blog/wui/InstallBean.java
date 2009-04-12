@@ -102,7 +102,7 @@ public class InstallBean extends AbstractBean
       configuration.set(Constants.CONFIG_DB_DRIVER, databaseDriver);
       configuration.set(Constants.CONFIG_DB_URL, databaseUrl);
       configuration.set(Constants.CONFIG_DB_USERNAME, databaseUsername);
-      configuration.setEncString(Constants.CONFIG_DB_PASSWORD, databsePassword);
+      configuration.setSecureString(Constants.CONFIG_DB_PASSWORD, databsePassword);
       configuration.set(Constants.CONFIG_RESOURCE_DIRECTORY, resourcePath);
 
       if (isDatabaseEmbedded())

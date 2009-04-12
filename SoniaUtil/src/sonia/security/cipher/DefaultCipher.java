@@ -42,6 +42,28 @@ public class DefaultCipher extends Cipher
   private static Logger logger =
     Logger.getLogger(DefaultCipher.class.getName());
 
+  //~--- constructors ---------------------------------------------------------
+
+  /**
+   * Constructs ...
+   *
+   */
+  public DefaultCipher()
+  {
+    super();
+  }
+
+  /**
+   * Constructs ...
+   *
+   *
+   * @param key
+   */
+  public DefaultCipher(char[] key)
+  {
+    super(key);
+  }
+
   //~--- methods --------------------------------------------------------------
 
   /**

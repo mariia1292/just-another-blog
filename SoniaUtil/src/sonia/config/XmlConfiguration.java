@@ -44,7 +44,7 @@ import javax.xml.transform.stream.StreamResult;
  * @author sdorra
  */
 public class XmlConfiguration extends StringBasedConfiguration
-        implements LoadableConfiguration, StoreableConfiguration
+        implements LoadableConfiguration, StoreableConfiguration, SecureConfiguration
 {
 
   /**

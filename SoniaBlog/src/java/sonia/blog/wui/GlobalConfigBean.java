@@ -82,7 +82,7 @@ public class GlobalConfigBean extends AbstractConfigBean
     smtpServer = config.getString(Constants.CONFIG_SMTPSERVER);
     smtpPort = config.getInteger(Constants.CONFIG_SMTPPORT, 25);
     smtpUsername = config.getString(Constants.CONFIG_SMTPUSER);
-    smtpPassword = config.getEncString(Constants.CONFIG_SMTPPASSWORD);
+    smtpPassword = config.getSecureString(Constants.CONFIG_SMTPPASSWORD);
     registerAcknowledgement =
       config.getBoolean(Constants.CONFIG_REGISTERACKNOWLEDGEMENT, false);
   }
@@ -107,7 +107,7 @@ public class GlobalConfigBean extends AbstractConfigBean
     config.set(Constants.CONFIG_SMTPSERVER, smtpServer);
     config.set(Constants.CONFIG_SMTPPORT, smtpPort);
     config.set(Constants.CONFIG_SMTPUSER, smtpUsername);
-    config.setEncString(Constants.CONFIG_SMTPPASSWORD, smtpPassword);
+    config.setSecureString(Constants.CONFIG_SMTPPASSWORD, smtpPassword);
     config.set(Constants.CONFIG_REGISTERACKNOWLEDGEMENT,
                registerAcknowledgement);
   }
