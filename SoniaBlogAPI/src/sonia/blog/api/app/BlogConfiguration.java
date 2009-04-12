@@ -11,13 +11,6 @@ package sonia.blog.api.app;
 
 import sonia.config.XmlConfiguration;
 
-import sonia.plugin.service.ServiceReference;
-
-import sonia.security.KeyGenerator;
-import sonia.security.cipher.Cipher;
-
-import sonia.util.Util;
-
 //~--- JDK imports ------------------------------------------------------------
 
 import java.io.File;
@@ -106,6 +99,7 @@ public class BlogConfiguration extends XmlConfiguration
       {
         backupFile.renameTo(file);
       }
+      throw ex;
     }
     finally
     {
@@ -115,110 +109,4 @@ public class BlogConfiguration extends XmlConfiguration
       }
     }
   }
-
-  //~--- get methods ----------------------------------------------------------
-
-  /**
-   * Method description
-   *
-   *
-   * @param key
-   * @param def
-   *
-   * @return
-   */
-  public String getEncString(String key, String def)
-  {
-    char[] secureKey = getKey();
-    String value = getString(key);
-
-    if (value != null)
-    {
-      value = getCipher().decode(secureKey, value);
-    }
-    else
-    {
-      value = def;
-    }
-
-    return value;
-  }
-
-  /**
-   * Method description
-   *
-   *
-   * @param key
-   *
-   * @return
-   */
-  public String getEncString(String key)
-  {
-    return getEncString(key, null);
-  }
-
-  //~--- set methods ----------------------------------------------------------
-
-  /**
-   * Method description
-   *
-   *
-   * @param key
-   * @param value
-   */
-  public void setEncString(String key, String value)
-  {
-    if (value != null)
-    {
-      char[] secureKey = getKey();
-
-      value = getCipher().encode(secureKey, value);
-    }
-
-    set(key, value);
-  }
-
-  //~--- get methods ----------------------------------------------------------
-
-  /**
-   * Method description
-   *
-   *
-   * @return
-   */
-  private Cipher getCipher()
-  {
-    if (cipherReference == null)
-    {
-      cipherReference =
-        BlogContext.getInstance().getServiceRegistry().get(Cipher.class,
-          Constants.SERVCIE_CIPHER);
-    }
-
-    return cipherReference.get();
-  }
-
-  /**
-   * Method description
-   *
-   *
-   * @return
-   */
-  private char[] getKey()
-  {
-    String key = getString(Constants.CONFIG_SECUREKEY);
-
-    if (Util.isBlank(key))
-    {
-      key = KeyGenerator.generateKey(16);
-      set(Constants.CONFIG_SECUREKEY, key);
-    }
-
-    return key.toCharArray();
-  }
-
-  //~--- fields ---------------------------------------------------------------
-
-  /** Field description */
-  private ServiceReference<Cipher> cipherReference;
 }

@@ -71,7 +71,7 @@ public class LdapConfigBean extends AbstractConfigBean
     port = config.getInteger(CONFIG_LDAP_PORT, 389);
     ssl = config.getBoolean(CONFIG_LDAP_SSL, Boolean.FALSE);
     user = config.getString(CONFIG_LDAP_USER);
-    password = config.getEncString(CONFIG_LDAP_PASSWORD);
+    password = config.getSecureString(CONFIG_LDAP_PASSWORD);
     filter = config.getString(CONFIG_LDAP_FILTER);
     scope = config.getString(CONFIG_LDAP_SCOPE, "sub");
     enabled = config.getBoolean(CONFIG_LDAP_ENABLED, Boolean.FALSE);
@@ -95,7 +95,7 @@ public class LdapConfigBean extends AbstractConfigBean
     config.set(CONFIG_LDAP_PORT, port);
     config.set(CONFIG_LDAP_SSL, ssl);
     config.set(CONFIG_LDAP_USER, user);
-    config.setEncString(CONFIG_LDAP_PASSWORD, password);
+    config.setSecureString(CONFIG_LDAP_PASSWORD, password);
     config.set(CONFIG_LDAP_FILTER, filter);
     config.set(CONFIG_LDAP_SCOPE, scope);
     config.set(CONFIG_LDAP_ENABLED, enabled);

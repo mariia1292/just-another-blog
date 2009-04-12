@@ -29,7 +29,11 @@ import sonia.plugin.PluginContext;
 import sonia.plugin.service.ServiceReference;
 import sonia.plugin.service.ServiceRegistry;
 
+import sonia.security.KeyGenerator;
 import sonia.security.authentication.LoginCallbackHandler;
+import sonia.security.cipher.DefaultCipher;
+
+import sonia.util.Util;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -225,18 +229,37 @@ public class BlogContext
       configuration = new BlogConfiguration();
 
       File config = getConfigFile();
+      String key = null;
 
       if (config.isFile())
       {
         try
         {
           configuration.load(new FileInputStream(config));
+          key = configuration.getString(Constants.CONFIG_SECUREKEY);
         }
         catch (IOException ex)
         {
           logger.log(Level.SEVERE, null, ex);
         }
       }
+
+      if (Util.isBlank(key))
+      {
+        key = KeyGenerator.generateKey(16);
+        configuration.set(Constants.CONFIG_SECUREKEY, key);
+
+        try
+        {
+          configuration.store();
+        }
+        catch (IOException ex)
+        {
+          throw new BlogRuntimeException(ex);
+        }
+      }
+
+      configuration.setCipher(new DefaultCipher(key.toCharArray()));
     }
 
     return configuration;

@@ -68,66 +68,6 @@ public class JpaCategoryDAO extends JpaGenericDAO<Category>
     return countQuery("Category.countByBlog", blog);
   }
 
-  /**
-   * Method description
-   *
-   *
-   * @param blog
-   * @param start
-   * @param max
-   *
-   * @return
-   */
-  public List<Category> getAll(Blog blog, int start, int max)
-  {
-    return findList("Category.findAllByBlog", blog, start, max);
-  }
-
-  /**
-   * Method description
-   *
-   *
-   * @param blog
-   *
-   * @return
-   */
-  public List<Category> getAll(Blog blog)
-  {
-    return findList("Category.findAllByBlog", blog);
-  }
-
-  /**
-   * Method description
-   *
-   *
-   * @param blog
-   *
-   * @return
-   */
-  public Category getFirst(Blog blog)
-  {
-    Category category = null;
-    EntityManager em = createEntityManager();
-    Query q = em.createNamedQuery("Category.findFirstByBlog");
-
-    q.setParameter("blog", blog);
-
-    try
-    {
-      category = (Category) q.getSingleResult();
-    }
-    catch (NoResultException ex) {}
-    finally
-    {
-      if (em != null)
-      {
-        em.close();
-      }
-    }
-
-    return category;
-  }
-
   //~--- get methods ----------------------------------------------------------
 
   /**
@@ -168,6 +108,34 @@ public class JpaCategoryDAO extends JpaGenericDAO<Category>
    * Method description
    *
    *
+   * @param blog
+   * @param start
+   * @param max
+   *
+   * @return
+   */
+  public List<Category> getAll(Blog blog, int start, int max)
+  {
+    return findList("Category.findAllByBlog", blog, start, max);
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param blog
+   *
+   * @return
+   */
+  public List<Category> getAll(Blog blog)
+  {
+    return findList("Category.findAllByBlog", blog);
+  }
+
+  /**
+   * Method description
+   *
+   *
    * @return
    */
   public List<Category> getAll()
@@ -187,5 +155,37 @@ public class JpaCategoryDAO extends JpaGenericDAO<Category>
   public List<Category> getAll(int start, int max)
   {
     return findList("Category.findAll", start, max);
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param blog
+   *
+   * @return
+   */
+  public Category getFirst(Blog blog)
+  {
+    Category category = null;
+    EntityManager em = createEntityManager();
+    Query q = em.createNamedQuery("Category.findFirstByBlog");
+
+    q.setParameter("blog", blog);
+
+    try
+    {
+      category = (Category) q.getSingleResult();
+    }
+    catch (NoResultException ex) {}
+    finally
+    {
+      if (em != null)
+      {
+        em.close();
+      }
+    }
+
+    return category;
   }
 }

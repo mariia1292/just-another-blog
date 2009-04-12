@@ -24,7 +24,7 @@ import java.util.Set;
  * @author sdorra
  */
 public class PropertiesConfiguration extends StringBasedConfiguration
-        implements StoreableConfiguration, LoadableConfiguration
+        implements StoreableConfiguration, LoadableConfiguration, SecureConfiguration
 {
 
   /**

@@ -129,7 +129,7 @@ public class BlogContextListener implements ServletContextListener
       initFileNameMap();
       configureLogger();
       initServices(context);
-      
+
       if (context.isInstalled())
       {
         BlogContext.getDAOFactory().init();
