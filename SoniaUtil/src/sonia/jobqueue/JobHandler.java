@@ -91,7 +91,7 @@ public class JobHandler extends Thread
           queue.fireFinishedEvent(job, ex);
         }
 
-        synchronized ( job )
+        synchronized (job)
         {
           job.notify();
         }

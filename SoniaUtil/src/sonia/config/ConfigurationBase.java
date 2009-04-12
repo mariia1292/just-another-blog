@@ -347,17 +347,6 @@ public abstract class ConfigurationBase
    * Method description
    *
    *
-   * @param key
-   */
-  public void setChipherKey(char[] key)
-  {
-    this.cipherKey = key;
-  }
-
-  /**
-   * Method description
-   *
-   *
    * @param cipher
    */
   public void setCipher(Cipher cipher)
@@ -391,9 +380,6 @@ public abstract class ConfigurationBase
 
   /** Field description */
   protected Cipher cipher;
-
-  /** Field description */
-  protected char[] cipherKey;
 
   /** Field description */
   protected ExceptionHandler exceptionHandler;

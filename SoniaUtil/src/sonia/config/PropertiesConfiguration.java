@@ -208,9 +208,9 @@ public class PropertiesConfiguration extends StringBasedConfiguration
    */
   public String getSecureString(String key)
   {
-    if ((cipher == null) || (cipherKey == null))
+    if (cipher == null)
     {
-      throw new IllegalStateException("no cipher or cipherkey found");
+      throw new IllegalStateException("no cipher found");
     }
 
     String result = null;
@@ -218,7 +218,7 @@ public class PropertiesConfiguration extends StringBasedConfiguration
 
     if ((value != null) && (value.length() > 0))
     {
-      result = cipher.decode(cipherKey, value);
+      result = cipher.decode(value);
     }
 
     return result;
@@ -332,12 +332,12 @@ public class PropertiesConfiguration extends StringBasedConfiguration
    */
   public void setSecureString(String key, String value)
   {
-    if ((cipher == null) || (cipherKey == null))
+    if (cipher == null)
     {
-      throw new IllegalStateException("no cipher or cipherkey found");
+      throw new IllegalStateException("no cipher found");
     }
 
-    value = cipher.encode(cipherKey, value);
+    value = cipher.encode(value);
     set(key, value);
   }
 

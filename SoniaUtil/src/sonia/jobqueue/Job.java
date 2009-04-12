@@ -25,5 +25,4 @@ public interface Job extends Serializable
    * @throws JobException
    */
   public abstract void excecute() throws JobException;
-
 }
