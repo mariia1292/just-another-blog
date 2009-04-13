@@ -48,7 +48,6 @@ public abstract class ConfigurationTestBase
   @Test
   public void cipherTest()
   {
-    config.setChipherKey("SoniaUtil".toCharArray());
     config.setCipher(new DefaultCipher());
     config.setSecureString("test6", "CipherHello");
     assertFalse("CipherHello".equals(config.getString("test6")));
