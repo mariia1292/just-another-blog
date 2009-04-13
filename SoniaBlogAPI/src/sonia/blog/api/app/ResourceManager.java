@@ -54,6 +54,20 @@ public class ResourceManager
    *
    *
    * @param name
+   * @param create
+   *
+   * @return
+   */
+  public File getDirectory(String name, boolean create)
+  {
+    return getDirectory(name, null, create);
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param name
    * @param blog
    *
    * @return
