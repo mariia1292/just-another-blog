@@ -16,6 +16,7 @@ import org.w3c.dom.NodeList;
 
 import org.xml.sax.SAXException;
 
+import sonia.util.Util;
 import sonia.util.XmlUtil;
 
 //~--- JDK imports ------------------------------------------------------------
@@ -44,7 +45,8 @@ import javax.xml.transform.stream.StreamResult;
  * @author sdorra
  */
 public class XmlConfiguration extends StringBasedConfiguration
-        implements LoadableConfiguration, StoreableConfiguration, SecureConfiguration
+        implements LoadableConfiguration, StoreableConfiguration,
+                   SecureConfiguration
 {
 
   /**
@@ -390,7 +392,11 @@ public class XmlConfiguration extends StringBasedConfiguration
       throw new IllegalStateException("no cipher found");
     }
 
-    value = cipher.encode(value);
+    if (Util.hasContent(value))
+    {
+      value = cipher.encode(value);
+    }
+
     set(key, value);
   }
 

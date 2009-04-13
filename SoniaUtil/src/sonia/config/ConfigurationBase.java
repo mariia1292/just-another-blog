@@ -19,8 +19,7 @@ import java.util.regex.Pattern;
  *
  * @author sdorra
  */
-public abstract class ConfigurationBase
-        implements Configuration
+public abstract class ConfigurationBase implements Configuration
 {
 
   /** Field description */

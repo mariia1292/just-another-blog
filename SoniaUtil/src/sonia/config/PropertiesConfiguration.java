@@ -7,6 +7,10 @@
 
 package sonia.config;
 
+//~--- non-JDK imports --------------------------------------------------------
+
+import sonia.util.Util;
+
 //~--- JDK imports ------------------------------------------------------------
 
 import java.io.IOException;
@@ -24,7 +28,8 @@ import java.util.Set;
  * @author sdorra
  */
 public class PropertiesConfiguration extends StringBasedConfiguration
-        implements StoreableConfiguration, LoadableConfiguration, SecureConfiguration
+        implements StoreableConfiguration, LoadableConfiguration,
+                   SecureConfiguration
 {
 
   /**
@@ -337,7 +342,11 @@ public class PropertiesConfiguration extends StringBasedConfiguration
       throw new IllegalStateException("no cipher found");
     }
 
-    value = cipher.encode(value);
+    if (Util.hasContent(value))
+    {
+      value = cipher.encode(value);
+    }
+
     set(key, value);
   }
 
