@@ -21,6 +21,7 @@ import sonia.blog.api.link.LinkBuilder;
 import sonia.blog.api.mapping.MappingHandler;
 import sonia.blog.api.navigation.NavigationProvider;
 import sonia.blog.api.search.SearchContext;
+import sonia.blog.api.spam.SpamCheck;
 import sonia.blog.api.spam.SpamInputProtection;
 import sonia.blog.authentication.CookieLoginModule;
 import sonia.blog.authentication.DefaultLoginModule;
@@ -37,6 +38,7 @@ import sonia.blog.macro.SpoilerMacro;
 import sonia.blog.mapping.DefaultMappingHandler;
 import sonia.blog.search.DefaultSearchContext;
 import sonia.blog.search.IndexListener;
+import sonia.blog.spam.BlacklistSpamCheck;
 import sonia.blog.spam.CaptchaSpamProtection;
 import sonia.blog.spam.MathSpamProtection;
 
@@ -331,9 +333,13 @@ public class BlogContextListener implements ServletContextListener
         new DefaultLinkBuilder());
     registry.register(String.class, Constants.SERVCIE_GLOBALCONFIGPROVIDER);
     registry.register(String.class, Constants.SERVCIE_GLOBALSTATUSROVIDER);
+
+    // spam protection
     registry.register(
         SpamInputProtection.class, Constants.SERVICE_SPAMPROTECTIONMETHOD).add(
         new MathSpamProtection()).add(new CaptchaSpamProtection());
+    registry.register(SpamCheck.class, Constants.SERVICE_SPAMCHECK).add(
+        new BlacklistSpamCheck());
 
     // register Listeners
     registry.register(DAOListener.class, Constants.LISTENER_ATTACHMENT);
