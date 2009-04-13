@@ -52,6 +52,7 @@
                     </xsd:sequence>
                 </xsd:complexType>
             </xsd:element>
+            <xsd:element name="loggedIn" minOccurs="0" maxOccurs="unbounded" nillable="true"/>
         </xsd:sequence>
     </xsd:complexType>
     <xsd:complexType name="init-param">

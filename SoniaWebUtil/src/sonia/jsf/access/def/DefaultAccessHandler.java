@@ -78,18 +78,13 @@ public class DefaultAccessHandler extends AccessHandler
    * @throws IOException
    */
   @Override
-  public void readConfig(InputStream in) throws IOException
+  public synchronized void readConfig(InputStream in) throws IOException
   {
     DefaultConfigReader reader = new DefaultConfigReader();
 
     try
     {
-      List<Rule> ruleList = reader.readConfig(in);
-
-      synchronized (rules)
-      {
-        rules = ruleList;
-      }
+      rules = reader.readConfig(in);
     }
     catch (Exception ex)
     {

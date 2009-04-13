@@ -44,6 +44,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.xml.parsers.ParserConfigurationException;
+import sonia.jsf.access.def.condition.LoggedInCondition;
 
 /**
  *
@@ -221,6 +222,10 @@ public class DefaultConfigReader
           {
             parent.add(new UriMatchesCondition(regex));
           }
+        }
+        else if (childName.equals("loggedIn"))
+        {
+          parent.add( new LoggedInCondition() );
         }
         else if (childName.equals("and"))
         {

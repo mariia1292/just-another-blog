@@ -14,6 +14,8 @@ import sonia.jsf.access.Action;
 //~--- JDK imports ------------------------------------------------------------
 
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.faces.context.FacesContext;
 
@@ -26,6 +28,12 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class NavigationAction implements Action
 {
+
+  /** Field description */
+  private static Logger logger =
+    Logger.getLogger(NavigationAction.class.getName());
+
+  //~--- constructors ---------------------------------------------------------
 
   /**
    * Constructs ...
@@ -51,6 +59,14 @@ public class NavigationAction implements Action
   public void doAction(HttpServletRequest request,
                        HttpServletResponse response, FacesContext context)
   {
+    if (logger.isLoggable(Level.FINE))
+    {
+      StringBuffer log = new StringBuffer();
+
+      log.append("navigate to ").append(target);
+      logger.fine(log.toString());
+    }
+
     context.getApplication().getNavigationHandler().handleNavigation(context,
             null, target);
   }
