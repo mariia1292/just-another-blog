@@ -64,7 +64,7 @@ public class RedirectAction implements Action
     String redirect = null;
     if ( target.startsWith( "/" ) )
     {
-      target = request.getContextPath() + target;
+      redirect = request.getContextPath() + target;
     }
     else
     {
@@ -81,7 +81,7 @@ public class RedirectAction implements Action
 
     try
     {
-      response.sendRedirect(target);
+      response.sendRedirect(redirect);
     }
     catch (IOException ex)
     {
