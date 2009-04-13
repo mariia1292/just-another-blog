@@ -102,7 +102,8 @@ public class InstallBean extends AbstractBean
       configuration.set(Constants.CONFIG_DB_DRIVER, databaseDriver);
       configuration.set(Constants.CONFIG_DB_URL, databaseUrl);
       configuration.set(Constants.CONFIG_DB_USERNAME, databaseUsername);
-      configuration.setSecureString(Constants.CONFIG_DB_PASSWORD, databsePassword);
+      configuration.setSecureString(Constants.CONFIG_DB_PASSWORD,
+                                    databsePassword);
       configuration.set(Constants.CONFIG_RESOURCE_DIRECTORY, resourcePath);
 
       if (isDatabaseEmbedded())
@@ -196,6 +197,7 @@ public class InstallBean extends AbstractBean
       else
       {
         configuration.set("defaultBlog", blog.getId());
+        configuration.set(Constants.CONFIG_INSTALLED, Boolean.TRUE);
 
         if (configuration instanceof StoreableConfiguration)
         {
