@@ -27,6 +27,7 @@ import sonia.blog.api.navigation.NavigationProvider;
 import sonia.blog.api.search.SearchContext;
 import sonia.blog.api.search.SearchEntry;
 import sonia.blog.api.search.SearchException;
+import sonia.blog.api.spam.SpamCheck;
 import sonia.blog.api.spam.SpamInputProtection;
 import sonia.blog.api.template.Template;
 import sonia.blog.api.util.AbstractBean;
@@ -79,6 +80,7 @@ public class BlogBean extends AbstractBean
 
       comment.setAuthorAddress(getRequest().getRemoteAddr());
       ca.addComment(comment);
+      checkSpam(comment);
 
       if (entry instanceof Entry)
       {
@@ -86,7 +88,14 @@ public class BlogBean extends AbstractBean
 
         if (commentDAO.add(comment))
         {
-          getMessageHandler().info("createCommentSuccess");
+          if ( comment.isSpam() )
+          {
+            getMessageHandler().warn("createCommentSpam");
+          }
+          else
+          {
+            getMessageHandler().info("createCommentSuccess");
+          }
         }
         else
         {
@@ -644,6 +653,36 @@ public class BlogBean extends AbstractBean
     this.searchString = searchString;
   }
 
+  //~--- methods --------------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   * @param comment
+   */
+  private void checkSpam(Comment comment)
+  {
+    comment.setSpam(false);
+
+    List<SpamCheck> list = spamCheckReference.getAll();
+
+    if (Util.hasContent(list))
+    {
+      BlogRequest request = getRequest();
+
+      for (SpamCheck check : list)
+      {
+        if (check.isSpam(request, comment))
+        {
+          comment.setSpam(true);
+
+          break;
+        }
+      }
+    }
+  }
+
   //~--- fields ---------------------------------------------------------------
 
   /** Field description */
@@ -677,6 +716,10 @@ public class BlogBean extends AbstractBean
 
   /** Field description */
   private String searchString;
+
+  /** Field description */
+  @Service(Constants.SERVICE_SPAMCHECK)
+  private ServiceReference<SpamCheck> spamCheckReference;
 
   /** Field description */
   @Service(Constants.SERVICE_SPAMPROTECTIONMETHOD)

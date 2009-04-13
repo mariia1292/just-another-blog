@@ -288,7 +288,10 @@ public interface Constants
   public static final String SERVICE_SEARCHCONTEXT = "/app/searchContext";
 
   /** Field description */
-  public static final String SERVICE_SPAMPROTECTIONMETHOD = "/app/input/spam";
+  public static final String SERVICE_SPAMCHECK = "/app/spam/check";
+
+  /** Field description */
+  public static final String SERVICE_SPAMPROTECTIONMETHOD = "/app/spam/input";
 
   /** Field description */
   public static final String SERVICE_SSOAUTHENTICATION = "/app/sso";
