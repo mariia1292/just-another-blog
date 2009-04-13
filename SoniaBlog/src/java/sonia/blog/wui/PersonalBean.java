@@ -161,14 +161,17 @@ public class PersonalBean extends AbstractBean
 
       User user = getRequest().getUser();
 
-      if (user.isSelfManaged())
+      if (user != null)
       {
-        readerNavigation.add(
-            new NavigationMenuItem(
-                label.getString("userSettings"), "userSettings"));
-      }
+        if (user.isSelfManaged())
+        {
+          readerNavigation.add(
+              new NavigationMenuItem(
+                  label.getString("userSettings"), "userSettings"));
+        }
 
-      handleProviders(Constants.NAVIGATION_READER, readerNavigation);
+        handleProviders(Constants.NAVIGATION_READER, readerNavigation);
+      }
     }
     else
     {

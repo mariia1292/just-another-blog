@@ -14,6 +14,8 @@ import sonia.jsf.access.Action;
 //~--- JDK imports ------------------------------------------------------------
 
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.faces.context.FacesContext;
 
@@ -27,6 +29,12 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class ForwardAction implements Action
 {
+
+  /** Field description */
+  private static Logger logger =
+    Logger.getLogger(NavigationAction.class.getName());
+
+  //~--- constructors ---------------------------------------------------------
 
   /**
    * Constructs ...
@@ -52,6 +60,14 @@ public class ForwardAction implements Action
   public void doAction(HttpServletRequest request,
                        HttpServletResponse response, FacesContext context)
   {
+    if (logger.isLoggable(Level.FINE))
+    {
+      StringBuffer log = new StringBuffer();
+
+      log.append("forward to ").append(target);
+      logger.fine(log.toString());
+    }
+
     RequestDispatcher dispatcher = request.getRequestDispatcher(target);
 
     try

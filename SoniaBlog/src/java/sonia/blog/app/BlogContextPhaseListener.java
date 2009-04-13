@@ -12,6 +12,7 @@ package sonia.blog.app;
 import java.util.Iterator;
 
 import javax.faces.application.FacesMessage;
+import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
 import javax.faces.event.PhaseEvent;
 import javax.faces.event.PhaseId;
@@ -63,7 +64,7 @@ public class BlogContextPhaseListener implements PhaseListener
    */
   public PhaseId getPhaseId()
   {
-    return PhaseId.RESTORE_VIEW;
+    return PhaseId.RENDER_RESPONSE;
   }
 
   //~--- methods --------------------------------------------------------------

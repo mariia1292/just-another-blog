@@ -105,7 +105,7 @@ public class AccessPhaseListener implements PhaseListener
    */
   public PhaseId getPhaseId()
   {
-    return PhaseId.RESTORE_VIEW;
+    return PhaseId.RENDER_RESPONSE;
   }
 
   //~--- fields ---------------------------------------------------------------

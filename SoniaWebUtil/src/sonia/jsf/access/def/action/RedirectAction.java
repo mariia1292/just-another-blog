@@ -16,6 +16,8 @@ import sonia.jsf.access.Action;
 import java.io.IOException;
 
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.faces.context.FacesContext;
 
@@ -28,6 +30,12 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class RedirectAction implements Action
 {
+
+  /** Field description */
+  private static Logger logger =
+    Logger.getLogger(NavigationAction.class.getName());
+
+  //~--- constructors ---------------------------------------------------------
 
   /**
    * Constructs ...
@@ -53,6 +61,24 @@ public class RedirectAction implements Action
   public void doAction(HttpServletRequest request,
                        HttpServletResponse response, FacesContext context)
   {
+    String redirect = null;
+    if ( target.startsWith( "/" ) )
+    {
+      target = request.getContextPath() + target;
+    }
+    else
+    {
+      redirect = target;
+    }
+
+    if (logger.isLoggable(Level.FINE))
+    {
+      StringBuffer log = new StringBuffer();
+
+      log.append("redirect to ").append(redirect);
+      logger.fine(log.toString());
+    }
+
     try
     {
       response.sendRedirect(target);

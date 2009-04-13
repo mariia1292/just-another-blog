@@ -43,13 +43,17 @@
 
   <lifecycle>
     <phase-listener>
+      sonia.blog.app.AccessPhaseListener
+    </phase-listener>
+    <phase-listener>
       sonia.blog.app.BlogContextPhaseListener
     </phase-listener>
   </lifecycle>
   
   <application>
     <locale-config>
-      <default-locale>de</default-locale>
+      <default-locale>en</default-locale>
+      <supported-locale>en</supported-locale>
       <supported-locale>de</supported-locale>
     </locale-config>
     <view-handler>
