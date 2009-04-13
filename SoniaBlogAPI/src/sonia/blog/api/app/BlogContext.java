@@ -504,12 +504,8 @@ public class BlogContext
    */
   public boolean isInstalled()
   {
-    if (!installed)
-    {
-      installed = getConfigFile().isFile();
-    }
-
-    return installed;
+    return getConfiguration().getBoolean(Constants.CONFIG_INSTALLED,
+            Boolean.FALSE);
   }
 
   //~--- set methods ----------------------------------------------------------

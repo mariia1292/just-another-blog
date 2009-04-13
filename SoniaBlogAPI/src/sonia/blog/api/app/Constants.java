@@ -74,6 +74,9 @@ public interface Constants
   public static final String CONFIG_IMAGEMIMETYPE = "image.mimetype";
 
   /** Field description */
+  public static final String CONFIG_INSTALLED = "app.installed";
+
+  /** Field description */
   public static final String CONFIG_PASSWORD_MINLENGTH = "password.minLength";
 
   /** Field description */
