@@ -121,7 +121,7 @@ public class IndexListener implements DAOListener
 
       try
       {
-        IndexWriter writer = new IndexWriter(blogDir, new StandardAnalyzer());
+        IndexWriter writer = new IndexWriter(blogDir, new StandardAnalyzer(), IndexWriter.MaxFieldLength.UNLIMITED);
 
         writer.addDocument(doc);
         writer.optimize();
