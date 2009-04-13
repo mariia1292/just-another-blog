@@ -107,7 +107,14 @@ public class GlobalConfigBean extends AbstractConfigBean
     config.set(Constants.CONFIG_SMTPSERVER, smtpServer);
     config.set(Constants.CONFIG_SMTPPORT, smtpPort);
     config.set(Constants.CONFIG_SMTPUSER, smtpUsername);
-    config.setSecureString(Constants.CONFIG_SMTPPASSWORD, smtpPassword);
+    if ( Util.hasContent( smtpPassword )  )
+    {
+      config.setSecureString(Constants.CONFIG_SMTPPASSWORD, smtpPassword);
+    }
+    else
+    {
+      config.set(Constants.CONFIG_SMTPPASSWORD, null);
+    }
     config.set(Constants.CONFIG_REGISTERACKNOWLEDGEMENT,
                registerAcknowledgement);
   }

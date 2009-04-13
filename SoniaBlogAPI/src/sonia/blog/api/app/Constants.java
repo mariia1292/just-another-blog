@@ -90,19 +90,19 @@ public interface Constants
   public static final String CONFIG_SECUREKEY = "app.securekey";
 
   /** Field description */
-  public static String CONFIG_SMTPPASSWORD = "smtp.password";
+  public static final String CONFIG_SMTPPASSWORD = "smtp.password";
 
   /** Field description */
-  public static String CONFIG_SMTPPORT = "smtp.port";
+  public static final String CONFIG_SMTPPORT = "smtp.port";
 
   /** Field description */
-  public static String CONFIG_SMTPSERVER = "smtp.server";
+  public static final String CONFIG_SMTPSERVER = "smtp.server";
 
   /** Field description */
-  public static String CONFIG_SMTPSTARTTLS = "smtp.starttls";
+  public static final String CONFIG_SMTPSTARTTLS = "smtp.starttls";
 
   /** Field description */
-  public static String CONFIG_SMTPUSER = "smtp.user";
+  public static final String CONFIG_SMTPUSER = "smtp.user";
 
   /** Field description */
   public static final String CONFIG_SPAMMETHOD = "spam.method";
@@ -209,6 +209,9 @@ public interface Constants
 
   /** Field description */
   public static final String RESOURCE_ATTACHMENT = "attachments";
+
+  /** Field description */
+  public static final String RESOURCE_CONFIG = "config";
 
   /** Field description */
   public static final String RESOURCE_DATABASE = "db";

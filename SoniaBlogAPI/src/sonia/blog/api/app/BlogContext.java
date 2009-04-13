@@ -18,6 +18,8 @@ import sonia.blog.api.search.SearchContext;
 import sonia.blog.api.template.TemplateManager;
 import sonia.blog.entity.Blog;
 
+import sonia.config.WebVariableResolver;
+
 import sonia.injection.DefaultInjectionProvider;
 import sonia.injection.InjectionProvider;
 
@@ -41,7 +43,9 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 
+import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -58,9 +62,6 @@ import javax.servlet.ServletContext;
  */
 public class BlogContext
 {
-
-  /** Field description */
-  public static final String CONFIGFILE_PARAMETER = "sonia.config.ConfigFile";
 
   /** Field description */
   private static BlogContext instance;
@@ -209,11 +210,14 @@ public class BlogContext
    */
   public File getConfigFile()
   {
-    String path = getServletContext().getRealPath(
-                      getServletContext().getInitParameter(
-                        CONFIGFILE_PARAMETER));
+    if (configFile == null)
+    {
+      File dir = getResourceManager().getDirectory(Constants.RESOURCE_CONFIG);
 
-    return new File(path);
+      configFile = new File(dir, "main-config.xml");
+    }
+
+    return configFile;
   }
 
   /**
@@ -227,6 +231,8 @@ public class BlogContext
     if (configuration == null)
     {
       configuration = new BlogConfiguration();
+      configuration.setVariableResolver(
+          new WebVariableResolver(servletContext));
 
       File config = getConfigFile();
       String key = null;
@@ -248,15 +254,6 @@ public class BlogContext
       {
         key = KeyGenerator.generateKey(16);
         configuration.set(Constants.CONFIG_SECUREKEY, key);
-
-        try
-        {
-          configuration.store();
-        }
-        catch (IOException ex)
-        {
-          throw new BlogRuntimeException(ex);
-        }
       }
 
       configuration.setCipher(new DefaultCipher(key.toCharArray()));
@@ -426,9 +423,41 @@ public class BlogContext
   {
     if (resourceManager == null)
     {
-      BlogConfiguration config = getConfiguration();
-      String resourcePath =
-        config.getString(Constants.CONFIG_RESOURCE_DIRECTORY);
+      String resourcePath = null;
+      Properties props = new Properties();
+      InputStream in = null;
+
+      try
+      {
+        String path =
+          getServletContext().getRealPath("/WEB-INF/base.properties");
+        File baseProps = new File(path);
+
+        if (baseProps.exists())
+        {
+          in = new FileInputStream(path);
+          props.load(in);
+          resourcePath = props.getProperty("resource.home");
+        }
+      }
+      catch (IOException ex)
+      {
+        throw new BlogRuntimeException(ex);
+      }
+      finally
+      {
+        if (in != null)
+        {
+          try
+          {
+            in.close();
+          }
+          catch (IOException ex)
+          {
+            logger.log(Level.SEVERE, null, ex);
+          }
+        }
+      }
 
       if (resourcePath == null)
       {
@@ -504,8 +533,11 @@ public class BlogContext
    */
   public boolean isInstalled()
   {
-    return getConfiguration().getBoolean(Constants.CONFIG_INSTALLED,
-            Boolean.FALSE);
+    File f = getConfigFile();
+
+    return (f != null) && f.exists()
+           && getConfiguration().getBoolean(Constants.CONFIG_INSTALLED,
+             Boolean.FALSE);
   }
 
   //~--- set methods ----------------------------------------------------------
@@ -522,6 +554,9 @@ public class BlogContext
   }
 
   //~--- fields ---------------------------------------------------------------
+
+  /** Field description */
+  private File configFile;
 
   /** Field description */
   private BlogConfiguration configuration;

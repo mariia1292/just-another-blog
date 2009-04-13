@@ -11,6 +11,7 @@ package sonia.blog.wui;
 
 import sonia.blog.api.app.BlogConfiguration;
 import sonia.blog.api.app.BlogContext;
+import sonia.blog.api.app.BlogRuntimeException;
 import sonia.blog.api.app.Constants;
 import sonia.blog.api.dao.DAOFactory;
 import sonia.blog.api.util.AbstractBean;
@@ -31,11 +32,14 @@ import sonia.security.encryption.Encryption;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 
 import java.sql.Connection;
 import java.sql.Driver;
 import java.sql.DriverManager;
 
+import java.util.Properties;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 
@@ -85,6 +89,8 @@ public class InstallBean extends AbstractBean
 
     if (admin.getPassword().equals(passwordRepeat))
     {
+      writeBaseProperties();
+
       BlogContext context = BlogContext.getInstance();
       ServiceReference<Encryption> reference =
         context.getServiceRegistry().get(Encryption.class,
@@ -104,7 +110,6 @@ public class InstallBean extends AbstractBean
       configuration.set(Constants.CONFIG_DB_USERNAME, databaseUsername);
       configuration.setSecureString(Constants.CONFIG_DB_PASSWORD,
                                     databsePassword);
-      configuration.set(Constants.CONFIG_RESOURCE_DIRECTORY, resourcePath);
 
       if (isDatabaseEmbedded())
       {
@@ -540,6 +545,46 @@ public class InstallBean extends AbstractBean
     }
 
     return result;
+  }
+
+  /**
+   * Method description
+   *
+   */
+  private void writeBaseProperties()
+  {
+    Properties props = new Properties();
+
+    props.setProperty("resource.home", resourcePath);
+
+    OutputStream out = null;
+
+    try
+    {
+      String path = BlogContext.getInstance().getServletContext().getRealPath(
+                        "/WEB-INF/base.properties");
+
+      out = new FileOutputStream(path);
+      props.store(out, "BaseConfiguration");
+    }
+    catch (IOException ex)
+    {
+      throw new BlogRuntimeException(ex);
+    }
+    finally
+    {
+      if (out != null)
+      {
+        try
+        {
+          out.close();
+        }
+        catch (IOException ex)
+        {
+          logger.log(Level.SEVERE, null, ex);
+        }
+      }
+    }
   }
 
   //~--- fields ---------------------------------------------------------------

@@ -50,11 +50,6 @@
   </context-param>
 
   <!-- blog parameter -->
-
-  <context-param>
-    <param-name>sonia.config.ConfigFile</param-name>
-    <param-value>/WEB-INF/config/main-config.xml</param-value>
-  </context-param>
   
   <context-param>
     <param-name>sonia.config.AccessFile</param-name>
