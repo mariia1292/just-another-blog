@@ -18,7 +18,6 @@ import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.queryParser.MultiFieldQueryParser;
 import org.apache.lucene.queryParser.ParseException;
 import org.apache.lucene.queryParser.QueryParser;
-import org.apache.lucene.search.Hits;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.highlight.Highlighter;
@@ -45,6 +44,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.apache.lucene.search.ScoreDoc;
+import org.apache.lucene.search.TopDocs;
 
 /**
  *
@@ -112,21 +113,23 @@ public class DefaultSearchContext implements SearchContext
                                  "content",
                                  "title" }, analyzer);
           Query query = parser.parse(search);
-          Hits hits = searcher.search(query);
+          TopDocs topDocs = searcher.search(query, blog.getEntriesPerPage());
           SimpleHTMLFormatter htmlFormatter = new SimpleHTMLFormatter();
           Highlighter highlighter = new Highlighter(htmlFormatter,
                                       new QueryScorer(query));
 
-          for (int i = 0; i < hits.length(); i++)
+          ScoreDoc[] docs = topDocs.scoreDocs;
+          for (int i = 0; i < docs.length; i++)
           {
-            Document doc = hits.doc(i);
+            int id = docs[i].doc;
+            Document doc = reader.document( id );
             String content = doc.get("content");
             String searchResult = "...";
 
             if (content != null)
             {
               TokenStream tokenStream = TokenSources.getAnyTokenStream(reader,
-                                          hits.id(i), "content", analyzer);
+                                          id, "content", analyzer);
               TextFragment[] frag =
                 highlighter.getBestTextFragments(tokenStream, content, false,
                                                  10);
@@ -258,7 +261,8 @@ public class DefaultSearchContext implements SearchContext
           file.mkdirs();
         }
 
-        writer = new IndexWriter(file, new StandardAnalyzer(), true);
+        writer = new IndexWriter(file, new StandardAnalyzer(), true,
+                                 IndexWriter.MaxFieldLength.UNLIMITED);
 
         EntryDAO entryDAO = BlogContext.getDAOFactory().getEntryDAO();
         List<Entry> entries = entryDAO.findAllActivesByBlog(blog);

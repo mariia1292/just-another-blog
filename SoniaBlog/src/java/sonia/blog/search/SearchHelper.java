@@ -51,30 +51,30 @@ public class SearchHelper
     Document doc = new Document();
 
     doc.add(new Field("tid", Entry.class.getName() + "-" + entry.getId(),
-                      Field.Store.YES, Field.Index.UN_TOKENIZED));
+                      Field.Store.YES, Field.Index.NOT_ANALYZED));
     doc.add(new Field("type", Entry.class.getName(), Field.Store.YES,
-                      Field.Index.UN_TOKENIZED));
+                      Field.Index.NOT_ANALYZED));
     doc.add(new Field("id", entry.getId().toString(), Field.Store.YES,
-                      Field.Index.UN_TOKENIZED));
+                      Field.Index.NOT_ANALYZED));
     doc.add(new Field("author", entry.getAuthor().getDisplayName(),
-                      Field.Store.YES, Field.Index.UN_TOKENIZED));
+                      Field.Store.YES, Field.Index.NOT_ANALYZED));
     doc.add(new Field("creationDate",
                       DateTools.timeToString(entry.getCreationDate().getTime(),
                         DateTools.Resolution.SECOND), Field.Store.YES,
-                          Field.Index.UN_TOKENIZED));
+                          Field.Index.NOT_ANALYZED));
 
     if (entry.getLastUpdate() != null)
     {
       doc.add(new Field("lastUpdate",
                         DateTools.timeToString(entry.getLastUpdate().getTime(),
                           DateTools.Resolution.SECOND), Field.Store.YES,
-                            Field.Index.UN_TOKENIZED));
+                            Field.Index.NOT_ANALYZED));
     }
 
     doc.add(new Field("title", entry.getTitle(), Field.Store.YES,
-                      Field.Index.TOKENIZED));
+                      Field.Index.ANALYZED));
     doc.add(new Field("content", extractText(entry.getContent()),
-                      Field.Store.YES, Field.Index.TOKENIZED));
+                      Field.Store.YES, Field.Index.ANALYZED));
 
     return doc;
   }
