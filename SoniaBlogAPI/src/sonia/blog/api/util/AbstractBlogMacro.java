@@ -48,9 +48,9 @@ public abstract class AbstractBlogMacro implements Macro
    *
    *
    * @param facesContext
-   * @param linkBase
-   * @param object
-   * @param body
+   * @param linkBase - the blog link base
+   * @param object - the current ContentObject (Entry)
+   * @param body - the body of the macro
    *
    * @return
    */
