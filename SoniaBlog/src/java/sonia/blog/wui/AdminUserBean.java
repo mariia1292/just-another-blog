@@ -210,6 +210,17 @@ public class AdminUserBean extends AbstractBean
    *
    * @return
    */
+  public Integer getPageSize()
+  {
+    return pageSize;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
   public String getPasswordRetry()
   {
     return passwordRetry;

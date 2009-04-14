@@ -659,6 +659,17 @@ public class EntryBean extends AbstractBean
    *
    * @return
    */
+  public Integer getPageSize()
+  {
+    return pageSize;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
   public String getTagString()
   {
     return tagString;

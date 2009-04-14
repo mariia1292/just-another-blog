@@ -20,7 +20,7 @@
         
         <h:form id="commentForm">
           
-          <h:dataTable id="commentTable" rows="20" value="#{CommentBean.comments}" var="Comment">
+          <h:dataTable id="commentTable" rows="#{CommentBean.pageSize}" value="#{CommentBean.comments}" var="Comment">
             
             <h:column>
               <f:facet name="header">

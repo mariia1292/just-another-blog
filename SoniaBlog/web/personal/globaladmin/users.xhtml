@@ -45,7 +45,7 @@
 
         <h:form id="userForm">
 
-          <h:dataTable id="userTable" rows="20" value="#{AdminUserBean.users}" var="User">
+          <h:dataTable id="userTable" rows="#{AdminUserBean.pageSize}" value="#{AdminUserBean.users}" var="User">
 
             <h:column>
               <f:facet name="header">
