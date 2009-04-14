@@ -154,8 +154,8 @@ public class ChartServlet extends HttpServlet
 
       u.setActive(true);
       u.setDisplayName("Test User");
-      u.setEmail("test.user@test.de");
-      u.setName("tuser");
+      u.setEmail("test.user" + System.currentTimeMillis() + "@test.de");
+      u.setName("tuser " + System.currentTimeMillis());
       u.setPassword("EGAL");
       em.persist(u);
 

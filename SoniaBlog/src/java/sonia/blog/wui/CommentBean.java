@@ -119,6 +119,17 @@ public class CommentBean extends AbstractBean
     return comments;
   }
 
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  public Integer getPageSize()
+  {
+    return pageSize;
+  }
+
   //~--- set methods ----------------------------------------------------------
 
   /**
