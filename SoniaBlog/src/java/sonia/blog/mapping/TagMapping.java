@@ -231,7 +231,7 @@ public class TagMapping extends ScrollableFilterMapping
     String link = linkBuilder.buildLink(request, "/tag/" + tag.getId() + "/");
 
     navigation = new SimpleMappingNavigation(prevUri, nextUri,
-            link + "{0}.jab");
+            link + "{0,number,#}.jab");
 
     return buildTemplateViewId(blog, Constants.TEMPLATE_LIST);
   }
