@@ -88,7 +88,7 @@ public class BlogBean extends AbstractBean
 
         if (commentDAO.add(comment))
         {
-          if ( comment.isSpam() )
+          if (comment.isSpam())
           {
             getMessageHandler().warn("createCommentSpam");
           }

@@ -26,6 +26,8 @@ import sonia.blog.api.dao.DAOFactory;
 import sonia.blog.api.util.BlogWrapper;
 import sonia.blog.dao.jpa.JpaDAOFactory;
 import sonia.blog.entity.Blog;
+import sonia.blog.entity.Comment;
+import sonia.blog.entity.Entry;
 import sonia.blog.entity.User;
 
 import sonia.util.Util;
@@ -142,23 +144,31 @@ public class ChartServlet extends HttpServlet
     JpaDAOFactory dao = (JpaDAOFactory) DAOFactory.getInstance();
     EntityManagerFactory emf = dao.getEntityManagerFactory();
     EntityManager em = emf.createEntityManager();
+    Blog b = DAOFactory.getInstance().getBlogDAO().get(request.getServerName());
 
     em.getTransaction().begin();
 
     try
     {
-      for (int i = 0; i < 1000; i++)
-      {
-        User u = new User();
+      User u = new User();
 
-        u.setActive(true);
-        u.setDisplayName("Benutzer " + (i + 1));
-        u.setEmail("mail" + (i + 1) + "@jab-test.de");
-        u.setGlobalAdmin(false);
-        u.setName("user" + (i + 1));
-        u.setPassword("hallo123");
-        u.setSelfManaged(false);
-        em.persist(u);
+      u.setActive(true);
+      u.setDisplayName("Test User");
+      u.setEmail("test.user@test.de");
+      u.setName("tuser");
+      u.setPassword("EGAL");
+      em.persist(u);
+
+      for (int i = 0; i < 10000; i++)
+      {
+        Entry e = new Entry();
+
+        e.setBlog(b);
+        e.setAuthor(u);
+        e.setTitle("Title " + i);
+        e.setPublished(true);
+        e.setContent("This is the content");
+        em.persist(e);
       }
 
       em.getTransaction().commit();
