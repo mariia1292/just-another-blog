@@ -10,17 +10,19 @@ package sonia.blog.wui;
 //~--- non-JDK imports --------------------------------------------------------
 
 import sonia.blog.api.app.BlogContext;
+import sonia.blog.api.app.Constants;
 import sonia.blog.api.dao.CommentDAO;
 import sonia.blog.api.util.AbstractBean;
+import sonia.blog.entity.Blog;
 import sonia.blog.entity.Comment;
+import sonia.blog.wui.model.CommentDataModel;
+
+import sonia.config.Config;
 
 //~--- JDK imports ------------------------------------------------------------
 
-import java.util.List;
-
 import javax.faces.event.ActionEvent;
 import javax.faces.model.DataModel;
-import javax.faces.model.ListDataModel;
 
 /**
  *
@@ -110,16 +112,9 @@ public class CommentBean extends AbstractBean
    */
   public DataModel getComments()
   {
-    comments = new ListDataModel();
+    Blog blog = getRequest().getCurrentBlog();
 
-    CommentDAO commentDAO = BlogContext.getDAOFactory().getCommentDAO();
-    List<Comment> commentList =
-      commentDAO.findAllByBlog(getRequest().getCurrentBlog());
-
-    if ((commentList != null) &&!commentList.isEmpty())
-    {
-      comments.setWrappedData(commentList);
-    }
+    comments = new CommentDataModel(blog, pageSize);
 
     return comments;
   }
@@ -144,4 +139,8 @@ public class CommentBean extends AbstractBean
 
   /** Field description */
   private DataModel comments;
+
+  /** Field description */
+  @Config(Constants.CONFIG_ADMIN_PAGESIZE)
+  private Integer pageSize = new Integer(20);
 }

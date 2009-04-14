@@ -33,6 +33,10 @@ import sonia.blog.entity.Entry;
 import sonia.blog.entity.Tag;
 import sonia.blog.entity.User;
 import sonia.blog.util.AttachmentWrapper;
+import sonia.blog.wui.model.EntryDataModel;
+import sonia.blog.wui.model.GenericDataModel;
+
+import sonia.config.Config;
 
 import sonia.util.Util;
 
@@ -620,16 +624,9 @@ public class EntryBean extends AbstractBean
    */
   public DataModel getEntries()
   {
-    entries = new ListDataModel();
+    Blog blog = getRequest().getCurrentBlog();
 
-    EntryDAO entryDAO = BlogContext.getDAOFactory().getEntryDAO();
-    List<Entry> entryList =
-      entryDAO.findAllByBlog(getRequest().getCurrentBlog());
-
-    if ((entryList != null) &&!entryList.isEmpty())
-    {
-      entries.setWrappedData(entryList);
-    }
+    entries = new EntryDataModel(blog, pageSize);
 
     return entries;
   }
@@ -1120,6 +1117,10 @@ public class EntryBean extends AbstractBean
 
   /** Field description */
   private String imageSize = "";
+
+  /** Field description */
+  @Config(Constants.CONFIG_ADMIN_PAGESIZE)
+  private Integer pageSize = new Integer(20);
 
   /** Field description */
   private File resourceDirectory;

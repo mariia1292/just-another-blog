@@ -3,7 +3,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:f="http://java.sun.com/jsf/core">
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:blog="http://jab.nitilon.org/blog/">
   
   <body>
     
@@ -17,9 +18,9 @@
       
         <h1><h:outputText value="#{label.comments}" /></h1>
         
-        <h:form>
+        <h:form id="commentForm">
           
-          <h:dataTable value="#{CommentBean.comments}" var="Comment">
+          <h:dataTable id="commentTable" rows="20" value="#{CommentBean.comments}" var="Comment">
             
             <h:column>
               <f:facet name="header">
@@ -66,6 +67,8 @@
             </h:column>
             
           </h:dataTable>
+
+          <blog:pager for="commentForm:commentTable" showPages="10" selectedStyle="font-weight: bold;" />
           
         </h:form>
         

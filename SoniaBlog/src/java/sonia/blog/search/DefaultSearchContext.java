@@ -20,6 +20,8 @@ import org.apache.lucene.queryParser.ParseException;
 import org.apache.lucene.queryParser.QueryParser;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
+import org.apache.lucene.search.ScoreDoc;
+import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.search.highlight.Highlighter;
 import org.apache.lucene.search.highlight.QueryScorer;
 import org.apache.lucene.search.highlight.SimpleHTMLFormatter;
@@ -44,8 +46,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.apache.lucene.search.ScoreDoc;
-import org.apache.lucene.search.TopDocs;
 
 /**
  *
@@ -117,12 +117,12 @@ public class DefaultSearchContext implements SearchContext
           SimpleHTMLFormatter htmlFormatter = new SimpleHTMLFormatter();
           Highlighter highlighter = new Highlighter(htmlFormatter,
                                       new QueryScorer(query));
-
           ScoreDoc[] docs = topDocs.scoreDocs;
+
           for (int i = 0; i < docs.length; i++)
           {
             int id = docs[i].doc;
-            Document doc = reader.document( id );
+            Document doc = reader.document(id);
             String content = doc.get("content");
             String searchResult = "...";
 

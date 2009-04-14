@@ -19,6 +19,8 @@ import sonia.blog.entity.Role;
 import sonia.blog.entity.User;
 import sonia.blog.wui.model.UserDataModel;
 
+import sonia.config.Config;
+
 import sonia.plugin.service.ServiceReference;
 
 import sonia.security.encryption.Encryption;
@@ -254,42 +256,21 @@ public class AdminUserBean extends AbstractBean
   {
     if (!Util.isBlank(filter) && onlyActive)
     {
-      users = new UserDataModel(20, filter, onlyActive);
+      users = new UserDataModel(pageSize, filter, onlyActive);
     }
     else if (!Util.isBlank(filter))
     {
-      users = new UserDataModel(20, filter);
+      users = new UserDataModel(pageSize, filter);
     }
     else if (onlyActive)
     {
-      users = new UserDataModel(20, onlyActive);
+      users = new UserDataModel(pageSize, onlyActive);
     }
     else
     {
-      users = new UserDataModel(20);
+      users = new UserDataModel(pageSize);
     }
 
-    /*
-     * users = new ListDataModel();
-     *
-     * List<User> userList = null;
-     * UserDAO userDAO = BlogContext.getDAOFactory().getUserDAO();
-     *
-     * // TODO scrolling
-     * if (onlyActive)
-     * {
-     * userList = userDAO.getAll(true, 0, 1000);
-     * }
-     * else
-     * {
-     * userList = userDAO.getAll(0, 1000);
-     * }
-     *
-     * if ((userList != null) &&!userList.isEmpty())
-     * {
-     * users.setWrappedData(userList);
-     * }
-     */
     return users;
   }
 
@@ -399,6 +380,10 @@ public class AdminUserBean extends AbstractBean
 
   /** Field description */
   private boolean onlyActive;
+
+  /** Field description */
+  @Config(Constants.CONFIG_ADMIN_PAGESIZE)
+  private Integer pageSize = new Integer(20);
 
   /** Field description */
   private String passwordRetry;

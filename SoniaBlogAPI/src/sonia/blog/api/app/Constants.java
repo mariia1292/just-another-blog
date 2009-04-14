@@ -20,6 +20,9 @@ public interface Constants
 {
 
   /** Field description */
+  public static final String CONFIG_ADMIN_PAGESIZE = "admin.page-size";
+
+  /** Field description */
   public static final String CONFIG_ALLOW_BLOGCREATION = "allow.blogCreation";
 
   /** Field description */

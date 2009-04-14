@@ -67,6 +67,7 @@ public class GlobalConfigBean extends AbstractConfigBean
   @Override
   public void load(BlogConfiguration config)
   {
+    adminPageSize = config.getInteger(Constants.CONFIG_ADMIN_PAGESIZE, 20);
     allowRegistration = config.getBoolean(Constants.CONFIG_ALLOW_REGISTRATION,
             Boolean.FALSE);
     allowBlogCreation = config.getBoolean(Constants.CONFIG_ALLOW_BLOGCREATION,
@@ -96,6 +97,7 @@ public class GlobalConfigBean extends AbstractConfigBean
   @Override
   public void store(BlogConfiguration config)
   {
+    config.set(Constants.CONFIG_ADMIN_PAGESIZE, adminPageSize);
     config.set(Constants.CONFIG_ALLOW_REGISTRATION, allowRegistration);
     config.set(Constants.CONFIG_ALLOW_BLOGCREATION, allowBlogCreation);
     config.set(Constants.CONFIG_PASSWORD_MINLENGTH, passwordMinLength);
@@ -107,7 +109,8 @@ public class GlobalConfigBean extends AbstractConfigBean
     config.set(Constants.CONFIG_SMTPSERVER, smtpServer);
     config.set(Constants.CONFIG_SMTPPORT, smtpPort);
     config.set(Constants.CONFIG_SMTPUSER, smtpUsername);
-    if ( Util.hasContent( smtpPassword )  )
+
+    if (Util.hasContent(smtpPassword))
     {
       config.setSecureString(Constants.CONFIG_SMTPPASSWORD, smtpPassword);
     }
@@ -115,6 +118,7 @@ public class GlobalConfigBean extends AbstractConfigBean
     {
       config.set(Constants.CONFIG_SMTPPASSWORD, null);
     }
+
     config.set(Constants.CONFIG_REGISTERACKNOWLEDGEMENT,
                registerAcknowledgement);
   }
@@ -143,6 +147,17 @@ public class GlobalConfigBean extends AbstractConfigBean
   }
 
   //~--- get methods ----------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  public int getAdminPageSize()
+  {
+    return adminPageSize;
+  }
 
   /**
    * Method description
@@ -394,6 +409,17 @@ public class GlobalConfigBean extends AbstractConfigBean
    * Method description
    *
    *
+   * @param adminPageSize
+   */
+  public void setAdminPageSize(int adminPageSize)
+  {
+    this.adminPageSize = adminPageSize;
+  }
+
+  /**
+   * Method description
+   *
+   *
    * @param allowBlogCreation
    */
   public void setAllowBlogCreation(boolean allowBlogCreation)
@@ -557,6 +583,9 @@ public class GlobalConfigBean extends AbstractConfigBean
   }
 
   //~--- fields ---------------------------------------------------------------
+
+  /** Field description */
+  private int adminPageSize;
 
   /** Field description */
   private boolean allowBlogCreation;

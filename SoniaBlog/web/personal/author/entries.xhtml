@@ -4,8 +4,7 @@
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:f="http://java.sun.com/jsf/core"
-      xmlns:t="http://myfaces.apache.org/tomahawk"
-      xmlns:c="http://java.sun.com/jstl/core">
+      xmlns:blog="http://jab.nitilon.org/blog/">
 
   <body>
 
@@ -19,41 +18,44 @@
 
         <h1><h:outputText value="#{label.entries}" /></h1>
 
-        <h:form>
+        <h:form id="entriesForm">
 
-            <h:dataTable styleClass="full" value="#{EntryBean.entries}" var="Entry">
-              
-              <h:column>
-                <f:facet name="header">
-                  <h:outputText value="#{label.title}" />
-                </f:facet>
-                <h:commandLink value="#{Entry.title}" action="#{EntryBean.edit}" />
-              </h:column>
+          <h:dataTable id="entriesTable" styleClass="full" value="#{EntryBean.entries}" var="Entry">
 
-              <h:column>
-                <f:facet name="header">
-                  <h:outputText value="#{label.author}" />
-                </f:facet>
-                <h:outputText value="#{Entry.authorName}" />
-              </h:column>
+            <h:column>
+              <f:facet name="header">
+                <h:outputText value="#{label.title}" />
+              </f:facet>
+              <h:commandLink value="#{Entry.title}" action="#{EntryBean.edit}" />
+            </h:column>
 
-              <h:column>
-                <f:facet name="header">
-                  <h:outputText value="#{label.creationDate}" />
-                </f:facet>
-                <h:outputText value="#{Entry.creationDate}">
-                  <f:convertDateTime pattern="#{BlogBean.blog.dateFormat}" />
-                </h:outputText>
-              </h:column>
+            <h:column>
+              <f:facet name="header">
+                <h:outputText value="#{label.author}" />
+              </f:facet>
+              <h:outputText value="#{Entry.authorName}" />
+            </h:column>
 
-              <h:column>
-                <f:facet name="header">
-                  <h:outputText value="#{label.published}" />
-                </f:facet>
-                <h:selectBooleanCheckbox value="#{Entry.published}" />
-              </h:column>
-              
-              </h:dataTable>
+            <h:column>
+              <f:facet name="header">
+                <h:outputText value="#{label.creationDate}" />
+              </f:facet>
+              <h:outputText value="#{Entry.creationDate}">
+                <f:convertDateTime pattern="#{BlogBean.blog.dateFormat}" />
+              </h:outputText>
+            </h:column>
+
+            <h:column>
+              <f:facet name="header">
+                <h:outputText value="#{label.published}" />
+              </f:facet>
+              <h:selectBooleanCheckbox value="#{Entry.published}" />
+            </h:column>
+
+          </h:dataTable>
+
+          <blog:pager for="entriesForm:entriesTable" showPages="10" selectedStyle="font-weight: bold;" />
+
         </h:form>
 
       </ui:define>

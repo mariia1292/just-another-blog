@@ -40,7 +40,11 @@
             <h:outputLabel for="passwordMinLength" value="#{label.passwordMinLength}" />
             <h:inputText id="passwordMinLength" styleClass="short" value="#{GlobalConfigBean.passwordMinLength}" required="true" />
             <h:message for="passwordMinLength" />
-            
+
+            <h:outputLabel for="adminPageSize" value="#{label.adminPageSize}" />
+            <h:inputText id="adminPageSize" styleClass="short" value="#{GlobalConfigBean.adminPageSize}" required="true" />
+            <h:message for="adminPageSize" />
+
             <h:outputLabel for="spamInputMethod" value="#{label.spamInputMethod}" />
             <h:selectOneRadio id="spamInputMethod" value="#{GlobalConfigBean.spamInputMethod}" styleClass="list">
               <f:selectItems value="#{GlobalConfigBean.spamInputMethodItems}" />
