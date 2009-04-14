@@ -217,7 +217,7 @@ public class ListMapping extends ScrollableFilterMapping
     String link = linkBuilder.buildLink(request, "/list/");
 
     navigation = new SimpleMappingNavigation(prevUri, nextUri,
-            link + "{0}.jab");
+            link + "{0,number,#}.jab");
 
     return buildTemplateViewId(blog, Constants.TEMPLATE_LIST);
   }

@@ -272,7 +272,7 @@ public class SearchMapping extends ScrollableFilterMapping
     StringBuffer detailPattern = new StringBuffer();
 
     detailPattern.append("/search.jab?search=").append(searchParam);
-    detailPattern.append("&hit={0}");
+    detailPattern.append("&hit={0,number,#}");
 
     LinkBuilder linkBuilder = BlogContext.getInstance().getLinkBuilder();
     String pattern = linkBuilder.buildLink(request, detailPattern.toString());

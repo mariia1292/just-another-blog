@@ -230,7 +230,7 @@ public class CategoryMapping extends ScrollableFilterMapping
                     "/category/" + category.getId() + "/");
 
     navigation = new SimpleMappingNavigation(prevUri, nextUri,
-            link + "{0}.jab");
+            link + "{0,number,#}.jab");
 
     return buildTemplateViewId(blog, Constants.TEMPLATE_LIST);
   }
