@@ -33,6 +33,19 @@ public interface CategoryDAO extends GenericDAO<Category>
    */
   public long count(Blog blog);
 
+  //~--- get methods ----------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   * @param blog
+   * @param name
+   *
+   * @return
+   */
+  public Category get(Blog blog, String name);
+
   /**
    * Method description
    *
@@ -64,17 +77,4 @@ public interface CategoryDAO extends GenericDAO<Category>
    * @return
    */
   public Category getFirst(Blog blog);
-
-  //~--- get methods ----------------------------------------------------------
-
-  /**
-   * Method description
-   *
-   *
-   * @param blog
-   * @param name
-   *
-   * @return
-   */
-  public Category get(Blog blog, String name);
 }

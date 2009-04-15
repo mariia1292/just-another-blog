@@ -19,6 +19,8 @@ import java.util.TimeZone;
 public interface Constants
 {
 
+  public static final String CONFIG_JMX_ENABLE = "app.enable-jmx";
+
   /** Field description */
   public static final String CONFIG_ADMIN_PAGESIZE = "admin.page-size";
 

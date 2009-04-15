@@ -30,7 +30,13 @@ public abstract class StringBasedConfiguration extends ConfigurationBase
    */
   public Boolean getBoolean(String key)
   {
-    return Boolean.parseBoolean(getString(key));
+    Boolean result = null;
+    String string = getString(key);
+    if ( string != null )
+    {
+      result = Boolean.parseBoolean(getString(key));
+    }
+    return result;
   }
 
   /**

@@ -17,6 +17,7 @@ import sonia.blog.api.mapping.MappingHandler;
 import sonia.blog.api.search.SearchContext;
 import sonia.blog.api.template.TemplateManager;
 import sonia.blog.entity.Blog;
+import sonia.blog.jmx.SessionInformation;
 
 import sonia.config.WebVariableResolver;
 
@@ -45,6 +46,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
+import java.util.Date;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -515,6 +517,22 @@ public class BlogContext
    *
    * @return
    */
+  public SessionInformation getSessionInformation()
+  {
+    if (sessionInformation == null)
+    {
+      this.sessionInformation = new SessionInformation(new Date());
+    }
+
+    return sessionInformation;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
   public TemplateManager getTemplateManager()
   {
     if (templateManager == null)
@@ -593,6 +611,9 @@ public class BlogContext
 
   /** Field description */
   private ServletContext servletContext;
+
+  /** Field description */
+  private SessionInformation sessionInformation;
 
   /** Field description */
   private Configuration ssoLoginConfiguration;

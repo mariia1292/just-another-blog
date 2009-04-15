@@ -99,6 +99,7 @@ public class BlogConfiguration extends XmlConfiguration
       {
         backupFile.renameTo(file);
       }
+
       throw ex;
     }
     finally

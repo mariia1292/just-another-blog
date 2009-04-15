@@ -72,6 +72,8 @@ import java.io.FileInputStream;
 import java.io.FilenameFilter;
 import java.io.IOException;
 
+import java.lang.management.ManagementFactory;
+
 import java.net.URLConnection;
 
 import java.util.HashMap;
@@ -79,6 +81,9 @@ import java.util.List;
 import java.util.logging.ConsoleHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import javax.management.MBeanServer;
+import javax.management.ObjectName;
 
 import javax.security.auth.login.AppConfigurationEntry;
 
@@ -130,6 +135,7 @@ public class BlogContextListener implements ServletContextListener
       context.setServletContext(event.getServletContext());
       initFileNameMap();
       configureLogger();
+      initMBeans(context);
       initServices(context);
 
       if (context.isInstalled())
@@ -269,6 +275,39 @@ public class BlogContextListener implements ServletContextListener
     provider.registerInjector(Dao.class,
                               new ObjectInjector(BlogContext.getDAOFactory()));
     context.getMacroParser().setInjectionProvider(provider);
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param context
+   */
+  private void initMBeans(BlogContext context)
+  {
+    MBeanServer mbs = ManagementFactory.getPlatformMBeanServer();
+
+    try
+    {
+      ObjectName sessionInfoName =
+        new ObjectName("sonia.blog.jmx:type=SessionInformation");
+
+      if (mbs.isRegistered(sessionInfoName))
+      {
+        mbs.unregisterMBean(sessionInfoName);
+      }
+
+      if (!context.isInstalled()
+          || context.getConfiguration().getBoolean(Constants.CONFIG_JMX_ENABLE,
+            Boolean.TRUE))
+      {
+        mbs.registerMBean(context.getSessionInformation(), sessionInfoName);
+      }
+    }
+    catch (Exception ex)
+    {
+      ex.printStackTrace();
+    }
   }
 
   /**
