@@ -258,6 +258,27 @@ public abstract class ConfigurationBase implements Configuration
    * Method description
    *
    *
+   * @param key
+   * @param def
+   *
+   * @return
+   */
+  public Object getObject(String key, Object def)
+  {
+    Object result = getObject(key);
+
+    if (result == null)
+    {
+      result = def;
+    }
+
+    return result;
+  }
+
+  /**
+   * Method description
+   *
+   *
    * @param clazz
    * @param key
    * @param def
@@ -267,6 +288,27 @@ public abstract class ConfigurationBase implements Configuration
   public <T>T getObject(Class<T> clazz, String key, T def)
   {
     T result = getObject(clazz, key);
+
+    if (result == null)
+    {
+      result = def;
+    }
+
+    return result;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param key
+   * @param def
+   *
+   * @return
+   */
+  public Object[] getObjects(String key, Object[] def)
+  {
+    Object[] result = getObjects(key);
 
     if (result == null)
     {

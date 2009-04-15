@@ -32,10 +32,12 @@ public abstract class StringBasedConfiguration extends ConfigurationBase
   {
     Boolean result = null;
     String string = getString(key);
-    if ( string != null )
+
+    if (string != null)
     {
       result = Boolean.parseBoolean(getString(key));
     }
+
     return result;
   }
 
@@ -318,6 +320,19 @@ public abstract class StringBasedConfiguration extends ConfigurationBase
    * Method description
    *
    *
+   * @param key
+   *
+   * @return
+   */
+  public Object getObject(String key)
+  {
+    return getString(key);
+  }
+
+  /**
+   * Method description
+   *
+   *
    * @param clazz
    * @param key
    *
@@ -339,6 +354,19 @@ public abstract class StringBasedConfiguration extends ConfigurationBase
     }
 
     return result;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param key
+   *
+   * @return
+   */
+  public Object[] getObjects(String key)
+  {
+    return getStrings(key);
   }
 
   /**

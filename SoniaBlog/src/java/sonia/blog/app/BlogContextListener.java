@@ -44,6 +44,7 @@ import sonia.blog.spam.MathSpamProtection;
 
 import sonia.config.Config;
 import sonia.config.ConfigInjector;
+import sonia.config.ModifyableConfigurationMBean;
 
 import sonia.injection.InjectionProvider;
 import sonia.injection.ObjectInjector;
@@ -291,10 +292,16 @@ public class BlogContextListener implements ServletContextListener
     {
       ObjectName sessionInfoName =
         new ObjectName("sonia.blog.jmx:type=SessionInformation");
+      ObjectName configName = new ObjectName("sonia.blog.jmx:type=Config");
 
       if (mbs.isRegistered(sessionInfoName))
       {
         mbs.unregisterMBean(sessionInfoName);
+      }
+
+      if (mbs.isRegistered(configName))
+      {
+        mbs.unregisterMBean(configName);
       }
 
       if (!context.isInstalled()
@@ -302,6 +309,9 @@ public class BlogContextListener implements ServletContextListener
             Boolean.TRUE))
       {
         mbs.registerMBean(context.getSessionInformation(), sessionInfoName);
+        mbs.registerMBean(
+            new ModifyableConfigurationMBean(context.getConfiguration()),
+            configName);
       }
     }
     catch (Exception ex)
