@@ -35,6 +35,18 @@ public class Util
 {
 
   /** Field description */
+  public static final int MILLIS_DAY = 1000 * 60 * 60 * 24;
+
+  /** Field description */
+  public static final int MILLIS_HOUR = 1000 * 60 * 60;
+
+  /** Field description */
+  public static final int MILLIS_MINUTE = 1000 * 60;
+
+  /** Field description */
+  public static final int MILLIS_SECOND = 1000;
+
+  /** Field description */
   private static Logger logger = Logger.getLogger(Util.class.getName());
 
   //~--- methods --------------------------------------------------------------
@@ -221,6 +233,72 @@ public class Util
     nf.setMaximumFractionDigits(2);
 
     return nf.format(size) + " " + suffix;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param time
+   *
+   * @return
+   */
+  public static String formatTime(long time)
+  {
+    int days = (int) (time / MILLIS_DAY);
+
+    time = time - (days * MILLIS_DAY);
+
+    int hours = (int) (time / MILLIS_HOUR);
+
+    time = time - (hours * MILLIS_HOUR);
+
+    int min = (int) (time / MILLIS_MINUTE);
+
+    time = time - (min * MILLIS_MINUTE);
+
+    int sec = (int) (time / MILLIS_SECOND);
+
+    time = time - (sec * MILLIS_SECOND);
+    time = (int) time;
+
+    StringBuffer out = new StringBuffer();
+
+    out.append(days).append("d ");
+
+    if (hours < 10)
+    {
+      out.append('0');
+    }
+
+    out.append(hours).append(":");
+
+    if (min < 10)
+    {
+      out.append('0');
+    }
+
+    out.append(min).append(':');
+
+    if (sec < 10)
+    {
+      out.append('0');
+    }
+
+    out.append(sec).append('.');
+
+    if (time < 10)
+    {
+      out.append('0').append('0');
+    }
+    else if (time < 100)
+    {
+      out.append('0');
+    }
+
+    out.append(time);
+
+    return out.toString();
   }
 
   //~--- get methods ----------------------------------------------------------

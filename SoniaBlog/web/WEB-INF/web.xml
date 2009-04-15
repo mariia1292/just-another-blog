@@ -96,6 +96,11 @@
     <listener-class>sonia.blog.app.BlogContextListener</listener-class>
   </listener>
 
+  <listener>
+    <description>HttpSessionListener</description>
+    <listener-class>sonia.blog.app.BlogSessionListener</listener-class>
+  </listener>
+
   <!-- Faces Servlet -->
 
   <servlet>
