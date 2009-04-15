@@ -260,6 +260,27 @@ public interface Configuration
    * Method description
    *
    *
+   * @param key
+   *
+   * @return
+   */
+  public Object getObject(String key);
+
+  /**
+   * Method description
+   *
+   *
+   * @param key
+   * @param def
+   *
+   * @return
+   */
+  public Object getObject(String key, Object def);
+
+  /**
+   * Method description
+   *
+   *
    * @param clazz
    * @param key
    *
@@ -278,6 +299,27 @@ public interface Configuration
    * @return
    */
   public <T>T getObject(Class<T> clazz, String key, T def);
+
+  /**
+   * Method description
+   *
+   *
+   * @param key
+   *
+   * @return
+   */
+  public Object[] getObjects(String key);
+
+  /**
+   * Method description
+   *
+   *
+   * @param key
+   * @param def
+   *
+   * @return
+   */
+  public Object[] getObjects(String key, Object[] def);
 
   /**
    * Method description
