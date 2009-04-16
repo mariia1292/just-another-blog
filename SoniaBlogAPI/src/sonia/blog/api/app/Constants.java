@@ -168,6 +168,9 @@ public interface Constants
   public static final String LISTENER_MEMBER = "/listener/member";
 
   /** Field description */
+  public static final String LISTENER_PAGE = "/listener/page";
+
+  /** Field description */
   public static final String LISTENER_TAG = "/listener/tag";
 
   /** Field description */

@@ -397,6 +397,7 @@ public class BlogContextListener implements ServletContextListener
     registry.register(DAOListener.class, Constants.LISTENER_COMMENT);
     registry.register(DAOListener.class,
                       Constants.LISTENER_ENTRY).add(new IndexListener());
+    registry.register(DAOListener.class, Constants.LISTENER_PAGE);
     registry.register(DAOListener.class, Constants.LISTENER_MEMBER);
     registry.register(DAOListener.class, Constants.LISTENER_TAG);
     registry.register(DAOListener.class, Constants.LISTENER_USER);
