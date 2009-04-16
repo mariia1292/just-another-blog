@@ -9,6 +9,7 @@ package sonia.blog.ldap;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import sonia.blog.api.app.BlogConfiguration;
 import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.app.Constants;
 
@@ -24,7 +25,6 @@ import sonia.plugin.service.ServiceReference;
 import java.util.HashMap;
 
 import javax.security.auth.login.AppConfigurationEntry;
-import sonia.blog.api.app.BlogConfiguration;
 
 /**
  *

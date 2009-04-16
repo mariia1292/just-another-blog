@@ -32,6 +32,7 @@ import sonia.util.Util;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.DataModel;
@@ -50,6 +51,21 @@ public class AdminUserBean extends AbstractBean
 
   /** Field description */
   public static final String DETAIL = "detail";
+
+  /** Field description */
+  private static Logger logger =
+    Logger.getLogger(AdminUserBean.class.getName());
+
+  //~--- constructors ---------------------------------------------------------
+
+  /**
+   * Constructs ...
+   *
+   */
+  public AdminUserBean()
+  {
+    super();
+  }
 
   //~--- methods --------------------------------------------------------------
 

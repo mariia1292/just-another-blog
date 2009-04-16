@@ -24,8 +24,6 @@ import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.annotation.PostConstruct;
-
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 
@@ -45,6 +43,9 @@ public class AbstractBean
   /** Field description */
   public static final String SUCCESS = "success";
 
+  /** Field description */
+  private static Logger logger = Logger.getLogger(AbstractBean.class.getName());
+
   //~--- constructors ---------------------------------------------------------
 
   /**
@@ -53,7 +54,7 @@ public class AbstractBean
    */
   public AbstractBean()
   {
-    this.logger = Logger.getLogger(getClass().getName());
+    init();
   }
 
   //~--- methods --------------------------------------------------------------
@@ -62,17 +63,15 @@ public class AbstractBean
    * Method description
    *
    */
-  @PostConstruct
   public void init()
   {
-    if (logger == null)
-    {
-      logger = Logger.getLogger(getClass().getName());
-    }
-
     if (logger.isLoggable(Level.FINEST))
     {
-      logger.finest("init, calling InjectionProvider");
+      StringBuffer log = new StringBuffer();
+
+      log.append("init, calling InjectionProvider for ");
+      log.append(getClass().getName());
+      logger.finest(log.toString());
     }
 
     BlogContext.getInstance().getInjectionProvider().inject(this);
@@ -230,9 +229,6 @@ public class AbstractBean
   }
 
   //~--- fields ---------------------------------------------------------------
-
-  /** Field description */
-  protected Logger logger;
 
   /** Field description */
   private MessageHandler messageHandler;

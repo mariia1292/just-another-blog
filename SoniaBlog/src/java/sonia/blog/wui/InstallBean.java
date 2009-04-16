@@ -42,6 +42,7 @@ import java.sql.DriverManager;
 import java.util.Properties;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
@@ -52,6 +53,22 @@ import javax.faces.model.SelectItem;
  */
 public class InstallBean extends AbstractBean
 {
+
+  /** Field description */
+  private static Logger logger = Logger.getLogger(InstallBean.class.getName());
+
+  //~--- constructors ---------------------------------------------------------
+
+  /**
+   * Constructs ...
+   *
+   */
+  public InstallBean()
+  {
+    super();
+  }
+
+  //~--- methods --------------------------------------------------------------
 
   /**
    * Method description

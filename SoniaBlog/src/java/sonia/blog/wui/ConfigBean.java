@@ -17,6 +17,8 @@ import sonia.blog.util.BlogUtil;
 
 //~--- JDK imports ------------------------------------------------------------
 
+import java.util.logging.Logger;
+
 import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
 
@@ -26,6 +28,22 @@ import javax.faces.model.SelectItem;
  */
 public class ConfigBean extends AbstractBean
 {
+
+  /** Field description */
+  private static Logger logger = Logger.getLogger(ConfigBean.class.getName());
+
+  //~--- constructors ---------------------------------------------------------
+
+  /**
+   * Constructs ...
+   *
+   */
+  public ConfigBean()
+  {
+    super();
+  }
+
+  //~--- methods --------------------------------------------------------------
 
   /**
    * Method description

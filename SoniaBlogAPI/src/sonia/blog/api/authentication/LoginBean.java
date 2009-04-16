@@ -35,6 +35,7 @@ import java.io.IOException;
 
 import java.util.Set;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.security.auth.login.LoginContext;
 import javax.security.auth.login.LoginException;
@@ -47,6 +48,22 @@ import javax.servlet.http.Cookie;
  */
 public class LoginBean extends AbstractBean
 {
+
+  /** Field description */
+  private static Logger logger = Logger.getLogger(LoginBean.class.getName());
+
+  //~--- constructors ---------------------------------------------------------
+
+  /**
+   * Constructs ...
+   *
+   */
+  public LoginBean()
+  {
+    super();
+  }
+
+  //~--- methods --------------------------------------------------------------
 
   /**
    * Method description

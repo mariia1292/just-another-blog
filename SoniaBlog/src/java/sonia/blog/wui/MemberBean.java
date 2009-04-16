@@ -22,6 +22,7 @@ import sonia.blog.entity.User;
 
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.logging.Logger;
 
 import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.DataModel;
@@ -34,6 +35,22 @@ import javax.faces.model.SelectItem;
  */
 public class MemberBean extends AbstractBean
 {
+
+  /** Field description */
+  private static Logger logger = Logger.getLogger(MemberBean.class.getName());
+
+  //~--- constructors ---------------------------------------------------------
+
+  /**
+   * Constructs ...
+   *
+   */
+  public MemberBean()
+  {
+    super();
+  }
+
+  //~--- methods --------------------------------------------------------------
 
   /**
    * Method description

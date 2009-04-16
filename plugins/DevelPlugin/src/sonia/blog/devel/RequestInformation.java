@@ -150,7 +150,9 @@ public class RequestInformation
    */
   public long getRequestTime()
   {
-    System.out.println( endTime + " - " + startTime + " = "+ (endTime - startTime) );
+    System.out.println(endTime + " - " + startTime + " = "
+                       + (endTime - startTime));
+
     return endTime - startTime;
   }
 

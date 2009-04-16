@@ -21,6 +21,8 @@ import sonia.config.Config;
 
 //~--- JDK imports ------------------------------------------------------------
 
+import java.util.logging.Logger;
+
 import javax.faces.event.ActionEvent;
 import javax.faces.model.DataModel;
 
@@ -30,6 +32,22 @@ import javax.faces.model.DataModel;
  */
 public class CommentBean extends AbstractBean
 {
+
+  /** Field description */
+  private static Logger logger = Logger.getLogger(CommentBean.class.getName());
+
+  //~--- constructors ---------------------------------------------------------
+
+  /**
+   * Constructs ...
+   *
+   */
+  public CommentBean()
+  {
+    super();
+  }
+
+  //~--- methods --------------------------------------------------------------
 
   /**
    * Method description

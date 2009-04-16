@@ -37,6 +37,7 @@ import java.net.UnknownHostException;
 
 import java.util.List;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.faces.context.FacesContext;
 import javax.faces.model.DataModel;
@@ -48,6 +49,23 @@ import javax.faces.model.ListDataModel;
  */
 public class DashboardBean extends AbstractBean
 {
+
+  /** Field description */
+  private static Logger logger =
+    Logger.getLogger(DashboardBean.class.getName());
+
+  //~--- constructors ---------------------------------------------------------
+
+  /**
+   * Constructs ...
+   *
+   */
+  public DashboardBean()
+  {
+    super();
+  }
+
+  //~--- methods --------------------------------------------------------------
 
   /**
    * Method description

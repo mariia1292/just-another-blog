@@ -30,6 +30,7 @@ import sonia.util.Util;
 //~--- JDK imports ------------------------------------------------------------
 
 import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.mail.MessagingException;
 
@@ -39,6 +40,12 @@ import javax.mail.MessagingException;
  */
 public class RegistrationBean extends AbstractBean
 {
+
+  /** Field description */
+  private static Logger logger =
+    Logger.getLogger(RegistrationBean.class.getName());
+
+  //~--- constructors ---------------------------------------------------------
 
   /**
    * Constructs ...

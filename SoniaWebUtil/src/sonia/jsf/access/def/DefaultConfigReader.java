@@ -25,6 +25,7 @@ import sonia.jsf.access.def.condition.AndCondition;
 import sonia.jsf.access.def.condition.ContainerCondition;
 import sonia.jsf.access.def.condition.IsUserCondition;
 import sonia.jsf.access.def.condition.IsUserInRoleCondition;
+import sonia.jsf.access.def.condition.LoggedInCondition;
 import sonia.jsf.access.def.condition.NotCondition;
 import sonia.jsf.access.def.condition.OrCondition;
 import sonia.jsf.access.def.condition.UriMatchesCondition;
@@ -44,7 +45,6 @@ import java.util.List;
 import java.util.Map;
 
 import javax.xml.parsers.ParserConfigurationException;
-import sonia.jsf.access.def.condition.LoggedInCondition;
 
 /**
  *
@@ -225,7 +225,7 @@ public class DefaultConfigReader
         }
         else if (childName.equals("loggedIn"))
         {
-          parent.add( new LoggedInCondition() );
+          parent.add(new LoggedInCondition());
         }
         else if (childName.equals("and"))
         {

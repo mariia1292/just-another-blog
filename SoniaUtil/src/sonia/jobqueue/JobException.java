@@ -51,18 +51,6 @@ public class JobException extends IOException
    */
   public JobException(Throwable cause)
   {
-    super(cause);
-  }
-
-  /**
-   * Constructs ...
-   *
-   *
-   * @param msg
-   * @param cause
-   */
-  public JobException(String msg, Throwable cause)
-  {
-    super(msg, cause);
+    super(cause.getMessage());
   }
 }

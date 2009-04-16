@@ -95,7 +95,7 @@ public class ModifyableConfigurationMBean extends ConfigurationMBean
    *
    * @return
    */
-  @Override
+  @Override @SuppressWarnings("unchecked")
   public AttributeList setAttributes(AttributeList attributes)
   {
     Attribute[] attrs = (Attribute[]) attributes.toArray(new Attribute[0]);
@@ -107,7 +107,7 @@ public class ModifyableConfigurationMBean extends ConfigurationMBean
       Object value = attr.getValue();
 
       config.set(name, value);
-      retlist.add( attr );
+      retlist.add(attr);
     }
 
     return retlist;

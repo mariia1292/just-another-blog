@@ -203,11 +203,15 @@ public class DefaultMappingHandler implements MappingHandler
     }
     catch (SAXException ex)
     {
-      throw new IOException(ex);
+      logger.log(Level.SEVERE, null, ex);
+
+      throw new IOException();
     }
     catch (ParserConfigurationException ex)
     {
-      throw new IOException(ex);
+      logger.log(Level.SEVERE, null, ex);
+
+      throw new IOException();
     }
   }
 

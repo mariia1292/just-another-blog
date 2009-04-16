@@ -62,7 +62,8 @@ public class RedirectAction implements Action
                        HttpServletResponse response, FacesContext context)
   {
     String redirect = null;
-    if ( target.startsWith( "/" ) )
+
+    if (target.startsWith("/"))
     {
       redirect = request.getContextPath() + target;
     }

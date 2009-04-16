@@ -62,6 +62,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -88,6 +89,9 @@ public class EntryBean extends AbstractBean
 
   /** Field description */
   private static final String UPLOAD_SUCCESS = "upload-success";
+
+  /** Field description */
+  private static Logger logger = Logger.getLogger(EntryBean.class.getName());
 
   //~--- constructors ---------------------------------------------------------
 

@@ -24,6 +24,7 @@ import sonia.util.Util;
 //~--- JDK imports ------------------------------------------------------------
 
 import java.util.List;
+import java.util.logging.Logger;
 
 import javax.faces.model.SelectItem;
 
@@ -33,6 +34,12 @@ import javax.faces.model.SelectItem;
  */
 public class GlobalConfigBean extends AbstractConfigBean
 {
+
+  /** Field description */
+  private static Logger logger =
+    Logger.getLogger(GlobalConfigBean.class.getName());
+
+  //~--- constructors ---------------------------------------------------------
 
   /**
    * Constructs ...
