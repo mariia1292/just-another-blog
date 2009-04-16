@@ -16,6 +16,7 @@ import sonia.blog.api.app.BlogRequestListener;
 import sonia.blog.api.app.BlogResponse;
 import sonia.blog.api.app.Constants;
 import sonia.blog.api.authentication.LoginBean;
+import sonia.blog.api.link.LinkBuilder;
 import sonia.blog.entity.Blog;
 
 import sonia.plugin.service.ServiceReference;
@@ -93,6 +94,13 @@ public class BlogContextFilter implements Filter
 
     if (BlogContext.getInstance().isInstalled())
     {
+      LinkBuilder builder = BlogContext.getInstance().getLinkBuilder();
+
+      if (!builder.isInit())
+      {
+        builder.init(request);
+      }
+
       if ((request.getSession() == null) || request.getSession().isNew())
       {
         Blog blog = request.getCurrentBlog();

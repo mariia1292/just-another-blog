@@ -21,12 +21,25 @@ import sonia.blog.entity.ContentObject;
 import sonia.blog.entity.PermaObject;
 import sonia.blog.entity.Tag;
 
+//~--- JDK imports ------------------------------------------------------------
+
+import java.text.MessageFormat;
+
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /**
  *
  * @author sdorra
  */
 public class DefaultLinkBuilder implements LinkBuilder
 {
+
+  /** Field description */
+  private static Logger logger =
+    Logger.getLogger(DefaultLinkBuilder.class.getName());
+
+  //~--- methods --------------------------------------------------------------
 
   /**
    * Method description
@@ -147,4 +160,70 @@ public class DefaultLinkBuilder implements LinkBuilder
 
     return link;
   }
+
+  /**
+   * Method description
+   *
+   *
+   * @param blog
+   * @param link
+   *
+   * @return
+   */
+  public String buildLink(Blog blog, String link)
+  {
+    if (linkScheme == null)
+    {
+      throw new IllegalStateException();
+    }
+
+    if (!link.startsWith("/"))
+    {
+      link = "/" + link;
+    }
+
+    return MessageFormat.format(linkScheme, blog.getIdentifier(), link);
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param request
+   */
+  public void init(BlogRequest request)
+  {
+    StringBuffer link = new StringBuffer();
+
+    link.append(request.getScheme()).append("://").append("{0}").append(":");
+    link.append(request.getServerPort());
+    link.append(request.getContextPath()).append("{1}");
+    linkScheme = link.toString();
+
+    if (logger.isLoggable(Level.FINE))
+    {
+      StringBuffer log = new StringBuffer();
+
+      log.append("init LinkBuilder with Link-Scheme: ").append(linkScheme);
+      logger.fine(log.toString());
+    }
+  }
+
+  //~--- get methods ----------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  public boolean isInit()
+  {
+    return linkScheme != null;
+  }
+
+  //~--- fields ---------------------------------------------------------------
+
+  /** Field description */
+  private String linkScheme;
 }

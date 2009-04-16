@@ -10,6 +10,7 @@ package sonia.blog.api.link;
 //~--- non-JDK imports --------------------------------------------------------
 
 import sonia.blog.api.app.BlogRequest;
+import sonia.blog.entity.Blog;
 import sonia.blog.entity.PermaObject;
 
 /**
@@ -18,6 +19,17 @@ import sonia.blog.entity.PermaObject;
  */
 public interface LinkBuilder
 {
+
+  /**
+   * Method description
+   *
+   *
+   * @param blog
+   * @param link
+   *
+   * @return
+   */
+  public String buildLink(Blog blog, String link);
 
   /**
    * Method description
@@ -40,4 +52,22 @@ public interface LinkBuilder
    * @return
    */
   public String buildLink(BlogRequest request, PermaObject object);
+
+  /**
+   * Method description
+   *
+   *
+   * @param request
+   */
+  public void init(BlogRequest request);
+
+  //~--- get methods ----------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  public boolean isInit();
 }

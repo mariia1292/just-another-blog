@@ -17,6 +17,7 @@ import sonia.blog.api.dao.BlogDAO;
 import sonia.blog.api.dao.CategoryDAO;
 import sonia.blog.api.dao.EntryDAO;
 import sonia.blog.api.dao.UserDAO;
+import sonia.blog.api.link.LinkBuilder;
 import sonia.blog.entity.Blog;
 import sonia.blog.entity.BlogMember;
 import sonia.blog.entity.Category;
@@ -415,8 +416,7 @@ public class Blogger
     Vector<Map<String, String>> result = new Vector<Map<String, String>>();
     LoginContext ctx = login(username, password);
     User user = getUser(ctx);
-
-    // LinkBuilder linkBuilder = BlogContext.getInstance().getLinkBuilder();
+    LinkBuilder linkBuilder = BlogContext.getInstance().getLinkBuilder();
     UserDAO userDAO = BlogContext.getDAOFactory().getUserDAO();
 
     // TODO scrolling
@@ -429,10 +429,9 @@ public class Blogger
       if (blog.isActive())
       {
         Map<String, String> blogMap = new HashMap<String, String>();
+        String link = linkBuilder.buildLink(blog, "/");
 
-        // TODO: replace with linkBuilder
-        System.out.println("http://" + blog.getIdentifier() + ":8080/jab/");
-        blogMap.put("url", "http://" + blog.getIdentifier() + ":8080/jab/");
+        blogMap.put("url", link);
         blogMap.put("blogid", blog.getId().toString());
         blogMap.put("blogName", blog.getTitle());
         result.add(blogMap);
