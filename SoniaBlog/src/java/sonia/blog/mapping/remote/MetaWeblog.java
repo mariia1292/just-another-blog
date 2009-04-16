@@ -14,6 +14,7 @@ import org.apache.xmlrpc.XmlRpcException;
 import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.dao.CategoryDAO;
 import sonia.blog.api.dao.EntryDAO;
+import sonia.blog.api.link.LinkBuilder;
 import sonia.blog.entity.Blog;
 import sonia.blog.entity.Category;
 import sonia.blog.entity.Entry;
@@ -96,6 +97,7 @@ public class MetaWeblog extends Blogger
                                                 Map<String, String>>();
     Blog blog = findBlog(blogId);
     CategoryDAO categoryDAO = BlogContext.getDAOFactory().getCategoryDAO();
+    LinkBuilder linkBuilder = BlogContext.getInstance().getLinkBuilder();
     List<Category> categories = categoryDAO.getAll(blog);
 
     for (Category category : categories)
@@ -103,13 +105,13 @@ public class MetaWeblog extends Blogger
 
       // TODO: replace with real links
       Map<String, String> properties = new HashMap<String, String>();
+      String link = linkBuilder.buildLink(blog,
+                      "/category/" + category.getId() + "/index.jab");
+      String rssLink = linkBuilder.buildLink(blog,
+                         "/feed/category/" + category.getId() + ".rss2");
 
-      properties.put("htmlUrl",
-                     "http://localhost:8080/jab/categories/"
-                     + category.getId());
-      properties.put("rssUrl",
-                     "http://localhost:8080/jab/categories/"
-                     + category.getId());
+      properties.put("htmlUrl", link);
+      properties.put("rssUrl", rssLink);
       result.put(category.getName(), properties);
     }
 
@@ -142,7 +144,7 @@ public class MetaWeblog extends Blogger
 
     if (entry != null)
     {
-      result = createPost(entry);
+      result = createPost(entry.getBlog(), entry);
     }
     else
     {
@@ -184,7 +186,7 @@ public class MetaWeblog extends Blogger
 
     for (Entry entry : entries)
     {
-      result.add(createPost(entry));
+      result.add(createPost(blog, entry));
     }
 
     logout(ctx);
@@ -198,19 +200,23 @@ public class MetaWeblog extends Blogger
    * Method description
    *
    *
+   *
+   * @param blog
    * @param entry
    *
    * @return
    */
-  protected Map<String, Object> createPost(Entry entry)
+  protected Map<String, Object> createPost(Blog blog, Entry entry)
   {
     Map<String, Object> result = new HashMap<String, Object>();
+    LinkBuilder linkBuilder = BlogContext.getInstance().getLinkBuilder();
+    String link = linkBuilder.buildLink(blog,
+                    "/list/" + entry.getId() + ".jab");
 
     // TODO replace with real Link
     result.put("postid", entry.getId().toString());
     result.put("title", entry.getTitle());
-    result.put("link",
-               "http://localhost:8080/jab/list/" + entry.getId() + ".jab");
+    result.put("link", link);
     result.put("description", entry.getContent());
     result.put("userid", entry.getAuthorName());
     result.put("author", entry.getAuthor().getEmail());
