@@ -46,6 +46,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Random;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.SelectItem;
@@ -56,6 +57,9 @@ import javax.faces.model.SelectItem;
  */
 public class DevelBean extends AbstractBean
 {
+
+  /** Field description */
+  private static Logger logger = Logger.getLogger(DevelBean.class.getName());
 
   /** Field description */
   private static SimpleDateFormat sdf =
@@ -311,6 +315,58 @@ public class DevelBean extends AbstractBean
    *
    * @return
    */
+  public SelectItem[] getStatisticFiles()
+  {
+    SelectItem[] items = null;
+    ResourceManager resManager = BlogContext.getInstance().getResourceManager();
+    File directory = resManager.getDirectory("plugin" + File.separator
+                       + "devel");
+
+    if (directory.exists())
+    {
+      File[] files = directory.listFiles(new FilenameFilter()
+      {
+        public boolean accept(File dir, String name)
+        {
+          return name.endsWith(".xml");
+        }
+      });
+      int size = files.length;
+
+      items = new SelectItem[size];
+
+      for (int i = 0; i < size; i++)
+      {
+        try
+        {
+          String name = files[i].getName();
+
+          if (name.length() > 4)
+          {
+            name = name.substring(0, name.length() - 4);
+
+            long time = Long.parseLong(name);
+
+            name = sdf.format(new Date(time));
+            items[i] = new SelectItem(files[i], name);
+          }
+        }
+        catch (NumberFormatException ex)
+        {
+          logger.log(Level.WARNING, null, ex);
+        }
+      }
+    }
+
+    return items;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
   public int getUsers()
   {
     return users;
@@ -411,7 +467,8 @@ public class DevelBean extends AbstractBean
    * Method description
    *
    *
-   * @param statistikFile
+   *
+   * @param statisticFile
    */
   public void setStatisticFile(File statisticFile)
   {
@@ -469,58 +526,6 @@ public class DevelBean extends AbstractBean
                                                Constants.SERVCIE_ENCRYPTION);
 
     return reference.get();
-  }
-
-  /**
-   * Method description
-   *
-   *
-   * @return
-   */
-  public SelectItem[] getStatisticFiles()
-  {
-    SelectItem[] items = null;
-    ResourceManager resManager = BlogContext.getInstance().getResourceManager();
-    File directory = resManager.getDirectory("plugin" + File.separator
-                       + "devel");
-
-    if (directory.exists())
-    {
-      File[] files = directory.listFiles(new FilenameFilter()
-      {
-        public boolean accept(File dir, String name)
-        {
-          return name.endsWith(".xml");
-        }
-      });
-      int size = files.length;
-
-      items = new SelectItem[size];
-
-      for (int i = 0; i < size; i++)
-      {
-        try
-        {
-          String name = files[i].getName();
-
-          if (name.length() > 4)
-          {
-            name = name.substring(0, name.length() - 4);
-
-            long time = Long.parseLong(name);
-
-            name = sdf.format(new Date(time));
-            items[i] = new SelectItem(files[i], name);
-          }
-        }
-        catch (NumberFormatException ex)
-        {
-          logger.log(Level.WARNING, null, ex);
-        }
-      }
-    }
-
-    return items;
   }
 
   //~--- fields ---------------------------------------------------------------

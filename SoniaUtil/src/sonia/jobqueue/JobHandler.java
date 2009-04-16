@@ -85,7 +85,8 @@ public class JobHandler extends Thread
         {
           if (logger.isLoggable(Level.FINER))
           {
-            logger.finer("JH" + handlerNumber + " job exited with exception");
+            logger.log(Level.FINER,
+                       "JH" + handlerNumber + " job exited with exception", ex);
           }
 
           queue.fireFinishedEvent(job, ex);

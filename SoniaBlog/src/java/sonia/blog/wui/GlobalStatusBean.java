@@ -22,6 +22,7 @@ import sonia.util.Util;
 import java.io.File;
 
 import java.util.List;
+import java.util.logging.Logger;
 
 /**
  *
@@ -29,6 +30,12 @@ import java.util.List;
  */
 public class GlobalStatusBean extends AbstractBean
 {
+
+  /** Field description */
+  private static Logger logger =
+    Logger.getLogger(GlobalStatusBean.class.getName());
+
+  //~--- constructors ---------------------------------------------------------
 
   /**
    * Constructs ...

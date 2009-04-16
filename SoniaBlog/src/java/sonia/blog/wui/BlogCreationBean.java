@@ -30,6 +30,7 @@ import sonia.util.Util;
 
 import java.util.ResourceBundle;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -37,6 +38,12 @@ import java.util.logging.Level;
  */
 public class BlogCreationBean extends AbstractBean
 {
+
+  /** Field description */
+  private static Logger logger =
+    Logger.getLogger(BlogCreationBean.class.getName());
+
+  //~--- constructors ---------------------------------------------------------
 
   /**
    * Constructs ...

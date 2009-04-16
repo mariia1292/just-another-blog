@@ -42,6 +42,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.faces.context.FacesContext;
 import javax.faces.event.ValueChangeEvent;
@@ -62,6 +63,10 @@ public class AdminBlogBean extends AbstractBean
   /** Field description */
   public static final String DETAIL = "detail";
 
+  /** Field description */
+  private static Logger logger =
+    Logger.getLogger(AdminBlogBean.class.getName());
+
   //~--- constructors ---------------------------------------------------------
 
   /**
@@ -70,6 +75,7 @@ public class AdminBlogBean extends AbstractBean
    */
   public AdminBlogBean()
   {
+    super();
     actionReference = BlogContext.getInstance().getServiceRegistry().get(
       NavigationProvider.class, Constants.NAVIGATION_BLOGACTION);
   }

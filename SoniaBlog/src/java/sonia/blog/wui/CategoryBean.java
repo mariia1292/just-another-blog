@@ -18,6 +18,7 @@ import sonia.blog.entity.Category;
 //~--- JDK imports ------------------------------------------------------------
 
 import java.util.List;
+import java.util.logging.Logger;
 
 import javax.faces.model.DataModel;
 import javax.faces.model.ListDataModel;
@@ -29,12 +30,18 @@ import javax.faces.model.ListDataModel;
 public class CategoryBean extends AbstractBean
 {
 
+  /** Field description */
+  private static Logger logger = Logger.getLogger(CategoryBean.class.getName());
+
+  //~--- constructors ---------------------------------------------------------
+
   /**
    * Constructs ...
    *
    */
   public CategoryBean()
   {
+    super();
     category = new Category();
   }
 

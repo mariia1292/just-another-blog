@@ -15,6 +15,7 @@ import sonia.blog.api.app.BlogContext;
 //~--- JDK imports ------------------------------------------------------------
 
 import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -22,6 +23,12 @@ import java.util.logging.Level;
  */
 public abstract class AbstractConfigBean extends AbstractBean
 {
+
+  /** Field description */
+  private static Logger logger =
+    Logger.getLogger(AbstractConfigBean.class.getName());
+
+  //~--- constructors ---------------------------------------------------------
 
   /**
    * Constructs ...
@@ -81,7 +88,10 @@ public abstract class AbstractConfigBean extends AbstractBean
       }
       catch (Exception ex)
       {
-        logger.log(Level.SEVERE, null, ex);
+        StringBuffer log = new StringBuffer();
+
+        log.append("exception in ").append(getClass().getName());
+        logger.log(Level.SEVERE, log.toString(), ex);
         getMessageHandler().error("failureStoreConfig");
         result = FAILURE;
       }

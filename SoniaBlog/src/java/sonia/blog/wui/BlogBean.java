@@ -49,6 +49,7 @@ import sonia.util.Util;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.logging.Logger;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
@@ -64,6 +65,20 @@ public class BlogBean extends AbstractBean
 
   /** Field description */
   public static final String NAME = "BlogBean";
+
+  /** Field description */
+  private static Logger logger = Logger.getLogger(BlogBean.class.getName());
+
+  //~--- constructors ---------------------------------------------------------
+
+  /**
+   * Constructs ...
+   *
+   */
+  public BlogBean()
+  {
+    super();
+  }
 
   //~--- methods --------------------------------------------------------------
 
