@@ -61,6 +61,7 @@
         <temporal>TIMESTAMP</temporal>
       </basic>
       <many-to-one name="entry" fetch="LAZY" />
+      <many-to-one name="page" fetch="LAZY" />
     </attributes>
   </entity>
 </entity-mappings>

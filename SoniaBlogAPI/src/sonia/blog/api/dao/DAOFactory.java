@@ -148,6 +148,14 @@ public abstract class DAOFactory
    *
    * @return
    */
+  public abstract PageDAO getPageDAO();
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
   public abstract TagDAO getTagDAO();
 
   /**
