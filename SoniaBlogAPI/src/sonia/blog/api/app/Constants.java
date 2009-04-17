@@ -331,4 +331,7 @@ public interface Constants
 
   /** Field description */
   public static final String TEMPLATE_LIST = "list.xhtml";
+
+  /** Field description */
+  public static final String TEMPLATE_PAGE = "page.xhtml";
 }

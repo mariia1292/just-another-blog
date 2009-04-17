@@ -85,6 +85,12 @@
   </managed-bean>
 
   <managed-bean>
+    <managed-bean-name>PageBean</managed-bean-name>
+    <managed-bean-class>sonia.blog.wui.PageBean</managed-bean-class>
+    <managed-bean-scope>request</managed-bean-scope>
+  </managed-bean>
+
+  <managed-bean>
     <managed-bean-name>LoginBean</managed-bean-name>
     <managed-bean-class>sonia.blog.api.authentication.LoginBean</managed-bean-class>
     <managed-bean-scope>session</managed-bean-scope>

@@ -39,6 +39,18 @@ public interface PageDAO extends GenericDAO<Page>
    * Method description
    *
    *
+   * @param id
+   * @param blog
+   * @param published
+   *
+   * @return
+   */
+  public Page get(Long id, Blog blog, boolean published);
+
+  /**
+   * Method description
+   *
+   *
    * @param blog
    * @param published
    *

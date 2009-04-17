@@ -75,4 +75,9 @@
     <class>sonia.blog.mapping.remote.TrackbackMapping</class>
   </mapping>
 
+  <mapping>
+    <regex>^/page/([0-9]+).jab</regex>
+    <class>sonia.blog.mapping.PageMapping</class>
+  </mapping>
+
 </mappings>
