@@ -26,13 +26,15 @@
 
         <h3><h:outputText value="#{label.navigation}" /></h3>
 
-        <t:panelNavigation2 expandAll="true" layout="list">
-          <t:navigationMenuItems value="#{PageBean.pageNavigation}" />
-        </t:panelNavigation2>
-
+        <div id="submenu">
+          <t:panelNavigation2 activeItemClass="active" expandAll="true" layout="list">
+            <t:navigationMenuItems value="#{PageBean.pageNavigation}" />
+          </t:panelNavigation2>
+        </div>
+        
       </ui:define>
 
     </ui:composition>
-
+    
   </body>
 </html>
