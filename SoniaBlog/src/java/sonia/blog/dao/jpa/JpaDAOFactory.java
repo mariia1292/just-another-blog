@@ -19,6 +19,7 @@ import sonia.blog.api.dao.CategoryDAO;
 import sonia.blog.api.dao.CommentDAO;
 import sonia.blog.api.dao.DAOFactory;
 import sonia.blog.api.dao.EntryDAO;
+import sonia.blog.api.dao.PageDAO;
 import sonia.blog.api.dao.TagDAO;
 import sonia.blog.api.dao.UserDAO;
 import sonia.blog.api.dao.cache.CacheManager;
@@ -180,6 +181,18 @@ public class JpaDAOFactory extends DAOFactory
   public EntryDAO getEntryDAO()
   {
     return new JpaEntryDAO(entityManagerFactory);
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  @Override
+  public PageDAO getPageDAO()
+  {
+    return new JpaPageDAO(entityManagerFactory);
   }
 
   /**
