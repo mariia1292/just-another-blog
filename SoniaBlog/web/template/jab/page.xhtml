@@ -3,7 +3,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:blog="http://jab.nitilon.org/blog/">
+      xmlns:blog="http://jab.nitilon.org/blog/"
+      xmlns:t="http://myfaces.apache.org/tomahawk">
 
   <body>
 
@@ -23,7 +24,11 @@
 
       <ui:define name="info">
 
-        Page Navigation
+        <h3><h:outputText value="#{label.navigation}" /></h3>
+
+        <t:panelNavigation2 expandAll="true" layout="list">
+          <t:navigationMenuItems value="#{PageBean.pageNavigation}" />
+        </t:panelNavigation2>
 
       </ui:define>
 

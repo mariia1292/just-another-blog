@@ -26,12 +26,12 @@
     </named-query>
     <named-query name="Page.getAllRootWithPublished">
       <query>
-        select p from Page p where p.blog = :blog and p.parent is empty and p.published = :published order by p.navigationPosition, p.navigationTitle
+        select p from Page p where p.blog = :blog and p.parent is null and p.published = :published order by p.navigationPosition, p.navigationTitle
       </query>
     </named-query>
     <named-query name="Page.getAllRoot">
       <query>
-        select p from Page p where p.blog = :blog and p.parent is empty order by p.navigationPosition, p.navigationTitle
+        select p from Page p where p.blog = :blog and p.parent is null order by p.navigationPosition, p.navigationTitle
       </query>
     </named-query>
     <named-query name="Page.getChildrenWithPublished">
