@@ -19,6 +19,8 @@ import sonia.blog.api.app.Constants;
 import sonia.blog.api.app.Context;
 import sonia.blog.api.dao.CategoryDAO;
 import sonia.blog.api.dao.CommentDAO;
+import sonia.blog.api.dao.Dao;
+import sonia.blog.api.dao.PageDAO;
 import sonia.blog.api.dao.TagDAO;
 import sonia.blog.api.link.LinkBuilder;
 import sonia.blog.api.mapping.Mapping;
@@ -31,6 +33,7 @@ import sonia.blog.api.spam.SpamCheck;
 import sonia.blog.api.spam.SpamInputProtection;
 import sonia.blog.api.template.Template;
 import sonia.blog.api.util.AbstractBean;
+import sonia.blog.api.util.PageNavigation;
 import sonia.blog.entity.Blog;
 import sonia.blog.entity.Category;
 import sonia.blog.entity.Comment;
@@ -263,11 +266,9 @@ public class BlogBean extends AbstractBean
    */
   public List<NavigationMenuItem> getExtraNavigation()
   {
-    BlogContext context = BlogContext.getInstance();
     List<NavigationMenuItem> navigation = new ArrayList<NavigationMenuItem>();
     ResourceBundle bundle = getResourceBundle("label");
     BlogRequest request = getRequest();
-    LinkBuilder linkBuilder = context.getLinkBuilder();
     NavigationMenuItem random = new NavigationMenuItem();
 
     random.setLabel(bundle.getString("random"));
@@ -330,13 +331,29 @@ public class BlogBean extends AbstractBean
   {
     List<NavigationMenuItem> navigation = new ArrayList<NavigationMenuItem>();
     BlogRequest request = getRequest();
-    LinkBuilder linkBuilder = BlogContext.getInstance().getLinkBuilder();
     ResourceBundle bundle = getResourceBundle("label");
+    String linkBase = linkBuilder.buildLink(request, "/");
     NavigationMenuItem overview = new NavigationMenuItem();
 
     overview.setValue(bundle.getString("overview"));
-    overview.setExternalLink(linkBuilder.buildLink(request, "/list/index.jab"));
+    overview.setExternalLink(linkBuilder.buildLink(request,
+            linkBase + "list/index.jab"));
     navigation.add(overview);
+
+    List<PageNavigation> pageNav = pageDAO.getAllRoot(request.getCurrentBlog());
+
+    for (PageNavigation nav : pageNav)
+    {
+      NavigationMenuItem item = new NavigationMenuItem();
+
+      item.setValue(nav.getNavigationTitle());
+
+      StringBuilder link = new StringBuilder();
+
+      link.append(linkBase).append("page/").append(nav.getId()).append(".jab");
+      item.setExternalLink(link.toString());
+      navigation.add(item);
+    }
 
     return navigation;
   }
@@ -376,8 +393,6 @@ public class BlogBean extends AbstractBean
   {
     if (overviewItem == null)
     {
-      LinkBuilder linkBuilder = BlogContext.getInstance().getLinkBuilder();
-
       overviewItem = new UINavigationMenuItem();
       overviewItem.setValue(getResourceBundle("label").getString("overview"));
       overviewItem.setExternalLink(linkBuilder.buildLink(getRequest(),
@@ -721,7 +736,15 @@ public class BlogBean extends AbstractBean
   private ServiceReference<NavigationProvider> extraNavigationReference;
 
   /** Field description */
+  @Context
+  private LinkBuilder linkBuilder;
+
+  /** Field description */
   private UINavigationMenuItem overviewItem;
+
+  /** Field description */
+  @Dao
+  private PageDAO pageDAO;
 
   /** Field description */
   private DataModel pageEntries;
