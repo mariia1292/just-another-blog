@@ -17,6 +17,7 @@ import sonia.blog.api.dao.Dao;
 import sonia.blog.api.dao.PageDAO;
 import sonia.blog.api.link.LinkBuilder;
 import sonia.blog.api.util.AbstractBean;
+import sonia.blog.api.util.PageNavigation;
 import sonia.blog.entity.Blog;
 import sonia.blog.entity.Page;
 
@@ -88,13 +89,13 @@ public class PageBean extends AbstractBean
     breadcrum.add(p);
     Collections.reverse(breadcrum);
 
-    List<Page> children = pageDAO.getAllRoot(blog, true);
+    List<PageNavigation> children = pageDAO.getAllRoot(blog, true);
 
-    for (Page child : children)
+    for (PageNavigation child : children)
     {
       NavigationMenuItem childNav = new NavigationMenuItem();
 
-      if (child.equals(p))
+      if (child.getId().equals(p.getId()))
       {
         childNav.setOpen(true);
         buildSubNavigation(childNav, linkBase, breadcrum, 0);
@@ -143,7 +144,7 @@ public class PageBean extends AbstractBean
     if (i < breadcrum.size())
     {
       Page p = breadcrum.get(i);
-      List<Page> children = pageDAO.getChildren(p, true);
+      List<PageNavigation> children = pageDAO.getChildren(p, true);
       Page next = null;
 
       if ((i + 1) < breadcrum.size())
@@ -151,11 +152,11 @@ public class PageBean extends AbstractBean
         next = breadcrum.get(i + 1);
       }
 
-      for (Page child : children)
+      for (PageNavigation child : children)
       {
         NavigationMenuItem childNav = new NavigationMenuItem();
 
-        if ((next != null) && child.equals(next))
+        if ((next != null) && child.getId().equals(next.getId()))
         {
           childNav.setOpen(true);
           buildSubNavigation(childNav, linkBase, breadcrum, ++i);

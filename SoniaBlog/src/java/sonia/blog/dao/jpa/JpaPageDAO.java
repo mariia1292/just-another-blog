@@ -21,6 +21,7 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
+import sonia.blog.api.util.PageNavigation;
 
 /**
  *
@@ -124,7 +125,7 @@ public class JpaPageDAO extends JpaGenericDAO<Page> implements PageDAO
    *
    * @return
    */
-  public List<Page> getAllRoot(Blog blog, boolean published)
+  public List<PageNavigation> getAllRoot(Blog blog, boolean published)
   {
     EntityManager em = createEntityManager();
     Query q = em.createNamedQuery("Page.getAllRootWithPublished");
@@ -132,7 +133,7 @@ public class JpaPageDAO extends JpaGenericDAO<Page> implements PageDAO
     q.setParameter("blog", blog);
     q.setParameter("published", published);
 
-    return excecuteListQuery(em, q);
+    return excecuteListQuery(PageNavigation.class, em, q);
   }
 
   /**
@@ -143,9 +144,14 @@ public class JpaPageDAO extends JpaGenericDAO<Page> implements PageDAO
    *
    * @return
    */
-  public List<Page> getAllRoot(Blog blog)
+  public List<PageNavigation> getAllRoot(Blog blog)
   {
-    return findList("Page.getAllRoot", blog);
+    EntityManager em = createEntityManager();
+    Query q = em.createNamedQuery("Page.getAllRoot");
+
+    q.setParameter("blog", blog);
+
+    return excecuteListQuery(PageNavigation.class, em, q);
   }
 
   /**
@@ -157,7 +163,7 @@ public class JpaPageDAO extends JpaGenericDAO<Page> implements PageDAO
    *
    * @return
    */
-  public List<Page> getChildren(Page parent, boolean published)
+  public List<PageNavigation> getChildren(Page parent, boolean published)
   {
     EntityManager em = createEntityManager();
     Query q = em.createNamedQuery("Page.getChildrenWithPublished");
@@ -165,7 +171,7 @@ public class JpaPageDAO extends JpaGenericDAO<Page> implements PageDAO
     q.setParameter("parent", parent);
     q.setParameter("published", published);
 
-    return excecuteListQuery(em, q);
+    return excecuteListQuery(PageNavigation.class, em, q);
   }
 
   /**
@@ -176,13 +182,13 @@ public class JpaPageDAO extends JpaGenericDAO<Page> implements PageDAO
    *
    * @return
    */
-  public List<Page> getChildren(Page parent)
+  public List<PageNavigation> getChildren(Page parent)
   {
     EntityManager em = createEntityManager();
     Query q = em.createNamedQuery("Page.getChildren");
 
     q.setParameter("parent", parent);
 
-    return excecuteListQuery(em, q);
+    return excecuteListQuery(PageNavigation.class, em, q);
   }
 }
