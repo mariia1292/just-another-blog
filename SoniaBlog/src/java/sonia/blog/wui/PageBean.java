@@ -101,6 +101,11 @@ public class PageBean extends AbstractBean
         buildSubNavigation(childNav, linkBase, breadcrum, 0);
       }
 
+      if (page.getId().equals(child.getId()))
+      {
+        childNav.setActive(true);
+      }
+
       childNav.setValue(child.getNavigationTitle());
 
       StringBuffer linkBuffer = new StringBuffer();
@@ -161,7 +166,8 @@ public class PageBean extends AbstractBean
           childNav.setOpen(true);
           buildSubNavigation(childNav, linkBase, breadcrum, ++i);
         }
-        else if (next == null)
+
+        if (page.getId().equals(child.getId()))
         {
           childNav.setActive(true);
         }
