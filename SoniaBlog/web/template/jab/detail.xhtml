@@ -74,11 +74,11 @@
               </h:inputText>
               <h:message for="url" />
 
-              <h:outputLabel for="content" value="#{label.content}" />
-              <h:inputTextarea id="content" value="#{BlogBean.comment.content}" required="true">
+              <h:outputLabel for="commentContent" value="#{label.content}" />
+              <h:inputTextarea id="commentContent" value="#{BlogBean.comment.content}" required="true">
                 <f:validateLength maximum="255" />
               </h:inputTextarea>
-              <h:message for="content" />
+              <h:message for="commentContent" />
 
               <blog:spamLabel method="#{BlogBean.spamInputMethod}" />
               <blog:spamInput id="spam" />
