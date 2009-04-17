@@ -81,7 +81,6 @@ public class SearchRenderer extends BaseRenderer
     {
       ResponseWriter writer = context.getResponseWriter();
 
-      writer.endElement("a");
       writer.endElement("form");
     }
   }

@@ -224,6 +224,8 @@
     border-bottom: 1px #eee solid;
   }
 
+  .content{ margin-bottom: 1em; }
+
   /**
   * Selection-Calendar
   * 

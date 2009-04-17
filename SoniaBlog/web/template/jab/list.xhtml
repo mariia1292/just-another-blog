@@ -28,9 +28,9 @@
             <h2>
               <blog:link value="#{Entry.title}" object="#{Entry}" />
             </h2>
-            <p id="content">
-              <blog:content object="#{Entry}" teaser="true" />
-            </p>
+
+            <blog:content styleClass="content" object="#{Entry}" teaser="true" />
+
             <p>
               <h:outputText value="#{Entry.creationDate}">
                 <f:convertDateTime pattern="#{BlogBean.blog.dateFormat}" />

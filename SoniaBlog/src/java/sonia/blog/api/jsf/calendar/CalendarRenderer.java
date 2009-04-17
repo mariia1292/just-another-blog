@@ -170,7 +170,7 @@ public class CalendarRenderer extends BaseRenderer
       }
 
       // end month
-      writer.endElement("body");
+      writer.endElement("tbody");
       writer.endElement("table");
     }
   }
