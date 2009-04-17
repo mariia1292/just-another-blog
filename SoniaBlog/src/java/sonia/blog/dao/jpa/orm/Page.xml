@@ -44,6 +44,11 @@
         select p from Page p where p.parent = :parent order by p.navigationPosition, p.navigationTitle
       </query>
     </named-query>
+    <named-query name="Page.getByIdBlogAndPublished">
+      <query>
+        select p from Page p where p.id = :id and p.published = :published and p.blog = :blog
+      </query>
+    </named-query>
     <pre-persist method-name="prePersists" />
     <pre-update method-name="preUpdate" />
     <attributes>
