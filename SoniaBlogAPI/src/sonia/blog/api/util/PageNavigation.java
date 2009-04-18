@@ -28,5 +28,13 @@ public interface PageNavigation
    *
    * @return
    */
+  public int getNavigationPosition();
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
   public String getNavigationTitle();
 }

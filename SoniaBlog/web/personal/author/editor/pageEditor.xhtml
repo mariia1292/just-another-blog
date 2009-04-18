@@ -5,7 +5,8 @@
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:blog="http://jab.nitilon.org/blog/"
-      xmlns:t="http://myfaces.apache.org/tomahawk">
+      xmlns:t="http://myfaces.apache.org/tomahawk"
+      xmlns:u1="http://jab.nitilon.org/blog/">
 
   <body>
 
@@ -35,14 +36,22 @@
               theme_advanced_path_location : "top"
             }
           });
+          function popup()
+          {
+            window.open(
+              '${facesContext.externalContext.requestContextPath}/personal/author/editor/pages.jab?id=pageForm:navigationParent&amp;description=navigationParentLabel',
+              'pages',
+              'width=300,height=400,status=yes,scrollbars=yes,resizable=yes'
+            );
+          }
         </script>
       </ui:define>
 
       <ui:define name="content">
 
         <h1><h:outputText value="#{label.pages}" /></h1>
-        
-        <h:form enctype="multipart/form-data">
+
+        <h:form id="pageForm" enctype="multipart/form-data">
 
           <h:panelGrid columns="2" styleClass="editor" columnClasses="e1,e2">
 
@@ -67,6 +76,19 @@
             <h:outputLabel for="navigationTitle" value="#{label.title}" />
             <h:inputText id="navigationTitle" value="#{PageAuthorBean.page.navigationTitle}" required="true" />
             <h:message for="navigationTitle" />
+
+            <h:outputLabel for="navigationParent" value="#{label.parentPage}" />
+            <h:panelGroup>
+              <span id="navigationParentLabel">
+                <h:outputText value="#{PageAuthorBean.page.parent.navigationTitle}"
+                              rendered="#{PageAuthorBean.page.parent != null}" />
+              </span>
+              <h:inputHidden id="navigationParent" value="#{PageAuthorBean.parentId}" />
+              <a href="#" onclick="popup()">
+                <h:outputText value="#{label.choose}" />
+              </a>
+            </h:panelGroup>
+            <h:message for="navigationParent" />
 
             <h:outputLabel for="navigationPos" value="#{label.position}" />
             <h:inputText id="navigationPos" value="#{PageAuthorBean.page.navigationPosition}" required="true" />

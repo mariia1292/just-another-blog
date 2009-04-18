@@ -16,6 +16,7 @@ import sonia.blog.api.dao.Dao;
 import sonia.blog.api.dao.PageDAO;
 import sonia.blog.api.util.AbstractBean;
 import sonia.blog.entity.Page;
+import sonia.blog.wui.model.PageNavigationTreeNode;
 import sonia.blog.wui.model.PageTreeNode;
 
 import sonia.util.Util;
@@ -167,6 +168,20 @@ public class PageAuthorBean extends AbstractBean
    *
    * @return
    */
+  public TreeNode getNavigationTreeNode()
+  {
+    BlogRequest request = getRequest();
+
+    return new PageNavigationTreeNode(pageDAO, request.getCurrentBlog(),
+                                      "root", "RootNode", false, false);
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
   public Page getPage()
   {
     if (page == null)
@@ -175,6 +190,17 @@ public class PageAuthorBean extends AbstractBean
     }
 
     return page;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  public Long getParentId()
+  {
+    return parentId;
   }
 
   /**
@@ -204,6 +230,17 @@ public class PageAuthorBean extends AbstractBean
     this.page = page;
   }
 
+  /**
+   * Method description
+   *
+   *
+   * @param parentId
+   */
+  public void setParentId(Long parentId)
+  {
+    this.parentId = parentId;
+  }
+
   //~--- methods --------------------------------------------------------------
 
   /**
@@ -218,6 +255,13 @@ public class PageAuthorBean extends AbstractBean
 
     page.setBlog(request.getCurrentBlog());
     page.setAuthor(request.getUser());
+
+    if (parentId != null)
+    {
+      Page parent = pageDAO.get(parentId);
+
+      page.setParent(parent);
+    }
 
     String result = SUCCESS;
 
@@ -257,4 +301,7 @@ public class PageAuthorBean extends AbstractBean
   /** Field description */
   @Dao
   private PageDAO pageDAO;
+
+  /** Field description */
+  private Long parentId;
 }
