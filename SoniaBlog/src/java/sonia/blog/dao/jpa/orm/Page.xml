@@ -26,7 +26,7 @@
     </named-query>
     <named-query name="Page.getAllRootWithPublished">
       <query>
-        select new sonia.blog.api.util.BasicPageNavigation( p.id, p.navigationTitle )
+        select new sonia.blog.api.util.BasicPageNavigation( p.id, p.navigationTitle, p.navigationPosition )
         from Page p 
         where p.blog = :blog and p.parent is null and p.published = :published
         order by p.navigationPosition, p.navigationTitle
@@ -34,7 +34,7 @@
     </named-query>
     <named-query name="Page.getAllRoot">
       <query>
-        select new sonia.blog.api.util.BasicPageNavigation( p.id, p.navigationTitle )
+        select new sonia.blog.api.util.BasicPageNavigation( p.id, p.navigationTitle, p.navigationPosition )
         from Page p
         where p.blog = :blog and p.parent is null
         order by p.navigationPosition, p.navigationTitle
@@ -42,7 +42,7 @@
     </named-query>
     <named-query name="Page.getChildrenWithPublished">
       <query>
-        select new sonia.blog.api.util.BasicPageNavigation( p.id, p.navigationTitle )
+        select new sonia.blog.api.util.BasicPageNavigation( p.id, p.navigationTitle, p.navigationPosition )
         from Page p
         where p.parent = :parent and p.published = :published
         order by p.navigationPosition, p.navigationTitle
@@ -50,7 +50,7 @@
     </named-query>
     <named-query name="Page.getChildren">
       <query>
-        select new sonia.blog.api.util.BasicPageNavigation( p.id, p.navigationTitle )
+        select new sonia.blog.api.util.BasicPageNavigation( p.id, p.navigationTitle, p.navigationPosition )
         from Page p
         where p.parent = :parent
         order by p.navigationPosition, p.navigationTitle
@@ -64,7 +64,7 @@
     </named-query>
     <named-query name="Page.getChildrenById">
       <query>
-        select new sonia.blog.api.util.BasicPageNavigation( p.id, p.navigationTitle )
+        select new sonia.blog.api.util.BasicPageNavigation( p.id, p.navigationTitle, p.navigationPosition )
         from Page p
         where p.parent.id = :id
         order by p.navigationPosition, p.navigationTitle
@@ -72,7 +72,7 @@
     </named-query>
     <named-query name="Page.getChildrenByIdAndPublished">
       <query>
-        select new sonia.blog.api.util.BasicPageNavigation( p.id, p.navigationTitle )
+        select new sonia.blog.api.util.BasicPageNavigation( p.id, p.navigationTitle, p.navigationPosition )
         from Page p
         where p.parent.id = :id and p.published = :published
         order by p.navigationPosition, p.navigationTitle
