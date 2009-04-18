@@ -57,7 +57,7 @@ public interface PageDAO extends GenericDAO<Page>
    *
    * @return
    */
-  public List<PageNavigation> getAllRoot(Blog blog, boolean published);
+  public List<? extends PageNavigation> getAllRoot(Blog blog, boolean published);
 
   /**
    * Method description
@@ -67,7 +67,7 @@ public interface PageDAO extends GenericDAO<Page>
    *
    * @return
    */
-  public List<PageNavigation> getAllRoot(Blog blog);
+  public List<? extends PageNavigation> getAllRoot(Blog blog);
 
   /**
    * Method description
@@ -78,7 +78,19 @@ public interface PageDAO extends GenericDAO<Page>
    *
    * @return
    */
-  public List<PageNavigation> getChildren(Page parent, boolean published);
+  public List<? extends PageNavigation> getChildren(Page parent, boolean published);
+
+  /**
+   * Method description
+   *
+   *
+   * @param parent
+   * @param published
+   *
+   * @return
+   */
+  public List<? extends PageNavigation> getChildren(PageNavigation parent,
+          boolean published);
 
   /**
    * Method description
@@ -88,5 +100,21 @@ public interface PageDAO extends GenericDAO<Page>
    *
    * @return
    */
-  public List<PageNavigation> getChildren(Page parent);
+  public List<? extends PageNavigation> getChildren(PageNavigation parent);
+
+  /**
+   * Method description
+   *
+   *
+   * @param parent
+   *
+   * @return
+   */
+  public List<? extends PageNavigation> getChildren(Page parent);
+
+  public List<Page> getPageChildren(Page parent);
+  public List<Page> getPageChildren(Page parent, boolean published);
+  public List<Page> getRootPages( Blog blog );
+  public List<Page> getRootPages( Blog blog, boolean published );
+  
 }

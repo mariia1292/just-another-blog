@@ -254,5 +254,9 @@
   div.widget-left { float: left;  }
   div.widget-right { float: right;  }
   div.widget-content { padding: 3px; }
+
+  
+  .pageTree table td,
+  .pageTree table th { padding: 0; }
 }
 

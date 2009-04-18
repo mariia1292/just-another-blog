@@ -110,6 +110,11 @@ public class PersonalBean extends AbstractBean
                 bundle.getString("categories"), "categories"));
         authorNavigation.add(
             new NavigationMenuItem(bundle.getString("comments"), "comments"));
+        authorNavigation.add(
+            new NavigationMenuItem(
+                bundle.getString("newPage"), "#{PageAuthorBean.newPage}"));
+        authorNavigation.add(new NavigationMenuItem(bundle.getString("pages"),
+                "pages"));
         handleProviders(Constants.NAVIGATION_AUTHOR, authorNavigation);
       }
     }
