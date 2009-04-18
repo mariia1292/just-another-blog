@@ -31,14 +31,9 @@ import javax.servlet.http.HttpServletResponse;
 public abstract class FilterMapping implements Mapping
 {
 
-  /**
-   * Constructs ...
-   *
-   */
-  public FilterMapping()
-  {
-    logger = Logger.getLogger(getClass().getName());
-  }
+  /** Field description */
+  private static Logger logger =
+    Logger.getLogger(FilterMapping.class.getName());
 
   //~--- methods --------------------------------------------------------------
 
@@ -120,9 +115,4 @@ public abstract class FilterMapping implements Mapping
   {
     return "/template/" + blog.getTemplate() + "/" + viewIdSuffix;
   }
-
-  //~--- fields ---------------------------------------------------------------
-
-  /** Field description */
-  protected Logger logger;
 }

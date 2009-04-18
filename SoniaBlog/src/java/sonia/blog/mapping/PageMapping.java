@@ -16,6 +16,7 @@ import sonia.blog.api.dao.Dao;
 import sonia.blog.api.dao.PageDAO;
 import sonia.blog.api.mapping.FilterMapping;
 import sonia.blog.api.mapping.MappingNavigation;
+import sonia.blog.entity.Blog;
 import sonia.blog.entity.Page;
 import sonia.blog.wui.PageBean;
 
@@ -26,9 +27,9 @@ import sonia.util.Util;
 import java.io.IOException;
 
 import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.servlet.ServletException;
-import sonia.blog.entity.Blog;
 
 /**
  *
@@ -36,6 +37,11 @@ import sonia.blog.entity.Blog;
  */
 public class PageMapping extends FilterMapping
 {
+
+  /** Field description */
+  private static Logger logger = Logger.getLogger(PageMapping.class.getName());
+
+  //~--- get methods ----------------------------------------------------------
 
   /**
    * Method description

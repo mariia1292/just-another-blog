@@ -29,6 +29,7 @@ import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.faces.model.ListDataModel;
 
@@ -41,6 +42,11 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class DateMapping extends ScrollableFilterMapping
 {
+
+  /** Field description */
+  private static Logger logger = Logger.getLogger(DateMapping.class.getName());
+
+  //~--- get methods ----------------------------------------------------------
 
   /**
    * Method description

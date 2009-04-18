@@ -32,6 +32,7 @@ import java.io.OutputStream;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.imageio.ImageIO;
 
@@ -44,6 +45,11 @@ import javax.servlet.http.HttpServletResponse;
  */
 public abstract class ChartMapping extends FinalMapping
 {
+
+  /** Field description */
+  private static Logger logger = Logger.getLogger(ChartMapping.class.getName());
+
+  //~--- methods --------------------------------------------------------------
 
   /**
    * Method description

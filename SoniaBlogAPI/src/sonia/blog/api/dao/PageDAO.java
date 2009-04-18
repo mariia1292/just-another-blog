@@ -9,13 +9,13 @@ package sonia.blog.api.dao;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import sonia.blog.api.util.PageNavigation;
 import sonia.blog.entity.Blog;
 import sonia.blog.entity.Page;
 
 //~--- JDK imports ------------------------------------------------------------
 
 import java.util.List;
-import sonia.blog.api.util.PageNavigation;
 
 /**
  *
@@ -57,7 +57,8 @@ public interface PageDAO extends GenericDAO<Page>
    *
    * @return
    */
-  public List<? extends PageNavigation> getAllRoot(Blog blog, boolean published);
+  public List<? extends PageNavigation> getAllRoot(Blog blog,
+          boolean published);
 
   /**
    * Method description
@@ -78,7 +79,8 @@ public interface PageDAO extends GenericDAO<Page>
    *
    * @return
    */
-  public List<? extends PageNavigation> getChildren(Page parent, boolean published);
+  public List<? extends PageNavigation> getChildren(Page parent,
+          boolean published);
 
   /**
    * Method description
@@ -112,9 +114,45 @@ public interface PageDAO extends GenericDAO<Page>
    */
   public List<? extends PageNavigation> getChildren(Page parent);
 
+  /**
+   * Method description
+   *
+   *
+   * @param parent
+   *
+   * @return
+   */
   public List<Page> getPageChildren(Page parent);
+
+  /**
+   * Method description
+   *
+   *
+   * @param parent
+   * @param published
+   *
+   * @return
+   */
   public List<Page> getPageChildren(Page parent, boolean published);
-  public List<Page> getRootPages( Blog blog );
-  public List<Page> getRootPages( Blog blog, boolean published );
-  
+
+  /**
+   * Method description
+   *
+   *
+   * @param blog
+   *
+   * @return
+   */
+  public List<Page> getRootPages(Blog blog);
+
+  /**
+   * Method description
+   *
+   *
+   * @param blog
+   * @param published
+   *
+   * @return
+   */
+  public List<Page> getRootPages(Blog blog, boolean published);
 }

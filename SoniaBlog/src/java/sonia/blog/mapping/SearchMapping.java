@@ -31,6 +31,7 @@ import java.io.IOException;
 
 import java.util.List;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.faces.model.ListDataModel;
 
@@ -49,6 +50,10 @@ public class SearchMapping extends ScrollableFilterMapping
 
   /** Field description */
   private static final int TIMEOUT = 1000 * 60 * 5;
+
+  /** Field description */
+  private static Logger logger =
+    Logger.getLogger(SearchMapping.class.getName());
 
   //~--- get methods ----------------------------------------------------------
 

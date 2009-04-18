@@ -24,6 +24,7 @@ import java.io.OutputStream;
 import java.net.URLConnection;
 
 import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletResponse;
@@ -37,6 +38,10 @@ public class ResourceMapping extends FinalMapping
 
   /** Field description */
   private static final String PATHPREFIX = "/jab/resource/";
+
+  /** Field description */
+  private static Logger logger =
+    Logger.getLogger(ResourceMapping.class.getName());
 
   //~--- methods --------------------------------------------------------------
 

@@ -38,6 +38,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletResponse;
@@ -48,6 +49,12 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class AttachmentMapping extends FinalMapping
 {
+
+  /** Field description */
+  private static Logger logger =
+    Logger.getLogger(AttachmentMapping.class.getName());
+
+  //~--- methods --------------------------------------------------------------
 
   /**
    * Method description
