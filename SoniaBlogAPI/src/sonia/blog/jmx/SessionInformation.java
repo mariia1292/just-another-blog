@@ -172,6 +172,17 @@ public class SessionInformation implements SessionInformationMBean
    *
    * @return
    */
+  public long getTotalPages()
+  {
+    return BlogContext.getDAOFactory().getPageDAO().count();
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
   public int getTotalSessions()
   {
     return totalSessions;

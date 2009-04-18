@@ -96,6 +96,14 @@ public interface SessionInformationMBean
    *
    * @return
    */
+  public long getTotalPages();
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
   public int getTotalSessions();
 
   /**
