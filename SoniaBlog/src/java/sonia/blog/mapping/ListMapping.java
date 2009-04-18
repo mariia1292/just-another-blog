@@ -28,6 +28,7 @@ import java.io.IOException;
 
 import java.util.List;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.faces.model.ListDataModel;
 
@@ -40,6 +41,11 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class ListMapping extends ScrollableFilterMapping
 {
+
+  /** Field description */
+  private static Logger logger = Logger.getLogger(ListMapping.class.getName());
+
+  //~--- get methods ----------------------------------------------------------
 
   /**
    * Method description

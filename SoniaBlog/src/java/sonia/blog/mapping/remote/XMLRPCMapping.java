@@ -22,6 +22,7 @@ import sonia.blog.api.mapping.FinalMapping;
 import java.io.IOException;
 
 import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletResponse;
@@ -32,6 +33,12 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class XMLRPCMapping extends FinalMapping
 {
+
+  /** Field description */
+  private static Logger logger =
+    Logger.getLogger(XMLRPCMapping.class.getName());
+
+  //~--- constructors ---------------------------------------------------------
 
   /**
    * Constructs ...

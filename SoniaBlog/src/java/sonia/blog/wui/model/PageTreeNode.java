@@ -111,5 +111,4 @@ public class PageTreeNode extends PageNavigationTreeNode
 
     return children;
   }
-
 }

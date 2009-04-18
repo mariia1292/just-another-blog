@@ -21,6 +21,7 @@ import java.io.IOException;
 
 import java.util.Enumeration;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletResponse;
@@ -31,6 +32,12 @@ import javax.servlet.http.HttpServletResponse;
  */
 public abstract class ScrollableFilterMapping extends FilterMapping
 {
+
+  /** Field description */
+  private static Logger logger =
+    Logger.getLogger(ScrollableFilterMapping.class.getName());
+
+  //~--- methods --------------------------------------------------------------
 
   /**
    * Method description

@@ -16,8 +16,6 @@ import sonia.blog.api.app.BlogResponse;
 
 import java.io.IOException;
 
-import java.util.logging.Logger;
-
 import javax.servlet.ServletException;
 
 /**
@@ -26,22 +24,6 @@ import javax.servlet.ServletException;
  */
 public abstract class FinalMapping implements Mapping
 {
-
-  /** Field description */
-  protected static Logger logger;
-
-  //~--- constructors ---------------------------------------------------------
-
-  /**
-   * Constructs ...
-   *
-   */
-  public FinalMapping()
-  {
-    logger = Logger.getLogger(getClass().getName());
-  }
-
-  //~--- methods --------------------------------------------------------------
 
   /**
    * Method description

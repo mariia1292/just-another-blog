@@ -29,6 +29,7 @@ import java.io.OutputStream;
 
 import java.util.Random;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.faces.context.ResponseWriter;
 
@@ -66,6 +67,10 @@ public class CaptchaSpamProtection implements SpamInputProtection
 
   /** Field description */
   private static final int WIDTH = 134;
+
+  /** Field description */
+  private static Logger logger =
+    Logger.getLogger(CaptchaSpamProtection.class.getName());
 
   /** Field description */
   private static final Random RANDOM = new Random();
