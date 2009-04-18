@@ -140,7 +140,7 @@ public class DashboardBean extends AbstractBean
       }
       catch (UnknownHostException ex)
       {
-        logger.log(Level.FINE, null, ex);
+        logger.log(Level.FINEST, null, ex);
       }
       catch (IOException ex)
       {

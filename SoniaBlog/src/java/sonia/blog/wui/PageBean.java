@@ -89,7 +89,7 @@ public class PageBean extends AbstractBean
     breadcrum.add(p);
     Collections.reverse(breadcrum);
 
-    List<PageNavigation> children = pageDAO.getAllRoot(blog, true);
+    List<? extends PageNavigation> children = pageDAO.getAllRoot(blog, true);
 
     for (PageNavigation child : children)
     {
@@ -149,7 +149,7 @@ public class PageBean extends AbstractBean
     if (i < breadcrum.size())
     {
       Page p = breadcrum.get(i);
-      List<PageNavigation> children = pageDAO.getChildren(p, true);
+      List<? extends PageNavigation> children = pageDAO.getChildren(p, true);
       Page next = null;
 
       if ((i + 1) < breadcrum.size())

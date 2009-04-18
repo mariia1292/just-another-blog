@@ -340,7 +340,8 @@ public class BlogBean extends AbstractBean
             linkBase + "list/index.jab"));
     navigation.add(overview);
 
-    List<PageNavigation> pageNav = pageDAO.getAllRoot(request.getCurrentBlog());
+    List<? extends PageNavigation> pageNav =
+      pageDAO.getAllRoot(request.getCurrentBlog());
 
     for (PageNavigation nav : pageNav)
     {

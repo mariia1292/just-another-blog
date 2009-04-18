@@ -86,6 +86,14 @@
       <to-view-id>/personal/author/editor/editor.xhtml</to-view-id>
     </navigation-case>
     <navigation-case>
+      <from-outcome>page-editor</from-outcome>
+      <to-view-id>/personal/author/editor/pageEditor.xhtml</to-view-id>
+    </navigation-case>
+    <navigation-case>
+      <from-outcome>pages</from-outcome>
+      <to-view-id>/personal/author/pages.xhtml</to-view-id>
+    </navigation-case>
+    <navigation-case>
       <from-outcome>plugins</from-outcome>
       <to-view-id>/personal/globaladmin/plugins.xhtml</to-view-id>
     </navigation-case>

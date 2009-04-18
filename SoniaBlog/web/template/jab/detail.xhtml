@@ -29,6 +29,13 @@
 
         <blog:content object="#{BlogBean.entry}" />
 
+        <p>
+          <h:outputText value="#{BlogBean.entry.creationDate}">
+            <f:convertDateTime pattern="#{BlogBean.blog.dateFormat}" />
+          </h:outputText>
+          <h:outputText value=", #{BlogBean.entry.authorName}" />
+        </p>
+
         <h:panelGroup styleClass="comments" rendered="#{BlogBean.showComments}">
 
           <a rel="comments"></a>

@@ -7,6 +7,10 @@
 
 package sonia.blog.entity;
 
+//~--- non-JDK imports --------------------------------------------------------
+
+import sonia.blog.api.util.PageNavigation;
+
 //~--- JDK imports ------------------------------------------------------------
 
 import java.io.Serializable;
@@ -19,7 +23,8 @@ import java.util.List;
  *
  * @author sdorra
  */
-public class Page implements Serializable, PermaObject, ContentObject
+public class Page
+        implements Serializable, PermaObject, ContentObject, PageNavigation
 {
 
   /** Field description */

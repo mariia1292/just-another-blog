@@ -11,23 +11,16 @@ package sonia.blog.api.util;
  *
  * @author sdorra
  */
-public class PageNavigation
+public interface PageNavigation
 {
 
   /**
-   * Constructs ...
+   * Method description
    *
    *
-   * @param id
-   * @param navigationTitle
+   * @return
    */
-  public PageNavigation(Long id, String navigationTitle)
-  {
-    this.id = id;
-    this.navigationTitle = navigationTitle;
-  }
-
-  //~--- methods --------------------------------------------------------------
+  public Long getId();
 
   /**
    * Method description
@@ -35,45 +28,5 @@ public class PageNavigation
    *
    * @return
    */
-  @Override
-  public String toString()
-  {
-    StringBuffer out = new StringBuffer();
-
-    out.append("nav: ").append(id).append(" - ").append(navigationTitle);
-
-    return out.toString();
-  }
-
-  //~--- get methods ----------------------------------------------------------
-
-  /**
-   * Method description
-   *
-   *
-   * @return
-   */
-  public Long getId()
-  {
-    return id;
-  }
-
-  /**
-   * Method description
-   *
-   *
-   * @return
-   */
-  public String getNavigationTitle()
-  {
-    return navigationTitle;
-  }
-
-  //~--- fields ---------------------------------------------------------------
-
-  /** Field description */
-  private Long id;
-
-  /** Field description */
-  private String navigationTitle;
+  public String getNavigationTitle();
 }
