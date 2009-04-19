@@ -185,6 +185,20 @@ public class Attachment implements Serializable, PermaObject, FileObject
     return fileSize;
   }
 
+  /**
+   * Method description
+   *
+   *
+   * @param blog
+   *
+   * @return
+   */
+  public boolean isBlog(Blog blog)
+  {
+    return ((entry != null) && entry.getBlog().equals(blog))
+           || ((page != null) && page.getBlog().equals(blog));
+  }
+
   //~--- set methods ----------------------------------------------------------
 
   /**

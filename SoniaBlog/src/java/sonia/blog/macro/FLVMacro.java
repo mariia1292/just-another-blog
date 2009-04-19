@@ -88,9 +88,9 @@ public class FLVMacro extends AbstractBlogMacro
       {
         BlogRequest request = getRequest(facesContext);
         Blog blog = request.getCurrentBlog();
-        Attachment attchment = attachmentDAO.findByBlogAndId(blog, id);
+        Attachment attchment = attachmentDAO.get(id);
 
-        if (attchment != null)
+        if (attchment != null && attchment.isBlog(blog))
         {
           result = renderPlayer(request, attchment, linkBase, width, height);
         }

@@ -30,6 +30,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletResponse;
@@ -43,6 +44,10 @@ public class PdfViewerMapping extends FinalMapping
 
   /** Field description */
   public static final String REGEX = "^/macros/pdfviewer/([0-9]+)/(.*)$";
+
+  /** Field description */
+  private static Logger logger =
+    Logger.getLogger(PdfViewerMapping.class.getName());
 
   //~--- methods --------------------------------------------------------------
 

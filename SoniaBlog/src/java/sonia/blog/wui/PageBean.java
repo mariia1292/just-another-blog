@@ -26,7 +26,6 @@ import sonia.blog.entity.Page;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.logging.Logger;
 
 /**
  *
@@ -37,9 +36,6 @@ public class PageBean extends AbstractBean
 
   /** Field description */
   public static final String NAME = "PageBean";
-
-  /** Field description */
-  private static Logger logger = Logger.getLogger(PageBean.class.getName());
 
   //~--- constructors ---------------------------------------------------------
 

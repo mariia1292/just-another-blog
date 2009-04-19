@@ -12,9 +12,11 @@ package sonia.blog.wui;
 import org.apache.myfaces.custom.tree2.TreeNode;
 
 import sonia.blog.api.app.BlogRequest;
+import sonia.blog.api.app.Constants;
+import sonia.blog.api.dao.AttachmentDAO;
 import sonia.blog.api.dao.Dao;
 import sonia.blog.api.dao.PageDAO;
-import sonia.blog.api.util.AbstractBean;
+import sonia.blog.entity.Attachment;
 import sonia.blog.entity.Page;
 import sonia.blog.wui.model.PageNavigationTreeNode;
 import sonia.blog.wui.model.PageTreeNode;
@@ -22,6 +24,8 @@ import sonia.blog.wui.model.PageTreeNode;
 import sonia.util.Util;
 
 //~--- JDK imports ------------------------------------------------------------
+
+import java.io.File;
 
 import java.util.Date;
 import java.util.List;
@@ -31,12 +35,13 @@ import java.util.logging.Logger;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIParameter;
 import javax.faces.event.ActionEvent;
+import sonia.blog.entity.Blog;
 
 /**
  *
  * @author sdorra
  */
-public class PageAuthorBean extends AbstractBean
+public class PageAuthorBean extends AbstractEditorBean
 {
 
   /** Field description */
@@ -55,22 +60,10 @@ public class PageAuthorBean extends AbstractBean
   public PageAuthorBean()
   {
     super();
+    page = new Page();
   }
 
   //~--- methods --------------------------------------------------------------
-
-  /**
-   * Method description
-   *
-   *
-   * @return
-   */
-  public String draft()
-  {
-    page.setPublished(false);
-
-    return save();
-  }
 
   /**
    * Method description
@@ -98,6 +91,7 @@ public class PageAuthorBean extends AbstractBean
               String idString = (String) param.getValue();
 
               page = pageDAO.get(Long.parseLong(idString));
+              setSessionVar();
             }
             catch (NumberFormatException ex)
             {
@@ -118,6 +112,7 @@ public class PageAuthorBean extends AbstractBean
   public String newPage()
   {
     page = new Page();
+    setSessionVar();
 
     return PAGEEDITOR;
   }
@@ -158,6 +153,80 @@ public class PageAuthorBean extends AbstractBean
     }
 
     return result;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  public String save()
+  {
+    BlogRequest request = getRequest();
+
+    Blog blog = request.getCurrentBlog();
+
+    page.setBlog(blog);
+    page.setAuthor(request.getUser());
+
+    if (page.getTitle() == null)
+        {
+          page.setTitle("NewPage " + blog.getDateFormatter().format(new Date()) );
+        }
+    if ( page.getNavigationTitle() == null )
+    {
+      page.setNavigationTitle( page.getTitle() );
+    }
+
+    if (parentId != null)
+    {
+      Page parent = pageDAO.get(parentId);
+
+      page.setParent(parent);
+    }
+
+    String result = SUCCESS;
+
+    if (page.getId() == null)
+    {
+      if (pageDAO.add(page))
+      {
+        getMessageHandler().info("createPageSuccess");
+      }
+      else
+      {
+        getMessageHandler().error("pageActionFailure");
+        result = FAILURE;
+      }
+    }
+    else
+    {
+      if (pageDAO.edit(page))
+      {
+        getMessageHandler().info("updatePageSuccess");
+      }
+      else
+      {
+        getMessageHandler().error("pageActionFailure");
+        result = FAILURE;
+      }
+    }
+
+    return result;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  public String saveDraft()
+  {
+    page.setPublished(false);
+
+    return save();
   }
 
   //~--- get methods ----------------------------------------------------------
@@ -217,6 +286,30 @@ public class PageAuthorBean extends AbstractBean
                             "RootNode", false, false);
   }
 
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  @Override
+  public boolean isNew()
+  {
+    return page.getId() == null;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  @Override
+  public boolean isPublished()
+  {
+    return page.isPublished();
+  }
+
   //~--- set methods ----------------------------------------------------------
 
   /**
@@ -241,7 +334,26 @@ public class PageAuthorBean extends AbstractBean
     this.parentId = parentId;
   }
 
-  //~--- methods --------------------------------------------------------------
+  //~--- get methods ----------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   * @param parent
+   *
+   * @return
+   */
+  @Override
+  protected File getAttachmentDirectory(File parent)
+  {
+    StringBuffer path = new StringBuffer();
+
+    path.append(Constants.RESOURCE_PAGES).append(File.separator);
+    path.append(page.getId());
+
+    return new File(parent, path.toString());
+  }
 
   /**
    * Method description
@@ -249,51 +361,52 @@ public class PageAuthorBean extends AbstractBean
    *
    * @return
    */
-  private String save()
+  @Override
+  protected List<Attachment> getAttachmentList()
   {
-    BlogRequest request = getRequest();
+    return attachmentDAO.getAll(page);
+  }
 
-    page.setBlog(request.getCurrentBlog());
-    page.setAuthor(request.getUser());
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  @Override
+  protected List<Attachment> getThumbnailList()
+  {
+    return attachmentDAO.getAllImages(page);
+  }
 
-    if (parentId != null)
-    {
-      Page parent = pageDAO.get(parentId);
+  //~--- set methods ----------------------------------------------------------
 
-      page.setParent(parent);
-    }
+  /**
+   * Method description
+   *
+   *
+   * @param attachment
+   */
+  @Override
+  protected void setRelation(Attachment attachment)
+  {
+    attachment.setPage(page);
+  }
 
-    String result = SUCCESS;
-
-    if (page.getId() == null)
-    {
-      if (pageDAO.add(page))
-      {
-        getMessageHandler().info("createPageSuccess");
-      }
-      else
-      {
-        getMessageHandler().error("pageActionFailure");
-        result = FAILURE;
-      }
-    }
-    else
-    {
-      if (pageDAO.edit(page))
-      {
-        getMessageHandler().info("updatePageSuccess");
-      }
-      else
-      {
-        getMessageHandler().error("pageActionFailure");
-        result = FAILURE;
-      }
-    }
-
-    return result;
+  /**
+   * Method description
+   *
+   */
+  private void setSessionVar()
+  {
+    getRequest().getSession().setAttribute("editor", "page");
   }
 
   //~--- fields ---------------------------------------------------------------
+
+  /** Field description */
+  @Dao
+  private AttachmentDAO attachmentDAO;
 
   /** Field description */
   private Page page;

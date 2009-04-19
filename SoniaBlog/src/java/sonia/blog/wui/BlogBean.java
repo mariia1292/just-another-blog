@@ -340,20 +340,28 @@ public class BlogBean extends AbstractBean
             linkBase + "list/index.jab"));
     navigation.add(overview);
 
-    List<? extends PageNavigation> pageNav =
-      pageDAO.getAllRoot(request.getCurrentBlog());
-
-    for (PageNavigation nav : pageNav)
+    if (BlogContext.getInstance().isInstalled())
     {
-      NavigationMenuItem item = new NavigationMenuItem();
+      List<? extends PageNavigation> pageNav =
+        BlogContext.getDAOFactory().getPageDAO().getAllRoot(
+            request.getCurrentBlog());
 
-      item.setValue(nav.getNavigationTitle());
+      if (pageNav != null)
+      {
+        for (PageNavigation nav : pageNav)
+        {
+          NavigationMenuItem item = new NavigationMenuItem();
 
-      StringBuilder link = new StringBuilder();
+          item.setValue(nav.getNavigationTitle());
 
-      link.append(linkBase).append("page/").append(nav.getId()).append(".jab");
-      item.setExternalLink(link.toString());
-      navigation.add(item);
+          StringBuilder link = new StringBuilder();
+
+          link.append(linkBase).append("page/").append(nav.getId()).append(
+              ".jab");
+          item.setExternalLink(link.toString());
+          navigation.add(item);
+        }
+      }
     }
 
     return navigation;
@@ -742,10 +750,6 @@ public class BlogBean extends AbstractBean
 
   /** Field description */
   private UINavigationMenuItem overviewItem;
-
-  /** Field description */
-  @Dao
-  private PageDAO pageDAO;
 
   /** Field description */
   private DataModel pageEntries;

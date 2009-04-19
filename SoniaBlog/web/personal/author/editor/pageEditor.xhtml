@@ -6,7 +6,8 @@
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:blog="http://jab.nitilon.org/blog/"
       xmlns:t="http://myfaces.apache.org/tomahawk"
-      xmlns:u1="http://jab.nitilon.org/blog/">
+      xmlns:u1="http://jab.nitilon.org/blog/"
+      xmlns:c="http://java.sun.com/jstl/core">
 
   <body>
 
@@ -48,6 +49,8 @@
       </ui:define>
 
       <ui:define name="content">
+
+        <c:set scope="session" var="blogEditor" value="page" />
 
         <h1><h:outputText value="#{label.pages}" /></h1>
 
@@ -97,7 +100,7 @@
           </h:panelGrid>
 
           <h:commandButton value="#{label.publish}" action="#{PageAuthorBean.publish}" />
-          <h:commandButton value="#{label.saveDraft}" action="#{PageAuthorBean.draft}" />
+          <h:commandButton value="#{label.saveDraft}" action="#{PageAuthorBean.saveDraft}" />
           <h:commandButton value="#{label.remove}" action="#{PageAuthorBean.remove}" />
 
         </h:form>
