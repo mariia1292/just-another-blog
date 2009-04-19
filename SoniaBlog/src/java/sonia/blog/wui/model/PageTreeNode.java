@@ -37,13 +37,14 @@ public class PageTreeNode extends PageNavigationTreeNode
    *
    * @param pageDAO
    * @param page
+   * @param filter
    * @param leaf
    * @param onlyPublished
    */
-  PageTreeNode(PageDAO pageDAO, PageNavigation page, boolean leaf,
-               boolean onlyPublished)
+  PageTreeNode(PageDAO pageDAO, PageNavigation page,
+               PageNavigationFilter filter, boolean leaf, boolean onlyPublished)
   {
-    super(pageDAO, page, leaf, onlyPublished);
+    super(pageDAO, page, filter, leaf, onlyPublished);
   }
 
   /**
@@ -52,15 +53,17 @@ public class PageTreeNode extends PageNavigationTreeNode
    *
    * @param pageDAO
    * @param blog
+   * @param filter
    * @param identifier
    * @param description
    * @param leaf
    * @param onlyPublished
    */
-  public PageTreeNode(PageDAO pageDAO, Blog blog, String identifier,
-                      String description, boolean leaf, boolean onlyPublished)
+  public PageTreeNode(PageDAO pageDAO, Blog blog, PageNavigationFilter filter,
+                      String identifier, String description, boolean leaf,
+                      boolean onlyPublished)
   {
-    super(pageDAO, blog, identifier, description, leaf, onlyPublished);
+    super(pageDAO, blog, filter, identifier, description, leaf, onlyPublished);
   }
 
   //~--- get methods ----------------------------------------------------------
@@ -105,7 +108,11 @@ public class PageTreeNode extends PageNavigationTreeNode
     {
       for (PageNavigation nav : pageNavigation)
       {
-        children.add(new PageTreeNode(pageDAO, nav, false, onlyPublished));
+        if ((filter == null) || filter.accept(nav))
+        {
+          children.add(new PageTreeNode(pageDAO, nav, filter, false,
+                                        onlyPublished));
+        }
       }
     }
 

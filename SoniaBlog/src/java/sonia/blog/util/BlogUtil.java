@@ -15,6 +15,10 @@ import sonia.blog.api.app.BlogRequest;
 import sonia.blog.api.app.BlogRuntimeException;
 import sonia.blog.api.app.Constants;
 import sonia.blog.api.util.AbstractBean;
+import sonia.blog.entity.Attachment;
+import sonia.blog.entity.ContentObject;
+import sonia.blog.entity.Entry;
+import sonia.blog.entity.Page;
 
 import sonia.util.Util;
 
@@ -44,10 +48,6 @@ import javax.mail.internet.MimeMessage;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import sonia.blog.entity.Attachment;
-import sonia.blog.entity.ContentObject;
-import sonia.blog.entity.Entry;
-import sonia.blog.entity.Page;
 
 /**
  *
@@ -55,22 +55,6 @@ import sonia.blog.entity.Page;
  */
 public class BlogUtil
 {
-
-  public static List<Attachment> getAttachments( ContentObject object )
-  {
-    List<Attachment> attachments = null;
-
-    if ( object instanceof Entry )
-    {
-      attachments = ((Entry)object).getAttachments();
-    }
-    else
-    {
-      attachments = ((Page)object).getAttachments();
-    }
-
-    return attachments;
-  }
 
   /**
    * Method description
@@ -284,6 +268,30 @@ public class BlogUtil
   }
 
   //~--- get methods ----------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   * @param object
+   *
+   * @return
+   */
+  public static List<Attachment> getAttachments(ContentObject object)
+  {
+    List<Attachment> attachments = null;
+
+    if (object instanceof Entry)
+    {
+      attachments = ((Entry) object).getAttachments();
+    }
+    else
+    {
+      attachments = ((Page) object).getAttachments();
+    }
+
+    return attachments;
+  }
 
   /**
    * Method description
