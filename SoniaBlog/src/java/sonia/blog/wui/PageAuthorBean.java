@@ -17,9 +17,12 @@ import sonia.blog.api.dao.AttachmentDAO;
 import sonia.blog.api.dao.Dao;
 import sonia.blog.api.dao.PageDAO;
 import sonia.blog.entity.Attachment;
+import sonia.blog.entity.Blog;
 import sonia.blog.entity.Page;
+import sonia.blog.wui.model.PageNavigationFilter;
 import sonia.blog.wui.model.PageNavigationTreeNode;
 import sonia.blog.wui.model.PageTreeNode;
+import sonia.blog.wui.model.SelfPageNavigationFilter;
 
 import sonia.util.Util;
 
@@ -35,7 +38,6 @@ import java.util.logging.Logger;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIParameter;
 import javax.faces.event.ActionEvent;
-import sonia.blog.entity.Blog;
 
 /**
  *
@@ -164,19 +166,19 @@ public class PageAuthorBean extends AbstractEditorBean
   public String save()
   {
     BlogRequest request = getRequest();
-
     Blog blog = request.getCurrentBlog();
 
     page.setBlog(blog);
     page.setAuthor(request.getUser());
 
     if (page.getTitle() == null)
-        {
-          page.setTitle("NewPage " + blog.getDateFormatter().format(new Date()) );
-        }
-    if ( page.getNavigationTitle() == null )
     {
-      page.setNavigationTitle( page.getTitle() );
+      page.setTitle("NewPage " + blog.getDateFormatter().format(new Date()));
+    }
+
+    if (page.getNavigationTitle() == null)
+    {
+      page.setNavigationTitle(page.getTitle());
     }
 
     if (parentId != null)
@@ -240,9 +242,15 @@ public class PageAuthorBean extends AbstractEditorBean
   public TreeNode getNavigationTreeNode()
   {
     BlogRequest request = getRequest();
+    PageNavigationFilter filter = null;
+
+    if ((page != null) && (page.getId() != null))
+    {
+      filter = new SelfPageNavigationFilter(page);
+    }
 
     return new PageNavigationTreeNode(pageDAO, request.getCurrentBlog(),
-                                      "root", "RootNode", false, false);
+                                      filter, "root", "RootNode", false, false);
   }
 
   /**
@@ -282,7 +290,7 @@ public class PageAuthorBean extends AbstractEditorBean
   {
     BlogRequest request = getRequest();
 
-    return new PageTreeNode(pageDAO, request.getCurrentBlog(), "root",
+    return new PageTreeNode(pageDAO, request.getCurrentBlog(), null, "root",
                             "RootNode", false, false);
   }
 

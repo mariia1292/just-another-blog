@@ -11,12 +11,17 @@ package sonia.blog.macro;
 
 import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.app.BlogRequest;
+import sonia.blog.api.dao.AttachmentDAO;
+import sonia.blog.api.dao.Dao;
 import sonia.blog.api.link.LinkBuilder;
 import sonia.blog.api.util.AbstractBlogMacro;
 import sonia.blog.entity.Attachment;
 import sonia.blog.entity.ContentObject;
 import sonia.blog.entity.Entry;
+import sonia.blog.entity.Page;
 import sonia.blog.util.BlogUtil;
+
+import sonia.util.Util;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -25,10 +30,6 @@ import java.util.Map;
 import java.util.logging.Level;
 
 import javax.faces.context.FacesContext;
-import sonia.blog.api.dao.AttachmentDAO;
-import sonia.blog.api.dao.Dao;
-import sonia.blog.entity.Page;
-import sonia.util.Util;
 
 /**
  *
@@ -36,24 +37,6 @@ import sonia.util.Util;
  */
 public class GalleryMacro extends AbstractBlogMacro
 {
-
-  private List<Attachment> getImages( ContentObject object )
-  {
-    List<Attachment> images = null;
-    if ( object instanceof Entry )
-    {
-      images = attachmentDAO.findAllImagesByEntry( (Entry) object );
-    }
-    else if ( object instanceof Page )
-    {
-      images = attachmentDAO.getAllImages( (Page) object );
-    }
-
-    return images;
-  }
-
-  @Dao
-  private AttachmentDAO attachmentDAO;
 
   /**
    * Method description
@@ -71,15 +54,12 @@ public class GalleryMacro extends AbstractBlogMacro
                           ContentObject object, String body)
   {
     String result = "";
-
     List<Attachment> images = getImages(object);
 
     if (Util.hasContent(images))
     {
-
       try
       {
-
         facesContext.getExternalContext().getRequestMap().put("test",
                 "<h1>Hello</h1>");
 
@@ -146,4 +126,36 @@ public class GalleryMacro extends AbstractBlogMacro
 
     return result;
   }
+
+  //~--- get methods ----------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   * @param object
+   *
+   * @return
+   */
+  private List<Attachment> getImages(ContentObject object)
+  {
+    List<Attachment> images = null;
+
+    if (object instanceof Entry)
+    {
+      images = attachmentDAO.findAllImagesByEntry((Entry) object);
+    }
+    else if (object instanceof Page)
+    {
+      images = attachmentDAO.getAllImages((Page) object);
+    }
+
+    return images;
+  }
+
+  //~--- fields ---------------------------------------------------------------
+
+  /** Field description */
+  @Dao
+  private AttachmentDAO attachmentDAO;
 }

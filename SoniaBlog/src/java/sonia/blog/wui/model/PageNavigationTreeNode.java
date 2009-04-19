@@ -41,14 +41,17 @@ public class PageNavigationTreeNode implements TreeNode
    *
    * @param pageDAO
    * @param page
+   * @param filter
    * @param leaf
    * @param onlyPublished
    */
-  PageNavigationTreeNode(PageDAO pageDAO, PageNavigation page, boolean leaf,
+  PageNavigationTreeNode(PageDAO pageDAO, PageNavigation page,
+                         PageNavigationFilter filter, boolean leaf,
                          boolean onlyPublished)
   {
     this.pageDAO = pageDAO;
     this.page = page;
+    this.filter = filter;
     this.leaf = leaf;
     this.onlyPublished = onlyPublished;
     this.type = DEFAULT_TYPE;
@@ -62,17 +65,20 @@ public class PageNavigationTreeNode implements TreeNode
    *
    * @param pageDAO
    * @param blog
+   * @param filter
    * @param identifier
    * @param description
    * @param leaf
    * @param onlyPublished
    */
-  public PageNavigationTreeNode(PageDAO pageDAO, Blog blog, String identifier,
+  public PageNavigationTreeNode(PageDAO pageDAO, Blog blog,
+                                PageNavigationFilter filter, String identifier,
                                 String description, boolean leaf,
                                 boolean onlyPublished)
   {
     this.pageDAO = pageDAO;
     this.blog = blog;
+    this.filter = filter;
     this.identifier = identifier;
     this.description = description;
     this.leaf = leaf;
@@ -137,8 +143,11 @@ public class PageNavigationTreeNode implements TreeNode
     {
       for (PageNavigation nav : pageNavigation)
       {
-        children.add(new PageNavigationTreeNode(pageDAO, nav, false,
-                onlyPublished));
+        if ((filter == null) || filter.accept(nav))
+        {
+          children.add(new PageNavigationTreeNode(pageDAO, nav, filter, false,
+                  onlyPublished));
+        }
       }
     }
 
@@ -256,6 +265,9 @@ public class PageNavigationTreeNode implements TreeNode
 
   /** Field description */
   protected String description;
+
+  /** Field description */
+  protected PageNavigationFilter filter;
 
   /** Field description */
   protected String identifier;

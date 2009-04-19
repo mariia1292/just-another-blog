@@ -26,15 +26,19 @@
 
         <div class="pageTree">
 
-          <t:tree2 id="pageTree" value="#{PageAuthorBean.navigationTreeNode}" var="node" showRootNode="false">
+          <h:form>
 
-            <f:facet name="page">
-              <a href="#" onclick="update('#{node.identifier}','#{node.description}')">
-                #{node.description} (#{node.page.navigationPosition})
-              </a>
-            </f:facet>
-            
-          </t:tree2>
+            <t:tree2 id="pageTree" value="#{PageAuthorBean.navigationTreeNode}" var="node" showRootNode="false">
+
+              <f:facet name="page">
+                <h:commandLink onclick="update('#{node.identifier}','#{node.description}')">
+                  <h:outputText value="#{node.description} (#{node.page.navigationPosition})" />
+                </h:commandLink>
+              </f:facet>
+
+            </t:tree2>
+
+          </h:form>
 
         </div>
 
