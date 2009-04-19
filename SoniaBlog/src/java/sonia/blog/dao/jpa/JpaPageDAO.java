@@ -13,12 +13,16 @@ import sonia.blog.api.app.Constants;
 import sonia.blog.api.dao.PageDAO;
 import sonia.blog.api.util.BasicPageNavigation;
 import sonia.blog.api.util.PageNavigation;
+import sonia.blog.entity.Attachment;
 import sonia.blog.entity.Blog;
 import sonia.blog.entity.Page;
+
+import sonia.util.Util;
 
 //~--- JDK imports ------------------------------------------------------------
 
 import java.util.List;
+import java.util.logging.Level;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -66,6 +70,58 @@ public class JpaPageDAO extends JpaGenericDAO<Page> implements PageDAO
   public long count(Blog blog)
   {
     return countQuery("Page.count", blog);
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param item
+   *
+   * @return
+   */
+  @Override
+  public boolean remove(Page item)
+  {
+    boolean result = false;
+    EntityManager em = createEntityManager();
+
+    try
+    {
+      em.getTransaction().begin();
+
+      List<Attachment> attachments = item.getAttachments();
+
+      if (Util.hasContent(attachments))
+      {
+        for (Attachment a : attachments)
+        {
+          em.remove(em.merge(a));
+        }
+      }
+
+      em.remove(em.merge(item));
+      em.getTransaction().commit();
+      result = true;
+    }
+    catch (Exception ex)
+    {
+      if (em.getTransaction().isActive())
+      {
+        em.getTransaction().rollback();
+      }
+
+      logger.log(Level.SEVERE, null, ex);
+    }
+    finally
+    {
+      if (em != null)
+      {
+        em.close();
+      }
+    }
+
+    return result;
   }
 
   //~--- get methods ----------------------------------------------------------
