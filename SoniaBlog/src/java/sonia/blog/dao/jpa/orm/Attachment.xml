@@ -39,6 +39,16 @@
         select count(a) from Attachment a join a.entry e join e.blog b where b = :blog
       </query>
     </named-query>
+    <named-query name="Attachment.getAllByPage">
+      <query>
+        select a from Attachment a where a.page = :page
+      </query>
+    </named-query>
+    <named-query name="Attachment.getAllImagesByPage">
+      <query>
+        select a from Attachment a where a.page = :page and a.mimeType like 'image/%'
+      </query>
+    </named-query>
     <pre-persist method-name="prePersists" />
     <attributes>
       <id name="id">

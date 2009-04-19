@@ -20,7 +20,7 @@
 
             <h:form id="size">
 
-              <h:selectOneRadio id="type" label="type" value="#{EntryBean.imageSize}">
+              <h:selectOneRadio id="type" label="type" value="#{EditorBean.imageSize}">
 
                 <f:selectItem itemLabel="#{label.sizeNormal}" itemValue="" />
                 <f:selectItem itemLabel="#{label.sizeOriginal}" itemValue="orginal" />
@@ -47,7 +47,7 @@
         <h3><h:outputText value="#{label.images}" /></h3>
         <div class="images">
 
-          <ui:repeat value="#{EntryBean.thumbnails}" var="Thumbnail">
+          <ui:repeat value="#{EditorBean.thumbnails}" var="Thumbnail">
 
             <a style="margin: 3px;" href="#" onclick="ImageDialog.insert('attachment/#{Thumbnail.id}')">
               <h:graphicImage value="/attachment/#{Thumbnail.id}?thumb" />

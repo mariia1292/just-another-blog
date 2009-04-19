@@ -25,6 +25,10 @@ import java.util.Map;
 import java.util.logging.Level;
 
 import javax.faces.context.FacesContext;
+import sonia.blog.api.dao.AttachmentDAO;
+import sonia.blog.api.dao.Dao;
+import sonia.blog.entity.Page;
+import sonia.util.Util;
 
 /**
  *
@@ -32,6 +36,24 @@ import javax.faces.context.FacesContext;
  */
 public class GalleryMacro extends AbstractBlogMacro
 {
+
+  private List<Attachment> getImages( ContentObject object )
+  {
+    List<Attachment> images = null;
+    if ( object instanceof Entry )
+    {
+      images = attachmentDAO.findAllImagesByEntry( (Entry) object );
+    }
+    else if ( object instanceof Page )
+    {
+      images = attachmentDAO.getAllImages( (Page) object );
+    }
+
+    return images;
+  }
+
+  @Dao
+  private AttachmentDAO attachmentDAO;
 
   /**
    * Method description
@@ -50,15 +72,13 @@ public class GalleryMacro extends AbstractBlogMacro
   {
     String result = "";
 
-    if (object instanceof Entry)
+    List<Attachment> images = getImages(object);
+
+    if (Util.hasContent(images))
     {
-      Entry entry = (Entry) object;
 
       try
       {
-        List<Attachment> images =
-          BlogContext.getDAOFactory().getAttachmentDAO().findAllImagesByEntry(
-              entry);
 
         facesContext.getExternalContext().getRequestMap().put("test",
                 "<h1>Hello</h1>");
@@ -85,14 +105,14 @@ public class GalleryMacro extends AbstractBlogMacro
             requestMap.put("sonia.blog.macro.gallery", Boolean.TRUE);
           }
 
-          result += "<div id=\"gallery_" + entry.getId() + "\">\n";
+          result += "<div id=\"gallery_" + object.getId() + "\">\n";
 
           for (int i = 0; i < images.size(); i++)
           {
             Attachment image = images.get(i);
 
             result += "<a id=\"image_" + i + "\" title=\"" + image.getName()
-                      + "\" rel=\"ligthbox[group_" + entry.getId()
+                      + "\" rel=\"ligthbox[group_" + object.getId()
                       + "]\" href=\"" + linkBuilder.buildLink(request, image)
                       + "\">\n";
             result += "<img border=\"0\" alt=\"\" src=\""
@@ -103,7 +123,7 @@ public class GalleryMacro extends AbstractBlogMacro
           result += "</div>\n";
           result += "<script type=\"text/javascript\">\n";
           result += "$(document).ready(function() {\n";
-          result += "$(\"div#gallery_" + entry.getId() + " a\").lightBox({\n";
+          result += "$(\"div#gallery_" + object.getId() + " a\").lightBox({\n";
           result += "imageLoading: '" + res
                     + "images/lightbox-ico-loading.gif',\n";
           result += "imageBtnPrev: '" + res

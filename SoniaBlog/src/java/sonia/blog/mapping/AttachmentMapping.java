@@ -82,12 +82,16 @@ public class AttachmentMapping extends FinalMapping
         AttachmentDAO attachmentDAO =
           BlogContext.getDAOFactory().getAttachmentDAO();
         Blog blog = request.getCurrentBlog();
-        Attachment attachment = attachmentDAO.findByBlogAndId(blog, id);
+        Attachment attachment = attachmentDAO.get(id);
 
-        if ((attachment != null)
-            && (attachment.getEntry().isPublished()
-                || request.isUserInRole(Role.ADMIN)
-                || request.isUserInRole(Role.AUTHOR)))
+        if (((attachment != null) && attachment.isBlog(blog))
+            && (((attachment.getEntry() != null)
+                 && attachment.getEntry()
+                   .isPublished()) || ((attachment.getPage() != null)
+                                       && attachment.getPage()
+                                         .isPublished()) || request
+                                           .isUserInRole(Role.ADMIN) || request
+                                           .isUserInRole(Role.AUTHOR)))
         {
           printAttachment(request, response, attachment);
         }

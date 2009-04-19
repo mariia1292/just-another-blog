@@ -44,6 +44,10 @@ import javax.mail.internet.MimeMessage;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import sonia.blog.entity.Attachment;
+import sonia.blog.entity.ContentObject;
+import sonia.blog.entity.Entry;
+import sonia.blog.entity.Page;
 
 /**
  *
@@ -51,6 +55,22 @@ import javax.servlet.http.HttpSession;
  */
 public class BlogUtil
 {
+
+  public static List<Attachment> getAttachments( ContentObject object )
+  {
+    List<Attachment> attachments = null;
+
+    if ( object instanceof Entry )
+    {
+      attachments = ((Entry)object).getAttachments();
+    }
+    else
+    {
+      attachments = ((Page)object).getAttachments();
+    }
+
+    return attachments;
+  }
 
   /**
    * Method description

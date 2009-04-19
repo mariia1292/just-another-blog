@@ -9,8 +9,6 @@ package sonia.blog.wui;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import org.apache.myfaces.custom.fileupload.UploadedFile;
-
 import org.w3c.tidy.Tidy;
 import org.w3c.tidy.TidyMessage;
 import org.w3c.tidy.TidyMessageListener;
@@ -25,16 +23,13 @@ import sonia.blog.api.dao.DAOFactory;
 import sonia.blog.api.dao.EntryDAO;
 import sonia.blog.api.dao.TagDAO;
 import sonia.blog.api.template.Template;
-import sonia.blog.api.util.AbstractBean;
 import sonia.blog.entity.Attachment;
 import sonia.blog.entity.Blog;
 import sonia.blog.entity.Category;
 import sonia.blog.entity.Entry;
 import sonia.blog.entity.Tag;
 import sonia.blog.entity.User;
-import sonia.blog.util.AttachmentWrapper;
 import sonia.blog.wui.model.EntryDataModel;
-import sonia.blog.wui.model.GenericDataModel;
 
 import sonia.config.Config;
 
@@ -45,14 +40,6 @@ import sonia.util.Util;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.UnsupportedEncodingException;
-
-import java.net.URLConnection;
-import java.net.URLDecoder;
 
 import java.text.SimpleDateFormat;
 
@@ -63,19 +50,15 @@ import java.util.List;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipInputStream;
 
-import javax.faces.event.ActionEvent;
 import javax.faces.model.DataModel;
-import javax.faces.model.ListDataModel;
 import javax.faces.model.SelectItem;
 
 /**
  *
  * @author sdorra
  */
-public class EntryBean extends AbstractBean
+public class EntryBean extends AbstractEditorBean
 {
 
   /** Field description */
@@ -83,12 +66,6 @@ public class EntryBean extends AbstractBean
 
   /** Field description */
   private static final String EDITOR = "editor";
-
-  /** Field description */
-  private static final String UPLOAD_FAILURE = "upload-failure";
-
-  /** Field description */
-  private static final String UPLOAD_SUCCESS = "upload-success";
 
   /** Field description */
   private static Logger logger = Logger.getLogger(EntryBean.class.getName());
@@ -103,8 +80,6 @@ public class EntryBean extends AbstractBean
   {
     super();
     entry = new Entry();
-    resourceDirectory =
-      BlogContext.getInstance().getResourceManager().getResourceDirectory();
   }
 
   //~--- methods --------------------------------------------------------------
@@ -115,20 +90,11 @@ public class EntryBean extends AbstractBean
    *
    * @return
    */
-  public String abortAttachmentEdit()
-  {
-    return SUCCESS;
-  }
-
-  /**
-   * Method description
-   *
-   *
-   * @return
-   */
   public String edit()
   {
     Entry e = (Entry) entries.getRowData();
+
+    setSessionVar();
 
     return edit(e);
   }
@@ -170,26 +136,6 @@ public class EntryBean extends AbstractBean
    *
    * @return
    */
-  public String editAttachment()
-  {
-    String result = FAILURE;
-    AttachmentWrapper wrapper = (AttachmentWrapper) attachments.getRowData();
-
-    if (wrapper != null)
-    {
-      attachment = wrapper.getAttachment();
-      result = SUCCESS;
-    }
-
-    return result;
-  }
-
-  /**
-   * Method description
-   *
-   *
-   * @return
-   */
   public String newEntry()
   {
     entry = new Entry();
@@ -198,6 +144,7 @@ public class EntryBean extends AbstractBean
 
     entry.setBlog(blog);
     tagString = "";
+    setSessionVar();
 
     return EDITOR;
   }
@@ -256,33 +203,6 @@ public class EntryBean extends AbstractBean
     }
 
     return result;
-  }
-
-  /**
-   * Method description
-   *
-   * @param event
-   */
-  public void removeAttachment(ActionEvent event)
-  {
-    Attachment attachment = (Attachment) attachments.getRowData();
-    File file = new File(getDirectory(), attachment.getFilePath());
-    AttachmentDAO attachmentDAO =
-      BlogContext.getDAOFactory().getAttachmentDAO();
-
-    if (attachmentDAO.remove(attachment))
-    {
-      if (!file.delete())
-      {
-        logger.warning("could not remove file " + file.getAbsolutePath());
-      }
-
-      getMessageHandler().info("removeAttachmentSuccess");
-    }
-    else
-    {
-      getMessageHandler().error("removeAttachmentFailure");
-    }
   }
 
   /**
@@ -357,25 +277,6 @@ public class EntryBean extends AbstractBean
   /**
    * Method description
    *
-   * @return
-   */
-  public String saveAttachment()
-  {
-    String result = SUCCESS;
-    AttachmentDAO attachmentDAO =
-      BlogContext.getDAOFactory().getAttachmentDAO();
-
-    if (!attachmentDAO.edit(attachment))
-    {
-      result = FAILURE;
-    }
-
-    return result;
-  }
-
-  /**
-   * Method description
-   *
    *
    * @return
    */
@@ -399,161 +300,19 @@ public class EntryBean extends AbstractBean
     return DETAIL;
   }
 
-  /**
-   * Method description
-   *
-   *
-   *
-   * @return
-   */
-  public String upload()
-  {
-    String result = UPLOAD_SUCCESS;
-
-    if (entry.isPublished() && (entry.getId() != null))
-    {
-      save();
-    }
-    else
-    {
-      saveDraft();
-    }
-
-    if (unzipFiles && uploadedFile.getName().endsWith(".zip"))
-    {
-      result = unzip();
-    }
-    else
-    {
-      Attachment attachment = new Attachment();
-
-      attachment.setEntry(entry);
-      attachment.setMimeType(uploadedFile.getContentType());
-      attachment.setSize(uploadedFile.getSize());
-      attachment.setName(uploadedFile.getName());
-      attachment.setDescription(uploadDescription);
-
-      InputStream in = null;
-      OutputStream out = null;
-
-      try
-      {
-        in = uploadedFile.getInputStream();
-
-        File rootDir = getDirectory();
-        File dir = new File(rootDir,
-                            Constants.RESOURCE_ENTRIES + File.separator
-                            + entry.getId());
-
-        if (!dir.exists())
-        {
-          dir.mkdirs();
-        }
-
-        File file = new File(dir, "" + System.currentTimeMillis());
-
-        out = new FileOutputStream(file);
-        Util.copy(in, out);
-
-        String path = file.getAbsolutePath().substring(
-                          resourceDirectory.getAbsolutePath().length());
-
-        attachment.setFilePath(path);
-
-        if (!BlogContext.getDAOFactory().getAttachmentDAO().add(attachment))
-        {
-          result = UPLOAD_FAILURE;
-        }
-        else
-        {
-          uploadDescription = null;
-        }
-      }
-      catch (Exception ex)
-      {
-        logger.log(Level.SEVERE, null, ex);
-        result = UPLOAD_FAILURE;
-      }
-      finally
-      {
-        try
-        {
-          if (in != null)
-          {
-            in.close();
-          }
-
-          if (out != null)
-          {
-            out.close();
-          }
-        }
-        catch (IOException ex)
-        {
-          logger.log(Level.SEVERE, null, ex);
-        }
-      }
-    }
-
-    return result;
-  }
-
   //~--- get methods ----------------------------------------------------------
 
   /**
    * Method description
    *
-   *
    * @return
    */
-  public Attachment getAttachment()
+  public List<Attachment> getAttachmentList()
   {
-    return attachment;
-  }
+    AttachmentDAO attachmentDAO =
+      BlogContext.getDAOFactory().getAttachmentDAO();
 
-  /**
-   * Method description
-   *
-   * @return
-   */
-  public DataModel getAttachments()
-  {
-    attachments = new ListDataModel();
-
-    if ((entry != null) && (entry.getId() != null))
-    {
-      AttachmentDAO attachmentDAO =
-        BlogContext.getDAOFactory().getAttachmentDAO();
-      List<Attachment> attachmentList = attachmentDAO.findAllByEntry(entry);
-      String content = getRequest().getParameter("content");
-
-      if (!Util.isBlank(content))
-      {
-        try
-        {
-          content = URLDecoder.decode(content, "UTF-8");
-        }
-        catch (UnsupportedEncodingException ex)
-        {
-          logger.log(Level.SEVERE, null, ex);
-        }
-      }
-
-      if ((attachmentList != null) &&!attachmentList.isEmpty())
-      {
-        List<AttachmentWrapper> wrapperList =
-          new ArrayList<AttachmentWrapper>();
-
-        for (Attachment a : attachmentList)
-        {
-          wrapperList.add(new AttachmentWrapper(a, content));
-        }
-
-        attachments.setWrappedData(wrapperList);
-      }
-    }
-
-    return attachments;
+    return attachmentDAO.findAllByEntry(entry);
   }
 
   /**
@@ -652,17 +411,6 @@ public class EntryBean extends AbstractBean
    *
    * @return
    */
-  public String getImageSize()
-  {
-    return imageSize;
-  }
-
-  /**
-   * Method description
-   *
-   *
-   * @return
-   */
   public Integer getPageSize()
   {
     return pageSize;
@@ -682,26 +430,14 @@ public class EntryBean extends AbstractBean
   /**
    * Method description
    *
+   *
    * @return
    */
-  public DataModel getThumbnails()
+  @Override
+  public List<Attachment> getThumbnailList()
   {
-    DataModel images = new ListDataModel();
-
-    if (entry != null)
-    {
-      AttachmentDAO attachmentDAO =
-        BlogContext.getDAOFactory().getAttachmentDAO();
-      List<Attachment> attachmentList =
-        attachmentDAO.findAllImagesByEntry(entry);
-
-      if ((attachmentList != null) &&!attachmentList.isEmpty())
-      {
-        images.setWrappedData(attachmentList);
-      }
-    }
-
-    return images;
+    return BlogContext.getDAOFactory().getAttachmentDAO().findAllImagesByEntry(
+        entry);
   }
 
   /**
@@ -761,9 +497,10 @@ public class EntryBean extends AbstractBean
    *
    * @return
    */
-  public String getUploadDescription()
+  @Override
+  public boolean isNew()
   {
-    return uploadDescription;
+    return entry.getId() == null;
   }
 
   /**
@@ -772,34 +509,13 @@ public class EntryBean extends AbstractBean
    *
    * @return
    */
-  public UploadedFile getUploadedFile()
+  @Override
+  public boolean isPublished()
   {
-    return uploadedFile;
-  }
-
-  /**
-   * Method description
-   *
-   *
-   * @return
-   */
-  public boolean isUnzipFiles()
-  {
-    return unzipFiles;
+    return entry.isPublished();
   }
 
   //~--- set methods ----------------------------------------------------------
-
-  /**
-   * Method description
-   *
-   *
-   * @param attachment
-   */
-  public void setAttachment(Attachment attachment)
-  {
-    this.attachment = attachment;
-  }
 
   /**
    * Method description
@@ -816,17 +532,6 @@ public class EntryBean extends AbstractBean
    * Method description
    *
    *
-   * @param imageSize
-   */
-  public void setImageSize(String imageSize)
-  {
-    this.imageSize = imageSize;
-  }
-
-  /**
-   * Method description
-   *
-   *
    * @param tagString
    */
   public void setTagString(String tagString)
@@ -834,37 +539,39 @@ public class EntryBean extends AbstractBean
     this.tagString = tagString;
   }
 
-  /**
-   * Method description
-   *
-   *
-   * @param unzipFiles
-   */
-  public void setUnzipFiles(boolean unzipFiles)
-  {
-    this.unzipFiles = unzipFiles;
-  }
+  //~--- get methods ----------------------------------------------------------
 
   /**
    * Method description
    *
    *
-   * @param uploadDescription
+   * @param parent
+   *
+   * @return
    */
-  public void setUploadDescription(String uploadDescription)
+  @Override
+  protected File getAttachmentDirectory(File parent)
   {
-    this.uploadDescription = uploadDescription;
+    StringBuffer path = new StringBuffer();
+
+    path.append(Constants.RESOURCE_ENTRIES).append(File.separator).append(
+        entry.getId());
+
+    return new File(parent, path.toString());
   }
+
+  //~--- set methods ----------------------------------------------------------
 
   /**
    * Method description
    *
    *
-   * @param uploadedFile
+   * @param attachment
    */
-  public void setUploadedFile(UploadedFile uploadedFile)
+  @Override
+  protected void setRelation(Attachment attachment)
   {
-    this.uploadedFile = uploadedFile;
+    attachment.setEntry(entry);
   }
 
   //~--- methods --------------------------------------------------------------
@@ -968,113 +675,6 @@ public class EntryBean extends AbstractBean
     }
   }
 
-  /**
-   * Method description
-   *
-   *
-   * @return
-   */
-  private String unzip()
-  {
-    InputStream in = null;
-    String result = UPLOAD_SUCCESS;
-
-    try
-    {
-      in = uploadedFile.getInputStream();
-
-      if (in != null)
-      {
-        ZipInputStream zis = new ZipInputStream(in);
-        ZipEntry ze = zis.getNextEntry();
-        File root = getDirectory();
-        File dir = new File(root,
-                            Constants.RESOURCE_ENTRIES + File.separator
-                            + entry.getId());
-
-        if (!dir.exists())
-        {
-          dir.mkdirs();
-        }
-
-        while (ze != null)
-        {
-          if (!ze.isDirectory())
-          {
-            try
-            {
-              File file = new File(dir, "" + System.currentTimeMillis());
-
-              Util.copy(zis, new FileOutputStream(file));
-
-              String name = ze.getName();
-
-              name = name.replaceAll("/", "-");
-
-              Attachment attachment = new Attachment();
-              String path = file.getAbsolutePath().substring(
-                                resourceDirectory.getAbsolutePath().length());
-
-              attachment.setEntry(entry);
-              attachment.setFilePath(path);
-              attachment.setMimeType(
-                  URLConnection.getFileNameMap().getContentTypeFor(name));
-              attachment.setName(name);
-              attachment.setSize(file.length());
-
-              if (!Util.isBlank(uploadDescription))
-              {
-                attachment.setDescription(uploadDescription);
-              }
-              else
-              {
-                attachment.setDescription(uploadedFile.getName());
-              }
-
-              if (!BlogContext.getDAOFactory().getAttachmentDAO().add(
-                      attachment))
-              {
-                result = UPLOAD_FAILURE;
-              }
-            }
-            catch (IOException ex)
-            {
-              logger.log(Level.SEVERE, null, ex);
-            }
-          }
-
-          ze = zis.getNextEntry();
-        }
-
-        uploadDescription = null;
-      }
-      else
-      {
-        result = UPLOAD_FAILURE;
-      }
-    }
-    catch (IOException ex)
-    {
-      logger.log(Level.SEVERE, null, ex);
-    }
-    finally
-    {
-      try
-      {
-        if (in != null)
-        {
-          in.close();
-        }
-      }
-      catch (IOException ex)
-      {
-        logger.log(Level.SEVERE, null, ex);
-      }
-    }
-
-    return result;
-  }
-
   //~--- get methods ----------------------------------------------------------
 
   /**
@@ -1113,13 +713,18 @@ public class EntryBean extends AbstractBean
     return directory;
   }
 
+  //~--- set methods ----------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   */
+  private void setSessionVar()
+  {
+    getRequest().getSession().setAttribute("editor", "entry");
+  }
+
   //~--- fields ---------------------------------------------------------------
-
-  /** Field description */
-  private Attachment attachment;
-
-  /** Field description */
-  private DataModel attachments;
 
   /** Field description */
   private File directory;
@@ -1131,27 +736,12 @@ public class EntryBean extends AbstractBean
   private Entry entry;
 
   /** Field description */
-  private String imageSize = "";
-
-  /** Field description */
   @Config(Constants.CONFIG_ADMIN_PAGESIZE)
   private Integer pageSize = new Integer(20);
-
-  /** Field description */
-  private File resourceDirectory;
 
   /** Field description */
   private String tagString;
 
   /** Field description */
   private Tidy tidy;
-
-  /** Field description */
-  private boolean unzipFiles = false;
-
-  /** Field description */
-  private String uploadDescription;
-
-  /** Field description */
-  private UploadedFile uploadedFile;
 }

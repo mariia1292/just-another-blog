@@ -101,7 +101,7 @@ public class EntryDataModel extends AbstractDataModel
   @Override
   protected List<?> getData(int start, int max)
   {
-    return entryDAO.findAllActivesByBlog(blog, start, max);
+    return entryDAO.findAllByBlog(blog, start, max);
   }
 
   //~--- fields ---------------------------------------------------------------

@@ -14,6 +14,7 @@ import sonia.blog.api.dao.AttachmentDAO;
 import sonia.blog.entity.Attachment;
 import sonia.blog.entity.Blog;
 import sonia.blog.entity.Entry;
+import sonia.blog.entity.Page;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -245,5 +246,41 @@ public class JpaAttachmentDAO extends JpaGenericDAO<Attachment>
   public List<Attachment> getAll(int start, int max)
   {
     return findList("Attachment.findAll", start, max);
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param page
+   *
+   * @return
+   */
+  public List<Attachment> getAll(Page page)
+  {
+    EntityManager em = createEntityManager();
+    Query q = em.createNamedQuery("Attachment.getAllByPage");
+
+    q.setParameter("page", page);
+
+    return excecuteListQuery(em, q);
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param page
+   *
+   * @return
+   */
+  public List<Attachment> getAllImages(Page page)
+  {
+    EntityManager em = createEntityManager();
+    Query q = em.createNamedQuery("Attachment.getAllImagesByPage");
+
+    q.setParameter("page", page);
+
+    return excecuteListQuery(em, q);
   }
 }
