@@ -15,8 +15,15 @@ import sonia.util.ServiceLocator;
 
 //~--- JDK imports ------------------------------------------------------------
 
+import java.io.IOException;
+import java.io.InputStream;
+
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Properties;
+import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -27,6 +34,9 @@ public abstract class MacroParser
 
   /** Field description */
   private static MacroParser instance;
+
+  /** Field description */
+  private static Logger logger = Logger.getLogger(MacroParser.class.getName());
 
   //~--- get methods ----------------------------------------------------------
 
@@ -59,6 +69,41 @@ public abstract class MacroParser
    * @return
    */
   public abstract String parseText(Map<String, ?> environment, String text);
+
+  /**
+   * Method description
+   *
+   *
+   * @param in
+   *
+   * @throws IOException
+   */
+  public void load(InputStream in) throws IOException
+  {
+    Properties props = new Properties();
+
+    props.load(in);
+
+    Set<Object> keys = props.keySet();
+
+    if (keys != null)
+    {
+      for (Object o : keys)
+      {
+        try
+        {
+          String key = (String) o;
+          String value = props.getProperty(key);
+
+          putMacro(key, (Class<? extends Macro>) Class.forName(value));
+        }
+        catch (Exception ex)
+        {
+          logger.log(Level.SEVERE, null, ex);
+        }
+      }
+    }
+  }
 
   /**
    * Method description
