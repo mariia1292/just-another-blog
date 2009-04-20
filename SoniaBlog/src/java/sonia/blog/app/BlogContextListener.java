@@ -29,12 +29,6 @@ import sonia.blog.dao.jpa.JpaDAOFactory;
 import sonia.blog.editor.FlowPlayerHandler;
 import sonia.blog.editor.LinkHandler;
 import sonia.blog.link.DefaultLinkBuilder;
-import sonia.blog.macro.AttachmentMacro;
-import sonia.blog.macro.BlogsMacro;
-import sonia.blog.macro.FLVMacro;
-import sonia.blog.macro.GalleryMacro;
-import sonia.blog.macro.HelloWorldMacro;
-import sonia.blog.macro.SpoilerMacro;
 import sonia.blog.mapping.DefaultMappingHandler;
 import sonia.blog.search.DefaultSearchContext;
 import sonia.blog.search.IndexListener;
@@ -99,6 +93,23 @@ import javax.servlet.ServletContextListener;
 public class BlogContextListener implements ServletContextListener
 {
 
+  /** Field description */
+  private static Logger logger =
+    Logger.getLogger(BlogContextListener.class.getName());
+
+  //~--- constructors ---------------------------------------------------------
+
+  /**
+   * Constructs ...
+   *
+   */
+  public BlogContextListener()
+  {
+    configureLogger();
+  }
+
+  //~--- methods --------------------------------------------------------------
+
   /**
    * Method description
    *
@@ -135,7 +146,6 @@ public class BlogContextListener implements ServletContextListener
 
       context.setServletContext(event.getServletContext());
       initFileNameMap();
-      configureLogger();
       initMBeans(context);
       initServices(context);
 
@@ -145,7 +155,7 @@ public class BlogContextListener implements ServletContextListener
       }
 
       initInjectionProvider(context);
-      initMacros();
+      initMacros(event.getServletContext());
 
       File pluginStore = context.getResourceManager().getDirectory(
                              Constants.RESOURCE_PLUGINSTORE);
@@ -168,12 +178,10 @@ public class BlogContextListener implements ServletContextListener
           listener.contextInitialized(event);
         }
       }
-
-      // context.getJobQueue().start();
     }
     catch (IOException ex)
     {
-      ex.printStackTrace(System.err);
+      logger.log(Level.SEVERE, null, ex);
 
       throw new RuntimeException(ex);
     }
@@ -230,20 +238,19 @@ public class BlogContextListener implements ServletContextListener
    * Method description
    *
    *
-   * @throws IOException
    */
-  private void configureLogger() throws IOException
+  private void configureLogger()
   {
     SimpleFormatter formatter = new SimpleFormatter();
-    Logger logger = Logger.getLogger("sonia");
+    Logger rootLogger = Logger.getLogger("sonia");
 
-    logger.setUseParentHandlers(false);
+    rootLogger.setUseParentHandlers(false);
 
     ConsoleHandler handler = new ConsoleHandler();
 
     handler.setFormatter(formatter);
     handler.setLevel(Level.FINEST);
-    logger.addHandler(handler);
+    rootLogger.addHandler(handler);
   }
 
   /**
@@ -316,24 +323,45 @@ public class BlogContextListener implements ServletContextListener
     }
     catch (Exception ex)
     {
-      ex.printStackTrace();
+      logger.log(Level.SEVERE, null, ex);
     }
   }
 
   /**
    * Method description
    *
+   *
+   * @param ctx
    */
-  private void initMacros()
+  private void initMacros(ServletContext ctx)
   {
     MacroParser parser = MacroParser.getInstance();
+    String path = ctx.getRealPath("/WEB-INF/config/macro.properties");
+    FileInputStream fis = null;
 
-    parser.putMacro("hello", HelloWorldMacro.class);
-    parser.putMacro("gallery", GalleryMacro.class);
-    parser.putMacro("spoiler", SpoilerMacro.class);
-    parser.putMacro("blogs", BlogsMacro.class);
-    parser.putMacro("flvviewer", FLVMacro.class);
-    parser.putMacro("attachments", AttachmentMacro.class);
+    try
+    {
+      fis = new FileInputStream(path);
+      parser.load(fis);
+    }
+    catch (IOException ex)
+    {
+      logger.log(Level.SEVERE, null, ex);
+    }
+    finally
+    {
+      if (fis != null)
+      {
+        try
+        {
+          fis.close();
+        }
+        catch (IOException ex)
+        {
+          logger.log(Level.SEVERE, null, ex);
+        }
+      }
+    }
   }
 
   /**
@@ -448,7 +476,7 @@ public class BlogContextListener implements ServletContextListener
       }
       catch (IOException ex)
       {
-        ex.printStackTrace();
+        logger.log(Level.SEVERE, null, ex);
       }
       finally
       {
@@ -458,7 +486,7 @@ public class BlogContextListener implements ServletContextListener
         }
         catch (IOException ex)
         {
-          ex.printStackTrace();
+          logger.log(Level.SEVERE, null, ex);
         }
       }
     }
