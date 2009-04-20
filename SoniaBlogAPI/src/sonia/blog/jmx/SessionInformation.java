@@ -10,6 +10,7 @@ package sonia.blog.jmx;
 //~--- non-JDK imports --------------------------------------------------------
 
 import sonia.blog.api.app.BlogContext;
+import sonia.blog.api.app.Constants;
 
 import sonia.util.Util;
 
@@ -35,6 +36,8 @@ public class SessionInformation implements SessionInformationMBean
   public SessionInformation(Date startTime)
   {
     this.startTime = startTime;
+    resourceDir =
+      BlogContext.getInstance().getResourceManager().getResourceDirectory();
   }
 
   //~--- methods --------------------------------------------------------------
@@ -66,7 +69,65 @@ public class SessionInformation implements SessionInformationMBean
    *
    * @return
    */
-  public int getOpenSessions()
+  public String getAttachmentDirectorySize()
+  {
+    long size = 0;
+    File attachments = new File(resourceDir, Constants.RESOURCE_ATTACHMENT);
+
+    if (attachments.exists())
+    {
+      for (File dir : attachments.listFiles())
+      {
+        size += Util.getLength(new File(dir, Constants.RESOURCE_ENTRIES));
+        size += Util.getLength(new File(dir, Constants.RESOURCE_PAGES));
+      }
+    }
+
+    return Util.formatSize((double) size);
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  public String getImageDirectorySize()
+  {
+    long size = 0;
+    File attachments = new File(resourceDir, Constants.RESOURCE_ATTACHMENT);
+
+    if (attachments.exists())
+    {
+      for (File dir : attachments.listFiles())
+      {
+        size += Util.getLength(new File(dir, Constants.RESOURCE_IMAGE));
+      }
+    }
+
+    return Util.formatSize((double) size);
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  public String getIndexDirectorySize()
+  {
+    long size = Util.getLength(new File(resourceDir, Constants.RESOURCE_INDEX));
+
+    return Util.formatSize((double) size);
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  public long getOpenSessions()
   {
     return openSessions;
   }
@@ -79,8 +140,6 @@ public class SessionInformation implements SessionInformationMBean
    */
   public String getResourceDirectorySize()
   {
-    File resourceDir =
-      BlogContext.getInstance().getResourceManager().getResourceDirectory();
     long size = Util.getLength(resourceDir);
 
     return Util.formatSize(size);
@@ -183,7 +242,7 @@ public class SessionInformation implements SessionInformationMBean
    *
    * @return
    */
-  public int getTotalSessions()
+  public long getTotalSessions()
   {
     return totalSessions;
   }
@@ -199,14 +258,28 @@ public class SessionInformation implements SessionInformationMBean
     return BlogContext.getDAOFactory().getTagDAO().count();
   }
 
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  public long getTotalUsers()
+  {
+    return BlogContext.getDAOFactory().getUserDAO().count();
+  }
+
   //~--- fields ---------------------------------------------------------------
 
   /** Field description */
-  private int openSessions = 0;
+  private long openSessions = 0;
+
+  /** Field description */
+  private File resourceDir;
 
   /** Field description */
   private Date startTime;
 
   /** Field description */
-  private int totalSessions = 0;
+  private long totalSessions = 0;
 }

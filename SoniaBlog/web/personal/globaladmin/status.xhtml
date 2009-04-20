@@ -19,6 +19,30 @@
 
         <h1><h:outputText value="#{label.status}" /></h1>
 
+        <h2><h:outputText value="#{label.sessions}" /></h2>
+
+        <table>
+
+          <thead>
+            <tr>
+              <th><h:outputText value="#{label.sessions}" /></th>
+              <th><h:outputText value="#{label.count}" /></th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr>
+              <td><h:outputText value="#{label.openSessions}" /></td>
+              <td><h:outputText value="#{GlobalStatusBean.information.openSessions}" /></td>
+            </tr>
+            <tr>
+              <td><h:outputText value="#{label.totalSessions}" /></td>
+              <td><h:outputText value="#{GlobalStatusBean.information.totalSessions}" /></td>
+            </tr>
+          </tbody>
+
+        </table>
+
         <h2><h:outputText value="#{label.objects}" /></h2>
 
         <table>
@@ -33,31 +57,35 @@
           <tbody>
             <tr>
               <td><h:outputText value="#{label.blogs}" /></td>
-              <td><h:outputText value="#{GlobalStatusBean.blogCount}" /></td>
+              <td><h:outputText value="#{GlobalStatusBean.information.totalBlogs}" /></td>
             </tr>
             <tr>
               <td><h:outputText value="#{label.entries}" /></td>
-              <td><h:outputText value="#{GlobalStatusBean.entryCount}" /></td>
+              <td><h:outputText value="#{GlobalStatusBean.information.totalEntries}" /></td>
+            </tr>
+            <tr>
+              <td><h:outputText value="#{label.pages}" /></td>
+              <td><h:outputText value="#{GlobalStatusBean.information.totalPages}" /></td>
             </tr>
             <tr>
               <td><h:outputText value="#{label.attachments}" /></td>
-              <td><h:outputText value="#{GlobalStatusBean.attachmentCount}" /></td>
+              <td><h:outputText value="#{GlobalStatusBean.information.totalAttachments}" /></td>
             </tr>
             <tr>
               <td><h:outputText value="#{label.comments}" /></td>
-              <td><h:outputText value="#{GlobalStatusBean.commentCount}" /></td>
+              <td><h:outputText value="#{GlobalStatusBean.information.totalComments}" /></td>
             </tr>
             <tr>
               <td><h:outputText value="#{label.categories}" /></td>
-              <td><h:outputText value="#{GlobalStatusBean.categoryCount}" /></td>
+              <td><h:outputText value="#{GlobalStatusBean.information.totalCategories}" /></td>
             </tr>
             <tr>
               <td><h:outputText value="#{label.tags}" /></td>
-              <td><h:outputText value="#{GlobalStatusBean.tagCount}" /></td>
+              <td><h:outputText value="#{GlobalStatusBean.information.totalTags}" /></td>
             </tr>
             <tr>
               <td><h:outputText value="#{label.users}" /></td>
-              <td><h:outputText value="#{GlobalStatusBean.userCount}" /></td>
+              <td><h:outputText value="#{GlobalStatusBean.information.totalUsers}" /></td>
             </tr>
           </tbody>
 
@@ -77,24 +105,24 @@
           <tbody>
             <tr>
               <td><h:outputText value="#{label.resourceDirectory}" /></td>
-              <td><h:outputText value="#{GlobalStatusBean.resourceDirectorySize}" /></td>
+              <td><h:outputText value="#{GlobalStatusBean.information.resourceDirectorySize}" /></td>
             </tr>
             <tr>
               <td><h:outputText value="#{label.attachments}" /></td>
-              <td><h:outputText value="#{GlobalStatusBean.attachmentSize}" /></td>
+              <td><h:outputText value="#{GlobalStatusBean.information.attachmentDirectorySize}" /></td>
             </tr>
             <tr>
               <td><h:outputText value="#{label.images}" /></td>
-              <td><h:outputText value="#{GlobalStatusBean.imageSize}" /></td>
+              <td><h:outputText value="#{GlobalStatusBean.information.imageDirectorySize}" /></td>
             </tr>
             <tr>
               <td><h:outputText value="#{label.searchIndex}" /></td>
-              <td><h:outputText value="#{GlobalStatusBean.indexSize}" /></td>
+              <td><h:outputText value="#{GlobalStatusBean.information.indexDirectorySize}" /></td>
             </tr>
           </tbody>
 
         </table>
-        
+
 
         <c:forEach items="#{GlobalStatusBean.statusProviders}" var="provider">
           <ui:include src="#{provider}" />
