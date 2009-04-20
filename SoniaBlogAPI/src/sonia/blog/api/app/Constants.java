@@ -35,6 +35,10 @@ public interface Constants
   public static final String CONFIG_COKKIETIME = "cookie.time";
 
   /** Field description */
+  public static final String CONFIG_COMMAND_RESIZE_IMAGE =
+    "app.cmd.resize-image";
+
+  /** Field description */
   public static final String CONFIG_COOKIEKEY = "app.cookieKey";
 
   /** Field description */
@@ -90,6 +94,9 @@ public interface Constants
     "register.acknowledgement.mail";
 
   /** Field description */
+  public static final String CONFIG_RESIZE_IMAGE = "app.resize-image";
+
+  /** Field description */
   public static final String CONFIG_RESOURCE_DIRECTORY = "resource.directory";
 
   /** Field description */
@@ -120,6 +127,10 @@ public interface Constants
   public static final String COOKIE_NAME = "jab.login.cookie";
 
   /** Field description */
+  public static final String DEFAULT_COMMAND_RESIZE_IMAGE =
+    "convert -resize {3,choice,0#|0<{3}}{4,choice,0#|0<x{4}} {0} {2}:{1}";
+
+  /** Field description */
   public static final int DEFAULT_COOKIETIME = 60 * 60 * 24 * 31;
 
   /** Field description */
@@ -135,10 +146,13 @@ public interface Constants
   public static final String DEFAULT_IMAGE_MIMETYPE = "image/jpeg";
 
   /** Field description */
-  public static final Locale DEFAULT_LOCALE = Locale.GERMAN;
+  public static final int DEFAULT_PASSWORD_MINLENGTH = 6;
 
   /** Field description */
-  public static final int DEFAULT_PASSWORD_MINLENGTH = 6;
+  public static final String DEFAULT_RESIZE_IMAGE = "internal";
+
+  /** Field description */
+  public static final Locale DEFAULT_LOCALE = Locale.GERMAN;
 
   /** Field description */
   public static final TimeZone DEFAULT_TIMEZONE =

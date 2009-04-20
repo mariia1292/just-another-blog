@@ -24,6 +24,14 @@ public interface SessionInformationMBean
    *
    * @return
    */
+  public String getAttachmentDirectorySize();
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
   public String getImageDirectorySize();
 
   /**
@@ -33,8 +41,6 @@ public interface SessionInformationMBean
    * @return
    */
   public String getIndexDirectorySize();
-
-  public String getAttachmentDirectorySize();
 
   /**
    * Method description
