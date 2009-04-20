@@ -24,7 +24,25 @@ public interface SessionInformationMBean
    *
    * @return
    */
-  public int getOpenSessions();
+  public String getImageDirectorySize();
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  public String getIndexDirectorySize();
+
+  public String getAttachmentDirectorySize();
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  public long getOpenSessions();
 
   /**
    * Method description
@@ -104,7 +122,7 @@ public interface SessionInformationMBean
    *
    * @return
    */
-  public int getTotalSessions();
+  public long getTotalSessions();
 
   /**
    * Method description
@@ -113,4 +131,12 @@ public interface SessionInformationMBean
    * @return
    */
   public long getTotalTags();
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  public long getTotalUsers();
 }
