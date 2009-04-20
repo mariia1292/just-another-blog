@@ -241,6 +241,11 @@ public class BlogContext
 
       if (config.isFile())
       {
+        StringBuffer log = new StringBuffer();
+
+        log.append("read config from ").append(config.getAbsolutePath());
+        logger.info(log.toString());
+
         try
         {
           configuration.load(new FileInputStream(config));

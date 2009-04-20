@@ -19,6 +19,7 @@ import sonia.blog.api.mapping.FinalMapping;
 import sonia.blog.entity.Attachment;
 import sonia.blog.entity.Blog;
 import sonia.blog.entity.Role;
+import sonia.blog.util.ExternalImageResizingJob;
 import sonia.blog.util.ImageResizingJob;
 
 import sonia.config.Config;
@@ -166,41 +167,71 @@ public class AttachmentMapping extends FinalMapping
   private void createImage(Blog blog, File source, File target, int maxWidth,
                            int maxHeight)
   {
-    try
+    if ("internal".equalsIgnoreCase(resizeMethod))
     {
-      Dimension d = ImageUtil.getDimension(new FileInputStream(source));
-
-      if ((d.getWidth() < maxWidth) && (d.getHeight() < maxHeight))
+      try
       {
-        copy(source, target);
+        Dimension d = ImageUtil.getDimension(new FileInputStream(source));
+
+        if ((d.getWidth() < maxWidth) && (d.getHeight() < maxHeight))
+        {
+          copy(source, target);
+        }
+        else
+        {
+          double width = d.getWidth();
+          double height = d.getHeight();
+          double ratio = height / width;
+
+          if ((maxWidth > 0) && (width > maxWidth))
+          {
+            width = maxWidth;
+            height = width * ratio;
+          }
+
+          ratio = width / height;
+
+          if ((maxHeight > 0) && (height > maxHeight))
+          {
+            height = maxHeight;
+            width = height * ratio;
+          }
+
+          resizeImage(blog, source, target, (int) width, (int) height);
+        }
       }
-      else
+      catch (Exception ex)
       {
-        double width = d.getWidth();
-        double height = d.getHeight();
-        double ratio = height / width;
-
-        if ((maxWidth > 0) && (width > maxWidth))
-        {
-          width = maxWidth;
-          height = width * ratio;
-        }
-
-        ratio = width / height;
-
-        if ((maxHeight > 0) && (height > maxHeight))
-        {
-          height = maxHeight;
-          width = height * ratio;
-        }
-
-        resizeImage(blog, source, target, (int) width, (int) height);
+        throw new RuntimeException(ex);
       }
     }
-    catch (Exception ex)
+    else if ("external".equalsIgnoreCase(resizeMethod))
     {
-      throw new RuntimeException(ex);
+      externalResizeImage(blog, source, target, maxWidth, maxHeight);
     }
+    else
+    {
+      throw new IllegalStateException(resizeMethod + " is not supported");
+    }
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param blog
+   * @param source
+   * @param target
+   * @param maxWidth
+   * @param maxHeight
+   */
+  private void externalResizeImage(Blog blog, File source, File target,
+                                   int maxWidth, int maxHeight)
+  {
+    BlogJob job = new ExternalImageResizingJob(resizeCommand, blog, source,
+                    target, format, maxWidth, maxHeight);
+
+    BlogContext.getInstance().getJobQueue().processs(job);
   }
 
   /**
@@ -370,36 +401,6 @@ public class AttachmentMapping extends FinalMapping
                                        height);
 
     BlogContext.getInstance().getJobQueue().processs(job);
-
-    /*
-     * InputStream in = null;
-     * OutputStream out = null;
-     *
-     * try
-     * {
-     * if (logger.isLoggable(Level.INFO))
-     * {
-     *   logger.info("resize image " + source.getName() + " (resolution "
-     *               + width + "x" + height + ")");
-     * }
-     *
-     * in = new FileInputStream(source);
-     * out = new FileOutputStream(target);
-     * ImageUtil.resize(in, out, format, width, height);
-     * }
-     * finally
-     * {
-     * if (in != null)
-     * {
-     *   in.close();
-     * }
-     *
-     * if (out != null)
-     * {
-     *   out.close();
-     * }
-     * }
-     */
   }
 
   //~--- get methods ----------------------------------------------------------
@@ -465,14 +466,22 @@ public class AttachmentMapping extends FinalMapping
   //~--- fields ---------------------------------------------------------------
 
   /** Field description */
-  @Config(Constants.CONFIG_IMAGEEXTENSION)
-  private String extension = Constants.DEFAULT_IMAGE_EXTENSION;
+  @Config(Constants.CONFIG_COMMAND_RESIZE_IMAGE)
+  private String resizeCommand = Constants.DEFAULT_COMMAND_RESIZE_IMAGE;
+
+  /** Field description */
+  @Config(Constants.CONFIG_RESIZE_IMAGE)
+  private String resizeMethod = Constants.DEFAULT_RESIZE_IMAGE;
+
+  /** Field description */
+  @Config(Constants.CONFIG_IMAGEMIMETYPE)
+  private String mimeType = Constants.DEFAULT_IMAGE_MIMETYPE;
 
   /** Field description */
   @Config(Constants.CONFIG_IMAGEFORMAT)
   private String format = Constants.DEFAULT_IMAGE_FORMAT;
 
   /** Field description */
-  @Config(Constants.CONFIG_IMAGEMIMETYPE)
-  private String mimeType = Constants.DEFAULT_IMAGE_MIMETYPE;
+  @Config(Constants.CONFIG_IMAGEEXTENSION)
+  private String extension = Constants.DEFAULT_IMAGE_EXTENSION;
 }

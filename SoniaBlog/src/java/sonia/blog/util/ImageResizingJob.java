@@ -156,20 +156,20 @@ public class ImageResizingJob implements BlogJob
   //~--- fields ---------------------------------------------------------------
 
   /** Field description */
-  private Blog blog;
+  protected Blog blog;
 
   /** Field description */
-  private String format;
+  protected String format;
 
   /** Field description */
-  private int height;
+  protected int height;
 
   /** Field description */
-  private File source;
+  protected File source;
 
   /** Field description */
-  private File target;
+  protected File target;
 
   /** Field description */
-  private int width;
+  protected int width;
 }
