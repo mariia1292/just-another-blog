@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+    Document   : services.xml
+    Created on : April 20, 2009, 9:50 PM
+    Author     : sdorra
+    Description:
+        Purpose of the document follows.
+-->
+
+<services>
+  
+  <!--
+  <service class="" path="">
+    <impl class="" />
+  </service>
+  -->
+
+  <service class="sonia.blog.api.dao.DAOFactory" path="/app/dao">
+    <impl class="sonia.blog.dao.jpa.JpaDAOFactory" />
+  </service>
+
+  <!-- listener -->
+
+  <service class="sonia.blog.api.dao.DAOListener" path="/listener/attachment" />
+  
+  <service class="sonia.blog.api.dao.DAOListener" path="/listener/blog" />
+  
+  <service class="sonia.blog.api.dao.DAOListener" path="/listener/member" />
+  
+  <service class="sonia.blog.api.dao.DAOListener" path="/listener/category" />
+  
+  <service class="sonia.blog.api.dao.DAOListener" path="/listener/comment" />
+  
+  <service class="sonia.blog.api.dao.DAOListener" path="/listener/entry">
+    <impl class="sonia.blog.search.IndexListener" />
+  </service>
+  
+  <service class="sonia.blog.api.dao.DAOListener" path="/listener/blogHitCount" />
+
+  <service class="sonia.blog.api.dao.DAOListener" path="/listener/page" />
+
+  <service class="sonia.blog.api.dao.DAOListener" path="/listener/tag" />
+
+  <service class="sonia.blog.api.dao.DAOListener" path="/listener/user" />
+
+  <service class="sonia.blog.api.app.BlogRequestListener" path="/listener/request" />
+
+  <service class="javax.servlet.ServletContextListener" path="/contextListener" />
+
+  <!-- listener -->
+
+  <service class="sonia.blog.api.search.SearchContext" path="/app/searchContext">
+    <impl class="sonia.blog.search.DefaultSearchContext" />
+  </service>
+
+  <service class="sonia.blog.api.link.LinkBuilder" path="/app/linkBuilder">
+    <impl class="sonia.blog.link.DefaultLinkBuilder" />
+  </service>
+
+  <service class="sonia.security.cipher.Cipher" path="/app/cipher">
+    <impl class="sonia.security.cipher.DefaultCipher" />
+  </service>
+
+  <service class="sonia.security.encryption.Encryption" path="/app/encryption">
+    <impl class="sonia.security.encryption.MD5Encryption" />
+  </service>
+
+  <service class="sonia.blog.api.spam.SpamInputProtection" path="/app/spam/input">
+    <impl class="sonia.blog.spam.CaptchaSpamProtection" />
+    <impl class="sonia.blog.spam.MathSpamProtection" />
+  </service>
+
+  <service class="sonia.blog.api.spam.SpamCheck" path="/app/spam/check">
+    <impl class="sonia.blog.spam.BlacklistSpamCheck" />
+  </service>
+
+  <service class="java.lang.String" path="/config/global" />
+
+  <service class="java.lang.String" path="/status/global" />
+
+  <!-- navigation -->
+
+  <service class="sonia.blog.api.navigation.NavigationProvider" path="/nav/admin" />
+
+  <service class="sonia.blog.api.navigation.NavigationProvider" path="/nav/author" />
+
+  <service class="sonia.blog.api.navigation.NavigationProvider" path="/nav/globaladmin/blog/action" />
+
+  <service class="sonia.blog.api.navigation.NavigationProvider" path="/nav/extra" />
+
+  <service class="sonia.blog.api.navigation.NavigationProvider" path="/nav/globaladmin" />
+
+  <service class="sonia.blog.api.navigation.NavigationProvider" path="/nav/reader" />
+
+  <!--<service class="java.lang.String" path="/dashboard/widget" />-->
+
+  <service class="sonia.blog.api.editor.AttachmentHandler" path="/editor/attachmentHandler">
+    <impl class="sonia.blog.editor.LinkHandler" />
+    <impl class="sonia.blog.editor.FlowPlayerHandler" />
+  </service>
+
+</services>

@@ -78,6 +78,7 @@ public abstract class MacroParser
    *
    * @throws IOException
    */
+  @SuppressWarnings("unchecked")
   public void load(InputStream in) throws IOException
   {
     Properties props = new Properties();
