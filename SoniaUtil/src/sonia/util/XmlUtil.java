@@ -10,6 +10,7 @@ package sonia.util;
 //~--- non-JDK imports --------------------------------------------------------
 
 import org.w3c.dom.Document;
+import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 
 import org.xml.sax.ErrorHandler;
@@ -34,6 +35,7 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
+import org.w3c.dom.NodeList;
 
 /**
  *
@@ -182,6 +184,53 @@ public class XmlUtil
                  TransformerException
   {
     writeDocument(node, new FileOutputStream(path));
+  }
+
+  //~--- get methods ----------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   * @param node
+   * @param name
+   *
+   * @return
+   */
+  public static String getAttributeValue(Node node, String name)
+  {
+    return getAttributeValue(node.getAttributes(), name);
+  }
+
+  public static boolean hasContent( NodeList list )
+  {
+    return list != null && list.getLength() > 0;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param attributes
+   * @param name
+   *
+   * @return
+   */
+  public static String getAttributeValue(NamedNodeMap attributes, String name)
+  {
+    String result = null;
+
+    if (attributes != null)
+    {
+      Node node = attributes.getNamedItem(name);
+
+      if (node != null)
+      {
+        result = node.getTextContent();
+      }
+    }
+
+    return result;
   }
 
   //~--- inner classes --------------------------------------------------------

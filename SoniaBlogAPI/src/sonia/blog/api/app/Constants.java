@@ -167,7 +167,7 @@ public interface Constants
   public static final String LISTENER_BLOG = "/listener/blog";
 
   /** Field description */
-  public static final String LISTENER_BLOGHITCOUNT = "/listener/member";
+  public static final String LISTENER_BLOGHITCOUNT = "/listener/blogHitCount";
 
   /** Field description */
   public static final String LISTENER_CATEGORY = "/listener/category";
