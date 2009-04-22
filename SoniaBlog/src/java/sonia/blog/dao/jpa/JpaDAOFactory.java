@@ -29,6 +29,7 @@ import sonia.blog.api.dao.cache.CacheManager;
 import java.util.HashMap;
 import java.util.Map;
 
+import java.util.logging.Logger;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
@@ -38,6 +39,8 @@ import javax.persistence.Persistence;
  */
 public class JpaDAOFactory extends DAOFactory
 {
+
+  private static Logger logger = Logger.getLogger( JpaDAOFactory.class.getName() );
 
   /**
    * Method description
@@ -59,19 +62,40 @@ public class JpaDAOFactory extends DAOFactory
   @Override
   public void init()
   {
-    BlogConfiguration config = BlogContext.getInstance().getConfiguration();
+    BlogContext ctx = BlogContext.getInstance();
+    String serverInfo = ctx.getServletContext().getServerInfo();
+    BlogConfiguration config = ctx.getConfiguration();
+    String pu = "SoniaBlog-oracle-PU";
     Map<String, String> parameters = new HashMap<String, String>();
 
-    parameters.put("toplink.jdbc.driver",
-                   config.getString(Constants.CONFIG_DB_DRIVER));
-    parameters.put("toplink.jdbc.url",
-                   config.getString(Constants.CONFIG_DB_URL));
-    parameters.put("toplink.jdbc.user",
-                   config.getString(Constants.CONFIG_DB_USERNAME));
-    parameters.put("toplink.jdbc.password",
-                   config.getSecureString(Constants.CONFIG_DB_PASSWORD));
-    entityManagerFactory =
-      Persistence.createEntityManagerFactory("SoniaBlog-PU", parameters);
+    if (serverInfo.equals("GlassFish/v3"))
+    {
+      logger.info( "load EclispeLink PersistenceProvider" );
+      pu = "SoniaBlog-eclipse-PU";
+      parameters.put("eclipselink.jdbc.driver",
+                     config.getString(Constants.CONFIG_DB_DRIVER));
+      parameters.put("eclipselink.jdbc.url",
+                     config.getString(Constants.CONFIG_DB_URL));
+      parameters.put("eclipselink.jdbc.user",
+                     config.getString(Constants.CONFIG_DB_USERNAME));
+      parameters.put("eclipselink.jdbc.password",
+                     config.getSecureString(Constants.CONFIG_DB_PASSWORD));
+    }
+    else
+    {
+      logger.info( "load Toplink PersistenceProvider" );
+      parameters.put("toplink.jdbc.driver",
+                     config.getString(Constants.CONFIG_DB_DRIVER));
+      parameters.put("toplink.jdbc.url",
+                     config.getString(Constants.CONFIG_DB_URL));
+      parameters.put("toplink.jdbc.user",
+                     config.getString(Constants.CONFIG_DB_USERNAME));
+      parameters.put("toplink.jdbc.password",
+                     config.getSecureString(Constants.CONFIG_DB_PASSWORD));
+    }
+
+    entityManagerFactory = Persistence.createEntityManagerFactory(pu,
+            parameters);
   }
 
   //~--- get methods ----------------------------------------------------------
