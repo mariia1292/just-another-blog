@@ -48,7 +48,9 @@
 
   <service class="javax.servlet.ServletContextListener" path="/contextListener" />
 
-  <!-- listener -->
+  <service class="sonia.blog.api.app.InstallationListener" path="/listener/installation">
+    <impl class="sonia.blog.util.ImageInstallationListener" />
+  </service>
 
   <service class="sonia.blog.api.search.SearchContext" path="/app/searchContext">
     <impl class="sonia.blog.search.DefaultSearchContext" />

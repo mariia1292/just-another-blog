@@ -73,14 +73,6 @@ public class ExternalImageResizingJob extends ImageResizingJob
                                       target.getAbsolutePath(), format, width,
                                       height);
 
-    if (logger.isLoggable(Level.FINER))
-    {
-      StringBuffer log = new StringBuffer();
-
-      log.append("excecute command \"").append(cmd);
-      log.append("\" to resize image");
-    }
-
     try
     {
       Process process = Runtime.getRuntime().exec(cmd);

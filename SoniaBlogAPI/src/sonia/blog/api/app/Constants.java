@@ -151,13 +151,6 @@ public interface Constants
   /** Field description */
   public static final String DEFAULT_RESIZE_IMAGE = "internal";
 
-  /** Field description */
-  public static final Locale DEFAULT_LOCALE = Locale.GERMAN;
-
-  /** Field description */
-  public static final TimeZone DEFAULT_TIMEZONE =
-    TimeZone.getTimeZone("Europe/Paris");
-
   // Listeners
 
   /** Field description */
@@ -306,6 +299,17 @@ public interface Constants
   /** Field description */
   public static final String SERVICE_INJECTIONPROVIDER =
     "/app/injectionProvider";
+
+  /** Field description */
+  public static final String SERVICE_INSTALLATIONLISTENER =
+    "/listener/installation";
+
+  /** Field description */
+  public static final TimeZone DEFAULT_TIMEZONE =
+    TimeZone.getTimeZone("Europe/Paris");
+
+  /** Field description */
+  public static final Locale DEFAULT_LOCALE = Locale.GERMAN;
 
   /** Field description */
   public static final String SERVICE_LINKBUILDER = "/app/linkBuilder";
