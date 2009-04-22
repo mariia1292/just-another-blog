@@ -13,6 +13,7 @@ import sonia.blog.api.app.BlogConfiguration;
 import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.app.BlogRuntimeException;
 import sonia.blog.api.app.Constants;
+import sonia.blog.api.app.InstallationListener;
 import sonia.blog.api.dao.DAOFactory;
 import sonia.blog.api.util.AbstractBean;
 import sonia.blog.entity.Blog;
@@ -24,6 +25,7 @@ import sonia.blog.util.BlogUtil;
 
 import sonia.config.StoreableConfiguration;
 
+import sonia.plugin.service.Service;
 import sonia.plugin.service.ServiceReference;
 
 import sonia.security.encryption.Encryption;
@@ -39,6 +41,7 @@ import java.sql.Connection;
 import java.sql.Driver;
 import java.sql.DriverManager;
 
+import java.util.List;
 import java.util.Properties;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
@@ -143,6 +146,13 @@ public class InstallBean extends AbstractBean
        * logger.log(Level.SEVERE, null, ex);
        * }
        */
+      if (listeners != null)
+      {
+        for (InstallationListener listener : listeners)
+        {
+          listener.beforeInstallation(context);
+        }
+      }
 
       // create first Entry
       ResourceBundle message = getResourceBundle("message");
@@ -228,6 +238,14 @@ public class InstallBean extends AbstractBean
             configuration.store(
                 new FileOutputStream(
                     BlogContext.getInstance().getConfigFile()));
+
+            if (listeners != null)
+            {
+              for (InstallationListener listener : listeners)
+              {
+                listener.beforeInstallation(context);
+              }
+            }
           }
           catch (Exception ex)
           {
@@ -626,6 +644,10 @@ public class InstallBean extends AbstractBean
 
   /** Field description */
   private String databsePassword;
+
+  /** Field description */
+  @Service(Constants.SERVICE_INSTALLATIONLISTENER)
+  private List<InstallationListener> listeners;
 
   /** Field description */
   private String passwordRepeat;
