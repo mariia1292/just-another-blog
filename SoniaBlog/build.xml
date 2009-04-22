@@ -8,10 +8,10 @@
 <!-- You can turn off the Compile on Save (or Deploy on Save) setting -->
 <!-- in the project's Project Properties dialog box.-->
 <project name="SoniaBlog" default="default" basedir=".">
-    <description>Builds, tests, and runs the project SoniaBlog.</description>
-    <import file="nbproject/build-impl.xml"/>
+  <description>Builds, tests, and runs the project SoniaBlog.</description>
+  <import file="nbproject/build-impl.xml"/>
 
-    <import file="nbproject/profiler-build-impl.xml"/>    <!--
+  <import file="nbproject/profiler-build-impl.xml"/>    <!--
 
     There exist several targets which are by default empty and which can be 
     used for execution of your tasks. These targets are usually executed 
@@ -69,4 +69,20 @@
     nbproject/build-impl.xml file. 
 
     -->
+  <target name="-post-dist">
+
+    <property name="build.tomcat.dir" value="${build.web.dir}/../tomcat" />
+
+    <copydir src="${build.web.dir}" dest="${build.tomcat.dir}" />
+
+    <copyfiles files="${libs.JAVADB_DRIVER_LABEL.classpath}" iftldtodir="${build.web.dir}/WEB-INF" manifestproperty="manifest.libs.JAVADB_DRIVER_LABEL.classpath" todir="${build.tomcat.dir}/WEB-INF/lib"/>
+    <copyfiles files="${libs.JavaMail.classpath}" iftldtodir="${build.web.dir}/WEB-INF" manifestproperty="manifest.libs.JavaMail.classpath" todir="${build.tomcat.dir}/WEB-INF/lib"/>
+    <copyfiles files="${libs.jsf12.classpath}" iftldtodir="${build.web.dir}/WEB-INF" manifestproperty="manifest.libs.jsf12.classpath" todir="${build.tomcat.dir}/WEB-INF/lib"/>
+    <copyfiles files="${libs.toplink.classpath}" iftldtodir="${build.web.dir}/WEB-INF" manifestproperty="manifest.libs.toplink.classpath" todir="${build.tomcat.dir}/WEB-INF/lib"/>
+
+    <jar compress="${jar.compress}" jarfile="${dist.jar.dir}/SoniaBlog.tomcat.war">
+      <fileset dir="${build.tomcat.dir}"/>
+    </jar>
+
+  </target>
 </project>
