@@ -26,10 +26,12 @@ import sonia.blog.api.dao.cache.CacheManager;
 
 //~--- JDK imports ------------------------------------------------------------
 
+import java.io.File;
+
 import java.util.HashMap;
 import java.util.Map;
-
 import java.util.logging.Logger;
+
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
@@ -40,7 +42,11 @@ import javax.persistence.Persistence;
 public class JpaDAOFactory extends DAOFactory
 {
 
-  private static Logger logger = Logger.getLogger( JpaDAOFactory.class.getName() );
+  /** Field description */
+  private static Logger logger =
+    Logger.getLogger(JpaDAOFactory.class.getName());
+
+  //~--- methods --------------------------------------------------------------
 
   /**
    * Method description
@@ -67,10 +73,12 @@ public class JpaDAOFactory extends DAOFactory
     BlogConfiguration config = ctx.getConfiguration();
     String pu = "SoniaBlog-oracle-PU";
     Map<String, String> parameters = new HashMap<String, String>();
+    File tmpDir =
+      ctx.getResourceManager().getDirectory(Constants.RESOURCE_TEMP, true);
 
     if (serverInfo.equals("GlassFish/v3"))
     {
-      logger.info( "load EclispeLink PersistenceProvider" );
+      logger.info("load EclispeLink PersistenceProvider");
       pu = "SoniaBlog-eclipse-PU";
       parameters.put("eclipselink.jdbc.driver",
                      config.getString(Constants.CONFIG_DB_DRIVER));
@@ -80,10 +88,12 @@ public class JpaDAOFactory extends DAOFactory
                      config.getString(Constants.CONFIG_DB_USERNAME));
       parameters.put("eclipselink.jdbc.password",
                      config.getSecureString(Constants.CONFIG_DB_PASSWORD));
+      parameters.put("eclipselink.application-location",
+                     tmpDir.getAbsolutePath());
     }
     else
     {
-      logger.info( "load Toplink PersistenceProvider" );
+      logger.info("load Toplink PersistenceProvider");
       parameters.put("toplink.jdbc.driver",
                      config.getString(Constants.CONFIG_DB_DRIVER));
       parameters.put("toplink.jdbc.url",
@@ -92,6 +102,7 @@ public class JpaDAOFactory extends DAOFactory
                      config.getString(Constants.CONFIG_DB_USERNAME));
       parameters.put("toplink.jdbc.password",
                      config.getSecureString(Constants.CONFIG_DB_PASSWORD));
+      parameters.put("toplink.application-location", tmpDir.getAbsolutePath());
     }
 
     entityManagerFactory = Persistence.createEntityManagerFactory(pu,
