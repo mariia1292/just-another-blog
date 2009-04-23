@@ -195,6 +195,24 @@ public class IndexListener implements DAOListener
    * Method description
    *
    *
+   * @param blog
+   *
+   * @return
+   */
+  private File getBlogDirectory(Blog blog)
+  {
+    if (resourceManager == null)
+    {
+      resourceManager = BlogContext.getInstance().getResourceManager();
+    }
+
+    return resourceManager.getDirectory(Constants.RESOURCE_INDEX, blog);
+  }
+
+  /**
+   * Method description
+   *
+   *
    * @param entry
    *
    * @return
@@ -215,15 +233,6 @@ public class IndexListener implements DAOListener
     }
 
     return result;
-  }
-
-  private File getBlogDirectory( Blog blog )
-  {
-    if ( resourceManager == null )
-    {
-      resourceManager = BlogContext.getInstance().getResourceManager();
-    }
-return resourceManager.getDirectory(Constants.RESOURCE_INDEX, blog);
   }
 
   //~--- fields ---------------------------------------------------------------
