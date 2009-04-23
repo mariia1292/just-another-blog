@@ -28,6 +28,7 @@ import sonia.util.Util;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.faces.context.FacesContext;
 
@@ -37,6 +38,11 @@ import javax.faces.context.FacesContext;
  */
 public class GalleryMacro extends AbstractBlogMacro
 {
+
+  /** Field description */
+  private static Logger logger = Logger.getLogger(GalleryMacro.class.getName());
+
+  //~--- methods --------------------------------------------------------------
 
   /**
    * Method description
