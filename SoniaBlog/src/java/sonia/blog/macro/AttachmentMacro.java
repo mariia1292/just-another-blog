@@ -15,7 +15,6 @@ import sonia.blog.api.link.LinkBuilder;
 import sonia.blog.entity.Attachment;
 import sonia.blog.entity.Blog;
 import sonia.blog.entity.ContentObject;
-import sonia.blog.entity.Entry;
 import sonia.blog.util.BlogUtil;
 
 import sonia.macro.Macro;
