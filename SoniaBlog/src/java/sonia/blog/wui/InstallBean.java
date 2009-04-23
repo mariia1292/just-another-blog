@@ -25,6 +25,7 @@ import sonia.blog.util.BlogUtil;
 
 import sonia.config.StoreableConfiguration;
 
+import sonia.plugin.DefaultPluginStore;
 import sonia.plugin.service.Service;
 import sonia.plugin.service.ServiceReference;
 
@@ -238,6 +239,17 @@ public class InstallBean extends AbstractBean
             configuration.store(
                 new FileOutputStream(
                     BlogContext.getInstance().getConfigFile()));
+
+            File pluginStore = context.getResourceManager().getDirectory(
+                                   Constants.RESOURCE_PLUGINSTORE);
+
+            if (!pluginStore.exists())
+            {
+              pluginStore.mkdirs();
+            }
+
+            context.getPluginContext().setStore(
+                new DefaultPluginStore(pluginStore));
 
             if (listeners != null)
             {

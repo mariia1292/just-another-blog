@@ -40,17 +40,6 @@ public class IndexListener implements DAOListener
   private static Logger logger =
     Logger.getLogger(IndexListener.class.getName());
 
-  //~--- constructors ---------------------------------------------------------
-
-  /**
-   * Constructs ...
-   *
-   */
-  public IndexListener()
-  {
-    resourceManager = BlogContext.getInstance().getResourceManager();
-  }
-
   //~--- methods --------------------------------------------------------------
 
   /**
@@ -221,11 +210,20 @@ public class IndexListener implements DAOListener
 
       if (id != null)
       {
-        result = resourceManager.getDirectory(Constants.RESOURCE_INDEX, blog);
+        result = getBlogDirectory(blog);
       }
     }
 
     return result;
+  }
+
+  private File getBlogDirectory( Blog blog )
+  {
+    if ( resourceManager == null )
+    {
+      resourceManager = BlogContext.getInstance().getResourceManager();
+    }
+return resourceManager.getDirectory(Constants.RESOURCE_INDEX, blog);
   }
 
   //~--- fields ---------------------------------------------------------------

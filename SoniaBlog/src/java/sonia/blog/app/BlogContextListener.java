@@ -129,20 +129,21 @@ public class BlogContextListener implements ServletContextListener
       if (context.isInstalled())
       {
         BlogContext.getDAOFactory().init();
+
+        File pluginStore = context.getResourceManager().getDirectory(
+                               Constants.RESOURCE_PLUGINSTORE);
+
+        if (!pluginStore.exists())
+        {
+          pluginStore.mkdirs();
+        }
+
+        context.getPluginContext().setStore(
+            new DefaultPluginStore(pluginStore));
       }
 
       initInjectionProvider(context);
       initMacros(event.getServletContext());
-
-      File pluginStore = context.getResourceManager().getDirectory(
-                             Constants.RESOURCE_PLUGINSTORE);
-
-      if (!pluginStore.exists())
-      {
-        pluginStore.mkdirs();
-      }
-
-      context.getPluginContext().setStore(new DefaultPluginStore(pluginStore));
       context.getPluginContext().searchClasspath(
           buildClasspath(event.getServletContext()));
 

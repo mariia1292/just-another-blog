@@ -214,9 +214,14 @@ public class BlogContext
   {
     if (configFile == null)
     {
-      File dir = getResourceManager().getDirectory(Constants.RESOURCE_CONFIG);
+      ResourceManager resManager = getResourceManager();
 
-      configFile = new File(dir, "main-config.xml");
+      if (resManager != null)
+      {
+        File dir = resManager.getDirectory(Constants.RESOURCE_CONFIG);
+
+        configFile = new File(dir, "main-config.xml");
+      }
     }
 
     return configFile;
@@ -239,7 +244,7 @@ public class BlogContext
       File config = getConfigFile();
       String key = null;
 
-      if (config.isFile())
+      if ((config != null) && config.exists())
       {
         StringBuffer log = new StringBuffer();
 
@@ -445,6 +450,11 @@ public class BlogContext
           in = new FileInputStream(path);
           props.load(in);
           resourcePath = props.getProperty("resource.home");
+
+          if (Util.hasContent(resourcePath))
+          {
+            resourceManager = new ResourceManager(new File(resourcePath));
+          }
         }
       }
       catch (IOException ex)
@@ -465,13 +475,6 @@ public class BlogContext
           }
         }
       }
-
-      if (resourcePath == null)
-      {
-        resourcePath = getServletContext().getRealPath("WEB-INF/resources");
-      }
-
-      resourceManager = new ResourceManager(new File(resourcePath));
     }
 
     return resourceManager;
@@ -556,9 +559,15 @@ public class BlogContext
    */
   public boolean isInstalled()
   {
-    File f = getConfigFile();
 
-    return (f != null) && f.exists()
+    /*
+     * File f = getConfigFile();
+     *
+     * return (f != null) && f.exists()
+     *      && getConfiguration().getBoolean(Constants.CONFIG_INSTALLED,
+     *        Boolean.FALSE);
+     */
+    return (getResourceManager() != null)
            && getConfiguration().getBoolean(Constants.CONFIG_INSTALLED,
              Boolean.FALSE);
   }
