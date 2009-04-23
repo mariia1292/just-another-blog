@@ -36,8 +36,6 @@ public class SessionInformation implements SessionInformationMBean
   public SessionInformation(Date startTime)
   {
     this.startTime = startTime;
-    resourceDir =
-      BlogContext.getInstance().getResourceManager().getResourceDirectory();
   }
 
   //~--- methods --------------------------------------------------------------
@@ -72,7 +70,8 @@ public class SessionInformation implements SessionInformationMBean
   public String getAttachmentDirectorySize()
   {
     long size = 0;
-    File attachments = new File(resourceDir, Constants.RESOURCE_ATTACHMENT);
+    File attachments = new File(getResourceDir(),
+                                Constants.RESOURCE_ATTACHMENT);
 
     if (attachments.exists())
     {
@@ -95,7 +94,8 @@ public class SessionInformation implements SessionInformationMBean
   public String getImageDirectorySize()
   {
     long size = 0;
-    File attachments = new File(resourceDir, Constants.RESOURCE_ATTACHMENT);
+    File attachments = new File(getResourceDir(),
+                                Constants.RESOURCE_ATTACHMENT);
 
     if (attachments.exists())
     {
@@ -116,7 +116,8 @@ public class SessionInformation implements SessionInformationMBean
    */
   public String getIndexDirectorySize()
   {
-    long size = Util.getLength(new File(resourceDir, Constants.RESOURCE_INDEX));
+    long size = Util.getLength(new File(getResourceDir(),
+                  Constants.RESOURCE_INDEX));
 
     return Util.formatSize((double) size);
   }
@@ -140,7 +141,7 @@ public class SessionInformation implements SessionInformationMBean
    */
   public String getResourceDirectorySize()
   {
-    long size = Util.getLength(resourceDir);
+    long size = Util.getLength(getResourceDir());
 
     return Util.formatSize(size);
   }
@@ -267,6 +268,23 @@ public class SessionInformation implements SessionInformationMBean
   public long getTotalUsers()
   {
     return BlogContext.getDAOFactory().getUserDAO().count();
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  private File getResourceDir()
+  {
+    if (resourceDir == null)
+    {
+      resourceDir =
+        BlogContext.getInstance().getResourceManager().getResourceDirectory();
+    }
+
+    return resourceDir;
   }
 
   //~--- fields ---------------------------------------------------------------
