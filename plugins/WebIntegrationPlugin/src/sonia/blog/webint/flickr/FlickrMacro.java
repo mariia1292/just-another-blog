@@ -20,6 +20,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.faces.context.FacesContext;
 
@@ -35,6 +36,9 @@ public class FlickrMacro extends AbstractBlogMacro implements FlickrAPI
 
   /** Field description */
   public static final String NAME = "flickr";
+
+  /** Field description */
+  private static Logger logger = Logger.getLogger(FlickrMacro.class.getName());
 
   //~--- get methods ----------------------------------------------------------
 

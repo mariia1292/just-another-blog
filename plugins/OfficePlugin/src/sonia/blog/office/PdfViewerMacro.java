@@ -41,6 +41,7 @@ import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 
 import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.faces.context.FacesContext;
 
@@ -58,6 +59,10 @@ public class PdfViewerMacro extends AbstractBlogMacro
 
   /** Field description */
   private static String PDFMIMETYPE = "application/pdf";
+
+  /** Field description */
+  private static Logger logger =
+    Logger.getLogger(PdfViewerMacro.class.getName());
 
   //~--- set methods ----------------------------------------------------------
 
