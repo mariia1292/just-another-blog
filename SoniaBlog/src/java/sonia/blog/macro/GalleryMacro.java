@@ -77,15 +77,16 @@ public class GalleryMacro extends AbstractBlogMacro
           BlogRequest request =
             BlogUtil.getBlogRequest(
                 facesContext.getExternalContext().getRequest());
-          String res = linkBuilder.buildLink(request, "/resources/lightbox/");
+          String res = linkBuilder.buildLink(request, "/resources/");
+          String lRes = res + "lightbox/";
 
           if (!requestMap.containsKey("sonia.blog.macro.gallery"))
           {
             result += "<script type=\"text/javascript\" src=\"" + res
-                      + "js/jquery.js\"></script>\n";
-            result += "<script type=\"text/javascript\" src=\"" + res
+                      + "jquery/jquery.min.js\"></script>\n";
+            result += "<script type=\"text/javascript\" src=\"" + lRes
                       + "js/jquery.lightbox-0.5.js\"></script>\n";
-            result += "<link rel=\"stylesheet\" href=\"" + res
+            result += "<link rel=\"stylesheet\" href=\"" + lRes
                       + "css/jquery.lightbox-0.5.css\" "
                       + "type=\"text/css\" media=\"screen\"></link>\n";
             requestMap.put("sonia.blog.macro.gallery", Boolean.TRUE);
@@ -110,15 +111,15 @@ public class GalleryMacro extends AbstractBlogMacro
           result += "<script type=\"text/javascript\">\n";
           result += "$(document).ready(function() {\n";
           result += "$(\"div#gallery_" + object.getId() + " a\").lightBox({\n";
-          result += "imageLoading: '" + res
+          result += "imageLoading: '" + lRes
                     + "images/lightbox-ico-loading.gif',\n";
-          result += "imageBtnPrev: '" + res
+          result += "imageBtnPrev: '" + lRes
                     + "images/lightbox-btn-prev.gif',\n";
-          result += "imageBtnNext: '" + res
+          result += "imageBtnNext: '" + lRes
                     + "images/lightbox-btn-next.gif',\n";
-          result += "imageBtnClose: '" + res
+          result += "imageBtnClose: '" + lRes
                     + "images/lightbox-btn-close.gif',\n";
-          result += "imageBlank: '" + res + "images/lightbox-blank.gif'\n";
+          result += "imageBlank: '" + lRes + "images/lightbox-blank.gif'\n";
           result += "});\n";
           result += "});\n";
           result += "</script>\n";
