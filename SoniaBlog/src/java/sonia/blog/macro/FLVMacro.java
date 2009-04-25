@@ -135,7 +135,7 @@ public class FLVMacro extends AbstractBlogMacro
     {
       result.append("<script type=\"text/javascript\" src=\"");
       result.append(playerPath);
-      result.append("flowplayer-3.0.1.min.js\"></script>");
+      result.append("flowplayer.min.js\"></script>");
       request.setAttribute("sonia.blog.flvplayer", Boolean.TRUE);
     }
 
@@ -146,7 +146,7 @@ public class FLVMacro extends AbstractBlogMacro
     result.append("<script type=\"text/javascript\">\n");
     result.append("$f(\"flvplayer_").append(+attchment.getId());
     result.append("\", \"").append(playerPath);
-    result.append("flowplayer-3.0.1.swf\", {\n");
+    result.append("flowplayer.swf\", {\n");
     result.append("clip: {\n");
     result.append("url: '").append(attachmentLink).append("',\n");
     result.append("autoPlay: false\n");
