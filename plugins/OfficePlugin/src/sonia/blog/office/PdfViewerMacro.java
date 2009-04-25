@@ -276,8 +276,8 @@ public class PdfViewerMacro extends AbstractBlogMacro
 
     if (request.getAttribute("sonia.blog.macro.gallery") == null)
     {
-      result.append("<script type=\"text/javascript\" src=\"").append(res);
-      result.append("js/jquery.js\"></script>\n");
+      result.append("<script type=\"text/javascript\" src=\"").append(linkBase);
+      result.append("resources/jquery/jquery.min.js\"></script>\n");
       result.append("<script type=\"text/javascript\" src=\"").append(res);
       result.append("js/jquery.lightbox-0.5.js\"></script>\n");
       result.append("<link rel=\"stylesheet\" href=\"").append(res);
