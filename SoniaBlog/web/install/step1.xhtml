@@ -29,6 +29,13 @@
 
           <h:panelGrid columns="3" rendered="#{!InstallBean.databaseEmbedded}">
 
+            <h:outputLabel for="dbProfile" value="#{label.dbDriver}" />
+            <h:selectOneMenu id="dbProfile" value="#{InstallBean.databaseProfile}" valueChangeListener="#{InstallBean.profileChange}"
+                             onchange="submit();" required="true">
+              <f:selectItems value="#{InstallBean.databaseProfiles}" />
+            </h:selectOneMenu>
+            <h:message for="dbProfile" />
+
             <h:outputLabel for="dbDriver" value="#{label.dbDriver}" />
             <h:inputText id="dbDriver" value="#{InstallBean.databaseDriver}" required="true" />
             <h:message for="dbDriver" />

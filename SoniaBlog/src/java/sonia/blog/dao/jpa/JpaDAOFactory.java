@@ -17,23 +17,36 @@ import sonia.blog.api.dao.BlogDAO;
 import sonia.blog.api.dao.BlogHitCountDAO;
 import sonia.blog.api.dao.CategoryDAO;
 import sonia.blog.api.dao.CommentDAO;
+import sonia.blog.api.dao.DAOException;
 import sonia.blog.api.dao.DAOFactory;
 import sonia.blog.api.dao.EntryDAO;
 import sonia.blog.api.dao.PageDAO;
 import sonia.blog.api.dao.TagDAO;
 import sonia.blog.api.dao.UserDAO;
 import sonia.blog.api.dao.cache.CacheManager;
+import sonia.blog.dao.jpa.profile.DatabaseProfile;
+
+import sonia.plugin.service.ServiceReference;
+
+import sonia.util.LineBasedReader;
+import sonia.util.Util;
 
 //~--- JDK imports ------------------------------------------------------------
 
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+import javax.persistence.Query;
 
 /**
  *
@@ -107,6 +120,36 @@ public class JpaDAOFactory extends DAOFactory
 
     entityManagerFactory = Persistence.createEntityManagerFactory(pu,
             parameters);
+  }
+
+  /**
+   * Method description
+   *
+   */
+  @Override
+  public void install()
+  {
+    DatabaseProfile profile = getProfile();
+
+    if (logger.isLoggable(Level.INFO))
+    {
+      StringBuffer log = new StringBuffer();
+
+      log.append("install database with profile ").append(profile.getName());
+      logger.info(log.toString());
+    }
+
+    excecuteCommands(profile);
+  }
+
+  /**
+   * Method description
+   *
+   */
+  @Override
+  public void update()
+  {
+    throw new UnsupportedOperationException("Not supported yet.");
   }
 
   //~--- get methods ----------------------------------------------------------
@@ -253,6 +296,149 @@ public class JpaDAOFactory extends DAOFactory
   {
     return new JpaUserDAO(entityManagerFactory);
   }
+
+  //~--- methods --------------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   * @param profile
+   */
+  private void excecuteCommands(DatabaseProfile profile)
+  {
+    EntityManager em = entityManagerFactory.createEntityManager();
+    InputStream in = profile.getCreationCommands();
+
+    try
+    {
+      em.getTransaction().begin();
+
+      CommandExcecuter ce = new CommandExcecuter(em);
+
+      ce.readLines(in);
+      em.getTransaction().commit();
+    }
+    catch (Exception ex)
+    {
+      if (em.getTransaction().isActive())
+      {
+        em.close();
+      }
+
+      logger.log(Level.SEVERE, null, ex);
+
+      throw new DAOException(ex);
+    }
+    finally
+    {
+      em.close();
+
+      if (in != null)
+      {
+        try
+        {
+          in.close();
+        }
+        catch (IOException ex)
+        {
+          logger.log(Level.SEVERE, null, ex);
+        }
+      }
+    }
+  }
+
+  //~--- get methods ----------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  private DatabaseProfile getProfile()
+  {
+    DatabaseProfile profile = null;
+    BlogContext ctx = BlogContext.getInstance();
+    BlogConfiguration config = ctx.getConfiguration();
+    String profileName = config.getString(Constants.CONFIG_DB_PROFILE);
+
+    if (Util.isBlank(profileName))
+    {
+      throw new IllegalStateException("profile is empty");
+    }
+
+    ServiceReference<DatabaseProfile> reference =
+      ctx.getServiceRegistry().get(DatabaseProfile.class,
+                                   Constants.SERVICE_DBPROFILE);
+    List<DatabaseProfile> profiles = reference.getAll();
+
+    for (DatabaseProfile dbProfile : profiles)
+    {
+      if (dbProfile.getName().equals(profileName))
+      {
+        profile = dbProfile;
+
+        break;
+      }
+    }
+
+    return profile;
+  }
+
+  //~--- inner classes --------------------------------------------------------
+
+  /**
+   * Class description
+   *
+   *
+   * @version        Enter version here..., 09/04/26
+   * @author         Enter your name here...
+   */
+  private static class CommandExcecuter extends LineBasedReader
+  {
+
+    /**
+     * Constructs ...
+     *
+     *
+     * @param em
+     */
+    public CommandExcecuter(EntityManager em)
+    {
+      this.em = em;
+    }
+
+    //~--- methods ------------------------------------------------------------
+
+    /**
+     * Method description
+     *
+     *
+     * @param line
+     */
+    @Override
+    public void invoke(String line)
+    {
+      if (logger.isLoggable(Level.FINEST))
+      {
+        StringBuffer log = new StringBuffer();
+
+        log.append("invoke ").append(line);
+        logger.finest(log.toString());
+      }
+
+      Query q = em.createNativeQuery(line);
+
+      q.executeUpdate();
+    }
+
+    //~--- fields -------------------------------------------------------------
+
+    /** Field description */
+    private EntityManager em;
+  }
+
 
   //~--- fields ---------------------------------------------------------------
 

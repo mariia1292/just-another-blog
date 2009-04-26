@@ -14,6 +14,8 @@ import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.app.Constants;
 import sonia.blog.api.app.InstallationListener;
 
+import sonia.util.ExecUtil;
+
 //~--- JDK imports ------------------------------------------------------------
 
 import java.util.logging.Level;
@@ -57,8 +59,7 @@ public class ImageInstallationListener implements InstallationListener
 
     try
     {
-      Process p = Runtime.getRuntime().exec("convert --help");
-      int result = p.waitFor();
+      int result = ExecUtil.process("convert --help", 3000l);
 
       if ((result == 1) || (result == 0))
       {

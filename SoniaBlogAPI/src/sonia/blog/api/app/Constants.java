@@ -45,6 +45,9 @@ public interface Constants
   public static final String CONFIG_DB_DRIVER = "db.driver";
 
   /** Field description */
+  public static final String CONFIG_DB_PROFILE = "db.profile";
+
+  /** Field description */
   public static final String CONFIG_DB_EMBEDDED = "db.embedded";
 
   /** Field description */
@@ -331,6 +334,8 @@ public interface Constants
 
   /** Field description */
   public static final String SERVICE_SSOAUTHENTICATION = "/app/sso";
+
+  public static final String SERVICE_DBPROFILE = "/db/profile";
 
   /** Field description */
   public static final String SSOLOGINMODULE_NAME = "BlogSSOLoginModule";

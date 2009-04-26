@@ -14,7 +14,6 @@
     <mapping-file>/sonia/blog/dao/jpa/orm/Page.xml</mapping-file>
     <exclude-unlisted-classes>true</exclude-unlisted-classes>
     <properties>
-      <property name="toplink.ddl-generation" value="create-tables"/>
     </properties>
   </persistence-unit>
   <persistence-unit name="SoniaBlog-eclipse-PU" transaction-type="RESOURCE_LOCAL">
@@ -31,7 +30,6 @@
     <mapping-file>/sonia/blog/dao/jpa/orm/Page.xml</mapping-file>
     <exclude-unlisted-classes>true</exclude-unlisted-classes>
     <properties>
-      <property name="eclipselink.ddl-generation" value="create-tables"/>
     </properties>
   </persistence-unit>
 </persistence>

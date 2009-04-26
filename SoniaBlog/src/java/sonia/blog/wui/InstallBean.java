@@ -16,6 +16,8 @@ import sonia.blog.api.app.Constants;
 import sonia.blog.api.app.InstallationListener;
 import sonia.blog.api.dao.DAOFactory;
 import sonia.blog.api.util.AbstractBean;
+import sonia.blog.dao.jpa.profile.DatabaseProfile;
+import sonia.blog.dao.jpa.profile.DerbyProfile;
 import sonia.blog.entity.Blog;
 import sonia.blog.entity.Category;
 import sonia.blog.entity.Entry;
@@ -48,7 +50,11 @@ import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.faces.component.UIComponent;
+import javax.faces.component.UIInput;
+import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
+import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.SelectItem;
 
 /**
@@ -83,9 +89,10 @@ public class InstallBean extends AbstractBean
   {
     super.init();
     databaseEmbedded = true;
-    databaseDriver = "org.apache.derby.jdbc.ClientDriver";
-    databaseUrl = "jdbc:derby://localhost:1527/SoniaBlog";
-    databaseUsername = "root";
+    databaseDriver = DerbyProfile.DRIVER;
+    databaseUrl = DerbyProfile.URL;
+    databaseUsername = DerbyProfile.USER;
+    databaseProfile = DerbyProfile.NAME;
     resourcePath = BlogContext.getInstance().getServletContext().getRealPath(
       "WEB-INF/resources");
     admin = new User();
@@ -126,6 +133,7 @@ public class InstallBean extends AbstractBean
 
       BlogConfiguration configuration = context.getConfiguration();
 
+      configuration.set(Constants.CONFIG_DB_PROFILE, databaseProfile);
       configuration.set(Constants.CONFIG_DB_DRIVER, databaseDriver);
       configuration.set(Constants.CONFIG_DB_URL, databaseUrl);
       configuration.set(Constants.CONFIG_DB_USERNAME, databaseUsername);
@@ -180,6 +188,7 @@ public class InstallBean extends AbstractBean
       DAOFactory daoFactory = BlogContext.getDAOFactory();
 
       daoFactory.init();
+      daoFactory.install();
 
       boolean error = true;
 
@@ -318,6 +327,7 @@ public class InstallBean extends AbstractBean
       databaseUrl = "jdbc:derby:" + jabDBDirectory.getPath() + ";create=true";
       databaseUsername = "jab";
       databsePassword = "pwd4jab";
+      databaseProfile = DerbyProfile.NAME;
     }
 
     try
@@ -340,6 +350,27 @@ public class InstallBean extends AbstractBean
     }
 
     return result;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param event
+   */
+  public void profileChange(ValueChangeEvent event)
+  {
+    String profileName = (String) event.getNewValue();
+
+    for (DatabaseProfile profile : databaseProfiles)
+    {
+      if (profile.getName().equals(profileName))
+      {
+        loadSampleData(profile);
+
+        break;
+      }
+    }
   }
 
   //~--- get methods ----------------------------------------------------------
@@ -375,6 +406,38 @@ public class InstallBean extends AbstractBean
   public String getDatabaseDriver()
   {
     return databaseDriver;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  public String getDatabaseProfile()
+  {
+    return databaseProfile;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  public SelectItem[] getDatabaseProfiles()
+  {
+    int size = databaseProfiles.size();
+    SelectItem[] items = new SelectItem[size];
+
+    for (int i = 0; i < size; i++)
+    {
+      DatabaseProfile dbP = databaseProfiles.get(i);
+
+      items[i] = new SelectItem(dbP.getName(), dbP.getDisplayName());
+    }
+
+    return items;
   }
 
   /**
@@ -515,6 +578,17 @@ public class InstallBean extends AbstractBean
    * Method description
    *
    *
+   * @param databaseProfile
+   */
+  public void setDatabaseProfile(String databaseProfile)
+  {
+    this.databaseProfile = databaseProfile;
+  }
+
+  /**
+   * Method description
+   *
+   *
    * @param databaseUrl
    */
   public void setDatabaseUrl(String databaseUrl)
@@ -597,6 +671,42 @@ public class InstallBean extends AbstractBean
   /**
    * Method description
    *
+   *
+   * @param profile
+   */
+  private void loadSampleData(DatabaseProfile profile)
+  {
+    databaseDriver = profile.getSampleDriver();
+    databaseUrl = profile.getSampleUrl();
+    databaseUsername = profile.getSampleUser();
+
+    FacesContext ctx = FacesContext.getCurrentInstance();
+    UIViewRoot vr = ctx.getViewRoot();
+    UIComponent cmp = vr.findComponent("form:dbDriver");
+
+    if ((cmp != null) && (cmp instanceof UIInput))
+    {
+      ((UIInput) cmp).setValue(databaseDriver);
+    }
+
+    cmp = vr.findComponent("form:dbUrl");
+
+    if ((cmp != null) && (cmp instanceof UIInput))
+    {
+      ((UIInput) cmp).setValue(databaseUrl);
+    }
+
+    cmp = vr.findComponent("form:dbUsername");
+
+    if ((cmp != null) && (cmp instanceof UIInput))
+    {
+      ((UIInput) cmp).setValue(databaseUsername);
+    }
+  }
+
+  /**
+   * Method description
+   *
    */
   private void writeBaseProperties()
   {
@@ -647,6 +757,13 @@ public class InstallBean extends AbstractBean
 
   /** Field description */
   private boolean databaseEmbedded;
+
+  /** Field description */
+  private String databaseProfile;
+
+  /** Field description */
+  @Service(Constants.SERVICE_DBPROFILE)
+  private List<DatabaseProfile> databaseProfiles;
 
   /** Field description */
   private String databaseUrl;
