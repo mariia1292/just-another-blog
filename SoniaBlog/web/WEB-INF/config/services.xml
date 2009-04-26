@@ -102,4 +102,9 @@
     <impl class="sonia.blog.editor.FlowPlayerHandler" />
   </service>
 
+  <service class="sonia.blog.dao.jpa.profile.DatabaseProfile" path="/db/profile">
+    <impl class="sonia.blog.dao.jpa.profile.DerbyProfile" />
+    <impl class="sonia.blog.dao.jpa.profile.MySQLProfile" />
+  </service>
+
 </services>

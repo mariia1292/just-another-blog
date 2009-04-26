@@ -76,6 +76,18 @@ public abstract class DAOFactory
    */
   public abstract void init() throws DAOException;
 
+  /**
+   * Method description
+   *
+   */
+  public abstract void install();
+
+  /**
+   * Method description
+   *
+   */
+  public abstract void update();
+
   //~--- get methods ----------------------------------------------------------
 
   /**
