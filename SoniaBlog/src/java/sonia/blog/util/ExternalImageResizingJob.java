@@ -21,6 +21,7 @@ import java.text.MessageFormat;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import sonia.util.ExecUtil;
 
 /**
  *
@@ -75,8 +76,7 @@ public class ExternalImageResizingJob extends ImageResizingJob
 
     try
     {
-      Process process = Runtime.getRuntime().exec(cmd);
-      int exit = process.waitFor();
+      int exit = ExecUtil.process(cmd, 5000l);
       Level level = (exit == 0)
                     ? Level.FINE
                     : Level.WARNING;
