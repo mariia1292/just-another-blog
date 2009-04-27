@@ -172,14 +172,18 @@
   </navigation-rule>
   
   <navigation-rule>
-    <from-view-id>/install/step1.xhtml</from-view-id>
+    <from-view-id>/install/*</from-view-id>
     <navigation-case>
-      <from-outcome>success</from-outcome>
+      <from-outcome>step1</from-outcome>
+      <to-view-id>/install/step1.xhtml</to-view-id>
+    </navigation-case>
+    <navigation-case>
+      <from-outcome>step2</from-outcome>
       <to-view-id>/install/step2.xhtml</to-view-id>
     </navigation-case>
     <navigation-case>
-      <from-outcome>failure</from-outcome>
-      <to-view-id>/install/step1.xhtml</to-view-id>
+      <from-outcome>step3</from-outcome>
+      <to-view-id>/install/step3.xhtml</to-view-id>
     </navigation-case>
   </navigation-rule>
   
