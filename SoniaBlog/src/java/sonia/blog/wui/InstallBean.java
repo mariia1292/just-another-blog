@@ -41,7 +41,6 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 import java.sql.Connection;
-import java.sql.Driver;
 import java.sql.DriverManager;
 
 import java.util.List;
@@ -63,6 +62,15 @@ import javax.faces.model.SelectItem;
  */
 public class InstallBean extends AbstractBean
 {
+
+  /** Field description */
+  public static final String STEP1 = "step1";
+
+  /** Field description */
+  public static final String STEP2 = "step2";
+
+  /** Field description */
+  public static final String STEP3 = "step3";
 
   /** Field description */
   private static Logger logger = Logger.getLogger(InstallBean.class.getName());
@@ -145,16 +153,6 @@ public class InstallBean extends AbstractBean
         configuration.set(Constants.CONFIG_DB_EMBEDDED, Boolean.TRUE);
       }
 
-      /*
-       * try
-       * {
-       * configureLogger();
-       * }
-       * catch (IOException ex)
-       * {
-       * logger.log(Level.SEVERE, null, ex);
-       * }
-       */
       if (listeners != null)
       {
         for (InstallationListener listener : listeners)
@@ -163,7 +161,6 @@ public class InstallBean extends AbstractBean
         }
       }
 
-      // create first Entry
       ResourceBundle message = getResourceBundle("message");
       ResourceBundle label = getResourceBundle("label");
       Category category = new Category();
@@ -274,79 +271,13 @@ public class InstallBean extends AbstractBean
           }
         }
 
-        String uri = context.getLinkBuilder().buildLink(getRequest(), "/");
-
-        sendRedirect(uri);
+        redirect();
       }
     }
     else
     {
       result = FAILURE;
       getMessageHandler().error("passwordsNotEqual");
-    }
-
-    return result;
-  }
-
-  /**
-   * Method description
-   *
-   *
-   * @return
-   */
-  public String next()
-  {
-    String result = SUCCESS;
-    File file = new File(resourcePath);
-
-    if (file.isFile())
-    {
-      getMessageHandler().error("form:resourceDir", "resourcePathIsFile");
-      result = FAILURE;
-    }
-    else if (!file.exists())
-    {
-      if (!file.mkdirs())
-      {
-        getMessageHandler().error("form:resourceDir",
-                                  "resourcePathCreationFailure");
-        result = FAILURE;
-      }
-    }
-
-    File resourceDirectory = new File(resourcePath);
-    File dbDriectory = new File(resourceDirectory, Constants.RESOURCE_DATABASE);
-
-    dbDriectory.mkdirs();
-
-    File jabDBDirectory = new File(dbDriectory, "jab");
-
-    if (databaseEmbedded)
-    {
-      databaseDriver = "org.apache.derby.jdbc.EmbeddedDriver";
-      databaseUrl = "jdbc:derby:" + jabDBDirectory.getPath() + ";create=true";
-      databaseUsername = "jab";
-      databsePassword = "pwd4jab";
-      databaseProfile = DerbyProfile.NAME;
-    }
-
-    try
-    {
-      Driver driver = (Driver) Class.forName(databaseDriver).newInstance();
-
-      DriverManager.registerDriver(driver);
-    }
-    catch (Exception ex)
-    {
-      logger.log(Level.WARNING, null, ex);
-      getMessageHandler().error("form:dbDriver", "dbDriverNotFound");
-      result = FAILURE;
-    }
-
-    if (!checkConnection())
-    {
-      getMessageHandler().error("dbNoConnection");
-      result = FAILURE;
     }
 
     return result;
@@ -371,6 +302,110 @@ public class InstallBean extends AbstractBean
         break;
       }
     }
+  }
+
+  /**
+   * Method description
+   *
+   */
+  public void redirect()
+  {
+    BlogContext context = BlogContext.getInstance();
+    String uri = context.getLinkBuilder().buildLink(getRequest(), "/");
+
+    sendRedirect(uri);
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  public String step2()
+  {
+    String result = STEP2;
+    File resourceDir = new File(resourcePath);
+
+    if (isAllreadyInstalled(resourceDir))
+    {
+      writeBaseProperties();
+
+      try
+      {
+        BlogContext.getInstance().getConfiguration().load();
+        BlogContext.getDAOFactory().init();
+        redirect();
+      }
+      catch (IOException ex)
+      {
+        getMessageHandler().error("unknownError");
+        logger.log(Level.SEVERE, null, ex);
+      }
+    }
+    else if (resourceDir.isFile())
+    {
+      getMessageHandler().error("form:resourceDir", "resourcePathIsFile");
+      result = FAILURE;
+    }
+    else if (!resourceDir.exists())
+    {
+      if (!resourceDir.mkdirs())
+      {
+        getMessageHandler().error("form:resourceDir",
+                                  "resourcePathCreationFailure");
+        result = FAILURE;
+      }
+    }
+
+    return result;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  public String step3()
+  {
+    String result = STEP3;
+
+    if (databaseEmbedded)
+    {
+      File resourceDirectory = new File(resourcePath);
+      File dbDriectory = new File(resourceDirectory,
+                                  Constants.RESOURCE_DATABASE);
+
+      dbDriectory.mkdirs();
+
+      File jabDBDirectory = new File(dbDriectory, "jab");
+
+      databaseDriver = "org.apache.derby.jdbc.EmbeddedDriver";
+      databaseUrl = "jdbc:derby:" + jabDBDirectory.getPath() + ";create=true";
+      databaseUsername = "jab";
+      databsePassword = "pwd4jab";
+      databaseProfile = DerbyProfile.NAME;
+    }
+
+    try
+    {
+      Class.forName(databaseDriver).newInstance();
+    }
+    catch (Exception ex)
+    {
+      logger.log(Level.WARNING, null, ex);
+      getMessageHandler().error("form:dbDriver", "dbDriverNotFound");
+      result = FAILURE;
+    }
+
+    if (!checkConnection())
+    {
+      getMessageHandler().error("dbNoConnection");
+      result = FAILURE;
+    }
+
+    return result;
   }
 
   //~--- get methods ----------------------------------------------------------
@@ -742,6 +777,32 @@ public class InstallBean extends AbstractBean
         }
       }
     }
+  }
+
+  //~--- get methods ----------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   * @param resourceDir
+   *
+   * @return
+   */
+  private boolean isAllreadyInstalled(File resourceDir)
+  {
+    boolean result = false;
+
+    if (resourceDir.exists())
+    {
+      StringBuffer configPath = new StringBuffer();
+
+      configPath.append(Constants.RESOURCE_CONFIG).append(File.separator);
+      configPath.append("main-config.xml");
+      result = new File(resourceDir, configPath.toString()).exists();
+    }
+
+    return result;
   }
 
   //~--- fields ---------------------------------------------------------------

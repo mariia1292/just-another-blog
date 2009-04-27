@@ -13,6 +13,8 @@ import sonia.blog.entity.Blog;
 
 import sonia.jobqueue.JobException;
 
+import sonia.util.ExecUtil;
+
 //~--- JDK imports ------------------------------------------------------------
 
 import java.io.File;
@@ -21,7 +23,6 @@ import java.text.MessageFormat;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import sonia.util.ExecUtil;
 
 /**
  *

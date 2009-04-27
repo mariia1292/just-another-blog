@@ -351,12 +351,13 @@ public class BlogUtil
    * @param request
    * @param type
    * @param name
+   * @param <T>
    *
    * @return
    */
   @SuppressWarnings("unchecked")
-  public static <T>T getSessionBean(BlogRequest request, Class<T> type,
-                                    String name)
+  public static <T> T getSessionBean(BlogRequest request, Class<T> type,
+                                     String name)
   {
     T result = null;
     HttpSession session = request.getSession(true);

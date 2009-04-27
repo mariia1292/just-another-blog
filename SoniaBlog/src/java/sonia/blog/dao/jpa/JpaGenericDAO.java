@@ -31,6 +31,8 @@ import javax.persistence.Query;
 /**
  *
  * @author sdorra
+ *
+ * @param <T>
  */
 public abstract class JpaGenericDAO<T> implements GenericDAO<T>
 {
@@ -307,11 +309,12 @@ public abstract class JpaGenericDAO<T> implements GenericDAO<T>
    * @param type
    * @param em
    * @param q
+   * @param <O>
    *
    * @return
    */
   @SuppressWarnings("unchecked")
-  protected <O>List<O> excecuteListQuery(Class<O> type, EntityManager em,
+  protected <O> List<O> excecuteListQuery(Class<O> type, EntityManager em,
           Query q)
   {
     List<O> resultList = null;
@@ -354,11 +357,12 @@ public abstract class JpaGenericDAO<T> implements GenericDAO<T>
    * @param type
    * @param em
    * @param q
+   * @param <O>
    *
    * @return
    */
   @SuppressWarnings("unchecked")
-  protected <O>O excecuteQuery(Class<O> type, EntityManager em, Query q)
+  protected <O> O excecuteQuery(Class<O> type, EntityManager em, Query q)
   {
     O item = null;
 

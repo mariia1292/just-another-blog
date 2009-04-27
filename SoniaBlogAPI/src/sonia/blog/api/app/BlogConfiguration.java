@@ -11,6 +11,10 @@ package sonia.blog.api.app;
 
 import sonia.config.XmlConfiguration;
 
+import sonia.security.cipher.DefaultCipher;
+
+import sonia.util.Util;
+
 //~--- JDK imports ------------------------------------------------------------
 
 import java.io.File;
@@ -55,6 +59,13 @@ public class BlogConfiguration extends XmlConfiguration
       try
       {
         load(fis);
+
+        String key = getString(Constants.CONFIG_SECUREKEY);
+
+        if (Util.hasContent(key))
+        {
+          setCipher(new DefaultCipher(key.toCharArray()));
+        }
       }
       finally
       {

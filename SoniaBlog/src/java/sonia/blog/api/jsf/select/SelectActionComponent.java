@@ -54,7 +54,8 @@ public class SelectActionComponent extends BaseComponent
    * @param context
    * @param obj
    */
-  @Override @SuppressWarnings("unchecked")
+  @Override
+  @SuppressWarnings("unchecked")
   public void restoreState(FacesContext context, Object obj)
   {
     state = (Object[]) obj;
