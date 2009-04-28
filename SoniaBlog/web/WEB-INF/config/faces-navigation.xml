@@ -108,6 +108,10 @@
       <from-outcome>detail</from-outcome>
       <to-view-id>/personal/globaladmin/userDetail.xhtml</to-view-id>
     </navigation-case>
+    <navigation-case>
+      <from-outcome>new</from-outcome>
+      <to-view-id>/personal/globaladmin/userNew.xhtml</to-view-id>
+    </navigation-case>
   </navigation-rule>
 
   <navigation-rule>
@@ -115,6 +119,30 @@
     <navigation-case>
       <from-outcome>back</from-outcome>
       <to-view-id>/personal/globaladmin/users.xhtml</to-view-id>
+    </navigation-case>
+    <navigation-case>
+      <from-outcome>success</from-outcome>
+      <to-view-id>/personal/globaladmin/users.xhtml</to-view-id>
+    </navigation-case>
+    <navigation-case>
+      <from-outcome>failure</from-outcome>
+      <to-view-id>/personal/globaladmin/userDetail.xhtml</to-view-id>
+    </navigation-case>
+  </navigation-rule>
+
+  <navigation-rule>
+    <from-view-id>/personal/globaladmin/userNew.xhtml</from-view-id>
+    <navigation-case>
+      <from-outcome>back</from-outcome>
+      <to-view-id>/personal/globaladmin/users.xhtml</to-view-id>
+    </navigation-case>
+    <navigation-case>
+      <from-outcome>success</from-outcome>
+      <to-view-id>/personal/globaladmin/users.xhtml</to-view-id>
+    </navigation-case>
+    <navigation-case>
+      <from-outcome>failure</from-outcome>
+      <to-view-id>/personal/globaladmin/userNew.xhtml</to-view-id>
     </navigation-case>
   </navigation-rule>
 

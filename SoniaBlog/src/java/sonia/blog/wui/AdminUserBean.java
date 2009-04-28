@@ -9,8 +9,8 @@ package sonia.blog.wui;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.app.Constants;
+import sonia.blog.api.dao.Dao;
 import sonia.blog.api.dao.UserDAO;
 import sonia.blog.api.util.AbstractBean;
 import sonia.blog.entity.Blog;
@@ -21,6 +21,7 @@ import sonia.blog.wui.model.UserDataModel;
 
 import sonia.config.Config;
 
+import sonia.plugin.service.Service;
 import sonia.plugin.service.ServiceReference;
 
 import sonia.security.encryption.Encryption;
@@ -51,6 +52,9 @@ public class AdminUserBean extends AbstractBean
 
   /** Field description */
   public static final String DETAIL = "detail";
+
+  /** Field description */
+  public static final String NEW = "new";
 
   /** Field description */
   private static Logger logger =
@@ -86,6 +90,19 @@ public class AdminUserBean extends AbstractBean
    * Method description
    *
    *
+   * @return
+   */
+  public String newUser()
+  {
+    user = new User();
+
+    return NEW;
+  }
+
+  /**
+   * Method description
+   *
+   *
    *
    * @param event
    */
@@ -100,8 +117,6 @@ public class AdminUserBean extends AbstractBean
     {
       try
       {
-        UserDAO userDAO = BlogContext.getDAOFactory().getUserDAO();
-
         userDAO.setRole(blog, user, role);
         getMessageHandler().info("changeRoleSuccess");
       }
@@ -121,19 +136,48 @@ public class AdminUserBean extends AbstractBean
    */
   public String save()
   {
-    String result = SUCCESS;
-    UserDAO userDAO = BlogContext.getDAOFactory().getUserDAO();
+    String result = FAILURE;
 
-    if (checkMail(userDAO))
+    if (checkMail())
     {
-      if (userDAO.edit(user))
+      if (checkName())
       {
-        getMessageHandler().info("userSettingsUpdateSuccess");
+        if (passwordRetry.equals(user.getPassword()))
+        {
+          if (user.getId() == null)
+          {
+            if (userDAO.add(user))
+            {
+              getMessageHandler().info("userSettingsUpdateSuccess");
+              result = SUCCESS;
+            }
+            else
+            {
+              getMessageHandler().error("unknownError");
+            }
+          }
+          else
+          {
+            if (userDAO.edit(user))
+            {
+              getMessageHandler().info("userSettingsUpdateSuccess");
+              result = SUCCESS;
+            }
+            else
+            {
+              getMessageHandler().error("unknownError");
+            }
+          }
+        }
+        else
+        {
+          getMessageHandler().warn("passwordsNotEqual");
+        }
       }
       else
       {
-        result = FAILURE;
-        getMessageHandler().error("unknownError");
+        getMessageHandler().warn(null, "nameAllreadyExists", null,
+                                 user.getName());
       }
     }
     else
@@ -157,13 +201,9 @@ public class AdminUserBean extends AbstractBean
 
     if (passwordRetry.equals(user.getPassword()))
     {
-      ServiceReference<Encryption> reference =
-        BlogContext.getInstance().getServiceRegistry().get(Encryption.class,
-          Constants.SERVCIE_ENCRYPTION);
-
-      if (reference != null)
+      if (encReference != null)
       {
-        Encryption enc = reference.get();
+        Encryption enc = encReference.get();
 
         if (enc != null)
         {
@@ -205,8 +245,6 @@ public class AdminUserBean extends AbstractBean
     if (members == null)
     {
       members = new ListDataModel();
-
-      UserDAO userDAO = BlogContext.getDAOFactory().getUserDAO();
 
       // TODO scrolling
       List<BlogMember> memberList = userDAO.getMembers(user, 0, 1000);
@@ -386,18 +424,34 @@ public class AdminUserBean extends AbstractBean
    * Method description
    *
    *
-   * @param userDAO
    *
    * @return
    */
-  private boolean checkMail(UserDAO userDAO)
+  private boolean checkMail()
   {
     User u = userDAO.getByMail(user.getEmail());
 
     return (u == null) || u.equals(user);
   }
 
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  private boolean checkName()
+  {
+    User u = userDAO.get(user.getName());
+
+    return (u == null) || u.equals(user);
+  }
+
   //~--- fields ---------------------------------------------------------------
+
+  /** Field description */
+  @Service(Constants.SERVCIE_ENCRYPTION)
+  private ServiceReference<Encryption> encReference;
 
   /** Field description */
   private String filter;
@@ -417,6 +471,10 @@ public class AdminUserBean extends AbstractBean
 
   /** Field description */
   private User user;
+
+  /** Field description */
+  @Dao
+  private UserDAO userDAO;
 
   /** Field description */
   private DataModel users;
