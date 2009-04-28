@@ -378,7 +378,6 @@ public class InstallBean extends AbstractBean
       File dbDriectory = new File(resourceDirectory,
                                   Constants.RESOURCE_DATABASE);
 
-      dbDriectory.mkdirs();
       databaseDriver = "org.apache.derby.jdbc.EmbeddedDriver";
       databaseUrl = "jdbc:derby:" + dbDriectory.getPath() + ";create=true";
       databaseUsername = "jab";
