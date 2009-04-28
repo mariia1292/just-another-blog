@@ -18,6 +18,7 @@ import sonia.blog.api.dao.AttachmentDAO;
 import sonia.blog.api.dao.BlogDAO;
 import sonia.blog.api.dao.CategoryDAO;
 import sonia.blog.api.dao.CommentDAO;
+import sonia.blog.api.dao.Dao;
 import sonia.blog.api.dao.EntryDAO;
 import sonia.blog.api.dao.UserDAO;
 import sonia.blog.api.navigation.NavigationProvider;
@@ -30,7 +31,7 @@ import sonia.blog.entity.Role;
 import sonia.blog.entity.User;
 import sonia.blog.util.BlogUtil;
 
-import sonia.plugin.service.ServiceReference;
+import sonia.plugin.service.Service;
 
 import sonia.util.Util;
 
@@ -64,6 +65,9 @@ public class AdminBlogBean extends AbstractBean
   public static final String DETAIL = "detail";
 
   /** Field description */
+  public static final String NEW = "new";
+
+  /** Field description */
   private static Logger logger =
     Logger.getLogger(AdminBlogBean.class.getName());
 
@@ -76,8 +80,6 @@ public class AdminBlogBean extends AbstractBean
   public AdminBlogBean()
   {
     super();
-    actionReference = BlogContext.getInstance().getServiceRegistry().get(
-      NavigationProvider.class, Constants.NAVIGATION_BLOGACTION);
   }
 
   //~--- methods --------------------------------------------------------------
@@ -153,6 +155,19 @@ public class AdminBlogBean extends AbstractBean
    *
    * @return
    */
+  public String newBlog()
+  {
+    blog = new Blog();
+
+    return NEW;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
   public String rebuildIndex()
   {
     String result = SUCCESS;
@@ -187,8 +202,6 @@ public class AdminBlogBean extends AbstractBean
     {
       if (!blog.equals(getRequest().getCurrentBlog()))
       {
-        BlogDAO blogDAO = BlogContext.getDAOFactory().getBlogDAO();
-
         if (blogDAO.remove(blog))
         {
           getMessageHandler().info(null, "successBlogDelete", null,
@@ -297,7 +310,7 @@ public class AdminBlogBean extends AbstractBean
     {
       try
       {
-        BlogContext.getDAOFactory().getUserDAO().setRole(blog, user, role);
+        userDAO.setRole(blog, user, role);
         getMessageHandler().info("changeRoleSuccess");
       }
       catch (Exception ex)
@@ -317,34 +330,27 @@ public class AdminBlogBean extends AbstractBean
   public String save()
   {
     String result = SUCCESS;
-    BlogDAO blogDAO = BlogContext.getDAOFactory().getBlogDAO();
 
     try
     {
       if (checkServername(blogDAO))
       {
-        try
+        if (blog.getId() != null)
         {
-          if (blog.getId() != null)
-          {
-            blogDAO.edit(blog);
-            getMessageHandler().info("updateBlogSuccess");
-          }
-          else
-          {
-            blogDAO.add(blog);
-            getMessageHandler().info("createBlogSuccess");
-          }
+          blogDAO.edit(blog);
+          getMessageHandler().info("updateBlogSuccess");
         }
-        catch (Exception ex)
+        else
         {
-          logger.log(Level.SEVERE, null, ex);
+          blogDAO.add(blog);
+          getMessageHandler().info("createBlogSuccess");
         }
       }
     }
     catch (Exception ex)
     {
       logger.log(Level.SEVERE, null, ex);
+      result = FAILURE;
     }
 
     return result;
@@ -373,8 +379,6 @@ public class AdminBlogBean extends AbstractBean
 
     items.add(new NavigationMenuItem(label.getString("clearImageCache"),
                                      "#{AdminBlogBean.clearImageCache}"));
-
-    List<NavigationProvider> providers = actionReference.getAll();
 
     if ((providers != null) &&!providers.isEmpty())
     {
@@ -424,7 +428,6 @@ public class AdminBlogBean extends AbstractBean
   {
     blogs = new ListDataModel();
 
-    BlogDAO blogDAO = BlogContext.getDAOFactory().getBlogDAO();
     List<Blog> blogList = blogDAO.getAll();
 
     if ((blogList != null) &&!blogList.isEmpty())
@@ -489,8 +492,6 @@ public class AdminBlogBean extends AbstractBean
    */
   public long getMemberCount()
   {
-    UserDAO userDAO = BlogContext.getDAOFactory().getUserDAO();
-
     return userDAO.count(blog);
   }
 
@@ -589,14 +590,23 @@ public class AdminBlogBean extends AbstractBean
   //~--- fields ---------------------------------------------------------------
 
   /** Field description */
-  private ServiceReference<NavigationProvider> actionReference;
+  private Blog blog;
 
   /** Field description */
-  private Blog blog;
+  @Dao
+  private BlogDAO blogDAO;
 
   /** Field description */
   private DataModel blogs;
 
   /** Field description */
   private DataModel members;
+
+  /** Field description */
+  @Service(Constants.NAVIGATION_BLOGACTION)
+  private List<NavigationProvider> providers;
+
+  /** Field description */
+  @Dao
+  private UserDAO userDAO;
 }
