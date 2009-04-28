@@ -75,10 +75,11 @@ public class Util
    *
    *
    * @param collection
+   * @param <T>
    *
    * @return
    */
-  public static <T>Set<T> createSet(Collection<T> collection)
+  public static <T> Set<T> createSet(Collection<T> collection)
   {
     Set<T> set = new HashSet<T>();
 
@@ -124,10 +125,11 @@ public class Util
    *
    *
    * @param array
+   * @param <T>
    *
    * @return
    */
-  public static <T>Set<T> createSet(T[] array)
+  public static <T> Set<T> createSet(T[] array)
   {
     Set<T> set = new HashSet<T>();
 
@@ -396,6 +398,17 @@ public class Util
   public static String getExtension(File file)
   {
     return getExtension(file.getName());
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  public static File getHomeDirectory()
+  {
+    return new File(System.getProperty("user.home"));
   }
 
   /**
