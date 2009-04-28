@@ -1,0 +1,108 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:blog="http://jab.nitilon.org/blog/"
+      xmlns:c="http://java.sun.com/jstl/core"
+      xmlns:t="http://myfaces.apache.org/tomahawk">
+
+  <body>
+
+    <ui:composition>
+
+      <h2><h:outputText value="#{label.configuration}" /></h2>
+
+      <h:form id="blogform">
+
+        <h:panelGrid columns="3">
+
+          <h:outputLabel for="servername" value="#{label.identifier}" />
+          <h:inputText id="servername" value="#{AdminBlogBean.blog.identifier}" required="true">
+            <f:validator validatorId="validator.domain" />
+          </h:inputText>
+          <h:message for="servername" />
+
+          <h:outputLabel for="email" value="#{label.email}" />
+          <h:inputText id="email" value="#{AdminBlogBean.blog.email}" required="true">
+            <f:validator validatorId="validator.mail" />
+          </h:inputText>
+          <h:message for="email" />
+
+          <h:outputLabel for="title" value="#{label.title}" />
+          <h:inputText id="title" value="#{AdminBlogBean.blog.title}" required="true" />
+          <h:message for="title" />
+
+          <h:outputLabel for="description" value="#{label.description}" />
+          <h:inputTextarea id="description" value="#{AdminBlogBean.blog.description}" />
+          <h:message for="description" />
+
+          <h:outputLabel for="template" value="#{label.template}" />
+          <h:selectOneMenu id="template" value="#{AdminBlogBean.blog.template}">
+            <f:selectItems value="#{AdminBlogBean.templateItems}" />
+          </h:selectOneMenu>
+          <h:message for="template" />
+
+          <h:outputLabel for="locale" value="#{label.locale}" />
+          <h:selectOneMenu id="locale" value="#{AdminBlogBean.blog.locale}" converter="converter.locale">
+            <f:selectItems value="#{AdminBlogBean.localeItems}" />
+          </h:selectOneMenu>
+          <h:message for="locale" />
+
+          <h:outputLabel for="timeZone" value="#{label.timeZone}" />
+          <h:selectOneMenu id="timeZone" value="#{AdminBlogBean.blog.timeZone}" converter="converter.timeZone">
+            <f:selectItems value="#{AdminBlogBean.timeZoneItems}" />
+          </h:selectOneMenu>
+          <h:message for="timeZone" />
+
+          <h:outputLabel for="allowMacros" value="#{label.allowMacros}" />
+          <h:selectBooleanCheckbox id="allowMacros" value="#{AdminBlogBean.blog.allowMacros}" />
+          <h:message for="allowMacros" />
+
+          <h:outputLabel for="allowComments" value="#{label.allowComments}" />
+          <h:selectBooleanCheckbox id="allowComments" value="#{AdminBlogBean.blog.allowComments}" />
+          <h:message for="allowComments" />
+
+          <h:outputLabel for="allowHtmlComments" value="#{label.allowHtmlComments}" />
+          <h:selectBooleanCheckbox id="allowHtmlComments" value="#{AdminBlogBean.blog.allowHtmlComments}" />
+          <h:message for="allowHtmlComments" />
+
+          <h:outputLabel for="entriesPerPage" value="#{label.entriesPerPage}" />
+          <h:inputText id="entriesPerPage" styleClass="short" value="#{AdminBlogBean.blog.entriesPerPage}" required="true">
+            <f:validateLongRange minimum="1" maximum="250" />
+          </h:inputText>
+          <h:message for="entriesPerPage" />
+
+          <h:outputLabel for="thumbnailWidth" value="#{label.thumbnailWidth}" />
+          <h:inputText id="thumbnailWidth" styleClass="short" value="#{AdminBlogBean.blog.thumbnailWidth}" required="true" />
+          <h:message for="thumbnailWidth" />
+
+          <h:outputLabel for="thumbnailHeight" value="#{label.thumbnailHeight}" />
+          <h:inputText id="thumbnailHeight" styleClass="short" value="#{AdminBlogBean.blog.thumbnailHeight}" required="true" />
+          <h:message for="thumbnailHeight" />
+
+          <h:outputLabel for="imageWidth" value="#{label.imageWidth}" />
+          <h:inputText id="imageWidth" styleClass="short" value="#{AdminBlogBean.blog.imageWidth}" required="true" />
+          <h:message for="imageWidth" />
+
+          <h:outputLabel for="imageHeight" value="#{label.imageHeight}" />
+          <h:inputText id="imageHeight" styleClass="short" value="#{AdminBlogBean.blog.imageHeight}" required="true" />
+          <h:message for="imageHeight" />
+
+          <h:outputLabel for="dateFormat" value="#{label.dateFormat}" />
+          <h:inputText id="dateFormat" value="#{AdminBlogBean.blog.dateFormat}" required="true">
+            <f:validator validatorId="validator.dateFormat" />
+          </h:inputText>
+          <h:message for="dateFormat" />
+
+        </h:panelGrid>
+
+        <h:commandButton value="#{label.save}" action="#{AdminBlogBean.save}" />
+
+      </h:form>
+
+    </ui:composition>
+
+  </body>
+</html>
