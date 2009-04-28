@@ -33,6 +33,8 @@ import sonia.plugin.service.ServiceReference;
 
 import sonia.security.encryption.Encryption;
 
+import sonia.util.Util;
+
 //~--- JDK imports ------------------------------------------------------------
 
 import java.io.File;
@@ -101,8 +103,7 @@ public class InstallBean extends AbstractBean
     databaseUrl = DerbyProfile.URL;
     databaseUsername = DerbyProfile.USER;
     databaseProfile = DerbyProfile.NAME;
-    resourcePath = BlogContext.getInstance().getServletContext().getRealPath(
-      "WEB-INF/resources");
+    resourcePath = new File(Util.getHomeDirectory(), ".jab").getAbsolutePath();
     admin = new User();
     admin.setGlobalAdmin(true);
     admin.setActive(true);
@@ -378,11 +379,8 @@ public class InstallBean extends AbstractBean
                                   Constants.RESOURCE_DATABASE);
 
       dbDriectory.mkdirs();
-
-      File jabDBDirectory = new File(dbDriectory, "jab");
-
       databaseDriver = "org.apache.derby.jdbc.EmbeddedDriver";
-      databaseUrl = "jdbc:derby:" + jabDBDirectory.getPath() + ";create=true";
+      databaseUrl = "jdbc:derby:" + dbDriectory.getPath() + ";create=true";
       databaseUsername = "jab";
       databsePassword = "pwd4jab";
       databaseProfile = DerbyProfile.NAME;
