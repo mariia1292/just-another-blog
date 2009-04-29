@@ -28,7 +28,6 @@ import sonia.util.XmlUtil;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -168,7 +167,6 @@ public class DefaultMappingHandler implements MappingHandler
       }
 
       request.setMapping(mapping);
-      setCharacterEncoding(request);
       result = mapping.handleMapping(request, response,
                                      params.toArray(new String[0]));
     }
@@ -308,26 +306,6 @@ public class DefaultMappingHandler implements MappingHandler
           mappingMap.put(regex, clazz);
         }
       }
-    }
-  }
-
-  //~--- set methods ----------------------------------------------------------
-
-  /**
-   * Method description
-   *
-   *
-   * @param request
-   */
-  private void setCharacterEncoding(BlogRequest request)
-  {
-    try
-    {
-      request.getRequest().setCharacterEncoding(request.getCharacterEncoding());
-    }
-    catch (UnsupportedEncodingException ex)
-    {
-      logger.log(Level.SEVERE, null, ex);
     }
   }
 

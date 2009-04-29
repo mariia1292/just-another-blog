@@ -18,8 +18,6 @@ import sonia.blog.entity.User;
 
 //~--- JDK imports ------------------------------------------------------------
 
-import java.io.UnsupportedEncodingException;
-
 import java.security.Principal;
 
 import java.util.Set;
@@ -57,24 +55,6 @@ public class BlogRequest extends HttpServletRequestWrapper
   }
 
   //~--- get methods ----------------------------------------------------------
-
-  /**
-   * Method description
-   *
-   *
-   * @return
-   */
-  @Override
-  public String getCharacterEncoding()
-  {
-    if (encoding == null)
-    {
-      encoding = BlogContext.getInstance().getConfiguration().getString(
-        Constants.CONFIG_ENCODING, Constants.DEFAULT_ENCODING);
-    }
-
-    return encoding;
-  }
 
   /**
    * Method description
@@ -327,22 +307,6 @@ public class BlogRequest extends HttpServletRequestWrapper
    * Method description
    *
    *
-   * @param enc
-   *
-   * @throws UnsupportedEncodingException
-   */
-  @Override
-  public void setCharacterEncoding(String enc)
-          throws UnsupportedEncodingException
-  {
-
-    // do nothing
-  }
-
-  /**
-   * Method description
-   *
-   *
    * @param mapping
    */
   public void setMapping(Mapping mapping)
@@ -378,7 +342,8 @@ public class BlogRequest extends HttpServletRequestWrapper
   private Blog blog;
 
   /** Field description */
-  private String encoding;
+
+  // private String encoding;
 
   /** Field description */
   private Mapping mapping;
