@@ -84,11 +84,12 @@ public class AbstractBean
    *
    * @param clazz
    * @param name
+   * @param <T>
    *
    * @return
    */
   @SuppressWarnings("unchecked")
-  public <T>T getBean(Class<T> clazz, String name)
+  public <T> T getBean(Class<T> clazz, String name)
   {
     T result = null;
     String el = "#{" + name + "}";

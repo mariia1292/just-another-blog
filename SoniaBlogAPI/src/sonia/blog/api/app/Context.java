@@ -19,5 +19,7 @@ import java.lang.annotation.Target;
  *
  * @author sdorra
  */
-@Documented @Target(ElementType.FIELD) @Retention(RetentionPolicy.RUNTIME)
+@Documented
+@Target(ElementType.FIELD)
+@Retention(RetentionPolicy.RUNTIME)
 public @interface Context {}

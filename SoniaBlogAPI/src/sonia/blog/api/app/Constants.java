@@ -45,13 +45,13 @@ public interface Constants
   public static final String CONFIG_DB_DRIVER = "db.driver";
 
   /** Field description */
-  public static final String CONFIG_DB_PROFILE = "db.profile";
-
-  /** Field description */
   public static final String CONFIG_DB_EMBEDDED = "db.embedded";
 
   /** Field description */
   public static final String CONFIG_DB_PASSWORD = "db.password";
+
+  /** Field description */
+  public static final String CONFIG_DB_PROFILE = "db.profile";
 
   /** Field description */
   public static final String CONFIG_DB_URL = "db.url";
@@ -300,6 +300,9 @@ public interface Constants
   public static final String SERVICE_DASHBOARDWIDGET = "/dashboard/widget";
 
   /** Field description */
+  public static final String SERVICE_DBPROFILE = "/db/profile";
+
+  /** Field description */
   public static final String SERVICE_INJECTIONPROVIDER =
     "/app/injectionProvider";
 
@@ -334,8 +337,6 @@ public interface Constants
 
   /** Field description */
   public static final String SERVICE_SSOAUTHENTICATION = "/app/sso";
-
-  public static final String SERVICE_DBPROFILE = "/db/profile";
 
   /** Field description */
   public static final String SSOLOGINMODULE_NAME = "BlogSSOLoginModule";

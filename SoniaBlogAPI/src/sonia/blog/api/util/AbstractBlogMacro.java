@@ -31,9 +31,6 @@ import javax.servlet.http.HttpServletRequest;
 public abstract class AbstractBlogMacro implements Macro
 {
 
-
-  //~--- methods --------------------------------------------------------------
-
   /**
    * Method description
    *
@@ -133,5 +130,4 @@ public abstract class AbstractBlogMacro implements Macro
   {
     return object instanceof Entry;
   }
-
 }
