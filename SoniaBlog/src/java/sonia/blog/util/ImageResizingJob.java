@@ -15,12 +15,16 @@ import sonia.blog.entity.Blog;
 import sonia.jobqueue.JobException;
 
 import sonia.util.ImageUtil;
+import sonia.util.Util;
 
 //~--- JDK imports ------------------------------------------------------------
+
+import java.awt.Dimension;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
@@ -61,8 +65,8 @@ public class ImageResizingJob implements BlogJob
     this.source = source;
     this.target = target;
     this.format = format;
-    this.width = width;
-    this.height = height;
+    this.maxWidth = width;
+    this.maxHeight = height;
   }
 
   //~--- methods --------------------------------------------------------------
@@ -82,15 +86,46 @@ public class ImageResizingJob implements BlogJob
 
       try
       {
-        if (logger.isLoggable(Level.INFO))
-        {
-          logger.info("resize image " + source.getName() + " (resolution "
-                      + width + "x" + height + ")");
-        }
+        Dimension d = ImageUtil.getDimension(new FileInputStream(source));
 
-        in = new FileInputStream(source);
-        out = new FileOutputStream(target);
-        ImageUtil.resize(in, out, format, width, height);
+        if ((d.getWidth() < maxWidth) && (d.getHeight() < maxHeight))
+        {
+          copy(source, target);
+        }
+        else
+        {
+          double width = d.getWidth();
+          double height = d.getHeight();
+          double ratio = height / width;
+
+          if ((maxWidth > 0) && (width > maxWidth))
+          {
+            width = maxWidth;
+            height = width * ratio;
+          }
+
+          ratio = width / height;
+
+          if ((maxHeight > 0) && (height > maxHeight))
+          {
+            height = maxHeight;
+            width = height * ratio;
+          }
+
+          if (logger.isLoggable(Level.INFO))
+          {
+            StringBuffer log = new StringBuffer();
+
+            log.append("resize image ").append(source.getName());
+            log.append(" (resolution ").append((int) width);
+            log.append("x").append((int) height).append(")");
+            logger.info(log.toString());
+          }
+
+          in = new FileInputStream(source);
+          out = new FileOutputStream(target);
+          ImageUtil.resize(in, out, format, (int) width, (int) height);
+        }
       }
       catch (Exception ex)
       {
@@ -153,6 +188,42 @@ public class ImageResizingJob implements BlogJob
     return "ImageResize";
   }
 
+  //~--- methods --------------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   * @param source
+   * @param target
+   *
+   * @throws IOException
+   */
+  private void copy(File source, File target) throws IOException
+  {
+    InputStream in = null;
+    OutputStream out = null;
+
+    try
+    {
+      in = new FileInputStream(source);
+      out = new FileOutputStream(target);
+      Util.copy(in, out);
+    }
+    finally
+    {
+      if (in != null)
+      {
+        in.close();
+      }
+
+      if (out != null)
+      {
+        out.close();
+      }
+    }
+  }
+
   //~--- fields ---------------------------------------------------------------
 
   /** Field description */
@@ -162,14 +233,14 @@ public class ImageResizingJob implements BlogJob
   protected String format;
 
   /** Field description */
-  protected int height;
+  protected int maxHeight;
+
+  /** Field description */
+  protected int maxWidth;
 
   /** Field description */
   protected File source;
 
   /** Field description */
   protected File target;
-
-  /** Field description */
-  protected int width;
 }

@@ -9,6 +9,7 @@ package sonia.blog.util;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import sonia.blog.api.app.BlogJob;
 import sonia.blog.entity.Blog;
 
 import sonia.jobqueue.JobException;
@@ -28,7 +29,7 @@ import java.util.logging.Logger;
  *
  * @author sdorra
  */
-public class ExternalImageResizingJob extends ImageResizingJob
+public class ExternalImageResizingJob implements BlogJob
 {
 
   /** Field description */
@@ -49,15 +50,20 @@ public class ExternalImageResizingJob extends ImageResizingJob
    * @param source
    * @param target
    * @param format
-   * @param width
-   * @param height
+   * @param maxWidth
+   * @param maxHeight
    */
   public ExternalImageResizingJob(String command, Blog blog, File source,
-                                  File target, String format, int width,
-                                  int height)
+                                  File target, String format, int maxWidth,
+                                  int maxHeight)
   {
-    super(blog, source, target, format, width, height);
     this.command = command;
+    this.blog = blog;
+    this.source = source;
+    this.target = target;
+    this.format = format;
+    this.maxWidth = maxWidth;
+    this.maxHeight = maxHeight;
   }
 
   //~--- methods --------------------------------------------------------------
@@ -72,8 +78,8 @@ public class ExternalImageResizingJob extends ImageResizingJob
   public void excecute() throws JobException
   {
     String cmd = MessageFormat.format(command, source.getAbsolutePath(),
-                                      target.getAbsolutePath(), format, width,
-                                      height);
+                                      target.getAbsolutePath(), format,
+                                      maxWidth, maxHeight);
 
     try
     {
@@ -97,8 +103,61 @@ public class ExternalImageResizingJob extends ImageResizingJob
     }
   }
 
+  //~--- get methods ----------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  public Blog getBlog()
+  {
+    return blog;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  public String getDescription()
+  {
+    return "external image resizing";
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  public String getName()
+  {
+    return "ExternalImageResize";
+  }
+
   //~--- fields ---------------------------------------------------------------
 
   /** Field description */
+  private Blog blog;
+
+  /** Field description */
   private String command;
+
+  /** Field description */
+  private String format;
+
+  /** Field description */
+  private int maxHeight;
+
+  /** Field description */
+  private int maxWidth;
+
+  /** Field description */
+  private File source;
+
+  /** Field description */
+  private File target;
 }

@@ -24,16 +24,12 @@ import sonia.blog.util.ImageResizingJob;
 
 import sonia.config.Config;
 
-import sonia.util.ImageUtil;
 import sonia.util.Util;
 
 //~--- JDK imports ------------------------------------------------------------
 
-import java.awt.Dimension;
-
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -122,40 +118,6 @@ public class AttachmentMapping extends FinalMapping
    * Method description
    *
    *
-   * @param source
-   * @param target
-   *
-   * @throws IOException
-   */
-  private void copy(File source, File target) throws IOException
-  {
-    InputStream in = null;
-    OutputStream out = null;
-
-    try
-    {
-      in = new FileInputStream(source);
-      out = new FileOutputStream(target);
-      Util.copy(in, out);
-    }
-    finally
-    {
-      if (in != null)
-      {
-        in.close();
-      }
-
-      if (out != null)
-      {
-        out.close();
-      }
-    }
-  }
-
-  /**
-   * Method description
-   *
-   *
    *
    *
    * @param blog
@@ -167,71 +129,27 @@ public class AttachmentMapping extends FinalMapping
   private void createImage(Blog blog, File source, File target, int maxWidth,
                            int maxHeight)
   {
+    BlogJob job = null;
+
     if ("internal".equalsIgnoreCase(resizeMethod))
     {
-      try
-      {
-        Dimension d = ImageUtil.getDimension(new FileInputStream(source));
-
-        if ((d.getWidth() < maxWidth) && (d.getHeight() < maxHeight))
-        {
-          copy(source, target);
-        }
-        else
-        {
-          double width = d.getWidth();
-          double height = d.getHeight();
-          double ratio = height / width;
-
-          if ((maxWidth > 0) && (width > maxWidth))
-          {
-            width = maxWidth;
-            height = width * ratio;
-          }
-
-          ratio = width / height;
-
-          if ((maxHeight > 0) && (height > maxHeight))
-          {
-            height = maxHeight;
-            width = height * ratio;
-          }
-
-          resizeImage(blog, source, target, (int) width, (int) height);
-        }
-      }
-      catch (Exception ex)
-      {
-        throw new RuntimeException(ex);
-      }
+      job = new ImageResizingJob(blog, source, target, format, maxWidth,
+                                 maxHeight);
     }
     else if ("external".equalsIgnoreCase(resizeMethod))
     {
-      externalResizeImage(blog, source, target, maxWidth, maxHeight);
+      job = new ExternalImageResizingJob(resizeCommand, blog, source, target,
+                                         format, maxWidth, maxHeight);
     }
     else
     {
       throw new IllegalStateException(resizeMethod + " is not supported");
     }
-  }
 
-  /**
-   * Method description
-   *
-   *
-   * @param blog
-   * @param source
-   * @param target
-   * @param maxWidth
-   * @param maxHeight
-   */
-  private void externalResizeImage(Blog blog, File source, File target,
-                                   int maxWidth, int maxHeight)
-  {
-    BlogJob job = new ExternalImageResizingJob(resizeCommand, blog, source,
-                    target, format, maxWidth, maxHeight);
-
-    BlogContext.getInstance().getJobQueue().processs(job);
+    if (job != null)
+    {
+      BlogContext.getInstance().getJobQueue().processs(job);
+    }
   }
 
   /**
@@ -378,29 +296,6 @@ public class AttachmentMapping extends FinalMapping
     }
 
     printFile(response, name, mimeType, image);
-  }
-
-  /**
-   * Method description
-   *
-   *
-   *
-   * @param blog
-   * @param source
-   * @param target
-   * @param width
-   * @param height
-   *
-   * @throws IOException
-   */
-  private void resizeImage(Blog blog, File source, File target, int width,
-                           int height)
-          throws IOException
-  {
-    BlogJob job = new ImageResizingJob(blog, source, target, format, width,
-                                       height);
-
-    BlogContext.getInstance().getJobQueue().processs(job);
   }
 
   //~--- get methods ----------------------------------------------------------
