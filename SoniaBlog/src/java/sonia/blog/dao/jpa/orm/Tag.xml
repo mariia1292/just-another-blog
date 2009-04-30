@@ -9,6 +9,7 @@
   </persistence-unit-metadata>
   <package>sonia.blog.entity</package>
   <entity metadata-complete="true" name="Tag" class="sonia.blog.entity.Tag">
+    <table name="JAB_TAG" />
     <named-query name="Tag.findAll">
       <query>
         select t from Tag t

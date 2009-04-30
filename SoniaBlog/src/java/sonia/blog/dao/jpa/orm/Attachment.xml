@@ -9,6 +9,7 @@
   </persistence-unit-metadata>
   <package>sonia.blog.entity</package>
   <entity metadata-complete="true" name="Attachment" class="sonia.blog.entity.Attachment">
+    <table name="JAB_ATTACHMENT" />
     <named-query name="Attachment.findAllByEntry">
       <query>
         select a from Attachment a join a.entry e where e = :entry order by a.creationDate desc

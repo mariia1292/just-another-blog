@@ -9,6 +9,7 @@
   </persistence-unit-metadata>
   <package>sonia.blog.entity</package>
   <entity metadata-complete="true" name="Page" class="sonia.blog.entity.Page">
+    <table name="JAB_PAGE" />
     <named-query name="Page.count">
       <query>
         select count(p) from Page p

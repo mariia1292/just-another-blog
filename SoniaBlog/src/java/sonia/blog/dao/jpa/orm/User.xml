@@ -9,7 +9,7 @@
   </persistence-unit-metadata>
   <package>sonia.blog.entity</package>
   <entity metadata-complete="true" name="User" class="sonia.blog.entity.User">
-    <table name="BlogUser" />
+    <table name="JAB_USER" />
     <named-query name="User.count">
       <query>
         select count(u) from User u

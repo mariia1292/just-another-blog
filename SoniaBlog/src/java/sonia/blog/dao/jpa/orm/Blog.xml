@@ -9,6 +9,7 @@
   </persistence-unit-metadata>
   <package>sonia.blog.entity</package>
   <entity metadata-complete="true" name="Blog" class="sonia.blog.entity.Blog">
+    <table name="JAB_BLOG" />
     <named-query name="Blog.getByIdentifier">
       <query>
         select b from Blog as b where b.identifier = :identifier

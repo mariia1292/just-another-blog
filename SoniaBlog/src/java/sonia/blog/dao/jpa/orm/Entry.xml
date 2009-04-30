@@ -9,6 +9,7 @@
   </persistence-unit-metadata>
   <package>sonia.blog.entity</package>
   <entity metadata-complete="true" name="Entry" class="sonia.blog.entity.Entry">
+    <table name="JAB_ENTRY" />
     <named-query name="Entry.findAll">
       <query>
         select e from Entry e
@@ -320,7 +321,7 @@
         <column nullable="false" />
       </basic>
       <basic name="teaser">
-        <column length="5000" />
+        <column length="4000" />
       </basic>
       <basic name="content">
         <lob />

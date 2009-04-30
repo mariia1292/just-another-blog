@@ -9,6 +9,7 @@
   </persistence-unit-metadata>
   <package>sonia.blog.entity</package>
   <entity metadata-complete="true" name="Comment" class="sonia.blog.entity.Comment">
+    <table name="JAB_COMMENT" />
     <named-query name="Comment.findAll">
       <query>
         select c from Comment c
