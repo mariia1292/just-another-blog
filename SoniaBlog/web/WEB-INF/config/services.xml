@@ -106,6 +106,7 @@
     <impl class="sonia.blog.dao.jpa.profile.DerbyProfile" />
     <impl class="sonia.blog.dao.jpa.profile.MySQLProfile" />
     <impl class="sonia.blog.dao.jpa.profile.OracleProfile" />
+    <impl class="sonia.blog.dao.jpa.profile.PostgreSQLProfile" />
   </service>
 
 </services>
