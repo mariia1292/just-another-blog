@@ -142,36 +142,29 @@ public class AdminUserBean extends AbstractBean
     {
       if (checkName())
       {
-        if (passwordRetry.equals(user.getPassword()))
+        if (user.getId() == null)
         {
-          if (user.getId() == null)
+          if (userDAO.add(user))
           {
-            if (userDAO.add(user))
-            {
-              getMessageHandler().info("userSettingsUpdateSuccess");
-              result = SUCCESS;
-            }
-            else
-            {
-              getMessageHandler().error("unknownError");
-            }
+            getMessageHandler().info("userSettingsUpdateSuccess");
+            result = SUCCESS;
           }
           else
           {
-            if (userDAO.edit(user))
-            {
-              getMessageHandler().info("userSettingsUpdateSuccess");
-              result = SUCCESS;
-            }
-            else
-            {
-              getMessageHandler().error("unknownError");
-            }
+            getMessageHandler().error("unknownError");
           }
         }
         else
         {
-          getMessageHandler().warn("passwordsNotEqual");
+          if (userDAO.edit(user))
+          {
+            getMessageHandler().info("userSettingsUpdateSuccess");
+            result = SUCCESS;
+          }
+          else
+          {
+            getMessageHandler().error("unknownError");
+          }
         }
       }
       else
@@ -195,27 +188,19 @@ public class AdminUserBean extends AbstractBean
    *
    * @return
    */
-  public String savePassword()
+  public String saveWithPassword()
   {
     String result = SUCCESS;
 
-    if (passwordRetry.equals(user.getPassword()))
+    if (encReference != null)
     {
-      if (encReference != null)
-      {
-        Encryption enc = encReference.get();
+      Encryption enc = encReference.get();
 
-        if (enc != null)
-        {
-          user.setPassword(enc.encrypt(passwordRetry));
-          result = save();
-        }
+      if (enc != null)
+      {
+        user.setPassword(enc.encrypt(passwordRetry));
+        result = save();
       }
-    }
-    else
-    {
-      getMessageHandler().warn("passwordsNotEqual");
-      result = FAILURE;
     }
 
     return result;
