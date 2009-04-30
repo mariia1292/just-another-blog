@@ -105,6 +105,7 @@
   <service class="sonia.blog.dao.jpa.profile.DatabaseProfile" path="/db/profile">
     <impl class="sonia.blog.dao.jpa.profile.DerbyProfile" />
     <impl class="sonia.blog.dao.jpa.profile.MySQLProfile" />
+    <impl class="sonia.blog.dao.jpa.profile.OracleProfile" />
   </service>
 
 </services>

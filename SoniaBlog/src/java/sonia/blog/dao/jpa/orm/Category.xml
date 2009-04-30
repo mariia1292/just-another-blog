@@ -9,12 +9,7 @@
   </persistence-unit-metadata>
   <package>sonia.blog.entity</package>
   <entity metadata-complete="true" name="Category" class="sonia.blog.entity.Category">
-    <table>
-      <unique-constraint>
-        <column-name>NAME</column-name>
-        <column-name>BLOG</column-name>
-      </unique-constraint>
-    </table>
+    <table name="JAB_CATEGORY" />
     <named-query name="Category.findAll">
       <query>
         select c from Category c
