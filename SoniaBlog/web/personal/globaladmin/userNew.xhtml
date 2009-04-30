@@ -21,7 +21,7 @@
 
         <h2><h:outputText value="#{label.properties}" /></h2>
 
-        <h:form>
+        <h:form id="user">
 
           <h:panelGrid columns="3">
 
@@ -52,12 +52,15 @@
             <h:message for="password" />
 
             <h:outputLabel for="passwordRetry" value="#{label.passwordRepeat}" />
-            <h:inputSecret id="passwordRetry" value="#{AdminUserBean.passwordRetry}" required="true" />
+            <h:inputSecret id="passwordRetry" value="#{AdminUserBean.passwordRetry}" required="true">
+              <f:validator validatorId="validator.equals" />
+              <f:attribute name="equalsId" value="user:password" />
+            </h:inputSecret>
             <h:message for="passwordRetry" />
 
           </h:panelGrid>
 
-          <h:commandButton value="#{label.save}" action="#{AdminUserBean.save}" />
+          <h:commandButton value="#{label.save}" action="#{AdminUserBean.saveWithPassword}" />
 
         </h:form>
 
