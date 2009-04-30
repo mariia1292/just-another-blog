@@ -227,17 +227,14 @@ public class AdminUserBean extends AbstractBean
    */
   public DataModel getMembers()
   {
-    if (members == null)
+    members = new ListDataModel();
+
+    // TODO scrolling
+    List<BlogMember> memberList = userDAO.getMembers(user, 0, 1000);
+
+    if ((memberList != null) &&!memberList.isEmpty())
     {
-      members = new ListDataModel();
-
-      // TODO scrolling
-      List<BlogMember> memberList = userDAO.getMembers(user, 0, 1000);
-
-      if ((memberList != null) &&!memberList.isEmpty())
-      {
-        members.setWrappedData(memberList);
-      }
+      members.setWrappedData(memberList);
     }
 
     return members;
