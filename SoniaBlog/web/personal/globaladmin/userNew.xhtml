@@ -53,8 +53,8 @@
 
             <h:outputLabel for="passwordRetry" value="#{label.passwordRepeat}" />
             <h:inputSecret id="passwordRetry" value="#{AdminUserBean.passwordRetry}" required="true">
-              <f:validator validatorId="validator.equals" />
-              <f:attribute name="equalsId" value="user:password" />
+              <f:validator validatorId="validator.password" />
+              <f:attribute name="passwordId" value="user:password" />
             </h:inputSecret>
             <h:message for="passwordRetry" />
 

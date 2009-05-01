@@ -254,7 +254,7 @@ public interface Constants
   public static final String RESOURCE_PLUGINSTORE = "plugins";
 
   /** Field description */
-  public static String RESOURCE_TEMP = "temp";
+  public static final String RESOURCE_TEMP = "temp";
 
   /*
    * Config Parameters

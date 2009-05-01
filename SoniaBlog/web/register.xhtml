@@ -40,7 +40,10 @@
             <h:message for="password" />
 
             <h:outputLabel for="passwordRepeat" value="#{label.passwordRepeat}" />
-            <h:inputSecret id="passwordRepeat" value="#{RegistrationBean.passwordRepeat}" required="true" />
+            <h:inputSecret id="passwordRepeat" value="#{RegistrationBean.passwordRepeat}" required="true">
+              <f:validator validatorId="validator.password" />
+              <f:attribute name="passwordId" value="regform:password" />
+            </h:inputSecret>
             <h:message for="passwordRepeat" />
 
           </h:panelGrid>
