@@ -26,7 +26,7 @@ import javax.faces.validator.ValidatorException;
  *
  * @author sdorra
  */
-public class EqualsValidator implements Validator
+public class PasswordValidator implements Validator
 {
 
   /**
@@ -43,33 +43,29 @@ public class EqualsValidator implements Validator
                        Object value)
           throws ValidatorException
   {
-    String equalsId = (String) component.getAttributes().get("equalsId");
+    String passwordId = (String) component.getAttributes().get("passwordId");
     ResourceBundle msgs = context.getApplication().getResourceBundle(context,
                             "message");
 
-    if (Util.hasContent(equalsId))
+    if (Util.hasContent(passwordId))
     {
-      UIInput input = (UIInput) context.getViewRoot().findComponent(equalsId);
+      UIInput input = (UIInput) context.getViewRoot().findComponent(passwordId);
 
       if (input != null)
       {
         Object oValue = input.getValue();
 
-        System.out.println( input.getClientId(context) );
-
-        System.out.println( value != null ? value.toString() : "null" );
-        System.out.println( oValue != null ? oValue.toString() : "null" );
-
         if ((oValue == null) ||!value.equals(oValue))
         {
-          FacesMessage msg = new FacesMessage(msgs.getString("notEquals"));
+          FacesMessage msg =
+            new FacesMessage(msgs.getString("passwordsNotEqual"));
 
           throw new ValidatorException(msg);
         }
       }
       else
       {
-        FacesMessage msg = new FacesMessage(equalsId + " not found");
+        FacesMessage msg = new FacesMessage(passwordId + " not found");
 
         throw new ValidatorException(msg);
       }

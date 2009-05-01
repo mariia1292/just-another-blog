@@ -42,8 +42,8 @@
   </validator>
 
   <validator>
-    <validator-id>validator.equals</validator-id>
-    <validator-class>sonia.blog.api.jsf.validator.EqualsValidator</validator-class>
+    <validator-id>validator.password</validator-id>
+    <validator-class>sonia.blog.api.jsf.validator.PasswordValidator</validator-class>
   </validator>
 
   <lifecycle>
