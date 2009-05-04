@@ -133,10 +133,11 @@ public class ServiceRegistry
    *
    * @param clazz
    * @param path
+   * @param <T>
    *
    * @return
    */
-  public <T>ServiceReference<T> register(Class<T> clazz, String path)
+  public <T> ServiceReference<T> register(Class<T> clazz, String path)
   {
     return register(clazz, path, true);
   }
@@ -183,11 +184,12 @@ public class ServiceRegistry
    *
    * @param clazz
    * @param path
+   * @param <T>
    *
    * @return
    */
   @SuppressWarnings("unchecked")
-  public <T>ServiceReference<T> get(Class<T> clazz, String path)
+  public <T> ServiceReference<T> get(Class<T> clazz, String path)
   {
     ServiceReference<T> reference = services.get(new ServiceKey(clazz, path));
 
@@ -281,10 +283,11 @@ public class ServiceRegistry
    * @param clazz
    * @param path
    * @param check
+   * @param <T>
    *
    * @return
    */
-  private <T>ServiceReference<T> register(Class<T> clazz, String path,
+  private <T> ServiceReference<T> register(Class<T> clazz, String path,
           boolean check)
   {
     ServiceKey key = new ServiceKey(clazz, path);

@@ -3,7 +3,11 @@
  * and open the template in the editor.
  */
 
+
+
 package sonia.util;
+
+//~--- JDK imports ------------------------------------------------------------
 
 import java.util.TimerTask;
 
@@ -14,19 +18,31 @@ import java.util.TimerTask;
 public class ProcessInterruptScheduler extends TimerTask
 {
 
-  private Process p;
-
-  public ProcessInterruptScheduler( Process p )
+  /**
+   * Constructs ...
+   *
+   *
+   * @param p
+   */
+  public ProcessInterruptScheduler(Process p)
   {
     this.p = p;
   }
 
+  //~--- methods --------------------------------------------------------------
 
-
+  /**
+   * Method description
+   *
+   */
   @Override
   public void run()
   {
     p.destroy();
   }
 
+  //~--- fields ---------------------------------------------------------------
+
+  /** Field description */
+  private Process p;
 }

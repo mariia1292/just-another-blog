@@ -56,7 +56,7 @@ public class SessionInformation implements SessionInformationMBean
    */
   public synchronized void removeSession()
   {
-    if ( openSessions > 0 )
+    if (openSessions > 0)
     {
       this.openSessions--;
     }

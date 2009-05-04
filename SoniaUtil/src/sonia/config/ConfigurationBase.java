@@ -282,10 +282,11 @@ public abstract class ConfigurationBase implements Configuration
    * @param clazz
    * @param key
    * @param def
+   * @param <T>
    *
    * @return
    */
-  public <T>T getObject(Class<T> clazz, String key, T def)
+  public <T> T getObject(Class<T> clazz, String key, T def)
   {
     T result = getObject(clazz, key);
 
@@ -325,10 +326,11 @@ public abstract class ConfigurationBase implements Configuration
    * @param clazz
    * @param key
    * @param def
+   * @param <T>
    *
    * @return
    */
-  public <T>T[] getObjects(Class<T> clazz, String key, T[] def)
+  public <T> T[] getObjects(Class<T> clazz, String key, T[] def)
   {
     T[] result = getObjects(clazz, key);
 

@@ -68,12 +68,21 @@ public class ExecUtil
     return p.waitFor();
   }
 
-    public static int process(String cmd)
-          throws IOException, InterruptedException
+  /**
+   * Method description
+   *
+   *
+   * @param cmd
+   *
+   * @return
+   *
+   * @throws IOException
+   * @throws InterruptedException
+   */
+  public static int process(String cmd) throws IOException, InterruptedException
   {
     return process(cmd, null);
   }
-
 
   /**
    * Method description
