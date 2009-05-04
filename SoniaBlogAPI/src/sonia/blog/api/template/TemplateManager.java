@@ -82,7 +82,7 @@ public class TemplateManager
   public Template getTemplate(Blog blog, String path)
   {
     Template template = null;
-    TemplateKey key = new TemplateKey(blog.getId(), path);
+    TemplateKey key = new TemplateKey(blog.getIdentifier(), path);
 
     if (templates.containsKey(key))
     {
@@ -126,24 +126,21 @@ public class TemplateManager
 
     if (customTemplateDirectory.exists())
     {
-      File f = new File(customTemplateDirectory, "all");
+      File f = new File(customTemplateDirectory, "__all");
 
       if (f.exists())
       {
-        addDirectory(templateList, f, blog, "/custom-template/all");
+        addDirectory(templateList, f, blog, "/custom-template/__all");
       }
 
-      String id = blog.getId().toString();
-
-      f = new File(customTemplateDirectory, id);
+      f = new File(customTemplateDirectory, blog.getIdentifier());
 
       if (f.exists())
       {
         StringBuffer path = new StringBuffer();
 
-        path.append("/custom-template/").append(id);
-        addDirectory(templateList, new File(customTemplateDirectory, id), blog,
-                     path.toString());
+        path.append("/custom-template/").append(blog.getIdentifier());
+        addDirectory(templateList, f, blog, path.toString());
       }
     }
 
@@ -171,7 +168,8 @@ public class TemplateManager
 
       pathBuffer.append(prefix).append("/").append(f.getName());
 
-      TemplateKey key = new TemplateKey(blog.getId(), pathBuffer.toString());
+      TemplateKey key = new TemplateKey(blog.getIdentifier(),
+                                        pathBuffer.toString());
 
       if (templates.containsKey(key))
       {
@@ -251,12 +249,13 @@ public class TemplateManager
      * Constructs ...
      *
      *
-     * @param blogId
+     *
+     * @param blogIdentifier
      * @param name
      */
-    public TemplateKey(Long blogId, String name)
+    public TemplateKey(String blogIdentifier, String name)
     {
-      this.blogId = blogId;
+      this.blogIdentifier = blogIdentifier;
       this.path = name;
     }
 
@@ -285,8 +284,9 @@ public class TemplateManager
 
       final TemplateKey other = (TemplateKey) obj;
 
-      if ((this.blogId != other.blogId)
-          && ((this.blogId == null) ||!this.blogId.equals(other.blogId)))
+      if ((this.blogIdentifier == null)
+          ? (other.blogIdentifier != null)
+          : !this.blogIdentifier.equals(other.blogIdentifier))
       {
         return false;
       }
@@ -310,12 +310,12 @@ public class TemplateManager
     @Override
     public int hashCode()
     {
-      int hash = 7;
+      int hash = 5;
 
-      hash = 73 * hash + ((this.blogId != null)
-                          ? this.blogId.hashCode()
+      hash = 79 * hash + ((this.blogIdentifier != null)
+                          ? this.blogIdentifier.hashCode()
                           : 0);
-      hash = 73 * hash + ((this.path != null)
+      hash = 79 * hash + ((this.path != null)
                           ? this.path.hashCode()
                           : 0);
 
@@ -330,9 +330,9 @@ public class TemplateManager
      *
      * @return
      */
-    public Long getBlogId()
+    public String getBlogIdentifier()
     {
-      return blogId;
+      return blogIdentifier;
     }
 
     /**
@@ -349,7 +349,7 @@ public class TemplateManager
     //~--- fields -------------------------------------------------------------
 
     /** Field description */
-    private Long blogId;
+    private String blogIdentifier;
 
     /** Field description */
     private String path;
