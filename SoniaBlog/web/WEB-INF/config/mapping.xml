@@ -80,4 +80,9 @@
     <class>sonia.blog.mapping.PageMapping</class>
   </mapping>
 
+  <mapping>
+    <regex>^/custom-template/(.*)$</regex>
+    <class>sonia.blog.mapping.CustomTemplateMapping</class>
+  </mapping>
+
 </mappings>

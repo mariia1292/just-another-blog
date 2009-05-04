@@ -19,8 +19,6 @@ import sonia.blog.api.app.Constants;
 import sonia.blog.api.app.Context;
 import sonia.blog.api.dao.CategoryDAO;
 import sonia.blog.api.dao.CommentDAO;
-import sonia.blog.api.dao.Dao;
-import sonia.blog.api.dao.PageDAO;
 import sonia.blog.api.dao.TagDAO;
 import sonia.blog.api.link.LinkBuilder;
 import sonia.blog.api.mapping.Mapping;

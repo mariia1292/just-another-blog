@@ -10,6 +10,8 @@ package sonia.blog.api.template;
 //~--- non-JDK imports --------------------------------------------------------
 
 import sonia.blog.api.app.BlogContext;
+import sonia.blog.api.app.Constants;
+import sonia.blog.api.app.ResourceManager;
 import sonia.blog.entity.Blog;
 
 //~--- JDK imports ------------------------------------------------------------
@@ -46,10 +48,16 @@ public class TemplateManager
    */
   public TemplateManager()
   {
-    templateDirectory = new File(
-        BlogContext.getInstance().getServletContext().getRealPath(
-          "/template/"));
-    templates = new HashMap<String, Template>();
+    BlogContext ctx = BlogContext.getInstance();
+
+    templates = new HashMap<TemplateKey, Template>();
+    templateDirectory =
+      new File(ctx.getServletContext().getRealPath("/template/"));
+
+    ResourceManager resManager = ctx.getResourceManager();
+
+    customTemplateDirectory =
+      resManager.getDirectory(Constants.RESOURCE_TEMPLATE);
     directoryFilter = new FileFilter()
     {
       public boolean accept(File file)
@@ -65,22 +73,25 @@ public class TemplateManager
    * Method description
    *
    *
-   * @param name
+   *
+   * @param blog
+   * @param path
    *
    * @return
    */
-  public Template getTemplate(String name)
+  public Template getTemplate(Blog blog, String path)
   {
-    Template template = templates.get(name);
+    Template template = null;
+    TemplateKey key = new TemplateKey(blog.getId(), path);
 
-    if (template == null)
+    if (templates.containsKey(key))
     {
-      template = buildTemplate(new File(templateDirectory, name));
-
-      if (template != null)
-      {
-        templates.put(name, template);
-      }
+      template = templates.get(key);
+    }
+    else
+    {
+      getTemplates(blog);
+      template = templates.get(key);
     }
 
     return template;
@@ -96,30 +107,47 @@ public class TemplateManager
    */
   public Template getTemplate(Blog blog)
   {
-    return getTemplate(blog.getTemplate());
+    return getTemplate(blog, blog.getTemplate());
   }
 
   /**
    * Method description
    *
    *
+   *
+   * @param blog
    * @return
    */
-  public List<Template> getTemplates()
+  public List<Template> getTemplates(Blog blog)
   {
-    for (File f : templateDirectory.listFiles(directoryFilter))
+    List<Template> templateList = new ArrayList<Template>();
+
+    addDirectory(templateList, templateDirectory, blog, "/template");
+
+    if (customTemplateDirectory.exists())
     {
-      String id = f.getName();
+      File f = new File(customTemplateDirectory, "all");
 
-      if (!templates.containsKey(id))
+      if (f.exists())
       {
-        Template template = buildTemplate(f);
+        addDirectory(templateList, f, blog, "/custom-template/all");
+      }
 
-        templates.put(id, template);
+      String id = blog.getId().toString();
+
+      f = new File(customTemplateDirectory, id);
+
+      if (f.exists())
+      {
+        StringBuffer path = new StringBuffer();
+
+        path.append("/custom-template/").append(id);
+        addDirectory(templateList, new File(customTemplateDirectory, id), blog,
+                     path.toString());
       }
     }
 
-    return new ArrayList<Template>(templates.values());
+    return templateList;
   }
 
   //~--- methods --------------------------------------------------------------
@@ -128,11 +156,50 @@ public class TemplateManager
    * Method description
    *
    *
+   *
+   * @param templateList
+   * @param directory
+   * @param blog
+   * @param prefix
+   */
+  private void addDirectory(List<Template> templateList, File directory,
+                            Blog blog, String prefix)
+  {
+    for (File f : directory.listFiles(directoryFilter))
+    {
+      StringBuffer pathBuffer = new StringBuffer();
+
+      pathBuffer.append(prefix).append("/").append(f.getName());
+
+      TemplateKey key = new TemplateKey(blog.getId(), pathBuffer.toString());
+
+      if (templates.containsKey(key))
+      {
+        templateList.add(templates.get(key));
+      }
+      else
+      {
+        Template template = buildTemplate(f, pathBuffer.toString());
+
+        if (template != null)
+        {
+          templates.put(key, template);
+          templateList.add(template);
+        }
+      }
+    }
+  }
+
+  /**
+   * Method description
+   *
+   *
    * @param file
+   * @param path
    *
    * @return
    */
-  private Template buildTemplate(File file)
+  private Template buildTemplate(File file, String path)
   {
     Template template = null;
 
@@ -145,7 +212,7 @@ public class TemplateManager
         try
         {
           template = new Template();
-          template.setPath(file.getName());
+          template.setPath(path);
 
           Properties information = new Properties();
 
@@ -168,7 +235,131 @@ public class TemplateManager
     return template;
   }
 
+  //~--- inner classes --------------------------------------------------------
+
+  /**
+   * Class description
+   *
+   *
+   * @version        Enter version here..., 09/05/04
+   * @author         Enter your name here...
+   */
+  private static class TemplateKey
+  {
+
+    /**
+     * Constructs ...
+     *
+     *
+     * @param blogId
+     * @param name
+     */
+    public TemplateKey(Long blogId, String name)
+    {
+      this.blogId = blogId;
+      this.path = name;
+    }
+
+    //~--- methods ------------------------------------------------------------
+
+    /**
+     * Method description
+     *
+     *
+     * @param obj
+     *
+     * @return
+     */
+    @Override
+    public boolean equals(Object obj)
+    {
+      if (obj == null)
+      {
+        return false;
+      }
+
+      if (getClass() != obj.getClass())
+      {
+        return false;
+      }
+
+      final TemplateKey other = (TemplateKey) obj;
+
+      if ((this.blogId != other.blogId)
+          && ((this.blogId == null) ||!this.blogId.equals(other.blogId)))
+      {
+        return false;
+      }
+
+      if ((this.path == null)
+          ? (other.path != null)
+          : !this.path.equals(other.path))
+      {
+        return false;
+      }
+
+      return true;
+    }
+
+    /**
+     * Method description
+     *
+     *
+     * @return
+     */
+    @Override
+    public int hashCode()
+    {
+      int hash = 7;
+
+      hash = 73 * hash + ((this.blogId != null)
+                          ? this.blogId.hashCode()
+                          : 0);
+      hash = 73 * hash + ((this.path != null)
+                          ? this.path.hashCode()
+                          : 0);
+
+      return hash;
+    }
+
+    //~--- get methods --------------------------------------------------------
+
+    /**
+     * Method description
+     *
+     *
+     * @return
+     */
+    public Long getBlogId()
+    {
+      return blogId;
+    }
+
+    /**
+     * Method description
+     *
+     *
+     * @return
+     */
+    public String getPath()
+    {
+      return path;
+    }
+
+    //~--- fields -------------------------------------------------------------
+
+    /** Field description */
+    private Long blogId;
+
+    /** Field description */
+    private String path;
+  }
+
+
   //~--- fields ---------------------------------------------------------------
+
+  /** Field description */
+  private File customTemplateDirectory;
 
   /** Field description */
   private FileFilter directoryFilter;
@@ -177,5 +368,5 @@ public class TemplateManager
   private File templateDirectory;
 
   /** Field description */
-  private Map<String, Template> templates;
+  private Map<TemplateKey, Template> templates;
 }

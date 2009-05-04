@@ -545,9 +545,10 @@ public class AdminBlogBean extends AbstractBean
    */
   public SelectItem[] getTemplateItems()
   {
+    Blog blog = getRequest().getCurrentBlog();
     SelectItem[] items = null;
     List<Template> templates =
-      BlogContext.getInstance().getTemplateManager().getTemplates();
+      BlogContext.getInstance().getTemplateManager().getTemplates(blog);
     int size = templates.size();
 
     items = new SelectItem[size];

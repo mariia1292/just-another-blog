@@ -113,6 +113,10 @@ public abstract class FilterMapping implements Mapping
    */
   protected String buildTemplateViewId(Blog blog, String viewIdSuffix)
   {
-    return "/template/" + blog.getTemplate() + "/" + viewIdSuffix;
+    StringBuffer templateBuffer = new StringBuffer();
+
+    templateBuffer.append(blog.getTemplate()).append("/").append(viewIdSuffix);
+
+    return templateBuffer.toString();
   }
 }

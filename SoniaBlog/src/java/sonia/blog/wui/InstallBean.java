@@ -111,7 +111,7 @@ public class InstallBean extends AbstractBean
     blog.setAllowComments(true);
     blog.setActive(true);
     blog.setIdentifier(getRequest().getServerName());
-    blog.setTemplate("jab");
+    blog.setTemplate("/template/jab");
   }
 
   /**
