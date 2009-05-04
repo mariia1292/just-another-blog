@@ -57,25 +57,44 @@ public class MailValidator implements Validator
                        Object value)
           throws ValidatorException
   {
-    if (value != null)
+    ResourceBundle bundle = context.getApplication().getResourceBundle(context,
+                              "message");
+
+    if ((value != null) && (value instanceof String)
+        && ((String) value).length() > 0)
     {
-      String text = value.toString();
+      String text = (String) value;
 
-      if ((text != null) && (text.length() > 0))
-      {
-        Matcher m = p.matcher(text);
+      validate(context, bundle, text);
+    }
+    else
+    {
+      FacesMessage msg = new FacesMessage(bundle.getString("emailNotValid"));
 
-        if (!m.matches())
-        {
-          ResourceBundle bundle =
-            context.getApplication().getResourceBundle(context, "message");
-          String msgValue = bundle.getString("malformedMail");
-          FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR,
-                               msgValue, msgValue);
+      throw new ValidatorException(msg);
+    }
+  }
 
-          throw new ValidatorException(msg);
-        }
-      }
+  /**
+   * Method description
+   *
+   *
+   * @param context
+   * @param bundle
+   * @param mail
+   */
+  protected void validate(FacesContext context, ResourceBundle bundle,
+                          String mail)
+  {
+    Matcher m = p.matcher(mail);
+
+    if (!m.matches())
+    {
+      String msgValue = bundle.getString("malformedMail");
+      FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                           msgValue, msgValue);
+
+      throw new ValidatorException(msg);
     }
   }
 

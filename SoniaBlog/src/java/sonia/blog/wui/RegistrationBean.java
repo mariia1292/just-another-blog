@@ -9,23 +9,23 @@ package sonia.blog.wui;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.app.BlogRequest;
 import sonia.blog.api.app.Constants;
+import sonia.blog.api.app.Context;
+import sonia.blog.api.dao.Dao;
 import sonia.blog.api.dao.UserDAO;
+import sonia.blog.api.link.LinkBuilder;
 import sonia.blog.api.util.AbstractBean;
 import sonia.blog.entity.Blog;
 import sonia.blog.entity.Role;
 import sonia.blog.entity.User;
 import sonia.blog.util.BlogUtil;
 
-import sonia.config.Configuration;
+import sonia.config.Config;
 
-import sonia.plugin.service.ServiceReference;
+import sonia.plugin.service.Service;
 
 import sonia.security.encryption.Encryption;
-
-import sonia.util.Util;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -53,50 +53,11 @@ public class RegistrationBean extends AbstractBean
    */
   public RegistrationBean()
   {
-    super();
+    init();
     this.user = new User();
-    sendAcknowledgeMail =
-      BlogContext.getInstance().getConfiguration().getBoolean(
-        Constants.CONFIG_REGISTERACKNOWLEDGEMENT, false);
   }
 
   //~--- methods --------------------------------------------------------------
-
-  /**
-   * Method description
-   *
-   *
-   * @param userDAO
-   *
-   * @return
-   */
-  public String checkNameAndEmail(UserDAO userDAO)
-  {
-    String result = SUCCESS;
-    User u = null;
-
-    u = userDAO.get(user.getName());
-
-    if (u != null)
-    {
-      getMessageHandler().error("regform:username", "nameAllreadyExists", null,
-                                user.getName());
-      result = FAILURE;
-    }
-    else
-    {
-      u = userDAO.getByMail(user.getEmail());
-
-      if (u != null)
-      {
-        getMessageHandler().error("regform:email", "emailAllreadyExists", null,
-                                  user.getEmail());
-        result = FAILURE;
-      }
-    }
-
-    return result;
-  }
 
   /**
    * Method description
@@ -108,33 +69,17 @@ public class RegistrationBean extends AbstractBean
   {
     String result = SUCCESS;
 
-    if (isPermitted())
+    if (registrationEnabled)
     {
-      if (user.getPassword().equals(passwordRepeat))
+      user.setPassword(encryptPassword(passwordRepeat));
+      result = createUser();
+
+      if (sendAcknowledgeMail)
       {
-        user.setPassword(encryptPassword(passwordRepeat));
-
-        UserDAO userDAO = BlogContext.getDAOFactory().getUserDAO();
-
-        result = checkNameAndEmail(userDAO);
-
-        if (result.equals(SUCCESS))
-        {
-          result = createUser(userDAO);
-
-          if (sendAcknowledgeMail)
-          {
-            sendMail();
-          }
-        }
-
-        redirect();
+        sendMail();
       }
-      else
-      {
-        getMessageHandler().error("passwordsNotEqual");
-        result = FAILURE;
-      }
+
+      redirect();
     }
     else
     {
@@ -198,28 +143,32 @@ public class RegistrationBean extends AbstractBean
   /**
    * Method description
    *
-   * @param userDAO
    *
    * @return
    */
-  private String createUser(UserDAO userDAO)
+  private String createUser()
   {
     String result = SUCCESS;
 
     if (userDAO.add(user))
     {
       Blog blog = getRequest().getCurrentBlog();
-      Role role = getDefaultRole();
+      Role role = Role.valueOf(defaultRole);
 
       try
       {
         userDAO.setRole(blog, user, role);
         getMessageHandler().info("registrationSuccess");
       }
-      catch ( /* TDOD replace with DAOException */Exception ex)
+      catch ( /* TODO replace with DAOException */Exception ex)
       {
+        logger.log(Level.SEVERE, null, ex);
         getMessageHandler().error("unknownError");
       }
+    }
+    else
+    {
+      getMessageHandler().error("unknownError");
     }
 
     return result;
@@ -235,14 +184,8 @@ public class RegistrationBean extends AbstractBean
    */
   private String encryptPassword(String password)
   {
-    ServiceReference<Encryption> reference =
-      BlogContext.getInstance().getServiceRegistry().get(Encryption.class,
-        Constants.SERVCIE_ENCRYPTION);
-
-    if ((reference != null) && (reference.get() != null))
+    if (enc != null)
     {
-      Encryption enc = reference.get();
-
       password = enc.encrypt(password);
     }
 
@@ -256,8 +199,7 @@ public class RegistrationBean extends AbstractBean
   private void redirect()
   {
     BlogRequest request = getRequest();
-    String uri = BlogContext.getInstance().getLinkBuilder().buildLink(request,
-                   request.getCurrentBlog());
+    String uri = linkBuilder.buildLink(request, request.getCurrentBlog());
 
     sendRedirect(uri);
   }
@@ -282,54 +224,35 @@ public class RegistrationBean extends AbstractBean
     }
   }
 
-  //~--- get methods ----------------------------------------------------------
-
-  /**
-   * Method description
-   *
-   *
-   * @return
-   */
-  private Role getDefaultRole()
-  {
-    Role role = null;
-    String value = BlogContext.getInstance().getConfiguration().getString(
-                       Constants.CONFIG_DEFAULTROLE);
-
-    if (Util.isBlank(value))
-    {
-      role = Role.READER;
-    }
-    else
-    {
-      role = Role.valueOf(value);
-    }
-
-    return role;
-  }
-
-  /**
-   * Method description
-   *
-   *
-   * @return
-   */
-  private boolean isPermitted()
-  {
-    Configuration config = BlogContext.getInstance().getConfiguration();
-
-    return config.getBoolean(Constants.CONFIG_ALLOW_REGISTRATION,
-                             Boolean.FALSE);
-  }
-
   //~--- fields ---------------------------------------------------------------
+
+  /** Field description */
+  @Config(Constants.CONFIG_DEFAULTROLE)
+  private String defaultRole = Role.READER.name();
+
+  /** Field description */
+  @Service(Constants.SERVCIE_ENCRYPTION)
+  private Encryption enc;
+
+  /** Field description */
+  @Context
+  private LinkBuilder linkBuilder;
 
   /** Field description */
   private String passwordRepeat;
 
   /** Field description */
-  private boolean sendAcknowledgeMail;
+  @Config(Constants.CONFIG_ALLOW_REGISTRATION)
+  private Boolean registrationEnabled = Boolean.FALSE;
+
+  /** Field description */
+  @Config(Constants.CONFIG_REGISTERACKNOWLEDGEMENT)
+  private Boolean sendAcknowledgeMail = Boolean.FALSE;
 
   /** Field description */
   private User user;
+
+  /** Field description */
+  @Dao
+  private UserDAO userDAO;
 }

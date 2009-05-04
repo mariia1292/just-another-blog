@@ -22,7 +22,9 @@
           <h:panelGrid columns="3">
 
             <h:outputLabel for="username" value="#{label.username}" />
-            <h:inputText id="username" value="#{RegistrationBean.user.name}" required="true" />
+            <h:inputText id="username" value="#{RegistrationBean.user.name}" required="true">
+              <f:validator validatorId="validator.username" />
+            </h:inputText>
             <h:message for="username" />
 
             <h:outputLabel for="displayName" value="#{label.displayName}" />
@@ -31,7 +33,7 @@
 
             <h:outputLabel for="email" value="#{label.email}" />
             <h:inputText id="email" value="#{RegistrationBean.user.email}" required="true">
-              <f:validator validatorId="validator.mail" />
+              <f:validator validatorId="validator.usermail" />
             </h:inputText>
             <h:message for="email" />
 
