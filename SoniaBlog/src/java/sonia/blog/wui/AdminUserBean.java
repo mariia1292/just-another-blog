@@ -68,7 +68,7 @@ public class AdminUserBean extends AbstractBean
    */
   public AdminUserBean()
   {
-    super();
+    init();
   }
 
   //~--- methods --------------------------------------------------------------

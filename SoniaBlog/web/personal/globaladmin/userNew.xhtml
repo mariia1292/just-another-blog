@@ -26,7 +26,9 @@
           <h:panelGrid columns="3">
 
             <h:outputLabel for="name" value="#{label.name}" />
-            <h:inputText id="name" value="#{AdminUserBean.user.name}" required="true" />
+            <h:inputText id="name" value="#{AdminUserBean.user.name}" required="true">
+              <f:validator validatorId="validator.username" />
+            </h:inputText>
             <h:message for="name" />
 
             <h:outputLabel for="displayName" value="#{label.displayName}" />
@@ -35,7 +37,7 @@
 
             <h:outputLabel for="email" value="#{label.email}" />
             <h:inputText id="email" value="#{AdminUserBean.user.email}" required="true">
-              <f:validator validatorId="validator.mail" />
+              <f:validator validatorId="validator.usermail" />
             </h:inputText>
             <h:message for="email" />
 
