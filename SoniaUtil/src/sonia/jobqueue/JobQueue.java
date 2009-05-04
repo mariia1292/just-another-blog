@@ -19,6 +19,8 @@ import java.util.logging.Logger;
 /**
  *
  * @author sdorra
+ *
+ * @param <T>
  */
 public class JobQueue<T extends Job>
 {

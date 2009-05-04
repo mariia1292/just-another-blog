@@ -12,6 +12,7 @@ package sonia.util;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 import org.xml.sax.ErrorHandler;
 import org.xml.sax.SAXException;
@@ -35,7 +36,6 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
-import org.w3c.dom.NodeList;
 
 /**
  *
@@ -202,11 +202,6 @@ public class XmlUtil
     return getAttributeValue(node.getAttributes(), name);
   }
 
-  public static boolean hasContent( NodeList list )
-  {
-    return list != null && list.getLength() > 0;
-  }
-
   /**
    * Method description
    *
@@ -231,6 +226,19 @@ public class XmlUtil
     }
 
     return result;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param list
+   *
+   * @return
+   */
+  public static boolean hasContent(NodeList list)
+  {
+    return (list != null) && (list.getLength() > 0);
   }
 
   //~--- inner classes --------------------------------------------------------

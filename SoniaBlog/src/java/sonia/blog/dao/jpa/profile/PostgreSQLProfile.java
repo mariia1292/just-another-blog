@@ -3,18 +3,26 @@
  * and open the template in the editor.
  */
 
+
+
 package sonia.blog.dao.jpa.profile;
 
-import java.io.InputStream;
+//~--- non-JDK imports --------------------------------------------------------
+
 import sonia.util.Util;
+
+//~--- JDK imports ------------------------------------------------------------
+
+import java.io.InputStream;
 
 /**
  *
  * @author sdorra
  */
-public class PostgreSQLProfile implements DatabaseProfile {
+public class PostgreSQLProfile implements DatabaseProfile
+{
 
-    /** Field description */
+  /** Field description */
   public static final String DISPLAY_NAME = "PostgreSQL";
 
   /** Field description */
@@ -32,6 +40,8 @@ public class PostgreSQLProfile implements DatabaseProfile {
 
   /** Field description */
   public static final String USER = "root";
+
+  //~--- get methods ----------------------------------------------------------
 
   /**
    * Method description

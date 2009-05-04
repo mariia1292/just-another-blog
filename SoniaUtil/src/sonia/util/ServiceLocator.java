@@ -29,10 +29,11 @@ public class ServiceLocator
    *
    *
    * @param serviceClass
+   * @param <T>
    *
    * @return
    */
-  public static <T>T locateService(Class<T> serviceClass)
+  public static <T> T locateService(Class<T> serviceClass)
   {
     return locateService(serviceClass, null);
   }
@@ -43,10 +44,11 @@ public class ServiceLocator
    *
    * @param serviceClass
    * @param def
+   * @param <T>
    *
    * @return
    */
-  public static <T>T locateService(Class<T> serviceClass, T def)
+  public static <T> T locateService(Class<T> serviceClass, T def)
   {
     T service = null;
 
@@ -89,10 +91,11 @@ public class ServiceLocator
    *
    *
    * @param serviceClass
+   * @param <T>
    *
    * @return
    */
-  public static <T>List<T> locateServices(Class<T> serviceClass)
+  public static <T> List<T> locateServices(Class<T> serviceClass)
   {
     return locateServices(serviceClass, null);
   }
@@ -103,10 +106,11 @@ public class ServiceLocator
    *
    * @param serviceClass
    * @param def
+   * @param <T>
    *
    * @return
    */
-  public static <T>List<T> locateServices(Class<T> serviceClass, List<T> def)
+  public static <T> List<T> locateServices(Class<T> serviceClass, List<T> def)
   {
     List<T> resultList = null;
 

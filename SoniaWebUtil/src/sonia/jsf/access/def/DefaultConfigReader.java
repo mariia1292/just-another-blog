@@ -402,10 +402,11 @@ public class DefaultConfigReader
    *
    * @param clazz
    * @param classString
+   * @param <T>
    *
    * @return
    */
-  private <T>T createInstance(Class<T> clazz, String classString)
+  private <T> T createInstance(Class<T> clazz, String classString)
   {
     T instance = null;
 

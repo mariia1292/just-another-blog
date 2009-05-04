@@ -283,10 +283,11 @@ public interface Configuration
    *
    * @param clazz
    * @param key
+   * @param <T>
    *
    * @return
    */
-  public <T>T getObject(Class<T> clazz, String key);
+  public <T> T getObject(Class<T> clazz, String key);
 
   /**
    * Method description
@@ -295,10 +296,11 @@ public interface Configuration
    * @param clazz
    * @param key
    * @param def
+   * @param <T>
    *
    * @return
    */
-  public <T>T getObject(Class<T> clazz, String key, T def);
+  public <T> T getObject(Class<T> clazz, String key, T def);
 
   /**
    * Method description
@@ -327,10 +329,11 @@ public interface Configuration
    *
    * @param clazz
    * @param key
+   * @param <T>
    *
    * @return
    */
-  public <T>T[] getObjects(Class<T> clazz, String key);
+  public <T> T[] getObjects(Class<T> clazz, String key);
 
   /**
    * Method description
@@ -339,10 +342,11 @@ public interface Configuration
    * @param clazz
    * @param key
    * @param def
+   * @param <T>
    *
    * @return
    */
-  public <T>T[] getObjects(Class<T> clazz, String key, T[] def);
+  public <T> T[] getObjects(Class<T> clazz, String key, T[] def);
 
   /**
    * Method description

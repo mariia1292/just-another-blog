@@ -15,6 +15,8 @@ import java.util.List;
 /**
  *
  * @author sdorra
+ *
+ * @param <T>
  */
 public class ServiceReference<T>
 {

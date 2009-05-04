@@ -335,10 +335,11 @@ public abstract class StringBasedConfiguration extends ConfigurationBase
    *
    * @param clazz
    * @param key
+   * @param <T>
    *
    * @return
    */
-  public <T>T getObject(Class<T> clazz, String key)
+  public <T> T getObject(Class<T> clazz, String key)
   {
     T result = null;
 
@@ -375,11 +376,12 @@ public abstract class StringBasedConfiguration extends ConfigurationBase
    *
    * @param clazz
    * @param key
+   * @param <T>
    *
    * @return
    */
   @SuppressWarnings("unchecked")
-  public <T>T[] getObjects(Class<T> clazz, String key)
+  public <T> T[] getObjects(Class<T> clazz, String key)
   {
     T[] result = null;
     String[] values = getStrings(key);
