@@ -133,14 +133,17 @@ public class TemplateManager
         addDirectory(templateList, f, blog, "/custom-template/__all");
       }
 
-      f = new File(customTemplateDirectory, blog.getIdentifier());
-
-      if (f.exists())
+      if (blog.getIdentifier() != null)
       {
-        StringBuffer path = new StringBuffer();
+        f = new File(customTemplateDirectory, blog.getIdentifier());
 
-        path.append("/custom-template/").append(blog.getIdentifier());
-        addDirectory(templateList, f, blog, path.toString());
+        if (f.exists())
+        {
+          StringBuffer path = new StringBuffer();
+
+          path.append("/custom-template/").append(blog.getIdentifier());
+          addDirectory(templateList, f, blog, path.toString());
+        }
       }
     }
 

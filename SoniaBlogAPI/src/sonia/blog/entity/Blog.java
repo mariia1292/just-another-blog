@@ -277,10 +277,6 @@ public class Blog implements Serializable, PermaObject, Comparable<Blog>
     {
       result = new Locale(locale);
     }
-    else
-    {
-      result = Locale.getDefault();
-    }
 
     return result;
   }
