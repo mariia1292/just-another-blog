@@ -7,14 +7,6 @@
 
 package sonia.blog.api.template;
 
-//~--- non-JDK imports --------------------------------------------------------
-
-import sonia.blog.api.app.BlogContext;
-
-//~--- JDK imports ------------------------------------------------------------
-
-import java.io.File;
-
 /**
  *
  * @author sdorra
@@ -103,7 +95,7 @@ public class Template
    */
   public String getScreenshot()
   {
-    return "/template/" + path + "/screenshot.jpg";
+    return path + "/screenshot.jpg";
   }
 
   /**
@@ -126,21 +118,6 @@ public class Template
   public String getVersion()
   {
     return version;
-  }
-
-  /**
-   * Method description
-   *
-   *
-   * @return
-   */
-  public boolean isScreenshotAvailable()
-  {
-    String filePath =
-      BlogContext.getInstance().getServletContext().getRealPath("/template/"
-        + path + "/screenshot.jpg");
-
-    return new File(filePath).exists();
   }
 
   //~--- set methods ----------------------------------------------------------

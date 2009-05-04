@@ -91,8 +91,10 @@ public class TemplateBean extends AbstractBean
   {
     templates = new ListDataModel();
 
+    Blog blog = getRequest().getCurrentBlog();
+
     List<Template> templateList =
-      BlogContext.getInstance().getTemplateManager().getTemplates();
+      BlogContext.getInstance().getTemplateManager().getTemplates( blog );
 
     if (templateList != null)
     {

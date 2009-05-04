@@ -256,6 +256,8 @@ public interface Constants
   /** Field description */
   public static final String RESOURCE_TEMP = "temp";
 
+  public static final String RESOURCE_TEMPLATE = "template";
+
   /*
    * Config Parameters
    */
