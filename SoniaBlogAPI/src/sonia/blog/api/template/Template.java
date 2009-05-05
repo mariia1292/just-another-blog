@@ -37,7 +37,11 @@ public class Template
 
     if (contentCSS != null)
     {
-      result = "/template/" + path + "/" + contentCSS;
+      StringBuffer css = new StringBuffer();
+
+      css.append(path).append("/").append(contentCSS);
+
+      return css.toString();
     }
 
     return result;
