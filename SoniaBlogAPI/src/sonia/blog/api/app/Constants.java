@@ -42,6 +42,9 @@ public interface Constants
   public static final String CONFIG_COOKIEKEY = "app.cookieKey";
 
   /** Field description */
+  public static final String CONFIG_DASHBOARD_RSS = "app.dashboard-rss";
+
+  /** Field description */
   public static final String CONFIG_DB_DRIVER = "db.driver";
 
   /** Field description */
@@ -153,6 +156,8 @@ public interface Constants
 
   /** Field description */
   public static final String DEFAULT_RESIZE_IMAGE = "internal";
+
+  public static final String DEFAULT_DASHBOARD_RSS = "http://news.just-another-blog.org/feed/index.rss2";
 
   // Listeners
 
