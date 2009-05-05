@@ -18,12 +18,19 @@ import sonia.blog.entity.User;
 
 //~--- JDK imports ------------------------------------------------------------
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+
 import java.security.Principal;
 
+import java.util.Enumeration;
+import java.util.Map;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
 import javax.servlet.http.HttpSession;
@@ -89,6 +96,22 @@ public class BlogRequest extends HttpServletRequestWrapper
    *
    *
    * @return
+   *
+   * @throws IOException
+   */
+  @Override
+  public ServletInputStream getInputStream() throws IOException
+  {
+    charsetIsSetable = false;
+
+    return super.getInputStream();
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
    */
   public LoginBean getLoginBean()
   {
@@ -118,6 +141,66 @@ public class BlogRequest extends HttpServletRequestWrapper
    * Method description
    *
    *
+   * @param name
+   *
+   * @return
+   */
+  @Override
+  public String getParameter(String name)
+  {
+    charsetIsSetable = false;
+
+    return super.getParameter(name);
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  @Override
+  public Map getParameterMap()
+  {
+    charsetIsSetable = false;
+
+    return super.getParameterMap();
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  @Override
+  public Enumeration getParameterNames()
+  {
+    charsetIsSetable = false;
+
+    return super.getParameterNames();
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param name
+   *
+   * @return
+   */
+  @Override
+  public String[] getParameterValues(String name)
+  {
+    charsetIsSetable = false;
+
+    return super.getParameterValues(name);
+  }
+
+  /**
+   * Method description
+   *
+   *
    * @return
    */
   @Override
@@ -135,6 +218,22 @@ public class BlogRequest extends HttpServletRequestWrapper
     }
 
     return pathInfo;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   *
+   * @throws IOException
+   */
+  @Override
+  public BufferedReader getReader() throws IOException
+  {
+    charsetIsSetable = false;
+
+    return super.getReader();
   }
 
   /**
@@ -307,6 +406,24 @@ public class BlogRequest extends HttpServletRequestWrapper
    * Method description
    *
    *
+   * @param enc
+   *
+   * @throws UnsupportedEncodingException
+   */
+  @Override
+  public void setCharacterEncoding(String enc)
+          throws UnsupportedEncodingException
+  {
+    if (charsetIsSetable)
+    {
+      super.setCharacterEncoding(enc);
+    }
+  }
+
+  /**
+   * Method description
+   *
+   *
    * @param mapping
    */
   public void setMapping(Mapping mapping)
@@ -342,8 +459,7 @@ public class BlogRequest extends HttpServletRequestWrapper
   private Blog blog;
 
   /** Field description */
-
-  // private String encoding;
+  private boolean charsetIsSetable = true;
 
   /** Field description */
   private Mapping mapping;
