@@ -1,3 +1,3 @@
-tinyMCE.addI18n('en.attachment',{
-	desc : 'This is just a template button'
+tinyMCE.addI18n('en.links',{
+	title : 'Insert internal links'
 });

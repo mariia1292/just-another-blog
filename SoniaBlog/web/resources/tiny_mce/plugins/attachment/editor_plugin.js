@@ -43,7 +43,7 @@
 
       // Register example button
       ed.addButton('attachment', {
-        title : 'attachment.desc',
+        title : 'attachment.title',
         cmd : 'mceAttachment',
         image : url + '/img/attachment.gif'
       });
@@ -73,8 +73,8 @@
       return {
         longname : 'Attachment Plugin',
         author : 'Sebastian Sdorra',
-        authorurl : 'http://www.fh-wolfenbuettel.de',
-        infourl : 'http://www.fh-wolfenbuettel.de/rz',
+        authorurl : 'http://kenai.com/projects/jab',
+        infourl : 'http://kenai.com/projects/jab',
         version : "0.1"
       };
     }

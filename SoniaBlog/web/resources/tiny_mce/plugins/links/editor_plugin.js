@@ -36,7 +36,7 @@
 
       // Register example button
       ed.addButton('links', {
-        title : 'links.desc',
+        title : 'links.title',
         cmd : 'mceLinks',
         image : url + '/img/links.gif'
       });
@@ -66,8 +66,8 @@
       return {
         longname : 'Links Plugin',
         author : 'Sebastian Sdorra',
-        authorurl : 'http://www.fh-wolfenbuettel.de',
-        infourl : 'http://www.fh-wolfenbuettel.de/rz',
+        authorurl : 'http://kenai.com/projects/jab',
+        infourl : 'http://kenai.com/projects/jab',
         version : "0.1"
       };
     }
