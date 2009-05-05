@@ -93,13 +93,13 @@ public class FeedMapping extends FinalMapping
       {
         if (param[0].equals("index"))
         {
-          items = buildItems(request, linkBuilder, max);
+          items = buildItems(request, blog, linkBuilder, max);
         }
         else if (param[0].equals("category"))
         {
           Long id = Long.parseLong(param[1]);
 
-          items = buildCategoryItems(request, response, linkBuilder, id, max);
+          items = buildCategoryItems(request, response, blog, linkBuilder, id, max);
         }
         else if (param[0].equals("tag"))
         {
@@ -155,7 +155,7 @@ public class FeedMapping extends FinalMapping
    * @throws IOException
    */
   private List<Item> buildCategoryItems(BlogRequest request,
-          BlogResponse response, LinkBuilder linkBuilder, Long id, int max)
+          BlogResponse response, Blog blog, LinkBuilder linkBuilder, Long id, int max)
           throws IOException
   {
     List<Item> items = null;
@@ -163,7 +163,7 @@ public class FeedMapping extends FinalMapping
     CategoryDAO categoryDAO = factory.getCategoryDAO();
     Category category = categoryDAO.get(id);
 
-    if (category != null)
+    if (category != null && category.getBlog().equals(blog))
     {
       EntryDAO entryDAO = factory.getEntryDAO();
       List<Entry> entries = entryDAO.findAllByCategory(category, 0, max);
@@ -345,13 +345,13 @@ public class FeedMapping extends FinalMapping
    *
    * @throws MalformedURLException
    */
-  private List<Item> buildItems(BlogRequest request, LinkBuilder linkBuilder,
+  private List<Item> buildItems(BlogRequest request, Blog blog, LinkBuilder linkBuilder,
                                 int max)
           throws MalformedURLException
   {
     List<Item> items = null;
     EntryDAO entryDAO = BlogContext.getDAOFactory().getEntryDAO();
-    List<Entry> entries = entryDAO.findAllActives(0, max);
+    List<Entry> entries = entryDAO.findAllActivesByBlog(blog, 0, max);
 
     items = buildEntryItems(request, linkBuilder, entries);
 
