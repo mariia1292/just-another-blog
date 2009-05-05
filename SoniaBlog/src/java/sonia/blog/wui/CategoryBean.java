@@ -33,6 +33,8 @@ public class CategoryBean extends AbstractBean
   /** Field description */
   private static Logger logger = Logger.getLogger(CategoryBean.class.getName());
 
+  private static final String EDIT = "edit";
+
   //~--- constructors ---------------------------------------------------------
 
   /**
@@ -41,7 +43,7 @@ public class CategoryBean extends AbstractBean
    */
   public CategoryBean()
   {
-    super();
+    init();
     category = new Category();
   }
 
@@ -57,7 +59,7 @@ public class CategoryBean extends AbstractBean
   {
     category = (Category) categories.getRowData();
 
-    return SUCCESS;
+    return EDIT;
   }
 
   /**
@@ -70,7 +72,7 @@ public class CategoryBean extends AbstractBean
   {
     category = new Category();
 
-    return SUCCESS;
+    return EDIT;
   }
 
   /**
