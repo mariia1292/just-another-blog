@@ -42,6 +42,7 @@ import java.util.logging.Logger;
 import javax.faces.context.FacesContext;
 import javax.faces.model.DataModel;
 import javax.faces.model.ListDataModel;
+import sonia.config.Config;
 
 /**
  *
@@ -62,7 +63,7 @@ public class DashboardBean extends AbstractBean
    */
   public DashboardBean()
   {
-    super();
+    init();
   }
 
   //~--- methods --------------------------------------------------------------
@@ -136,7 +137,7 @@ public class DashboardBean extends AbstractBean
         FeedParser parser = FeedParser.getInstance("rss2");
 
         channel = parser.load(
-          new URL("http://rss.golem.de/rss.php?feed=RSS2.0").openStream());
+          new URL(rssUrl).openStream());
       }
       catch (UnknownHostException ex)
       {
@@ -297,6 +298,11 @@ public class DashboardBean extends AbstractBean
   }
 
   //~--- fields ---------------------------------------------------------------
+
+
+
+  @Config(Constants.CONFIG_DASHBOARD_RSS)
+  private String rssUrl = Constants.DEFAULT_DASHBOARD_RSS;
 
   /** Field description */
   private Channel channel;
