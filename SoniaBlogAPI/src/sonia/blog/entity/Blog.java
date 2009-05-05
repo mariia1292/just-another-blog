@@ -168,7 +168,14 @@ public class Blog implements Serializable, PermaObject, Comparable<Blog>
    */
   public DateFormat getDateFormatter()
   {
-    SimpleDateFormat sdf = new SimpleDateFormat(dateFormat, getLocale());
+    Locale l = getLocale();
+
+    if (l == null)
+    {
+      l = Locale.getDefault();
+    }
+
+    SimpleDateFormat sdf = new SimpleDateFormat(dateFormat, l);
 
     sdf.setTimeZone(getTimeZone());
 
