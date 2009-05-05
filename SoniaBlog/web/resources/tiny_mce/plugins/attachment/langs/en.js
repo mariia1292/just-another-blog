@@ -1,3 +1,3 @@
 tinyMCE.addI18n('en.attachment',{
-	desc : 'Attachment'
+	title : 'Upload/Insert Attachments'
 });

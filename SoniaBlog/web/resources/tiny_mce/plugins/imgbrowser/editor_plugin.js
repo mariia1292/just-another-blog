@@ -41,7 +41,7 @@
 
       // Register example button
       ed.addButton('imgbrowser', {
-        title : 'imgbrowser.desc',
+        title : 'imgbrowser.title',
         cmd : 'mceImgBrowser',
         image : url + '/img/image.gif'
       });
@@ -71,8 +71,8 @@
       return {
         longname : 'ImageBrowser Plugin',
         author : 'Sebastian Sdorra',
-        authorurl : 'http://www.fh-wolfenbuettel.de',
-        infourl : 'http://www.fh-wolfenbuettel.de/rz',
+        authorurl : 'http://kenai.com/projects/jab',
+        infourl : 'http://kenai.com/projects/jab',
         version : "0.1"
       };
     }
