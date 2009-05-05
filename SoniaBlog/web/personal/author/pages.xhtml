@@ -5,7 +5,8 @@
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:blog="http://jab.nitilon.org/blog/"
-      xmlns:t="http://myfaces.apache.org/tomahawk">
+      xmlns:t="http://myfaces.apache.org/tomahawk"
+      xmlns:c="http://java.sun.com/jstl/core">
 
   <body>
 
@@ -20,6 +21,8 @@
         <h1><h:outputText value="#{label.pages}" /></h1>
 
         <h:form>
+
+          <c:if test="#{PageAuthorBean.treeData.childCount > 0}">
 
           <div class="pageTree">
 
@@ -44,6 +47,16 @@
             </t:tree2>
 
           </div>
+
+          </c:if>
+          
+          <c:if test="#{PageAuthorBean.treeData.childCount == 0}">
+
+            <div class="note">
+              <h:outputText value="#{message.noPagesFound}" />
+            </div>
+
+          </c:if>
 
         </h:form>
 
