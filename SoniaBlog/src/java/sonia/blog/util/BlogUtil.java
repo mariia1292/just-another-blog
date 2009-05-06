@@ -232,8 +232,7 @@ public class BlogUtil
     props.put("mail.smtp.port",
               config.getInteger(Constants.CONFIG_SMTPPORT, 25));
 
-    if (BlogContext.getInstance().getConfiguration().getBoolean(
-            Constants.CONFIG_SMTPSTARTTLS, Boolean.FALSE))
+    if (config.getBoolean(Constants.CONFIG_SMTPSTARTTLS, Boolean.FALSE))
     {
       props.put("mail.smtp.starttls.enable", Boolean.TRUE);
     }
@@ -245,7 +244,7 @@ public class BlogUtil
     {
       props.put("mail.smtp.user", user);
 
-      String password = config.getString(Constants.CONFIG_SMTPPASSWORD);
+      String password = config.getSecureString(Constants.CONFIG_SMTPPASSWORD);
 
       if (!Util.isBlank(password))
       {

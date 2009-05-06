@@ -16,6 +16,7 @@ import sonia.blog.api.dao.BlogDAO;
 import sonia.blog.api.spam.SpamInputProtection;
 import sonia.blog.api.util.AbstractConfigBean;
 import sonia.blog.entity.Blog;
+import sonia.blog.util.BlogUtil;
 
 import sonia.plugin.service.ServiceReference;
 
@@ -24,9 +25,12 @@ import sonia.util.Util;
 //~--- JDK imports ------------------------------------------------------------
 
 import java.util.List;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.faces.model.SelectItem;
+
+import javax.mail.MessagingException;
 
 /**
  *
@@ -91,8 +95,33 @@ public class GlobalConfigBean extends AbstractConfigBean
     smtpPort = config.getInteger(Constants.CONFIG_SMTPPORT, 25);
     smtpUsername = config.getString(Constants.CONFIG_SMTPUSER);
     smtpPassword = config.getSecureString(Constants.CONFIG_SMTPPASSWORD);
+    startTls = config.getBoolean(Constants.CONFIG_SMTPSTARTTLS, Boolean.FALSE);
     registerAcknowledgement =
       config.getBoolean(Constants.CONFIG_REGISTERACKNOWLEDGEMENT, false);
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  public String sendTestMail()
+  {
+    String result = SUCCESS;
+
+    try
+    {
+      BlogUtil.sendMail("test@just-another-blog.org", testMail, "JAB TestMail",
+                        "This is a test message");
+    }
+    catch (MessagingException ex)
+    {
+      result = FAILURE;
+      logger.log(Level.SEVERE, null, ex);
+    }
+
+    return result;
   }
 
   /**
@@ -116,6 +145,7 @@ public class GlobalConfigBean extends AbstractConfigBean
     config.set(Constants.CONFIG_SMTPSERVER, smtpServer);
     config.set(Constants.CONFIG_SMTPPORT, smtpPort);
     config.set(Constants.CONFIG_SMTPUSER, smtpUsername);
+    config.set(Constants.CONFIG_SMTPSTARTTLS, startTls);
 
     if (Util.hasContent(smtpPassword))
     {
@@ -372,6 +402,28 @@ public class GlobalConfigBean extends AbstractConfigBean
    *
    * @return
    */
+  public Boolean getStartTls()
+  {
+    return startTls;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  public String getTestMail()
+  {
+    return testMail;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
   public boolean isAllowBlogCreation()
   {
     return allowBlogCreation;
@@ -589,6 +641,28 @@ public class GlobalConfigBean extends AbstractConfigBean
     this.sso = sso;
   }
 
+  /**
+   * Method description
+   *
+   *
+   * @param startTls
+   */
+  public void setStartTls(Boolean startTls)
+  {
+    this.startTls = startTls;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param testMail
+   */
+  public void setTestMail(String testMail)
+  {
+    this.testMail = testMail;
+  }
+
   //~--- fields ---------------------------------------------------------------
 
   /** Field description */
@@ -638,4 +712,10 @@ public class GlobalConfigBean extends AbstractConfigBean
 
   /** Field description */
   private int sso;
+
+  /** Field description */
+  private Boolean startTls;
+
+  /** Field description */
+  private String testMail;
 }

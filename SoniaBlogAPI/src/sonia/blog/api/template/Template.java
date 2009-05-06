@@ -41,7 +41,7 @@ public class Template
 
       css.append(path).append("/").append(contentCSS);
 
-      return css.toString();
+      result = css.toString();
     }
 
     return result;

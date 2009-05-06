@@ -116,6 +116,10 @@
             <h:inputSecret id="password" value="#{GlobalConfigBean.smtpPassword}" />
             <h:message for="password" />
 
+            <h:outputLabel for="startTls" value="#{label.startTls}" />
+            <h:selectBooleanCheckbox id="startTls" value="#{GlobalConfigBean.startTls}" />
+            <h:message for="startTls" />
+
             <h:outputLabel for="registerAcknowledgement" value="#{label.registerAcknowledgementMail}" />
             <h:selectBooleanCheckbox id="registerAcknowledgement" value="#{GlobalConfigBean.registerAcknowledgement}" />
             <h:message for="registerAcknowledgement" />
@@ -123,6 +127,24 @@
           </h:panelGrid>
 
           <h:commandButton action="#{GlobalConfigBean.save}" value="#{label.save}" />
+
+        </h:form>
+
+        <h3><h:outputText value="#{label.testMail}" /></h3>
+
+        <h:form>
+
+          <h:panelGrid columns="3">
+
+            <h:outputLabel for="testMail" value="#{label.email}" />
+            <h:inputText id="testMail" value="#{GlobalConfigBean.testMail}" required="true">
+              <f:validator validatorId="validator.mail" />
+            </h:inputText>
+            <h:message for="testMail" />
+
+          </h:panelGrid>
+
+          <h:commandButton action="#{GlobalConfigBean.sendTestMail}" value="#{label.send}" />
 
         </h:form>
 
