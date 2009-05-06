@@ -99,7 +99,8 @@ public class FeedMapping extends FinalMapping
         {
           Long id = Long.parseLong(param[1]);
 
-          items = buildCategoryItems(request, response, blog, linkBuilder, id, max);
+          items = buildCategoryItems(request, response, blog, linkBuilder, id,
+                                     max);
         }
         else if (param[0].equals("tag"))
         {
@@ -146,6 +147,7 @@ public class FeedMapping extends FinalMapping
    *
    * @param request
    * @param response
+   * @param blog
    * @param linkBuilder
    * @param id
    * @param max
@@ -155,7 +157,8 @@ public class FeedMapping extends FinalMapping
    * @throws IOException
    */
   private List<Item> buildCategoryItems(BlogRequest request,
-          BlogResponse response, Blog blog, LinkBuilder linkBuilder, Long id, int max)
+          BlogResponse response, Blog blog, LinkBuilder linkBuilder, Long id,
+          int max)
           throws IOException
   {
     List<Item> items = null;
@@ -163,7 +166,7 @@ public class FeedMapping extends FinalMapping
     CategoryDAO categoryDAO = factory.getCategoryDAO();
     Category category = categoryDAO.get(id);
 
-    if (category != null && category.getBlog().equals(blog))
+    if ((category != null) && category.getBlog().equals(blog))
     {
       EntryDAO entryDAO = factory.getEntryDAO();
       List<Entry> entries = entryDAO.findAllByCategory(category, 0, max);
@@ -338,6 +341,7 @@ public class FeedMapping extends FinalMapping
    *
    *
    * @param request
+   * @param blog
    * @param linkBuilder
    * @param max
    *
@@ -345,8 +349,8 @@ public class FeedMapping extends FinalMapping
    *
    * @throws MalformedURLException
    */
-  private List<Item> buildItems(BlogRequest request, Blog blog, LinkBuilder linkBuilder,
-                                int max)
+  private List<Item> buildItems(BlogRequest request, Blog blog,
+                                LinkBuilder linkBuilder, int max)
           throws MalformedURLException
   {
     List<Item> items = null;

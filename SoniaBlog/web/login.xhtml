@@ -43,6 +43,10 @@
 
         </h:form>
 
+        <h:form rendered="#{LoginBean.mailConfigured}">
+          <h:commandLink value="#{label.lostPassword}" action="lostPassword" />
+        </h:form>
+
       </ui:define>
 
       <ui:define name="info">

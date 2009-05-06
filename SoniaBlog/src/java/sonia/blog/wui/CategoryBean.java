@@ -31,9 +31,10 @@ public class CategoryBean extends AbstractBean
 {
 
   /** Field description */
-  private static Logger logger = Logger.getLogger(CategoryBean.class.getName());
-
   private static final String EDIT = "edit";
+
+  /** Field description */
+  private static Logger logger = Logger.getLogger(CategoryBean.class.getName());
 
   //~--- constructors ---------------------------------------------------------
 

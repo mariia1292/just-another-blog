@@ -14,6 +14,7 @@ import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.app.BlogRequest;
 import sonia.blog.api.app.BlogResponse;
 import sonia.blog.api.app.Constants;
+import sonia.blog.api.app.MailService;
 import sonia.blog.api.dao.UserDAO;
 import sonia.blog.api.util.AbstractBean;
 import sonia.blog.entity.Blog;
@@ -229,6 +230,19 @@ public class LoginBean extends AbstractBean
   public boolean isCookie()
   {
     return cookie;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  public boolean isMailConfigured()
+  {
+    MailService mailService = BlogContext.getInstance().getMailService();
+
+    return (mailService != null) && mailService.isConfigured();
   }
 
   /**

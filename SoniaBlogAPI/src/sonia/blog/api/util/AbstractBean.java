@@ -20,11 +20,13 @@ import sonia.jsf.util.MessageHandler;
 import java.io.IOException;
 
 import java.util.Iterator;
+import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.faces.application.FacesMessage;
+import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
 
 import javax.servlet.http.HttpServletRequest;
@@ -145,6 +147,31 @@ public class AbstractBean
   }
 
   //~--- get methods ----------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  protected Locale getLocale()
+  {
+    Locale l = null;
+    FacesContext ctx = FacesContext.getCurrentInstance();
+    UIViewRoot view = ctx.getViewRoot();
+
+    if (view != null)
+    {
+      l = view.getLocale();
+    }
+
+    if (l == null)
+    {
+      l = ctx.getApplication().getDefaultLocale();
+    }
+
+    return l;
+  }
 
   /**
    * Method description

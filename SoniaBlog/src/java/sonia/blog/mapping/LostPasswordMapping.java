@@ -1,0 +1,174 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
+
+
+package sonia.blog.mapping;
+
+//~--- non-JDK imports --------------------------------------------------------
+
+import sonia.blog.api.app.BlogRequest;
+import sonia.blog.api.app.BlogResponse;
+import sonia.blog.api.app.Constants;
+import sonia.blog.api.app.Context;
+import sonia.blog.api.app.MailService;
+import sonia.blog.api.dao.Dao;
+import sonia.blog.api.dao.UserDAO;
+import sonia.blog.api.link.LinkBuilder;
+import sonia.blog.api.mapping.FinalMapping;
+import sonia.blog.entity.Blog;
+import sonia.blog.entity.User;
+
+import sonia.plugin.service.Service;
+
+import sonia.security.KeyGenerator;
+import sonia.security.cipher.Cipher;
+import sonia.security.encryption.Encryption;
+
+import sonia.util.Convert;
+import sonia.util.Util;
+
+//~--- JDK imports ------------------------------------------------------------
+
+import java.io.IOException;
+
+import java.net.URLDecoder;
+
+import java.text.MessageFormat;
+
+import java.util.Locale;
+import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import javax.servlet.ServletException;
+
+/**
+ *
+ * @author sdorra
+ */
+public class LostPasswordMapping extends FinalMapping
+{
+
+  /** Field description */
+  private static Logger logger =
+    Logger.getLogger(LostPasswordMapping.class.getName());
+
+  //~--- methods --------------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   * @param request
+   * @param response
+   * @param param
+   *
+   * @throws IOException
+   * @throws ServletException
+   */
+  @Override
+  protected void handleFinalMapping(BlogRequest request, BlogResponse response,
+                                    String[] param)
+          throws IOException, ServletException
+  {
+    Blog blog = request.getCurrentBlog();
+    String id = request.getParameter("id");
+
+    if (Util.hasContent(id))
+    {
+      id = new String(Convert.fromBase64(id));
+      id = cipher.decode(id);
+
+      String[] parts = id.split(":");
+
+      if ((parts != null) && (parts.length == 4)
+          && parts[0].equals(blog.getId().toString()))
+      {
+        String username = parts[1];
+        String activationCode = parts[2];
+        String localeString = parts[3];
+        Locale locale = new Locale(localeString);
+        User user = userDAO.getByNameAndCode(username, activationCode);
+
+        if ((user != null) && user.isActive() && user.isSelfManaged())
+        {
+          try
+          {
+            String password = KeyGenerator.generateKey(8);
+
+            user.setPassword(encryption.encrypt(password));
+
+            if (userDAO.edit(user))
+            {
+              sendMail(blog, locale, user, password);
+            }
+          }
+          catch (Exception ex)
+          {
+            logger.log(Level.SEVERE, null, ex);
+          }
+        }
+      }
+    }
+
+    response.sendRedirect(linkBuilder.buildLink(blog, ""));
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param blog
+   * @param locale
+   * @param user
+   * @param password
+   */
+  private void sendMail(Blog blog, Locale locale, User user, String password)
+  {
+    ResourceBundle bundle =
+      ResourceBundle.getBundle("/sonia/blog/resources/message", locale,
+                               LostPasswordMapping.class.getClassLoader());
+    StringBuffer subject = new StringBuffer();
+
+    subject.append("[").append(blog.getTitle()).append("] ");
+    subject.append(bundle.getString("mailLostPasswordSubject"));
+
+    String text = MessageFormat.format(bundle.getString("mailLostPassword"),
+                                       password);
+
+    try
+    {
+      mailService.sendMail(blog.getEmail(), user.getEmail(),
+                           subject.toString(), text);
+    }
+    catch (Exception ex)
+    {
+      logger.log(Level.SEVERE, null, ex);
+    }
+  }
+
+  //~--- fields ---------------------------------------------------------------
+
+  /** Field description */
+  @Service(Constants.SERVCIE_CIPHER)
+  private Cipher cipher;
+
+  /** Field description */
+  @Service(Constants.SERVCIE_ENCRYPTION)
+  private Encryption encryption;
+
+  /** Field description */
+  @Context
+  private LinkBuilder linkBuilder;
+
+  /** Field description */
+  @Context
+  private MailService mailService;
+
+  /** Field description */
+  @Dao
+  private UserDAO userDAO;
+}
