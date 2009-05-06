@@ -51,6 +51,7 @@ public class JobQueue<T extends Job>
     this.jobs = new LinkedList<T>();
     this.stop = true;
     this.timeoutLimit = 60;
+    this.maxJobs = 0;
     this.handlerCount = handlerCount;
     this.handlers = new ArrayList<JobHandler>();
 
@@ -78,6 +79,14 @@ public class JobQueue<T extends Job>
     synchronized (jobs)
     {
       jobs.offer(job);
+
+      int size = jobs.size();
+
+      if (size > maxJobs)
+      {
+        maxJobs = size;
+      }
+
       jobs.notify();
     }
   }
@@ -239,6 +248,17 @@ public class JobQueue<T extends Job>
    *
    * @return
    */
+  public int getMaxJobs()
+  {
+    return maxJobs;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
   public int getTimeoutLimit()
   {
     return timeoutLimit;
@@ -368,6 +388,9 @@ public class JobQueue<T extends Job>
 
   /** Field description */
   private List<JobHandler> handlers;
+
+  /** Field description */
+  private int maxJobs;
 
   /** Field description */
   private boolean stop;

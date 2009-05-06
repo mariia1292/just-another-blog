@@ -310,24 +310,29 @@ public class BlogContext
    */
   public JobQueue<BlogJob> getJobQueue()
   {
-    if ( jobQueue == null )
+    if (jobQueue == null)
     {
       Integer hc = null;
-      if ( isInstalled() )
+
+      if (isInstalled())
       {
         BlogConfiguration config = getConfiguration();
-        hc = config.getInteger( Constants.CONFIG_QUEUEHANDLER );
+
+        hc = config.getInteger(Constants.CONFIG_QUEUEHANDLER);
       }
-      if ( hc != null )
+
+      if (hc != null)
       {
-        this.jobQueue = new JobQueue<BlogJob>();
+        this.jobQueue = new JobQueue<BlogJob>(hc);
       }
       else
       {
-        this.jobQueue = new JobQueue<BlogJob>( hc );
+        this.jobQueue = new JobQueue<BlogJob>();
       }
+
       this.jobQueue.start();
     }
+
     return jobQueue;
   }
 

@@ -25,6 +25,8 @@ import sonia.config.ModifyableConfigurationMBean;
 import sonia.injection.InjectionProvider;
 import sonia.injection.ObjectInjector;
 
+import sonia.jobqueue.JobQueueMBean;
+
 import sonia.logging.SimpleFormatter;
 
 import sonia.macro.MacroParser;
@@ -278,6 +280,7 @@ public class BlogContextListener implements ServletContextListener
       ObjectName sessionInfoName =
         new ObjectName("sonia.blog.jmx:type=SessionInformation");
       ObjectName configName = new ObjectName("sonia.blog.jmx:type=Config");
+      ObjectName queueName = new ObjectName("sonia.blog.jmx:type=JobQueue");
 
       if (mbs.isRegistered(sessionInfoName))
       {
@@ -289,6 +292,11 @@ public class BlogContextListener implements ServletContextListener
         mbs.unregisterMBean(configName);
       }
 
+      if (mbs.isRegistered(queueName))
+      {
+        mbs.unregisterMBean(queueName);
+      }
+
       if (!context.isInstalled()
           || context.getConfiguration().getBoolean(Constants.CONFIG_JMX_ENABLE,
             Boolean.TRUE))
@@ -297,6 +305,7 @@ public class BlogContextListener implements ServletContextListener
         mbs.registerMBean(
             new ModifyableConfigurationMBean(context.getConfiguration()),
             configName);
+        mbs.registerMBean(new JobQueueMBean(context.getJobQueue()), queueName);
       }
     }
     catch (Exception ex)
