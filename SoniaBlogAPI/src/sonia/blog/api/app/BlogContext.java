@@ -34,6 +34,7 @@ import sonia.plugin.service.ServiceRegistry;
 
 import sonia.security.KeyGenerator;
 import sonia.security.authentication.LoginCallbackHandler;
+import sonia.security.cipher.Cipher;
 import sonia.security.cipher.DefaultCipher;
 
 import sonia.util.Util;
@@ -266,7 +267,27 @@ public class BlogContext
         configuration.set(Constants.CONFIG_SECUREKEY, key);
       }
 
-      configuration.setCipher(new DefaultCipher(key.toCharArray()));
+      Cipher cipher = null;
+      ServiceReference<Cipher> cipherRefence =
+        getServiceRegistry().get(Cipher.class, Constants.SERVCIE_CIPHER);
+
+      if (cipherRefence != null)
+      {
+        cipher = cipherRefence.get();
+
+        if (cipher == null)
+        {
+          cipher = new DefaultCipher();
+          cipherRefence.add(cipher);
+        }
+      }
+      else
+      {
+        cipher = new DefaultCipher();
+      }
+
+      cipher.setKey(key.toCharArray());
+      configuration.setCipher(cipher);
     }
 
     return configuration;

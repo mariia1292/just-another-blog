@@ -114,9 +114,9 @@ public class DefaultCipher extends Cipher
 
       cipher.init(javax.crypto.Cipher.DECRYPT_MODE, key, parameterSpec);
 
-      byte[] deoded = cipher.doFinal(encoded);
+      byte[] decoded = cipher.doFinal(encoded);
 
-      result = new String(deoded, "UTF-8");
+      result = new String(decoded, "UTF-8");
     }
     catch (Exception ex)
     {
