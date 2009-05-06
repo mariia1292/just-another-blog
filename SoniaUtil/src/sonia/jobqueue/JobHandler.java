@@ -41,6 +41,9 @@ public class JobHandler extends Thread
     {
       logger.fine("JH" + handlerNumber + " initializing");
     }
+
+    name = "JobHandler-" + handlerNumber;
+    setName(name);
   }
 
   //~--- methods --------------------------------------------------------------
@@ -54,7 +57,7 @@ public class JobHandler extends Thread
   {
     if (logger.isLoggable(Level.FINE))
     {
-      logger.fine("JH" + handlerNumber + " started");
+      logger.fine(name + " started");
     }
 
     while (!stop)
@@ -65,7 +68,7 @@ public class JobHandler extends Thread
       {
         if (logger.isLoggable(Level.FINER))
         {
-          logger.finer("JH" + handlerNumber + " start job ");
+          logger.finer(name + " start job ");
         }
 
         queue.fireStartedEvent(job);
@@ -76,7 +79,7 @@ public class JobHandler extends Thread
 
           if (logger.isLoggable(Level.FINER))
           {
-            logger.finer("JH" + handlerNumber + " finished job ");
+            logger.finer(name + " finished job ");
           }
 
           queue.fireFinishedEvent(job);
@@ -85,8 +88,7 @@ public class JobHandler extends Thread
         {
           if (logger.isLoggable(Level.FINER))
           {
-            logger.log(Level.FINER,
-                       "JH" + handlerNumber + " job exited with exception", ex);
+            logger.log(Level.FINER, name + " job exited with exception", ex);
           }
 
           queue.fireFinishedEvent(job, ex);
@@ -103,7 +105,7 @@ public class JobHandler extends Thread
         {
           if (logger.isLoggable(Level.FINEST))
           {
-            logger.finest("JH" + handlerNumber + " is going in wait mode ");
+            logger.finest(name + " is going in wait mode ");
           }
 
           synchronized (queue.getQueue())
@@ -120,7 +122,7 @@ public class JobHandler extends Thread
 
     if (logger.isLoggable(Level.FINE))
     {
-      logger.fine("JH" + handlerNumber + " exiting");
+      logger.fine(name + " exiting");
     }
   }
 
@@ -134,7 +136,7 @@ public class JobHandler extends Thread
 
     if (logger.isLoggable(Level.FINE))
     {
-      logger.fine("JH" + handlerNumber + " is going in stop mode");
+      logger.fine(name + " is going in stop mode");
     }
   }
 
@@ -142,6 +144,9 @@ public class JobHandler extends Thread
 
   /** Field description */
   private int handlerNumber;
+
+  /** Field description */
+  private String name;
 
   /** Field description */
   private JobQueue queue;
