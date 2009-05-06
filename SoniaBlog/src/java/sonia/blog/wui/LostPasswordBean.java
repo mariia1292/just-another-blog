@@ -24,14 +24,14 @@ import sonia.plugin.service.Service;
 
 import sonia.security.cipher.Cipher;
 
-//~--- JDK imports ------------------------------------------------------------
+import sonia.util.Convert;
 
+//~--- JDK imports ------------------------------------------------------------
 
 import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import sonia.util.Convert;
 
 /**
  *
@@ -94,9 +94,12 @@ public class LostPasswordBean extends AbstractBean
         StringBuffer text = new StringBuffer();
 
         text.append(bundle.getString("mailLostPasswordConfirmation"));
-        text.append(s).append(s).append(link).append( Convert.toBase64( id.getBytes() ) );
+        text.append(s).append(s).append(link).append(
+            Convert.toBase64(id.getBytes()));
         mailService.sendMail(u.getEmail(), blog.getEmail(), subject.toString(),
                              text.toString());
+        // TODO: add Message
+        getResponse().sendRedirect(linkBuilder.buildLink(blog, ""));
       }
       catch (Exception ex)
       {
