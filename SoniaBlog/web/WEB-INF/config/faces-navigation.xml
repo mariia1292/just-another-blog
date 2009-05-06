@@ -36,10 +36,6 @@
       <from-outcome>deny</from-outcome>
       <to-view-id>/deny.xhtml</to-view-id>
     </navigation-case>
-    <navigation-case>
-      <from-outcome>lostPassword</from-outcome>
-      <to-view-id>/lostPassword.xhtml</to-view-id>
-    </navigation-case>
   </navigation-rule>  
   
   <navigation-rule>
@@ -103,6 +99,22 @@
     <navigation-case>
       <from-outcome>userAdministration</from-outcome>
       <to-view-id>/personal/globaladmin/users.xhtml</to-view-id>
+    </navigation-case>
+  </navigation-rule>
+
+  <navigation-rule>
+    <from-view-id>/login.xhtml</from-view-id>
+    <navigation-case>
+      <from-outcome>lostPassword</from-outcome>
+      <to-view-id>/lostPassword.xhtml</to-view-id>
+    </navigation-case>
+  </navigation-rule>
+
+  <navigation-rule>
+    <from-view-id>/lostPassword.xhtml</from-view-id>
+    <navigation-case>
+      <from-outcome>failure</from-outcome>
+      <to-view-id>/lostPassword.xhtml</to-view-id>
     </navigation-case>
   </navigation-rule>
 

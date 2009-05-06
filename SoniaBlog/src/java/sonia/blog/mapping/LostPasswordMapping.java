@@ -102,6 +102,8 @@ public class LostPasswordMapping extends FinalMapping
             if (userDAO.edit(user))
             {
               sendMail(blog, locale, user, password);
+
+              // TODO: add Message
             }
           }
           catch (Exception ex)
