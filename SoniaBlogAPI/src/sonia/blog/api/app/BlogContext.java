@@ -359,60 +359,6 @@ public class BlogContext
 
   /**
    * Method description
-   * TODO: remove
-   *
-   *
-   * @return
-   *
-   * public EntityManager getEntityManager(boolean recreate)
-   * {
-   * if (recreate || (entityManagerFactory == null))
-   * {
-   *   if (entityManagerFactory != null)
-   *   {
-   *     try
-   *     {
-   *       entityManagerFactory.close();
-   *     }
-   *     catch (Exception ex)
-   *     {
-   *       logger.log(Level.SEVERE, null, ex);
-   *     }
-   *   }
-   *
-   *   XmlConfiguration config = getConfiguration();
-   *   Map<String, String> parameters = new HashMap<String, String>();
-   *
-   *   parameters.put("toplink.jdbc.driver",
-   *                  config.getString(Constants.CONFIG_DB_DRIVER));
-   *   parameters.put("toplink.jdbc.url",
-   *                  config.getString(Constants.CONFIG_DB_URL));
-   *   parameters.put("toplink.jdbc.user",
-   *                  config.getString(Constants.CONFIG_DB_USERNAME));
-   *   parameters.put("toplink.jdbc.password",
-   *                  config.getString(Constants.CONFIG_DB_PASSWORD));
-   *   entityManagerFactory =
-   *     Persistence.createEntityManagerFactory("SoniaBlog-PU", parameters);
-   * }
-   *
-   * return entityManagerFactory.createEntityManager();
-   * }
-   */
-
-  /**
-   * Method description
-   * TODO: remove
-   *
-   * @return
-   *
-   * public EntityManager getEntityManager()
-   * {
-   * return getEntityManager(false);
-   * }
-   */
-
-  /**
-   * Method description
    *
    *
    * @return
@@ -618,17 +564,14 @@ public class BlogContext
    */
   public boolean isInstalled()
   {
+    if (!installed)
+    {
+      installed = (getResourceManager() != null)
+                  && getConfiguration().getBoolean(Constants.CONFIG_INSTALLED,
+                    Boolean.FALSE);
+    }
 
-    /*
-     * File f = getConfigFile();
-     *
-     * return (f != null) && f.exists()
-     *      && getConfiguration().getBoolean(Constants.CONFIG_INSTALLED,
-     *        Boolean.FALSE);
-     */
-    return (getResourceManager() != null)
-           && getConfiguration().getBoolean(Constants.CONFIG_INSTALLED,
-             Boolean.FALSE);
+    return installed;
   }
 
   //~--- set methods ----------------------------------------------------------
