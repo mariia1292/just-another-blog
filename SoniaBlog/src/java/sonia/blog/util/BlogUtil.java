@@ -9,18 +9,13 @@ package sonia.blog.util;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import sonia.blog.api.app.BlogConfiguration;
-import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.app.BlogRequest;
 import sonia.blog.api.app.BlogRuntimeException;
-import sonia.blog.api.app.Constants;
 import sonia.blog.api.util.AbstractBean;
 import sonia.blog.entity.Attachment;
 import sonia.blog.entity.ContentObject;
 import sonia.blog.entity.Entry;
 import sonia.blog.entity.Page;
-
-import sonia.util.Util;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -32,19 +27,10 @@ import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
-import java.util.Properties;
 import java.util.TimeZone;
 
 import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
-
-import javax.mail.Authenticator;
-import javax.mail.Message;
-import javax.mail.MessagingException;
-import javax.mail.Session;
-import javax.mail.Transport;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -201,69 +187,6 @@ public class BlogUtil
     cal.set(Calendar.SECOND, 1);
 
     return cal.getTime();
-  }
-
-  /**
-   * Method description
-   *
-   *
-   * @param from
-   * @param to
-   * @param subject
-   * @param text
-   *
-   * @throws MessagingException
-   */
-  public static void sendMail(String from, String to, String subject,
-                              String text)
-          throws MessagingException
-  {
-    BlogConfiguration config = BlogContext.getInstance().getConfiguration();
-    Properties props = new Properties(System.getProperties());
-    String server = config.getString(Constants.CONFIG_SMTPSERVER);
-
-    if (Util.isBlank(server))
-    {
-      throw new IllegalStateException(Constants.CONFIG_SMTPSERVER
-                                      + " is blank");
-    }
-
-    props.put("mail.smtp.host", server);
-    props.put("mail.smtp.port",
-              config.getInteger(Constants.CONFIG_SMTPPORT, 25));
-
-    if (config.getBoolean(Constants.CONFIG_SMTPSTARTTLS, Boolean.FALSE))
-    {
-      props.put("mail.smtp.starttls.enable", Boolean.TRUE);
-    }
-
-    Authenticator auth = null;
-    String user = config.getString(Constants.CONFIG_SMTPUSER);
-
-    if (!Util.isBlank(user))
-    {
-      props.put("mail.smtp.user", user);
-
-      String password = config.getSecureString(Constants.CONFIG_SMTPPASSWORD);
-
-      if (!Util.isBlank(password))
-      {
-        props.put("mail.smtp.auth", "true");
-        auth = new SmtpAuthenticator(user, password);
-      }
-    }
-
-    Session session = Session.getInstance(props, auth);
-
-    session.setDebug(true);
-
-    MimeMessage msg = new MimeMessage(session);
-
-    msg.setFrom(new InternetAddress(from));
-    msg.addRecipient(Message.RecipientType.TO, new InternetAddress(to));
-    msg.setSubject(subject);
-    msg.setText(text);
-    Transport.send(msg);
   }
 
   //~--- get methods ----------------------------------------------------------

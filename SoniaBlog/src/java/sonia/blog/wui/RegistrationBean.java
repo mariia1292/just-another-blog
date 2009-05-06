@@ -12,6 +12,7 @@ package sonia.blog.wui;
 import sonia.blog.api.app.BlogRequest;
 import sonia.blog.api.app.Constants;
 import sonia.blog.api.app.Context;
+import sonia.blog.api.app.MailService;
 import sonia.blog.api.dao.Dao;
 import sonia.blog.api.dao.UserDAO;
 import sonia.blog.api.link.LinkBuilder;
@@ -19,7 +20,6 @@ import sonia.blog.api.util.AbstractBean;
 import sonia.blog.entity.Blog;
 import sonia.blog.entity.Role;
 import sonia.blog.entity.User;
-import sonia.blog.util.BlogUtil;
 
 import sonia.config.Config;
 
@@ -31,8 +31,6 @@ import sonia.security.encryption.Encryption;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import javax.mail.MessagingException;
 
 /**
  *
@@ -214,10 +212,10 @@ public class RegistrationBean extends AbstractBean
 
     try
     {
-      BlogUtil.sendMail(request.getCurrentBlog().getEmail(), user.getEmail(),
-                        "subject", "text");
+      mailService.sendMail(request.getCurrentBlog().getEmail(),
+                           user.getEmail(), "subject", "text");
     }
-    catch (MessagingException ex)
+    catch (Exception ex)
     {
       getMessageHandler().error("unknownError");
       logger.log(Level.SEVERE, null, ex);
@@ -237,6 +235,10 @@ public class RegistrationBean extends AbstractBean
   /** Field description */
   @Context
   private LinkBuilder linkBuilder;
+
+  /** Field description */
+  @Context
+  private MailService mailService;
 
   /** Field description */
   private String passwordRepeat;

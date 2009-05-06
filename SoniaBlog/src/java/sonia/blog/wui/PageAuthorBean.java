@@ -64,6 +64,7 @@ public class PageAuthorBean extends AbstractEditorBean
   {
     super();
     page = new Page();
+
     FacesContext ctx;
   }
 

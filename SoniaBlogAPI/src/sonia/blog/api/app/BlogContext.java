@@ -403,6 +403,23 @@ public class BlogContext
    *
    * @return
    */
+  public MailService getMailService()
+  {
+    if (mailService == null)
+    {
+      mailService = getServiceRegistry().get(MailService.class,
+              Constants.SERVICE_MAIL);
+    }
+
+    return mailService.get();
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
   public MappingHandler getMappingHandler()
   {
     if (mappingHandler == null)
@@ -610,6 +627,9 @@ public class BlogContext
 
   /** Field description */
   private Configuration loginConfiguration;
+
+  /** Field description */
+  private ServiceReference<MailService> mailService;
 
   /** Field description */
   private ServiceReference<MappingHandler> mappingHandler;

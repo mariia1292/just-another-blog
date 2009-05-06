@@ -40,7 +40,6 @@ public class Template
       StringBuffer css = new StringBuffer();
 
       css.append(path).append("/").append(contentCSS);
-
       result = css.toString();
     }
 

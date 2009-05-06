@@ -109,6 +109,9 @@ public interface Constants
   public static final String CONFIG_SECUREKEY = "app.securekey";
 
   /** Field description */
+  public static final String CONFIG_SMTPDEBUG = "smtp.debug";
+
+  /** Field description */
   public static final String CONFIG_SMTPPASSWORD = "smtp.password";
 
   /** Field description */
@@ -140,6 +143,10 @@ public interface Constants
   public static final int DEFAULT_COOKIETIME = 60 * 60 * 24 * 31;
 
   /** Field description */
+  public static final String DEFAULT_DASHBOARD_RSS =
+    "http://news.just-another-blog.org/feed/index.rss2";
+
+  /** Field description */
   public static final String DEFAULT_ENCODING = "UTF-8";
 
   /** Field description */
@@ -156,8 +163,6 @@ public interface Constants
 
   /** Field description */
   public static final String DEFAULT_RESIZE_IMAGE = "internal";
-
-  public static final String DEFAULT_DASHBOARD_RSS = "http://news.just-another-blog.org/feed/index.rss2";
 
   // Listeners
 
@@ -319,14 +324,17 @@ public interface Constants
     "/listener/installation";
 
   /** Field description */
+  public static final String SERVICE_LINKBUILDER = "/app/linkBuilder";
+
+  /** Field description */
+  public static final String SERVICE_MAIL = "/app/mail";
+
+  /** Field description */
   public static final TimeZone DEFAULT_TIMEZONE =
     TimeZone.getTimeZone("Europe/Paris");
 
   /** Field description */
   public static final Locale DEFAULT_LOCALE = Locale.GERMAN;
-
-  /** Field description */
-  public static final String SERVICE_LINKBUILDER = "/app/linkBuilder";
 
   /** Field description */
   public static final String SERVICE_MAPPINGHANDLER = "/app/mappingHandler";

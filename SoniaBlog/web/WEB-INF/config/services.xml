@@ -68,6 +68,10 @@
     <impl class="sonia.security.encryption.MD5Encryption" />
   </service>
 
+  <service class="sonia.blog.api.app.MailService" path="/app/mail">
+    <impl class="sonia.blog.app.DefaultMailService" />
+  </service>
+
   <service class="sonia.blog.api.spam.SpamInputProtection" path="/app/spam/input">
     <impl class="sonia.blog.spam.CaptchaSpamProtection" />
     <impl class="sonia.blog.spam.MathSpamProtection" />

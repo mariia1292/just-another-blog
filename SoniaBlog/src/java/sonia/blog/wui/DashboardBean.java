@@ -23,6 +23,8 @@ import sonia.blog.entity.Comment;
 import sonia.blog.entity.Entry;
 import sonia.blog.entity.User;
 
+import sonia.config.Config;
+
 import sonia.plugin.service.ServiceReference;
 
 import sonia.rss.Channel;
@@ -42,7 +44,6 @@ import java.util.logging.Logger;
 import javax.faces.context.FacesContext;
 import javax.faces.model.DataModel;
 import javax.faces.model.ListDataModel;
-import sonia.config.Config;
 
 /**
  *
@@ -136,8 +137,7 @@ public class DashboardBean extends AbstractBean
       {
         FeedParser parser = FeedParser.getInstance("rss2");
 
-        channel = parser.load(
-          new URL(rssUrl).openStream());
+        channel = parser.load(new URL(rssUrl).openStream());
       }
       catch (UnknownHostException ex)
       {
@@ -299,11 +299,6 @@ public class DashboardBean extends AbstractBean
 
   //~--- fields ---------------------------------------------------------------
 
-
-
-  @Config(Constants.CONFIG_DASHBOARD_RSS)
-  private String rssUrl = Constants.DEFAULT_DASHBOARD_RSS;
-
   /** Field description */
   private Channel channel;
 
@@ -312,6 +307,10 @@ public class DashboardBean extends AbstractBean
 
   /** Field description */
   private DataModel drafts;
+
+  /** Field description */
+  @Config(Constants.CONFIG_DASHBOARD_RSS)
+  private String rssUrl = Constants.DEFAULT_DASHBOARD_RSS;
 
   /** Field description */
   private List<String> widgets;

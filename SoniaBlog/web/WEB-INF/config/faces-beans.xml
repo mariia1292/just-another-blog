@@ -131,5 +131,11 @@
     <managed-bean-class>sonia.blog.wui.AdminUserBean</managed-bean-class>
     <managed-bean-scope>session</managed-bean-scope>
   </managed-bean>
-    
+
+  <managed-bean>
+    <managed-bean-name>LostPasswordBean</managed-bean-name>
+    <managed-bean-class>sonia.blog.wui.LostPasswordBean</managed-bean-class>
+    <managed-bean-scope>request</managed-bean-scope>
+  </managed-bean>
+
 </faces-config>

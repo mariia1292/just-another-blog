@@ -283,7 +283,7 @@ public class BlogBean extends AbstractBean
         navigation.add(new NavigationMenuItem(bundle.getString("register"),
                 "register"));
       }
-    }
+      }
     else
     {
       String dashboardLink = linkBuilder.buildLink(request,

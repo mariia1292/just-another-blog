@@ -12,11 +12,11 @@ package sonia.blog.wui;
 import sonia.blog.api.app.BlogConfiguration;
 import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.app.Constants;
+import sonia.blog.api.app.MailService;
 import sonia.blog.api.dao.BlogDAO;
 import sonia.blog.api.spam.SpamInputProtection;
 import sonia.blog.api.util.AbstractConfigBean;
 import sonia.blog.entity.Blog;
-import sonia.blog.util.BlogUtil;
 
 import sonia.plugin.service.ServiceReference;
 
@@ -29,8 +29,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.faces.model.SelectItem;
-
-import javax.mail.MessagingException;
 
 /**
  *
@@ -112,10 +110,13 @@ public class GlobalConfigBean extends AbstractConfigBean
 
     try
     {
-      BlogUtil.sendMail("test@just-another-blog.org", testMail, "JAB TestMail",
-                        "This is a test message");
+      String from = getRequest().getCurrentBlog().getEmail();
+      MailService msgService = BlogContext.getInstance().getMailService();
+
+      msgService.sendMail(testMail, from,
+                          "JAB TestMail", "This is a test message");
     }
-    catch (MessagingException ex)
+    catch (Exception ex)
     {
       result = FAILURE;
       logger.log(Level.SEVERE, null, ex);
