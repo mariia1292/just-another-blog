@@ -36,11 +36,22 @@ public class JobQueue<T extends Job>
    */
   public JobQueue()
   {
+    this(Runtime.getRuntime().availableProcessors() * 2);
+  }
+
+  /**
+   * Constructs ...
+   *
+   *
+   * @param handlerCount
+   */
+  public JobQueue(int handlerCount)
+  {
     this.listeners = new ArrayList<JobListener>();
     this.jobs = new LinkedList<T>();
     this.stop = true;
     this.timeoutLimit = 60;
-    this.handlerCount = Runtime.getRuntime().availableProcessors() * 2;
+    this.handlerCount = handlerCount;
     this.handlers = new ArrayList<JobHandler>();
 
     if (logger.isLoggable(Level.FINE))
@@ -190,6 +201,11 @@ public class JobQueue<T extends Job>
     for (JobHandler handler : handlers)
     {
       handler.stopWork();
+    }
+
+    synchronized (jobs)
+    {
+      jobs.notifyAll();
     }
   }
 

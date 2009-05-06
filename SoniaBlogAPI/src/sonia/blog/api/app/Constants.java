@@ -96,6 +96,9 @@ public interface Constants
   public static final String CONFIG_PASSWORD_MINLENGTH = "password.minLength";
 
   /** Field description */
+  public static final String CONFIG_QUEUEHANDLER = "app.queue-handler";
+
+  /** Field description */
   public static final String CONFIG_REGISTERACKNOWLEDGEMENT =
     "register.acknowledgement.mail";
 

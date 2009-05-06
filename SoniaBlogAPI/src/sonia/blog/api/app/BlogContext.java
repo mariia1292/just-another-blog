@@ -78,8 +78,6 @@ public class BlogContext
   {
     this.injectionProvider = new DefaultInjectionProvider();
     this.pluginContext = new PluginContext();
-    this.jobQueue = new JobQueue<BlogJob>();
-    this.jobQueue.start();
   }
 
   //~--- get methods ----------------------------------------------------------
@@ -312,6 +310,24 @@ public class BlogContext
    */
   public JobQueue<BlogJob> getJobQueue()
   {
+    if ( jobQueue == null )
+    {
+      Integer hc = null;
+      if ( isInstalled() )
+      {
+        BlogConfiguration config = getConfiguration();
+        hc = config.getInteger( Constants.CONFIG_QUEUEHANDLER );
+      }
+      if ( hc != null )
+      {
+        this.jobQueue = new JobQueue<BlogJob>();
+      }
+      else
+      {
+        this.jobQueue = new JobQueue<BlogJob>( hc );
+      }
+      this.jobQueue.start();
+    }
     return jobQueue;
   }
 

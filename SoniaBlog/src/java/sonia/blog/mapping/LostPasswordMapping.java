@@ -34,8 +34,6 @@ import sonia.util.Util;
 
 import java.io.IOException;
 
-import java.net.URLDecoder;
-
 import java.text.MessageFormat;
 
 import java.util.Locale;
