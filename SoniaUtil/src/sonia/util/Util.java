@@ -11,6 +11,7 @@ package sonia.util;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -438,6 +439,44 @@ public class Util
     }
 
     return size;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param file
+   *
+   * @return
+   *
+   * @throws IOException
+   */
+  public static String getTextFromFile(File file) throws IOException
+  {
+    StringBuffer buffer = new StringBuffer();
+    BufferedReader reader = null;
+
+    try
+    {
+      reader = new BufferedReader(new FileReader(file));
+
+      String line = reader.readLine();
+
+      while (line != null)
+      {
+        buffer.append(line).append("\n");
+        line = reader.readLine();
+      }
+    }
+    finally
+    {
+      if (reader != null)
+      {
+        reader.close();
+      }
+    }
+
+    return buffer.toString();
   }
 
   /**

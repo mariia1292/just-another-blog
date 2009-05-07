@@ -562,6 +562,36 @@ public class BlogContext
    *
    * @return
    */
+  public String getVersion()
+  {
+    if (Util.isBlank(version))
+    {
+      String path =
+        getServletContext().getRealPath("/WEB-INF/config/version.txt");
+      File file = new File(path);
+
+      if (file.exists())
+      {
+        try
+        {
+          version = Util.getTextFromFile(file);
+        }
+        catch (IOException ex)
+        {
+          logger.log(Level.SEVERE, null, ex);
+        }
+      }
+    }
+
+    return version;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
   public boolean isInstalled()
   {
     if (!installed)
@@ -639,4 +669,7 @@ public class BlogContext
 
   /** Field description */
   private TemplateManager templateManager;
+
+  /** Field description */
+  private String version;
 }
