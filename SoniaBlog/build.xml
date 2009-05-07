@@ -69,6 +69,15 @@
     nbproject/build-impl.xml file. 
 
     -->
+  <target name="-pre-init">
+    <ant antfile="../SoniaAnt/build.xml" inheritall="false" target="jar"/>
+  </target>
+
+  <target name="-pre-dist">
+    <taskdef name="hgVersion" classname="sonia.ant.MercurialVersion" classpath="../SoniaAnt/dist/SoniaAnt.jar" />
+    <hgVersion prefix="r" repositorypath="${basedir}/.." path="${basedir}/${build.web.dir}/WEB-INF/config/version.txt" />
+  </target>
+  
   <target name="-post-dist">
 
     <property name="build.tomcat.dir" value="${build.web.dir}/../tomcat" />
