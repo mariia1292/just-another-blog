@@ -125,9 +125,14 @@
         <!-- end: #main -->
         <!-- begin: #footer -->
         <div id="footer">
-          <a href="http://kenai.com/projects/jab">
-            JAB - Just Another Blog
-          </a>
+          <div class="float_left">
+            <a href="http://kenai.com/projects/jab">
+              JAB - Just Another Blog
+            </a>
+          </div>
+          <div class="float_right">
+            <h:outputText value="#{BlogBean.version}" rendered="#{BlogBean.version != null}" />
+          </div>
         </div>
         <!-- end: #footer -->
       </div>

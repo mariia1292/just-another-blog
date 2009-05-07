@@ -283,7 +283,7 @@ public class BlogBean extends AbstractBean
         navigation.add(new NavigationMenuItem(bundle.getString("register"),
                 "register"));
       }
-      }
+    }
     else
     {
       String dashboardLink = linkBuilder.buildLink(request,
@@ -561,6 +561,17 @@ public class BlogBean extends AbstractBean
   {
     return BlogContext.getInstance().getTemplateManager().getTemplate(
         getBlog());
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  public String getVersion()
+  {
+    return BlogContext.getInstance().getVersion();
   }
 
   /**
