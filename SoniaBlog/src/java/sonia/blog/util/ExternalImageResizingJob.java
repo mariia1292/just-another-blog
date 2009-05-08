@@ -85,7 +85,7 @@ public class ExternalImageResizingJob implements BlogJob
 
     try
     {
-      int exit = ExecUtil.process(cmd, 10000l);
+      int exit = ExecUtil.process(cmd, timeout);
       Level level = (exit == 0)
                     ? Level.FINE
                     : Level.WARNING;
