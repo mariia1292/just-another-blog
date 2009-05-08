@@ -39,6 +39,9 @@ public interface Constants
     "app.cmd.resize-image";
 
   /** Field description */
+  public static final String CONFIG_COMMAND_TIMEOUT = "app.cmd.timeout";
+
+  /** Field description */
   public static final String CONFIG_COOKIEKEY = "app.cookieKey";
 
   /** Field description */
@@ -141,6 +144,9 @@ public interface Constants
   /** Field description */
   public static final String DEFAULT_COMMAND_RESIZE_IMAGE =
     "convert -resize {3,choice,0#|0<{3}}{4,choice,0#|0<x{4}} {0} {2}:{1}";
+
+  /** Field description */
+  public static final long DEFAULT_COMMAND_TIMEOUT = 10000l;
 
   /** Field description */
   public static final int DEFAULT_COOKIETIME = 60 * 60 * 24 * 31;

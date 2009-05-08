@@ -46,6 +46,7 @@ public class ExternalImageResizingJob implements BlogJob
    *
    *
    * @param command
+   * @param timeout
    * @param blog
    * @param source
    * @param target
@@ -53,11 +54,12 @@ public class ExternalImageResizingJob implements BlogJob
    * @param maxWidth
    * @param maxHeight
    */
-  public ExternalImageResizingJob(String command, Blog blog, File source,
-                                  File target, String format, int maxWidth,
-                                  int maxHeight)
+  public ExternalImageResizingJob(String command, long timeout, Blog blog,
+                                  File source, File target, String format,
+                                  int maxWidth, int maxHeight)
   {
     this.command = command;
+    this.timeout = timeout;
     this.blog = blog;
     this.source = source;
     this.target = target;
@@ -83,7 +85,7 @@ public class ExternalImageResizingJob implements BlogJob
 
     try
     {
-      int exit = ExecUtil.process(cmd, 5000l);
+      int exit = ExecUtil.process(cmd, 10000l);
       Level level = (exit == 0)
                     ? Level.FINE
                     : Level.WARNING;
@@ -160,4 +162,7 @@ public class ExternalImageResizingJob implements BlogJob
 
   /** Field description */
   private File target;
+
+  /** Field description */
+  private long timeout;
 }

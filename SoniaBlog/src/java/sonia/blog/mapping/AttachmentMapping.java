@@ -138,8 +138,9 @@ public class AttachmentMapping extends FinalMapping
     }
     else if ("external".equalsIgnoreCase(resizeMethod))
     {
-      job = new ExternalImageResizingJob(resizeCommand, blog, source, target,
-                                         format, maxWidth, maxHeight);
+      job = new ExternalImageResizingJob(resizeCommand, commandTimeout, blog,
+                                         source, target, format, maxWidth,
+                                         maxHeight);
     }
     else
     {
@@ -359,6 +360,10 @@ public class AttachmentMapping extends FinalMapping
   }
 
   //~--- fields ---------------------------------------------------------------
+
+  /** Field description */
+  @Config(Constants.CONFIG_COMMAND_TIMEOUT)
+  private Long commandTimeout = Constants.DEFAULT_COMMAND_TIMEOUT;
 
   /** Field description */
   @Config(Constants.CONFIG_COMMAND_RESIZE_IMAGE)
