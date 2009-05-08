@@ -274,18 +274,19 @@ public class PdfViewerMacro extends AbstractBlogMacro
     StringBuffer result = new StringBuffer();
     String res = linkBase + "resources/lightbox/";
 
-    if (request.getAttribute("sonia.blog.macro.gallery") == null)
-    {
-      result.append("<script type=\"text/javascript\" src=\"").append(linkBase);
-      result.append("resources/jquery/jquery.min.js\"></script>\n");
-      result.append("<script type=\"text/javascript\" src=\"").append(res);
-      result.append("js/jquery.lightbox-0.5.js\"></script>\n");
-      result.append("<link rel=\"stylesheet\" href=\"").append(res);
-      result.append("css/jquery.lightbox-0.5.css\" ");
-      result.append("type=\"text/css\" media=\"screen\"></link>\n");
-      request.setAttribute("sonia.blog.macro.gallery", Boolean.TRUE);
-    }
-
+    /*
+     * if (request.getAttribute("sonia.blog.macro.gallery") == null)
+     * {
+     * result.append("<script type=\"text/javascript\" src=\"").append(linkBase);
+     * result.append("resources/jquery/jquery.min.js\"></script>\n");
+     * result.append("<script type=\"text/javascript\" src=\"").append(res);
+     * result.append("js/jquery.lightbox-0.5.js\"></script>\n");
+     * result.append("<link rel=\"stylesheet\" href=\"").append(res);
+     * result.append("css/jquery.lightbox-0.5.css\" ");
+     * result.append("type=\"text/css\" media=\"screen\"></link>\n");
+     * request.setAttribute("sonia.blog.macro.gallery", Boolean.TRUE);
+     * }
+     */
     File[] files = pdfDir.listFiles(new FilenameFilter()
     {
       public boolean accept(File dir, String name)
@@ -336,6 +337,10 @@ public class PdfViewerMacro extends AbstractBlogMacro
     result.append("</span>\n");
     result.append("<script type=\"text/javascript\">\n");
     result.append("$(document).ready(function() {\n");
+    result.append("addScript(\"").append(res);
+    result.append("js/jquery.lightbox-0.5.js").append("\");\n");
+    result.append("addCSS(\"").append(res);
+    result.append("css/jquery.lightbox-0.5.css").append("\");\n");
     result.append("$(\"span#").append(name).append(" a\").lightBox({\n");
     result.append("imageLoading: '").append(res);
     result.append("images/lightbox-ico-loading.gif',\n");
