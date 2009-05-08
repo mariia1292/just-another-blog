@@ -16,10 +16,6 @@ import sonia.config.Config;
 
 //~--- JDK imports ------------------------------------------------------------
 
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-
 import javax.faces.context.FacesContext;
 
 /**
@@ -28,9 +24,6 @@ import javax.faces.context.FacesContext;
  */
 public class CodeMacro extends AbstractBlogMacro
 {
-
-  /** Field description */
-  public static final String ATTRIBUTE_VAR = "sonia.office.code";
 
   /** Field description */
   public static final String CONFIG_THEME = "office.code.theme";
@@ -111,15 +104,13 @@ public class CodeMacro extends AbstractBlogMacro
   public static final String THEME_RDARK = "rdark";
 
   /** Field description */
-  private static final String CSS_PREFIX =
-    "<link type=\"text/css\" rel=\"stylesheet\" href=\"";
+  private static final String CSS_PREFIX = "addCSS(\"";
 
   /** Field description */
-  private static final String JS_PREFIX =
-    "<script language=\"javascript\" src=\"";
+  private static final String JS_PREFIX = "addScript(\"";
 
   /** Field description */
-  private static final String SUFFIX = "\"></script>\n";
+  private static final String SUFFIX = "\")\n";
 
   //~--- set methods ----------------------------------------------------------
 
@@ -208,172 +199,130 @@ public class CodeMacro extends AbstractBlogMacro
 
     StringBuffer result = new StringBuffer();
 
-    result.append("\n");
+    result.append("<script type=\"text/javascript\">\n");
 
-    boolean appendCore = false;
-    Map<String, Object> requestMap =
-      facesContext.getExternalContext().getRequestMap();
-    Set<String> ca = (Set<String>) requestMap.get(ATTRIBUTE_VAR);
+    // Core CSS
+    result.append(cssPrefix).append("shCore.css").append(SUFFIX);
 
-    if (ca == null)
+    // Core JS
+    result.append(jsPrefix).append("shCore.js").append(SUFFIX);
+
+    // Theme CSS
+    if (theme.equalsIgnoreCase(THEME_DJANGO))
     {
-      appendCore = true;
-      ca = new HashSet<String>();
+      result.append(cssPrefix).append("shThemeDjango.css").append(SUFFIX);
     }
-
-    if (appendCore)
+    else if (theme.equalsIgnoreCase(THEME_EMACS))
     {
-
-      // Core CSS
-      result.append(cssPrefix).append("shCore.css").append(SUFFIX);
-
-      // Core JS
-      result.append(jsPrefix).append("shCore.js").append(SUFFIX);
-
-      // Theme CSS
-      if (theme.equalsIgnoreCase(THEME_DJANGO))
-      {
-        result.append(cssPrefix).append("shThemeDjango.css").append(SUFFIX);
-      }
-      else if (theme.equalsIgnoreCase(THEME_EMACS))
-      {
-        result.append(cssPrefix).append("shThemeEmacs.css").append(SUFFIX);
-      }
-      else if (theme.equalsIgnoreCase(THEME_FADETOGREY))
-      {
-        result.append(cssPrefix).append("shThemeFadeToGrey.css").append(SUFFIX);
-      }
-      else if (theme.equalsIgnoreCase(THEME_MIDNIGHT))
-      {
-        result.append(cssPrefix).append("shThemeMidnight.css").append(SUFFIX);
-      }
-      else if (theme.equalsIgnoreCase(THEME_RDARK))
-      {
-        result.append(cssPrefix).append("shThemeRDark.css").append(SUFFIX);
-      }
-      else
-      {
-        result.append(cssPrefix).append("shThemeDefault.css").append(SUFFIX);
-      }
+      result.append(cssPrefix).append("shThemeEmacs.css").append(SUFFIX);
+    }
+    else if (theme.equalsIgnoreCase(THEME_FADETOGREY))
+    {
+      result.append(cssPrefix).append("shThemeFadeToGrey.css").append(SUFFIX);
+    }
+    else if (theme.equalsIgnoreCase(THEME_MIDNIGHT))
+    {
+      result.append(cssPrefix).append("shThemeMidnight.css").append(SUFFIX);
+    }
+    else if (theme.equalsIgnoreCase(THEME_RDARK))
+    {
+      result.append(cssPrefix).append("shThemeRDark.css").append(SUFFIX);
+    }
+    else
+    {
+      result.append(cssPrefix).append("shThemeDefault.css").append(SUFFIX);
     }
 
     lang = lang.toLowerCase();
 
-    if (lang.equals("bash") &&!ca.contains(LANG_BASH))
+    if (lang.equals("bash"))
     {
       result.append(jsPrefix).append("shBrushBash.js").append(SUFFIX);
-      ca.add(LANG_BASH);
     }
     else if (lang.equals("csharp") || lang.equals("c#")
-             || (lang.equals("c-sharp") &&!ca.contains(LANG_CSAHRP)))
+             || (lang.equals("c-sharp")))
     {
       result.append(jsPrefix).append("shBrushCSharp.js").append(SUFFIX);
     }
-    else if (lang.equals("cpp") || lang.equals("c++")
-             || (lang.equals("c") &&!ca.contains(LANG_CPP)))
+    else if (lang.equals("cpp") || lang.equals("c++") || (lang.equals("c")))
     {
       result.append(jsPrefix).append("shBrushCpp.js").append(SUFFIX);
-      result.append(LANG_CPP);
     }
-    else if (lang.equals("css") &&!ca.contains(LANG_CSS))
+    else if (lang.equals("css"))
     {
       result.append(jsPrefix).append("shBrushCss.js").append(SUFFIX);
       result.append(LANG_CSS);
     }
-    else if (lang.equals("delphi")
-             || (lang.equals("pascal") &&!ca.contains(LANG_DELPHI)))
+    else if (lang.equals("delphi") || (lang.equals("pascal")))
     {
       result.append(jsPrefix).append("shBrushDelphi.js").append(SUFFIX);
-      ca.add(LANG_DELPHI);
     }
-    else if (lang.equals("diff") &&!ca.contains(LANG_DIFF))
+    else if (lang.equals("diff"))
     {
       result.append(jsPrefix).append("shBrushDiff.js").append(SUFFIX);
-      ca.add(LANG_DIFF);
     }
-    else if (lang.equals("groovy") &&!ca.contains(LANG_GROOVY))
+    else if (lang.equals("groovy"))
     {
       result.append(jsPrefix).append("shBrushGroovy.js").append(SUFFIX);
-      ca.add(LANG_GROOVY);
     }
     else if (lang.equals("js") || lang.equals("javascript")
-             || (lang.equals("jscript") &&!ca.contains(LANG_JS)))
+             || (lang.equals("jscript")))
     {
       result.append(jsPrefix).append("shBrushJScript.js").append(SUFFIX);
-      ca.add(LANG_JS);
     }
-    else if (lang.equals("java") &&!ca.contains(LANG_JAVA))
+    else if (lang.equals("java"))
     {
       result.append(jsPrefix).append("shBrushJava.js").append(SUFFIX);
-      ca.add(LANG_JAVA);
     }
-    else if (lang.equals("perl") &&!ca.contains(LANG_PERL))
+    else if (lang.equals("perl"))
     {
       result.append(jsPrefix).append("shBrushPerl.js").append(SUFFIX);
-      ca.add(LANG_PERL);
     }
-    else if (lang.equals("php") &&!ca.contains(LANG_PHP))
+    else if (lang.equals("php"))
     {
       result.append(jsPrefix).append("shBrushPhp.js").append(SUFFIX);
-      ca.add(LANG_PHP);
     }
-    else if (lang.equals("plain") &&!ca.contains(LANG_PLAIN))
+    else if (lang.equals("plain"))
     {
       result.append(jsPrefix).append("shBrushPlain.js").append(SUFFIX);
-      ca.add(LANG_PLAIN);
     }
-    else if (lang.equals("python")
-             || (lang.equals("py") &&!ca.contains(LANG_PYTHON)))
+    else if (lang.equals("python") || (lang.equals("py")))
     {
       result.append(jsPrefix).append("shBrushPython.js").append(SUFFIX);
-      ca.add(LANG_PYTHON);
     }
     else if (lang.equals("ruby") || lang.equals("ror") || lang.equals("rb")
-             || (lang.equals("rails") &&!ca.contains(LANG_RUBY)))
+             || (lang.equals("rails")))
     {
       result.append(jsPrefix).append("shBrushRuby.js").append(SUFFIX);
-      ca.add(LANG_RUBY);
     }
-    else if (lang.equals("scala") &&!ca.contains(LANG_SCALA))
+    else if (lang.equals("scala"))
     {
       result.append(jsPrefix).append("shBrushScala.js").append(SUFFIX);
-      ca.add(LANG_SCALA);
     }
-    else if (lang.equals("sql") &&!ca.contains(LANG_SQL))
+    else if (lang.equals("sql"))
     {
       result.append(jsPrefix).append("shBrushSql.js").append(SUFFIX);
-      ca.add(LANG_SQL);
     }
-    else if (lang.equals("vb")
-             || (lang.equals("vb.net") &&!ca.contains(LANG_VB)))
+    else if (lang.equals("vb") || (lang.equals("vb.net")))
     {
       result.append(jsPrefix).append("shBrushVb.js").append(SUFFIX);
-      ca.add(LANG_VB);
     }
     else if (lang.equals("xml") || lang.equals("html") || lang.equals("xhtml")
-             || (lang.equals("xslt") &&!ca.contains(LANG_XML)))
+             || (lang.equals("xslt")))
     {
       result.append(jsPrefix).append("shBrushXml.js").append(SUFFIX);
-      ca.add(LANG_XML);
     }
 
-    if (appendCore)
-    {
-      result.append("<script language=\"javascript\">\n");
-      result.append("SyntaxHighlighter.config.clipboardSwf = '");
-      result.append(linkBase).append(
-          "resource/syntax/scripts/clipboard.swf';\n");
-      result.append("SyntaxHighlighter.config.bloggerMode = true;\n");
-      result.append("SyntaxHighlighter.all();\n");
-      result.append("</script>\n");
-    }
-
+    result.append("SyntaxHighlighter.config.clipboardSwf = '");
+    result.append(linkBase).append("resource/syntax/scripts/clipboard.swf';\n");
+    result.append("SyntaxHighlighter.config.bloggerMode = true;\n");
+    result.append("SyntaxHighlighter.all();\n");
+    result.append("</script>\n");
     result.append("<pre name=\"code\" class=\"brush: ").append(lang);
     result.append("; toolbar: ").append(toolbar).append("; gutter: ");
     result.append(gutter).append("; collapse: ").append(collapse);
     result.append("; tab-size: ").append(tabSize);
     result.append(";\">\n").append(body).append("\n</pre>\n");
-    requestMap.put(ATTRIBUTE_VAR, ca);
 
     return result.toString();
   }

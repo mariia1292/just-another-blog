@@ -10,7 +10,6 @@ package sonia.blog.macro;
 //~--- non-JDK imports --------------------------------------------------------
 
 import sonia.blog.api.app.BlogContext;
-import sonia.blog.entity.ContentObject;
 
 import sonia.macro.Macro;
 
@@ -41,19 +40,14 @@ public class SpoilerMacro implements Macro
       title = "spoiler";
     }
 
-    ContentObject object = (ContentObject) environment.get("object");
-    StringBuffer js = new StringBuffer();
-
-    js.append("var div = this.parentNode.getElementsByTagName('div')[0]");
-    js.append(".getElementsByTagName('div')[0];");
-    js.append("if ( div.style.display != '' ){ div.style.display = '' } ");
-    js.append("else { div.style.display = 'none' }");
-
+    long time = System.nanoTime();
     StringBuffer result = new StringBuffer();
 
     result.append("<div>\n");
     result.append("<input type=\"button\" value=\"").append(title);
-    result.append("\" onclick=\"").append(js).append("\" />\n");
+    result.append("\" onclick=\"");
+    result.append("$('#spoiler_").append(time).append("').toggle();");
+    result.append("\" />\n");
     result.append("<div");
 
     if (style != null)
@@ -67,7 +61,7 @@ public class SpoilerMacro implements Macro
     }
 
     result.append(">");
-    result.append("<div id=\"spoiler_").append(object.getId());
+    result.append("<div id=\"spoiler_").append(time);
     result.append("\" style=\"display: none;\">\n");
 
     if (macros)

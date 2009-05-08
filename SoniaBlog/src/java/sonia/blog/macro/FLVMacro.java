@@ -131,22 +131,25 @@ public class FLVMacro extends AbstractBlogMacro
     String attachmentLink = linkBuilder.buildLink(request, attchment);
     StringBuffer result = new StringBuffer();
 
-    if (request.getAttribute("sonia.blog.flvplayer") == null)
-    {
-      result.append("<script type=\"text/javascript\" src=\"");
-      result.append(playerPath);
-      result.append("flowplayer.min.js\"></script>");
-      request.setAttribute("sonia.blog.flvplayer", Boolean.TRUE);
-    }
-
+    // player block
     result.append("<a id=\"flvplayer_").append(attchment.getId());
     result.append("\" href=\"").append(attachmentLink);
     result.append("\" style=\"display: block; width: ").append(width);
     result.append("px; height: ").append(height).append("px\"></a>");
+
+    // load player
     result.append("<script type=\"text/javascript\">\n");
-    result.append("$f(\"flvplayer_").append(+attchment.getId());
+
+    // load flowplayer.min.js
+    result.append("addScript(\"").append(playerPath);
+    result.append("flowplayer.min.js\");\n");
+
+    // load flowplayer.swf
+    result.append("$f(\"flvplayer_").append(attchment.getId());
     result.append("\", \"").append(playerPath);
     result.append("flowplayer.swf\", {\n");
+
+    // configure player
     result.append("clip: {\n");
     result.append("url: '").append(attachmentLink).append("',\n");
     result.append("autoPlay: false\n");
