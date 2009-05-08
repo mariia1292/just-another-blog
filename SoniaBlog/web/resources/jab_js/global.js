@@ -18,9 +18,11 @@ function addCSS( href, media )
   }
 }
 
+var srcArray = new Array();
+
 function addScript( src, type )
 {
-  if ( $("script[src="+src+"]").length == 0 )
+  if ( srcArray.indexOf( src) < 0 )
   {
     var element = document.createElement( "script" );
     if ( type && type.length > 0 )
@@ -33,5 +35,6 @@ function addScript( src, type )
     }
     element.src = src;
     $("head:first").append( element );
+    srcArray.push(src);
   }
 }
