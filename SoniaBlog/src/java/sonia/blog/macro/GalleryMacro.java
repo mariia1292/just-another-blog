@@ -59,70 +59,78 @@ public class GalleryMacro extends AbstractBlogMacro
   protected String doBody(FacesContext facesContext, String linkBase,
                           ContentObject object, String body)
   {
-    String result = "";
+    StringBuffer result = new StringBuffer();
     List<Attachment> images = getImages(object);
 
     if (Util.hasContent(images))
     {
       try
       {
-        facesContext.getExternalContext().getRequestMap().put("test",
-                "<h1>Hello</h1>");
-
         if ((images != null) &&!images.isEmpty())
         {
           LinkBuilder linkBuilder = BlogContext.getInstance().getLinkBuilder();
-          Map<String, Object> requestMap =
-            facesContext.getExternalContext().getRequestMap();
           BlogRequest request =
             BlogUtil.getBlogRequest(
                 facesContext.getExternalContext().getRequest());
           String res = linkBuilder.buildLink(request, "/resources/");
           String lRes = res + "lightbox/";
 
-          if (!requestMap.containsKey("sonia.blog.macro.gallery"))
-          {
-            result += "<script type=\"text/javascript\" src=\"" + res
-                      + "jquery/jquery.min.js\"></script>\n";
-            result += "<script type=\"text/javascript\" src=\"" + lRes
-                      + "js/jquery.lightbox-0.5.js\"></script>\n";
-            result += "<link rel=\"stylesheet\" href=\"" + lRes
-                      + "css/jquery.lightbox-0.5.css\" "
-                      + "type=\"text/css\" media=\"screen\"></link>\n";
-            requestMap.put("sonia.blog.macro.gallery", Boolean.TRUE);
-          }
-
-          result += "<div id=\"gallery_" + object.getId() + "\">\n";
+          result.append("<div id=\"gallery_").append(object.getId());
+          result.append("\">\n");
 
           for (int i = 0; i < images.size(); i++)
           {
             Attachment image = images.get(i);
 
-            result += "<a id=\"image_" + i + "\" title=\"" + image.getName()
-                      + "\" rel=\"ligthbox[group_" + object.getId()
-                      + "]\" href=\"" + linkBuilder.buildLink(request, image)
-                      + "\">\n";
-            result += "<img border=\"0\" alt=\"\" src=\""
-                      + linkBuilder.buildLink(request, image) + "?thumb\" />\n";
-            result += "</a>";
+            result.append("<a id=\"image_").append(i).append("\" title=\"");
+            result.append(image.getName()).append("\" rel=\"ligthbox[group_");
+            result.append(object.getId()).append("]\" href=\"");
+            result.append(linkBuilder.buildLink(request, image));
+            result.append("\">\n").append("<img border=\"0\" alt=\"\" src=\"");
+            result.append(linkBuilder.buildLink(request, image));
+            result.append("?thumb\" />\n").append("</a>");
           }
 
-          result += "</div>\n";
-          result += "<script type=\"text/javascript\">\n";
-          result += "$(document).ready(function() {\n";
-          result += "$(\"div#gallery_" + object.getId() + " a\").lightBox({\n";
-          result += "imageLoading: '" + lRes
-                    + "images/lightbox-ico-loading.gif',\n";
-          result += "imageBtnPrev: '" + lRes
-                    + "images/lightbox-btn-prev.gif',\n";
-          result += "imageBtnNext: '" + lRes
-                    + "images/lightbox-btn-next.gif',\n";
-          result += "imageBtnClose: '" + lRes
-                    + "images/lightbox-btn-close.gif',\n";
-          result += "imageBlank: '" + lRes + "images/lightbox-blank.gif'\n";
-          result += "});\n";
-          result += "});\n";
-          result += "</script>\n";
+          result.append("</div>\n");
+          result.append("<script type=\"text/javascript\">\n");
+
+          // on document ready
+          result.append("$(document).ready(function() {\n");
+
+          // load lightbox js
+          result.append("addScript(\"").append(lRes);
+          result.append("js/jquery.lightbox-0.5.js").append("\");\n");
+
+          // load lightbox css
+          result.append("addCSS(\"").append(lRes);
+          result.append("css/jquery.lightbox-0.5.css").append("\");\n");
+
+          // configure gallery
+          result.append("$(\"div#gallery_").append(object.getId());
+          result.append(" a\").lightBox({\n");
+
+          // load icon
+          result.append("imageLoading: '").append(lRes);
+          result.append("images/lightbox-ico-loading.gif',\n");
+
+          // previous button
+          result.append("imageBtnPrev: '").append(lRes);
+          result.append("images/lightbox-btn-prev.gif',\n");
+
+          // next button
+          result.append("imageBtnNext: '").append(lRes);
+          result.append("images/lightbox-btn-next.gif',\n");
+
+          // close button
+          result.append("imageBtnClose: '").append(lRes);
+          result.append("images/lightbox-btn-close.gif',\n");
+
+          // blank image
+          result.append("imageBlank: '").append(lRes);
+          result.append("images/lightbox-blank.gif'\n");
+          result.append("});\n");
+          result.append("});\n");
+          result.append("</script>\n");
         }
       }
       catch (Exception ex)
@@ -131,7 +139,7 @@ public class GalleryMacro extends AbstractBlogMacro
       }
     }
 
-    return result;
+    return result.toString();
   }
 
   //~--- get methods ----------------------------------------------------------

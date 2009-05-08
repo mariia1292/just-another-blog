@@ -57,56 +57,103 @@ public class ResourceRenderer extends BaseRenderer
 
       ResponseWriter writer = context.getResponseWriter();
 
-      if ((resource.getIePatch() != null)
-          && resource.getIePatch().equals(Boolean.TRUE))
+      if (type.equals("script"))
       {
-        writer.write("<!--[if lte IE 7]>\n");
+        addScript(context, writer, resource);
       }
-
-      writer.startElement("link", component);
-
-      if (type.equalsIgnoreCase("css") || type.equalsIgnoreCase("stylesheet"))
+      else
       {
-        writer.writeAttribute("rel", "stylesheet", null);
-        writer.writeAttribute("type", "text/css", null);
-        writer.writeAttribute("class", "user", null);
-      }
-      else if (type.equalsIgnoreCase("rss"))
-      {
-        writer.writeAttribute("rel", "alternate", null);
-        writer.writeAttribute("type", "application/rss+xml", type);
-      }
-      else if (type.equalsIgnoreCase("opensearch"))
-      {
-        writer.writeAttribute("rel", "search", null);
-        writer.writeAttribute("type", "application/opensearchdescription+xml",
-                              type);
-      }
-      else if (type.equalsIgnoreCase("favicon"))
-      {
-        writer.writeAttribute("rel", "shortcut icon", null);
-      }
-
-      if (resource.getTitle() != null)
-      {
-        writer.writeAttribute("title", "JAB - " + resource.getTitle(), null);
-      }
-
-      if (resource.getHref() != null)
-      {
-        writer.writeAttribute("href",
-                              buildRelativeLink(context, resource.getHref()),
-                              null);
-      }
-
-      writer.endElement("link");
-      writer.write("\n");
-
-      if ((resource.getIePatch() != null)
-          && resource.getIePatch().equals(Boolean.TRUE))
-      {
-        writer.write("<![endif]-->");
+        addLink(context, writer, resource, type);
       }
     }
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param context
+   * @param writer
+   * @param resource
+   * @param type
+   *
+   * @throws IOException
+   */
+  private void addLink(FacesContext context, ResponseWriter writer,
+                       ResourceComponent resource, String type)
+          throws IOException
+  {
+    if ((resource.getIePatch() != null)
+        && resource.getIePatch().equals(Boolean.TRUE))
+    {
+      writer.write("<!--[if lte IE 7]>\n");
+    }
+
+    writer.startElement("link", resource);
+
+    if (type.equalsIgnoreCase("css") || type.equalsIgnoreCase("stylesheet"))
+    {
+      writer.writeAttribute("rel", "stylesheet", null);
+      writer.writeAttribute("type", "text/css", null);
+      writer.writeAttribute("class", "user", null);
+    }
+    else if (type.equalsIgnoreCase("rss"))
+    {
+      writer.writeAttribute("rel", "alternate", null);
+      writer.writeAttribute("type", "application/rss+xml", null);
+    }
+    else if (type.equalsIgnoreCase("opensearch"))
+    {
+      writer.writeAttribute("rel", "search", null);
+      writer.writeAttribute("type", "application/opensearchdescription+xml",
+                            type);
+    }
+    else if (type.equalsIgnoreCase("favicon"))
+    {
+      writer.writeAttribute("rel", "shortcut icon", null);
+    }
+
+    if (resource.getTitle() != null)
+    {
+      writer.writeAttribute("title", "JAB - " + resource.getTitle(), null);
+    }
+
+    if (resource.getHref() != null)
+    {
+      writer.writeAttribute("href",
+                            buildRelativeLink(context, resource.getHref()),
+                            null);
+    }
+
+    writer.endElement("link");
+    writer.write("\n");
+
+    if ((resource.getIePatch() != null)
+        && resource.getIePatch().equals(Boolean.TRUE))
+    {
+      writer.write("<![endif]-->\n");
+    }
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param context
+   * @param writer
+   * @param resource
+   *
+   * @throws IOException
+   */
+  private void addScript(FacesContext context, ResponseWriter writer,
+                         ResourceComponent resource)
+          throws IOException
+  {
+    writer.startElement("script", resource);
+    writer.writeAttribute("type", "text/javascript", null);
+    writer.writeAttribute("src",
+                          buildRelativeLink(context, resource.getHref()), null);
+    writer.endElement("script");
+    writer.write("\n");
   }
 }
