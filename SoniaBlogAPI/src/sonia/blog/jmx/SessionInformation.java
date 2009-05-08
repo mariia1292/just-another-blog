@@ -279,6 +279,17 @@ public class SessionInformation implements SessionInformationMBean
    *
    * @return
    */
+  public String getVersion()
+  {
+    return BlogContext.getInstance().getVersion();
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
   private File getResourceDir()
   {
     if (resourceDir == null)
