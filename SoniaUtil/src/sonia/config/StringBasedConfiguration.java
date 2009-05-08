@@ -268,14 +268,18 @@ public abstract class StringBasedConfiguration extends ConfigurationBase
   public Long getLong(String key)
   {
     Long result = null;
+    String value = getString(key);
 
-    try
+    if (value != null)
     {
-      result = Long.parseLong(getString(key));
-    }
-    catch (Exception ex)
-    {
-      getExceptionHandler().handleException(ex);
+      try
+      {
+        result = Long.parseLong(value);
+      }
+      catch (Exception ex)
+      {
+        getExceptionHandler().handleException(ex);
+      }
     }
 
     return result;

@@ -30,6 +30,9 @@ public class MathSpamProtection implements SpamInputProtection
   /** Field description */
   public static final String LABEL = "Math";
 
+  /** Field description */
+  private static final long serialVersionUID = 6655134796472622884L;
+
   //~--- methods --------------------------------------------------------------
 
   /**
