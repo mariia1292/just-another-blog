@@ -145,4 +145,12 @@ public interface SessionInformationMBean
    * @return
    */
   public long getTotalUsers();
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  public String getVersion();
 }
