@@ -82,7 +82,9 @@
 
     <property name="build.tomcat.dir" value="${build.web.dir}/../tomcat" />
 
-    <copydir src="${build.web.dir}" dest="${build.tomcat.dir}" />
+    <copy todir="${build.tomcat.dir}">
+      <fileset dir="${build.web.dir}" />
+    </copy>
 
     <copyfiles files="${libs.JAVADB_DRIVER_LABEL.classpath}" iftldtodir="${build.web.dir}/WEB-INF" manifestproperty="manifest.libs.JAVADB_DRIVER_LABEL.classpath" todir="${build.tomcat.dir}/WEB-INF/lib"/>
     <copyfiles files="${libs.JavaMail.classpath}" iftldtodir="${build.web.dir}/WEB-INF" manifestproperty="manifest.libs.JavaMail.classpath" todir="${build.tomcat.dir}/WEB-INF/lib"/>
