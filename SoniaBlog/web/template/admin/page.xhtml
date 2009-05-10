@@ -19,7 +19,9 @@
 
         <h1><h:outputText value="#{PageBean.page.title}" /></h1>
 
-        <blog:content styleClass="content" object="#{PageBean.page}" />
+        <div class="content">
+          <h:outputText value="#{PageBean.page.displayContent}" escape="false" />
+        </div>
 
         <p>
           <h:outputText value="#{PageBean.page.creationDate}">

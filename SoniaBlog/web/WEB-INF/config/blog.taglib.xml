@@ -4,14 +4,6 @@
 <facelet-taglib>
 
     <namespace>http://jab.nitilon.org/blog/</namespace>
-    
-    <tag>
-        <tag-name>content</tag-name>
-        <component>
-            <component-type>sonia.blog.content</component-type>
-            <renderer-type>sonia.blog.content.renderer</renderer-type>
-        </component>
-    </tag>
 
     <tag>
         <tag-name>calendar</tag-name>
