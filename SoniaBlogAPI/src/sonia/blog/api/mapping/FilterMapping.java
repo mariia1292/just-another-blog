@@ -241,9 +241,7 @@ public abstract class FilterMapping implements Mapping
     MacroParser parser = BlogContext.getInstance().getMacroParser();
     String text = null;
 
-    System.out.println( object.getId() );
-
-    if (teaser && Util.hasContent( object.getTeaser() ))
+    if (teaser && Util.hasContent(object.getTeaser()))
     {
       text = object.getTeaser();
     }
@@ -251,8 +249,6 @@ public abstract class FilterMapping implements Mapping
     {
       text = object.getContent();
     }
-
-    System.out.println( text );
 
     MacroResult result = parser.parseText(env, text);
     List<Macro> macros = result.getMacros();
@@ -280,8 +276,6 @@ public abstract class FilterMapping implements Mapping
         }
       }
     }
-
-    System.out.println( result.getText() );
 
     object.setDisplayContent(result.getText());
   }

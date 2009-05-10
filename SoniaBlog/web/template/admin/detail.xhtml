@@ -28,7 +28,9 @@
 
         <h1><h:outputText value="#{BlogBean.entry.title}" /></h1>
 
-        <blog:content object="#{BlogBean.entry}" />
+        <div class="content">
+          <h:outputText value="#{BlogBean.entry.displayContent}" escape="false" />
+        </div>
 
         <h:panelGroup styleClass="comments" rendered="#{BlogBean.showComments}">
 

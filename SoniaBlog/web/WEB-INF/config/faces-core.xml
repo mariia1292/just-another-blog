@@ -85,15 +85,6 @@
   </application>
 
   <component>
-    <display-name>content</display-name>
-    <component-type>sonia.blog.content</component-type>
-    <component-class>sonia.blog.api.jsf.content.ContentComponent</component-class>
-    <component-extension>
-      <renderer-type>sonia.blog.content.renderer</renderer-type>
-    </component-extension>
-  </component>
-  
-  <component>
     <display-name>link</display-name>
     <component-type>sonia.blog.link</component-type>
     <component-class>sonia.blog.api.jsf.link.LinkComponent</component-class>
@@ -203,11 +194,6 @@
       <component-family>sonia.blog.content</component-family>
       <renderer-type>sonia.blog.content.renderer</renderer-type>
       <renderer-class>sonia.blog.api.jsf.content.ContentRenderer</renderer-class>
-    </renderer>
-    <renderer>
-      <component-family>sonia.blog.calendar</component-family>
-      <renderer-type>sonia.blog.calendar.renderer</renderer-type>
-      <renderer-class>sonia.blog.api.jsf.calendar.CalendarRenderer</renderer-class>
     </renderer>
     <renderer>
       <component-family>sonia.blog.spamInput</component-family>
