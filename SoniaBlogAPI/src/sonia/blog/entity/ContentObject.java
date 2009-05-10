@@ -59,6 +59,14 @@ public interface ContentObject extends PermaObject
    *
    * @return
    */
+  public String getDisplayContent();
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
   public String getTeaser();
 
   /**
@@ -68,4 +76,14 @@ public interface ContentObject extends PermaObject
    * @return
    */
   public String getTitle();
+
+  //~--- set methods ----------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   * @param displayContent
+   */
+  public void setDisplayContent(String displayContent);
 }

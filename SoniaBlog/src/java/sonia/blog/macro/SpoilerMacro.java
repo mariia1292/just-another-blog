@@ -67,7 +67,7 @@ public class SpoilerMacro implements Macro
     if (macros)
     {
       body = BlogContext.getInstance().getMacroParser().parseText(environment,
-              body);
+              body).getText();
     }
 
     result.append(body).append("\n");

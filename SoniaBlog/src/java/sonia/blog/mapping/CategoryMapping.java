@@ -149,6 +149,7 @@ public class CategoryMapping extends ScrollableFilterMapping
       BlogBean blogBean = BlogUtil.getSessionBean(request, BlogBean.class,
                             BlogBean.NAME);
 
+      setDisplayContent(request, entry, false);
       blogBean.setEntry(entry);
 
       Entry prev = entryDAO.getPreviousEntry(category, entry, true);
@@ -230,6 +231,7 @@ public class CategoryMapping extends ScrollableFilterMapping
       logger.finer("set entry list(" + entries.size() + ") to BlogBean");
     }
 
+    setDisplayContent(request, entries, true);
     blogBean.setPageEntries(new ListDataModel(entries));
 
     LinkBuilder linkBuilder = BlogContext.getInstance().getLinkBuilder();

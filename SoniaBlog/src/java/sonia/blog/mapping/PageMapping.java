@@ -125,6 +125,7 @@ public class PageMapping extends FilterMapping
 
     PageBean pageBean = new PageBean();
 
+    setDisplayContent(request, page, false);
     pageBean.setPage(page);
     request.setAttribute(PageBean.NAME, pageBean);
   }

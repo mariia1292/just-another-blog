@@ -9,9 +9,18 @@ package sonia.blog.api.mapping;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.app.BlogRequest;
 import sonia.blog.api.app.BlogResponse;
+import sonia.blog.api.link.LinkBuilder;
+import sonia.blog.api.macro.WebMacro;
+import sonia.blog.api.macro.WebResource;
 import sonia.blog.entity.Blog;
+import sonia.blog.entity.ContentObject;
+
+import sonia.macro.Macro;
+import sonia.macro.MacroParser;
+import sonia.macro.MacroResult;
 
 import sonia.util.Util;
 
@@ -19,6 +28,11 @@ import sonia.util.Util;
 
 import java.io.IOException;
 
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.logging.Logger;
 
 import javax.servlet.ServletException;
@@ -88,6 +102,32 @@ public abstract class FilterMapping implements Mapping
     return result;
   }
 
+  //~--- get methods ----------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  public StringBuffer getJsInitCode()
+  {
+    return jsInitCode;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  public Set<WebResource> getResources()
+  {
+    return resources;
+  }
+
+  //~--- methods --------------------------------------------------------------
+
   /**
    * Method description
    *
@@ -119,4 +159,138 @@ public abstract class FilterMapping implements Mapping
 
     return templateBuffer.toString();
   }
+
+  //~--- set methods ----------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   * @param request
+   * @param object
+   * @param teaser
+   */
+  protected void setDisplayContent(BlogRequest request, ContentObject object,
+                                   boolean teaser)
+  {
+    Map<String, ?> env = getEnvironment(request, object);
+
+    setDisplayContent(env, object, teaser);
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param request
+   * @param objects
+   * @param teaser
+   */
+  protected void setDisplayContent(BlogRequest request,
+                                   List<? extends ContentObject> objects,
+                                   boolean teaser)
+  {
+    for (ContentObject object : objects)
+    {
+      Map<String, ?> env = getEnvironment(request, object);
+
+      setDisplayContent(env, object, teaser);
+    }
+  }
+
+  //~--- get methods ----------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   * @param request
+   * @param object
+   *
+   * @return
+   */
+  private Map<String, ?> getEnvironment(BlogRequest request,
+          ContentObject object)
+  {
+    Map<String, Object> env = new HashMap<String, Object>();
+
+    env.put("request", request);
+    env.put("object", object);
+    env.put("blog", request.getCurrentBlog());
+
+    LinkBuilder builder = BlogContext.getInstance().getLinkBuilder();
+
+    env.put("linkBase", builder.buildLink(request, "/"));
+
+    return env;
+  }
+
+  //~--- set methods ----------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   * @param env
+   * @param object
+   * @param teaser
+   */
+  private void setDisplayContent(Map<String, ?> env, ContentObject object,
+                                 boolean teaser)
+  {
+    MacroParser parser = BlogContext.getInstance().getMacroParser();
+    String text = null;
+
+    System.out.println( object.getId() );
+
+    if (teaser && Util.hasContent( object.getTeaser() ))
+    {
+      text = object.getTeaser();
+    }
+    else
+    {
+      text = object.getContent();
+    }
+
+    System.out.println( text );
+
+    MacroResult result = parser.parseText(env, text);
+    List<Macro> macros = result.getMacros();
+
+    if (Util.hasContent(macros))
+    {
+      for (Macro macro : macros)
+      {
+        if (macro instanceof WebMacro)
+        {
+          WebMacro webMacro = (WebMacro) macro;
+          Set<WebResource> wr = webMacro.getResources();
+
+          if (Util.hasContent(wr))
+          {
+            resources.addAll(wr);
+          }
+
+          String script = webMacro.getJSInitCode();
+
+          if (Util.hasContent(script))
+          {
+            jsInitCode.append(script);
+          }
+        }
+      }
+    }
+
+    System.out.println( result.getText() );
+
+    object.setDisplayContent(result.getText());
+  }
+
+  //~--- fields ---------------------------------------------------------------
+
+  /** Field description */
+  protected Set<WebResource> resources = new HashSet<WebResource>();
+
+  /** Field description */
+  protected StringBuffer jsInitCode = new StringBuffer();
 }

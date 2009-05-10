@@ -9,14 +9,11 @@ package sonia.blog.office;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import sonia.blog.api.util.AbstractBlogMacro;
+import sonia.blog.api.app.BlogRequest;
+import sonia.blog.api.macro.AbstractBlogMacro;
 import sonia.blog.entity.ContentObject;
 
 import sonia.config.Config;
-
-//~--- JDK imports ------------------------------------------------------------
-
-import javax.faces.context.FacesContext;
 
 /**
  *
@@ -175,7 +172,8 @@ public class CodeMacro extends AbstractBlogMacro
    * Method description
    *
    *
-   * @param facesContext
+   *
+   * @param request
    * @param linkBase
    * @param object
    * @param body
@@ -184,7 +182,7 @@ public class CodeMacro extends AbstractBlogMacro
    */
   @Override
   @SuppressWarnings("unchecked")
-  protected String doBody(FacesContext facesContext, String linkBase,
+  protected String doBody(BlogRequest request, String linkBase,
                           ContentObject object, String body)
   {
     StringBuffer jsPrefix = new StringBuffer();
@@ -318,7 +316,7 @@ public class CodeMacro extends AbstractBlogMacro
     result.append("SyntaxHighlighter.config.bloggerMode = true;\n");
     result.append("SyntaxHighlighter.all();\n");
     result.append("</script>\n");
-    result.append("<pre name=\"code\" class=\"brush: ").append(lang);
+    result.append("<pre class=\"brush: ").append(lang);
     result.append("; toolbar: ").append(toolbar).append("; gutter: ");
     result.append(gutter).append("; collapse: ").append(collapse);
     result.append("; tab-size: ").append(tabSize);

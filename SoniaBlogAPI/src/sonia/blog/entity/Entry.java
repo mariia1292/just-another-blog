@@ -329,6 +329,17 @@ public class Entry implements Serializable, ContentObject, CommentAble
    *
    * @return
    */
+  public String getDisplayContent()
+  {
+    return displayContent;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
   public Long getId()
   {
     return id;
@@ -521,6 +532,17 @@ public class Entry implements Serializable, ContentObject, CommentAble
    * Method description
    *
    *
+   * @param displayContent
+   */
+  public void setDisplayContent(String displayContent)
+  {
+    this.displayContent = displayContent;
+  }
+
+  /**
+   * Method description
+   *
+   *
    * @param id
    */
   public void setId(Long id)
@@ -625,6 +647,9 @@ public class Entry implements Serializable, ContentObject, CommentAble
 
   /** Field description */
   private Date creationDate;
+
+  /** Field description */
+  private transient String displayContent;
 
   /** Field description */
   private Long id;

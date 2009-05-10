@@ -179,6 +179,17 @@ public class DefaultSearchEntry implements SearchEntry
    *
    * @return
    */
+  public String getDisplayContent()
+  {
+    return getContent();
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
   public Long getId()
   {
     return hit;
@@ -204,6 +215,20 @@ public class DefaultSearchEntry implements SearchEntry
   public String getTitle()
   {
     return document.get("title");
+  }
+
+  //~--- set methods ----------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   * @param displayContent
+   */
+  public void setDisplayContent(String displayContent)
+  {
+
+    // do nothing
   }
 
   //~--- fields ---------------------------------------------------------------
