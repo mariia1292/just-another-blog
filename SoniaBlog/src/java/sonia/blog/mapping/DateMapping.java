@@ -175,6 +175,7 @@ public class DateMapping extends ScrollableFilterMapping
     BlogBean blogBean = BlogUtil.getSessionBean(request, BlogBean.class,
                           BlogBean.NAME);
 
+    setDisplayContent(request, entry, false);
     blogBean.setEntry(entry);
 
     Entry next = entryDAO.getNextEntry(blog, startDate, endDate, entry, true);
@@ -258,6 +259,7 @@ public class DateMapping extends ScrollableFilterMapping
       logger.finer("set entry list(" + entries.size() + ") to BlogBean");
     }
 
+    setDisplayContent(request, entries, true);
     blogBean.setPageEntries(new ListDataModel(entries));
 
     LinkBuilder linkBuilder = BlogContext.getInstance().getLinkBuilder();

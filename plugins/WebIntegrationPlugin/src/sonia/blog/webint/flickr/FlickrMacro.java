@@ -10,7 +10,7 @@ package sonia.blog.webint.flickr;
 //~--- non-JDK imports --------------------------------------------------------
 
 import sonia.blog.api.app.BlogRequest;
-import sonia.blog.api.util.AbstractBlogMacro;
+import sonia.blog.api.macro.AbstractBlogMacro;
 import sonia.blog.entity.ContentObject;
 
 //~--- JDK imports ------------------------------------------------------------
@@ -21,8 +21,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import javax.faces.context.FacesContext;
 
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
@@ -70,7 +68,8 @@ public class FlickrMacro extends AbstractBlogMacro implements FlickrAPI
    * Method description
    *
    *
-   * @param facesContext
+   *
+   * @param request
    * @param linkBase
    * @param object
    * @param body
@@ -78,7 +77,7 @@ public class FlickrMacro extends AbstractBlogMacro implements FlickrAPI
    * @return
    */
   @Override
-  protected String doBody(FacesContext facesContext, String linkBase,
+  protected String doBody(BlogRequest request, String linkBase,
                           ContentObject object, String body)
   {
     String result = null;
@@ -105,8 +104,7 @@ public class FlickrMacro extends AbstractBlogMacro implements FlickrAPI
       List<Photo> photos = new ArrayList<Photo>();
 
       parser.parse(url.openStream(), new SearchHandler(photos));
-      result = buildGallery(photos, linkBase, object.getId(),
-                            getRequest(facesContext));
+      result = buildGallery(photos, linkBase, object.getId(), request);
     }
     catch (Exception ex)
     {

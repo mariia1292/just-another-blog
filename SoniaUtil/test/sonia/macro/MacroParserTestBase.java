@@ -61,7 +61,7 @@ public abstract class MacroParserTestBase
   {
     parser.putMacro("body", BodyMacro.class);
 
-    String text = parser.parseText(env, "- {body}Hello World{/body} -");
+    String text = parser.parseText(env, "- {body}Hello World{/body} -").getText();
 
     assertEquals("- BODY: Hello World -", text);
   }
@@ -76,7 +76,7 @@ public abstract class MacroParserTestBase
     parser.putMacro("parameter", ParameterMacro.class);
 
     String parseText = "- {parameter:p1=result;n1=3;n2=4}{/parameter} -";
-    String text = parser.parseText(env, parseText);
+    String text = parser.parseText(env, parseText).getText();
 
     assertEquals("- result=7 -", text);
   }
@@ -91,7 +91,7 @@ public abstract class MacroParserTestBase
     parser.putMacro("simple", SimpleMacro.class);
     assertEquals(SimpleMacro.class, parser.getMacro("simple"));
 
-    String text = parser.parseText(env, "- {simple}{/simple} -");
+    String text = parser.parseText(env, "- {simple}{/simple} -").getText();
 
     assertEquals("- Hello from SimpleMacro -", text);
     parser.removeMacro("simple");

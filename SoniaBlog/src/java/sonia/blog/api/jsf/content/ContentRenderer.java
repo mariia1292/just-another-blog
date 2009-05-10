@@ -99,7 +99,7 @@ public class ContentRenderer extends BaseRenderer
 
           MacroParser parser = MacroParser.getInstance();
 
-          content = parser.parseText(environment, content);
+          content = parser.parseText(environment, content).getText();
         }
 
         ResponseWriter writer = context.getResponseWriter();

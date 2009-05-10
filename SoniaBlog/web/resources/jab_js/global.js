@@ -20,11 +20,14 @@ function addCSS( href, media )
 
 var srcArray = new Array();
 
-function addScript( src, type )
+function addScript( src )
 {
   if ( srcArray.indexOf( src) < 0 )
   {
-    var element = document.createElement( "script" );
+    $.ajaxSetup({ async: false });
+    $.getScript( src, function(){ console.log( src ) } );
+    $.ajaxSetup({ async: true });
+    /*var element = document.createElement( "script" );
     if ( type && type.length > 0 )
     {
       element.type = type;
@@ -34,7 +37,8 @@ function addScript( src, type )
       element.type = "text/javascript";
     }
     element.src = src;
-    $("head:first").append( element );
+    document.getElementsByTagName("head")[0].appendChild(element);
+    $("head:first").append( element );*/
     srcArray.push(src);
   }
 }

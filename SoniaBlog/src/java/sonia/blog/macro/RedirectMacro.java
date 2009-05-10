@@ -9,17 +9,9 @@ package sonia.blog.macro;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import sonia.blog.api.util.AbstractBlogMacro;
+import sonia.blog.api.app.BlogRequest;
+import sonia.blog.api.macro.AbstractBlogMacro;
 import sonia.blog.entity.ContentObject;
-
-//~--- JDK imports ------------------------------------------------------------
-
-import java.io.IOException;
-
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
-import javax.faces.context.FacesContext;
 
 /**
  *
@@ -27,12 +19,6 @@ import javax.faces.context.FacesContext;
  */
 public class RedirectMacro extends AbstractBlogMacro
 {
-
-  /** Field description */
-  private static Logger logger =
-    Logger.getLogger(RedirectMacro.class.getName());
-
-  //~--- set methods ----------------------------------------------------------
 
   /**
    * Method description
@@ -51,7 +37,8 @@ public class RedirectMacro extends AbstractBlogMacro
    * Method description
    *
    *
-   * @param facesContext
+   *
+   * @param request
    * @param linkBase
    * @param object
    * @param body
@@ -59,17 +46,10 @@ public class RedirectMacro extends AbstractBlogMacro
    * @return
    */
   @Override
-  protected String doBody(FacesContext facesContext, String linkBase,
+  protected String doBody(BlogRequest request, String linkBase,
                           ContentObject object, String body)
   {
-    try
-    {
-      facesContext.getExternalContext().redirect(url);
-    }
-    catch (IOException ex)
-    {
-      logger.log(Level.SEVERE, null, ex);
-    }
+    request.setRedirect(url);
 
     return "";
   }

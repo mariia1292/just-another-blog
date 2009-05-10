@@ -29,7 +29,9 @@
               <blog:link value="#{Entry.title}" object="#{Entry}" />
             </h2>
 
-            <blog:content styleClass="content" object="#{Entry}" teaser="true" />
+            <div class="content">
+              <h:outputText value="#{Entry.displayContent}" escape="false" />
+            </div>
 
             <p>
               <h:outputText value="#{Entry.creationDate}">

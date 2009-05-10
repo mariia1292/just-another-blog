@@ -51,8 +51,9 @@ public class RegexMacroParser extends MacroParser
    *
    * @return
    */
-  public String parseText(Map<String, ?> environment, String text)
+  public MacroResult parseText(Map<String, ?> environment, String text)
   {
+    MacroResult result = new MacroResult();
     Pattern p = Pattern.compile(REGEX, Pattern.DOTALL);
     Matcher m = p.matcher(text);
     Map<String, String> replaceMap = new HashMap<String, String>();
@@ -67,6 +68,8 @@ public class RegexMacroParser extends MacroParser
 
         if (macro != null)
         {
+          result.addMacro(macro);
+
           String paramString = m.group(2);
 
           if (!Util.isBlank(paramString))
@@ -87,7 +90,9 @@ public class RegexMacroParser extends MacroParser
       text = text.replace(key, replaceMap.get(key));
     }
 
-    return text;
+    result.setText(text);
+
+    return result;
   }
 
   /**

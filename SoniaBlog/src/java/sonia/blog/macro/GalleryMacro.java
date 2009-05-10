@@ -14,12 +14,11 @@ import sonia.blog.api.app.BlogRequest;
 import sonia.blog.api.dao.AttachmentDAO;
 import sonia.blog.api.dao.Dao;
 import sonia.blog.api.link.LinkBuilder;
-import sonia.blog.api.util.AbstractBlogMacro;
+import sonia.blog.api.macro.AbstractBlogMacro;
 import sonia.blog.entity.Attachment;
 import sonia.blog.entity.ContentObject;
 import sonia.blog.entity.Entry;
 import sonia.blog.entity.Page;
-import sonia.blog.util.BlogUtil;
 
 import sonia.util.Util;
 
@@ -28,8 +27,6 @@ import sonia.util.Util;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import javax.faces.context.FacesContext;
 
 /**
  *
@@ -47,7 +44,8 @@ public class GalleryMacro extends AbstractBlogMacro
    * Method description
    *
    *
-   * @param facesContext
+   *
+   * @param request
    * @param linkBase
    * @param object
    * @param body
@@ -55,7 +53,7 @@ public class GalleryMacro extends AbstractBlogMacro
    * @return
    */
   @Override
-  protected String doBody(FacesContext facesContext, String linkBase,
+  protected String doBody(BlogRequest request, String linkBase,
                           ContentObject object, String body)
   {
     StringBuffer result = new StringBuffer();
@@ -68,9 +66,6 @@ public class GalleryMacro extends AbstractBlogMacro
         if ((images != null) &&!images.isEmpty())
         {
           LinkBuilder linkBuilder = BlogContext.getInstance().getLinkBuilder();
-          BlogRequest request =
-            BlogUtil.getBlogRequest(
-                facesContext.getExternalContext().getRequest());
           String res = linkBuilder.buildLink(request, "/resources/");
           String lRes = res + "lightbox/";
 

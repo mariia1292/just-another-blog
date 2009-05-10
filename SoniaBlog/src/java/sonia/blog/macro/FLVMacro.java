@@ -14,14 +14,10 @@ import sonia.blog.api.app.Context;
 import sonia.blog.api.dao.AttachmentDAO;
 import sonia.blog.api.dao.Dao;
 import sonia.blog.api.link.LinkBuilder;
-import sonia.blog.api.util.AbstractBlogMacro;
+import sonia.blog.api.macro.AbstractBlogMacro;
 import sonia.blog.entity.Attachment;
 import sonia.blog.entity.Blog;
 import sonia.blog.entity.ContentObject;
-
-//~--- JDK imports ------------------------------------------------------------
-
-import javax.faces.context.FacesContext;
 
 /**
  *
@@ -69,7 +65,8 @@ public class FLVMacro extends AbstractBlogMacro
    * Method description
    *
    *
-   * @param facesContext
+   *
+   * @param request
    * @param linkBase
    * @param object
    * @param body
@@ -77,7 +74,7 @@ public class FLVMacro extends AbstractBlogMacro
    * @return
    */
   @Override
-  protected String doBody(FacesContext facesContext, String linkBase,
+  protected String doBody(BlogRequest request, String linkBase,
                           ContentObject object, String body)
   {
     String result = null;
@@ -86,7 +83,6 @@ public class FLVMacro extends AbstractBlogMacro
     {
       if (id != null)
       {
-        BlogRequest request = getRequest(facesContext);
         Blog blog = request.getCurrentBlog();
         Attachment attchment = attachmentDAO.get(id);
 

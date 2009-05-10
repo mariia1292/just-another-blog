@@ -9,14 +9,11 @@ package sonia.blog.webint;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import sonia.blog.api.util.AbstractBlogMacro;
+import sonia.blog.api.app.BlogRequest;
+import sonia.blog.api.macro.AbstractBlogMacro;
 import sonia.blog.entity.ContentObject;
 
 import sonia.util.Util;
-
-//~--- JDK imports ------------------------------------------------------------
-
-import javax.faces.context.FacesContext;
 
 /**
  *
@@ -47,7 +44,8 @@ public class GoogleGadgetMacro extends AbstractBlogMacro
    * Method description
    *
    *
-   * @param facesContext
+   *
+   * @param request
    * @param linkBase
    * @param object
    * @param body
@@ -55,7 +53,7 @@ public class GoogleGadgetMacro extends AbstractBlogMacro
    * @return
    */
   @Override
-  protected String doBody(FacesContext facesContext, String linkBase,
+  protected String doBody(BlogRequest request, String linkBase,
                           ContentObject object, String body)
   {
     String result = null;

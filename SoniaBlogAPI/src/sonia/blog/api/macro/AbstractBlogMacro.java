@@ -5,24 +5,20 @@
 
 
 
-package sonia.blog.api.util;
+package sonia.blog.api.macro;
 
 //~--- non-JDK imports --------------------------------------------------------
 
 import sonia.blog.api.app.BlogRequest;
-import sonia.blog.entity.Blog;
 import sonia.blog.entity.ContentObject;
 import sonia.blog.entity.Entry;
+import sonia.blog.entity.Page;
 
 import sonia.macro.Macro;
 
 //~--- JDK imports ------------------------------------------------------------
 
 import java.util.Map;
-
-import javax.faces.context.FacesContext;
-
-import javax.servlet.http.HttpServletRequest;
 
 /**
  *
@@ -35,14 +31,15 @@ public abstract class AbstractBlogMacro implements Macro
    * Method description
    *
    *
-   * @param facesContext
+   *
+   * @param request
    * @param linkBase - the blog link base
    * @param object - the current ContentObject (Entry)
    * @param body - the body of the macro
    *
    * @return
    */
-  protected abstract String doBody(FacesContext facesContext, String linkBase,
+  protected abstract String doBody(BlogRequest request, String linkBase,
                                    ContentObject object, String body);
 
   /**
@@ -58,65 +55,22 @@ public abstract class AbstractBlogMacro implements Macro
   {
     String result = null;
     ContentObject object = (ContentObject) environment.get("object");
-    FacesContext facesContext = (FacesContext) environment.get("facesContext");
+    BlogRequest request = (BlogRequest) environment.get("request");
     String linkBase = (String) environment.get("linkBase");
 
-    if ((object != null) && (facesContext != null))
+    if ((object != null) && (request != null))
     {
-      result = doBody(facesContext, linkBase, object, body);
+      result = doBody(request, linkBase, object, body);
     }
     else
     {
-      result = "-- object or facesContext is null --";
+      result = "-- object or request is null --";
     }
 
     return result;
   }
 
   //~--- get methods ----------------------------------------------------------
-
-  /**
-   * Method description
-   *
-   *
-   * @param context
-   *
-   * @return
-   */
-  protected Blog getCurrentBlog(FacesContext context)
-  {
-    return getRequest(context).getCurrentBlog();
-  }
-
-  /**
-   * Method description
-   *
-   *
-   * @param context
-   *
-   * @return
-   */
-  protected BlogRequest getRequest(FacesContext context)
-  {
-    BlogRequest request = null;
-    Object object = context.getExternalContext().getRequest();
-
-    if (object instanceof BlogRequest)
-    {
-      request = (BlogRequest) object;
-    }
-    else if (object instanceof HttpServletRequest)
-    {
-      request = new BlogRequest((HttpServletRequest) object);
-    }
-    else
-    {
-      throw new IllegalArgumentException(
-          "object is not an instance of HttpServletRequest");
-    }
-
-    return request;
-  }
 
   /**
    * Method description
@@ -129,5 +83,18 @@ public abstract class AbstractBlogMacro implements Macro
   protected boolean isEntry(ContentObject object)
   {
     return object instanceof Entry;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param object
+   *
+   * @return
+   */
+  protected boolean isPage(ContentObject object)
+  {
+    return object instanceof Page;
   }
 }
