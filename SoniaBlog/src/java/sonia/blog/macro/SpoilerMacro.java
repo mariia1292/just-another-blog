@@ -9,19 +9,26 @@ package sonia.blog.macro;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import java.util.ArrayList;
 import sonia.blog.api.app.BlogContext;
+import sonia.blog.api.macro.WebMacro;
+import sonia.blog.api.macro.WebResource;
 
 import sonia.macro.Macro;
+import sonia.macro.MacroResult;
+
+import sonia.util.Util;
 
 //~--- JDK imports ------------------------------------------------------------
 
+import java.util.List;
 import java.util.Map;
 
 /**
  *
  * @author sdorra
  */
-public class SpoilerMacro implements Macro
+public class SpoilerMacro implements WebMacro
 {
 
   /**
@@ -66,8 +73,34 @@ public class SpoilerMacro implements Macro
 
     if (macros)
     {
-      body = BlogContext.getInstance().getMacroParser().parseText(environment,
-              body).getText();
+      MacroResult childResult =
+        BlogContext.getInstance().getMacroParser().parseText(environment, body);
+
+      if (childResult != null)
+      {
+        List<Macro> children = childResult.getMacros();
+
+        if (Util.hasContent(children))
+        {
+          resources = new ArrayList<WebResource>();
+
+          for (Macro child : children)
+          {
+            if (child instanceof WebMacro)
+            {
+              List<WebResource> childResources =
+                ((WebMacro) child).getResources();
+
+              if (childResources != null)
+              {
+                resources.addAll(childResources);
+              }
+            }
+          }
+        }
+      }
+
+      body = childResult.getText();
     }
 
     result.append(body).append("\n");
@@ -76,6 +109,19 @@ public class SpoilerMacro implements Macro
     result.append("</div>\n");
 
     return result.toString();
+  }
+
+  //~--- get methods ----------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  public List<WebResource> getResources()
+  {
+    return resources;
   }
 
   //~--- set methods ----------------------------------------------------------
@@ -128,6 +174,9 @@ public class SpoilerMacro implements Macro
 
   /** Field description */
   private Boolean macros = Boolean.TRUE;
+
+  /** Field description */
+  private List<WebResource> resources;
 
   /** Field description */
   private String style;

@@ -15,7 +15,7 @@ import sonia.util.Util;
  *
  * @author sdorra
  */
-public class ScriptResource implements WebResource
+public class ScriptResource extends WebResource
 {
 
   /**
@@ -24,8 +24,9 @@ public class ScriptResource implements WebResource
    *
    * @param src
    */
-  public ScriptResource(String src)
+  public ScriptResource(int index, String src)
   {
+    super( index );
     this.src = src;
   }
 
@@ -36,13 +37,75 @@ public class ScriptResource implements WebResource
    * @param src
    * @param type
    */
-  public ScriptResource(String src, String type)
+  public ScriptResource(int index, String src, String type)
   {
+    super( index );
     this.src = src;
     this.type = type;
   }
 
   //~--- methods --------------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   * @param obj
+   *
+   * @return
+   */
+  @Override
+  public boolean equals(Object obj)
+  {
+    if (obj == null)
+    {
+      return false;
+    }
+
+    if (getClass() != obj.getClass())
+    {
+      return false;
+    }
+
+    final ScriptResource other = (ScriptResource) obj;
+
+    if ((this.src == null)
+        ? (other.src != null)
+        : !this.src.equals(other.src))
+    {
+      return false;
+    }
+
+    if ((this.type == null)
+        ? (other.type != null)
+        : !this.type.equals(other.type))
+    {
+      return false;
+    }
+
+    return true;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  @Override
+  public int hashCode()
+  {
+    int hash = 7;
+
+    hash = 97 * hash + ((this.src != null)
+                        ? this.src.hashCode()
+                        : 0);
+    hash = 97 * hash + ((this.type != null)
+                        ? this.type.hashCode()
+                        : 0);
+
+    return hash;
+  }
 
   /**
    * Method description

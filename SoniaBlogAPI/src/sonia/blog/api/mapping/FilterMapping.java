@@ -28,11 +28,10 @@ import sonia.util.Util;
 
 import java.io.IOException;
 
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.logging.Logger;
 
 import javax.servlet.ServletException;
@@ -110,18 +109,7 @@ public abstract class FilterMapping implements Mapping
    *
    * @return
    */
-  public StringBuffer getJsInitCode()
-  {
-    return jsInitCode;
-  }
-
-  /**
-   * Method description
-   *
-   *
-   * @return
-   */
-  public Set<WebResource> getResources()
+  public List<WebResource> getResources()
   {
     return resources;
   }
@@ -260,19 +248,13 @@ public abstract class FilterMapping implements Mapping
         if (macro instanceof WebMacro)
         {
           WebMacro webMacro = (WebMacro) macro;
-          Set<WebResource> wr = webMacro.getResources();
+          List<WebResource> wr = webMacro.getResources();
 
           if (Util.hasContent(wr))
           {
             resources.addAll(wr);
           }
 
-          String script = webMacro.getJSInitCode();
-
-          if (Util.hasContent(script))
-          {
-            jsInitCode.append(script);
-          }
         }
       }
     }
@@ -283,8 +265,6 @@ public abstract class FilterMapping implements Mapping
   //~--- fields ---------------------------------------------------------------
 
   /** Field description */
-  protected Set<WebResource> resources = new HashSet<WebResource>();
+  protected List<WebResource> resources = new ArrayList<WebResource>();
 
-  /** Field description */
-  protected StringBuffer jsInitCode = new StringBuffer();
 }

@@ -339,13 +339,6 @@ public interface Constants
   public static final String SERVICE_MAIL = "/app/mail";
 
   /** Field description */
-  public static final TimeZone DEFAULT_TIMEZONE =
-    TimeZone.getTimeZone("Europe/Paris");
-
-  /** Field description */
-  public static final Locale DEFAULT_LOCALE = Locale.GERMAN;
-
-  /** Field description */
   public static final String SERVICE_MAPPINGHANDLER = "/app/mappingHandler";
 
   /** Field description */
@@ -362,6 +355,16 @@ public interface Constants
 
   /** Field description */
   public static final String SERVICE_SSOAUTHENTICATION = "/app/sso";
+
+  /** Field description */
+  public static final String SERVICE_WEBRESOURCE = "/web/resource";
+
+  /** Field description */
+  public static final TimeZone DEFAULT_TIMEZONE =
+    TimeZone.getTimeZone("Europe/Paris");
+
+  /** Field description */
+  public static final Locale DEFAULT_LOCALE = Locale.GERMAN;
 
   /** Field description */
   public static final String SSOLOGINMODULE_NAME = "BlogSSOLoginModule";

@@ -22,8 +22,10 @@ import java.net.URLConnection;
 
 import java.text.NumberFormat;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -302,6 +304,30 @@ public class Util
     out.append(time);
 
     return out.toString();
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param collection
+   * @param <T>
+   *
+   * @return
+   */
+  public static <T> List<T> unique(Collection<T> collection)
+  {
+    List<T> resultList = new ArrayList<T>();
+
+    for (T item : collection)
+    {
+      if (!resultList.contains(item))
+      {
+        resultList.add(item);
+      }
+    }
+
+    return resultList;
   }
 
   //~--- get methods ----------------------------------------------------------

@@ -13,7 +13,7 @@ import sonia.macro.Macro;
 
 //~--- JDK imports ------------------------------------------------------------
 
-import java.util.Set;
+import java.util.List;
 
 /**
  *
@@ -28,13 +28,5 @@ public interface WebMacro extends Macro
    *
    * @return
    */
-  public String getJSInitCode();
-
-  /**
-   * Method description
-   *
-   *
-   * @return
-   */
-  public Set<WebResource> getResources();
+  public List<WebResource> getResources();
 }

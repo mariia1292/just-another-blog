@@ -113,4 +113,6 @@
     <impl class="sonia.blog.dao.jpa.profile.PostgreSQLProfile" />
   </service>
 
+  <service class="sonia.blog.api.macro.WebResource" path="/web/resource" />
+
 </services>

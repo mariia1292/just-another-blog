@@ -11,8 +11,21 @@ package sonia.blog.api.macro;
  *
  * @author sdorra
  */
-public interface WebResource
+public abstract class WebResource implements Comparable<WebResource>
 {
+
+  /**
+   * Constructs ...
+   *
+   *
+   * @param index
+   */
+  public WebResource(int index)
+  {
+    this.index = index;
+  }
+
+  //~--- methods --------------------------------------------------------------
 
   /**
    * Method description
@@ -20,5 +33,23 @@ public interface WebResource
    *
    * @return
    */
-  public String toHTML();
+  public abstract String toHTML();
+
+  /**
+   * Method description
+   *
+   *
+   * @param resource
+   *
+   * @return
+   */
+  public int compareTo(WebResource resource)
+  {
+    return index - resource.index;
+  }
+
+  //~--- fields ---------------------------------------------------------------
+
+  /** Field description */
+  private int index;
 }

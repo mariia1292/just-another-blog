@@ -9,12 +9,17 @@ package sonia.blog.macro;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import java.util.ArrayList;
+import java.util.List;
 import sonia.blog.api.app.BlogRequest;
 import sonia.blog.api.app.Context;
 import sonia.blog.api.dao.AttachmentDAO;
 import sonia.blog.api.dao.Dao;
 import sonia.blog.api.link.LinkBuilder;
 import sonia.blog.api.macro.AbstractBlogMacro;
+import sonia.blog.api.macro.ScriptResource;
+import sonia.blog.api.macro.WebMacro;
+import sonia.blog.api.macro.WebResource;
 import sonia.blog.entity.Attachment;
 import sonia.blog.entity.Blog;
 import sonia.blog.entity.ContentObject;
@@ -23,7 +28,7 @@ import sonia.blog.entity.ContentObject;
  *
  * @author sdorra
  */
-public class FLVMacro extends AbstractBlogMacro
+public class FLVMacro extends AbstractBlogMacro implements WebMacro
 {
 
   /**
@@ -127,6 +132,10 @@ public class FLVMacro extends AbstractBlogMacro
     String attachmentLink = linkBuilder.buildLink(request, attchment);
     StringBuffer result = new StringBuffer();
 
+    resources = new ArrayList<WebResource>();
+    ScriptResource sr = new ScriptResource(10, playerPath + "flowplayer.min.js" );
+    resources.add(sr);
+
     // player block
     result.append("<a id=\"flvplayer_").append(attchment.getId());
     result.append("\" href=\"").append(attachmentLink);
@@ -137,8 +146,8 @@ public class FLVMacro extends AbstractBlogMacro
     result.append("<script type=\"text/javascript\">\n");
 
     // load flowplayer.min.js
-    result.append("addScript(\"").append(playerPath);
-    result.append("flowplayer.min.js\");\n");
+    //result.append("addScript(\"").append(playerPath);
+    //result.append("flowplayer.min.js\");\n");
 
     // load flowplayer.swf
     result.append("$f(\"flvplayer_").append(attchment.getId());
@@ -174,4 +183,11 @@ public class FLVMacro extends AbstractBlogMacro
 
   /** Field description */
   private Integer width = 480;
+
+  private List<WebResource> resources;
+
+  public List<WebResource> getResources()
+  {
+    return resources;
+  }
 }

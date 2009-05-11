@@ -6,6 +6,15 @@
     <namespace>http://jab.nitilon.org/blog/</namespace>
 
     <tag>
+        <tag-name>header</tag-name>
+        <component>
+            <component-type>sonia.blog.header</component-type>
+            <renderer-type>sonia.blog.header.renderer</renderer-type>
+        </component>
+    </tag>
+
+
+    <tag>
         <tag-name>calendar</tag-name>
         <component>
             <component-type>sonia.blog.calendar</component-type>
