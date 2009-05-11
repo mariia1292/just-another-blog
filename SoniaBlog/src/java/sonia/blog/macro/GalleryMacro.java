@@ -15,6 +15,10 @@ import sonia.blog.api.dao.AttachmentDAO;
 import sonia.blog.api.dao.Dao;
 import sonia.blog.api.link.LinkBuilder;
 import sonia.blog.api.macro.AbstractBlogMacro;
+import sonia.blog.api.macro.LinkResource;
+import sonia.blog.api.macro.ScriptResource;
+import sonia.blog.api.macro.WebMacro;
+import sonia.blog.api.macro.WebResource;
 import sonia.blog.entity.Attachment;
 import sonia.blog.entity.ContentObject;
 import sonia.blog.entity.Entry;
@@ -24,6 +28,7 @@ import sonia.util.Util;
 
 //~--- JDK imports ------------------------------------------------------------
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -32,11 +37,24 @@ import java.util.logging.Logger;
  *
  * @author sdorra
  */
-public class GalleryMacro extends AbstractBlogMacro
+public class GalleryMacro extends AbstractBlogMacro implements WebMacro
 {
 
   /** Field description */
   private static Logger logger = Logger.getLogger(GalleryMacro.class.getName());
+
+  //~--- get methods ----------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  public List<WebResource> getResources()
+  {
+    return resources;
+  }
 
   //~--- methods --------------------------------------------------------------
 
@@ -69,16 +87,32 @@ public class GalleryMacro extends AbstractBlogMacro
           String res = linkBuilder.buildLink(request, "/resources/");
           String lRes = res + "lightbox/";
 
-          result.append("<div id=\"gallery_").append(object.getId());
+          resources = new ArrayList<WebResource>();
+
+          ScriptResource sr = new ScriptResource(20,
+                                lRes + "js/jquery.lightbox-0.5.js");
+
+          resources.add(sr);
+
+          LinkResource lr = new LinkResource(21);
+
+          lr.setRel(LinkResource.REL_STYLESHEET);
+          lr.setType(LinkResource.TYPE_STYLESHEET);
+          lr.setHref(lRes + "css/jquery.lightbox-0.5.css");
+          resources.add(lr);
+
+          long time = System.nanoTime();
+
+          result.append("<div id=\"gallery_").append(time);
           result.append("\">\n");
 
           for (int i = 0; i < images.size(); i++)
           {
             Attachment image = images.get(i);
 
-            result.append("<a id=\"image_").append(i).append("\" title=\"");
+            result.append("<a title=\"");
             result.append(image.getName()).append("\" rel=\"ligthbox[group_");
-            result.append(object.getId()).append("]\" href=\"");
+            result.append(time).append("]\" href=\"");
             result.append(linkBuilder.buildLink(request, image));
             result.append("\">\n").append("<img border=\"0\" alt=\"\" src=\"");
             result.append(linkBuilder.buildLink(request, image));
@@ -92,15 +126,13 @@ public class GalleryMacro extends AbstractBlogMacro
           result.append("$(document).ready(function() {\n");
 
           // load lightbox js
-          result.append("addScript(\"").append(lRes);
-          result.append("js/jquery.lightbox-0.5.js").append("\");\n");
-
+          // result.append("addScript(\"").append(lRes);
+          // result.append("js/jquery.lightbox-0.5.js").append("\");\n");
           // load lightbox css
-          result.append("addCSS(\"").append(lRes);
-          result.append("css/jquery.lightbox-0.5.css").append("\");\n");
-
+          // result.append("addCSS(\"").append(lRes);
+          // result.append("css/jquery.lightbox-0.5.css").append("\");\n");
           // configure gallery
-          result.append("$(\"div#gallery_").append(object.getId());
+          result.append("$(\"div#gallery_").append(time);
           result.append(" a\").lightBox({\n");
 
           // load icon
@@ -167,4 +199,7 @@ public class GalleryMacro extends AbstractBlogMacro
   /** Field description */
   @Dao
   private AttachmentDAO attachmentDAO;
+
+  /** Field description */
+  private List<WebResource> resources;
 }
