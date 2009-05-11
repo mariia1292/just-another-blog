@@ -15,6 +15,10 @@ import sonia.blog.api.app.Constants;
 import sonia.blog.api.dao.AttachmentDAO;
 import sonia.blog.api.dao.Dao;
 import sonia.blog.api.macro.AbstractBlogMacro;
+import sonia.blog.api.macro.LinkResource;
+import sonia.blog.api.macro.ScriptResource;
+import sonia.blog.api.macro.WebMacro;
+import sonia.blog.api.macro.WebResource;
 import sonia.blog.entity.Attachment;
 import sonia.blog.entity.Blog;
 import sonia.blog.entity.ContentObject;
@@ -40,6 +44,8 @@ import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -49,7 +55,7 @@ import javax.imageio.ImageIO;
  *
  * @author sdorra
  */
-public class PdfViewerMacro extends AbstractBlogMacro
+public class PdfViewerMacro extends AbstractBlogMacro implements WebMacro
 {
 
   /** Field description */
@@ -61,6 +67,19 @@ public class PdfViewerMacro extends AbstractBlogMacro
   /** Field description */
   private static Logger logger =
     Logger.getLogger(PdfViewerMacro.class.getName());
+
+  //~--- get methods ----------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  public List<WebResource> getResources()
+  {
+    return resources;
+  }
 
   //~--- set methods ----------------------------------------------------------
 
@@ -272,6 +291,19 @@ public class PdfViewerMacro extends AbstractBlogMacro
     StringBuffer result = new StringBuffer();
     String res = linkBase + "resources/lightbox/";
 
+    resources = new ArrayList<WebResource>();
+
+    LinkResource css = new LinkResource(100);
+
+    css.setRel(LinkResource.REL_STYLESHEET);
+    css.setType(LinkResource.TYPE_STYLESHEET);
+    css.setHref(res + "css/jquery.lightbox-0.5.css");
+    resources.add(css);
+
+    ScriptResource js = new ScriptResource(101, res + "js/jquery.lightbox-0.5.js");
+
+    resources.add(js);
+
     /*
      * if (request.getAttribute("sonia.blog.macro.gallery") == null)
      * {
@@ -335,10 +367,13 @@ public class PdfViewerMacro extends AbstractBlogMacro
     result.append("</span>\n");
     result.append("<script type=\"text/javascript\">\n");
     result.append("$(document).ready(function() {\n");
-    result.append("addScript(\"").append(res);
-    result.append("js/jquery.lightbox-0.5.js").append("\");\n");
-    result.append("addCSS(\"").append(res);
-    result.append("css/jquery.lightbox-0.5.css").append("\");\n");
+
+    /*
+     * result.append("addScript(\"").append(res);
+     * result.append("js/jquery.lightbox-0.5.js").append("\");\n");
+     * result.append("addCSS(\"").append(res);
+     * result.append("css/jquery.lightbox-0.5.css").append("\");\n");
+     */
     result.append("$(\"span#").append(name).append(" a\").lightBox({\n");
     result.append("imageLoading: '").append(res);
     result.append("images/lightbox-ico-loading.gif',\n");
@@ -373,4 +408,7 @@ public class PdfViewerMacro extends AbstractBlogMacro
 
   /** Field description */
   private Long id;
+
+  /** Field description */
+  private List<WebResource> resources;
 }
