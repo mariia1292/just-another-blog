@@ -9,7 +9,6 @@ package sonia.blog.office;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import java.util.ArrayList;
 import sonia.blog.api.app.BlogRequest;
 import sonia.blog.api.macro.AbstractBlogMacro;
 import sonia.blog.api.macro.LinkResource;
@@ -22,6 +21,7 @@ import sonia.config.Config;
 
 //~--- JDK imports ------------------------------------------------------------
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -201,49 +201,51 @@ public class CodeMacro extends AbstractBlogMacro implements WebMacro
     resources = new ArrayList<WebResource>();
 
     // Core CSS
-    resources.add(buildStyleSheet(70, linkBase
+    resources.add(buildStyleSheet(70,
+                                  linkBase
                                   + "resource/syntax/styles/shCore.css"));
 
     // Core JS
-    resources.add(new ScriptResource(80, linkBase
+    resources.add(new ScriptResource(80,
+                                     linkBase
                                      + "resource/syntax/scripts/shCore.js"));
 
     // Theme CSS
     if (theme.equalsIgnoreCase(THEME_DJANGO))
     {
       resources.add(
-          buildStyleSheet(71,
-            linkBase + "resource/syntax/styles/shThemeDjango.css"));
+          buildStyleSheet(
+            71, linkBase + "resource/syntax/styles/shThemeDjango.css"));
     }
     else if (theme.equalsIgnoreCase(THEME_EMACS))
     {
       resources.add(
-          buildStyleSheet(72,
-            linkBase + "resource/syntax/styles/shThemeEmacs.css"));
+          buildStyleSheet(
+            72, linkBase + "resource/syntax/styles/shThemeEmacs.css"));
     }
     else if (theme.equalsIgnoreCase(THEME_FADETOGREY))
     {
       resources.add(
-          buildStyleSheet(73,
-            linkBase + "resource/syntax/styles/shThemeFadeToGrey.css"));
+          buildStyleSheet(
+            73, linkBase + "resource/syntax/styles/shThemeFadeToGrey.css"));
     }
     else if (theme.equalsIgnoreCase(THEME_MIDNIGHT))
     {
       resources.add(
-          buildStyleSheet(74,
-            linkBase + "resource/syntax/styles/shThemeMidnight.css"));
+          buildStyleSheet(
+            74, linkBase + "resource/syntax/styles/shThemeMidnight.css"));
     }
     else if (theme.equalsIgnoreCase(THEME_RDARK))
     {
       resources.add(
-          buildStyleSheet(75,
-            linkBase + "resource/syntax/styles/shThemeRDark.css"));
+          buildStyleSheet(
+            75, linkBase + "resource/syntax/styles/shThemeRDark.css"));
     }
     else
     {
       resources.add(
-          buildStyleSheet(76,
-            linkBase + "resource/syntax/styles/shThemeDefault.css"));
+          buildStyleSheet(
+            76, linkBase + "resource/syntax/styles/shThemeDefault.css"));
     }
 
     lang = lang.toLowerCase();
@@ -251,120 +253,137 @@ public class CodeMacro extends AbstractBlogMacro implements WebMacro
     if (lang.equals("bash"))
     {
       resources.add(
-          new ScriptResource(81,
-              linkBase + "resource/syntax/scripts/shBrushBash.js"));
+          new ScriptResource(
+              81, linkBase + "resource/syntax/scripts/shBrushBash.js"));
     }
     else if (lang.equals("csharp") || lang.equals("c#")
              || (lang.equals("c-sharp")))
     {
       resources.add(
-          new ScriptResource(82,
-              linkBase + "resource/syntax/scripts/shBrushCSharp.js"));
+          new ScriptResource(
+              82, linkBase + "resource/syntax/scripts/shBrushCSharp.js"));
     }
     else if (lang.equals("cpp") || lang.equals("c++") || (lang.equals("c")))
     {
       resources.add(
-          new ScriptResource(83,
-              linkBase + "resource/syntax/scripts/shBrushCpp.js"));
+          new ScriptResource(
+              83, linkBase + "resource/syntax/scripts/shBrushCpp.js"));
     }
     else if (lang.equals("css"))
     {
       resources.add(
-          new ScriptResource(84,
-              linkBase + "resource/syntax/scripts/shBrushCss.js"));
+          new ScriptResource(
+              84, linkBase + "resource/syntax/scripts/shBrushCss.js"));
     }
     else if (lang.equals("delphi") || (lang.equals("pascal")))
     {
       resources.add(
-          new ScriptResource(85,
-              linkBase + "resource/syntax/scripts/shBrushDelphi.js"));
+          new ScriptResource(
+              85, linkBase + "resource/syntax/scripts/shBrushDelphi.js"));
     }
     else if (lang.equals("diff"))
     {
       resources.add(
-          new ScriptResource(86,
-              linkBase + "resource/syntax/scripts/shBrushDiff.js"));
+          new ScriptResource(
+              86, linkBase + "resource/syntax/scripts/shBrushDiff.js"));
     }
     else if (lang.equals("groovy"))
     {
       resources.add(
-          new ScriptResource(87,
-              linkBase + "resource/syntax/scripts/shBrushGroovy.js"));
+          new ScriptResource(
+              87, linkBase + "resource/syntax/scripts/shBrushGroovy.js"));
     }
     else if (lang.equals("js") || lang.equals("javascript")
              || (lang.equals("jscript")))
     {
       resources.add(
-          new ScriptResource(88,
-              linkBase + "resource/syntax/scripts/shBrushJScript.js"));
+          new ScriptResource(
+              88, linkBase + "resource/syntax/scripts/shBrushJScript.js"));
     }
     else if (lang.equals("java"))
     {
       resources.add(
-          new ScriptResource(89,
-              linkBase + "resource/syntax/scripts/shBrushJava.js"));
+          new ScriptResource(
+              89, linkBase + "resource/syntax/scripts/shBrushJava.js"));
     }
     else if (lang.equals("perl"))
     {
       resources.add(
-          new ScriptResource(90,
-              linkBase + "resource/syntax/scripts/shBrushPerl.js"));
+          new ScriptResource(
+              90, linkBase + "resource/syntax/scripts/shBrushPerl.js"));
     }
     else if (lang.equals("php"))
     {
       resources.add(
-          new ScriptResource(91,
-              linkBase + "resource/syntax/scripts/shBrushPhp.js"));
+          new ScriptResource(
+              91, linkBase + "resource/syntax/scripts/shBrushPhp.js"));
     }
     else if (lang.equals("plain"))
     {
       resources.add(
-          new ScriptResource(92,
-              linkBase + "resource/syntax/scripts/shBrushPlain.js"));
+          new ScriptResource(
+              92, linkBase + "resource/syntax/scripts/shBrushPlain.js"));
     }
     else if (lang.equals("python") || (lang.equals("py")))
     {
       resources.add(
-          new ScriptResource(93,
-              linkBase + "resource/syntax/scripts/shBrushPython.js"));
+          new ScriptResource(
+              93, linkBase + "resource/syntax/scripts/shBrushPython.js"));
     }
     else if (lang.equals("ruby") || lang.equals("ror") || lang.equals("rb")
              || (lang.equals("rails")))
     {
       resources.add(
-          new ScriptResource(94,
-              linkBase + "resource/syntax/scripts/shBrushRuby.js"));
+          new ScriptResource(
+              94, linkBase + "resource/syntax/scripts/shBrushRuby.js"));
     }
     else if (lang.equals("scala"))
     {
       resources.add(
-          new ScriptResource(95,
-              linkBase + "resource/syntax/scripts/shBrushScala.js"));
+          new ScriptResource(
+              95, linkBase + "resource/syntax/scripts/shBrushScala.js"));
     }
     else if (lang.equals("sql"))
     {
       resources.add(
-          new ScriptResource(96,
-              linkBase + "resource/syntax/scripts/shBrushSql.js"));
+          new ScriptResource(
+              96, linkBase + "resource/syntax/scripts/shBrushSql.js"));
     }
     else if (lang.equals("vb") || (lang.equals("vb.net")))
     {
       resources.add(
-          new ScriptResource(97,
-              linkBase + "resource/syntax/scripts/shBrushVb.js"));
+          new ScriptResource(
+              97, linkBase + "resource/syntax/scripts/shBrushVb.js"));
     }
     else if (lang.equals("xml") || lang.equals("html") || lang.equals("xhtml")
              || (lang.equals("xslt")))
     {
       resources.add(
-          new ScriptResource(98,
-              linkBase + "resource/syntax/scripts/shBrushXml.js"));
+          new ScriptResource(
+              98, linkBase + "resource/syntax/scripts/shBrushXml.js"));
+    }
+    else if (lang.equals("actionscript3") || lang.equals("as3"))
+    {
+      resources.add(
+          new ScriptResource(
+              99, linkBase + "resource/syntax/scripts/shBrushAS3.js"));
+    }
+    else if (lang.equals("jfx") || lang.equals("javafx"))
+    {
+      resources.add(
+          new ScriptResource(
+              100, linkBase + "resource/syntax/scripts/shBrushJavaFX.js"));
+    }
+    else if (lang.equals("powershell") || lang.equals("ps"))
+    {
+      resources.add(
+          new ScriptResource(
+              101, linkBase + "resource/syntax/scripts/shBrushPowerShell.js"));
     }
 
     StringBuffer result = new StringBuffer();
 
     result.append("<script type=\"text/javascript\">\n");
-
     result.append("SyntaxHighlighter.config.clipboardSwf = '");
     result.append(linkBase).append("resource/syntax/scripts/clipboard.swf';\n");
     result.append("SyntaxHighlighter.config.bloggerMode = true;\n");
@@ -383,6 +402,8 @@ public class CodeMacro extends AbstractBlogMacro implements WebMacro
    * Method description
    *
    *
+   *
+   * @param index
    * @param href
    *
    * @return
