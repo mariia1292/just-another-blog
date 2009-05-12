@@ -68,7 +68,6 @@ public class RandomMapping extends FilterMapping
           BlogResponse response, String[] param)
           throws IOException, ServletException
   {
-    String result = null;
     Random random = new Random();
     Blog blog = request.getCurrentBlog();
     EntryDAO entryDAO = BlogContext.getDAOFactory().getEntryDAO();
@@ -83,12 +82,13 @@ public class RandomMapping extends FilterMapping
       {
         BlogBean blogBean = BlogUtil.getSessionBean(request, BlogBean.class,
                               BlogBean.NAME);
+        Entry e = entries.get(0);
 
-        blogBean.setEntry(entries.get(0));
-        result = buildTemplateViewId(blog, Constants.TEMPLATE_DETAIL);
+        setDisplayContent(request, e, false);
+        blogBean.setEntry(e);
       }
     }
 
-    return result;
+    return buildTemplateViewId(blog, Constants.TEMPLATE_DETAIL);
   }
 }
