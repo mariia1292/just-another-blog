@@ -59,7 +59,6 @@ public class SpoilerMacro implements WebMacro
     long time = System.nanoTime();
     StringBuffer result = new StringBuffer();
 
-    result.append("<div>\n");
     result.append("<input type=\"button\" value=\"").append(title);
     result.append("\" onclick=\"");
     result.append("$('#spoiler_").append(time).append("').toggle();");
@@ -111,7 +110,6 @@ public class SpoilerMacro implements WebMacro
     }
 
     result.append(body).append("\n");
-    result.append("</div>\n");
     result.append("</div>\n");
     result.append("</div>\n");
 

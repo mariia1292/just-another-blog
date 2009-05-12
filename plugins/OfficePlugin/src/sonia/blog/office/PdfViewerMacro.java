@@ -94,6 +94,17 @@ public class PdfViewerMacro extends AbstractBlogMacro implements WebMacro
     this.id = id;
   }
 
+  /**
+   * Method description
+   *
+   *
+   * @param theme
+   */
+  public void setTheme(String theme)
+  {
+    this.theme = theme;
+  }
+
   //~--- methods --------------------------------------------------------------
 
   /**
@@ -287,7 +298,7 @@ public class PdfViewerMacro extends AbstractBlogMacro implements WebMacro
   private String printPdfImageGallery(String linkBase, File pdfDir, String body)
   {
     StringBuffer result = new StringBuffer();
-    String res = linkBase + "resources/lightbox/";
+    String res = linkBase + "resources/prettyPhoto/";
 
     resources = new ArrayList<WebResource>();
 
@@ -300,27 +311,14 @@ public class PdfViewerMacro extends AbstractBlogMacro implements WebMacro
 
     css.setRel(LinkResource.REL_STYLESHEET);
     css.setType(LinkResource.TYPE_STYLESHEET);
-    css.setHref(res + "css/jquery.lightbox-0.5.css");
+    css.setHref(res + "css/prettyPhoto.css");
     resources.add(css);
 
     ScriptResource js = new ScriptResource(101,
-                          res + "js/jquery.lightbox-0.5.js");
+                          res + "js/jquery.prettyPhoto.js");
 
     resources.add(js);
 
-    /*
-     * if (request.getAttribute("sonia.blog.macro.gallery") == null)
-     * {
-     * result.append("<script type=\"text/javascript\" src=\"").append(linkBase);
-     * result.append("resources/jquery/jquery.min.js\"></script>\n");
-     * result.append("<script type=\"text/javascript\" src=\"").append(res);
-     * result.append("js/jquery.lightbox-0.5.js\"></script>\n");
-     * result.append("<link rel=\"stylesheet\" href=\"").append(res);
-     * result.append("css/jquery.lightbox-0.5.css\" ");
-     * result.append("type=\"text/css\" media=\"screen\"></link>\n");
-     * request.setAttribute("sonia.blog.macro.gallery", Boolean.TRUE);
-     * }
-     */
     File[] files = pdfDir.listFiles(new FilenameFilter()
     {
       public boolean accept(File dir, String name)
@@ -328,6 +326,8 @@ public class PdfViewerMacro extends AbstractBlogMacro implements WebMacro
         return name.endsWith("." + extension);
       }
     });
+
+    long time = System.nanoTime();
     String name = "pdfgallery_" + pdfDir.getName();
 
     result.append("<span id=\"").append(name).append("\">\n");
@@ -341,9 +341,8 @@ public class PdfViewerMacro extends AbstractBlogMacro implements WebMacro
       {
         String link = baseLink + i + "." + extension;
 
-        result.append("<a id=\"").append(name).append("_").append(i);
-        result.append("\" title=\"Page ").append(i).append("\" ");
-        result.append("rel=\"[ligthbox[group_a").append(i);
+        result.append("<a title=\"Page ").append(i).append("\" ");
+        result.append("rel=\"prettyPhoto[").append(time);
         result.append("]\" href=\"").append(link).append("\"");
 
         if (i > 1)
@@ -371,24 +370,8 @@ public class PdfViewerMacro extends AbstractBlogMacro implements WebMacro
     result.append("</span>\n");
     result.append("<script type=\"text/javascript\">\n");
     result.append("$(document).ready(function() {\n");
-
-    /*
-     * result.append("addScript(\"").append(res);
-     * result.append("js/jquery.lightbox-0.5.js").append("\");\n");
-     * result.append("addCSS(\"").append(res);
-     * result.append("css/jquery.lightbox-0.5.css").append("\");\n");
-     */
-    result.append("$(\"span#").append(name).append(" a\").lightBox({\n");
-    result.append("imageLoading: '").append(res);
-    result.append("images/lightbox-ico-loading.gif',\n");
-    result.append("imageBtnPrev: '").append(res);
-    result.append("images/lightbox-btn-prev.gif',\n");
-    result.append("imageBtnNext: '").append(res);
-    result.append("images/lightbox-btn-next.gif',\n");
-    result.append("imageBtnClose: '").append(res);
-    result.append("images/lightbox-btn-close.gif',\n");
-    result.append("imageBlank: '").append(res);
-    result.append("images/lightbox-blank.gif'\n");
+    result.append("$(\"span#").append(name).append(" a\").prettyPhoto({\n");
+    result.append( "theme: '" ).append(theme).append("'\n");
     result.append("});\n");
     result.append("});\n");
     result.append("</script>\n");
@@ -415,4 +398,7 @@ public class PdfViewerMacro extends AbstractBlogMacro implements WebMacro
 
   /** Field description */
   private List<WebResource> resources;
+
+  /** Field description */
+  private String theme = "dark_square";
 }

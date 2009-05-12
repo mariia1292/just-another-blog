@@ -85,7 +85,7 @@ public class GalleryMacro extends AbstractBlogMacro implements WebMacro
         {
           LinkBuilder linkBuilder = BlogContext.getInstance().getLinkBuilder();
           String res = linkBuilder.buildLink(request, "/resources/");
-          String lRes = res + "lightbox/";
+          String lRes = res + "prettyPhoto/";
 
           resources = new ArrayList<WebResource>();
 
@@ -94,17 +94,17 @@ public class GalleryMacro extends AbstractBlogMacro implements WebMacro
 
           resources.add(jquery);
 
-          ScriptResource jqueryLightbox = new ScriptResource(21,
-                                            lRes + "js/jquery.lightbox-0.5.js");
+          ScriptResource jqueryPrettyPhoto = new ScriptResource(21,
+                                            lRes + "js/jquery.prettyPhoto.js");
 
-          resources.add(jqueryLightbox);
+          resources.add(jqueryPrettyPhoto);
 
-          LinkResource lightboxCSS = new LinkResource(22);
+          LinkResource prettyPhotoCSS = new LinkResource(22);
 
-          lightboxCSS.setRel(LinkResource.REL_STYLESHEET);
-          lightboxCSS.setType(LinkResource.TYPE_STYLESHEET);
-          lightboxCSS.setHref(lRes + "css/jquery.lightbox-0.5.css");
-          resources.add(lightboxCSS);
+          prettyPhotoCSS.setRel(LinkResource.REL_STYLESHEET);
+          prettyPhotoCSS.setType(LinkResource.TYPE_STYLESHEET);
+          prettyPhotoCSS.setHref(lRes + "css/prettyPhoto.css");
+          resources.add(prettyPhotoCSS);
 
           long time = System.nanoTime();
 
@@ -116,7 +116,7 @@ public class GalleryMacro extends AbstractBlogMacro implements WebMacro
             Attachment image = images.get(i);
 
             result.append("<a title=\"");
-            result.append(image.getName()).append("\" rel=\"ligthbox[group_");
+            result.append(image.getName()).append("\" rel=\"prettyPhoto[group_");
             result.append(time).append("]\" href=\"");
             result.append(linkBuilder.buildLink(request, image));
             result.append("\">\n").append("<img border=\"0\" alt=\"\" src=\"");
@@ -125,34 +125,17 @@ public class GalleryMacro extends AbstractBlogMacro implements WebMacro
           }
 
           result.append("</div>\n");
-          result.append("<script type=\"text/javascript\">\n");
+          result.append("<script type=\"text/javascript\" charset=\"utf-8\">\n");
 
           // on document ready
           result.append("$(document).ready(function() {\n");
 
           // configure gallery
+
           result.append("$(\"div#gallery_").append(time);
-          result.append(" a\").lightBox({\n");
+          result.append(" a\").prettyPhoto({\n");
+          result.append( "theme: '" ).append(theme).append("'\n");
 
-          // load icon
-          result.append("imageLoading: '").append(lRes);
-          result.append("images/lightbox-ico-loading.gif',\n");
-
-          // previous button
-          result.append("imageBtnPrev: '").append(lRes);
-          result.append("images/lightbox-btn-prev.gif',\n");
-
-          // next button
-          result.append("imageBtnNext: '").append(lRes);
-          result.append("images/lightbox-btn-next.gif',\n");
-
-          // close button
-          result.append("imageBtnClose: '").append(lRes);
-          result.append("images/lightbox-btn-close.gif',\n");
-
-          // blank image
-          result.append("imageBlank: '").append(lRes);
-          result.append("images/lightbox-blank.gif'\n");
           result.append("});\n");
           result.append("});\n");
           result.append("</script>\n");
@@ -193,7 +176,16 @@ public class GalleryMacro extends AbstractBlogMacro implements WebMacro
     return images;
   }
 
+  public void setTheme(String theme)
+  {
+    this.theme = theme;
+  }
+
+  
+
   //~--- fields ---------------------------------------------------------------
+
+  private String theme = "dark_square";
 
   /** Field description */
   @Dao
@@ -201,4 +193,5 @@ public class GalleryMacro extends AbstractBlogMacro implements WebMacro
 
   /** Field description */
   private List<WebResource> resources;
+  
 }
