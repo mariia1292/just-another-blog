@@ -89,17 +89,22 @@ public class GalleryMacro extends AbstractBlogMacro implements WebMacro
 
           resources = new ArrayList<WebResource>();
 
-          ScriptResource sr = new ScriptResource(20,
-                                lRes + "js/jquery.lightbox-0.5.js");
+          ScriptResource jquery = new ScriptResource(20,
+                                    res + "jquery/jquery.min.js");
 
-          resources.add(sr);
+          resources.add(jquery);
 
-          LinkResource lr = new LinkResource(21);
+          ScriptResource jqueryLightbox = new ScriptResource(21,
+                                            lRes + "js/jquery.lightbox-0.5.js");
 
-          lr.setRel(LinkResource.REL_STYLESHEET);
-          lr.setType(LinkResource.TYPE_STYLESHEET);
-          lr.setHref(lRes + "css/jquery.lightbox-0.5.css");
-          resources.add(lr);
+          resources.add(jqueryLightbox);
+
+          LinkResource lightboxCSS = new LinkResource(22);
+
+          lightboxCSS.setRel(LinkResource.REL_STYLESHEET);
+          lightboxCSS.setType(LinkResource.TYPE_STYLESHEET);
+          lightboxCSS.setHref(lRes + "css/jquery.lightbox-0.5.css");
+          resources.add(lightboxCSS);
 
           long time = System.nanoTime();
 
@@ -125,12 +130,6 @@ public class GalleryMacro extends AbstractBlogMacro implements WebMacro
           // on document ready
           result.append("$(document).ready(function() {\n");
 
-          // load lightbox js
-          // result.append("addScript(\"").append(lRes);
-          // result.append("js/jquery.lightbox-0.5.js").append("\");\n");
-          // load lightbox css
-          // result.append("addCSS(\"").append(lRes);
-          // result.append("css/jquery.lightbox-0.5.css").append("\");\n");
           // configure gallery
           result.append("$(\"div#gallery_").append(time);
           result.append(" a\").lightBox({\n");

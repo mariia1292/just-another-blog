@@ -13,6 +13,8 @@ import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.app.Constants;
 import sonia.blog.api.app.Context;
 import sonia.blog.api.dao.Dao;
+import sonia.blog.api.macro.LinkResource;
+import sonia.blog.api.macro.WebResource;
 import sonia.blog.api.mapping.MappingHandler;
 import sonia.blog.authentication.CookieLoginModule;
 import sonia.blog.authentication.DefaultLoginModule;
@@ -127,6 +129,7 @@ public class BlogContextListener implements ServletContextListener
       initFileNameMap();
       initMBeans(context);
       initServices(context);
+      registerResources(context);
 
       if (context.isInstalled())
       {
@@ -483,6 +486,37 @@ public class BlogContextListener implements ServletContextListener
         }
       }
     }
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param context
+   */
+  private void registerResources(BlogContext context)
+  {
+    ServiceRegistry registry = context.getServiceRegistry();
+    String ctxPath = context.getServletContext().getContextPath();
+    LinkResource entryRSS = new LinkResource(0);
+
+    entryRSS.setRel(LinkResource.REL_RSSFEED);
+    entryRSS.setType(LinkResource.TYPE_RSSFEED);
+    entryRSS.setHref(ctxPath + "/feed/index.rss2");
+
+    LinkResource commentRSS = new LinkResource(1);
+
+    commentRSS.setRel(LinkResource.REL_RSSFEED);
+    commentRSS.setType(LinkResource.TYPE_RSSFEED);
+    commentRSS.setHref(ctxPath + "/feed/comments.rss2");
+
+    LinkResource opensearch = new LinkResource(2);
+
+    opensearch.setRel(LinkResource.REL_OPENSEARCH);
+    opensearch.setType(LinkResource.TYPE_OPENSEARCH);
+    opensearch.setHref(ctxPath + "/opensearch.xml");
+    registry.register(WebResource.class, Constants.SERVICE_WEBRESOURCE).add(
+        entryRSS).add(commentRSS).add(opensearch);
   }
 
   //~--- get methods ----------------------------------------------------------
