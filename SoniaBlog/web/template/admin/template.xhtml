@@ -6,37 +6,38 @@
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:t="http://myfaces.apache.org/tomahawk"
-      xmlns:blog="http://jab.nitilon.org/blog/"
-      xmlns:u1="http://jab.nitilon.org/blog/">
+      xmlns:blog="http://jab.nitilon.org/blog/">
   <head>
-    <title><ui:insert name="title">JAB</ui:insert> | Just-Another-Blog</title>
+
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <blog:resource type="css" href="/template/admin/css/admin.css" />
-    <blog:resource type="css" href="/template/admin/css/patches/patch_blog.css" iePatch="true" />
-    <blog:resource type="rss" title="#{label.entries}" href="/feed/index.rss2" />
-    <blog:resource type="rss" title="#{label.comments}" href="/feed/comments.rss2" />
-    <blog:resource type="opensearch" href="/opensearch.xml" title="#{BlogBean.blog.title}" rendered="#{BlogBean.installed}" />
-    <blog:resource type="favicon" href="/template/admin/images/favicon.ico" />
-    <blog:resource type="script" href="/resources/jquery/jquery.min.js" />
+    <meta name="revisit-after" content="1 day"/>
+
+    <title><ui:insert name="title">JAB</ui:insert> | Just-Another-Blog</title>
+
+    <link rel="stylesheet" type="text/css" class="user" href="${facesContext.externalContext.requestContextPath}/template/admin/css/admin.css" />
+    <!--[if lte IE 7]>
+      <link rel="stylesheet" type="text/css" class="user" href="${facesContext.externalContext.requestContextPath}/template/admin/css/patches/patch_blog.css" />
+    <![endif]-->
+    <link rel="shortcut icon" href="${facesContext.externalContext.requestContextPath}/template/jab/images/favicon.ico" />
+    
     <blog:header comments="false" />
-    <ui:insert name="head" />
+    <ui:insert name="header" />
   </head>
   <body>
-
     <div id="page_margins">
 
-    <div id="header-line">
-      <div class="left">
-        <h:outputText value="#{BlogBean.blog.title}" rendered="#{BlogBean.installed}" />
-        <h:outputText value=" | "  rendered="#{BlogBean.installed}" />
-        <h:outputText value="#{BlogBean.blog.description}" rendered="#{BlogBean.installed}" />
+      <div id="header-line">
+        <div class="left">
+          <h:outputText value="#{BlogBean.blog.title}" rendered="#{BlogBean.installed}" />
+          <h:outputText value=" | "  rendered="#{BlogBean.installed}" />
+          <h:outputText value="#{BlogBean.blog.description}" rendered="#{BlogBean.installed}" />
+        </div>
+        <div class="right">
+          <h:outputText value="JAB | Just-Another-Blog" />
+        </div>
+        <div style="clear: both;">
+        </div>
       </div>
-      <div class="right">
-        <h:outputText value="JAB | Just-Another-Blog" />
-      </div>
-      <div style="clear: both;">
-      </div>
-    </div>
 
       <div id="page">
 

@@ -190,7 +190,7 @@ public class PdfViewerMacro extends AbstractBlogMacro implements WebMacro
 
     if (pdfDir.exists())
     {
-      result = printPdfImageGallery(request, linkBase, pdfDir, body);
+      result = printPdfImageGallery(linkBase, pdfDir, body);
     }
     else
     {
@@ -199,7 +199,7 @@ public class PdfViewerMacro extends AbstractBlogMacro implements WebMacro
         try
         {
           createPdfImageGallery(pdfDir, attachmentFile);
-          result = printPdfImageGallery(request, linkBase, pdfDir, body);
+          result = printPdfImageGallery(linkBase, pdfDir, body);
         }
         catch (Exception ex)
         {
@@ -278,20 +278,23 @@ public class PdfViewerMacro extends AbstractBlogMacro implements WebMacro
    *
    *
    *
-   * @param request
    * @param linkBase
    * @param pdfDir
    * @param body
    *
    * @return
    */
-  private String printPdfImageGallery(BlogRequest request, String linkBase,
-          File pdfDir, String body)
+  private String printPdfImageGallery(String linkBase, File pdfDir, String body)
   {
     StringBuffer result = new StringBuffer();
     String res = linkBase + "resources/lightbox/";
 
     resources = new ArrayList<WebResource>();
+
+    ScriptResource jquery = new ScriptResource(20,
+                              linkBase + "resources/jquery/jquery.min.js");
+
+    resources.add(jquery);
 
     LinkResource css = new LinkResource(100);
 
@@ -300,7 +303,8 @@ public class PdfViewerMacro extends AbstractBlogMacro implements WebMacro
     css.setHref(res + "css/jquery.lightbox-0.5.css");
     resources.add(css);
 
-    ScriptResource js = new ScriptResource(101, res + "js/jquery.lightbox-0.5.js");
+    ScriptResource js = new ScriptResource(101,
+                          res + "js/jquery.lightbox-0.5.js");
 
     resources.add(js);
 

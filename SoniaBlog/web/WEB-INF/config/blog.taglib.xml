@@ -21,14 +21,6 @@
             <renderer-type>sonia.blog.calendar.renderer</renderer-type>
         </component>
     </tag>
-
-    <tag>
-        <tag-name>resource</tag-name>
-        <component>
-            <component-type>sonia.blog.resource</component-type>
-            <renderer-type>sonia.blog.resource.renderer</renderer-type>
-        </component>
-    </tag>
     
     <tag>
         <tag-name>link</tag-name>
