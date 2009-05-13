@@ -5,7 +5,9 @@
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:c="http://java.sun.com/jstl/core"
-      xmlns:t="http://myfaces.apache.org/tomahawk">
+      xmlns:blog="http://jab.nitilon.org/blog/"
+      xmlns:t="http://myfaces.apache.org/tomahawk"
+      xmlns:u1="http://jab.nitilon.org/blog/">
   
   <body>
     
@@ -36,7 +38,7 @@
               theme_advanced_path_location : "top"
             }
           });
-
+          
         </script>
       </ui:define>
       
@@ -86,6 +88,7 @@
           
           <h:commandButton value="#{label.publish}" action="#{EntryBean.publish}" />
           <h:commandButton value="#{label.saveDraft}" action="#{EntryBean.saveDraft}" />
+          <t:commandButton target="_blank" value="#{label.preview}" actionListener="#{EntryBean.preview}" />
           <h:commandButton value="#{label.remove}" action="#{EntryBean.remove}" />
           
         </h:form>

@@ -22,6 +22,7 @@ import sonia.blog.api.dao.CategoryDAO;
 import sonia.blog.api.dao.DAOFactory;
 import sonia.blog.api.dao.EntryDAO;
 import sonia.blog.api.dao.TagDAO;
+import sonia.blog.api.link.LinkBuilder;
 import sonia.blog.api.template.Template;
 import sonia.blog.entity.Attachment;
 import sonia.blog.entity.Blog;
@@ -51,6 +52,7 @@ import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.faces.event.ActionEvent;
 import javax.faces.model.DataModel;
 import javax.faces.model.SelectItem;
 
@@ -60,6 +62,9 @@ import javax.faces.model.SelectItem;
  */
 public class EntryBean extends AbstractEditorBean
 {
+
+  /** Field description */
+  public static final String NAME = "EntryBean";
 
   /** Field description */
   private static final String DETAIL = "detail";
@@ -147,6 +152,25 @@ public class EntryBean extends AbstractEditorBean
     setSessionVar();
 
     return EDITOR;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param event
+   */
+  @Override
+  public void preview(ActionEvent event)
+  {
+    BlogRequest request = getRequest();
+    LinkBuilder linkBuilder = BlogContext.getInstance().getLinkBuilder();
+    String uri = linkBuilder.buildLink(request, "/entry-preview.jab");
+
+    entry.setPublishingDate( new Date() );
+    entry.setAuthor( request.getUser() );
+
+    sendRedirect(uri);
   }
 
   /**

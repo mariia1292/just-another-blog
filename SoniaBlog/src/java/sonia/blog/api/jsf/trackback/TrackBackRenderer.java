@@ -48,68 +48,73 @@ public class TrackBackRenderer extends BaseRenderer
   {
     TrackBackComponent tbc = (TrackBackComponent) component;
     ContentObject co = tbc.getObject();
-    BlogContext ctx = BlogContext.getInstance();
-    LinkBuilder builder = ctx.getLinkBuilder();
-    BlogRequest request =
-      BlogUtil.getBlogRequest(context.getExternalContext().getRequest());
-    Blog blog = request.getCurrentBlog();
-    String linkBase = builder.buildLink(request, "/");
-    StringBuffer linkBuffer = new StringBuffer();
 
-    linkBuffer.append(linkBase).append("list/");
-    linkBuffer.append(co.getId()).append(".jab");
+    if (co.getId() != null)
+    {
+      BlogContext ctx = BlogContext.getInstance();
+      LinkBuilder builder = ctx.getLinkBuilder();
+      BlogRequest request =
+        BlogUtil.getBlogRequest(context.getExternalContext().getRequest());
+      Blog blog = request.getCurrentBlog();
+      String linkBase = builder.buildLink(request, "/");
+      StringBuffer linkBuffer = new StringBuffer();
 
-    String link = linkBuffer.toString();
-    StringBuffer tbLinkBuffer = new StringBuffer();
+      linkBuffer.append(linkBase).append("list/");
+      linkBuffer.append(co.getId()).append(".jab");
 
-    tbLinkBuffer.append(linkBase).append("trackback/").append(co.getId());
+      String link = linkBuffer.toString();
+      StringBuffer tbLinkBuffer = new StringBuffer();
 
-    String tbLink = tbLinkBuffer.toString();
-    String date = blog.getDateFormatter().format(co.getCreationDate());
-    ResponseWriter writer = context.getResponseWriter();
+      tbLinkBuffer.append(linkBase).append("trackback/").append(co.getId());
 
-    writer.write("<!--\n");
-    writer.write("<rdf:RDF xmlns:rdf=\"");
-    writer.write("http://www.w3.org/1999/02/22-rdf-syntax-ns#\"\n");
-    writer.write("  xmlns:dc=\"http://purl.org/dc/elements/1.1/\"\n");
-    writer.write("  xmlns:trackback=\"");
-    writer.write("http://madskills.com/public/xml/rss/module/trackback/\">\n");
+      String tbLink = tbLinkBuffer.toString();
+      String date = blog.getDateFormatter().format(co.getCreationDate());
+      ResponseWriter writer = context.getResponseWriter();
 
-    // start description
-    writer.write("<rdf:Description\n");
+      writer.write("<!--\n");
+      writer.write("<rdf:RDF xmlns:rdf=\"");
+      writer.write("http://www.w3.org/1999/02/22-rdf-syntax-ns#\"\n");
+      writer.write("  xmlns:dc=\"http://purl.org/dc/elements/1.1/\"\n");
+      writer.write("  xmlns:trackback=\"");
+      writer.write(
+          "http://madskills.com/public/xml/rss/module/trackback/\">\n");
 
-    // about
-    writer.write("  rdf:about=\"");
-    writer.write(link);
-    writer.write("\"\n");
+      // start description
+      writer.write("<rdf:Description\n");
 
-    // identifier
-    writer.write("  dc:identifier=\"");
-    writer.write(link);
-    writer.write("\"\n");
+      // about
+      writer.write("  rdf:about=\"");
+      writer.write(link);
+      writer.write("\"\n");
 
-    // TrackBackUrl
-    writer.write("  trackback:ping=\"");
-    writer.write(tbLink);
-    writer.write("\"\n");
+      // identifier
+      writer.write("  dc:identifier=\"");
+      writer.write(link);
+      writer.write("\"\n");
 
-    // title
-    writer.write("  dc:title=\"");
-    writer.write(co.getTitle());
-    writer.write("\"\n");
+      // TrackBackUrl
+      writer.write("  trackback:ping=\"");
+      writer.write(tbLink);
+      writer.write("\"\n");
 
-    // creator
-    writer.write("  dc:creator=\"");
-    writer.write(co.getAuthorName());
-    writer.write("\"\n");
+      // title
+      writer.write("  dc:title=\"");
+      writer.write(co.getTitle());
+      writer.write("\"\n");
 
-    // date
-    writer.write("  dc:date=\"");
-    writer.write(date);
-    writer.write("\" />\n");
+      // creator
+      writer.write("  dc:creator=\"");
+      writer.write(co.getAuthorName());
+      writer.write("\"\n");
 
-    // end description
-    writer.write("</rdf:RDF>\n");
-    writer.write("-->\n");
+      // date
+      writer.write("  dc:date=\"");
+      writer.write(date);
+      writer.write("\" />\n");
+
+      // end description
+      writer.write("</rdf:RDF>\n");
+      writer.write("-->\n");
+    }
   }
 }
