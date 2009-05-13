@@ -9,6 +9,7 @@ package sonia.blog.api.jsf.header;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.app.BlogRequest;
 import sonia.blog.api.macro.WebResource;
 import sonia.blog.entity.Blog;
@@ -55,36 +56,39 @@ public class HeaderRenderer extends BaseRenderer
       throw new IllegalArgumentException();
     }
 
-    HeaderComponent header = (HeaderComponent) component;
-    ResponseWriter writer = context.getResponseWriter();
-
-    if (header.getComments())
+    if (BlogContext.getInstance().isInstalled())
     {
-      writer.writeComment("start header");
-    }
+      HeaderComponent header = (HeaderComponent) component;
+      ResponseWriter writer = context.getResponseWriter();
 
-    List<WebResource> resources = header.getResources(context);
-    BlogRequest request =
-      BlogUtil.getBlogRequest(context.getExternalContext().getRequest());
-    Blog blog = request.getCurrentBlog();
-
-    if (Util.hasContent(resources))
-    {
-      for (WebResource resource : resources)
+      if (header.getComments())
       {
-        String html = resource.toHTML();
-
-        writer.write(MessageFormat.format(html, blog.getId(),
-                                          blog.getIdentifier(),
-                                          blog.getTitle(),
-                                          blog.getDescription()));
-        writer.write("\n");
+        writer.writeComment("start header");
       }
-    }
 
-    if (header.getComments())
-    {
-      writer.writeComment("end header");
+      List<WebResource> resources = header.getResources(context);
+      BlogRequest request =
+        BlogUtil.getBlogRequest(context.getExternalContext().getRequest());
+      Blog blog = request.getCurrentBlog();
+
+      if (Util.hasContent(resources))
+      {
+        for (WebResource resource : resources)
+        {
+          String html = resource.toHTML();
+
+          writer.write(MessageFormat.format(html, blog.getId(),
+                                            blog.getIdentifier(),
+                                            blog.getTitle(),
+                                            blog.getDescription()));
+          writer.write("\n");
+        }
+      }
+
+      if (header.getComments())
+      {
+        writer.writeComment("end header");
+      }
     }
   }
 }
