@@ -142,6 +142,17 @@ public class SessionInformation implements SessionInformationMBean
    *
    * @return
    */
+  public long getPluginCount()
+  {
+    return BlogContext.getInstance().getPluginContext().getPlugins().size();
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
   public String getResourceDirectorySize()
   {
     long size = Util.getLength(getResourceDir());
@@ -161,6 +172,17 @@ public class SessionInformation implements SessionInformationMBean
     long runtime = System.currentTimeMillis() - time;
 
     return Util.formatTime(runtime);
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  public long getServiceCount()
+  {
+    return BlogContext.getInstance().getServiceRegistry().getServiceCount();
   }
 
   /**

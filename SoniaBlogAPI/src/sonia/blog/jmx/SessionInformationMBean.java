@@ -56,6 +56,14 @@ public interface SessionInformationMBean
    *
    * @return
    */
+  public long getPluginCount();
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
   public String getResourceDirectorySize();
 
   /**
@@ -65,6 +73,14 @@ public interface SessionInformationMBean
    * @return
    */
   public String getRuntime();
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  public long getServiceCount();
 
   /**
    * Method description

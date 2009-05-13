@@ -201,6 +201,17 @@ public class ServiceRegistry
     return reference;
   }
 
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  public long getServiceCount()
+  {
+    return services.size();
+  }
+
   //~--- methods --------------------------------------------------------------
 
   /**
