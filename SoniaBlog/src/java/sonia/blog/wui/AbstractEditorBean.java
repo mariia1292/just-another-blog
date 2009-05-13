@@ -80,6 +80,14 @@ public abstract class AbstractEditorBean extends AbstractBean
    * Method description
    *
    *
+   * @param event
+   */
+  public abstract void preview(ActionEvent event);
+
+  /**
+   * Method description
+   *
+   *
    * @return
    */
   public abstract String save();

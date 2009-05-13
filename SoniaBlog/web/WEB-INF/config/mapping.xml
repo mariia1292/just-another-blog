@@ -90,4 +90,9 @@
     <class>sonia.blog.mapping.LostPasswordMapping</class>
   </mapping>
 
+  <mapping>
+    <regex>^/(page|entry)-preview.jab$</regex>
+    <class>sonia.blog.mapping.PreviewMapping</class>
+  </mapping>
+
 </mappings>

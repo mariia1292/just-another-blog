@@ -113,8 +113,8 @@ public class GlobalConfigBean extends AbstractConfigBean
       String from = getRequest().getCurrentBlog().getEmail();
       MailService msgService = BlogContext.getInstance().getMailService();
 
-      msgService.sendMail(testMail, from,
-                          "JAB TestMail", "This is a test message");
+      msgService.sendMail(testMail, from, "JAB TestMail",
+                          "This is a test message");
     }
     catch (Exception ex)
     {

@@ -98,6 +98,7 @@ public class LostPasswordBean extends AbstractBean
             Convert.toBase64(id.getBytes()));
         mailService.sendMail(u.getEmail(), blog.getEmail(), subject.toString(),
                              text.toString());
+
         // TODO: add Message
         getResponse().sendRedirect(linkBuilder.buildLink(blog, ""));
       }

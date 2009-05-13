@@ -56,6 +56,19 @@ public class GalleryMacro extends AbstractBlogMacro implements WebMacro
     return resources;
   }
 
+  //~--- set methods ----------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   * @param theme
+   */
+  public void setTheme(String theme)
+  {
+    this.theme = theme;
+  }
+
   //~--- methods --------------------------------------------------------------
 
   /**
@@ -95,7 +108,8 @@ public class GalleryMacro extends AbstractBlogMacro implements WebMacro
           resources.add(jquery);
 
           ScriptResource jqueryPrettyPhoto = new ScriptResource(21,
-                                            lRes + "js/jquery.prettyPhoto.js");
+                                               lRes
+                                               + "js/jquery.prettyPhoto.js");
 
           resources.add(jqueryPrettyPhoto);
 
@@ -116,7 +130,8 @@ public class GalleryMacro extends AbstractBlogMacro implements WebMacro
             Attachment image = images.get(i);
 
             result.append("<a title=\"");
-            result.append(image.getName()).append("\" rel=\"prettyPhoto[group_");
+            result.append(image.getName()).append(
+                "\" rel=\"prettyPhoto[group_");
             result.append(time).append("]\" href=\"");
             result.append(linkBuilder.buildLink(request, image));
             result.append("\">\n").append("<img border=\"0\" alt=\"\" src=\"");
@@ -125,17 +140,16 @@ public class GalleryMacro extends AbstractBlogMacro implements WebMacro
           }
 
           result.append("</div>\n");
-          result.append("<script type=\"text/javascript\" charset=\"utf-8\">\n");
+          result.append(
+              "<script type=\"text/javascript\" charset=\"utf-8\">\n");
 
           // on document ready
           result.append("$(document).ready(function() {\n");
 
           // configure gallery
-
           result.append("$(\"div#gallery_").append(time);
           result.append(" a\").prettyPhoto({\n");
-          result.append( "theme: '" ).append(theme).append("'\n");
-
+          result.append("theme: '").append(theme).append("'\n");
           result.append("});\n");
           result.append("});\n");
           result.append("</script>\n");
@@ -176,16 +190,7 @@ public class GalleryMacro extends AbstractBlogMacro implements WebMacro
     return images;
   }
 
-  public void setTheme(String theme)
-  {
-    this.theme = theme;
-  }
-
-  
-
   //~--- fields ---------------------------------------------------------------
-
-  private String theme = "dark_square";
 
   /** Field description */
   @Dao
@@ -193,5 +198,7 @@ public class GalleryMacro extends AbstractBlogMacro implements WebMacro
 
   /** Field description */
   private List<WebResource> resources;
-  
+
+  /** Field description */
+  private String theme = "dark_square";
 }

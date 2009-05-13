@@ -11,11 +11,13 @@ package sonia.blog.wui;
 
 import org.apache.myfaces.custom.tree2.TreeNode;
 
+import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.app.BlogRequest;
 import sonia.blog.api.app.Constants;
 import sonia.blog.api.dao.AttachmentDAO;
 import sonia.blog.api.dao.Dao;
 import sonia.blog.api.dao.PageDAO;
+import sonia.blog.api.link.LinkBuilder;
 import sonia.blog.entity.Attachment;
 import sonia.blog.entity.Blog;
 import sonia.blog.entity.Page;
@@ -46,6 +48,9 @@ import javax.faces.event.ActionEvent;
  */
 public class PageAuthorBean extends AbstractEditorBean
 {
+
+  /** Field description */
+  public static final String NAME = "PageAuthorBean";
 
   /** Field description */
   public static final String PAGEEDITOR = "page-editor";
@@ -120,6 +125,25 @@ public class PageAuthorBean extends AbstractEditorBean
     setSessionVar();
 
     return PAGEEDITOR;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param event
+   */
+  @Override
+  public void preview(ActionEvent event)
+  {
+    BlogRequest request = getRequest();
+    LinkBuilder linkBuilder = BlogContext.getInstance().getLinkBuilder();
+    String uri = linkBuilder.buildLink(request, "/page-preview.jab");
+
+    page.setPublishingDate( new Date() );
+    page.setAuthor( request.getUser() );
+
+    sendRedirect(uri);
   }
 
   /**
