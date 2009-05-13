@@ -502,18 +502,21 @@ public class BlogContextListener implements ServletContextListener
 
     entryRSS.setRel(LinkResource.REL_RSSFEED);
     entryRSS.setType(LinkResource.TYPE_RSSFEED);
+    entryRSS.setTitle("{2} - entries");
     entryRSS.setHref(ctxPath + "/feed/index.rss2");
 
     LinkResource commentRSS = new LinkResource(1);
 
     commentRSS.setRel(LinkResource.REL_RSSFEED);
     commentRSS.setType(LinkResource.TYPE_RSSFEED);
+    commentRSS.setTitle("{2} - comments");
     commentRSS.setHref(ctxPath + "/feed/comments.rss2");
 
     LinkResource opensearch = new LinkResource(2);
 
     opensearch.setRel(LinkResource.REL_OPENSEARCH);
     opensearch.setType(LinkResource.TYPE_OPENSEARCH);
+    opensearch.setTitle("JAB - {2}");
     opensearch.setHref(ctxPath + "/opensearch.xml");
     registry.register(WebResource.class, Constants.SERVICE_WEBRESOURCE).add(
         entryRSS).add(commentRSS).add(opensearch);

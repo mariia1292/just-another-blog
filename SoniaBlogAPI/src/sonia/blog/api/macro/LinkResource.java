@@ -191,7 +191,7 @@ public class LinkResource extends WebResource
       buffer.append("<!--[if lte IE 7]>\n");
     }
 
-    buffer.append("<link ");
+    buffer.append("<link");
 
     if (Util.hasContent(type))
     {
