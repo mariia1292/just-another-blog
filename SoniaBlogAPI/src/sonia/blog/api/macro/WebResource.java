@@ -28,8 +28,11 @@ public abstract class WebResource implements Comparable<WebResource>
   //~--- methods --------------------------------------------------------------
 
   /**
-   * Method description
-   *
+   * Allowed Patterns:
+   * {1} - id of the current blog
+   * {2} - identifier of the current blog
+   * {3} - title of the current blog
+   * {4} - description of the current blog
    *
    * @return
    */

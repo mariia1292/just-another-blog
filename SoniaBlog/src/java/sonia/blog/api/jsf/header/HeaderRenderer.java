@@ -9,7 +9,10 @@ package sonia.blog.api.jsf.header;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import sonia.blog.api.app.BlogRequest;
 import sonia.blog.api.macro.WebResource;
+import sonia.blog.entity.Blog;
+import sonia.blog.util.BlogUtil;
 
 import sonia.jsf.base.BaseRenderer;
 
@@ -18,6 +21,8 @@ import sonia.util.Util;
 //~--- JDK imports ------------------------------------------------------------
 
 import java.io.IOException;
+
+import java.text.MessageFormat;
 
 import java.util.List;
 
@@ -59,12 +64,20 @@ public class HeaderRenderer extends BaseRenderer
     }
 
     List<WebResource> resources = header.getResources(context);
+    BlogRequest request =
+      BlogUtil.getBlogRequest(context.getExternalContext().getRequest());
+    Blog blog = request.getCurrentBlog();
 
     if (Util.hasContent(resources))
     {
       for (WebResource resource : resources)
       {
-        writer.write(resource.toHTML());
+        String html = resource.toHTML();
+
+        writer.write(MessageFormat.format(html, blog.getId(),
+                                          blog.getIdentifier(),
+                                          blog.getTitle(),
+                                          blog.getDescription()));
         writer.write("\n");
       }
     }
