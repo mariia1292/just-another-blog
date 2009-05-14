@@ -43,7 +43,7 @@
         <column length="255" nullable="false" />
       </basic>
       <basic name="date">
-        <column name="trackbackDate" nullable="false" />
+        <column name="TRACKBACKDATE" nullable="false" />
         <temporal>TIMESTAMP</temporal>
       </basic>
     </attributes>
