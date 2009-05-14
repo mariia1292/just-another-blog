@@ -68,6 +68,25 @@ public class Entry implements Serializable, ContentObject, CommentAble
    * Method description
    *
    *
+   * @param trackback
+   */
+  public void addTrackback(Trackback trackback)
+  {
+    if (trackbacks == null)
+    {
+      trackbacks = new ArrayList<Trackback>();
+    }
+
+    if (!trackbacks.contains(trackback))
+    {
+      trackbacks.add(trackback);
+    }
+  }
+
+  /**
+   * Method description
+   *
+   *
    * @param category
    *
    * @return
@@ -155,6 +174,20 @@ public class Entry implements Serializable, ContentObject, CommentAble
     }
 
     category.getEntries().remove(this);
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param trackback
+   */
+  public void removeTrackbacks(Trackback trackback)
+  {
+    if (trackbacks != null)
+    {
+      trackbacks.remove(trackback);
+    }
   }
 
   /**
@@ -411,6 +444,17 @@ public class Entry implements Serializable, ContentObject, CommentAble
    *
    * @return
    */
+  public List<Trackback> getTrackbacks()
+  {
+    return trackbacks;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
   public boolean isAllowComments()
   {
     return allowComments;
@@ -605,6 +649,17 @@ public class Entry implements Serializable, ContentObject, CommentAble
     this.title = title;
   }
 
+  /**
+   * Method description
+   *
+   *
+   * @param trackbacks
+   */
+  public void setTrackbacks(List<Trackback> trackbacks)
+  {
+    this.trackbacks = trackbacks;
+  }
+
   //~--- methods --------------------------------------------------------------
 
   /**
@@ -674,4 +729,7 @@ public class Entry implements Serializable, ContentObject, CommentAble
 
   /** Field description */
   private String title;
+
+  /** Field description */
+  private List<Trackback> trackbacks;
 }
