@@ -176,5 +176,13 @@ public abstract class DAOFactory
    *
    * @return
    */
+  public abstract TrackbackDAO getTrackbackDAO();
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
   public abstract UserDAO getUserDAO();
 }

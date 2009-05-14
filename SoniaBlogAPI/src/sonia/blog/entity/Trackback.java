@@ -11,6 +11,8 @@ package sonia.blog.entity;
 
 import java.io.Serializable;
 
+import java.util.Date;
+
 /**
  *
  * @author sdorra
@@ -51,6 +53,17 @@ public class Trackback implements Serializable
   public String getBlogname()
   {
     return blogname;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  public Date getDate()
+  {
+    return date;
   }
 
   /**
@@ -125,6 +138,17 @@ public class Trackback implements Serializable
    * Method description
    *
    *
+   * @param date
+   */
+  public void setDate(Date date)
+  {
+    this.date = date;
+  }
+
+  /**
+   * Method description
+   *
+   *
    * @param entry
    */
   public void setEntry(Entry entry)
@@ -176,10 +200,24 @@ public class Trackback implements Serializable
     this.url = url;
   }
 
+  //~--- methods --------------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   */
+  void prePersists()
+  {
+    this.date = new Date();
+  }
+
   //~--- fields ---------------------------------------------------------------
 
   /** Field description */
   private String blogname;
+
+  /** Field description */
+  private Date date;
 
   /** Field description */
   private Entry entry;

@@ -22,6 +22,7 @@ import sonia.blog.api.dao.DAOFactory;
 import sonia.blog.api.dao.EntryDAO;
 import sonia.blog.api.dao.PageDAO;
 import sonia.blog.api.dao.TagDAO;
+import sonia.blog.api.dao.TrackbackDAO;
 import sonia.blog.api.dao.UserDAO;
 import sonia.blog.api.dao.cache.CacheManager;
 import sonia.blog.dao.jpa.profile.DatabaseProfile;
@@ -283,6 +284,18 @@ public class JpaDAOFactory extends DAOFactory
   public TagDAO getTagDAO()
   {
     return new JpaTagDAO(entityManagerFactory);
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  @Override
+  public TrackbackDAO getTrackbackDAO()
+  {
+    return new JpaTrackbackDAO(entityManagerFactory);
   }
 
   /**
