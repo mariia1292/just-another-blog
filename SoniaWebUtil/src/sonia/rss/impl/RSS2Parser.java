@@ -286,7 +286,7 @@ public class RSS2Parser extends FeedParser
         }
       }
 
-      XmlUtil.writeDocument(doc, out);
+      XmlUtil.writeDocument(doc, out, true);
     }
     catch (ParserConfigurationException ex)
     {
