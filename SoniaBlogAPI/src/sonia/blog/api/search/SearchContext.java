@@ -53,13 +53,5 @@ public interface SearchContext
    *
    * @return
    */
-  public boolean isLocked();
-
-  /**
-   * Method description
-   *
-   *
-   * @return
-   */
   public boolean isReIndexable();
 }
