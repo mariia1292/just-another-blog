@@ -32,8 +32,8 @@
               <f:facet name="header">
                 <h:outputText value="#{label.role}" />
               </f:facet>
-              <h:selectOneRadio styleClass="list" value="#{Member.role}"
-                                onclick="submit();" valueChangeListener="#{MemberBean.roleChanged}">
+              <h:selectOneRadio disabled="#{Member.user == MemberBean.currentUser || Member.user.globalAdmin || Member.role == MemberBean.adminRole}"
+                                styleClass="list" value="#{Member.role}" onclick="submit();" valueChangeListener="#{MemberBean.roleChanged}">
                 <f:selectItems value="#{MemberBean.roleItems}" />
               </h:selectOneRadio>
             </h:column>
