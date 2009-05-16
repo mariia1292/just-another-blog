@@ -21,6 +21,12 @@ public class Trackback implements Serializable
 {
 
   /** Field description */
+  public static final int TYPE_RECEIVE = 1;
+
+  /** Field description */
+  public static final int TYPE_SEND = 0;
+
+  /** Field description */
   private static final long serialVersionUID = -6733835815011208749L;
 
   //~--- constructors ---------------------------------------------------------
@@ -35,10 +41,12 @@ public class Trackback implements Serializable
    * Constructs ...
    *
    *
-   * @param url
+   *
+   * @param type
    */
-  public Trackback(String url)
+  public Trackback(int type, String url)
   {
+    this.type = type;
     this.url = url;
   }
 
@@ -108,6 +116,17 @@ public class Trackback implements Serializable
   public String getTitle()
   {
     return title;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  public int getType()
+  {
+    return type;
   }
 
   /**
@@ -193,6 +212,17 @@ public class Trackback implements Serializable
    * Method description
    *
    *
+   * @param type
+   */
+  public void setType(int type)
+  {
+    this.type = type;
+  }
+
+  /**
+   * Method description
+   *
+   *
    * @param url
    */
   public void setUrl(String url)
@@ -230,6 +260,9 @@ public class Trackback implements Serializable
 
   /** Field description */
   private String title;
+
+  /** Field description */
+  private int type;
 
   /** Field description */
   private String url;

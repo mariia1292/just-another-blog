@@ -40,7 +40,7 @@
               <f:selectItems value="#{ConfigBean.timeZoneItems}" />
             </h:selectOneMenu>
             <h:message for="timeZone" />
-            
+
             <h:outputLabel for="allowMacros" value="#{label.allowMacros}" />
             <h:selectBooleanCheckbox id="allowMacros" value="#{ConfigBean.blog.allowMacros}" />
             <h:message for="allowMacros" />
@@ -52,6 +52,10 @@
             <h:outputLabel for="allowHtmlComments" value="#{label.allowHtmlComments}" />
             <h:selectBooleanCheckbox id="allowHtmlComments" value="#{ConfigBean.blog.allowHtmlComments}" />
             <h:message for="allowHtmlComments" />
+
+            <h:outputLabel for="autoPing" value="#{label.sendAutoPing}" />
+            <h:selectBooleanCheckbox id="autoPing" value="#{ConfigBean.blog.sendAutoPing}" />
+            <h:message for="autoPing" />
             
             <h:outputLabel for="entriesPerPage" value="#{label.entriesPerPage}" />
             <h:inputText id="entriesPerPage" styleClass="short" value="#{ConfigBean.blog.entriesPerPage}" required="true">

@@ -28,6 +28,20 @@ public interface TrackbackDAO extends GenericDAO<Trackback>
    *
    *
    * @param entry
+   * @param type
+   * @param url
+   *
+   * @return
+   */
+  public long count(Entry entry, int type, String url);
+
+  //~--- get methods ----------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   * @param entry
    *
    * @return
    */

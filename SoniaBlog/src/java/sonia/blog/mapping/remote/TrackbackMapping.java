@@ -110,7 +110,7 @@ public class TrackbackMapping extends FinalMapping
 
             if (!Util.isBlank(url))
             {
-              trackback = new Trackback(url);
+              trackback = new Trackback(Trackback.TYPE_RECEIVE, url);
 
               String title = request.getParameter("title");
 

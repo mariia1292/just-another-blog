@@ -15,16 +15,7 @@ import org.apache.lucene.document.Field;
 
 import sonia.blog.entity.Entry;
 
-//~--- JDK imports ------------------------------------------------------------
-
-import java.io.Reader;
-import java.io.StringReader;
-
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
-import javax.swing.text.EditorKit;
-import javax.swing.text.html.HTMLEditorKit;
+import sonia.util.Util;
 
 /**
  *
@@ -32,11 +23,6 @@ import javax.swing.text.html.HTMLEditorKit;
  */
 public class SearchHelper
 {
-
-  /** Field description */
-  private static Logger logger = Logger.getLogger(SearchHelper.class.getName());
-
-  //~--- methods --------------------------------------------------------------
 
   /**
    * Method description
@@ -73,39 +59,9 @@ public class SearchHelper
 
     doc.add(new Field("title", entry.getTitle(), Field.Store.YES,
                       Field.Index.ANALYZED));
-    doc.add(new Field("content", extractText(entry.getContent()),
+    doc.add(new Field("content", Util.extractHTMLText(entry.getContent()),
                       Field.Store.YES, Field.Index.ANALYZED));
 
     return doc;
-  }
-
-  /**
-   * Method description
-   *
-   *
-   * @param content
-   *
-   * @return
-   */
-  public static String extractText(String content)
-  {
-    try
-    {
-      EditorKit kit = new HTMLEditorKit();
-      javax.swing.text.Document doc = kit.createDefaultDocument();
-
-      doc.putProperty("IgnoreCharsetDirective", Boolean.TRUE);
-
-      Reader reader = new StringReader(content);
-
-      kit.read(reader, doc, 0);
-      content = doc.getText(0, doc.getLength());
-    }
-    catch (Exception ex)
-    {
-      logger.log(Level.SEVERE, null, ex);
-    }
-
-    return content;
   }
 }
