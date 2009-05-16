@@ -27,6 +27,8 @@ import java.text.MessageFormat;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import sonia.blog.entity.Entry;
+import sonia.blog.entity.Page;
 
 /**
  *
@@ -130,7 +132,7 @@ public class DefaultLinkBuilder implements LinkBuilder
       {
         Mapping mapping = request.getMapping();
 
-        if (mapping != null)
+        if (mapping != null && mapping.getMappingNavigation() != null )
         {
           MappingNavigation navigation = mapping.getMappingNavigation();
 
@@ -139,9 +141,13 @@ public class DefaultLinkBuilder implements LinkBuilder
             link = navigation.getDetailUri(object);
           }
         }
-        else
+        else if ( object instanceof Entry )
         {
           link += "list/" + object.getId() + ".jab";
+        }
+        else if ( object instanceof Page )
+        {
+          link += "page/" + object.getId() + ".jab";
         }
       }
       else if (object instanceof Category)

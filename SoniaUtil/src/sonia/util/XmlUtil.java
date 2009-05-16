@@ -30,6 +30,7 @@ import java.io.OutputStream;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
@@ -144,8 +145,31 @@ public class XmlUtil
   public static void writeDocument(Node node, OutputStream out)
           throws TransformerConfigurationException, TransformerException
   {
+    writeDocument(node, out, false);
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param node
+   * @param out
+   * @param prettyOutput
+   *
+   * @throws TransformerConfigurationException
+   * @throws TransformerException
+   */
+  public static void writeDocument(Node node, OutputStream out,
+                                   boolean prettyOutput)
+          throws TransformerConfigurationException, TransformerException
+  {
     TransformerFactory factory = TransformerFactory.newInstance();
     Transformer transformer = factory.newTransformer();
+
+    if (prettyOutput)
+    {
+      transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+    }
 
     transformer.transform(new DOMSource(node), new StreamResult(out));
   }
