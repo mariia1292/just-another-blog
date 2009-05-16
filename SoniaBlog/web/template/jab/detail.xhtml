@@ -56,7 +56,7 @@
 
           <h:column>
 
-            <h:outputLink value="#{Trackback.url}">
+            <h:outputLink value="#{Trackback.url}" target="_blank">
               <h:outputText value="#{label.send}" rendered="#{Trackback.type == 0}" />
               <h:outputText value="#{label.receive}" rendered="#{Trackback.type == 1}" />
             </h:outputLink>
