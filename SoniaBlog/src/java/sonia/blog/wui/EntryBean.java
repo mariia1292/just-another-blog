@@ -30,6 +30,7 @@ import sonia.blog.entity.Category;
 import sonia.blog.entity.Entry;
 import sonia.blog.entity.Tag;
 import sonia.blog.entity.User;
+import sonia.blog.util.BlogUtil;
 import sonia.blog.util.TrackbackJob;
 import sonia.blog.wui.model.EntryDataModel;
 
@@ -42,6 +43,8 @@ import sonia.util.Util;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+
+import java.net.URL;
 
 import java.text.SimpleDateFormat;
 
@@ -317,6 +320,26 @@ public class EntryBean extends AbstractEditorBean
    * Method description
    *
    *
+   * @param event
+   */
+  public void sendTrackback(ActionEvent event)
+  {
+    try
+    {
+      BlogUtil.sendTrackbackPing(entry, new URL(trackbackURL));
+      getMessageHandler().info("sendTrackBackSuccess");
+    }
+    catch (Exception ex)
+    {
+      logger.log(Level.SEVERE, null, ex);
+      getMessageHandler().warn("sendTrackBackFailure");
+    }
+  }
+
+  /**
+   * Method description
+   *
+   *
    * @return
    */
   public String showDetail()
@@ -523,6 +546,17 @@ public class EntryBean extends AbstractEditorBean
    *
    * @return
    */
+  public String getTrackbackURL()
+  {
+    return trackbackURL;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
   @Override
   public boolean isNew()
   {
@@ -563,6 +597,17 @@ public class EntryBean extends AbstractEditorBean
   public void setTagString(String tagString)
   {
     this.tagString = tagString;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param trackbackURL
+   */
+  public void setTrackbackURL(String trackbackURL)
+  {
+    this.trackbackURL = trackbackURL;
   }
 
   //~--- get methods ----------------------------------------------------------
@@ -787,4 +832,7 @@ public class EntryBean extends AbstractEditorBean
 
   /** Field description */
   private Tidy tidy;
+
+  /** Field description */
+  private String trackbackURL;
 }
