@@ -87,7 +87,9 @@
             <h:outputLabel for="trackback" value="#{label.trackback}" rendered="#{EntryBean.published}" />
             <h:panelGroup rendered="#{EntryBean.published}">
               <h:form>
-                <h:inputText value="#{EntryBean.trackbackURL}" />
+                <h:inputText id="trackback" value="#{EntryBean.trackbackURL}">
+                  <f:validator validatorId="validator.url" />
+                </h:inputText>
                 <h:commandButton value="#{label.send}" actionListener="#{EntryBean.sendTrackback}" />
                 <h:message for="trackback" />
               </h:form>

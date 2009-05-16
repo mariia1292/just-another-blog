@@ -2,15 +2,15 @@
 <Scene Scope="Project" version="2">
     <Scope Scope="Faces Configuration Only"/>
     <Scope Scope="Project">
-        <Node id="resources/tiny_mce/plugins/table/table.htm" x="900" y="750" zoom="true"/>
         <Node id="resources/tiny_mce/plugins/table/row.htm" x="650" y="450" zoom="true"/>
+        <Node id="resources/tiny_mce/plugins/table/table.htm" x="900" y="750" zoom="true"/>
         <Node id="resources/tiny_mce/themes/advanced/source_editor.htm" x="2150" y="150" zoom="true"/>
         <Node id="resources/tiny_mce/plugins/xhtmlxtras/del.htm" x="150" y="300" zoom="true"/>
         <Node id="resources/tiny_mce/themes/advanced/charmap.htm" x="650" y="900" zoom="true"/>
-        <Node id="resources/tiny_mce/plugins/inlinepopups/template.htm" x="150" y="450" zoom="true"/>
-        <Node id="resources/tiny_mce/plugins/xhtmlxtras/abbr.htm" x="1150" y="300" zoom="true"/>
         <Node id="resources/tiny_mce/plugins/table/merge_cells.htm" x="1900" y="150" zoom="true"/>
         <Node id="resources/tiny_mce/plugins/xhtmlxtras/acronym.htm" x="900" y="900" zoom="true"/>
+        <Node id="resources/tiny_mce/plugins/xhtmlxtras/abbr.htm" x="1150" y="300" zoom="true"/>
+        <Node id="resources/tiny_mce/plugins/inlinepopups/template.htm" x="150" y="450" zoom="true"/>
         <Node id="resources/tiny_mce/plugins/advimage/image.htm" x="900" y="600" zoom="true"/>
         <Node id="resources/tiny_mce/plugins/preview/preview.html" x="1150" y="750" zoom="true"/>
         <Node id="resources/tiny_mce/plugins/style/props.htm" x="150" y="1350" zoom="true"/>
@@ -23,13 +23,13 @@
         <Node id="resources/tiny_mce/plugins/advlink/link.htm" x="1650" y="300" zoom="true"/>
         <Node id="resources/tiny_mce/plugins/template/blank.htm" x="650" y="750" zoom="true"/>
         <Node id="resources/tiny_mce/plugins/advhr/rule.htm" x="400" y="150" zoom="true"/>
-        <Node id="resources/yaml/markup_draft.html" x="150" y="150" zoom="true"/>
         <Node id="resources/tiny_mce/plugins/xhtmlxtras/cite.htm" x="1650" y="150" zoom="true"/>
-        <Node id="resources/tiny_mce/themes/advanced/about.htm" x="1400" y="450" zoom="true"/>
+        <Node id="resources/yaml/markup_draft.html" x="150" y="150" zoom="true"/>
         <Node id="resources/tiny_mce/plugins/fullpage/fullpage.htm" x="650" y="300" zoom="true"/>
+        <Node id="resources/tiny_mce/themes/advanced/about.htm" x="1400" y="450" zoom="true"/>
+        <Node id="resources/tiny_mce/plugins/fullscreen/fullscreen.htm" x="400" y="600" zoom="true"/>
         <Node id="resources/tiny_mce/plugins/safari/blank.htm" x="900" y="300" zoom="true"/>
         <Node id="resources/tiny_mce/plugins/preview/example.html" x="400" y="1050" zoom="true"/>
-        <Node id="resources/tiny_mce/plugins/fullscreen/fullscreen.htm" x="400" y="600" zoom="true"/>
         <Node id="resources/tiny_mce/plugins/paste/pasteword.htm" x="1150" y="150" zoom="true"/>
         <Node id="resources/tiny_mce/plugins/paste/pastetext.htm" x="1650" y="450" zoom="true"/>
         <Node id="forward.jsp" x="1900" y="300" zoom="true"/>
