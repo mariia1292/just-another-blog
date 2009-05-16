@@ -98,7 +98,7 @@
           <h:commandButton value="#{label.publish}" action="#{EntryBean.publish}" />
           <h:commandButton value="#{label.saveDraft}" action="#{EntryBean.saveDraft}" />
           <t:commandButton target="_blank" value="#{label.preview}" actionListener="#{EntryBean.preview}" />
-          <h:commandButton value="#{label.remove}" action="#{EntryBean.remove}" rendered="#{EntryBean.published}" />
+          <h:commandButton value="#{label.remove}" action="#{EntryBean.remove}" rendered="#{!EntryBean.new}" />
 
         </h:form>
 

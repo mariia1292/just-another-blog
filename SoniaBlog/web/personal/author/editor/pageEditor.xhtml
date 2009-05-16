@@ -101,7 +101,7 @@
           <h:commandButton value="#{label.publish}" action="#{PageAuthorBean.publish}" />
           <h:commandButton value="#{label.saveDraft}" action="#{PageAuthorBean.saveDraft}" />
           <t:commandButton target="_blank" value="#{label.preview}" actionListener="#{PageAuthorBean.preview}" />
-          <h:commandButton value="#{label.remove}" action="#{PageAuthorBean.remove}" />
+          <h:commandButton value="#{label.remove}" action="#{PageAuthorBean.remove}" rendered="#{!PageAuthorBean.new}" />
 
         </h:form>
 
