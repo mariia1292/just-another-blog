@@ -22,6 +22,7 @@ import sonia.blog.entity.User;
 
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.faces.event.ValueChangeEvent;
@@ -77,12 +78,35 @@ public class MemberBean extends AbstractBean
       }
       catch (Exception ex)
       {
+        logger.log(Level.SEVERE, null, ex);
         getMessageHandler().error("changeRoleFailure");
       }
     }
   }
 
   //~--- get methods ----------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  public Role getAdminRole()
+  {
+    return Role.ADMIN;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  public User getCurrentUser()
+  {
+    return getRequest().getUser();
+  }
 
   /**
    * Method description
