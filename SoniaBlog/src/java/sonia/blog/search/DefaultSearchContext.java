@@ -14,7 +14,6 @@ import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.IndexReader;
-import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.queryParser.MultiFieldQueryParser;
 import org.apache.lucene.queryParser.ParseException;
 import org.apache.lucene.queryParser.QueryParser;
@@ -30,12 +29,10 @@ import org.apache.lucene.search.highlight.TokenSources;
 
 import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.app.Constants;
-import sonia.blog.api.dao.EntryDAO;
 import sonia.blog.api.search.SearchContext;
 import sonia.blog.api.search.SearchEntry;
 import sonia.blog.api.search.SearchException;
 import sonia.blog.entity.Blog;
-import sonia.blog.entity.Entry;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -68,14 +65,7 @@ public class DefaultSearchContext implements SearchContext
    */
   public void reIndex(Blog blog)
   {
-    if (!locked)
-    {
-      locked = true;
-
-      Thread thread = new Thread(new ReIndexThread(blog));
-
-      thread.start();
-    }
+    BlogContext.getInstance().getJobQueue().add(new ReIndexJob(blog));
   }
 
   /**
@@ -189,17 +179,6 @@ public class DefaultSearchContext implements SearchContext
    *
    * @return
    */
-  public boolean isLocked()
-  {
-    return locked;
-  }
-
-  /**
-   * Method description
-   *
-   *
-   * @return
-   */
   public boolean isReIndexable()
   {
     return true;
@@ -218,107 +197,4 @@ public class DefaultSearchContext implements SearchContext
     return BlogContext.getInstance().getResourceManager().getDirectory(
         Constants.RESOURCE_INDEX, blog);
   }
-
-  //~--- inner classes --------------------------------------------------------
-
-  /**
-   * Class description
-   *
-   *
-   * @version    Enter version here..., 08/10/06
-   * @author     Enter your name here...
-   */
-  public class ReIndexThread implements Runnable
-  {
-
-    /**
-     * Constructs ...
-     *
-     *
-     * @param blog
-     */
-    public ReIndexThread(Blog blog)
-    {
-      this.blog = blog;
-    }
-
-    //~--- methods ------------------------------------------------------------
-
-    /**
-     * Method description
-     *
-     */
-    public void run()
-    {
-      IndexWriter writer = null;
-
-      try
-      {
-        File file = getDirectory(blog);
-
-        if (!file.exists())
-        {
-          file.mkdirs();
-        }
-
-        writer = new IndexWriter(file, new StandardAnalyzer(), true,
-                                 IndexWriter.MaxFieldLength.UNLIMITED);
-
-        EntryDAO entryDAO = BlogContext.getDAOFactory().getEntryDAO();
-        List<Entry> entries = entryDAO.findAllActivesByBlog(blog);
-
-        if (entries != null)
-        {
-          for (Entry e : entries)
-          {
-            try
-            {
-              Document doc = SearchHelper.buildDocument(e);
-
-              if (doc != null)
-              {
-                writer.addDocument(doc);
-              }
-            }
-            catch (Exception ex)
-            {
-              logger.log(Level.SEVERE, "error during indexing " + e, ex);
-            }
-          }
-        }
-      }
-      catch (Exception ex)
-      {
-        logger.log(Level.SEVERE, null, ex);
-      }
-      finally
-      {
-        locked = false;
-
-        if (writer != null)
-        {
-          try
-          {
-            writer.optimize();
-            writer.close();
-          }
-          catch (Exception ex)
-          {
-            logger.log(Level.SEVERE, null, ex);
-          }
-        }
-      }
-    }
-
-    //~--- fields -------------------------------------------------------------
-
-    /** Field description */
-    private Blog blog;
-  }
-
-
-  //~--- fields ---------------------------------------------------------------
-
-  /** Field description */
-  private boolean locked = false;
 }

@@ -55,6 +55,8 @@ public class ConfigBean extends AbstractBean
   {
     BlogContext.getInstance().getSearchContext().reIndex(getBlog());
 
+    getMessageHandler().info( "rebuildIndex" );
+
     return SUCCESS;
   }
 
@@ -117,17 +119,6 @@ public class ConfigBean extends AbstractBean
   public SelectItem[] getTimeZoneItems()
   {
     return BlogUtil.getTimeZoneItems();
-  }
-
-  /**
-   * Method description
-   *
-   *
-   * @return
-   */
-  public boolean isSearchContextLocked()
-  {
-    return BlogContext.getInstance().getSearchContext().isLocked();
   }
 
   /**
