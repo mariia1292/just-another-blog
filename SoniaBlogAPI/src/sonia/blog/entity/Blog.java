@@ -414,6 +414,17 @@ public class Blog implements Serializable, PermaObject, Comparable<Blog>
     return allowMacros;
   }
 
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  public boolean isSendAutoPing()
+  {
+    return sendAutoPing;
+  }
+
   //~--- set methods ----------------------------------------------------------
 
   /**
@@ -604,6 +615,17 @@ public class Blog implements Serializable, PermaObject, Comparable<Blog>
    * Method description
    *
    *
+   * @param sendAutoPing
+   */
+  public void setSendAutoPing(boolean sendAutoPing)
+  {
+    this.sendAutoPing = sendAutoPing;
+  }
+
+  /**
+   * Method description
+   *
+   *
    * @param template
    */
   public void setTemplate(String template)
@@ -674,18 +696,6 @@ public class Blog implements Serializable, PermaObject, Comparable<Blog>
   //~--- fields ---------------------------------------------------------------
 
   /** Field description */
-  private boolean active = true;
-
-  /** Field description */
-  private boolean allowComments = true;
-
-  /** Field description */
-  private boolean allowHtmlComments = false;
-
-  /** Field description */
-  private boolean allowMacros = true;
-
-  /** Field description */
   private List<Category> categories;
 
   /** Field description */
@@ -723,6 +733,21 @@ public class Blog implements Serializable, PermaObject, Comparable<Blog>
 
   /** Field description */
   private List<BlogMember> members;
+
+  /** Field description */
+  private boolean sendAutoPing = false;
+
+  /** Field description */
+  private boolean allowMacros = true;
+
+  /** Field description */
+  private boolean allowHtmlComments = false;
+
+  /** Field description */
+  private boolean allowComments = true;
+
+  /** Field description */
+  private boolean active = true;
 
   /** Field description */
   private String template;

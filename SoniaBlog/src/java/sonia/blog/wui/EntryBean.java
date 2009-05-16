@@ -30,6 +30,7 @@ import sonia.blog.entity.Category;
 import sonia.blog.entity.Entry;
 import sonia.blog.entity.Tag;
 import sonia.blog.entity.User;
+import sonia.blog.util.TrackbackJob;
 import sonia.blog.wui.model.EntryDataModel;
 
 import sonia.config.Config;
@@ -48,6 +49,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -167,9 +169,8 @@ public class EntryBean extends AbstractEditorBean
     LinkBuilder linkBuilder = BlogContext.getInstance().getLinkBuilder();
     String uri = linkBuilder.buildLink(request, "/entry-preview.jab");
 
-    entry.setPublishingDate( new Date() );
-    entry.setAuthor( request.getUser() );
-
+    entry.setPublishingDate(new Date());
+    entry.setAuthor(request.getUser());
     sendRedirect(uri);
   }
 
@@ -245,11 +246,10 @@ public class EntryBean extends AbstractEditorBean
       buildTagList();
       cleanupContent();
 
+      BlogRequest request = getRequest();
+
       if (entry.getId() == null)
       {
-        BlogRequest request = getRequest();
-
-        // entry.setBlog(blog);
         User author = request.getUser();
 
         if (entry.getTitle() == null)
@@ -269,6 +269,7 @@ public class EntryBean extends AbstractEditorBean
 
         if (entryDAO.add(entry))
         {
+          doTrackback(request.getCurrentBlog());
           getMessageHandler().info("createEntrySuccess");
         }
         else
@@ -281,6 +282,7 @@ public class EntryBean extends AbstractEditorBean
       {
         if (entryDAO.edit(entry))
         {
+          doTrackback(request.getCurrentBlog());
           getMessageHandler().info("updateEntrySuccess");
         }
         else
@@ -696,6 +698,23 @@ public class EntryBean extends AbstractEditorBean
         tidy.parse(bais, baos);
         entry.setTeaser(baos.toString());
       }
+    }
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param blog
+   */
+  private void doTrackback(Blog blog)
+  {
+    if (entry.isPublished() && blog.isSendAutoPing())
+    {
+      ResourceBundle bundle = getResourceBundle("message");
+
+      BlogContext.getInstance().getJobQueue().add(new TrackbackJob(entry,
+              bundle));
     }
   }
 

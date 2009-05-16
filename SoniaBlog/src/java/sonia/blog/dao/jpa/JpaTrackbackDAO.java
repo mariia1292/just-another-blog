@@ -9,6 +9,7 @@ package sonia.blog.dao.jpa;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import sonia.blog.api.app.Constants;
 import sonia.blog.api.dao.TrackbackDAO;
 import sonia.blog.entity.Entry;
 import sonia.blog.entity.Trackback;
@@ -20,7 +21,6 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
-import sonia.blog.api.app.Constants;
 
 /**
  *
@@ -52,6 +52,28 @@ public class JpaTrackbackDAO extends JpaGenericDAO<Trackback>
   public long count()
   {
     return countQuery("Trackback.count");
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param entry
+   * @param type
+   * @param url
+   *
+   * @return
+   */
+  public long count(Entry entry, int type, String url)
+  {
+    EntityManager em = createEntityManager();
+    Query q = em.createNamedQuery("Trackback.countByEntryTypeAndUrl");
+
+    q.setParameter("entry", entry);
+    q.setParameter("type", type);
+    q.setParameter("url", url);
+
+    return (Long) q.getSingleResult();
   }
 
   //~--- get methods ----------------------------------------------------------

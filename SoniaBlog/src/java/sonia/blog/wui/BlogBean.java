@@ -20,6 +20,7 @@ import sonia.blog.api.app.Context;
 import sonia.blog.api.dao.CategoryDAO;
 import sonia.blog.api.dao.CommentDAO;
 import sonia.blog.api.dao.TagDAO;
+import sonia.blog.api.dao.TrackbackDAO;
 import sonia.blog.api.link.LinkBuilder;
 import sonia.blog.api.mapping.Mapping;
 import sonia.blog.api.mapping.MappingNavigation;
@@ -39,6 +40,7 @@ import sonia.blog.entity.CommentAble;
 import sonia.blog.entity.ContentObject;
 import sonia.blog.entity.Entry;
 import sonia.blog.entity.Tag;
+import sonia.blog.entity.Trackback;
 
 import sonia.plugin.service.Service;
 import sonia.plugin.service.ServiceReference;
@@ -426,6 +428,28 @@ public class BlogBean extends AbstractBean
    *
    * @return
    */
+  public String getPermalink()
+  {
+    String result = null;
+
+    if ((entry != null) && (entry instanceof Entry))
+    {
+      BlogRequest request = getRequest();
+      StringBuffer link = new StringBuffer();
+
+      link.append("/list/").append(entry.getId()).append(".jab");
+      result = linkBuilder.buildLink(request, link.toString());
+    }
+
+    return result;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
   public String getPreviousUri()
   {
     String prevUri = null;
@@ -561,6 +585,52 @@ public class BlogBean extends AbstractBean
   {
     return BlogContext.getInstance().getTemplateManager().getTemplate(
         getBlog());
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  public String getTrackbackLink()
+  {
+    String result = null;
+
+    if ((entry != null) && (entry instanceof Entry))
+    {
+      BlogRequest request = getRequest();
+      StringBuffer link = new StringBuffer();
+
+      link.append("/trackback/").append(entry.getId());
+      result = linkBuilder.buildLink(request, link.toString());
+    }
+
+    return result;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  public DataModel getTrackbacks()
+  {
+    trackbacks = new ListDataModel();
+
+    if (entry instanceof Entry)
+    {
+      TrackbackDAO trackbackDAO = BlogContext.getDAOFactory().getTrackbackDAO();
+      List<Trackback> trackbackList = trackbackDAO.getAll((Entry) entry);
+
+      if ((trackbackList != null) &&!trackbackList.isEmpty())
+      {
+        trackbacks.setWrappedData(trackbackList);
+      }
+    }
+
+    return trackbacks;
   }
 
   /**
@@ -779,4 +849,7 @@ public class BlogBean extends AbstractBean
 
   /** Field description */
   private DataModel tags;
+
+  /** Field description */
+  private DataModel trackbacks;
 }

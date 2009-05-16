@@ -16,6 +16,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.Reader;
+import java.io.StringReader;
 
 import java.net.URL;
 import java.net.URLConnection;
@@ -29,6 +31,9 @@ import java.util.List;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import javax.swing.text.EditorKit;
+import javax.swing.text.html.HTMLEditorKit;
 
 /**
  *
@@ -175,6 +180,36 @@ public class Util
     {
       throw new RuntimeException("could not delete file " + file.getPath());
     }
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param content
+   *
+   * @return
+   */
+  public static String extractHTMLText(String content)
+  {
+    try
+    {
+      EditorKit kit = new HTMLEditorKit();
+      javax.swing.text.Document doc = kit.createDefaultDocument();
+
+      doc.putProperty("IgnoreCharsetDirective", Boolean.TRUE);
+
+      Reader reader = new StringReader(content);
+
+      kit.read(reader, doc, 0);
+      content = doc.getText(0, doc.getLength());
+    }
+    catch (Exception ex)
+    {
+      logger.log(Level.SEVERE, null, ex);
+    }
+
+    return content;
   }
 
   /**

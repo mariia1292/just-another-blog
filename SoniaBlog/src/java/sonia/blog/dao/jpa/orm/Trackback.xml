@@ -25,6 +25,11 @@
         select t from Trackback t join t.entry e where e = :entry
       </query>
     </named-query>
+    <named-query name="Trackback.countByEntryTypeAndUrl">
+      <query>
+        select count(t) from Trackback t join t.entry e where e = :entry and t.type = :type and t.url = :url
+      </query>
+    </named-query>
     <pre-persist method-name="prePersists" />
     <attributes>
       <id name="id">
