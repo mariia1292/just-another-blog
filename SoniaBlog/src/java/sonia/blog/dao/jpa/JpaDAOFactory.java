@@ -38,6 +38,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -369,6 +370,35 @@ public class JpaDAOFactory extends DAOFactory
    *
    * @return
    */
+  private List<DatabaseProfile> getDatabaseProfiles()
+  {
+    List<DatabaseProfile> profiles = new ArrayList<DatabaseProfile>();
+    BlogContext ctx = BlogContext.getInstance();
+    ServiceReference<String> reference =
+      ctx.getServiceRegistry().get(String.class, Constants.SERVICE_DBPROFILE);
+    List<String> profilePathes = reference.getAll();
+
+    for (String profilePath : profilePathes)
+    {
+      try
+      {
+        profiles.add(DatabaseProfile.createProfile(profilePath));
+      }
+      catch (IOException ex)
+      {
+        logger.log(Level.SEVERE, null, ex);
+      }
+    }
+
+    return profiles;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
   private DatabaseProfile getProfile()
   {
     DatabaseProfile profile = null;
@@ -381,10 +411,7 @@ public class JpaDAOFactory extends DAOFactory
       throw new IllegalStateException("profile is empty");
     }
 
-    ServiceReference<DatabaseProfile> reference =
-      ctx.getServiceRegistry().get(DatabaseProfile.class,
-                                   Constants.SERVICE_DBPROFILE);
-    List<DatabaseProfile> profiles = reference.getAll();
+    List<DatabaseProfile> profiles = getDatabaseProfiles();
 
     for (DatabaseProfile dbProfile : profiles)
     {
