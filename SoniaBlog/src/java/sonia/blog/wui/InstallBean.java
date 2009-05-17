@@ -17,7 +17,6 @@ import sonia.blog.api.app.InstallationListener;
 import sonia.blog.api.dao.DAOFactory;
 import sonia.blog.api.util.AbstractBean;
 import sonia.blog.dao.jpa.profile.DatabaseProfile;
-import sonia.blog.dao.jpa.profile.DerbyProfile;
 import sonia.blog.entity.Blog;
 import sonia.blog.entity.Category;
 import sonia.blog.entity.Entry;
@@ -45,6 +44,9 @@ import java.io.OutputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 
+import java.text.MessageFormat;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 import java.util.ResourceBundle;
@@ -75,6 +77,22 @@ public class InstallBean extends AbstractBean
   public static final String STEP3 = "step3";
 
   /** Field description */
+  private static final String DBEMBEDDED_DRIVER =
+    "org.apache.derby.jdbc.EmbeddedDriver";
+
+  /** Field description */
+  private static final String DBEMBEDDED_PASSWORD = "pwd4jab";
+
+  /** Field description */
+  private static final String DBEMBEDDED_PROFILE = "derby-embedded";
+
+  /** Field description */
+  private static final String DBEMBEDDED_URL = "jdbc:derby:{0};create=true";
+
+  /** Field description */
+  private static final String DBEMBEDDED_USERNAME = "jab";
+
+  /** Field description */
   private static Logger logger = Logger.getLogger(InstallBean.class.getName());
 
   //~--- constructors ---------------------------------------------------------
@@ -98,12 +116,16 @@ public class InstallBean extends AbstractBean
   public void init()
   {
     super.init();
-    databaseEmbedded = true;
-    databaseDriver = DerbyProfile.DRIVER;
-    databaseUrl = DerbyProfile.URL;
-    databaseUsername = DerbyProfile.USER;
-    databaseProfile = DerbyProfile.NAME;
+    loadDatabaseProfiles();
     resourcePath = new File(Util.getHomeDirectory(), ".jab").getAbsolutePath();
+    databaseEmbedded = true;
+    databaseDriver = DBEMBEDDED_DRIVER;
+    databaseProfile = DBEMBEDDED_PROFILE;
+    databaseUrl = MessageFormat.format(
+      DBEMBEDDED_URL,
+      new File(resourcePath, Constants.RESOURCE_DATABASE).getAbsolutePath());
+    databaseUsername = DBEMBEDDED_USERNAME;
+    databsePassword = DBEMBEDDED_PASSWORD;
     admin = new User();
     admin.setGlobalAdmin(true);
     admin.setActive(true);
@@ -378,11 +400,12 @@ public class InstallBean extends AbstractBean
       File dbDriectory = new File(resourceDirectory,
                                   Constants.RESOURCE_DATABASE);
 
-      databaseDriver = "org.apache.derby.jdbc.EmbeddedDriver";
-      databaseUrl = "jdbc:derby:" + dbDriectory.getPath() + ";create=true";
-      databaseUsername = "jab";
-      databsePassword = "pwd4jab";
-      databaseProfile = DerbyProfile.NAME;
+      databaseDriver = DBEMBEDDED_DRIVER;
+      databaseUrl = MessageFormat.format(DBEMBEDDED_URL,
+                                         dbDriectory.getAbsolutePath());
+      databaseUsername = DBEMBEDDED_USERNAME;
+      databsePassword = DBEMBEDDED_PASSWORD;
+      databaseProfile = DBEMBEDDED_PROFILE;
     }
 
     try
@@ -703,12 +726,37 @@ public class InstallBean extends AbstractBean
   /**
    * Method description
    *
+   */
+  private void loadDatabaseProfiles()
+  {
+    databaseProfiles = new ArrayList<DatabaseProfile>();
+
+    List<String> profilePathes =
+      BlogContext.getInstance().getServiceRegistry().get(String.class,
+        Constants.SERVICE_DBPROFILE).getAll();
+
+    for (String profilePath : profilePathes)
+    {
+      try
+      {
+        databaseProfiles.add(DatabaseProfile.createProfile(profilePath));
+      }
+      catch (IOException ex)
+      {
+        logger.log(Level.SEVERE, null, ex);
+      }
+    }
+  }
+
+  /**
+   * Method description
+   *
    *
    * @param profile
    */
   private void loadSampleData(DatabaseProfile profile)
   {
-    databaseDriver = profile.getSampleDriver();
+    databaseDriver = profile.getDriver();
     databaseUrl = profile.getSampleUrl();
     databaseUsername = profile.getSampleUser();
 
@@ -820,7 +868,6 @@ public class InstallBean extends AbstractBean
   private String databaseProfile;
 
   /** Field description */
-  @Service(Constants.SERVICE_DBPROFILE)
   private List<DatabaseProfile> databaseProfiles;
 
   /** Field description */

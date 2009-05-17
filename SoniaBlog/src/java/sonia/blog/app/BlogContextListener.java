@@ -75,6 +75,26 @@ public class BlogContextListener implements ServletContextListener
 {
 
   /** Field description */
+  private static final String DBPROFILE_DERBY =
+    "/sonia/blog/dao/jpa/profile/derby-profile.properties";
+
+  /** Field description */
+  private static final String DBPROFILE_DERBYEMBEDDED =
+    "/sonia/blog/dao/jpa/profile/derby-embedded-profile.properties";
+
+  /** Field description */
+  private static final String DBPROFILE_MYSQL =
+    "/sonia/blog/dao/jpa/profile/mysql-profile.properties";
+
+  /** Field description */
+  private static final String DBPROFILE_ORACLE =
+    "/sonia/blog/dao/jpa/profile/oracle-profile.properties";
+
+  /** Field description */
+  private static final String DBPROFILE_POSTGRESQL =
+    "/sonia/blog/dao/jpa/profile/postgresql-profile.properties";
+
+  /** Field description */
   private static Logger logger =
     Logger.getLogger(BlogContextListener.class.getName());
 
@@ -373,6 +393,12 @@ public class BlogContextListener implements ServletContextListener
     logger.info("loading services");
 
     ServiceRegistry registry = context.getPluginContext().getServiceRegistry();
+
+    // register database profiles
+    registry.register(String.class, Constants.SERVICE_DBPROFILE).add(
+        DBPROFILE_DERBYEMBEDDED).add(DBPROFILE_DERBY).add(DBPROFILE_MYSQL).add(
+        DBPROFILE_ORACLE).add(DBPROFILE_POSTGRESQL);
+
     MappingHandler mappingHandler = new DefaultMappingHandler();
 
     loadMappingFile(context, mappingHandler);
