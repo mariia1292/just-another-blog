@@ -199,7 +199,7 @@
                                where
                                  e2.published = :published
                                and
-                                 c2 = :categories
+                                 c2 = :category
                                and
                                  e2.publishingDate &lt; :date )
         order by
