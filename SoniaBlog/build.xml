@@ -86,10 +86,10 @@
       <fileset dir="${build.web.dir}" />
     </copy>
 
-    <copyfiles files="${libs.JAVADB_DRIVER_LABEL.classpath}" iftldtodir="${build.web.dir}/WEB-INF" manifestproperty="manifest.libs.JAVADB_DRIVER_LABEL.classpath" todir="${build.tomcat.dir}/WEB-INF/lib"/>
-    <copyfiles files="${libs.JavaMail.classpath}" iftldtodir="${build.web.dir}/WEB-INF" manifestproperty="manifest.libs.JavaMail.classpath" todir="${build.tomcat.dir}/WEB-INF/lib"/>
-    <copyfiles files="${libs.jsf12.classpath}" iftldtodir="${build.web.dir}/WEB-INF" manifestproperty="manifest.libs.jsf12.classpath" todir="${build.tomcat.dir}/WEB-INF/lib"/>
-    <copyfiles files="${libs.toplink.classpath}" iftldtodir="${build.web.dir}/WEB-INF" manifestproperty="manifest.libs.toplink.classpath" todir="${build.tomcat.dir}/WEB-INF/lib"/>
+    <copyfiles files="${libs.JAVADB_DRIVER_LABEL.classpath}" todir="${build.tomcat.dir}/WEB-INF/lib"/>
+    <copyfiles files="${libs.JavaMail.classpath}" todir="${build.tomcat.dir}/WEB-INF/lib"/>
+    <copyfiles files="${libs.jsf12.classpath}" todir="${build.tomcat.dir}/WEB-INF/lib"/>
+    <copyfiles files="${libs.toplink.classpath}" todir="${build.tomcat.dir}/WEB-INF/lib"/>
 
     <jar compress="${jar.compress}" jarfile="${dist.jar.dir}/SoniaBlog.tomcat.war">
       <fileset dir="${build.tomcat.dir}"/>
