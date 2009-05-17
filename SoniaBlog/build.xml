@@ -85,12 +85,14 @@
     <property name="sonia.ant.hg" value="hg" />
   </target>
 
-  <target name="-pre-dist" depends="set-hg-path">
+  <target name="set-version" depends="set-hg-path">
     <taskdef name="hgVersion" classname="sonia.ant.MercurialVersion" classpath="../SoniaAnt/dist/SoniaAnt.jar" />
     <hgVersion hgpath="${sonia.ant.hg}" prefix="r" repositorypath="${basedir}/.." path="${basedir}/${build.web.dir}/WEB-INF/config/version.txt" />
   </target>
+
+  <target name="-pre-dist" depends="set-version" />
   
-  <target name="-post-dist">
+  <target name="tomcat" depends="compile,set-version">
     
     <property name="build.tomcat.dir" value="${build.web.dir}/../tomcat" />
 
@@ -103,7 +105,9 @@
     <copyfiles files="${libs.jsf12.classpath}" todir="${build.tomcat.dir}/WEB-INF/lib"/>
     <copyfiles files="${libs.toplink.classpath}" todir="${build.tomcat.dir}/WEB-INF/lib"/>
 
-    <jar compress="${jar.compress}" jarfile="${dist.jar.dir}/SoniaBlog.tomcat.war">
+    <mkdir dir="${dist.dir}" />
+
+    <jar compress="${jar.compress}" jarfile="${dist.dir}/SoniaBlog.tomcat.war">
       <fileset dir="${build.tomcat.dir}"/>
     </jar>
 
