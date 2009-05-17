@@ -76,7 +76,6 @@ public class ExternalImageResizingJob implements BlogJob
    *
    * @throws JobException
    */
-  @Override
   public void excecute() throws JobException
   {
     String cmd = MessageFormat.format(command, source.getAbsolutePath(),
