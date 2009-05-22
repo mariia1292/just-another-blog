@@ -39,6 +39,10 @@
             <h:selectBooleanCheckbox id="active" value="#{AdminUserBean.user.active}" />
             <h:message for="active" />
 
+            <h:outputLabel for="selfManaged" value="#{label.selfManaged}" />
+            <h:selectBooleanCheckbox id="selfManaged" value="#{AdminUserBean.user.selfManaged}" />
+            <h:message for="selfManaged" />
+
             <h:outputLabel for="globalAdmin" value="#{label.globalAdmin}" />
             <h:selectBooleanCheckbox id="globalAdmin" value="#{AdminUserBean.user.globalAdmin}" />
             <h:message for="globalAdmin" />
