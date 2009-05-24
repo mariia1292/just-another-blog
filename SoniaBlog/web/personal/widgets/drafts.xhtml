@@ -12,7 +12,7 @@
 
       <h:form>
 
-        <h:dataTable styleClass="small" value="#{DashboardBean.drafts}" var="Draft">
+        <h:dataTable styleClass="small" value="#{DashboardBean.drafts}" var="Draft" rendered="#{DashboardBean.drafts.rowCount &gt; 0}">
 
           <h:column>
             <h:outputText value="#{Draft.creationDate}">
@@ -26,7 +26,7 @@
 
         </h:dataTable>
 
-        <h:outputText value="#{message.noDraftsFound}" rendered="#{DashboardBean.drafts.rowCount == 0}" />
+        <h:outputText value="#{message.noDraftsFound}" rendered="#{DashboardBean.drafts.rowCount &lt;= 0}" />
 
       </h:form>
 
