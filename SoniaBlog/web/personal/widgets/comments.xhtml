@@ -13,7 +13,7 @@
 
       <h:form>
 
-        <h:dataTable styleClass="small" value="#{DashboardBean.comments}" var="Comment">
+        <h:dataTable styleClass="small" value="#{DashboardBean.comments}" var="Comment" rendered="#{DashboardBean.comments.rowCount &gt; 0}">
 
           <h:column>
             <h:outputText value="#{Comment.creationDate}">
@@ -28,7 +28,7 @@
 
         </h:dataTable>
 
-        <h:outputText value="#{message.noCommentsFound}" rendered="#{DashboardBean.comments.rowCount == 0}" />
+        <h:outputText value="#{message.noCommentsFound}" rendered="#{DashboardBean.comments.rowCount &lt;= 0}" />
 
       </h:form>
 
