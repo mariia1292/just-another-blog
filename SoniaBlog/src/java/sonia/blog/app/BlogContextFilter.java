@@ -15,7 +15,7 @@ import sonia.blog.api.app.BlogRequest;
 import sonia.blog.api.app.BlogRequestListener;
 import sonia.blog.api.app.BlogResponse;
 import sonia.blog.api.app.Constants;
-import sonia.blog.api.authentication.LoginBean;
+import sonia.blog.wui.LoginBean;
 import sonia.blog.api.link.LinkBuilder;
 import sonia.blog.entity.Blog;
 

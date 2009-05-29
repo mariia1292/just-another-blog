@@ -12,6 +12,7 @@ package sonia.blog.api.util;
 import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.app.BlogRequest;
 import sonia.blog.api.app.BlogResponse;
+import sonia.blog.api.app.BlogSession;
 
 import sonia.jsf.util.MessageHandler;
 
@@ -147,6 +148,18 @@ public class AbstractBean
   }
 
   //~--- get methods ----------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  protected BlogSession getBlogSession()
+  {
+    return (BlogSession) FacesContext.getCurrentInstance().getExternalContext()
+      .getSessionMap().get(BlogSession.SESSIONVAR);
+  }
 
   /**
    * Method description

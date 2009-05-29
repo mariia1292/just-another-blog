@@ -9,7 +9,6 @@ package sonia.blog.api.app;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import sonia.blog.api.authentication.LoginBean;
 import sonia.blog.api.dao.BlogDAO;
 import sonia.blog.api.mapping.Mapping;
 import sonia.blog.entity.Blog;
@@ -26,7 +25,6 @@ import java.security.Principal;
 
 import java.util.Enumeration;
 import java.util.Map;
-import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -62,6 +60,17 @@ public class BlogRequest extends HttpServletRequestWrapper
   }
 
   //~--- get methods ----------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  public BlogSession getBlogSession()
+  {
+    return (BlogSession) getSession(true).getAttribute(BlogSession.SESSIONVAR);
+  }
 
   /**
    * Method description
@@ -105,25 +114,6 @@ public class BlogRequest extends HttpServletRequestWrapper
     charsetIsSetable = false;
 
     return super.getInputStream();
-  }
-
-  /**
-   * Method description
-   *
-   *
-   * @return
-   */
-  public LoginBean getLoginBean()
-  {
-    LoginBean loginBean = null;
-    HttpSession session = getSession();
-
-    if (session != null)
-    {
-      loginBean = (LoginBean) session.getAttribute("LoginBean");
-    }
-
-    return loginBean;
   }
 
   /**
@@ -305,21 +295,11 @@ public class BlogRequest extends HttpServletRequestWrapper
    */
   public User getUser()
   {
-    User user = null;
-    LoginBean loginBean = getLoginBean();
+    BlogSession bs = getBlogSession();
 
-    if ((loginBean != null) && loginBean.isAuthenticated())
-    {
-      Set<User> userSet =
-        loginBean.getLoginContext().getSubject().getPrincipals(User.class);
-
-      if ((userSet != null) &&!userSet.isEmpty())
-      {
-        user = userSet.iterator().next();
-      }
-    }
-
-    return user;
+    return (bs != null)
+           ? bs.getUser()
+           : null;
   }
 
   /**

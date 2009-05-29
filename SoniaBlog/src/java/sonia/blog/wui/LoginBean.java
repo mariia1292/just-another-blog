@@ -5,7 +5,7 @@
 
 
 
-package sonia.blog.api.authentication;
+package sonia.blog.wui;
 
 //~--- non-JDK imports --------------------------------------------------------
 
@@ -13,12 +13,10 @@ import sonia.blog.api.app.BlogConfiguration;
 import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.app.BlogRequest;
 import sonia.blog.api.app.BlogResponse;
+import sonia.blog.api.app.BlogSession;
 import sonia.blog.api.app.Constants;
 import sonia.blog.api.app.MailService;
-import sonia.blog.api.dao.UserDAO;
 import sonia.blog.api.util.AbstractBean;
-import sonia.blog.entity.Blog;
-import sonia.blog.entity.Role;
 import sonia.blog.entity.User;
 
 import sonia.config.XmlConfiguration;
@@ -34,11 +32,9 @@ import sonia.util.Util;
 
 import java.io.IOException;
 
-import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.security.auth.login.LoginContext;
 import javax.security.auth.login.LoginException;
 
 import javax.servlet.http.Cookie;
@@ -83,11 +79,8 @@ public class LoginBean extends AbstractBean
         throw new IllegalArgumentException("username or password is null");
       }
 
-      loginContext = BlogContext.getInstance().buildLoginContext(username,
+      session = BlogContext.getInstance().login(getRequest(), username,
               password.toCharArray());
-      loginContext.login();
-      authenticated = true;
-      checkMembership(getRequest().getCurrentBlog());
       result = SUCCESS;
 
       if (cookie)
@@ -118,11 +111,7 @@ public class LoginBean extends AbstractBean
   {
     try
     {
-      loginContext = BlogContext.getInstance().buildSSOLoginContext(request,
-              response);
-      loginContext.login();
-      checkMembership(request.getCurrentBlog());
-      authenticated = true;
+      session = BlogContext.getInstance().login(request, response);
     }
     catch (LoginException ex)
     {
@@ -138,21 +127,20 @@ public class LoginBean extends AbstractBean
    */
   public String logout()
   {
-    if (authenticated)
+    if (session != null)
     {
-      authenticated = false;
       password = null;
 
       try
       {
-        loginContext.logout();
+        BlogContext.getInstance().logout(getRequest(), session);
       }
       catch (LoginException ex)
       {
         logger.log(Level.SEVERE, null, ex);
       }
 
-      loginContext = null;
+      session = null;
     }
 
     Cookie[] cookies = getRequest().getCookies();
@@ -183,9 +171,10 @@ public class LoginBean extends AbstractBean
    *
    * @return
    */
-  public LoginContext getLoginContext()
+  @Override
+  public BlogSession getBlogSession()
   {
-    return loginContext;
+    return session;
   }
 
   /**
@@ -218,7 +207,7 @@ public class LoginBean extends AbstractBean
    */
   public boolean isAuthenticated()
   {
-    return authenticated;
+    return session != null;
   }
 
   /**
@@ -303,32 +292,6 @@ public class LoginBean extends AbstractBean
   /**
    * Method description
    *
-   *
-   * @param blog
-   */
-  private void checkMembership(Blog blog)
-  {
-    Role role = null;
-    Set<User> users = loginContext.getSubject().getPrincipals(User.class);
-
-    if ((users != null) &&!users.isEmpty())
-    {
-      User user = users.iterator().next();
-      UserDAO userDAO = BlogContext.getDAOFactory().getUserDAO();
-
-      role = userDAO.getRole(blog, user);
-
-      if (role == null)
-      {
-        role = getDefaultRole();
-        userDAO.setRole(blog, user, role);
-      }
-    }
-  }
-
-  /**
-   * Method description
-   *
    */
   private void createCookie()
   {
@@ -387,30 +350,6 @@ public class LoginBean extends AbstractBean
    *
    *
    * @return
-   */
-  private Role getDefaultRole()
-  {
-    Role role = null;
-    String value = BlogContext.getInstance().getConfiguration().getString(
-                       Constants.CONFIG_DEFAULTROLE);
-
-    if (Util.isBlank(value))
-    {
-      role = Role.READER;
-    }
-    else
-    {
-      role = Role.valueOf(value);
-    }
-
-    return role;
-  }
-
-  /**
-   * Method description
-   *
-   *
-   * @return
    *
    * @throws IOException
    */
@@ -441,13 +380,10 @@ public class LoginBean extends AbstractBean
   private boolean cookie = false;
 
   /** Field description */
-  private boolean authenticated = false;
-
-  /** Field description */
-  private LoginContext loginContext;
-
-  /** Field description */
   private String password;
+
+  /** Field description */
+  private BlogSession session;
 
   /** Field description */
   private String username;
