@@ -92,7 +92,7 @@
 
   <managed-bean>
     <managed-bean-name>LoginBean</managed-bean-name>
-    <managed-bean-class>sonia.blog.api.authentication.LoginBean</managed-bean-class>
+    <managed-bean-class>sonia.blog.wui.LoginBean</managed-bean-class>
     <managed-bean-scope>session</managed-bean-scope>
   </managed-bean>
 

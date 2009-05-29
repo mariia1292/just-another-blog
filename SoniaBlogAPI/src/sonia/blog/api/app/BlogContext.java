@@ -17,6 +17,7 @@ import sonia.blog.api.mapping.MappingHandler;
 import sonia.blog.api.search.SearchContext;
 import sonia.blog.api.template.TemplateManager;
 import sonia.blog.entity.Blog;
+import sonia.blog.entity.User;
 import sonia.blog.jmx.SessionInformation;
 
 import sonia.config.WebVariableResolver;
@@ -49,6 +50,7 @@ import java.io.InputStream;
 
 import java.util.Date;
 import java.util.Properties;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -63,7 +65,7 @@ import javax.servlet.ServletContext;
  *
  * @author sdorra
  */
-public class BlogContext
+public final class BlogContext
 {
 
   /** Field description */
@@ -188,6 +190,79 @@ public class BlogContext
         logger.log(Level.SEVERE, null, ex);
       }
     }
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param request
+   * @param username
+   * @param password
+   *
+   * @return
+   *
+   * @throws LoginException
+   */
+  public BlogSession login(BlogRequest request, String username,
+                           char[] password)
+          throws LoginException
+  {
+    if (logger.isLoggable(Level.INFO))
+    {
+      StringBuffer log = new StringBuffer();
+
+      log.append("login user ").append(username);
+      logger.info(log.toString());
+    }
+
+    LoginContext loginContext = buildLoginContext(username, password);
+
+    return login(loginContext, request);
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param request
+   * @param response
+   *
+   * @return
+   *
+   * @throws LoginException
+   */
+  public BlogSession login(BlogRequest request, BlogResponse response)
+          throws LoginException
+  {
+    LoginContext loginContext = buildSSOLoginContext(request, response);
+
+    return login(loginContext, request);
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param request
+   * @param blogSession
+   *
+   * @throws LoginException
+   */
+  public void logout(BlogRequest request, BlogSession blogSession)
+          throws LoginException
+  {
+    if (logger.isLoggable(Level.WARNING))
+    {
+      StringBuffer log = new StringBuffer();
+
+      log.append("logout user ").append(blogSession.getUser().getName());
+      logger.info(log.toString());
+    }
+
+    blogSession.getLoginContext().logout();
+    blogSession = null;
+    request.getSession().invalidate();
   }
 
   //~--- get methods ----------------------------------------------------------
@@ -615,6 +690,69 @@ public class BlogContext
   public void setServletContext(ServletContext servletContext)
   {
     this.servletContext = servletContext;
+  }
+
+  //~--- methods --------------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   * @param loginContext
+   * @param request
+   *
+   * @return
+   *
+   * @throws LoginException
+   */
+  private BlogSession login(LoginContext loginContext, BlogRequest request)
+          throws LoginException
+  {
+    BlogSession blogSession = null;
+
+    if (loginContext != null)
+    {
+      loginContext.login();
+
+      User user = getUser(loginContext);
+      Blog blog = request.getCurrentBlog();
+
+      if ((user != null) && (blog != null))
+      {
+        blogSession = new BlogSession(loginContext, user, blog);
+        request.getSession(true).setAttribute(BlogSession.SESSIONVAR,
+                           blogSession);
+      }
+      else if (logger.isLoggable(Level.WARNING))
+      {
+        logger.warning("could not find blog or user");
+      }
+    }
+
+    return blogSession;
+  }
+
+  //~--- get methods ----------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   * @param loginContext
+   *
+   * @return
+   */
+  private User getUser(LoginContext loginContext)
+  {
+    User user = null;
+    Set<User> userSet = loginContext.getSubject().getPrincipals(User.class);
+
+    if ((userSet != null) &&!userSet.isEmpty())
+    {
+      user = userSet.iterator().next();
+    }
+
+    return user;
   }
 
   //~--- fields ---------------------------------------------------------------
