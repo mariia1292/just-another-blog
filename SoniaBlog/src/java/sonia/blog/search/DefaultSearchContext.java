@@ -28,11 +28,14 @@ import org.apache.lucene.search.highlight.TextFragment;
 import org.apache.lucene.search.highlight.TokenSources;
 
 import sonia.blog.api.app.BlogContext;
+import sonia.blog.api.app.BlogSession;
 import sonia.blog.api.app.Constants;
+import sonia.blog.api.exception.BlogSecurityException;
 import sonia.blog.api.search.SearchContext;
 import sonia.blog.api.search.SearchEntry;
 import sonia.blog.api.search.SearchException;
 import sonia.blog.entity.Blog;
+import sonia.blog.entity.Role;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -61,10 +64,17 @@ public class DefaultSearchContext implements SearchContext
    * Method description
    *
    *
+   *
+   * @param session
    * @param blog
    */
-  public void reIndex(Blog blog)
+  public void reIndex(BlogSession session, Blog blog)
   {
+    if (!session.hasRole(blog, Role.ADMIN))
+    {
+      throw new BlogSecurityException("AdminSession is required");
+    }
+
     BlogContext.getInstance().getJobQueue().add(new ReIndexJob(blog));
   }
 

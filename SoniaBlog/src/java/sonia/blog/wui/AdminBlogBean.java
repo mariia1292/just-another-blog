@@ -175,7 +175,7 @@ public class AdminBlogBean extends AbstractBean
 
     if ((context != null) && context.isReIndexable())
     {
-      context.reIndex(blog);
+      context.reIndex(getBlogSession(), blog);
       getMessageHandler().info("rebuildIndex");
     }
     else

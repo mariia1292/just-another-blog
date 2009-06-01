@@ -11,7 +11,7 @@ package sonia.blog.wui;
 
 import sonia.blog.api.app.BlogConfiguration;
 import sonia.blog.api.app.BlogContext;
-import sonia.blog.api.app.BlogRuntimeException;
+import sonia.blog.api.exception.BlogException;
 import sonia.blog.api.app.Constants;
 import sonia.blog.api.app.InstallationListener;
 import sonia.blog.api.dao.DAOFactory;
@@ -806,7 +806,7 @@ public class InstallBean extends AbstractBean
     }
     catch (IOException ex)
     {
-      throw new BlogRuntimeException(ex);
+      throw new BlogException(ex);
     }
     finally
     {

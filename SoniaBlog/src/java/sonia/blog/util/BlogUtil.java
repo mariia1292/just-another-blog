@@ -17,7 +17,7 @@ import org.xml.sax.SAXException;
 
 import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.app.BlogRequest;
-import sonia.blog.api.app.BlogRuntimeException;
+import sonia.blog.api.exception.BlogException;
 import sonia.blog.api.util.AbstractBean;
 import sonia.blog.entity.Attachment;
 import sonia.blog.entity.Blog;
@@ -423,7 +423,7 @@ public class BlogUtil
     {
       if (!type.isInstance(obj))
       {
-        throw new BlogRuntimeException("session object " + name
+        throw new BlogException("session object " + name
                                        + " is not an instance of "
                                        + type.getName());
       }
@@ -447,7 +447,7 @@ public class BlogUtil
       }
       catch (Exception ex)
       {
-        throw new BlogRuntimeException("could not create new SessionBean", ex);
+        throw new BlogException("could not create new SessionBean", ex);
       }
     }
 

@@ -118,6 +118,50 @@ public final class BlogSession implements Serializable
    * Method description
    *
    *
+   * @param blog
+   * @param role
+   *
+   * @return
+   */
+  public boolean hasRole(Blog blog, Role role)
+  {
+    boolean result = true;
+
+    if (this.role != Role.GLOBALADMIN)
+    {
+      if (this.blog.equals(blog))
+      {
+        result = hasRole(role);
+      }
+      else
+      {
+        Role r = BlogContext.getDAOFactory().getUserDAO().getRole(blog, user);
+
+        result = role.getValue() <= r.getValue();
+      }
+    }
+
+    return result;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param blog
+   * @param role
+   *
+   * @return
+   */
+  public boolean hasRole(Blog blog, String role)
+  {
+    return hasRole(blog, Role.valueOf(role));
+  }
+
+  /**
+   * Method description
+   *
+   *
    * @param name
    *
    * @return
@@ -148,7 +192,8 @@ public final class BlogSession implements Serializable
       if (role == null)
       {
         role = getDefaultRole();
-        //TODO: use SystemBlogSession
+
+        // TODO: use SystemBlogSession
         userDAO.setRole(blog, user, role);
       }
     }

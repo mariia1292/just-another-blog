@@ -5,13 +5,13 @@
 
 
 
-package sonia.blog.api.app;
+package sonia.blog.api.exception;
 
 /**
  *
  * @author sdorra
  */
-public class BlogRuntimeException extends RuntimeException
+public class BlogException extends RuntimeException
 {
 
   /** Field description */
@@ -23,7 +23,7 @@ public class BlogRuntimeException extends RuntimeException
    * Constructs ...
    *
    */
-  public BlogRuntimeException()
+  public BlogException()
   {
     super();
   }
@@ -34,7 +34,7 @@ public class BlogRuntimeException extends RuntimeException
    *
    * @param msg
    */
-  public BlogRuntimeException(String msg)
+  public BlogException(String msg)
   {
     super(msg);
   }
@@ -45,7 +45,7 @@ public class BlogRuntimeException extends RuntimeException
    *
    * @param cause
    */
-  public BlogRuntimeException(Throwable cause)
+  public BlogException(Throwable cause)
   {
     super(cause);
   }
@@ -57,7 +57,7 @@ public class BlogRuntimeException extends RuntimeException
    * @param msg
    * @param cause
    */
-  public BlogRuntimeException(String msg, Throwable cause)
+  public BlogException(String msg, Throwable cause)
   {
     super(msg, cause);
   }
