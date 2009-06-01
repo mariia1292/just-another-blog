@@ -11,6 +11,10 @@
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
                 <library>
+                    <file>${libs.CommonsCollection.classpath}</file>
+                    <path-in-war>WEB-INF/lib</path-in-war>
+                </library>
+                <library>
                     <file>${libs.facelets-1-1-14.classpath}</file>
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>

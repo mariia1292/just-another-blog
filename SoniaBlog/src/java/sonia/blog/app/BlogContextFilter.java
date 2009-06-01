@@ -122,6 +122,8 @@ public class BlogContextFilter implements Filter
     {
       listener.afterMapping(request);
     }
+
+    response.finish();
   }
 
   /**
