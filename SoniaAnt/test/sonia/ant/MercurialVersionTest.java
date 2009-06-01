@@ -25,7 +25,7 @@ public class MercurialVersionTest {
     public void test()
     {
 
-      MercurialVersion hgVersion = new MercurialVersion();
+      MercurialVersionTask hgVersion = new MercurialVersionTask();
       hgVersion.execute();
 
     }
