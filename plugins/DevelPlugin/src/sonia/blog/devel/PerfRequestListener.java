@@ -15,7 +15,7 @@ import org.w3c.dom.Element;
 import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.app.BlogRequest;
 import sonia.blog.api.app.BlogRequestListener;
-import sonia.blog.api.app.BlogRuntimeException;
+import sonia.blog.api.exception.BlogException;
 import sonia.blog.api.app.ResourceManager;
 
 import sonia.util.XmlUtil;
@@ -99,7 +99,7 @@ public class PerfRequestListener implements BlogRequestListener
     }
     catch (ParserConfigurationException ex)
     {
-      throw new BlogRuntimeException(ex);
+      throw new BlogException(ex);
     }
   }
 
@@ -120,7 +120,7 @@ public class PerfRequestListener implements BlogRequestListener
     {
       if (!directory.mkdirs())
       {
-        throw new BlogRuntimeException("cannt create directory");
+        throw new BlogException("cannt create directory");
       }
     }
 

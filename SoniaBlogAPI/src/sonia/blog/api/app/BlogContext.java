@@ -9,6 +9,7 @@ package sonia.blog.api.app;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import sonia.blog.api.exception.BlogException;
 import sonia.blog.api.authentication.SSOCallbackHandler;
 import sonia.blog.api.dao.DAOFactory;
 import sonia.blog.api.dao.cache.CacheManager;
@@ -539,7 +540,7 @@ public final class BlogContext
       }
       catch (IOException ex)
       {
-        throw new BlogRuntimeException(ex);
+        throw new BlogException(ex);
       }
       finally
       {

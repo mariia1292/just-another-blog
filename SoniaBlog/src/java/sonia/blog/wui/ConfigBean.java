@@ -53,9 +53,9 @@ public class ConfigBean extends AbstractBean
    */
   public String reIndex()
   {
-    BlogContext.getInstance().getSearchContext().reIndex(getBlog());
-
-    getMessageHandler().info( "rebuildIndex" );
+    BlogContext.getInstance().getSearchContext().reIndex(getBlogSession(),
+            getBlog());
+    getMessageHandler().info("rebuildIndex");
 
     return SUCCESS;
   }

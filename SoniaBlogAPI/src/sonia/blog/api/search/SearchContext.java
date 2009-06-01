@@ -9,6 +9,7 @@ package sonia.blog.api.search;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import sonia.blog.api.app.BlogSession;
 import sonia.blog.entity.Blog;
 
 //~--- JDK imports ------------------------------------------------------------
@@ -26,9 +27,13 @@ public interface SearchContext
    * Method description
    *
    *
+   *
+   * @param session, maust be a Admin- or a GlobalAdminSession
    * @param blog
+   *
+   * @throws BlogSecurityException
    */
-  public void reIndex(Blog blog);
+  public void reIndex(BlogSession session, Blog blog);
 
   /**
    * Method description
