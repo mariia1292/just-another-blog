@@ -150,6 +150,14 @@ public class SearchMapping extends ScrollableFilterMapping
         result = handleListView(request, searchParam, entries, start, max);
       }
     }
+    else
+    {
+      BlogBean blogBean = BlogUtil.getSessionBean(request, BlogBean.class,
+                            BlogBean.NAME);
+
+      blogBean.setPageEntries(new ListDataModel());
+      result = buildTemplateViewId(request, Constants.TEMPLATE_LIST);
+    }
 
     return result;
   }
