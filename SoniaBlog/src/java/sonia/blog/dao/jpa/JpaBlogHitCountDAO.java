@@ -138,7 +138,7 @@ public class JpaBlogHitCountDAO extends JpaGenericDAO<BlogHitCount>
    *
    * @return
    */
-  public boolean increase(Blog blog)
+  public synchronized boolean increase(Blog blog)
   {
     boolean result = true;
     Date date = new Date();

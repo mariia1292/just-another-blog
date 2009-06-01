@@ -24,7 +24,7 @@ import java.io.InputStreamReader;
  *
  * @author sdorra
  */
-public class MercurialVersion extends Task
+public class MercurialVersionTask extends Task
 {
 
   /**

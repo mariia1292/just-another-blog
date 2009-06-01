@@ -86,7 +86,7 @@
   </target>
 
   <target name="set-version" depends="set-hg-path">
-    <taskdef name="hgVersion" classname="sonia.ant.MercurialVersion" classpath="../SoniaAnt/dist/SoniaAnt.jar" />
+    <taskdef name="hgVersion" classname="sonia.ant.MercurialVersionTask" classpath="../SoniaAnt/dist/SoniaAnt.jar" />
     <hgVersion hgpath="${sonia.ant.hg}" prefix="r" repositorypath="${basedir}/.." path="${basedir}/${build.web.dir}/WEB-INF/config/version.txt" />
   </target>
 
