@@ -1,0 +1,7 @@
+# To change this template, choose Tools | Templates
+# and open the template in the editor.
+
+.logger = INFO
+handlers = sonia.blog.logging.LoggingHandler
+
+sonia.logging.FileHandler.filename = jab.log
