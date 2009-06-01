@@ -172,6 +172,8 @@ public class BlogContextListener implements ServletContextListener
       context.getPluginContext().searchClasspath(
           buildClasspath(event.getServletContext()));
 
+      initCaches(context);
+
       List<ServletContextListener> listeners = getPluginListeners(context);
 
       if (listeners != null)
@@ -254,6 +256,45 @@ public class BlogContextListener implements ServletContextListener
     handler.setFormatter(formatter);
     handler.setLevel(Level.FINEST);
     rootLogger.addHandler(handler);
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param context
+   */
+  private void initCaches(BlogContext context)
+  {
+    File file = new File(
+                    context.getServletContext().getRealPath(
+                      "/WEB-INF/config/cache.xml"));
+
+    if (file.exists())
+    {
+      FileInputStream fis = null;
+
+      try
+      {
+        fis = new FileInputStream(file);
+        context.getCacheManager().load(fis);
+      }
+      catch (IOException ex)
+      {
+        logger.log(Level.SEVERE, null, ex);
+      }
+      finally
+      {
+        try
+        {
+          fis.close();
+        }
+        catch (IOException ex)
+        {
+          logger.log(Level.WARNING, null, ex);
+        }
+      }
+    }
   }
 
   /**

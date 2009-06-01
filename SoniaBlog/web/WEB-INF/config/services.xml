@@ -108,4 +108,8 @@
     <impl class="sonia.blog.editor.FlowPlayerHandler" />
   </service>
 
+  <service class="sonia.blog.api.cache.CacheManager" path="/app/cacheManager">
+    <impl class="sonia.blog.cache.DefaultCacheManager" />
+  </service>
+
 </services>
