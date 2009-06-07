@@ -23,6 +23,7 @@ import sonia.util.Util;
 import java.io.File;
 
 import java.util.List;
+import java.util.logging.Logger;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -34,6 +35,11 @@ import javax.persistence.Query;
  */
 public class JpaBlogDAO extends JpaGenericDAO<Blog> implements BlogDAO
 {
+
+  /** Field description */
+  private static Logger logger = Logger.getLogger(JpaBlogDAO.class.getName());
+
+  //~--- constructors ---------------------------------------------------------
 
   /**
    * Constructs ...
@@ -232,5 +238,17 @@ public class JpaBlogDAO extends JpaGenericDAO<Blog> implements BlogDAO
     q.setMaxResults(max);
 
     return excecuteListQuery(BlogMember.class, em, q);
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  @Override
+  protected Logger getLogger()
+  {
+    return logger;
   }
 }

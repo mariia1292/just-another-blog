@@ -24,6 +24,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.logging.Logger;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -37,6 +38,12 @@ import javax.persistence.Query;
 public class JpaBlogHitCountDAO extends JpaGenericDAO<BlogHitCount>
         implements BlogHitCountDAO
 {
+
+  /** Field description */
+  private static Logger logger =
+    Logger.getLogger(JpaBlogHitCountDAO.class.getName());
+
+  //~--- constructors ---------------------------------------------------------
 
   /**
    * Constructs ...
@@ -254,6 +261,18 @@ public class JpaBlogHitCountDAO extends JpaGenericDAO<BlogHitCount>
     }
 
     return result;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  @Override
+  protected Logger getLogger()
+  {
+    return logger;
   }
 
   //~--- methods --------------------------------------------------------------

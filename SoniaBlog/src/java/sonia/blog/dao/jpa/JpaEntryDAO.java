@@ -25,6 +25,7 @@ import sonia.util.Util;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -37,6 +38,11 @@ import javax.persistence.Query;
  */
 public class JpaEntryDAO extends JpaGenericDAO<Entry> implements EntryDAO
 {
+
+  /** Field description */
+  private static Logger logger = Logger.getLogger(JpaEntryDAO.class.getName());
+
+  //~--- constructors ---------------------------------------------------------
 
   /**
    * Constructs ...
@@ -794,5 +800,17 @@ public class JpaEntryDAO extends JpaGenericDAO<Entry> implements EntryDAO
     catch (NoResultException ex) {}
 
     return prevEntry;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  @Override
+  protected Logger getLogger()
+  {
+    return logger;
   }
 }

@@ -18,6 +18,7 @@ import sonia.blog.entity.Tag;
 //~--- JDK imports ------------------------------------------------------------
 
 import java.util.List;
+import java.util.logging.Logger;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -30,6 +31,11 @@ import javax.persistence.Query;
  */
 public class JpaTagDAO extends JpaGenericDAO<Tag> implements TagDAO
 {
+
+  /** Field description */
+  private static Logger logger = Logger.getLogger(JpaTagDAO.class.getName());
+
+  //~--- constructors ---------------------------------------------------------
 
   /**
    * Constructs ...
@@ -198,5 +204,17 @@ public class JpaTagDAO extends JpaGenericDAO<Tag> implements TagDAO
   public List<Tag> getAll(int start, int max)
   {
     return findList("Tag.findAll", start, max);
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  @Override
+  protected Logger getLogger()
+  {
+    return logger;
   }
 }

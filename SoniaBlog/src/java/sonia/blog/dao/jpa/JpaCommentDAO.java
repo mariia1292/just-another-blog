@@ -18,6 +18,7 @@ import sonia.blog.entity.Entry;
 //~--- JDK imports ------------------------------------------------------------
 
 import java.util.List;
+import java.util.logging.Logger;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -30,6 +31,12 @@ import javax.persistence.Query;
  */
 public class JpaCommentDAO extends JpaGenericDAO<Comment> implements CommentDAO
 {
+
+  /** Field description */
+  private static Logger logger =
+    Logger.getLogger(JpaCommentDAO.class.getName());
+
+  //~--- constructors ---------------------------------------------------------
 
   /**
    * Constructs ...
@@ -179,5 +186,17 @@ public class JpaCommentDAO extends JpaGenericDAO<Comment> implements CommentDAO
   public List<Comment> getAll(int start, int max)
   {
     return findList("Comment.findAll", start, max);
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  @Override
+  protected Logger getLogger()
+  {
+    return logger;
   }
 }
