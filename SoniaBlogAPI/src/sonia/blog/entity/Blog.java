@@ -310,6 +310,17 @@ public class Blog implements Serializable, PermaObject, Comparable<Blog>
    *
    * @return
    */
+  public String getStartPage()
+  {
+    return startPage;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
   public String getTemplate()
   {
     return template;
@@ -626,6 +637,17 @@ public class Blog implements Serializable, PermaObject, Comparable<Blog>
    * Method description
    *
    *
+   * @param startPage
+   */
+  public void setStartPage(String startPage)
+  {
+    this.startPage = startPage;
+  }
+
+  /**
+   * Method description
+   *
+   *
    * @param template
    */
   public void setTemplate(String template)
@@ -748,6 +770,9 @@ public class Blog implements Serializable, PermaObject, Comparable<Blog>
 
   /** Field description */
   private boolean active = true;
+
+  /** Field description */
+  private String startPage;
 
   /** Field description */
   private String template;
