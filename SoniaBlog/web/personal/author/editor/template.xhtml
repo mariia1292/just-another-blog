@@ -25,7 +25,9 @@
         </c:otherwise>
       </c:choose>
 
-      <h:messages />
+      <h:messages id="messages" globalOnly="true"
+                  errorClass="warning" fatalClass="warning"
+                  warnClass="warning" infoClass="note" />
 
       <ui:insert name="content" />
 
