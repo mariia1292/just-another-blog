@@ -20,6 +20,11 @@
       select m from BlogMember as m where m.blog = :blog and m.user.active = :active
       </query>
     </named-query>
+    <named-query name="BlogMember.getAllByBlogActiveAndNotify">
+      <query>
+      select m from BlogMember as m where m.blog = :blog and m.notify = :notify and m.user.active = :active
+      </query>
+    </named-query>
     <named-query name="BlogMember.getAllByBlog">
       <query>
       select m from BlogMember as m where m.blog = :blog

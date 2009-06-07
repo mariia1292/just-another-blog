@@ -66,6 +66,14 @@ public interface UserDAO extends GenericDAO<User>
    */
   public long count(boolean active);
 
+  /**
+   * Method description
+   *
+   *
+   * @param member
+   */
+  public boolean saveMember(BlogMember member);
+
   //~--- get methods ----------------------------------------------------------
 
   /**
@@ -158,6 +166,17 @@ public interface UserDAO extends GenericDAO<User>
    * @return
    */
   public User getByNameAndCode(String username, String code);
+
+  /**
+   * Method description
+   *
+   *
+   * @param blog
+   * @param user
+   *
+   * @return
+   */
+  public BlogMember getMember(Blog blog, User user);
 
   /**
    * Method description

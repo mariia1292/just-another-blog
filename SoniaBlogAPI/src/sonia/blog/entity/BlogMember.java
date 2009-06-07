@@ -164,6 +164,17 @@ public class BlogMember implements Serializable
     return user;
   }
 
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  public boolean isNotify()
+  {
+    return notify;
+  }
+
   //~--- set methods ----------------------------------------------------------
 
   /**
@@ -186,6 +197,17 @@ public class BlogMember implements Serializable
   public void setId(Long id)
   {
     this.id = id;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param notify
+   */
+  public void setNotify(boolean notify)
+  {
+    this.notify = notify;
   }
 
   /**
@@ -228,6 +250,9 @@ public class BlogMember implements Serializable
 
   /** Field description */
   private Long id;
+
+  /** Field description */
+  private boolean notify = false;
 
   /** Field description */
   private Date registrationDate;

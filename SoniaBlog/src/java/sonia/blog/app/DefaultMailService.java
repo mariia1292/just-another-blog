@@ -20,6 +20,8 @@ import sonia.util.Util;
 //~--- JDK imports ------------------------------------------------------------
 
 import java.util.Properties;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.mail.Authenticator;
 import javax.mail.Message;
@@ -35,6 +37,12 @@ import javax.mail.internet.MimeMessage;
  */
 public class DefaultMailService implements MailService
 {
+
+  /** Field description */
+  private static Logger logger =
+    Logger.getLogger(DefaultMailService.class.getName());
+
+  //~--- methods --------------------------------------------------------------
 
   /**
    * Method description
@@ -157,6 +165,18 @@ public class DefaultMailService implements MailService
                         String contentType)
           throws MessagingException
   {
+    if (logger.isLoggable(Level.FINEST))
+    {
+      StringBuffer log = new StringBuffer();
+
+      log.append("try to send message: \n");
+      log.append("\tto: ").append(from).append("\n");
+      log.append("\tfrom: ").append(from).append("\n");
+      log.append("\tsubject: ").append(subject).append("\n");
+      log.append("\tcontent: ").append(text).append("\n");
+      logger.finest(log.toString());
+    }
+
     Session session = createSession();
     MimeMessage msg = new MimeMessage(session);
 
