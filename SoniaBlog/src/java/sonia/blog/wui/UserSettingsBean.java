@@ -12,8 +12,11 @@ package sonia.blog.wui;
 import sonia.blog.api.app.BlogConfiguration;
 import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.app.Constants;
+import sonia.blog.api.dao.Dao;
 import sonia.blog.api.dao.UserDAO;
 import sonia.blog.api.util.AbstractBean;
+import sonia.blog.entity.Blog;
+import sonia.blog.entity.BlogMember;
 import sonia.blog.entity.User;
 
 import sonia.plugin.service.ServiceReference;
@@ -52,6 +55,29 @@ public class UserSettingsBean extends AbstractBean
   }
 
   //~--- methods --------------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  public String saveMember()
+  {
+    String result = SUCCESS;
+
+    if (userDAO.saveMember(member))
+    {
+      getMessageHandler().info("userSettingsUpdateSuccess");
+    }
+    else
+    {
+      result = FAILURE;
+      getMessageHandler().error("unknownError");
+    }
+
+    return result;
+  }
 
   /**
    * Method description
@@ -116,6 +142,25 @@ public class UserSettingsBean extends AbstractBean
    *
    * @return
    */
+  public BlogMember getMember()
+  {
+    if (member == null)
+    {
+      Blog b = getRequest().getCurrentBlog();
+      User u = getUser();
+
+      member = userDAO.getMember(b, u);
+    }
+
+    return member;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
   public int getPasswordMinLength()
   {
     return passwordMinLength;
@@ -167,6 +212,17 @@ public class UserSettingsBean extends AbstractBean
    * Method description
    *
    *
+   * @param member
+   */
+  public void setMember(BlogMember member)
+  {
+    this.member = member;
+  }
+
+  /**
+   * Method description
+   *
+   *
    * @param passwordOld
    */
   public void setPasswordOld(String passwordOld)
@@ -207,7 +263,6 @@ public class UserSettingsBean extends AbstractBean
   private String save()
   {
     String result = SUCCESS;
-    UserDAO userDAO = BlogContext.getDAOFactory().getUserDAO();
 
     if (userDAO.edit(user))
     {
@@ -225,6 +280,9 @@ public class UserSettingsBean extends AbstractBean
   //~--- fields ---------------------------------------------------------------
 
   /** Field description */
+  private BlogMember member;
+
+  /** Field description */
   private int passwordMinLength;
 
   /** Field description */
@@ -235,4 +293,8 @@ public class UserSettingsBean extends AbstractBean
 
   /** Field description */
   private User user;
+
+  /** Field description */
+  @Dao
+  private UserDAO userDAO;
 }

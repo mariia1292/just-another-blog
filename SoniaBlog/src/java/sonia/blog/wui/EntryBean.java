@@ -14,6 +14,7 @@ import org.w3c.tidy.TidyMessage;
 import org.w3c.tidy.TidyMessageListener;
 
 import sonia.blog.api.app.BlogContext;
+import sonia.blog.api.app.BlogJob;
 import sonia.blog.api.app.BlogRequest;
 import sonia.blog.api.app.Constants;
 import sonia.blog.api.app.ResourceManager;
@@ -31,6 +32,7 @@ import sonia.blog.entity.Entry;
 import sonia.blog.entity.Tag;
 import sonia.blog.entity.User;
 import sonia.blog.util.BlogUtil;
+import sonia.blog.util.NotificationJob;
 import sonia.blog.util.TrackbackJob;
 import sonia.blog.wui.model.EntryDataModel;
 
@@ -186,6 +188,12 @@ public class EntryBean extends AbstractEditorBean
   public String publish()
   {
     entry.publish();
+
+    Blog blog = getRequest().getCurrentBlog();
+    ResourceBundle bundle = getResourceBundle("message");
+    BlogJob job = new NotificationJob(bundle, blog, entry);
+
+    BlogContext.getInstance().getJobQueue().add(job);
 
     return save();
   }

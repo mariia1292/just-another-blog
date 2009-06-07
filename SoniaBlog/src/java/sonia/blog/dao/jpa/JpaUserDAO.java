@@ -171,6 +171,44 @@ public class JpaUserDAO extends JpaGenericDAO<User> implements UserDAO
     return result;
   }
 
+  /**
+   * Method description
+   *
+   *
+   * @param member
+   */
+  public boolean saveMember(BlogMember member)
+  {
+    boolean result = false;
+    EntityManager em = createEntityManager();
+
+    em.getTransaction().begin();
+
+    try
+    {
+      em.merge(member);
+      em.getTransaction().commit();
+      result = true;
+    }
+    catch (Exception ex)
+    {
+      if (em.getTransaction().isActive())
+      {
+        em.getTransaction().rollback();
+      }
+
+      logger.log(Level.SEVERE, null, ex);
+    }
+    finally
+    {
+      if (em != null)
+      {
+        em.close();
+      }
+    }
+    return result;
+  }
+
   //~--- get methods ----------------------------------------------------------
 
   /**
@@ -362,6 +400,26 @@ public class JpaUserDAO extends JpaGenericDAO<User> implements UserDAO
     q.setParameter("code", code);
 
     return excecuteQuery(em, q);
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param blog
+   * @param user
+   *
+   * @return
+   */
+  public BlogMember getMember(Blog blog, User user)
+  {
+    EntityManager em = createEntityManager();
+    Query q = em.createNamedQuery("BlogMember.getByBlogAndUser");
+
+    q.setParameter("blog", blog);
+    q.setParameter("user", user);
+
+    return excecuteQuery(BlogMember.class, em, q);
   }
 
   /**

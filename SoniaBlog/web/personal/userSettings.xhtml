@@ -62,6 +62,22 @@
 
         </h:form>
 
+        <h2><h:outputText value="#{label.notification}" /></h2>
+
+        <h:form id="notifyForm">
+
+          <h:panelGrid columns="3">
+
+            <h:outputLabel for="notify" value="#{label.notifyMe}" />
+            <h:selectBooleanCheckbox id="notify" value="#{UserSettingsBean.member.notify}" />
+            <h:message for="notify" />
+
+          </h:panelGrid>
+
+          <h:commandButton value="#{label.save}" action="#{UserSettingsBean.saveMember}" />
+
+        </h:form>
+
       </ui:define>
 
 
