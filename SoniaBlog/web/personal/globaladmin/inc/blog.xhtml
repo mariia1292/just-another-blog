@@ -38,6 +38,13 @@
           <h:inputTextarea id="description" value="#{AdminBlogBean.blog.description}" />
           <h:message for="description" />
 
+          <h:outputLabel for="startPage" value="#{label.startPage}" />
+          <h:inputText id="startPage" value="#{ConfigBean.blog.startPage}">
+            <f:validateLength maximum="255" />
+            <f:validator validatorId="validator.url" />
+          </h:inputText>
+          <h:message for="startPage" />
+
           <h:outputLabel for="template" value="#{label.template}" />
           <h:selectOneMenu id="template" value="#{AdminBlogBean.blog.template}">
             <f:selectItems value="#{AdminBlogBean.templateItems}" />

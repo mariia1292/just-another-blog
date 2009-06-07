@@ -29,6 +29,13 @@
             <h:inputTextarea id="description" value="#{ConfigBean.blog.description}" />
             <h:message for="description" />
 
+            <h:outputLabel for="startPage" value="#{label.startPage}" />
+            <h:inputText id="startPage" value="#{ConfigBean.blog.startPage}">
+              <f:validateLength maximum="255" />
+              <f:validator validatorId="validator.url" />
+            </h:inputText>
+            <h:message for="startPage" />
+
             <h:outputLabel for="locale" value="#{label.locale}" />
             <h:selectOneMenu id="locale" value="#{ConfigBean.blog.locale}" converter="converter.locale">
               <f:selectItems value="#{ConfigBean.localeItems}" />
