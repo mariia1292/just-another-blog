@@ -484,4 +484,21 @@
       <type>java.lang.Object</type>
     </attribute>
   </tag>
+  <tag>
+    <name>header</name>
+    <tag-class>sonia.blog.api.jsf.header.HeaderTag</tag-class>
+    <body-content>empty</body-content>
+    <attribute>
+      <name>comments</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.object</type>
+    </attribute>
+    <attribute>
+      <name>cacheType</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.object</type>
+    </attribute>
+  </tag>
 </taglib>

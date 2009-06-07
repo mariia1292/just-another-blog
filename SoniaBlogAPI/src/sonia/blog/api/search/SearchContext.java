@@ -31,7 +31,6 @@ public interface SearchContext
    * @param session, maust be a Admin- or a GlobalAdminSession
    * @param blog
    *
-   * @throws BlogSecurityException
    */
   public void reIndex(BlogSession session, Blog blog);
 

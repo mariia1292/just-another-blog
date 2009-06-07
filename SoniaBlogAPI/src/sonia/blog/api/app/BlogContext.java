@@ -10,7 +10,6 @@ package sonia.blog.api.app;
 //~--- non-JDK imports --------------------------------------------------------
 
 import sonia.blog.api.authentication.SSOCallbackHandler;
-import sonia.blog.api.cache.CacheManager;
 import sonia.blog.api.dao.DAOFactory;
 import sonia.blog.api.exception.BlogException;
 import sonia.blog.api.link.LinkBuilder;
@@ -267,23 +266,6 @@ public final class BlogContext
   }
 
   //~--- get methods ----------------------------------------------------------
-
-  /**
-   * Method description
-   *
-   *
-   * @return
-   */
-  public CacheManager getCacheManager()
-  {
-    if (cacheManager == null)
-    {
-      cacheManager = getServiceRegistry().get(CacheManager.class,
-              Constants.SERVICE_CACHEMANAGER);
-    }
-
-    return cacheManager.get();
-  }
 
   /**
    * Method description
@@ -763,9 +745,6 @@ public final class BlogContext
   }
 
   //~--- fields ---------------------------------------------------------------
-
-  /** Field description */
-  private ServiceReference<CacheManager> cacheManager;
 
   /** Field description */
   private File configFile;

@@ -13,7 +13,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.el.ValueExpression;
+
 import javax.faces.component.UIComponent;
+import javax.faces.component.UIInput;
+import javax.faces.component.UIOutput;
 import javax.faces.component.UIParameter;
 import javax.faces.context.FacesContext;
 import javax.faces.render.Renderer;
@@ -44,6 +48,30 @@ public class BaseRenderer extends Renderer
     }
 
     return link;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param context
+   * @param value
+   *
+   * @return
+   */
+  protected UIOutput createHtmlOutputComponent(FacesContext context,
+          String value)
+  {
+    Boolean escape = Boolean.FALSE;
+    ValueExpression ve =
+      context.getApplication().getExpressionFactory().createValueExpression(
+          escape, Boolean.class);
+    UIOutput out = new UIOutput();
+
+    out.setValueExpression("escape", ve);
+    out.setValue(value);
+
+    return out;
   }
 
   //~--- get methods ----------------------------------------------------------

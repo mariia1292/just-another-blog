@@ -254,7 +254,6 @@ public abstract class FilterMapping implements Mapping
           {
             resources.addAll(wr);
           }
-
         }
       }
     }
@@ -266,5 +265,4 @@ public abstract class FilterMapping implements Mapping
 
   /** Field description */
   protected List<WebResource> resources = new ArrayList<WebResource>();
-
 }

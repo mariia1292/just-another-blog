@@ -45,6 +45,8 @@ public class LinkResource extends WebResource
   /**
    * Constructs ...
    *
+   *
+   * @param index
    */
   public LinkResource(int index)
   {
@@ -56,6 +58,8 @@ public class LinkResource extends WebResource
    *
    *
    *
+   *
+   * @param index
    * @param type
    * @param href
    * @param rel
@@ -63,8 +67,8 @@ public class LinkResource extends WebResource
    * @param clazz
    * @param iePatch
    */
-  public LinkResource(int index, String type, String href, String rel, String title,
-                      String clazz, boolean iePatch)
+  public LinkResource(int index, String type, String href, String rel,
+                      String title, String clazz, boolean iePatch)
   {
     super(index);
     this.type = type;
