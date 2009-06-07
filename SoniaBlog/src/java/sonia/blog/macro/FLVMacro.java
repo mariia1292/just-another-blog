@@ -9,8 +9,6 @@ package sonia.blog.macro;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import java.util.ArrayList;
-import java.util.List;
 import sonia.blog.api.app.BlogRequest;
 import sonia.blog.api.app.Context;
 import sonia.blog.api.dao.AttachmentDAO;
@@ -24,12 +22,30 @@ import sonia.blog.entity.Attachment;
 import sonia.blog.entity.Blog;
 import sonia.blog.entity.ContentObject;
 
+//~--- JDK imports ------------------------------------------------------------
+
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  *
  * @author sdorra
  */
 public class FLVMacro extends AbstractBlogMacro implements WebMacro
 {
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  public List<WebResource> getResources()
+  {
+    return resources;
+  }
+
+  //~--- set methods ----------------------------------------------------------
 
   /**
    * Method description
@@ -84,30 +100,23 @@ public class FLVMacro extends AbstractBlogMacro implements WebMacro
   {
     String result = null;
 
-    if (isEntry(object))
+    if (id != null)
     {
-      if (id != null)
-      {
-        Blog blog = request.getCurrentBlog();
-        Attachment attchment = attachmentDAO.get(id);
+      Blog blog = request.getCurrentBlog();
+      Attachment attchment = attachmentDAO.get(id);
 
-        if ((attchment != null) && attchment.isBlog(blog))
-        {
-          result = renderPlayer(request, attchment, linkBase, width, height);
-        }
-        else
-        {
-          result = "-- cant find attachment --";
-        }
+      if ((attchment != null) && attchment.isBlog(blog))
+      {
+        result = renderPlayer(request, attchment, linkBase, width, height);
       }
       else
       {
-        result = "-- id parameter not found --";
+        result = "-- cant find attachment --";
       }
     }
     else
     {
-      result = "-- object is not an instance of Entry --";
+      result = "-- id parameter not found --";
     }
 
     return result;
@@ -133,7 +142,10 @@ public class FLVMacro extends AbstractBlogMacro implements WebMacro
     StringBuffer result = new StringBuffer();
 
     resources = new ArrayList<WebResource>();
-    ScriptResource sr = new ScriptResource(10, playerPath + "flowplayer.min.js" );
+
+    ScriptResource sr = new ScriptResource(10,
+                          playerPath + "flowplayer.min.js");
+
     resources.add(sr);
 
     // player block
@@ -146,9 +158,8 @@ public class FLVMacro extends AbstractBlogMacro implements WebMacro
     result.append("<script type=\"text/javascript\">\n");
 
     // load flowplayer.min.js
-    //result.append("addScript(\"").append(playerPath);
-    //result.append("flowplayer.min.js\");\n");
-
+    // result.append("addScript(\"").append(playerPath);
+    // result.append("flowplayer.min.js\");\n");
     // load flowplayer.swf
     result.append("$f(\"flvplayer_").append(attchment.getId());
     result.append("\", \"").append(playerPath);
@@ -182,12 +193,8 @@ public class FLVMacro extends AbstractBlogMacro implements WebMacro
   private LinkBuilder linkBuilder;
 
   /** Field description */
-  private Integer width = 480;
-
   private List<WebResource> resources;
 
-  public List<WebResource> getResources()
-  {
-    return resources;
-  }
+  /** Field description */
+  private Integer width = 480;
 }
