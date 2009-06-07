@@ -17,6 +17,7 @@ import sonia.blog.entity.Trackback;
 //~--- JDK imports ------------------------------------------------------------
 
 import java.util.List;
+import java.util.logging.Logger;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -29,6 +30,12 @@ import javax.persistence.Query;
 public class JpaTrackbackDAO extends JpaGenericDAO<Trackback>
         implements TrackbackDAO
 {
+
+  /** Field description */
+  private static Logger logger =
+    Logger.getLogger(JpaTrackbackDAO.class.getName());
+
+  //~--- constructors ---------------------------------------------------------
 
   /**
    * Constructs ...
@@ -141,5 +148,17 @@ public class JpaTrackbackDAO extends JpaGenericDAO<Trackback>
     q.setMaxResults(max);
 
     return excecuteListQuery(em, q);
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  @Override
+  protected Logger getLogger()
+  {
+    return logger;
   }
 }

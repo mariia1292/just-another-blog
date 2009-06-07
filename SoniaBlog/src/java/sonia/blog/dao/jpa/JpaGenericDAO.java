@@ -51,13 +51,22 @@ public abstract class JpaGenericDAO<T> implements GenericDAO<T>
   {
     this.entityManagerFactory = entityManagerFactory;
     this.clazz = clazz;
-    logger = Logger.getLogger(getClass().getName());
 
     BlogContext context = BlogContext.getInstance();
 
     reference = context.getServiceRegistry().get(DAOListener.class,
             servicePath);
   }
+
+  //~--- get methods ----------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  protected abstract Logger getLogger();
 
   //~--- methods --------------------------------------------------------------
 
@@ -91,7 +100,7 @@ public abstract class JpaGenericDAO<T> implements GenericDAO<T>
         em.getTransaction().rollback();
       }
 
-      logger.log(Level.SEVERE, null, ex);
+      getLogger().log(Level.SEVERE, null, ex);
       result = false;
     }
     finally
@@ -135,7 +144,7 @@ public abstract class JpaGenericDAO<T> implements GenericDAO<T>
         em.getTransaction().rollback();
       }
 
-      logger.log(Level.SEVERE, null, ex);
+      getLogger().log(Level.SEVERE, null, ex);
       result = false;
     }
     finally
@@ -179,7 +188,7 @@ public abstract class JpaGenericDAO<T> implements GenericDAO<T>
         em.getTransaction().rollback();
       }
 
-      logger.log(Level.SEVERE, null, ex);
+      getLogger().log(Level.SEVERE, null, ex);
       result = false;
     }
     finally
@@ -483,9 +492,6 @@ public abstract class JpaGenericDAO<T> implements GenericDAO<T>
 
   /** Field description */
   protected EntityManagerFactory entityManagerFactory;
-
-  /** Field description */
-  protected Logger logger;
 
   /** Field description */
   private Class<T> clazz;

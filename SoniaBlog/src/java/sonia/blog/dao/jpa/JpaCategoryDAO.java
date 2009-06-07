@@ -17,6 +17,7 @@ import sonia.blog.entity.Category;
 //~--- JDK imports ------------------------------------------------------------
 
 import java.util.List;
+import java.util.logging.Logger;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -30,6 +31,12 @@ import javax.persistence.Query;
 public class JpaCategoryDAO extends JpaGenericDAO<Category>
         implements CategoryDAO
 {
+
+  /** Field description */
+  private static Logger logger =
+    Logger.getLogger(JpaCategoryDAO.class.getName());
+
+  //~--- constructors ---------------------------------------------------------
 
   /**
    * Constructs ...
@@ -187,5 +194,17 @@ public class JpaCategoryDAO extends JpaGenericDAO<Category>
     }
 
     return category;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  @Override
+  protected Logger getLogger()
+  {
+    return logger;
   }
 }

@@ -20,6 +20,7 @@ import sonia.blog.entity.User;
 
 import java.util.List;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -32,6 +33,11 @@ import javax.persistence.Query;
  */
 public class JpaUserDAO extends JpaGenericDAO<User> implements UserDAO
 {
+
+  /** Field description */
+  private static Logger logger = Logger.getLogger(JpaUserDAO.class.getName());
+
+  //~--- constructors ---------------------------------------------------------
 
   /**
    * Constructs ...
@@ -462,5 +468,19 @@ public class JpaUserDAO extends JpaGenericDAO<User> implements UserDAO
         em.close();
       }
     }
+  }
+
+  //~--- get methods ----------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  @Override
+  protected Logger getLogger()
+  {
+    return logger;
   }
 }

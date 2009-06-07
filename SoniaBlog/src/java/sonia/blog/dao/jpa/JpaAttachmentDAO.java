@@ -19,6 +19,7 @@ import sonia.blog.entity.Page;
 //~--- JDK imports ------------------------------------------------------------
 
 import java.util.List;
+import java.util.logging.Logger;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -32,6 +33,12 @@ import javax.persistence.Query;
 public class JpaAttachmentDAO extends JpaGenericDAO<Attachment>
         implements AttachmentDAO
 {
+
+  /** Field description */
+  private static Logger logger =
+    Logger.getLogger(JpaAttachmentDAO.class.getName());
+
+  //~--- constructors ---------------------------------------------------------
 
   /**
    * Constructs ...
@@ -282,5 +289,17 @@ public class JpaAttachmentDAO extends JpaGenericDAO<Attachment>
     q.setParameter("page", page);
 
     return excecuteListQuery(em, q);
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  @Override
+  protected Logger getLogger()
+  {
+    return logger;
   }
 }
