@@ -168,6 +168,9 @@
       <http-method>TRACE</http-method>
       <http-method>DELETE</http-method>
     </web-resource-collection>
+    <auth-constraint>
+      <role-name>none</role-name>
+    </auth-constraint>
   </security-constraint>
 
 </web-app>
