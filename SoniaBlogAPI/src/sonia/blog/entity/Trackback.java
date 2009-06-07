@@ -43,6 +43,7 @@ public class Trackback implements Serializable
    *
    *
    * @param type
+   * @param url
    */
   public Trackback(int type, String url)
   {

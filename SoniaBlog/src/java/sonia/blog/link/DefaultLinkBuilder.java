@@ -18,6 +18,8 @@ import sonia.blog.entity.Attachment;
 import sonia.blog.entity.Blog;
 import sonia.blog.entity.Category;
 import sonia.blog.entity.ContentObject;
+import sonia.blog.entity.Entry;
+import sonia.blog.entity.Page;
 import sonia.blog.entity.PermaObject;
 import sonia.blog.entity.Tag;
 
@@ -27,8 +29,6 @@ import java.text.MessageFormat;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import sonia.blog.entity.Entry;
-import sonia.blog.entity.Page;
 
 /**
  *
@@ -132,7 +132,7 @@ public class DefaultLinkBuilder implements LinkBuilder
       {
         Mapping mapping = request.getMapping();
 
-        if (mapping != null && mapping.getMappingNavigation() != null )
+        if ((mapping != null) && (mapping.getMappingNavigation() != null))
         {
           MappingNavigation navigation = mapping.getMappingNavigation();
 
@@ -141,11 +141,11 @@ public class DefaultLinkBuilder implements LinkBuilder
             link = navigation.getDetailUri(object);
           }
         }
-        else if ( object instanceof Entry )
+        else if (object instanceof Entry)
         {
           link += "list/" + object.getId() + ".jab";
         }
-        else if ( object instanceof Page )
+        else if (object instanceof Page)
         {
           link += "page/" + object.getId() + ".jab";
         }

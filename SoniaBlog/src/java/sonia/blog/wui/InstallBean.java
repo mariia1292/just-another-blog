@@ -11,10 +11,10 @@ package sonia.blog.wui;
 
 import sonia.blog.api.app.BlogConfiguration;
 import sonia.blog.api.app.BlogContext;
-import sonia.blog.api.exception.BlogException;
 import sonia.blog.api.app.Constants;
 import sonia.blog.api.app.InstallationListener;
 import sonia.blog.api.dao.DAOFactory;
+import sonia.blog.api.exception.BlogException;
 import sonia.blog.api.util.AbstractBean;
 import sonia.blog.dao.jpa.profile.DatabaseProfile;
 import sonia.blog.entity.Blog;

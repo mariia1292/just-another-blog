@@ -318,6 +318,17 @@ public class BlogRequest extends HttpServletRequestWrapper
    * Method description
    *
    *
+   * @return
+   */
+  public String getViewId()
+  {
+    return viewId;
+  }
+
+  /**
+   * Method description
+   *
+   *
    * @param role
    *
    * @return

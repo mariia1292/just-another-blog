@@ -140,9 +140,8 @@ public class PageAuthorBean extends AbstractEditorBean
     LinkBuilder linkBuilder = BlogContext.getInstance().getLinkBuilder();
     String uri = linkBuilder.buildLink(request, "/page-preview.jab");
 
-    page.setPublishingDate( new Date() );
-    page.setAuthor( request.getUser() );
-
+    page.setPublishingDate(new Date());
+    page.setAuthor(request.getUser());
     sendRedirect(uri);
   }
 

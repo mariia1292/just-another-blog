@@ -11,7 +11,6 @@ package sonia.blog.api.dao;
 
 import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.app.Constants;
-import sonia.blog.api.dao.cache.CacheManager;
 
 import sonia.plugin.service.ServiceReference;
 
@@ -113,14 +112,6 @@ public abstract class DAOFactory
    * @return
    */
   public abstract BlogHitCountDAO getBlogHitCountDAO();
-
-  /**
-   * Method description
-   *
-   *
-   * @return
-   */
-  public abstract CacheManager getCacheManager();
 
   /**
    * Method description

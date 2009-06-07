@@ -277,8 +277,11 @@ public class BlogBean extends AbstractBean
 
     if (request.getUser() == null)
     {
-      navigation.add(new NavigationMenuItem(bundle.getString("login"),
-              "login"));
+      NavigationMenuItem loginItem = new NavigationMenuItem();
+
+      loginItem.setValue(bundle.getString("login"));
+      loginItem.setExternalLink(linkBuilder.buildLink(request, "/login.jab"));
+      navigation.add(loginItem);
 
       if (config.getBoolean(Constants.CONFIG_ALLOW_REGISTRATION, Boolean.FALSE))
       {

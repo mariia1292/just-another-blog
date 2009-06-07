@@ -22,11 +22,13 @@ public class ScriptResource extends WebResource
    * Constructs ...
    *
    *
+   *
+   * @param index
    * @param src
    */
   public ScriptResource(int index, String src)
   {
-    super( index );
+    super(index);
     this.src = src;
   }
 
@@ -34,12 +36,14 @@ public class ScriptResource extends WebResource
    * Constructs ...
    *
    *
+   *
+   * @param index
    * @param src
    * @param type
    */
   public ScriptResource(int index, String src, String type)
   {
-    super( index );
+    super(index);
     this.src = src;
     this.type = type;
   }

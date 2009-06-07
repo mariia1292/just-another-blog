@@ -218,7 +218,6 @@ public class ListMapping extends ScrollableFilterMapping
       logger.finer("set entry list(" + entries.size() + ") to BlogBean");
     }
 
-
     setDisplayContent(request, entries, true);
     blogBean.setPageEntries(new ListDataModel(entries));
 

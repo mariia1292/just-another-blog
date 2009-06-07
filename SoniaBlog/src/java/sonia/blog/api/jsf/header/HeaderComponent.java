@@ -25,10 +25,8 @@ import sonia.util.Util;
 
 //~--- JDK imports ------------------------------------------------------------
 
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import java.util.Set;
 
 import javax.el.ValueExpression;
 
@@ -152,7 +150,7 @@ public class HeaderComponent extends BaseComponent
       resources = getServiceResources();
     }
 
-    Collections.sort( resources );
+    Collections.sort(resources);
 
     return Util.unique(resources);
   }

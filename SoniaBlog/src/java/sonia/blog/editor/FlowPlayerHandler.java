@@ -23,8 +23,10 @@ public class FlowPlayerHandler extends AttachmentHandler
 {
 
   /** Field description */
-  private static final String EXTENSIONS[] = new String[] { "flv", "f4v", "f4p",
-          "f4a", "f4b", "mp4", "m4v" };
+  private static final String EXTENSIONS[] = new String[]
+  {
+    "flv", "f4v", "f4p", "f4a", "f4b", "mp4", "m4v"
+  };
 
   /** Field description */
   private static final String LABEL = "FlowPlayer";

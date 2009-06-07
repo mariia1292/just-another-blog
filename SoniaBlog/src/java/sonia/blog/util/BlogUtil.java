@@ -17,6 +17,7 @@ import org.xml.sax.SAXException;
 
 import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.app.BlogRequest;
+import sonia.blog.api.app.BlogResponse;
 import sonia.blog.api.exception.BlogException;
 import sonia.blog.api.util.AbstractBean;
 import sonia.blog.entity.Attachment;
@@ -55,6 +56,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -345,6 +347,30 @@ public class BlogUtil
    * Method description
    *
    *
+   * @param object
+   *
+   * @return
+   */
+  public static BlogResponse getBlogResponse(Object object)
+  {
+    BlogResponse response = null;
+
+    if (object instanceof BlogResponse)
+    {
+      response = (BlogResponse) object;
+    }
+    else if (object instanceof HttpServletResponse)
+    {
+      response = new BlogResponse((HttpServletResponse) object);
+    }
+
+    return response;
+  }
+
+  /**
+   * Method description
+   *
+   *
    * @param entry
    *
    * @return
@@ -424,8 +450,7 @@ public class BlogUtil
       if (!type.isInstance(obj))
       {
         throw new BlogException("session object " + name
-                                       + " is not an instance of "
-                                       + type.getName());
+                                + " is not an instance of " + type.getName());
       }
       else
       {
