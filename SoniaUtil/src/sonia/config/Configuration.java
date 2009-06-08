@@ -352,6 +352,14 @@ public interface Configuration
    * Method description
    *
    *
+   * @return
+   */
+  public int getSize();
+
+  /**
+   * Method description
+   *
+   *
    * @param key
    *
    * @return
