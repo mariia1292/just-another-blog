@@ -233,6 +233,17 @@ public class PropertiesConfiguration extends StringBasedConfiguration
    * Method description
    *
    *
+   * @return
+   */
+  public int getSize()
+  {
+    return properties.size();
+  }
+
+  /**
+   * Method description
+   *
+   *
    * @param key
    *
    * @return

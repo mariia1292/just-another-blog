@@ -42,6 +42,8 @@ import sonia.blog.entity.Entry;
 import sonia.blog.entity.Tag;
 import sonia.blog.entity.Trackback;
 
+import sonia.config.ElParamConfigMap;
+
 import sonia.plugin.service.Service;
 import sonia.plugin.service.ServiceReference;
 
@@ -51,6 +53,7 @@ import sonia.util.Util;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.logging.Logger;
 
@@ -211,6 +214,23 @@ public class BlogBean extends AbstractBean
     }
 
     return comments;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  public Map<String, String> getConfigurationMap()
+  {
+    if (configurationMap == null)
+    {
+      configurationMap =
+        new ElParamConfigMap(BlogContext.getInstance().getConfiguration());
+    }
+
+    return configurationMap;
   }
 
   /**
@@ -815,6 +835,9 @@ public class BlogBean extends AbstractBean
   /** Field description */
   @Context
   private BlogConfiguration config;
+
+  /** Field description */
+  private Map<String, String> configurationMap;
 
   /** Field description */
   private List<? extends ContentObject> entries;
