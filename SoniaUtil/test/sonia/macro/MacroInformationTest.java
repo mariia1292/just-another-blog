@@ -124,6 +124,7 @@ public class MacroInformationTest
      *
      * @param test
      */
+    @MacroInfoParameter("Der Test")
     public void setTest(String test)
     {
       this.test = test;
@@ -135,6 +136,8 @@ public class MacroInformationTest
      *
      * @param test2
      */
+    @MacroInfoParameter(value = "Der zweite Test",
+                        description = "Nicht so gut wie der erste")
     public void setTest2(String test2)
     {
       this.test2 = test2;
@@ -146,12 +149,9 @@ public class MacroInformationTest
     private int notListed;
 
     /** Field description */
-    @MacroInfoParameter("Der Test")
     private String test;
 
     /** Field description */
-    @MacroInfoParameter(value = "Der zweite Test",
-                        description = "Nicht so gut wie der erste")
     private String test2;
   }
 }
