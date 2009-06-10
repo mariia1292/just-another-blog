@@ -7,6 +7,10 @@
 
 package sonia.macro.browse;
 
+//~--- non-JDK imports --------------------------------------------------------
+
+import sonia.util.Util;
+
 //~--- JDK imports ------------------------------------------------------------
 
 import java.util.List;
@@ -15,7 +19,7 @@ import java.util.List;
  *
  * @author sdorra
  */
-public class MetaInformation
+public class MacroInformation
 {
 
   /**
@@ -24,7 +28,7 @@ public class MetaInformation
    *
    * @param name
    */
-  public MetaInformation(String name)
+  public MacroInformation(String name)
   {
     this.name = name;
   }
@@ -34,11 +38,26 @@ public class MetaInformation
    *
    *
    * @param name
-   * @param description
+   * @param displayName
    */
-  public MetaInformation(String name, String description)
+  public MacroInformation(String name, String displayName)
   {
     this.name = name;
+    this.displayName = displayName;
+  }
+
+  /**
+   * Constructs ...
+   *
+   *
+   * @param name
+   * @param displayName
+   * @param description
+   */
+  public MacroInformation(String name, String displayName, String description)
+  {
+    this.name = name;
+    this.displayName = displayName;
     this.description = description;
   }
 
@@ -47,12 +66,15 @@ public class MetaInformation
    *
    *
    * @param name
+   * @param displayName
    * @param description
    * @param icon
    */
-  public MetaInformation(String name, String description, String icon)
+  public MacroInformation(String name, String displayName, String description,
+                          String icon)
   {
     this.name = name;
+    this.displayName = displayName;
     this.description = description;
     this.icon = icon;
   }
@@ -62,14 +84,17 @@ public class MetaInformation
    *
    *
    * @param name
+   * @param displayName
    * @param description
    * @param icon
    * @param parameter
    */
-  public MetaInformation(String name, String description, String icon,
-                         List<MetaInformationParameter> parameter)
+  public MacroInformation(String name, String displayName, String description,
+                          String icon,
+                          List<MacroInformationParameter> parameter)
   {
     this.name = name;
+    this.displayName = displayName;
     this.description = description;
     this.icon = icon;
     this.parameter = parameter;
@@ -86,6 +111,19 @@ public class MetaInformation
   public String getDescription()
   {
     return description;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  public String getDisplayName()
+  {
+    return Util.hasContent(displayName)
+           ? displayName
+           : name;
   }
 
   /**
@@ -116,7 +154,7 @@ public class MetaInformation
    *
    * @return
    */
-  public List<MetaInformationParameter> getParameter()
+  public List<MacroInformationParameter> getParameter()
   {
     return parameter;
   }
@@ -132,6 +170,17 @@ public class MetaInformation
   public void setDescription(String description)
   {
     this.description = description;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param displayName
+   */
+  public void setDisplayName(String displayName)
+  {
+    this.displayName = displayName;
   }
 
   /**
@@ -162,7 +211,7 @@ public class MetaInformation
    *
    * @param parameter
    */
-  public void setParameter(List<MetaInformationParameter> parameter)
+  public void setParameter(List<MacroInformationParameter> parameter)
   {
     this.parameter = parameter;
   }
@@ -173,11 +222,16 @@ public class MetaInformation
   private String description;
 
   /** Field description */
+  private String displayName;
+
+  /** Field description */
   private String icon;
 
   /** Field description */
   private String name;
 
   /** Field description */
-  private List<MetaInformationParameter> parameter;
+
+  /** Field description */
+  private List<MacroInformationParameter> parameter;
 }

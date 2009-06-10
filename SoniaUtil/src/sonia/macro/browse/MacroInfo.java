@@ -24,7 +24,8 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface MacroInfo
 {
-  String value();
+  String name();
+  String displayName()    default "";
   String description()    default "";
   String icon()           default "";
   String resourceBundle() default "";

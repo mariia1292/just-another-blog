@@ -11,7 +11,7 @@ package sonia.macro.browse;
  *
  * @author sdorra
  */
-public class MetaInformationParameter
+public class MacroInformationParameter
 {
 
   /**
@@ -20,7 +20,7 @@ public class MetaInformationParameter
    *
    * @param name
    */
-  public MetaInformationParameter(String name)
+  public MacroInformationParameter(String name)
   {
     this.name = name;
   }
@@ -32,7 +32,7 @@ public class MetaInformationParameter
    * @param name
    * @param label
    */
-  public MetaInformationParameter(String name, String label)
+  public MacroInformationParameter(String name, String label)
   {
     this.name = name;
     this.label = label;
@@ -46,7 +46,8 @@ public class MetaInformationParameter
    * @param label
    * @param description
    */
-  public MetaInformationParameter(String name, String label, String description)
+  public MacroInformationParameter(String name, String label,
+                                   String description)
   {
     this.name = name;
     this.label = label;

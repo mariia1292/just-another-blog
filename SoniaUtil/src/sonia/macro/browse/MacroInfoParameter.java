@@ -24,6 +24,6 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface MacroInfoParameter
 {
-  String value();
+  String displayName();
   String description() default "";
 }

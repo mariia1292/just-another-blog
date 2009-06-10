@@ -26,14 +26,14 @@ import java.util.ResourceBundle;
  *
  * @author sdorra
  */
-public class DefaultMetaInformationProvider extends MetaInformationProvider
+public class DefaultMacroInformationProvider extends MacroInformationProvider
 {
 
   /**
    * Constructs ...
    *
    */
-  protected DefaultMetaInformationProvider() {}
+  protected DefaultMacroInformationProvider() {}
 
   //~--- get methods ----------------------------------------------------------
 
@@ -47,10 +47,10 @@ public class DefaultMetaInformationProvider extends MetaInformationProvider
    * @return
    */
   @Override
-  public MetaInformation getInformation(Class<? extends Macro> macroClass,
+  public MacroInformation getInformation(Class<? extends Macro> macroClass,
           Locale locale)
   {
-    MetaInformation information = null;
+    MacroInformation information = null;
     MacroInfo macro = macroClass.getAnnotation(MacroInfo.class);
 
     if (macro != null)
@@ -80,14 +80,15 @@ public class DefaultMetaInformationProvider extends MetaInformationProvider
    *
    * @return
    */
-  private MetaInformation getMainInformation(ResourceBundle bundle,
+  private MacroInformation getMainInformation(ResourceBundle bundle,
           MacroInfo macro)
   {
-    String name = getString(bundle, macro.value());
+    String name = macro.name();
+    String displayName = getString(bundle, macro.displayName());
     String description = getString(bundle, macro.description());
     String icon = getString(bundle, macro.icon());
 
-    return new MetaInformation(name, description, icon);
+    return new MacroInformation(name, displayName, description, icon);
   }
 
   /**
@@ -121,11 +122,11 @@ public class DefaultMetaInformationProvider extends MetaInformationProvider
    *
    * @return
    */
-  private List<MetaInformationParameter> getParameters(
+  private List<MacroInformationParameter> getParameters(
           Class<? extends Macro> macroClass, ResourceBundle bundle)
   {
-    List<MetaInformationParameter> parameters =
-      new ArrayList<MetaInformationParameter>();
+    List<MacroInformationParameter> parameters =
+      new ArrayList<MacroInformationParameter>();
     Method[] methods = macroClass.getDeclaredMethods();
 
     for (Method method : methods)
@@ -135,10 +136,10 @@ public class DefaultMetaInformationProvider extends MetaInformationProvider
       if (param != null)
       {
         String name = getParamName(method.getName());
-        String label = getString(bundle, param.value());
+        String label = getString(bundle, param.displayName());
         String description = getString(bundle, param.description());
 
-        parameters.add(new MetaInformationParameter(name, label, description));
+        parameters.add(new MacroInformationParameter(name, label, description));
       }
     }
 

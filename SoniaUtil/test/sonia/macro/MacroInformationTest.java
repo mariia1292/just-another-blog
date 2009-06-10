@@ -13,9 +13,9 @@ import org.junit.Test;
 
 import sonia.macro.browse.MacroInfo;
 import sonia.macro.browse.MacroInfoParameter;
-import sonia.macro.browse.MetaInformation;
-import sonia.macro.browse.MetaInformationParameter;
-import sonia.macro.browse.MetaInformationProvider;
+import sonia.macro.browse.MacroInformation;
+import sonia.macro.browse.MacroInformationParameter;
+import sonia.macro.browse.MacroInformationProvider;
 
 import static org.junit.Assert.*;
 
@@ -39,18 +39,19 @@ public class MacroInformationTest
   @Test
   public void getMetaInformationTest()
   {
-    MetaInformationProvider provider = MetaInformationProvider.getInstance();
+    MacroInformationProvider provider = MacroInformationProvider.getInstance();
 
     assertNotNull(provider);
 
-    MetaInformation info = provider.getInformation(InformationMacro.class,
+    MacroInformation info = provider.getInformation(InformationMacro.class,
                              Locale.GERMAN);
 
-    assertEquals("Information", info.getName());
+    assertEquals("info", info.getName());
+    assertEquals("Information", info.getDisplayName());
     assertEquals("Gibt Infos", info.getDescription());
     assertNull(info.getIcon());
 
-    List<MetaInformationParameter> params = info.getParameter();
+    List<MacroInformationParameter> params = info.getParameter();
 
     assertNotNull(params);
     assertTrue(params.size() == 2);
@@ -58,7 +59,7 @@ public class MacroInformationTest
     boolean param1 = false;
     boolean param2 = false;
 
-    for (MetaInformationParameter param : params)
+    for (MacroInformationParameter param : params)
     {
       if (param.getName().equals("test"))
       {
@@ -87,7 +88,11 @@ public class MacroInformationTest
    * @version        Enter version here..., 09/06/08
    * @author         Enter your name here...
    */
-  @MacroInfo(value = "Information", description = "Gibt Infos")
+  @MacroInfo(
+    name = "info",
+    displayName = "Information",
+    description = "Gibt Infos"
+  )
   private static class InformationMacro implements Macro
   {
 
@@ -124,7 +129,7 @@ public class MacroInformationTest
      *
      * @param test
      */
-    @MacroInfoParameter("Der Test")
+    @MacroInfoParameter(displayName = "Der Test")
     public void setTest(String test)
     {
       this.test = test;
@@ -136,7 +141,7 @@ public class MacroInformationTest
      *
      * @param test2
      */
-    @MacroInfoParameter(value = "Der zweite Test",
+    @MacroInfoParameter(displayName = "Der zweite Test",
                         description = "Nicht so gut wie der erste")
     public void setTest2(String test2)
     {
