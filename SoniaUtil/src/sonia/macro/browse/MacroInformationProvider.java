@@ -21,11 +21,11 @@ import java.util.Locale;
  *
  * @author sdorra
  */
-public abstract class MetaInformationProvider
+public abstract class MacroInformationProvider
 {
 
   /** Field description */
-  private static MetaInformationProvider instance;
+  private static MacroInformationProvider instance;
 
   //~--- constructors ---------------------------------------------------------
 
@@ -33,7 +33,7 @@ public abstract class MetaInformationProvider
    * Constructs ...
    *
    */
-  protected MetaInformationProvider() {}
+  protected MacroInformationProvider() {}
 
   //~--- get methods ----------------------------------------------------------
 
@@ -43,12 +43,12 @@ public abstract class MetaInformationProvider
    *
    * @return
    */
-  public static MetaInformationProvider getInstance()
+  public static MacroInformationProvider getInstance()
   {
     if (instance == null)
     {
-      instance = ServiceLocator.locateService(MetaInformationProvider.class,
-              new DefaultMetaInformationProvider());
+      instance = ServiceLocator.locateService(MacroInformationProvider.class,
+              new DefaultMacroInformationProvider());
     }
 
     return instance;
@@ -63,6 +63,6 @@ public abstract class MetaInformationProvider
    *
    * @return
    */
-  public abstract MetaInformation getInformation(
+  public abstract MacroInformation getInformation(
           Class<? extends Macro> macroClass, Locale locale);
 }

@@ -11,6 +11,8 @@ package sonia.macro;
 
 import sonia.injection.InjectionProvider;
 
+import sonia.macro.browse.MacroInformationProvider;
+
 import sonia.util.ServiceLocator;
 
 //~--- JDK imports ------------------------------------------------------------
@@ -19,6 +21,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
@@ -178,6 +181,17 @@ public abstract class MacroParser
    *
    * @return
    */
+  public MacroInformationProvider getInformationProvider()
+  {
+    return MacroInformationProvider.getInstance();
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
   public InjectionProvider getInjectionProvider()
   {
     return injectionProvider;
@@ -194,6 +208,17 @@ public abstract class MacroParser
   public Class<? extends Macro> getMacro(String name)
   {
     return macros.get(name);
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  public Iterator<Class<? extends Macro>> getMacros()
+  {
+    return macros.values().iterator();
   }
 
   //~--- set methods ----------------------------------------------------------
