@@ -73,6 +73,26 @@ public class InitParamConfiguration extends StringBasedConfiguration
    * Method description
    *
    *
+   * @return
+   */
+  public int getSize()
+  {
+    int result = 0;
+    Enumeration<?> enm = context.getInitParameterNames();
+
+    while (enm.hasMoreElements())
+    {
+      enm.nextElement();
+      result++;
+    }
+
+    return result;
+  }
+
+  /**
+   * Method description
+   *
+   *
    * @param key
    *
    * @return
