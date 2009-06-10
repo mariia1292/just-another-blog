@@ -3,32 +3,52 @@
  * and open the template in the editor.
  */
 
+
+
 package sonia.macro.browse;
 
-import java.lang.reflect.Field;
+//~--- non-JDK imports --------------------------------------------------------
+
+import sonia.macro.Macro;
+
+import sonia.util.Util;
+
+//~--- JDK imports ------------------------------------------------------------
+
+import java.lang.reflect.Method;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
-import sonia.macro.Macro;
-import sonia.util.Util;
 
 /**
  *
  * @author sdorra
  */
-public class DefaultMetaInformationProvider extends MetaInformationProvider {
+public class DefaultMetaInformationProvider extends MetaInformationProvider
+{
 
-  protected DefaultMetaInformationProvider()
-  {
-  }
+  /**
+   * Constructs ...
+   *
+   */
+  protected DefaultMetaInformationProvider() {}
 
+  //~--- get methods ----------------------------------------------------------
 
-
-
-
+  /**
+   * Method description
+   *
+   *
+   * @param macroClass
+   * @param locale
+   *
+   * @return
+   */
   @Override
-  public MetaInformation getInformation(Class<? extends Macro> macroClass, Locale locale)
+  public MetaInformation getInformation(Class<? extends Macro> macroClass,
+          Locale locale)
   {
     MetaInformation information = null;
     MacroInfo macro = macroClass.getAnnotation(MacroInfo.class);
@@ -51,7 +71,7 @@ public class DefaultMetaInformationProvider extends MetaInformationProvider {
     return information;
   }
 
-   /**
+  /**
    * Method description
    *
    *
@@ -74,6 +94,28 @@ public class DefaultMetaInformationProvider extends MetaInformationProvider {
    * Method description
    *
    *
+   * @param methodName
+   *
+   * @return
+   */
+  private String getParamName(String methodName)
+  {
+    String name = null;
+
+    if ((methodName.length() > 3) && methodName.startsWith("set"))
+    {
+      char c = methodName.charAt(3);
+
+      name = Character.toLowerCase(c) + methodName.substring(4);
+    }
+
+    return name;
+  }
+
+  /**
+   * Method description
+   *
+   *
    * @param macroClass
    * @param bundle
    *
@@ -84,15 +126,15 @@ public class DefaultMetaInformationProvider extends MetaInformationProvider {
   {
     List<MetaInformationParameter> parameters =
       new ArrayList<MetaInformationParameter>();
-    Field[] fields = macroClass.getDeclaredFields();
+    Method[] methods = macroClass.getDeclaredMethods();
 
-    for (Field field : fields)
+    for (Method method : methods)
     {
-      MacroInfoParameter param = field.getAnnotation(MacroInfoParameter.class);
+      MacroInfoParameter param = method.getAnnotation(MacroInfoParameter.class);
 
       if (param != null)
       {
-        String name = field.getName();
+        String name = getParamName(method.getName());
         String label = getString(bundle, param.value());
         String description = getString(bundle, param.description());
 
@@ -130,5 +172,4 @@ public class DefaultMetaInformationProvider extends MetaInformationProvider {
 
     return result;
   }
-
 }

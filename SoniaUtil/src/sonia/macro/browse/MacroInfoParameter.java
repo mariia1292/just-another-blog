@@ -20,7 +20,7 @@ import java.lang.annotation.Target;
  * @author sdorra
  */
 @Documented
-@Target(ElementType.FIELD)
+@Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface MacroInfoParameter
 {
