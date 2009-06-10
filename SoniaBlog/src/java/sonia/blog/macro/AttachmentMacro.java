@@ -18,6 +18,8 @@ import sonia.blog.entity.ContentObject;
 import sonia.blog.util.BlogUtil;
 
 import sonia.macro.Macro;
+import sonia.macro.browse.MacroInfo;
+import sonia.macro.browse.MacroInfoParameter;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -30,6 +32,12 @@ import java.util.Map;
  *
  * @author sdorra
  */
+@MacroInfo(
+  name = "attachments",
+  displayName = "macro.attachments.displayName",
+  description = "macro.attachments.description",
+  resourceBundle = "sonia.blog.resources.label"
+)
 public class AttachmentMacro implements Macro
 {
 
@@ -119,6 +127,8 @@ public class AttachmentMacro implements Macro
    *
    * @param style
    */
+  @MacroInfoParameter(displayName = "macro.attachments.style.displayName",
+                      description = "macro.attachments.style.description")
   public void setStyle(String style)
   {
     this.style = style;
@@ -130,6 +140,8 @@ public class AttachmentMacro implements Macro
    *
    * @param styleClass
    */
+  @MacroInfoParameter(displayName = "macro.attachments.styleClass.displayName",
+                      description = "macro.attachments.styleClass.description")
   public void setStyleClass(String styleClass)
   {
     this.styleClass = styleClass;

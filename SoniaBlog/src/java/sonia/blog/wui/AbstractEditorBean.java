@@ -19,6 +19,11 @@ import sonia.blog.entity.Attachment;
 import sonia.blog.entity.Blog;
 import sonia.blog.util.AttachmentWrapper;
 
+import sonia.macro.Macro;
+import sonia.macro.MacroParser;
+import sonia.macro.browse.MacroInformation;
+import sonia.macro.browse.MacroInformationProvider;
+
 import sonia.util.Util;
 
 //~--- JDK imports ------------------------------------------------------------
@@ -34,7 +39,9 @@ import java.net.URLConnection;
 import java.net.URLDecoder;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.zip.ZipEntry;
@@ -399,6 +406,44 @@ public abstract class AbstractEditorBean extends AbstractBean
   /**
    * Method description
    *
+   *
+   * @return
+   */
+  public DataModel getMacroInformations()
+  {
+    Locale locale = getLocale();
+
+    if (macroInformations == null)
+    {
+      List<MacroInformation> informations = new ArrayList<MacroInformation>();
+      MacroParser parser = BlogContext.getInstance().getMacroParser();
+      MacroInformationProvider provider = parser.getInformationProvider();
+
+      if (provider != null)
+      {
+        Iterator<Class<? extends Macro>> macroIterator = parser.getMacros();
+
+        while (macroIterator.hasNext())
+        {
+          Class<? extends Macro> macro = macroIterator.next();
+          MacroInformation info = provider.getInformation(macro, locale);
+
+          if (info != null)
+          {
+            informations.add(info);
+          }
+        }
+
+        macroInformations = new ListDataModel(informations);
+      }
+    }
+
+    return macroInformations;
+  }
+
+  /**
+   * Method description
+   *
    * @return
    */
   public DataModel getThumbnails()
@@ -649,6 +694,9 @@ public abstract class AbstractEditorBean extends AbstractBean
 
   /** Field description */
   private String imageSize = "";
+
+  /** Field description */
+  private DataModel macroInformations;
 
   /** Field description */
   private File resourceDirectory;
