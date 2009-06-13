@@ -29,4 +29,6 @@ public @interface MacroInfo
   String description()    default "";
   String icon()           default "";
   String resourceBundle() default "";
+  Class<? extends MacroWidget> bodyWidget() default MacroWidget.class;
+  String widgetParam() default "";
 }

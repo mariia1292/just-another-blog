@@ -2,11 +2,11 @@ tinyMCEPopup.requireLangPack();
 
 var MacroDialog = {
   init : function() {
-    alert( "init" );
   },
 
-  message : function() {
-    alert( "message" );
+  insert : function(content) {
+    tinyMCEPopup.editor.execCommand('mceInsertContent', false, content);
+    tinyMCEPopup.close();
   }
 
 };
