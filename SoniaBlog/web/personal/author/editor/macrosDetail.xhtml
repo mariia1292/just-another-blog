@@ -1,0 +1,50 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:blog="http://jab.nitilon.org/blog/"
+      xmlns:c="http://java.sun.com/jstl/core"
+      xmlns:u1="http://jab.nitilon.org/blog/">
+  <body>
+
+    <ui:composition template="./template.xhtml">
+
+      <ui:define name="content">
+
+        <c:set value="#{EditorBean.macroInformation}" var="Macro" />
+
+        <h3><h:outputText value="#{Macro.displayName}" /></h3>
+
+        <p><h:outputText value="#{Macro.description}" /></p>
+
+        <form method="post" action="macrosAction.jab">
+
+          <input type="hidden" name="macro" value="#{Macro.name}" />
+
+          <h:dataTable value="#{Macro.parameter}" var="InfoParam">
+
+            <h:column>
+              <h:outputText value="#{InfoParam.label}" />
+            </h:column>
+
+            <h:column>
+              <blog:widget widget="#{InfoParam.widget}" param="#{InfoParam.widgetParam}" name="#{InfoParam.name}" />
+            </h:column>
+
+          </h:dataTable>
+
+          <input type="submit" value="#{label.send}" />
+
+        </form>
+
+      </ui:define>
+
+      <ui:define name="footer"></ui:define>
+
+    </ui:composition>
+
+  </body>
+</html>
+

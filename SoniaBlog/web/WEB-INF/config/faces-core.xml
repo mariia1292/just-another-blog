@@ -94,6 +94,15 @@
   </component>
 
   <component>
+    <display-name>widget</display-name>
+    <component-type>sonia.blog.widget</component-type>
+    <component-class>sonia.blog.api.jsf.widget.WidgetComponent</component-class>
+    <component-extension>
+      <renderer-type>sonia.blog.widget.renderer</renderer-type>
+    </component-extension>
+  </component>
+
+  <component>
     <display-name>link</display-name>
     <component-type>sonia.blog.link</component-type>
     <component-class>sonia.blog.api.jsf.link.LinkComponent</component-class>
@@ -179,6 +188,11 @@
       <component-family>sonia.blog.header</component-family>
       <renderer-type>sonia.blog.header.renderer</renderer-type>
       <renderer-class>sonia.blog.api.jsf.header.HeaderRenderer</renderer-class>
+    </renderer>
+    <renderer>
+      <component-family>sonia.blog.widget</component-family>
+      <renderer-type>sonia.blog.widget.renderer</renderer-type>
+      <renderer-class>sonia.blog.api.jsf.widget.WidgetRenderer</renderer-class>
     </renderer>
     <renderer>
       <component-family>sonia.blog.calendar</component-family>

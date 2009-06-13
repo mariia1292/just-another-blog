@@ -12,6 +12,7 @@ package sonia.blog.wui;
 import org.apache.myfaces.custom.fileupload.UploadedFile;
 
 import sonia.blog.api.app.BlogContext;
+import sonia.blog.api.app.BlogRequest;
 import sonia.blog.api.app.Constants;
 import sonia.blog.api.app.ResourceManager;
 import sonia.blog.api.util.*;
@@ -42,6 +43,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.zip.ZipEntry;
@@ -409,6 +411,33 @@ public abstract class AbstractEditorBean extends AbstractBean
    *
    * @return
    */
+  public MacroInformation getMacroInformation()
+  {
+    MacroInformation info = null;
+    BlogRequest request = getRequest();
+    String name = request.getParameter("macro");
+
+    if (Util.hasContent(name))
+    {
+      MacroParser parser = BlogContext.getInstance().getMacroParser();
+      Class<? extends Macro> macro = parser.getMacro(name);
+
+      if (macro != null)
+      {
+        info = parser.getInformationProvider().getInformation(macro,
+                getLocale());
+      }
+    }
+
+    return info;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
   public DataModel getMacroInformations()
   {
     Locale locale = getLocale();
@@ -697,6 +726,9 @@ public abstract class AbstractEditorBean extends AbstractBean
 
   /** Field description */
   private DataModel macroInformations;
+
+  /** Field description */
+  private Map macroMap;
 
   /** Field description */
   private File resourceDirectory;

@@ -26,4 +26,6 @@ public @interface MacroInfoParameter
 {
   String displayName();
   String description() default "";
+  Class<? extends MacroWidget> widget() default MacroWidget.class;
+  String widgetParam() default "";
 }

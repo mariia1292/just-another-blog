@@ -87,8 +87,23 @@ public class DefaultMacroInformationProvider extends MacroInformationProvider
     String displayName = getString(bundle, macro.displayName());
     String description = getString(bundle, macro.description());
     String icon = getString(bundle, macro.icon());
+    MacroInformation info = new MacroInformation(name, displayName,
+                              description, icon);
+    Class<? extends MacroWidget> widget = macro.bodyWidget();
 
-    return new MacroInformation(name, displayName, description, icon);
+    if (widget != null)
+    {
+      info.setBodyWidget(widget);
+
+      String param = macro.widgetParam();
+
+      if (Util.hasContent(param))
+      {
+        info.setWidgetParam(param);
+      }
+    }
+
+    return info;
   }
 
   /**
@@ -138,8 +153,23 @@ public class DefaultMacroInformationProvider extends MacroInformationProvider
         String name = getParamName(method.getName());
         String label = getString(bundle, param.displayName());
         String description = getString(bundle, param.description());
+        MacroInformationParameter infoParam =
+          new MacroInformationParameter(name, label, description);
+        Class<? extends MacroWidget> widget = param.widget();
 
-        parameters.add(new MacroInformationParameter(name, label, description));
+        if (widget != null)
+        {
+          infoParam.setWidget(widget);
+
+          String widgetParam = param.widgetParam();
+
+          if (Util.hasContent(widgetParam))
+          {
+            infoParam.setWidgetParam(widgetParam);
+          }
+        }
+
+        parameters.add(infoParam);
       }
     }
 

@@ -124,7 +124,32 @@ public class MacroInformationParameter
     this.name = name;
   }
 
+  public Class<? extends MacroWidget> getWidget()
+  {
+    return widget;
+  }
+
+  public void setWidget(Class<? extends MacroWidget> widget)
+  {
+    this.widget = widget;
+  }
+
+  public String getWidgetParam()
+  {
+    return widgetParam;
+  }
+
+  public void setWidgetParam(String widgetParam)
+  {
+    this.widgetParam = widgetParam;
+  }
+
   //~--- fields ---------------------------------------------------------------
+
+
+
+  private Class<? extends MacroWidget> widget;
+  private String widgetParam;
 
   /** Field description */
   private String description;

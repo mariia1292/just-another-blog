@@ -12,6 +12,7 @@ package sonia.blog.macro;
 import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.app.BlogRequest;
 import sonia.blog.api.link.LinkBuilder;
+import sonia.blog.api.macro.browse.StringInputWidget;
 import sonia.blog.entity.Attachment;
 import sonia.blog.entity.Blog;
 import sonia.blog.entity.ContentObject;
@@ -127,8 +128,11 @@ public class AttachmentMacro implements Macro
    *
    * @param style
    */
-  @MacroInfoParameter(displayName = "macro.attachments.style.displayName",
-                      description = "macro.attachments.style.description")
+  @MacroInfoParameter(
+    displayName = "macro.attachments.style.displayName",
+    description = "macro.attachments.style.description",
+    widget = StringInputWidget.class
+  )
   public void setStyle(String style)
   {
     this.style = style;
@@ -140,8 +144,11 @@ public class AttachmentMacro implements Macro
    *
    * @param styleClass
    */
-  @MacroInfoParameter(displayName = "macro.attachments.styleClass.displayName",
-                      description = "macro.attachments.styleClass.description")
+  @MacroInfoParameter(
+    displayName = "macro.attachments.styleClass.displayName",
+    description = "macro.attachments.styleClass.description",
+    widget = StringInputWidget.class
+  )
   public void setStyleClass(String styleClass)
   {
     this.styleClass = styleClass;

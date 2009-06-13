@@ -3,7 +3,9 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:f="http://java.sun.com/jsf/core">
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:blog="http://jab.nitilon.org/blog/"
+      xmlns:u1="http://jab.nitilon.org/blog/">
   <body>
 
     <ui:composition template="./template.xhtml">
@@ -20,7 +22,10 @@
           <h:dataTable value="#{EditorBean.macroInformations}" var="Macro">
 
             <h:column>
-              <h:graphicImage url="/resource/icon/document.gif" width="32" height="32" />
+              <h:outputLink value="#{facesContext.externalContext.requestContextPath}/personal/author/editor/macrosDetail.jab">
+                <f:param name="macro" value="#{Macro.name}" />
+                <h:graphicImage url="/resource/icon/document.gif" width="32" height="32" />
+              </h:outputLink>
             </h:column>
 
             <h:column>
