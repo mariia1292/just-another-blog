@@ -15,9 +15,14 @@ import sonia.blog.api.macro.LinkResource;
 import sonia.blog.api.macro.ScriptResource;
 import sonia.blog.api.macro.WebMacro;
 import sonia.blog.api.macro.WebResource;
+import sonia.blog.api.macro.browse.SelectWidget;
+import sonia.blog.api.macro.browse.StringTextAreaWidget;
 import sonia.blog.entity.ContentObject;
 
 import sonia.config.Config;
+
+import sonia.macro.browse.MacroInfo;
+import sonia.macro.browse.MacroInfoParameter;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -28,6 +33,13 @@ import java.util.List;
  *
  * @author sdorra
  */
+@MacroInfo(
+  name = "code",
+  displayName = "macro.code.displayName",
+  description = "macro.code.description",
+  resourceBundle = "sonia.blog.office.messages",
+  bodyWidget = StringTextAreaWidget.class
+)
 public class CodeMacro extends AbstractBlogMacro implements WebMacro
 {
 
@@ -152,6 +164,12 @@ public class CodeMacro extends AbstractBlogMacro implements WebMacro
    *
    * @param lang
    */
+  @MacroInfoParameter(
+    displayName = "macro.code.lang.displayName",
+    description = "macro.code.lang.description",
+    widget = SelectWidget.class,
+    widgetParam = "options=bash|c++|c#|css|delphi|diff|groovy|java|js|perl|python|ruby|scala|sql|vb|xml"
+  )
   public void setLang(String lang)
   {
     this.lang = lang;
@@ -166,6 +184,23 @@ public class CodeMacro extends AbstractBlogMacro implements WebMacro
   public void setTabSize(String tabSize)
   {
     this.tabSize = tabSize;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param theme
+   */
+  @MacroInfoParameter(
+    displayName = "macro.code.theme.displayName",
+    description = "macro.code.theme.description",
+    widget = SelectWidget.class,
+    widgetParam = "options=default|django|emacs|fadetogray|modinight|rdark"
+  )
+  public void setTheme(String theme)
+  {
+    this.theme = theme;
   }
 
   /**

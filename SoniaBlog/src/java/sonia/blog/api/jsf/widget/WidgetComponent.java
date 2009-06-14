@@ -114,9 +114,9 @@ public class WidgetComponent extends BaseComponent
    */
   public String getName()
   {
-    if (param != null)
+    if (name != null)
     {
-      return param;
+      return name;
     }
 
     ValueExpression ve = getValueExpression("name");
