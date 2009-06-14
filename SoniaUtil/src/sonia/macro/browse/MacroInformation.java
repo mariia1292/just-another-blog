@@ -108,6 +108,17 @@ public class MacroInformation
    *
    * @return
    */
+  public Class<? extends MacroWidget> getBodyWidget()
+  {
+    return bodyWidget;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
   public String getDescription()
   {
     return description;
@@ -159,7 +170,29 @@ public class MacroInformation
     return parameter;
   }
 
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  public String getWidgetParam()
+  {
+    return widgetParam;
+  }
+
   //~--- set methods ----------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   * @param bodyWidget
+   */
+  public void setBodyWidget(Class<? extends MacroWidget> bodyWidget)
+  {
+    this.bodyWidget = bodyWidget;
+  }
 
   /**
    * Method description
@@ -216,33 +249,21 @@ public class MacroInformation
     this.parameter = parameter;
   }
 
-  public Class<? extends MacroWidget> getBodyWidget()
-  {
-    return bodyWidget;
-  }
-
-  public void setBodyWidget(Class<? extends MacroWidget> bodyWidget)
-  {
-    this.bodyWidget = bodyWidget;
-  }
-
-  public String getWidgetParam()
-  {
-    return widgetParam;
-  }
-
+  /**
+   * Method description
+   *
+   *
+   * @param widgetParam
+   */
   public void setWidgetParam(String widgetParam)
   {
     this.widgetParam = widgetParam;
   }
 
-
-
   //~--- fields ---------------------------------------------------------------
 
+  /** Field description */
   private Class<? extends MacroWidget> bodyWidget;
-
-  private String widgetParam;
 
   /** Field description */
   private String description;
@@ -260,4 +281,7 @@ public class MacroInformation
 
   /** Field description */
   private List<MacroInformationParameter> parameter;
+
+  /** Field description */
+  private String widgetParam;
 }

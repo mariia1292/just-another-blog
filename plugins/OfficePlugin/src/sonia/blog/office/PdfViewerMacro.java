@@ -326,7 +326,6 @@ public class PdfViewerMacro extends AbstractBlogMacro implements WebMacro
         return name.endsWith("." + extension);
       }
     });
-
     long time = System.nanoTime();
     String name = "pdfgallery_" + pdfDir.getName();
 
@@ -371,7 +370,7 @@ public class PdfViewerMacro extends AbstractBlogMacro implements WebMacro
     result.append("<script type=\"text/javascript\">\n");
     result.append("$(document).ready(function() {\n");
     result.append("$(\"span#").append(name).append(" a\").prettyPhoto({\n");
-    result.append( "theme: '" ).append(theme).append("'\n");
+    result.append("theme: '").append(theme).append("'\n");
     result.append("});\n");
     result.append("});\n");
     result.append("</script>\n");

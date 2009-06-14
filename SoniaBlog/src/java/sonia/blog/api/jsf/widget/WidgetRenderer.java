@@ -74,7 +74,6 @@ public class WidgetRenderer extends BaseRenderer
 
       if (widgetComponent.getResult())
       {
-        System.out.println( "result ...." );
         String result = widget.getResult(request, object, name, param);
 
         if (Util.hasContent(result))
@@ -84,7 +83,6 @@ public class WidgetRenderer extends BaseRenderer
       }
       else
       {
-        System.out.println( "form ...." );
         String formEl = widget.getFormElement(request, object, name, param);
 
         if (Util.hasContent(formEl))
@@ -123,13 +121,9 @@ public class WidgetRenderer extends BaseRenderer
     BlogMacroWidget widget = null;
     Class<? extends MacroWidget> macroClass = component.getWidget();
 
-    System.out.println(macroClass);
-
     if ((macroClass != null)
         && BlogMacroWidget.class.isAssignableFrom(macroClass))
     {
-      System.out.println("isBlogMacroClass");
-
       try
       {
         widget = (BlogMacroWidget) macroClass.newInstance();
