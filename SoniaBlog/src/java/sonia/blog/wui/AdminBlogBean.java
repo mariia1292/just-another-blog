@@ -117,10 +117,8 @@ public class AdminBlogBean extends AbstractBean
   public String clearImageCache()
   {
     String result = SUCCESS;
-    File attachmentDir =
-      BlogContext.getInstance().getResourceManager().getDirectory(
-          Constants.RESOURCE_ATTACHMENT, blog);
-    File imageDir = new File(attachmentDir, Constants.RESOURCE_IMAGE);
+    File imageDir = BlogContext.getInstance().getResourceManager().getDirectory(
+                        Constants.RESOURCE_IMAGE, blog);
 
     try
     {
