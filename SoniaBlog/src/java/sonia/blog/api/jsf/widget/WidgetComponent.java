@@ -55,6 +55,7 @@ public class WidgetComponent extends BaseComponent
    * @param obj
    */
   @Override
+  @SuppressWarnings("unchecked")
   public void restoreState(FacesContext context, Object obj)
   {
     state = (Object[]) obj;
@@ -172,6 +173,32 @@ public class WidgetComponent extends BaseComponent
    *
    * @return
    */
+  public Boolean getResult()
+  {
+    if (result != null)
+    {
+      System.out.println("result: " + result);
+
+      return result;
+    }
+
+    ValueExpression ve = getValueExpression("result");
+    Boolean re = (ve != null)
+                 ? (Boolean) ve.getValue(getFacesContext().getELContext())
+                 : Boolean.FALSE;
+
+    System.out.println("re: " + re);
+
+    return re;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  @SuppressWarnings("unchecked")
   public Class<? extends MacroWidget> getWidget()
   {
     if (widget != null)
@@ -185,29 +212,6 @@ public class WidgetComponent extends BaseComponent
            ? (Class<? extends MacroWidget>) ve.getValue(
                getFacesContext().getELContext())
            : null;
-  }
-
-  /**
-   * Method description
-   *
-   *
-   * @return
-   */
-  public Boolean getResult()
-  {
-    if (result != null)
-    {
-      System.out.println( "result: " + result );
-      return result;
-    }
-
-    ValueExpression ve = getValueExpression("result");
-
-    Boolean re = (ve != null)
-           ? (Boolean) ve.getValue(getFacesContext().getELContext())
-           : Boolean.FALSE;
-    System.out.println( "re: " + re );
-    return re;
   }
 
   //~--- set methods ----------------------------------------------------------

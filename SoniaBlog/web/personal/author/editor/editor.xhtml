@@ -25,14 +25,18 @@
             mode : "textareas",
             skin : "jab",
             language: "${facesContext.viewRoot.locale}",
-            plugins : "fullscreen,safari,emotions,imgbrowser,attachment,links,table,macro",
+            plugins : "fullscreen,safari,emotions,imgbrowser,attachment,links,table,macro,imgresize",
             theme_advanced_buttons3_add : "|,table,emotions,fullscreen,|,imgbrowser,attachment,links,macro",
             theme_advanced_toolbar_location : "top",
             theme_advanced_toolbar_align : "left",
             <h:outputText value="content_css: '#{EntryBean.contentCSS}?' + new Date().getTime(),"
                           rendered="#{BlogBean.template.contentCSS != null}" />
             convert_urls : false,
+
             <h:outputText value="document_base_url : '#{EntryBean.baseUrl}'," />
+              
+            <h:outputText value="imageHandlerPattern : '#{EntryBean.imageHandlerUri}'," />
+              
             fullscreen_new_window : true,
             fullscreen_settings : {
               theme_advanced_path_location : "top"

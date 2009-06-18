@@ -22,6 +22,8 @@ import sonia.blog.jmx.SessionInformation;
 
 import sonia.config.WebVariableResolver;
 
+import sonia.image.ImageHandler;
+
 import sonia.injection.DefaultInjectionProvider;
 import sonia.injection.InjectionProvider;
 
@@ -374,6 +376,24 @@ public final class BlogContext
     }
 
     return blog;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  public ImageHandler getImageHandler()
+  {
+    if (imageHandler == null)
+    {
+
+      // TODO: get with service
+      imageHandler = ImageHandler.getInstance();
+    }
+
+    return imageHandler;
   }
 
   /**
@@ -751,6 +771,9 @@ public final class BlogContext
 
   /** Field description */
   private BlogConfiguration configuration;
+
+  /** Field description */
+  private ImageHandler imageHandler;
 
   /** Field description */
   private InjectionProvider injectionProvider;

@@ -133,10 +133,10 @@ public class GalleryMacro extends AbstractBlogMacro implements WebMacro
             result.append(image.getName()).append(
                 "\" rel=\"prettyPhoto[group_");
             result.append(time).append("]\" href=\"");
-            result.append(linkBuilder.buildLink(request, image));
+            result.append(linkBase).append("image/").append(image.getId());
             result.append("\">\n").append("<img border=\"0\" alt=\"\" src=\"");
-            result.append(linkBuilder.buildLink(request, image));
-            result.append("?thumb\" />\n").append("</a>");
+            result.append(linkBase).append("image/").append(image.getId());
+            result.append("?type=thumb\" />\n").append("</a>");
           }
 
           result.append("</div>\n");

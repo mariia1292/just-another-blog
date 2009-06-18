@@ -49,8 +49,8 @@
 
           <ui:repeat value="#{EditorBean.thumbnails}" var="Thumbnail">
 
-            <a style="margin: 3px;" href="#" onclick="ImageDialog.insert('attachment/#{Thumbnail.id}')">
-              <h:graphicImage value="/attachment/#{Thumbnail.id}?thumb" />
+            <a style="margin: 3px;" href="#" onclick="ImageDialog.insert('image/#{Thumbnail.id}')">
+              <h:graphicImage value="/image/#{Thumbnail.id}?type=thumb" />
             </a>
           </ui:repeat>
 
