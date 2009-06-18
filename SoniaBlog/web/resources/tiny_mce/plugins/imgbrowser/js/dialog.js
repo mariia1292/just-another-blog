@@ -12,7 +12,7 @@ var ImageDialog = {
     {
       if ( r[i].checked && r[i].value != "" )
       {
-        url += "?" + r[i].value;
+        url += "?type=" + r[i].value;
       }
     }
 

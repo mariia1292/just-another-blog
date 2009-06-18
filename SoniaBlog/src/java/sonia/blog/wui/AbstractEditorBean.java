@@ -15,7 +15,9 @@ import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.app.BlogRequest;
 import sonia.blog.api.app.Constants;
 import sonia.blog.api.app.ResourceManager;
+import sonia.blog.api.link.LinkBuilder;
 import sonia.blog.api.util.*;
+import sonia.blog.editor.LinkHandler;
 import sonia.blog.entity.Attachment;
 import sonia.blog.entity.Blog;
 import sonia.blog.util.AttachmentWrapper;
@@ -392,6 +394,22 @@ public abstract class AbstractEditorBean extends AbstractBean
     }
 
     return attachments;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  public String getImageHandlerUri()
+  {
+    BlogRequest request = getRequest();
+    LinkBuilder linkBuilder = BlogContext.getInstance().getLinkBuilder();
+
+    String result = linkBuilder.buildLink(request.getCurrentBlog(), "/image/");
+    System.out.println( result );
+    return result;
   }
 
   /**
