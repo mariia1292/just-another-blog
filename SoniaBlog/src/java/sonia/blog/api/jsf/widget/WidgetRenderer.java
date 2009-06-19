@@ -9,6 +9,8 @@ package sonia.blog.api.jsf.widget;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import org.apache.commons.lang.StringEscapeUtils;
+
 import sonia.blog.api.app.BlogRequest;
 import sonia.blog.api.macro.browse.BlogMacroWidget;
 import sonia.blog.entity.ContentObject;
@@ -78,6 +80,7 @@ public class WidgetRenderer extends BaseRenderer
 
         if (Util.hasContent(result))
         {
+          result = escape(result);
           context.getResponseWriter().write(result);
         }
       }
@@ -91,6 +94,20 @@ public class WidgetRenderer extends BaseRenderer
         }
       }
     }
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param result
+   *
+   * @return
+   */
+  private String escape(String result)
+  {
+    return StringEscapeUtils.escapeHtml(result).replace(" ",
+            "&nbsp;").replace("\n", "<br />").replace("\r", "");
   }
 
   //~--- get methods ----------------------------------------------------------

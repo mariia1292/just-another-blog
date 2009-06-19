@@ -21,9 +21,7 @@
 
         <script type="text/javascript">
           var name = '#{Macro.name}';
-          alert(name);
           var body = '<blog:widget widget="#{Macro.bodyWidget}" param="#{Macro.widgetParam}" name="__body" result="true" />';
-          alert(body);
           var param = new Array();
           var paramName;
           var paramValue;
@@ -45,7 +43,7 @@
           out += "}" + body + "{/" + name +'}';
           MacroDialog.insert( out );
         </script>
-        
+
       </ui:define>
 
       <ui:define name="footer"></ui:define>
