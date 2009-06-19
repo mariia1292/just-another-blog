@@ -14,10 +14,12 @@ import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-
 
 import javax.imageio.ImageIO;
 
@@ -25,7 +27,7 @@ import javax.imageio.ImageIO;
  *
  * @author sdorra
  */
-public class DefaultImageHandler extends ImageHandler
+public class DefaultImageHandler implements ImageStreamHandler, ImageFileHandler
 {
 
   /** Field description */
@@ -49,12 +51,54 @@ public class DefaultImageHandler extends ImageHandler
    *
    * @throws IOException
    */
-  @Override
   public void cropImage(InputStream in, OutputStream out, String format,
                         int x1, int y1, int x2, int y2, int width, int height)
           throws IOException
   {
     throw new UnsupportedOperationException("Not supported yet.");
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param in
+   * @param out
+   * @param format
+   * @param x1
+   * @param y1
+   * @param x2
+   * @param y2
+   * @param width
+   * @param height
+   *
+   * @throws IOException
+   */
+  public void cropImage(File in, File out, String format, int x1, int y1,
+                        int x2, int y2, int width, int height)
+          throws IOException
+  {
+    FileInputStream fis = null;
+    FileOutputStream fos = null;
+
+    try
+    {
+      fis = new FileInputStream(in);
+      fos = new FileOutputStream(out);
+      cropImage(fis, fos, format, x1, y1, x2, y2, width, height);
+    }
+    finally
+    {
+      if (fis != null)
+      {
+        fis.close();
+      }
+
+      if (fos != null)
+      {
+        fos.close();
+      }
+    }
   }
 
   /**
@@ -70,7 +114,6 @@ public class DefaultImageHandler extends ImageHandler
    *
    * @throws IOException
    */
-  @Override
   public void scaleImage(InputStream in, OutputStream out, String format,
                          Color background, int maxWidth, int maxHeight)
           throws IOException
@@ -90,7 +133,6 @@ public class DefaultImageHandler extends ImageHandler
    *
    * @throws IOException
    */
-  @Override
   public void scaleImage(InputStream in, OutputStream out, String format,
                          int maxWidth, int maxHeight)
           throws IOException
@@ -132,12 +174,90 @@ public class DefaultImageHandler extends ImageHandler
    * @param in
    * @param out
    * @param format
+   * @param background
+   * @param maxWidth
+   * @param maxHeight
+   *
+   * @throws IOException
+   */
+  public void scaleImage(File in, File out, String format, Color background,
+                         int maxWidth, int maxHeight)
+          throws IOException
+  {
+    FileInputStream fis = null;
+    FileOutputStream fos = null;
+
+    try
+    {
+      fis = new FileInputStream(in);
+      fos = new FileOutputStream(out);
+      scaleImage(fis, fos, format, background, maxWidth, maxHeight);
+    }
+    finally
+    {
+      if (fis != null)
+      {
+        fis.close();
+      }
+
+      if (fos != null)
+      {
+        fos.close();
+      }
+    }
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param in
+   * @param out
+   * @param format
+   * @param maxWidth
+   * @param maxHeight
+   *
+   * @throws IOException
+   */
+  public void scaleImage(File in, File out, String format, int maxWidth,
+                         int maxHeight)
+          throws IOException
+  {
+    FileInputStream fis = null;
+    FileOutputStream fos = null;
+
+    try
+    {
+      fis = new FileInputStream(in);
+      fos = new FileOutputStream(out);
+      scaleImage(fis, fos, format, maxWidth, maxHeight);
+    }
+    finally
+    {
+      if (fis != null)
+      {
+        fis.close();
+      }
+
+      if (fos != null)
+      {
+        fos.close();
+      }
+    }
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param in
+   * @param out
+   * @param format
    * @param width
    * @param height
    *
    * @throws IOException
    */
-  @Override
   public void scaleImageFix(InputStream in, OutputStream out, String format,
                             int width, int height)
           throws IOException
@@ -154,11 +274,49 @@ public class DefaultImageHandler extends ImageHandler
    * @param in
    * @param out
    * @param format
+   * @param width
+   * @param height
+   *
+   * @throws IOException
+   */
+  public void scaleImageFix(File in, File out, String format, int width,
+                            int height)
+          throws IOException
+  {
+    FileInputStream fis = null;
+    FileOutputStream fos = null;
+
+    try
+    {
+      fis = new FileInputStream(in);
+      fos = new FileOutputStream(out);
+      scaleImageFix(fis, fos, format, width, height);
+    }
+    finally
+    {
+      if (fis != null)
+      {
+        fis.close();
+      }
+
+      if (fos != null)
+      {
+        fos.close();
+      }
+    }
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param in
+   * @param out
+   * @param format
    * @param maxHeight
    *
    * @throws IOException
    */
-  @Override
   public void scaleImageMaxHeight(InputStream in, OutputStream out,
                                   String format, int maxHeight)
           throws IOException
@@ -178,11 +336,48 @@ public class DefaultImageHandler extends ImageHandler
    * @param in
    * @param out
    * @param format
+   * @param maxHeight
+   *
+   * @throws IOException
+   */
+  public void scaleImageMaxHeight(File in, File out, String format,
+                                  int maxHeight)
+          throws IOException
+  {
+    FileInputStream fis = null;
+    FileOutputStream fos = null;
+
+    try
+    {
+      fis = new FileInputStream(in);
+      fos = new FileOutputStream(out);
+      scaleImageMaxHeight(fis, fos, format, maxHeight);
+    }
+    finally
+    {
+      if (fis != null)
+      {
+        fis.close();
+      }
+
+      if (fos != null)
+      {
+        fos.close();
+      }
+    }
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param in
+   * @param out
+   * @param format
    * @param maxWidth
    *
    * @throws IOException
    */
-  @Override
   public void scaleImageMaxWidth(InputStream in, OutputStream out,
                                  String format, int maxWidth)
           throws IOException
@@ -193,6 +388,43 @@ public class DefaultImageHandler extends ImageHandler
     int height = (int) (maxWidth * ratio);
 
     scale(inputImage, out, format, maxWidth, height);
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param in
+   * @param out
+   * @param format
+   * @param maxWidth
+   *
+   * @throws IOException
+   */
+  public void scaleImageMaxWidth(File in, File out, String format, int maxWidth)
+          throws IOException
+  {
+    FileInputStream fis = null;
+    FileOutputStream fos = null;
+
+    try
+    {
+      fis = new FileInputStream(in);
+      fos = new FileOutputStream(out);
+      scaleImageMaxWidth(fis, fos, format, maxWidth);
+    }
+    finally
+    {
+      if (fis != null)
+      {
+        fis.close();
+      }
+
+      if (fos != null)
+      {
+        fos.close();
+      }
+    }
   }
 
   /**

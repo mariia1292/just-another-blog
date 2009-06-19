@@ -13,7 +13,7 @@ import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.app.BlogJob;
 import sonia.blog.entity.Blog;
 
-import sonia.image.ImageHandler;
+import sonia.image.ImageFileHandler;
 
 import sonia.jobqueue.JobException;
 
@@ -22,8 +22,6 @@ import sonia.util.Util;
 //~--- JDK imports ------------------------------------------------------------
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 
 import java.util.logging.Level;
@@ -98,59 +96,37 @@ public class ImageHandlerJob implements BlogJob
    */
   public void excecute() throws JobException
   {
-    FileInputStream fis = null;
-    FileOutputStream fos = null;
-
     try
     {
-      fis = new FileInputStream(in);
-      fos = new FileOutputStream(out);
-
-      ImageHandler imageHandler = BlogContext.getInstance().getImageHandler();
+      ImageFileHandler imageHandler =
+        BlogContext.getInstance().getImageHandler();
 
       if (Util.isBlank(type) || type.equalsIgnoreCase("relative"))
       {
-        printRelativeImage(imageHandler, fis, fos);
+        printRelativeImage(imageHandler);
       }
       else if (type.equalsIgnoreCase("thumb"))
       {
-        printThumbImage(imageHandler, fis, fos);
+        printThumbImage(imageHandler);
       }
       else if (type.equalsIgnoreCase("fix"))
       {
-        printFixImage(imageHandler, fis, fos);
+        printFixImage(imageHandler);
       }
     }
     catch (Exception ex)
     {
       logger.log(Level.SEVERE, null, ex);
-      if ( ! out.delete() )
+
+      if (!out.delete())
       {
         StringBuffer log = new StringBuffer();
-        log.append("could not delete broken image ").append( out.getPath() );
-        logger.severe( log.toString() );
+
+        log.append("could not delete broken image ").append(out.getPath());
+        logger.severe(log.toString());
       }
 
       throw new JobException(ex);
-    }
-    finally
-    {
-      try
-      {
-        if (fis != null)
-        {
-          fis.close();
-        }
-
-        if (fos != null)
-        {
-          fos.close();
-        }
-      }
-      catch (IOException ex)
-      {
-        logger.log(Level.SEVERE, null, ex);
-      }
     }
   }
 
@@ -197,21 +173,17 @@ public class ImageHandlerJob implements BlogJob
    *
    *
    * @param imageHandler
-   * @param fis
-   * @param fos
    *
    * @throws IOException
    */
-  private void printFixImage(ImageHandler imageHandler, FileInputStream fis,
-                             FileOutputStream fos)
-          throws IOException
+  private void printFixImage(ImageFileHandler imageHandler) throws IOException
   {
     if ((width < 0) || (height < 0))
     {
       throw new IllegalArgumentException("width or height are null");
     }
 
-    imageHandler.scaleImageFix(fis, fos, format, width, height);
+    imageHandler.scaleImageFix(in, out, format, width, height);
   }
 
   /**
@@ -219,13 +191,10 @@ public class ImageHandlerJob implements BlogJob
    *
    *
    * @param imageHandler
-   * @param fis
-   * @param fos
    *
    * @throws IOException
    */
-  private void printRelativeImage(ImageHandler imageHandler,
-                                  FileInputStream fis, FileOutputStream fos)
+  private void printRelativeImage(ImageFileHandler imageHandler)
           throws IOException
   {
     if (width < 0)
@@ -238,7 +207,7 @@ public class ImageHandlerJob implements BlogJob
       height = blog.getImageHeight();
     }
 
-    imageHandler.scaleImage(fis, fos, format, width, height);
+    imageHandler.scaleImage(in, out, format, width, height);
   }
 
   /**
@@ -246,14 +215,10 @@ public class ImageHandlerJob implements BlogJob
    *
    *
    * @param imageHandler
-   * @param fis
-   * @param fos
    *
    * @throws IOException
    */
-  private void printThumbImage(ImageHandler imageHandler, FileInputStream fis,
-                               FileOutputStream fos)
-          throws IOException
+  private void printThumbImage(ImageFileHandler imageHandler) throws IOException
   {
     if (width < 0)
     {
@@ -265,7 +230,7 @@ public class ImageHandlerJob implements BlogJob
       height = blog.getThumbnailHeight();
     }
 
-    imageHandler.scaleImage(fis, fos, format, width, height);
+    imageHandler.scaleImage(in, out, format, width, height);
   }
 
   //~--- fields ---------------------------------------------------------------
