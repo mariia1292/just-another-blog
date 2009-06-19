@@ -28,6 +28,8 @@ import sonia.macro.browse.MacroInfoParameter;
 
 import java.util.ArrayList;
 import java.util.List;
+import sonia.blog.api.macro.browse.CheckboxWidget;
+import sonia.blog.api.macro.browse.StringInputWidget;
 
 /**
  *
@@ -38,7 +40,8 @@ import java.util.List;
   displayName = "macro.code.displayName",
   description = "macro.code.description",
   resourceBundle = "sonia.blog.office.messages",
-  bodyWidget = StringTextAreaWidget.class
+  bodyWidget = StringTextAreaWidget.class,
+  widgetParam="cols=110;rows=25"
 )
 public class CodeMacro extends AbstractBlogMacro implements WebMacro
 {
@@ -181,6 +184,12 @@ public class CodeMacro extends AbstractBlogMacro implements WebMacro
    *
    * @param tabSize
    */
+  @MacroInfoParameter(
+    displayName = "macro.code.tabSize.displayName",
+    description = "macro.code.tabSize.description",
+    widget = StringInputWidget.class,
+    widgetParam = "regex=[0-9]+"
+  )
   public void setTabSize(String tabSize)
   {
     this.tabSize = tabSize;
@@ -190,25 +199,14 @@ public class CodeMacro extends AbstractBlogMacro implements WebMacro
    * Method description
    *
    *
-   * @param theme
-   */
-  @MacroInfoParameter(
-    displayName = "macro.code.theme.displayName",
-    description = "macro.code.theme.description",
-    widget = SelectWidget.class,
-    widgetParam = "options=default|django|emacs|fadetogray|modinight|rdark"
-  )
-  public void setTheme(String theme)
-  {
-    this.theme = theme;
-  }
-
-  /**
-   * Method description
-   *
-   *
    * @param toolbar
    */
+    @MacroInfoParameter(
+    displayName = "macro.code.toolbar.displayName",
+    description = "macro.code.toolbar.description",
+    widget = CheckboxWidget.class,
+    widgetParam = "checked=true"
+  )
   public void setToolbar(String toolbar)
   {
     this.toolbar = toolbar;
