@@ -11,23 +11,26 @@ package sonia.image;
 
 import sonia.util.ServiceLocator;
 
-//~--- JDK imports ------------------------------------------------------------
-
-import java.awt.Color;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-
 /**
  *
  * @author sdorra
  */
-public abstract class ImageHandler
+public class ImageHandler
 {
 
   /** Field description */
-  private static ImageHandler instance;
+  private static ImageFileHandler fileHandler;
+
+  /** Field description */
+  private static ImageStreamHandler streamHandler;
+
+  //~--- constructors ---------------------------------------------------------
+
+  /**
+   * Constructs ...
+   *
+   */
+  private ImageHandler() {}
 
   //~--- get methods ----------------------------------------------------------
 
@@ -37,121 +40,31 @@ public abstract class ImageHandler
    *
    * @return
    */
-  public static ImageHandler getInstance()
+  public static ImageFileHandler getImageFileHandler()
   {
-    if (instance == null)
+    if (fileHandler == null)
     {
-      instance = ServiceLocator.locateService(ImageHandler.class,
+      fileHandler = ServiceLocator.locateService(ImageFileHandler.class,
               new DefaultImageHandler());
     }
 
-    return instance;
+    return fileHandler;
   }
 
-  //~--- methods --------------------------------------------------------------
-
   /**
    * Method description
    *
    *
-   * @param in
-   * @param out
-   * @param format
-   * @param x1
-   * @param y1
-   * @param x2
-   * @param y2
-   * @param width
-   * @param height
-   *
-   *
-   * @throws IOException
+   * @return
    */
-  public abstract void cropImage(InputStream in, OutputStream out, String format, int x1,
-                                 int y1, int x2, int y2, int width, int height)
-          throws IOException;
+  public static ImageStreamHandler getImageStreamHandler()
+  {
+    if (streamHandler == null)
+    {
+      streamHandler = ServiceLocator.locateService(ImageStreamHandler.class,
+              new DefaultImageHandler());
+    }
 
-  /**
-   * Method description
-   *
-   *
-   * @param in
-   * @param out
-   * @param format
-   * @param background
-   * @param maxWidth
-   * @param maxHeight
-   *
-   *
-   * @throws IOException
-   */
-  public abstract void scaleImage(InputStream in, OutputStream out, String format,
-                                  Color background, int maxWidth, int maxHeight)
-          throws IOException;
-
-  /**
-   * Method description
-   *
-   *
-   * @param in
-   * @param out
-   * @param format
-   * @param maxWidth
-   * @param maxHeight
-   *
-   *
-   * @throws IOException
-   */
-  public abstract void scaleImage(InputStream in, OutputStream out, String format,
-                                  int maxWidth, int maxHeight)
-          throws IOException;
-
-  /**
-   * Method description
-   *
-   *
-   * @param in
-   * @param out
-   * @param format
-   * @param width
-   * @param height
-   *
-   *
-   * @throws IOException
-   */
-  public abstract void scaleImageFix(InputStream in, OutputStream out, String format,
-                                     int width, int height)
-          throws IOException;
-
-  /**
-   * Method description
-   *
-   *
-   * @param in
-   * @param out
-   * @param format
-   * @param maxHeight
-   *
-   *
-   * @throws IOException
-   */
-  public abstract void scaleImageMaxHeight(InputStream in, OutputStream out, String format,
-          int maxHeight)
-          throws IOException;
-
-  /**
-   * Method description
-   *
-   *
-   * @param in
-   * @param out
-   * @param format
-   * @param maxWidth
-   *
-   *
-   * @throws IOException
-   */
-  public abstract void scaleImageMaxWidth(InputStream in, OutputStream out, String format,
-          int maxWidth)
-          throws IOException;
+    return streamHandler;
+  }
 }
