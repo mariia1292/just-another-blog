@@ -107,7 +107,7 @@ public class WidgetRenderer extends BaseRenderer
   private String escape(String result)
   {
     return StringEscapeUtils.escapeHtml(result).replace(" ",
-            "&nbsp;").replace("\n", "<br />").replace("\r", "");
+            "&nbsp;").replace("'", "&#039;").replace("\n", "<br />").replace("\r", "");
   }
 
   //~--- get methods ----------------------------------------------------------
