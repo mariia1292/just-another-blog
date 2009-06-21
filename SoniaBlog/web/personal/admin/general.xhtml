@@ -3,7 +3,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:f="http://java.sun.com/jsf/core">
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:c="http://java.sun.com/jstl/core">
   
   <body>
     
@@ -97,6 +98,10 @@
           <h:commandButton value="#{label.save}" action="#{ConfigBean.save}" />
           
         </h:form>
+
+        <c:forEach items="#{ConfigBean.providers}" var="provider">
+          <ui:include src="#{provider}" />
+        </c:forEach>
         
         <h:form rendered="#{ConfigBean.searchReIndexAble}">
         

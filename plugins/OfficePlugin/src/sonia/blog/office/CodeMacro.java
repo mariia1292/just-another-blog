@@ -10,26 +10,29 @@ package sonia.blog.office;
 //~--- non-JDK imports --------------------------------------------------------
 
 import sonia.blog.api.app.BlogRequest;
+import sonia.blog.api.dao.BlogDAO;
+import sonia.blog.api.dao.Dao;
 import sonia.blog.api.macro.AbstractBlogMacro;
 import sonia.blog.api.macro.LinkResource;
 import sonia.blog.api.macro.ScriptResource;
 import sonia.blog.api.macro.WebMacro;
 import sonia.blog.api.macro.WebResource;
+import sonia.blog.api.macro.browse.CheckboxWidget;
 import sonia.blog.api.macro.browse.SelectWidget;
+import sonia.blog.api.macro.browse.StringInputWidget;
 import sonia.blog.api.macro.browse.StringTextAreaWidget;
+import sonia.blog.entity.Blog;
 import sonia.blog.entity.ContentObject;
-
-import sonia.config.Config;
 
 import sonia.macro.browse.MacroInfo;
 import sonia.macro.browse.MacroInfoParameter;
+
+import sonia.util.Util;
 
 //~--- JDK imports ------------------------------------------------------------
 
 import java.util.ArrayList;
 import java.util.List;
-import sonia.blog.api.macro.browse.CheckboxWidget;
-import sonia.blog.api.macro.browse.StringInputWidget;
 
 /**
  *
@@ -41,7 +44,7 @@ import sonia.blog.api.macro.browse.StringInputWidget;
   description = "macro.code.description",
   resourceBundle = "sonia.blog.office.messages",
   bodyWidget = StringTextAreaWidget.class,
-  widgetParam="cols=110;rows=25"
+  widgetParam = "cols=110;rows=25"
 )
 public class CodeMacro extends AbstractBlogMacro implements WebMacro
 {
@@ -201,7 +204,7 @@ public class CodeMacro extends AbstractBlogMacro implements WebMacro
    *
    * @param toolbar
    */
-    @MacroInfoParameter(
+  @MacroInfoParameter(
     displayName = "macro.code.toolbar.displayName",
     description = "macro.code.toolbar.description",
     widget = CheckboxWidget.class,
@@ -242,6 +245,7 @@ public class CodeMacro extends AbstractBlogMacro implements WebMacro
     resources.add(new ScriptResource(80,
                                      linkBase
                                      + "resource/syntax/scripts/shCore.js"));
+    theme = getTheme(request.getCurrentBlog());
 
     // Theme CSS
     if (theme.equalsIgnoreCase(THEME_DJANGO))
@@ -452,7 +456,33 @@ public class CodeMacro extends AbstractBlogMacro implements WebMacro
     return stylesheet;
   }
 
+  //~--- get methods ----------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   * @param blog
+   *
+   * @return
+   */
+  private String getTheme(Blog blog)
+  {
+    String result = blogDAO.getParameter(blog, CONFIG_THEME);
+
+    if (Util.isBlank(result))
+    {
+      result = THEME_DEFAULT;
+    }
+
+    return result;
+  }
+
   //~--- fields ---------------------------------------------------------------
+
+  /** Field description */
+  @Dao
+  private BlogDAO blogDAO;
 
   /** Field description */
   private String collapse = "false";
@@ -470,8 +500,7 @@ public class CodeMacro extends AbstractBlogMacro implements WebMacro
   private String tabSize = "2";
 
   /** Field description */
-  @Config(CONFIG_THEME)
-  private String theme = "default";
+  private String theme;
 
   /** Field description */
   private String toolbar = "true";

@@ -10,13 +10,17 @@ package sonia.blog.wui;
 //~--- non-JDK imports --------------------------------------------------------
 
 import sonia.blog.api.app.BlogContext;
+import sonia.blog.api.app.Constants;
 import sonia.blog.api.dao.BlogDAO;
 import sonia.blog.api.util.AbstractBean;
 import sonia.blog.entity.Blog;
 import sonia.blog.util.BlogUtil;
 
+import sonia.plugin.service.Service;
+
 //~--- JDK imports ------------------------------------------------------------
 
+import java.util.List;
 import java.util.logging.Logger;
 
 import javax.faces.context.FacesContext;
@@ -116,6 +120,17 @@ public class ConfigBean extends AbstractBean
    *
    * @return
    */
+  public List<String> getProviders()
+  {
+    return providers;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
   public SelectItem[] getTimeZoneItems()
   {
     return BlogUtil.getTimeZoneItems();
@@ -136,4 +151,8 @@ public class ConfigBean extends AbstractBean
 
   /** Field description */
   private Blog blog;
+
+  /** Field description */
+  @Service(Constants.SERVICE_BLOGCONFIGPROVIDER)
+  private List<String> providers;
 }
