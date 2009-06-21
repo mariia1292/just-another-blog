@@ -54,7 +54,18 @@ public class SelectWidget extends AbstractBlogMacroWidget
 
         for (String option : options)
         {
-          out.append("<option>").append(option).append("</option>");
+          out.append("<option");
+
+          int index = option.indexOf(":");
+
+          if (index > 0)
+          {
+            out.append(" value=\"").append(option.substring(index + 1));
+            out.append("\"");
+            option = option.substring(0, index);
+          }
+
+          out.append(">").append(option).append("</option>");
         }
 
         out.append("</select>");

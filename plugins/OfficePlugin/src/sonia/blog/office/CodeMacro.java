@@ -171,7 +171,7 @@ public class CodeMacro extends AbstractBlogMacro implements WebMacro
     displayName = "macro.code.lang.displayName",
     description = "macro.code.lang.description",
     widget = SelectWidget.class,
-    widgetParam = "options=bash|c++|c#|css|delphi|diff|groovy|java|js|perl|python|ruby|scala|sql|vb|xml"
+    widgetParam = "options=bash|c++|c#|css|delphi|diff|groovy|java|JavaScript:js|perl|python|ruby|scala|sql|vb|xml"
   )
   public void setLang(String lang)
   {

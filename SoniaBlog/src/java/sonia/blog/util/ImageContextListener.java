@@ -65,15 +65,6 @@ public class ImageContextListener implements ServletContextListener
     BlogContext ctx = BlogContext.getInstance();
     BlogConfiguration config = ctx.getConfiguration();
 
-    System.out.println("----");
-
-    for (String key : config.keySet())
-    {
-      System.out.println(key + ": " + config.getString(key));
-    }
-
-    System.out.println(config.getString(Constants.CONFIG_RESIZE_IMAGE));
-
     try
     {
       if (Util.isBlank(config.getString(Constants.CONFIG_RESIZE_IMAGE)))

@@ -310,6 +310,21 @@ public class Blog implements Serializable, PermaObject, Comparable<Blog>
    *
    * @return
    */
+  public List<BlogParameter> getParameters()
+  {
+    if ( parameters == null )
+    {
+      parameters = new ArrayList<BlogParameter>();
+    }
+    return parameters;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
   public String getStartPage()
   {
     return startPage;
@@ -626,6 +641,17 @@ public class Blog implements Serializable, PermaObject, Comparable<Blog>
    * Method description
    *
    *
+   * @param parameters
+   */
+  public void setParameters(List<BlogParameter> parameters)
+  {
+    this.parameters = parameters;
+  }
+
+  /**
+   * Method description
+   *
+   *
    * @param sendAutoPing
    */
   public void setSendAutoPing(boolean sendAutoPing)
@@ -755,6 +781,9 @@ public class Blog implements Serializable, PermaObject, Comparable<Blog>
 
   /** Field description */
   private List<BlogMember> members;
+
+  /** Field description */
+  private List<BlogParameter> parameters;
 
   /** Field description */
   private boolean sendAutoPing = false;

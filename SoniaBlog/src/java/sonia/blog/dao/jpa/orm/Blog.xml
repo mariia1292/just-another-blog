@@ -56,6 +56,12 @@
       <basic name="template">
         <column nullable="false" />
       </basic>
+      <one-to-many name="parameters" fetch="LAZY" mapped-by="blog">
+        <cascade>
+          <cascade-merge />
+          <cascade-remove />
+        </cascade>
+      </one-to-many>
       <one-to-many name="members" fetch="LAZY" mapped-by="blog">
         <cascade>
           <cascade-merge />
