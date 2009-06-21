@@ -10,11 +10,15 @@ package sonia.blog.dao.jpa;
 //~--- non-JDK imports --------------------------------------------------------
 
 import sonia.blog.api.app.BlogContext;
+import sonia.blog.api.app.BlogSession;
 import sonia.blog.api.app.Constants;
 import sonia.blog.api.app.ResourceManager;
 import sonia.blog.api.dao.BlogDAO;
+import sonia.blog.api.exception.BlogSecurityException;
 import sonia.blog.entity.Blog;
 import sonia.blog.entity.BlogMember;
+import sonia.blog.entity.BlogParameter;
+import sonia.blog.entity.Role;
 
 import sonia.util.Util;
 
@@ -22,11 +26,15 @@ import sonia.util.Util;
 
 import java.io.File;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.NoResultException;
 import javax.persistence.Query;
 
 /**
@@ -246,6 +254,7 @@ public class JpaBlogDAO extends JpaGenericDAO<Blog> implements BlogDAO
    *
    * @param blog
    * @param active
+   * @param notify
    *
    * @return
    */
@@ -260,6 +269,127 @@ public class JpaBlogDAO extends JpaGenericDAO<Blog> implements BlogDAO
 
     return excecuteListQuery(BlogMember.class, em, q);
   }
+
+  /**
+   * Method description
+   *
+   *
+   * @param blog
+   * @param name
+   *
+   * @return
+   */
+  public String getParameter(Blog blog, String name)
+  {
+    EntityManager em = createEntityManager();
+    Query q = em.createNamedQuery("BlogParameter.getValueByBlogAndName");
+
+    q.setParameter("blog", blog);
+    q.setParameter("name", name);
+
+    return excecuteQuery(String.class, em, q);
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param blog
+   *
+   * @return
+   */
+  public Map<String, String> getParameters(Blog blog)
+  {
+    EntityManager em = createEntityManager();
+    Query q = em.createNamedQuery("BlogParameter.getAllByBlog");
+
+    q.setParameter("blog", blog);
+
+    Map<String, String> paramMap = new HashMap<String, String>();
+    List<BlogParameter> parameters = excecuteListQuery(BlogParameter.class, em,
+                                       q);
+
+    if (Util.hasContent(parameters))
+    {
+      for (BlogParameter param : parameters)
+      {
+        paramMap.put(param.getName(), param.getValue());
+      }
+    }
+
+    return paramMap;
+  }
+
+  //~--- set methods ----------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   * @param session
+   * @param blog
+   * @param name
+   * @param value
+   */
+  public void setParameter(BlogSession session, Blog blog, String name,
+                           String value)
+  {
+    if (!(session.hasRole(Role.GLOBALADMIN)
+          || (session.hasRole(Role.ADMIN) && session.getBlog().equals(blog))))
+    {
+      throw new BlogSecurityException("AdminSession is required");
+    }
+
+    EntityManager em = createEntityManager();
+    Query q = em.createNamedQuery("BlogParameter.getByBlogAndName");
+
+    q.setParameter("blog", blog);
+    q.setParameter("name", name);
+
+    BlogParameter param = null;
+
+    try
+    {
+      param = (BlogParameter) q.getSingleResult();
+    }
+    catch (NoResultException ex) {}
+
+    try
+    {
+      em.getTransaction().begin();
+
+      if (param != null)
+      {
+        param.setValue(value);
+        em.merge(param);
+      }
+      else
+      {
+        param = new BlogParameter(blog, name, value);
+        em.persist(param);
+      }
+
+      em.getTransaction().commit();
+    }
+    catch (Exception ex)
+    {
+      if (em.getTransaction().isActive())
+      {
+        em.getTransaction().rollback();
+      }
+
+      logger.log(Level.SEVERE, null, ex);
+    }
+    finally
+    {
+      if (em != null)
+      {
+        em.close();
+      }
+    }
+  }
+
+  //~--- get methods ----------------------------------------------------------
 
   /**
    * Method description

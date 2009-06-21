@@ -9,12 +9,14 @@ package sonia.blog.api.dao;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import sonia.blog.api.app.BlogSession;
 import sonia.blog.entity.Blog;
 import sonia.blog.entity.BlogMember;
 
 //~--- JDK imports ------------------------------------------------------------
 
 import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -93,4 +95,39 @@ public interface BlogDAO extends GenericDAO<Blog>
    */
   public List<BlogMember> getMembers(Blog blog, boolean active, int start,
                                      int max);
+
+  /**
+   * Method description
+   *
+   *
+   * @param blog
+   * @param name
+   *
+   * @return
+   */
+  public String getParameter(Blog blog, String name);
+
+  /**
+   * Method description
+   *
+   *
+   * @param blog
+   *
+   * @return
+   */
+  public Map<String, String> getParameters(Blog blog);
+
+  //~--- set methods ----------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   * @param session
+   * @param blog
+   * @param name
+   * @param value
+   */
+  public void setParameter(BlogSession session, Blog blog, String name,
+                           String value);
 }

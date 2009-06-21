@@ -408,7 +408,6 @@ public abstract class AbstractEditorBean extends AbstractBean
     LinkBuilder linkBuilder = BlogContext.getInstance().getLinkBuilder();
 
     String result = linkBuilder.buildLink(request.getCurrentBlog(), "/image/");
-    System.out.println( result );
     return result;
   }
 
