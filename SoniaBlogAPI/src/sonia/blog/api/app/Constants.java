@@ -319,6 +319,9 @@ public interface Constants
   public static final String SERVICE_AUTHENTICATION = "/app/authentication";
 
   /** Field description */
+  public static final String SERVICE_BLOGCONFIGPROVIDER = "/config/blog";
+
+  /** Field description */
   public static final String SERVICE_CACHEMANAGER = "/app/cacheManager";
 
   /** Field description */

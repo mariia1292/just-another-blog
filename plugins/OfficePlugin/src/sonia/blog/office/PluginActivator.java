@@ -2,13 +2,9 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
-
-
 package sonia.blog.office;
 
 //~--- non-JDK imports --------------------------------------------------------
-
 import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.app.Constants;
 import sonia.blog.api.editor.AttachmentHandler;
@@ -49,10 +45,11 @@ public class PluginActivator implements Activator
       handler = new PdfHandler();
     }
 
-    if ((handlerReference != null) &&!handlerReference.contains(handler))
+    if ((handlerReference != null) && !handlerReference.contains(handler))
     {
       handlerReference.add(handler);
     }
+    configProvider.add("/view/office/config.xhtml");
   }
 
   /**
@@ -71,20 +68,19 @@ public class PluginActivator implements Activator
     {
       handlerReference.add(handler);
     }
+    configProvider.remove("/view/office/config.xhtml");
   }
 
   //~--- fields ---------------------------------------------------------------
-
   /** Field description */
   private PdfHandler handler;
-
   /** Field description */
   @Service(Constants.SERVICE_ATTACHMENTHANDLER)
   private ServiceReference<AttachmentHandler> handlerReference;
-
+  @Service(Constants.SERVICE_BLOGCONFIGPROVIDER)
+  private ServiceReference<String> configProvider;
   /** Field description */
   private MappingHandler mappingHandler;
-
   /** Field description */
   private MacroParser parser;
 }

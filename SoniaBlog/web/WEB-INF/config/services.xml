@@ -85,6 +85,8 @@
 
   <service class="java.lang.String" path="/config/global" />
 
+  <service class="java.lang.String" path="/config/blog" />
+
   <service class="java.lang.String" path="/status/global" />
 
   <!-- navigation -->
