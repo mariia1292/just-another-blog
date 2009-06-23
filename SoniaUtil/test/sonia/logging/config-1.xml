@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+    Document   : logging.xml
+    Created on : June 23, 2009, 6:36 PM
+    Author     : sdorra
+    Description:
+        Purpose of the document follows.
+-->
+
+<sonia-logging>
+
+  <handlers>
+    <handler>
+      <name>console</name>
+      <class>java.util.logging.ConsoleHandler</class>
+      <formatter>sonia.logging.SimpleFormatter</formatter>
+      <level>FINEST</level>
+    </handler>
+    <handler>
+      <name>file</name>
+      <class>java.util.logging.FileHandler</class>
+      <formatter>sonia.logging.SimpleFormatter</formatter>
+      <level>INFO</level>
+      <parameter>
+        <name>limit</name>
+        <value>5000000</value>
+      </parameter>
+      <parameter>
+        <name>count</name>
+        <value>9</value>
+      </parameter>
+      <parameter>
+        <name>append</name>
+        <value>true</value>
+      </parameter>
+      <parameter>
+        <name>pattern</name>
+        <value>${logdir}/test-%g.log</value>
+      </parameter>
+    </handler>
+  </handlers>
+
+  <loggers>
+    <logger>
+      <name>sonia</name>
+      <handler>console</handler>
+      <handler>file</handler>
+      <level>FINE</level>
+      <removeOldHandlers />
+    </logger>
+  </loggers>
+
+</sonia-logging>
