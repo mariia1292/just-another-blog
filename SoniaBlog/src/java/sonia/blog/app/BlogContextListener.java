@@ -19,6 +19,7 @@ import sonia.blog.api.mapping.MappingHandler;
 import sonia.blog.authentication.CookieLoginModule;
 import sonia.blog.authentication.DefaultLoginModule;
 import sonia.blog.mapping.DefaultMappingHandler;
+import sonia.blog.util.BlogUtil;
 
 import sonia.config.Config;
 import sonia.config.ConfigInjector;
@@ -28,8 +29,6 @@ import sonia.injection.InjectionProvider;
 import sonia.injection.ObjectInjector;
 
 import sonia.jobqueue.JobQueueMBean;
-
-import sonia.logging.SimpleFormatter;
 
 import sonia.macro.MacroParser;
 
@@ -54,7 +53,6 @@ import java.net.URLConnection;
 
 import java.util.HashMap;
 import java.util.List;
-import java.util.logging.ConsoleHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -104,10 +102,7 @@ public class BlogContextListener implements ServletContextListener
    * Constructs ...
    *
    */
-  public BlogContextListener()
-  {
-    configureLogger();
-  }
+  public BlogContextListener() {}
 
   //~--- methods --------------------------------------------------------------
 
@@ -146,6 +141,7 @@ public class BlogContextListener implements ServletContextListener
       BlogContext context = BlogContext.getInstance();
 
       context.setServletContext(event.getServletContext());
+      BlogUtil.configureLogger(context);
       initFileNameMap();
       initMBeans(context);
       initServices(context);
@@ -235,25 +231,6 @@ public class BlogContextListener implements ServletContextListener
     }
 
     return classpath;
-  }
-
-  /**
-   * Method description
-   *
-   *
-   */
-  private void configureLogger()
-  {
-    SimpleFormatter formatter = new SimpleFormatter();
-    Logger rootLogger = Logger.getLogger("sonia");
-
-    rootLogger.setUseParentHandlers(false);
-
-    ConsoleHandler handler = new ConsoleHandler();
-
-    handler.setFormatter(formatter);
-    handler.setLevel(Level.FINEST);
-    rootLogger.addHandler(handler);
   }
 
   /**

@@ -260,6 +260,7 @@ public class InstallBean extends AbstractBean
       {
         configuration.set("defaultBlog", blog.getId());
         configuration.set(Constants.CONFIG_INSTALLED, Boolean.TRUE);
+        BlogUtil.configureLogger(context);
 
         if (configuration instanceof StoreableConfiguration)
         {
