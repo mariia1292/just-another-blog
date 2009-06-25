@@ -18,6 +18,8 @@ import sonia.util.XmlUtil;
 
 //~--- JDK imports ------------------------------------------------------------
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -94,6 +96,32 @@ public class LogManager
   public String putVar(String key, String value)
   {
     return vars.put(key, value);
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param logFile
+   *
+   * @throws IOException
+   */
+  public void readConfiguration(File logFile) throws IOException
+  {
+    FileInputStream fis = null;
+
+    try
+    {
+      fis = new FileInputStream(logFile);
+      readConfiguration(fis);
+    }
+    finally
+    {
+      if (fis != null)
+      {
+        fis.close();
+      }
+    }
   }
 
   /**
@@ -356,6 +384,7 @@ public class LogManager
     {
       String name = null;
       Level level = null;
+      boolean useParentHandlers = true;
       boolean removeOldHandlers = false;
       List<Handler> handlerList = null;
 
@@ -390,6 +419,10 @@ public class LogManager
         {
           removeOldHandlers = true;
         }
+        else if (childName.equals("useParentHandlers"))
+        {
+          useParentHandlers = Boolean.parseBoolean(getNodeValue(node));
+        }
       }
 
       if (Util.hasContent(name))
@@ -413,6 +446,8 @@ public class LogManager
         {
           l.setLevel(level);
         }
+
+        l.setUseParentHandlers(useParentHandlers);
 
         if (Util.hasContent(handlerList))
         {

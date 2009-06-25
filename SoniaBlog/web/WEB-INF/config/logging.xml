@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+    Document   : logging.xml
+    Created on : June 23, 2009, 6:36 PM
+    Author     : sdorra
+    Description:
+        Purpose of the document follows.
+-->
+
+<sonia-logging>
+
+  <handlers>
+    <handler>
+      <name>console</name>
+      <class>java.util.logging.ConsoleHandler</class>
+      <formatter>sonia.logging.SimpleFormatter</formatter>
+      <level>FINEST</level>
+    </handler>
+  </handlers>
+
+  <loggers>
+    <logger>
+      <name>sonia</name>
+      <handler>console</handler>
+      <level>FINEST</level>
+      <useParentHandlers>false</useParentHandlers>
+    </logger>
+    <logger>
+      <name>sonia.blog.wui.DashboardBean</name>
+      <level>FINER</level>
+    </logger>
+    <logger>
+      <name>sonia.blog.util.ImageContextListener</name>
+      <level>SEVERE</level>
+    </logger>
+    <logger>
+      <name>sonia.blog.wui.LoginBean</name>
+      <level>INFO</level>
+    </logger>
+  </loggers>
+
+</sonia-logging>

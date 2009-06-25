@@ -26,12 +26,15 @@ import sonia.blog.entity.ContentObject;
 import sonia.blog.entity.Entry;
 import sonia.blog.entity.Page;
 
+import sonia.logging.LogManager;
+
 import sonia.util.Util;
 import sonia.util.XmlUtil;
 
 //~--- JDK imports ------------------------------------------------------------
 
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
@@ -60,6 +63,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import javax.xml.parsers.ParserConfigurationException;
+import sonia.blog.api.app.Constants;
 
 /**
  *
@@ -72,6 +76,41 @@ public class BlogUtil
   private static Logger logger = Logger.getLogger(BlogUtil.class.getName());
 
   //~--- methods --------------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   * @param context
+   */
+  public static void configureLogger(BlogContext context)
+  {
+    if (context.isInstalled())
+    {
+      File logFile = new File(
+                         context.getServletContext().getRealPath(
+                           "/WEB-INF/config/logging.xml"));
+
+      if (logFile.exists())
+      {
+        try
+        {
+          File logDir = context.getResourceManager().getDirectory(Constants.RESOURCE_LOG, true);
+          LogManager logManager = LogManager.getInstance();
+          logManager.putVar("logdir", logDir.getPath());
+          logManager.readConfiguration(logFile);
+        }
+        catch (IOException ex)
+        {
+          logger.log(Level.SEVERE, null, ex);
+        }
+      }
+      else
+      {
+        logger.severe("logging config not found");
+      }
+    }
+  }
 
   /**
    * Method description
