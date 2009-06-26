@@ -18,7 +18,7 @@
 
         <h1><h:outputText value="#{label.userSettings}" /></h1>
 
-        <h2><h:outputText value="#{label.changeDisplayName}" /></h2>
+        <h2><h:outputText value="#{label.generalUserSettings}" /></h2>
 
         <h:form id="nameForm">
 
@@ -27,6 +27,12 @@
             <h:outputLabel for="diplayName" value="#{label.displayName}" />
             <h:inputText id="diplayName" value="#{UserSettingsBean.user.displayName}" required="true" />
             <h:message for="diplayName" />
+
+            <h:outputLabel for="homePage" value="#{label.homePage}" />
+            <h:inputText id="homePage" value="#{UserSettingsBean.user.homePage}">
+              <f:validator validatorId="validator.url" />
+            </h:inputText>
+            <h:message for="homePage" />
 
           </h:panelGrid>
 

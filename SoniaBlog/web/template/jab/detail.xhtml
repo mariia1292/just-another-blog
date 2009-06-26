@@ -5,7 +5,8 @@
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:blog="http://jab.nitilon.org/blog/"
-      xmlns:t="http://myfaces.apache.org/tomahawk">
+      xmlns:t="http://myfaces.apache.org/tomahawk"
+      xmlns:c="http://java.sun.com/jstl/core">
 
   <body>
 
@@ -37,7 +38,7 @@
           </h:outputText>
           <h:outputText value=", #{BlogBean.entry.authorName}" />
         </p>
-        
+
         <h3><h:outputText value="#{label.links}" /></h3>
 
         <h:panelGrid styleClass="small" columns="2">
@@ -99,21 +100,25 @@
 
             <h:panelGrid columns="3">
 
-              <h:outputLabel for="name" value="#{label.name}" />
-              <h:inputText id="name" value="#{BlogBean.comment.authorName}" required="true" />
-              <h:message for="name" />
+              <c:if test="#{! LoginBean.authenticated}">
 
-              <h:outputLabel for="mail" value="#{label.email}" />
-              <h:inputText id="mail" value="#{BlogBean.comment.authorMail}">
-                <f:validator validatorId="validator.mail" />
-              </h:inputText>
-              <h:message for="mail" />
+                <h:outputLabel for="name" value="#{label.name}" />
+                <h:inputText id="name" value="#{BlogBean.comment.authorName}" required="true" />
+                <h:message for="name" />
 
-              <h:outputLabel for="url" value="#{label.url}" />
-              <h:inputText id="url" value="#{BlogBean.comment.authorURL}">
-                <f:validator validatorId="validator.url" />
-              </h:inputText>
-              <h:message for="url" />
+                <h:outputLabel for="mail" value="#{label.email}" />
+                <h:inputText id="mail" value="#{BlogBean.comment.authorMail}">
+                  <f:validator validatorId="validator.mail" />
+                </h:inputText>
+                <h:message for="mail" />
+
+                <h:outputLabel for="url" value="#{label.url}" />
+                <h:inputText id="url" value="#{BlogBean.comment.authorURL}">
+                  <f:validator validatorId="validator.url" />
+                </h:inputText>
+                <h:message for="url" />
+
+              </c:if>
 
               <h:outputLabel for="commentContent" value="#{label.content}" />
               <h:inputTextarea id="commentContent" value="#{BlogBean.comment.content}" required="true">
