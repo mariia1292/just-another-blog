@@ -15,6 +15,7 @@ import org.apache.myfaces.custom.navmenu.UINavigationMenuItem;
 import sonia.blog.api.app.BlogConfiguration;
 import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.app.BlogRequest;
+import sonia.blog.api.app.BlogSession;
 import sonia.blog.api.app.Constants;
 import sonia.blog.api.app.Context;
 import sonia.blog.api.dao.CategoryDAO;
@@ -95,9 +96,19 @@ public class BlogBean extends AbstractBean
    */
   public void addComment()
   {
+    BlogSession session = getBlogSession();
+
     if (entry instanceof CommentAble)
     {
       CommentAble ca = (CommentAble) entry;
+
+      if (session != null)
+      {
+        comment.setAuthorMail(null);
+        comment.setAuthorName(null);
+        comment.setAuthorURL(null);
+        comment.setAuthor(session.getUser());
+      }
 
       comment.setAuthorAddress(getRequest().getRemoteAddr());
       ca.addComment(comment);

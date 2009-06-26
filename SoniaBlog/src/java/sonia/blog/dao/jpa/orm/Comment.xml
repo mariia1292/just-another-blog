@@ -40,9 +40,6 @@
       <id name="id">
         <generated-value strategy="IDENTITY" />
       </id>
-      <basic name="authorName">
-        <column nullable="false" />
-      </basic>
       <basic name="content">
         <column nullable="false" length="2048" />
       </basic>
@@ -50,6 +47,7 @@
         <column nullable="false" />
         <temporal>TIMESTAMP</temporal>
       </basic>
+      <many-to-one name="author" optional="false" />
     </attributes>
   </entity>
 </entity-mappings>

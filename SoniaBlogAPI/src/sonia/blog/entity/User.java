@@ -139,6 +139,17 @@ public class User implements Serializable, Principal, PermaObject
    *
    * @return
    */
+  public String getHomePage()
+  {
+    return homePage;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
   public Long getId()
   {
     return id;
@@ -271,6 +282,17 @@ public class User implements Serializable, Principal, PermaObject
    * Method description
    *
    *
+   * @param homePage
+   */
+  public void setHomePage(String homePage)
+  {
+    this.homePage = homePage;
+  }
+
+  /**
+   * Method description
+   *
+   *
    * @param id
    */
   public void setId(Long id)
@@ -361,6 +383,9 @@ public class User implements Serializable, Principal, PermaObject
 
   /** Field description */
   private boolean globalAdmin;
+
+  /** Field description */
+  private String homePage;
 
   /** Field description */
   private Long id;

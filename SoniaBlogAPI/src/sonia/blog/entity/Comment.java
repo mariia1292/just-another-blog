@@ -92,6 +92,17 @@ public class Comment implements Serializable, PermaObject
    *
    * @return
    */
+  public User getAuthor()
+  {
+    return author;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
   public String getAuthorAddress()
   {
     return authorAddress;
@@ -105,7 +116,18 @@ public class Comment implements Serializable, PermaObject
    */
   public String getAuthorMail()
   {
-    return authorMail;
+    String result = null;
+
+    if (author != null)
+    {
+      result = author.getEmail();
+    }
+    else
+    {
+      result = authorMail;
+    }
+
+    return result;
   }
 
   /**
@@ -116,7 +138,18 @@ public class Comment implements Serializable, PermaObject
    */
   public String getAuthorName()
   {
-    return authorName;
+    String result = null;
+
+    if (author != null)
+    {
+      result = author.getDisplayName();
+    }
+    else
+    {
+      result = authorName;
+    }
+
+    return result;
   }
 
   /**
@@ -127,7 +160,18 @@ public class Comment implements Serializable, PermaObject
    */
   public String getAuthorURL()
   {
-    return authorURL;
+    String result = null;
+
+    if (author != null)
+    {
+      result = author.getHomePage();
+    }
+    else
+    {
+      result = authorURL;
+    }
+
+    return result;
   }
 
   /**
@@ -186,6 +230,17 @@ public class Comment implements Serializable, PermaObject
   }
 
   //~--- set methods ----------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   * @param author
+   */
+  public void setAuthor(User author)
+  {
+    this.author = author;
+  }
 
   /**
    * Method description
@@ -288,6 +343,9 @@ public class Comment implements Serializable, PermaObject
   }
 
   //~--- fields ---------------------------------------------------------------
+
+  /** Field description */
+  private User author;
 
   /** Field description */
   private String authorAddress;

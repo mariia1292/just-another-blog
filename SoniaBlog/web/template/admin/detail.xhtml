@@ -92,21 +92,24 @@
 
             <h:panelGrid columns="3">
 
-              <h:outputLabel for="name" value="#{label.name}" />
-              <h:inputText id="name" value="#{BlogBean.comment.authorName}" required="true" />
-              <h:message for="name" />
+              <c:if test="#{! LoginBean.authenticated}">
+                <h:outputLabel for="name" value="#{label.name}" />
+                <h:inputText id="name" value="#{BlogBean.comment.authorName}" required="true" />
+                <h:message for="name" />
 
-              <h:outputLabel for="mail" value="#{label.email}" />
-              <h:inputText id="mail" value="#{BlogBean.comment.authorMail}">
-                <f:validator validatorId="validator.mail" />
-              </h:inputText>
-              <h:message for="mail" />
+                <h:outputLabel for="mail" value="#{label.email}" />
+                <h:inputText id="mail" value="#{BlogBean.comment.authorMail}">
+                  <f:validator validatorId="validator.mail" />
+                </h:inputText>
+                <h:message for="mail" />
 
-              <h:outputLabel for="url" value="#{label.url}" />
-              <h:inputText id="url" value="#{BlogBean.comment.authorURL}">
-                <f:validator validatorId="validator.url" />
-              </h:inputText>
-              <h:message for="url" />
+                <h:outputLabel for="url" value="#{label.url}" />
+                <h:inputText id="url" value="#{BlogBean.comment.authorURL}">
+                  <f:validator validatorId="validator.url" />
+                </h:inputText>
+                <h:message for="url" />
+
+              </c:if>
 
               <h:outputLabel for="content" value="#{label.content}" />
               <h:inputTextarea id="content" value="#{BlogBean.comment.content}" required="true">

@@ -357,8 +357,11 @@ public class InstallBean extends AbstractBean
 
       try
       {
-        BlogContext.getInstance().getConfiguration().load();
+        BlogContext context = BlogContext.getInstance();
+
+        context.getConfiguration().load();
         BlogContext.getDAOFactory().init();
+        BlogUtil.configureLogger(context);
         redirect();
       }
       catch (IOException ex)
