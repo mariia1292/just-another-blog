@@ -15,6 +15,7 @@ import sonia.util.Util;
 //~--- JDK imports ------------------------------------------------------------
 
 import java.awt.Color;
+import java.awt.Dimension;
 
 import java.io.File;
 import java.io.IOException;
@@ -46,10 +47,12 @@ public class ImageMagickFileHandler implements ImageFileHandler
    *
    *
    * @param imageMagick
+   * @param identify
    */
-  public ImageMagickFileHandler(String imageMagick)
+  public ImageMagickFileHandler(String imageMagick, String identify)
   {
     this.imageMagick = imageMagick;
+    this.identify = identify;
   }
 
   /**
@@ -57,11 +60,14 @@ public class ImageMagickFileHandler implements ImageFileHandler
    *
    *
    * @param imageMagick
+   * @param identify
    * @param timeout
    */
-  public ImageMagickFileHandler(String imageMagick, long timeout)
+  public ImageMagickFileHandler(String imageMagick, String identify,
+                                long timeout)
   {
     this.imageMagick = imageMagick;
+    this.identify = identify;
     this.timeout = timeout;
   }
 
@@ -186,7 +192,62 @@ public class ImageMagickFileHandler implements ImageFileHandler
     excecute(getScaleCommand(in, out, format, maxWidth, -1, false));
   }
 
+  //~--- get methods ----------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   * @param in
+   *
+   * @return
+   *
+   * @throws IOException
+   */
+  public Dimension getDimension(File in) throws IOException
+  {
+    Dimension d = null;
+    StringBuffer cmd = new StringBuffer();
+
+    cmd.append(identify).append(" -format %wx%h ");
+    cmd.append(in.getAbsoluteFile());
+
+    String dimensionString = excecute(cmd.toString());
+    int x = dimensionString.indexOf("x");
+
+    if (x > 0)
+    {
+      try
+      {
+        int width = Integer.parseInt(dimensionString.substring(0, x));
+        int height = Integer.parseInt(dimensionString.substring(x+1));
+        d = new Dimension(width, height);
+      }
+      catch (NumberFormatException ex)
+      {
+        throw new IOException(ex.getMessage());
+      }
+    }
+    else
+    {
+      throw new IOException("identify command returned " + dimensionString);
+    }
+
+    return d;
+  }
+
   //~--- set methods ----------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   * @param identify
+   */
+  public void setIdentify(String identify)
+  {
+    this.identify = identify;
+  }
 
   /**
    * Method description
@@ -218,10 +279,14 @@ public class ImageMagickFileHandler implements ImageFileHandler
    *
    * @param command
    *
+   *
+   * @return
    * @throws IOException
    */
-  private void excecute(String command) throws IOException
+  private String excecute(String command) throws IOException
   {
+    String output = null;
+
     if (logger.isLoggable(Level.FINEST))
     {
       StringBuffer log = new StringBuffer();
@@ -232,12 +297,22 @@ public class ImageMagickFileHandler implements ImageFileHandler
 
     try
     {
-      ExecUtil.process(command, timeout);
+      output = ExecUtil.processWithOutput(command, timeout);
+
+      if (logger.isLoggable(Level.FINEST))
+      {
+        StringBuffer log = new StringBuffer();
+
+        log.append("command result: ").append(output);
+        logger.finest(log.toString());
+      }
     }
     catch (InterruptedException ex)
     {
       throw new IOException(ex.getMessage());
     }
+
+    return output;
   }
 
   //~--- get methods ----------------------------------------------------------
@@ -291,6 +366,9 @@ public class ImageMagickFileHandler implements ImageFileHandler
   }
 
   //~--- fields ---------------------------------------------------------------
+
+  /** Field description */
+  private String identify = "identify";
 
   /** Field description */
   private String imageMagick = "convert";
