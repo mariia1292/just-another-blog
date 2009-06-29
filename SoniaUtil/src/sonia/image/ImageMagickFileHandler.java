@@ -74,20 +74,23 @@ public class ImageMagickFileHandler implements ImageFileHandler
    * @param in
    * @param out
    * @param format
-   * @param x1
-   * @param y1
-   * @param x2
-   * @param y2
+   * @param x
+   * @param y
    * @param width
    * @param height
    *
    * @throws IOException
    */
-  public void cropImage(File in, File out, String format, int x1, int y1,
-                        int x2, int y2, int width, int height)
+  public void cropImage(File in, File out, String format, int x, int y,
+                        int width, int height)
           throws IOException
   {
-    throw new UnsupportedOperationException("Not supported yet.");
+    StringBuffer cmd = new StringBuffer();
+
+    cmd.append(imageMagick).append(" ").append(in.getPath()).append(" -crop ");
+    cmd.append(x).append("x").append(y).append("+").append(width).append("+");
+    cmd.append(height).append(" ").append(out.getPath());
+    excecute(cmd.toString());
   }
 
   /**
@@ -219,6 +222,14 @@ public class ImageMagickFileHandler implements ImageFileHandler
    */
   private void excecute(String command) throws IOException
   {
+    if (logger.isLoggable(Level.FINEST))
+    {
+      StringBuffer log = new StringBuffer();
+
+      log.append("execute ").append(command);
+      logger.finest(log.toString());
+    }
+
     try
     {
       ExecUtil.process(command, timeout);
@@ -275,14 +286,6 @@ public class ImageMagickFileHandler implements ImageFileHandler
     }
 
     cmd.append(out.getAbsolutePath());
-
-    if (logger.isLoggable(Level.FINEST))
-    {
-      StringBuffer log = new StringBuffer();
-
-      log.append("execute ").append(cmd);
-      logger.finest(log.toString());
-    }
 
     return cmd.toString();
   }
