@@ -42,20 +42,20 @@ public class DefaultImageHandler implements ImageStreamHandler, ImageFileHandler
    * @param in
    * @param out
    * @param format
-   * @param x1
-   * @param y1
-   * @param x2
-   * @param y2
+   * @param x
+   * @param y
    * @param width
    * @param height
    *
    * @throws IOException
    */
-  public void cropImage(InputStream in, OutputStream out, String format,
-                        int x1, int y1, int x2, int y2, int width, int height)
+  public void cropImage(InputStream in, OutputStream out, String format, int x,
+                        int y, int width, int height)
           throws IOException
   {
-    throw new UnsupportedOperationException("Not supported yet.");
+    BufferedImage image = ImageIO.read(in);
+
+    ImageIO.write(image.getSubimage(x, y, width, height), format, out);
   }
 
   /**
@@ -65,17 +65,15 @@ public class DefaultImageHandler implements ImageStreamHandler, ImageFileHandler
    * @param in
    * @param out
    * @param format
-   * @param x1
-   * @param y1
-   * @param x2
-   * @param y2
+   * @param x
+   * @param y
    * @param width
    * @param height
    *
    * @throws IOException
    */
-  public void cropImage(File in, File out, String format, int x1, int y1,
-                        int x2, int y2, int width, int height)
+  public void cropImage(File in, File out, String format, int x, int y,
+                        int width, int height)
           throws IOException
   {
     FileInputStream fis = null;
@@ -85,7 +83,7 @@ public class DefaultImageHandler implements ImageStreamHandler, ImageFileHandler
     {
       fis = new FileInputStream(in);
       fos = new FileOutputStream(out);
-      cropImage(fis, fos, format, x1, y1, x2, y2, width, height);
+      cropImage(fis, fos, format, x, y, width, height);
     }
     finally
     {

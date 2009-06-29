@@ -7,9 +7,6 @@
 
 package sonia.image;
 
-//~--- non-JDK imports --------------------------------------------------------
-
-
 //~--- JDK imports ------------------------------------------------------------
 
 import java.awt.Color;
@@ -25,9 +22,6 @@ import java.io.OutputStream;
 public interface ImageStreamHandler
 {
 
-
-  //~--- methods --------------------------------------------------------------
-
   /**
    * Method description
    *
@@ -35,18 +29,16 @@ public interface ImageStreamHandler
    * @param in
    * @param out
    * @param format
-   * @param x1
-   * @param y1
-   * @param x2
-   * @param y2
+   * @param x
+   * @param y
    * @param width
    * @param height
    *
    *
    * @throws IOException
    */
-  public  void cropImage(InputStream in, OutputStream out, String format, int x1,
-                                 int y1, int x2, int y2, int width, int height)
+  public void cropImage(InputStream in, OutputStream out, String format, int x,
+                        int y, int width, int height)
           throws IOException;
 
   /**
@@ -63,8 +55,8 @@ public interface ImageStreamHandler
    *
    * @throws IOException
    */
-  public  void scaleImage(InputStream in, OutputStream out, String format,
-                                  Color background, int maxWidth, int maxHeight)
+  public void scaleImage(InputStream in, OutputStream out, String format,
+                         Color background, int maxWidth, int maxHeight)
           throws IOException;
 
   /**
@@ -80,8 +72,8 @@ public interface ImageStreamHandler
    *
    * @throws IOException
    */
-  public  void scaleImage(InputStream in, OutputStream out, String format,
-                                  int maxWidth, int maxHeight)
+  public void scaleImage(InputStream in, OutputStream out, String format,
+                         int maxWidth, int maxHeight)
           throws IOException;
 
   /**
@@ -97,8 +89,8 @@ public interface ImageStreamHandler
    *
    * @throws IOException
    */
-  public  void scaleImageFix(InputStream in, OutputStream out, String format,
-                                     int width, int height)
+  public void scaleImageFix(InputStream in, OutputStream out, String format,
+                            int width, int height)
           throws IOException;
 
   /**
@@ -113,8 +105,8 @@ public interface ImageStreamHandler
    *
    * @throws IOException
    */
-  public  void scaleImageMaxHeight(InputStream in, OutputStream out, String format,
-          int maxHeight)
+  public void scaleImageMaxHeight(InputStream in, OutputStream out,
+                                  String format, int maxHeight)
           throws IOException;
 
   /**
@@ -129,7 +121,7 @@ public interface ImageStreamHandler
    *
    * @throws IOException
    */
-  public  void scaleImageMaxWidth(InputStream in, OutputStream out, String format,
-          int maxWidth)
+  public void scaleImageMaxWidth(InputStream in, OutputStream out,
+                                 String format, int maxWidth)
           throws IOException;
 }
