@@ -10,6 +10,7 @@ package sonia.image;
 //~--- JDK imports ------------------------------------------------------------
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
@@ -424,6 +425,58 @@ public class DefaultImageHandler implements ImageStreamHandler, ImageFileHandler
       }
     }
   }
+
+  //~--- get methods ----------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   * @param in
+   *
+   * @return
+   *
+   * @throws IOException
+   */
+  public Dimension getDimension(InputStream in) throws IOException
+  {
+    BufferedImage inputImage = ImageIO.read(in);
+    int width = inputImage.getWidth();
+    int height = inputImage.getHeight();
+
+    return new Dimension(width, height);
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param in
+   *
+   * @return
+   *
+   * @throws IOException
+   */
+  public Dimension getDimension(File in) throws IOException
+  {
+    Dimension d = null;
+    FileInputStream fis = null;
+    try
+    {
+      fis = new FileInputStream(in);
+      d = getDimension(fis);
+    }
+    finally
+    {
+      if ( fis != null )
+      {
+        fis.close();
+      }
+    }
+    return d;
+  }
+
+  //~--- methods --------------------------------------------------------------
 
   /**
    * Method description

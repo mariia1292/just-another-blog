@@ -10,6 +10,7 @@ package sonia.image;
 //~--- JDK imports ------------------------------------------------------------
 
 import java.awt.Color;
+import java.awt.Dimension;
 
 import java.io.File;
 import java.io.IOException;
@@ -122,4 +123,18 @@ public interface ImageFileHandler
    */
   public void scaleImageMaxWidth(File in, File out, String format, int maxWidth)
           throws IOException;
+
+  //~--- get methods ----------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   * @param in
+   *
+   * @return
+   *
+   * @throws IOException
+   */
+  public Dimension getDimension(File in) throws IOException;
 }

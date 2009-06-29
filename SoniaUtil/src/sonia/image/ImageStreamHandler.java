@@ -10,6 +10,7 @@ package sonia.image;
 //~--- JDK imports ------------------------------------------------------------
 
 import java.awt.Color;
+import java.awt.Dimension;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -124,4 +125,18 @@ public interface ImageStreamHandler
   public void scaleImageMaxWidth(InputStream in, OutputStream out,
                                  String format, int maxWidth)
           throws IOException;
+
+  //~--- get methods ----------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   * @param in
+   *
+   * @return
+   *
+   * @throws IOException
+   */
+  public Dimension getDimension(InputStream in) throws IOException;
 }
