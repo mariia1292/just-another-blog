@@ -45,14 +45,14 @@ public class InjectionProviderTest
    * @throws IOException
    */
   @Test
-  public void testGetInstance() throws IOException
+  public void testProvider() throws IOException
   {
     byte[] buf = ".logger = FINEST\n".getBytes();
     ByteArrayInputStream bais = new ByteArrayInputStream(buf);
 
     LogManager.getLogManager().readConfiguration(bais);
     Logger.getLogger("sonia").setLevel(Level.FINEST);
-    System.out.println("getInstance");
+    System.out.println("testProvider");
 
     ServiceRegistry registry = new ServiceRegistry();
     ServiceReference<ServiceTest> reference =
