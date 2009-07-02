@@ -61,7 +61,8 @@ public abstract class MacroParserTestBase
   {
     parser.putMacro("body", BodyMacro.class);
 
-    String text = parser.parseText(env, "- {body}Hello World{/body} -").getText();
+    String text = parser.parseText(env,
+                                   "- {body}Hello World{/body} -").getText();
 
     assertEquals("- BODY: Hello World -", text);
   }

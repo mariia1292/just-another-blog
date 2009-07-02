@@ -44,7 +44,7 @@ public class MacroInformationTest
     assertNotNull(provider);
 
     MacroInformation info = provider.getInformation(InformationMacro.class,
-                             Locale.GERMAN);
+                              Locale.GERMAN);
 
     assertEquals("info", info.getName());
     assertEquals("Information", info.getDisplayName());
