@@ -22,6 +22,8 @@ import sonia.util.Util;
 
 //~--- JDK imports ------------------------------------------------------------
 
+import java.io.File;
+
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -88,7 +90,20 @@ public class ImageContextListener implements ServletContextListener
 
           if (Util.hasContent(path))
           {
-            imfh.setImageMagick(path);
+            File convertFile = new File(path);
+
+            if (convertFile.exists() && (convertFile != null))
+            {
+              imfh.setImageMagick(path);
+            }
+
+            File identifyFile = new File(convertFile.getParentFile(),
+                                         "identify");
+
+            if (identifyFile.exists() && (identifyFile != null))
+            {
+              imfh.setIdentify(identifyFile.getAbsolutePath());
+            }
           }
 
           Long timeout = config.getLong(Constants.CONFIG_COMMAND_TIMEOUT);

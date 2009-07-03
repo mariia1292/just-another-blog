@@ -117,6 +117,17 @@ public class User implements Serializable, Principal, PermaObject
    *
    * @return
    */
+  public String getAvatar()
+  {
+    return avatar;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
   public String getDisplayName()
   {
     return displayName;
@@ -249,6 +260,17 @@ public class User implements Serializable, Principal, PermaObject
    * Method description
    *
    *
+   * @param avatar
+   */
+  public void setAvatar(String avatar)
+  {
+    this.avatar = avatar;
+  }
+
+  /**
+   * Method description
+   *
+   *
    * @param displayName
    */
   public void setDisplayName(String displayName)
@@ -374,6 +396,9 @@ public class User implements Serializable, Principal, PermaObject
 
   /** Field description */
   private String activationCode;
+
+  /** Field description */
+  private String avatar;
 
   /** Field description */
   private String displayName;

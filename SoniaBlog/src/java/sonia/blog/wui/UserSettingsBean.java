@@ -23,22 +23,12 @@ import sonia.plugin.service.ServiceReference;
 
 import sonia.security.encryption.Encryption;
 
-//~--- JDK imports ------------------------------------------------------------
-
-import java.util.logging.Logger;
-
 /**
  *
  * @author sdorra
  */
 public class UserSettingsBean extends AbstractBean
 {
-
-  /** Field description */
-  private static Logger logger =
-    Logger.getLogger(UserSettingsBean.class.getName());
-
-  //~--- constructors ---------------------------------------------------------
 
   /**
    * Constructs ...

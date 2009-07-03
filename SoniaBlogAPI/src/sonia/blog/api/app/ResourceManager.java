@@ -133,6 +133,24 @@ public class ResourceManager
     return resourceDirectory;
   }
 
+  /**
+   * Method description
+   *
+   *
+   * @param prefix
+   * @param suffix
+   *
+   * @return
+   */
+  public File getTempFile(String prefix, String suffix)
+  {
+    File tempDirectory = getDirectory(Constants.RESOURCE_TEMP, true);
+    String time = new StringBuffer(prefix).append(System.nanoTime()).append(
+                      suffix).toString();
+
+    return new File(tempDirectory, time);
+  }
+
   //~--- fields ---------------------------------------------------------------
 
   /** Field description */

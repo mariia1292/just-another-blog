@@ -745,9 +745,6 @@ public abstract class AbstractEditorBean extends AbstractBean
   private DataModel macroInformations;
 
   /** Field description */
-  private Map macroMap;
-
-  /** Field description */
   private File resourceDirectory;
 
   /** Field description */

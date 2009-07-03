@@ -19,6 +19,12 @@
   </managed-bean>
 
   <managed-bean>
+    <managed-bean-name>AvatarBean</managed-bean-name>
+    <managed-bean-class>sonia.blog.wui.AvatarBean</managed-bean-class>
+    <managed-bean-scope>session</managed-bean-scope>
+  </managed-bean>
+
+  <managed-bean>
     <managed-bean-name>PluginBean</managed-bean-name>
     <managed-bean-class>sonia.blog.wui.PluginBean</managed-bean-class>
     <managed-bean-scope>request</managed-bean-scope>

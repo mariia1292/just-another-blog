@@ -151,10 +151,8 @@ public class ImageMapping extends AbstractAttachmentMapping
     String type = request.getParameter("type");
     int width = getIntParameter(request, "width");
     int height = getIntParameter(request, "height");
-    int x1 = getIntParameter(request, "x1");
-    int x2 = getIntParameter(request, "x1");
-    int y1 = getIntParameter(request, "x1");
-    int y2 = getIntParameter(request, "x1");
+    int x = getIntParameter(request, "x");
+    int y = getIntParameter(request, "y");
     String color = request.getParameter("color");
 
     if ( Util.hasContent(type) && type.equals("orginal") )
@@ -164,7 +162,7 @@ public class ImageMapping extends AbstractAttachmentMapping
     else
     {
       File out = getOutputFile(request, attachment.getId(), type, format,
-                               color, width, height, x1, x2, y1, y2);
+                               color, width, height, x, y);
 
       if (out.exists())
       {
@@ -175,7 +173,7 @@ public class ImageMapping extends AbstractAttachmentMapping
         ImageHandlerJob job = new ImageHandlerJob(request.getCurrentBlog(),
                                 getFile(response, attachment), out,
                                 attachment.getId(), type, format, color, width,
-                                height, x1, x2, y1, y2);
+                                height, x, y);
 
         queue.processs(job);
 
@@ -227,8 +225,7 @@ public class ImageMapping extends AbstractAttachmentMapping
    * @return
    */
   private String getFileName(Long id, String type, String format, String color,
-                             int width, int height, int x1, int x2, int y1,
-                             int y2)
+                             int width, int height, int x, int y)
   {
     String name = null;
     StringBuffer nameBuffer = new StringBuffer();
@@ -240,8 +237,8 @@ public class ImageMapping extends AbstractAttachmentMapping
       nameBuffer.append(color);
     }
 
-    nameBuffer.append(width).append(height).append(x1);
-    nameBuffer.append(x2).append(y1).append(y2);
+    nameBuffer.append(width).append(height).append(x);
+    nameBuffer.append(y);
 
     if (encryption != null)
     {
@@ -308,12 +305,11 @@ public class ImageMapping extends AbstractAttachmentMapping
    */
   private File getOutputFile(BlogRequest request, Long id, String type,
                              String format, String color, int width,
-                             int height, int x1, int x2, int y1, int y2)
+                             int height, int x, int y)
   {
     File directory = resourceManager.getDirectory(Constants.RESOURCE_IMAGE,
                        request.getCurrentBlog(), true);
-    String name = getFileName(id, type, format, color, width, height, x1, x2,
-                              y1, y2);
+    String name = getFileName(id, type, format, color, width, height, x, y);
 
     return new File(directory, name);
   }

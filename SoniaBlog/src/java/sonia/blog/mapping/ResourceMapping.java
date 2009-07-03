@@ -9,14 +9,18 @@ package sonia.blog.mapping;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.app.BlogRequest;
 import sonia.blog.api.app.BlogResponse;
+import sonia.blog.api.app.Constants;
 import sonia.blog.api.mapping.FinalMapping;
 
 import sonia.util.Util;
 
 //~--- JDK imports ------------------------------------------------------------
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -64,12 +68,27 @@ public class ResourceMapping extends FinalMapping
     if ((param != null) && (param.length > 0))
     {
       String path = param[0];
-      String uri = PATHPREFIX + path;
       String mimeType = URLConnection.getFileNameMap().getContentTypeFor(path);
 
       response.setContentType(mimeType);
 
-      InputStream in = Util.findResource(uri);
+      InputStream in = null;
+
+      if (request.getParameter("temp") != null)
+      {
+        File tempDirectory =
+          BlogContext.getInstance().getResourceManager().getDirectory(
+              Constants.RESOURCE_TEMP);
+
+        in = new FileInputStream(new File(tempDirectory, path));
+      }
+      else
+      {
+        String uri = PATHPREFIX + path;
+
+        in = Util.findResource(uri);
+      }
+
       OutputStream out = null;
 
       try

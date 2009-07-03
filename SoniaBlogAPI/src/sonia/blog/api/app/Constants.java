@@ -252,6 +252,9 @@ public interface Constants
   public static final String RESOURCE_ATTACHMENT = "attachments";
 
   /** Field description */
+  public static final String RESOURCE_AVATAR = "avatar";
+
+  /** Field description */
   public static final String RESOURCE_CONFIG = "config";
 
   /** Field description */

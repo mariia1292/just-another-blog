@@ -81,6 +81,13 @@
 
             <h:column>
 
+              <h:graphicImage value="/avatar/#{Comment.author.avatar}" 
+                              rendered="#{Comment.author != null &amp;&amp; Comment.author.avatar != null}" />
+
+            </h:column>
+
+            <h:column>
+
               <h:outputText value="#{Comment.authorName}" rendered="#{Comment.authorURL == null}" />
               <h:outputLink rel="nofollow" target="_blank" value="#{Comment.authorURL}" rendered="#{Comment.authorURL != null}">
                 <h:outputText value="#{Comment.authorName}" />

@@ -37,11 +37,11 @@
           </h:panelGrid>
 
           <h:commandButton value="#{label.save}" action="#{UserSettingsBean.updateDisplayName}" />
-          
+
         </h:form>
 
         <h2><h:outputText value="#{label.changePassword}" /></h2>
-        
+
         <h:form id="passwordForm">
 
           <h:panelGrid columns="3">
@@ -81,6 +81,24 @@
           </h:panelGrid>
 
           <h:commandButton value="#{label.save}" action="#{UserSettingsBean.saveMember}" />
+
+        </h:form>
+
+        <h2><h:outputText value="#{label.avatar}" /></h2>
+
+        <h:form enctype="multipart/form-data">
+
+          <table>
+            <tr>
+              <td>
+                <h:graphicImage value="/avatar/#{UserSettingsBean.user.avatar}" rendered="#{UserSettingsBean.user.avatar != null}" />
+              </td>
+              <td>
+                <t:inputFileUpload value="#{AvatarBean.avatarUploadFile}" />
+                <h:commandButton value="#{label.save}" action="#{AvatarBean.upload}" />
+              </td>
+            </tr>
+          </table>
 
         </h:form>
 
