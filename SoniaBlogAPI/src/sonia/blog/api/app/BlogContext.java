@@ -385,17 +385,18 @@ public final class BlogContext
    *
    * @return
    */
-  public ImageFileHandler getImageHandler()
+  public ImageFileHandler getImageFileHandler()
   {
-    if (imageHandler == null)
+    if (imageFileHandler == null)
     {
 
       // TODO: get with service
-      imageHandler = ImageHandler.getImageFileHandler();
+      imageFileHandler = ImageHandler.getImageFileHandler();
     }
 
-    return imageHandler;
+    return imageFileHandler;
   }
+
 
   /**
    * Method description
@@ -699,7 +700,7 @@ public final class BlogContext
    */
   public void setImageHandler(ImageFileHandler imageHandler)
   {
-    this.imageHandler = imageHandler;
+    this.imageFileHandler = imageHandler;
   }
 
   /**
@@ -785,7 +786,7 @@ public final class BlogContext
   private BlogConfiguration configuration;
 
   /** Field description */
-  private ImageFileHandler imageHandler;
+  private ImageFileHandler imageFileHandler;
 
   /** Field description */
   private InjectionProvider injectionProvider;

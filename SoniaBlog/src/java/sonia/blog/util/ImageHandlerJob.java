@@ -69,7 +69,7 @@ public class ImageHandlerJob implements BlogJob
    */
   public ImageHandlerJob(Blog blog, File in, File out, Long id, String type,
                          String format, String color, int width, int height,
-                         int x1, int x2, int y1, int y2)
+                         int x, int y)
   {
     this.blog = blog;
     this.in = in;
@@ -80,10 +80,8 @@ public class ImageHandlerJob implements BlogJob
     this.color = color;
     this.width = width;
     this.height = height;
-    this.x1 = x1;
-    this.x2 = x2;
-    this.y1 = y1;
-    this.y2 = y2;
+    this.x = x;
+    this.y = y;
   }
 
   //~--- methods --------------------------------------------------------------
@@ -99,7 +97,7 @@ public class ImageHandlerJob implements BlogJob
     try
     {
       ImageFileHandler imageHandler =
-        BlogContext.getInstance().getImageHandler();
+        BlogContext.getInstance().getImageFileHandler();
 
       if (Util.isBlank(type) || type.equalsIgnoreCase("relative"))
       {
@@ -112,6 +110,10 @@ public class ImageHandlerJob implements BlogJob
       else if (type.equalsIgnoreCase("fix"))
       {
         printFixImage(imageHandler);
+      }
+      else if (type.equalsIgnoreCase("crop"))
+      {
+        printCropImage(imageHandler);
       }
     }
     catch (Exception ex)
@@ -166,6 +168,19 @@ public class ImageHandlerJob implements BlogJob
   }
 
   //~--- methods --------------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   * @param imageHandler
+   *
+   * @throws IOException
+   */
+  private void printCropImage(ImageFileHandler imageHandler) throws IOException
+  {
+    imageHandler.cropImage(in, out, format, x, y, width, height);
+  }
 
   /**
    * Method description
@@ -262,15 +277,6 @@ public class ImageHandlerJob implements BlogJob
   /** Field description */
   private int width;
 
-  /** Field description */
-  private int x1;
-
-  /** Field description */
-  private int x2;
-
-  /** Field description */
-  private int y1;
-
-  /** Field description */
-  private int y2;
+private int x;
+private int y;
 }

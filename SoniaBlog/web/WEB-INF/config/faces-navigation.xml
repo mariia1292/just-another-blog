@@ -291,6 +291,23 @@
   </navigation-rule>
 
   <navigation-rule>
+    <from-view-id>/personal/userSettings.xhtml</from-view-id>
+    <navigation-case>
+      <from-outcome>avatarCrop</from-outcome>
+      <to-view-id>/personal/avatarCrop.xhtml</to-view-id>
+    </navigation-case>
+  </navigation-rule>
+
+  <navigation-rule>
+    <from-view-id>/personal/avatarCrop.xhtml</from-view-id>
+    <navigation-case>
+      <from-outcome>success</from-outcome>
+      <to-view-id>/personal/userSettings.xhtml</to-view-id>
+    </navigation-case>
+  </navigation-rule>
+
+
+  <navigation-rule>
     <from-view-id>/personal/dashboard.xhtml</from-view-id>
     <navigation-case>
       <from-outcome>edit-draft</from-outcome>

@@ -100,4 +100,9 @@
     <class>sonia.blog.mapping.PreviewMapping</class>
   </mapping>
 
+  <mapping>
+    <regex>^/avatar/(.*)$</regex>
+    <class>sonia.blog.mapping.AvatarMapping</class>
+  </mapping>
+
 </mappings>
