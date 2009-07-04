@@ -22,29 +22,29 @@
         <Node id="personal/globaladmin/plugins.xhtml" x="1900" y="600" zoom="true"/>
         <Node id="personal/author/editor/attachments.xhtml" x="1650" y="150" zoom="true"/>
         <Node id="personal/admin/general.xhtml" x="2900" y="150" zoom="true"/>
-        <Node id="resources/tiny_mce/plugins/xhtmlxtras/cite.htm" x="400" y="750" zoom="true"/>
         <Node id="resources/yaml/markup_draft.html" x="150" y="750" zoom="true"/>
+        <Node id="resources/tiny_mce/plugins/xhtmlxtras/cite.htm" x="400" y="750" zoom="true"/>
         <Node id="personal/author/editor/pageEditor.xhtml" x="1400" y="900" zoom="true"/>
-        <Node id="resources/tiny_mce/themes/advanced/about.htm" x="900" y="750" zoom="true"/>
         <Node id="*" x="1150" y="600" zoom="true"/>
-        <Node id="resources/tiny_mce/plugins/preview/example.html" x="1400" y="150" zoom="true"/>
+        <Node id="resources/tiny_mce/themes/advanced/about.htm" x="900" y="750" zoom="true"/>
         <Node id="resources/tiny_mce/plugins/safari/blank.htm" x="150" y="1500" zoom="true"/>
+        <Node id="resources/tiny_mce/plugins/preview/example.html" x="1400" y="150" zoom="true"/>
         <Node id="deny.xhtml" x="650" y="600" zoom="true"/>
         <Node id="personal/admin/members.xhtml" x="1400" y="450" zoom="true"/>
         <Node id="resources/tiny_mce/plugins/media/media.htm" x="2400" y="150" zoom="true"/>
         <Node id="resources/tiny_mce/plugins/searchreplace/searchreplace.htm" x="1150" y="750" zoom="true"/>
         <Node id="resources/tiny_mce/themes/advanced/link.htm" x="2150" y="600" zoom="true"/>
         <Node id="resources/tiny_mce/plugins/template/template.htm" x="900" y="900" zoom="true"/>
+        <Node id="personal/globaladmin/blogs.xhtml" x="1650" y="750" zoom="true"/>
         <Node id="resources/tiny_mce/plugins/xhtmlxtras/del.htm" x="150" y="300" zoom="true"/>
         <Node id="resources/tiny_mce/themes/advanced/charmap.htm" x="650" y="150" zoom="true"/>
-        <Node id="personal/globaladmin/blogs.xhtml" x="1650" y="750" zoom="true"/>
         <Node id="personal/globaladmin/userNew.xhtml" x="1650" y="900" zoom="true"/>
-        <Node id="resources/tiny_mce/plugins/inlinepopups/template.htm" x="2650" y="300" zoom="true"/>
-        <Node id="resources/tiny_mce/plugins/xhtmlxtras/abbr.htm" x="1650" y="600" zoom="true"/>
         <Node id="resources/tiny_mce/plugins/xhtmlxtras/acronym.htm" x="1150" y="900" zoom="true"/>
-        <Node id="personal/globaladmin/blogNew.xhtml" x="650" y="1200" zoom="true"/>
+        <Node id="resources/tiny_mce/plugins/xhtmlxtras/abbr.htm" x="1650" y="600" zoom="true"/>
+        <Node id="resources/tiny_mce/plugins/inlinepopups/template.htm" x="2650" y="300" zoom="true"/>
         <Node id="resources/tiny_mce/plugins/advimage/image.htm" x="900" y="1200" zoom="true"/>
         <Node id="blog.xhtml" x="650" y="450" zoom="true"/>
+        <Node id="personal/globaladmin/blogNew.xhtml" x="650" y="1200" zoom="true"/>
         <Node id="resources/tiny_mce/plugins/xhtmlxtras/attributes.htm" x="400" y="1350" zoom="true"/>
         <Node id="resources/tiny_mce/plugins/style/props.htm" x="1900" y="150" zoom="true"/>
         <Node id="resources/tiny_mce/plugins/table/cell.htm" x="400" y="1050" zoom="true"/>
@@ -63,14 +63,13 @@
         <Node id="personal/globaladmin/config.xhtml" x="1900" y="450" zoom="true"/>
         <Node id="resources/tiny_mce/plugins/fullscreen/fullscreen.htm" x="400" y="450" zoom="true"/>
         <Node id="personal/globaladmin/blogDetail.xhtml" x="2650" y="150" zoom="true"/>
-        <Node id="resources/lightbox/index.htm" x="1150" y="300" zoom="true"/>
         <Node id="personal/author/categories.xhtml" x="150" y="450" zoom="true"/>
         <Node id="resources/tiny_mce/plugins/paste/pasteword.htm" x="400" y="600" zoom="true"/>
-        <Node id="resources/tiny_mce/plugins/paste/pastetext.htm" x="1400" y="300" zoom="true"/>
         <Node id="forward.jsp" x="1900" y="750" zoom="true"/>
+        <Node id="resources/tiny_mce/plugins/paste/pastetext.htm" x="1400" y="300" zoom="true"/>
         <Node id="personal/author/pages.xhtml" x="900" y="450" zoom="true"/>
-        <Node id="personal/admin/templates.xhtml" x="1650" y="300" zoom="true"/>
         <Node id="index.xhtml" x="150" y="1050" zoom="true"/>
+        <Node id="personal/admin/templates.xhtml" x="1650" y="300" zoom="true"/>
         <Node id="resources/tiny_mce/plugins/example/dialog.htm" x="1650" y="450" zoom="true"/>
         <Node id="resources/tiny_mce/plugins/paste/blank.htm" x="650" y="300" zoom="true"/>
         <Node id="install/*" x="900" y="600" zoom="true"/>

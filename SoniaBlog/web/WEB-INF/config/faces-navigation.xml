@@ -306,7 +306,6 @@
     </navigation-case>
   </navigation-rule>
 
-
   <navigation-rule>
     <from-view-id>/personal/dashboard.xhtml</from-view-id>
     <navigation-case>

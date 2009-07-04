@@ -40,6 +40,12 @@
 
       <ui:define name="content">
 
+        <h1><h:outputText value="#{label.avatar}" /></h1>
+
+        <h:graphicImage id="avatar" url="#{AvatarBean.imagePath}" rendered="#{AvatarBean.imagePath != null}" />
+
+        <br />
+
         <h:form prependId="false">
           <h:inputHidden id="x" value="#{AvatarBean.x}" />
           <h:inputHidden id="y" value="#{AvatarBean.y}" />
@@ -47,8 +53,6 @@
           <h:inputHidden id="height" value="#{AvatarBean.height}" />
           <h:commandButton value="#{label.save}" action="#{AvatarBean.crop}" />
         </h:form>
-
-        <h:graphicImage id="avatar" url="#{AvatarBean.imagePath}" rendered="#{AvatarBean.imagePath != null}" />
 
       </ui:define>
 

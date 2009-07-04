@@ -35,7 +35,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -45,6 +44,9 @@ import java.util.logging.Logger;
  */
 public class AvatarBean extends AbstractBean
 {
+
+  /** Field description */
+  private static final String AVATARCROP = "avatarCrop";
 
   /** Field description */
   private static Logger logger = Logger.getLogger(AvatarBean.class.getName());
@@ -71,13 +73,28 @@ public class AvatarBean extends AbstractBean
   public String crop()
   {
     String result = SUCCESS;
+
     try
     {
       File avatar = getAvatarFile();
 
-      imageHandler.cropImage(tempFile, avatar, imageFormat, x, y, width,
-                             height);
+      if ((width == 50) && (height == 50))
+      {
+        imageHandler.cropImage(tempFile, avatar, imageFormat, x, y, width,
+                               height);
+      }
+      else
+      {
+        File temp = resManager.getTempFile("avatar-", ".crop");
+
+        imageHandler.cropImage(tempFile, temp, imageFormat, x, y, width,
+                               height);
+        imageHandler.scaleImageFix(temp, avatar, imageFormat, 50, 50);
+        temp.delete();
+      }
+
       updateAvatar(avatar.getName());
+      tempFile.delete();
     }
     catch (IOException ex)
     {
@@ -89,8 +106,6 @@ public class AvatarBean extends AbstractBean
     return result;
   }
 
-  private static final String AVATARCROP = "avatarCrop";
-
   /**
    * Method description
    *
@@ -100,6 +115,7 @@ public class AvatarBean extends AbstractBean
   public String upload()
   {
     String result = SUCCESS;
+
     if (avatarUploadFile != null)
     {
       try
@@ -111,7 +127,7 @@ public class AvatarBean extends AbstractBean
         try
         {
           in = avatarUploadFile.getInputStream();
-          temp = resManager.getTempFile("avatar", ".up");
+          temp = resManager.getTempFile("avatar-", ".up");
           out = new FileOutputStream(temp);
           Util.copy(in, out);
         }
@@ -150,11 +166,13 @@ public class AvatarBean extends AbstractBean
           // TODO replace with scale with background
           imageHandler.scaleImageFix(temp, avatar, imageFormat, width, height);
           updateAvatar(avatar.getName());
+          temp.delete();
         }
         else if ((d.width > 720) || (d.height > 576))
         {
           imageHandler.scaleImage(temp, tempFile, imageFormat, 720, 576);
           result = AVATARCROP;
+          temp.delete();
         }
         else
         {
@@ -323,10 +341,32 @@ public class AvatarBean extends AbstractBean
 
     if (user != null)
     {
+      String oldAvatar = user.getAvatar();
+
       user.setAvatar(name);
 
       if (userDAO.edit(user))
       {
+        if (oldAvatar != null)
+        {
+          File avatarDir = resManager.getDirectory(Constants.RESOURCE_AVATAR);
+          File oa = new File(avatarDir, oldAvatar);
+
+          if (oa.exists())
+          {
+            if (oa.delete())
+            {
+              if (logger.isLoggable(Level.WARNING))
+              {
+                StringBuffer log = new StringBuffer();
+
+                log.append("cant delete avatar <").append(oa.getPath());
+                logger.warning(log.toString());
+              }
+            }
+          }
+        }
+
         getMessageHandler().info("successUpdateAvatar");
       }
       else
