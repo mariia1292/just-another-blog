@@ -1,0 +1,17 @@
+ul.autocomplete {
+  background-color: #ffffff;
+  border: 1px solid black;
+  padding: 0;
+  margin: 0;
+  position: absolute;
+}
+ul.autocomplete li {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  text-align: left;
+  background-color: #ffffff;
+}
+ul.autocomplete li.selected {
+  background-color: #cccccc;
+}
