@@ -14,6 +14,7 @@ import sonia.blog.api.app.Constants;
 import sonia.blog.api.app.Context;
 import sonia.blog.api.dao.Dao;
 import sonia.blog.api.macro.LinkResource;
+import sonia.blog.api.macro.ScriptResource;
 import sonia.blog.api.macro.WebResource;
 import sonia.blog.api.mapping.MappingHandler;
 import sonia.blog.authentication.CookieLoginModule;
@@ -521,8 +522,12 @@ public class BlogContextListener implements ServletContextListener
     opensearch.setType(LinkResource.TYPE_OPENSEARCH);
     opensearch.setTitle("JAB - {2}");
     opensearch.setHref(ctxPath + "/opensearch.xml");
+
+    ScriptResource jquery = new ScriptResource(10,
+                              ctxPath + "/resources/jquery/jquery.min.js");
+
     registry.register(WebResource.class, Constants.SERVICE_WEBRESOURCE).add(
-        entryRSS).add(commentRSS).add(opensearch);
+        entryRSS).add(commentRSS).add(opensearch).add(jquery);
   }
 
   //~--- get methods ----------------------------------------------------------
