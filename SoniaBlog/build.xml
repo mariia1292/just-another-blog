@@ -113,7 +113,7 @@
 
   </target>
 
-  <target name="changeEnvironment" depends="-post-compile">
+  <target name="changeEnvironment" depends="compile">
     <taskdef name="chEnv" classname="sonia.ant.ChangeEnvironmentTask" classpath="../SoniaAnt/dist/SoniaAnt.jar" />
     <chEnv path="${build.web.dir}" environment="release" />
   </target>
@@ -154,6 +154,15 @@
     </yuicompress>
   </target>
 
-  <target name="release" depends="changeEnvironment,dist,tomcat" />
+  <target name="removeSources">
+    <delete>
+      <fileset dir="${build.web.dir}/">
+        <include name="resources/tiny_mce/*_src.js" />
+        <include name="resources/tiny_mce/plugins/*/*_src.js" />
+      </fileset>
+    </delete>
+  </target>
+
+  <target name="release" depends="changeEnvironment,removeSources,dist,tomcat" />
   
 </project>
