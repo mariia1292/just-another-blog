@@ -256,5 +256,7 @@
   div.widget-left { float: left;  }
   div.widget-right { float: right;  }
   div.widget-content { padding: 3px; }
+
+  .searchForm input[type=text] { width: 120px; }
 }
 

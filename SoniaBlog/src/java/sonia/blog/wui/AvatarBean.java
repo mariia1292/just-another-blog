@@ -360,7 +360,7 @@ public class AvatarBean extends AbstractBean
               {
                 StringBuffer log = new StringBuffer();
 
-                log.append("cant delete avatar <").append(oa.getPath());
+                log.append("cant delete avatar ").append(oa.getPath());
                 logger.warning(log.toString());
               }
             }

@@ -46,17 +46,17 @@
   </mapping>
 
   <mapping>
-    <regex>^/opensearch.xml$</regex>
+    <regex>^/opensearch\.xml$</regex>
     <class>sonia.blog.mapping.OpenSearchMapping</class>
   </mapping>
 
   <mapping>
-    <regex>^/search.jab$</regex>
+    <regex>^/search\.jab$</regex>
     <class>sonia.blog.mapping.SearchMapping</class>
   </mapping>
 
   <mapping>
-    <regex>^/random.jab$</regex>
+    <regex>^/random\.jab$</regex>
     <class>sonia.blog.mapping.RandomMapping</class>
   </mapping>
   
@@ -66,7 +66,7 @@
   </mapping>
 
   <mapping>
-    <regex>^/chart/blog/usage.png$</regex>
+    <regex>^/chart/blog/usage\.png$</regex>
     <class>sonia.blog.mapping.chart.BlogUsageChartMapping</class>
   </mapping>
 
@@ -81,7 +81,7 @@
   </mapping>
 
   <mapping>
-    <regex>^/page/([0-9]+).jab</regex>
+    <regex>^/page/([0-9]+)\.jab</regex>
     <class>sonia.blog.mapping.PageMapping</class>
   </mapping>
 
@@ -103,6 +103,11 @@
   <mapping>
     <regex>^/avatar/(.*)$</regex>
     <class>sonia.blog.mapping.AvatarMapping</class>
+  </mapping>
+
+  <mapping>
+    <regex>^/async/([a-zA-Z0-9]+)\.json$</regex>
+    <class>sonia.blog.mapping.AsyncMapping</class>
   </mapping>
 
 </mappings>
