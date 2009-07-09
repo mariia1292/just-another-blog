@@ -38,7 +38,7 @@
   <loggers>
     <logger>
       <name>sonia</name>
-      <handler>console</handler>
+      <handler>file</handler>
       <level>INFO</level>
       <useParentHandlers>false</useParentHandlers>
     </logger>
