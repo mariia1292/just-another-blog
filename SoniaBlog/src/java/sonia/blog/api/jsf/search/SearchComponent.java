@@ -60,7 +60,33 @@ public class SearchComponent extends BaseComponent
     type = (String) state[3];
     value = (String) state[4];
     label = (String) state[5];
+    autoComplete = (Boolean) state[6];
   }
+
+  private Boolean autoComplete;
+
+  public Boolean isAutoComplete()
+  {
+         if (autoComplete != null)
+    {
+      return autoComplete;
+    }
+
+    ValueExpression ve = getValueExpression("autoComplete");
+
+    return (ve != null)
+           ? (Boolean) ve.getValue(getFacesContext().getELContext())
+           : Boolean.FALSE;
+  
+  }
+
+  public void setAutoComplete(Boolean autoComplete)
+  {
+    this.autoComplete = autoComplete;
+  }
+  
+
+
 
   /**
    * Method description
@@ -75,7 +101,7 @@ public class SearchComponent extends BaseComponent
   {
     if (state == null)
     {
-      state = new Object[6];
+      state = new Object[7];
     }
 
     state[0] = super.saveState(context);
@@ -84,6 +110,7 @@ public class SearchComponent extends BaseComponent
     state[3] = type;
     state[4] = value;
     state[5] = label;
+    state[6] = autoComplete;
 
     return state;
   }

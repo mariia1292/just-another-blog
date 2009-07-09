@@ -55,6 +55,11 @@ public class SearchRenderer extends BaseRenderer
     {
       renderBegin(context, searchCompnent, writer);
     }
+
+    if (searchCompnent.isAutoComplete())
+    {
+      renderAutoComplete(context, searchCompnent, writer);
+    }
   }
 
   /**
@@ -83,6 +88,81 @@ public class SearchRenderer extends BaseRenderer
 
       writer.endElement("form");
     }
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param context
+   * @param searchCompnent
+   * @param writer
+   *
+   * @throws IOException
+   */
+  private void renderAutoComplete(FacesContext context,
+                                  SearchComponent searchCompnent,
+                                  ResponseWriter writer)
+          throws IOException
+  {
+    writer.startElement("script", searchCompnent);
+    writer.writeAttribute("type", "text/javascript", null);
+    writer.write("if (typeof jQuery != 'undefined') { ");
+
+    if (context.getExternalContext().getRequestMap().get(
+            "sonia.blog.resource.autocomplete") == null)
+    {
+      writer.write("$(\"head\").append(\"<link rel=\\\"stylesheet\\\" ");
+      writer.write("type=\\\"text/css\\\" href=\\\"");
+
+      // write href
+      writer.write(context.getExternalContext().getRequestContextPath());
+      writer.write("/resources/jquery/plugins/css/autocomplete.css");
+      writer.write("\\\" /> \"); ");
+      writer.write("$.getScript(\"");
+      writer.write(context.getExternalContext().getRequestContextPath());
+      writer.write("/resources/jquery/plugins/js/autocomplete.js");
+      writer.write("\", function(){ ");
+      renderAutoCompleteScript(context, searchCompnent, writer);
+      writer.write("}); ");
+      context.getExternalContext().getRequestMap().put(
+          "sonia.blog.resource.autocomplete", Boolean.TRUE);
+    }
+    else
+    {
+      writer.write("$.ready((function(){");
+      renderAutoCompleteScript(context, searchCompnent, writer);
+      writer.write("}));");
+    }
+
+    writer.write("}");
+    writer.endElement("script");
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param context
+   * @param searchCompnent
+   * @param writer
+   *
+   * @throws IOException
+   */
+  private void renderAutoCompleteScript(FacesContext context,
+          SearchComponent searchCompnent, ResponseWriter writer)
+          throws IOException
+  {
+    String clientId = searchCompnent.getClientId(context);
+
+    clientId = clientId.replaceAll(":", "\\:");
+    writer.write("$(\"#");
+    writer.write(clientId);
+    writer.write("\").autocomplete(\"");
+    writer.write(context.getExternalContext().getRequestContextPath());
+    writer.write("/async/search.json\", {id: \"result_");
+    writer.write(clientId);
+    writer.write("\"});");
   }
 
   /**
@@ -127,8 +207,14 @@ public class SearchRenderer extends BaseRenderer
     }
 
     writer.startElement("input", searchComponent);
+    writer.writeAttribute("id", searchComponent.getClientId(context), null);
     writer.writeAttribute("type", "text", null);
     writer.writeAttribute("name", "search", null);
+
+    if (searchComponent.isAutoComplete())
+    {
+      writer.writeAttribute("autocomplete", "off", null);
+    }
 
     String value = searchComponent.getValue();
 

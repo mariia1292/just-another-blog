@@ -32,7 +32,7 @@
     $field.blur(function(){
       setTimeout( function(){
         $output.hide()
-      }, 100);
+      }, 200);
     });
 
     $field.keydown(function(event){

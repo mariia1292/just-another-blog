@@ -71,6 +71,17 @@ public class SearchTag extends BaseTag
    * Method description
    *
    *
+   * @param autoComplete
+   */
+  public void setAutoComplete(ValueExpression autoComplete)
+  {
+    this.autoComplete = autoComplete;
+  }
+
+  /**
+   * Method description
+   *
+   *
    * @param label
    */
   public void setLabel(ValueExpression label)
@@ -156,10 +167,18 @@ public class SearchTag extends BaseTag
       component.setValueExpression("label", label);
     }
 
+    if (autoComplete != null)
+    {
+      component.setValueExpression("autoComplete", autoComplete);
+    }
+
     super.setProperties(component);
   }
 
   //~--- fields ---------------------------------------------------------------
+
+  /** Field description */
+  private ValueExpression autoComplete;
 
   /** Field description */
   private ValueExpression label;
