@@ -90,9 +90,9 @@
     <hgVersion hgpath="${sonia.ant.hg}" prefix="r" repositorypath="${basedir}/.." path="${basedir}/${build.web.dir}/WEB-INF/config/version.txt" />
   </target>
 
-  <target name="-pre-dist" depends="set-version" />
+  <target name="-post-compile" depends="set-version,compress" />
   
-  <target name="tomcat" depends="compile,set-version">
+  <target name="tomcat" depends="-post-compile">
     
     <property name="build.tomcat.dir" value="${build.web.dir}/../tomcat" />
 
@@ -113,11 +113,47 @@
 
   </target>
 
-  <target name="release" depends="compile,set-version">
+  <target name="changeEnvironment" depends="-post-compile">
     <taskdef name="chEnv" classname="sonia.ant.ChangeEnvironmentTask" classpath="../SoniaAnt/dist/SoniaAnt.jar" />
     <chEnv path="${build.web.dir}" environment="release" />
-    <antcall target="dist"  />
-    <antcall target="tomcat" />
   </target>
+
+  <target name="init-compress">
+    <condition property="compress">
+      <or>
+        <not>
+          <isset property="sonia.compress" />
+        </not>
+        <istrue value="${sonia.compress}" />
+      </or>
+    </condition>
+  </target>
+
+  <target name="compress" if="compress" depends="init-compress">
+    <taskdef name="yuicompress" classname="sonia.ant.YuiCompressTask" classpath="${libs.YuiCompress.classpath}:../SoniaAnt/dist/SoniaAnt.jar" />
+    <yuicompress replaceSourceFiles="true">
+      <fileset dir="${build.web.dir}/">
+        <include name="resources/jquery/plugins/js/autocomplete.js" />
+        <include name="resources/jquery/plugins/css/autocomplete.css" />
+        <include name="resources/tiny_mce/plugins/attachment/editor_plugin.js" />
+        <include name="resources/tiny_mce/plugins/attachment/*/*.js" />
+        <include name="resources/tiny_mce/plugins/imgbrowser/editor_plugin.js" />
+        <include name="resources/tiny_mce/plugins/imgbrowser/*/*.js" />
+        <include name="resources/tiny_mce/plugins/links/editor_plugin.js" />
+        <include name="resources/tiny_mce/plugins/links/*/*.js" />
+        <include name="resources/tiny_mce/plugins/macro/editor_plugin.js" />
+        <include name="resources/tiny_mce/plugins/macro/*/*.js" />
+        <include name="resources/tiny_mce/plugins/imgresize/editor_plugin.js" />
+        <include name="template/jab/css/blog.css" />
+        <include name="template/jab/css/screen/*.css" />
+        <include name="template/jab/css/patches/*.css" />
+        <include name="template/admin/css/admin.css" />
+        <include name="template/admin/css/screen/*.css" />
+        <include name="template/admin/css/patches/*.css" />
+      </fileset>
+    </yuicompress>
+  </target>
+
+  <target name="release" depends="changeEnvironment,dist,tomcat" />
   
 </project>
