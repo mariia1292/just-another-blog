@@ -269,8 +269,7 @@ public class YuiCompressTask extends Task
       {
         String charset = System.getProperty("file.encoding");
 
-        log(new StringBuffer("using charset ").append(charset).toString());
-        log(in.getPath());
+        log("compress file " + in.getPath());
         reader = new InputStreamReader(new FileInputStream(in), charset);
 
         File out = getOutputFile(in);
