@@ -18,7 +18,7 @@
 
         <h1><h:outputText value="#{label.loginTitle}" /></h1>
 
-        <h:form>
+        <h:form id="loginForm">
 
           <h:panelGrid columns="3">
 
@@ -36,7 +36,7 @@
 
             <f:facet name="footer">
               <h:panelGroup />
-              <h:commandButton value="#{label.login}" action="#{LoginBean.login}" />
+              <h:commandButton id="submit" value="#{label.login}" action="#{LoginBean.login}" />
             </f:facet>
 
           </h:panelGrid>
