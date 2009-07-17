@@ -9,37 +9,31 @@
 
     <ui:composition>
 
-      <c:if test="#{DashboardBean.channel == null}">
+      <h3 id="feedTitle"><h:outputText value="#{label.news}" /></h3>
 
-        <h3><h:outputText value="#{label.rssWidgetTitle}" /></h3>
+      <ul id="feedItems" class="feeds">
+        <li><h:outputText value="#{label.newsLoading}" /></li>
+      </ul>
 
-        <p>
-          <h:outputText value="#{message.rssCouldNotLoadChannel}" />
-        </p>
-
-      </c:if>
-
-      <c:if test="#{DashboardBean.channel != null}">
-
-      <h3><h:outputText value="#{DashboardBean.channel.title}" /></h3>
-
-      <h:dataTable styleClass="small" value="#{DashboardBean.channel.items}" var="Item" rows="4">
-
-        <h:column>
-          <h:outputText value="#{Item.pubDate}">
-            <f:convertDateTime pattern="#{BlogBean.blog.dateFormat}" />
-          </h:outputText>
-        </h:column>
-
-        <h:column>
-          <h:outputLink target="_blank" value="#{Item.link}">
-            <h:outputText value="#{Item.title}" />
-          </h:outputLink>
-        </h:column>
-
-      </h:dataTable>
-
-      </c:if>
+      <script type="text/javascript">
+        $(document).ready(function(){
+          $.getJSON( "#{DashboardBean.rssUrl}", function(result, status){
+            if ( status == "success" ){
+              $("#feedTitle").empty();
+              $("#feedItems").empty();
+              $.each(result, function(index, channel){
+                $("#feedTitle").append( $("<a />").attr("href", channel.link).attr("target", "_blank").text( channel.title ) );
+                $.each( channel.items, function(i,item){
+                  $("#feedItems").append($("<li />").text(item.date + " - ").append( $("<a />").attr("href", item.link).attr("target", "_blank").text(item.title)));
+                  if ( i == 3 ) return false;
+                });
+              });
+            } else {
+              $("#feedItems li:first").text( "#{message.rssCouldNotLoadChannel}" );
+            }
+          });
+        });
+      </script>
 
     </ui:composition>
 

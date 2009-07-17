@@ -1,10 +1,10 @@
 /**
  * Copyright (c) 2009, Sebastian Sdorra
  * All rights reserved.
- * 
+ *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
@@ -13,7 +13,7 @@
  * 3. Neither the name of JAB; nor the names of its
  *    contributors may be used to endorse or promote products derived from this
  *    software without specific prior written permission.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -24,10 +24,11 @@
  * ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- * 
+ *
  * http://kenai.com/projects/jab
- * 
+ *
  */
+
 
 
 package sonia.blog.wui;
@@ -52,19 +53,9 @@ import sonia.config.Config;
 
 import sonia.plugin.service.ServiceReference;
 
-import sonia.rss.Channel;
-import sonia.rss.FeedParser;
-
 //~--- JDK imports ------------------------------------------------------------
 
-import java.io.IOException;
-
-import java.net.URL;
-import java.net.UnknownHostException;
-
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javax.faces.context.FacesContext;
 import javax.faces.model.DataModel;
@@ -76,12 +67,6 @@ import javax.faces.model.ListDataModel;
  */
 public class DashboardBean extends AbstractBean
 {
-
-  /** Field description */
-  private static Logger logger =
-    Logger.getLogger(DashboardBean.class.getName());
-
-  //~--- constructors ---------------------------------------------------------
 
   /**
    * Constructs ...
@@ -146,35 +131,6 @@ public class DashboardBean extends AbstractBean
     CategoryDAO categegoryDAO = BlogContext.getDAOFactory().getCategoryDAO();
 
     return categegoryDAO.count(b);
-  }
-
-  /**
-   * Method description
-   *
-   *
-   * @return
-   */
-  public Channel getChannel()
-  {
-    if (channel == null)
-    {
-      try
-      {
-        FeedParser parser = FeedParser.getInstance("rss2");
-
-        channel = parser.load(new URL(rssUrl).openStream());
-      }
-      catch (UnknownHostException ex)
-      {
-        logger.log(Level.FINEST, null, ex);
-      }
-      catch (IOException ex)
-      {
-        logger.log(Level.SEVERE, null, ex);
-      }
-    }
-
-    return channel;
   }
 
   /**
@@ -293,6 +249,22 @@ public class DashboardBean extends AbstractBean
 
   /**
    * Method description
+   *
+   *
+   * @return
+   */
+  public String getRssUrl()
+  {
+    StringBuffer url = new StringBuffer();
+
+    url.append(getRequest().getContextPath()).append("/async/feed.json?url=");
+    url.append(rssUrl).append("&type=rss2");
+
+    return url.toString();
+  }
+
+  /**
+   * Method description
    * TODO: replace with TagDAO.countByBlog()
    *
    * @return
@@ -323,9 +295,6 @@ public class DashboardBean extends AbstractBean
   }
 
   //~--- fields ---------------------------------------------------------------
-
-  /** Field description */
-  private Channel channel;
 
   /** Field description */
   private DataModel comments;

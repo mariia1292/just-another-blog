@@ -254,9 +254,17 @@
   div.widget-left { float: left;  }
   div.widget-right { float: right;  }
   div.widget-content { padding: 3px; }
-
   
   .pageTree table td,
   .pageTree table th { padding: 0; }
+
+  ul.feeds {
+    list-style: none;
+    margin-left: 0;
+  }
+
+  ul.feeds li {
+    margin-left: 0;
+  }
 }
 
