@@ -33,27 +33,63 @@
 
 package sonia.cache;
 
-//~--- JDK imports ------------------------------------------------------------
-
-import java.io.Serializable;
-
-import java.util.Set;
-
 /**
  *
  * @author Sebastian Sdorra
  *
- * @param <K>
  * @param <V>
  */
-public interface Cache<K, V> extends Serializable
+public class CacheObject<V>
 {
 
   /**
+   * Constructs ...
+   *
+   *
+   * @param object
+   */
+  public CacheObject(V object)
+  {
+    this.object = object;
+    this.time = System.currentTimeMillis();
+    this.lastAccess = 0;
+    this.hits = 0;
+  }
+
+  //~--- methods --------------------------------------------------------------
+
+  /**
    * Method description
    *
+   *
+   * @param obj
+   *
+   * @return
    */
-  public void clear();
+  @Override
+  @SuppressWarnings("unchecked")
+  public boolean equals(Object obj)
+  {
+    if (obj == null)
+    {
+      return false;
+    }
+
+    if (getClass() != obj.getClass())
+    {
+      return false;
+    }
+
+    final CacheObject<V> other = (CacheObject<V>) obj;
+
+    if ((this.object != other.object)
+        && ((this.object == null) ||!this.object.equals(other.object)))
+    {
+      return false;
+    }
+
+    return true;
+  }
 
   /**
    * Method description
@@ -61,36 +97,17 @@ public interface Cache<K, V> extends Serializable
    *
    * @return
    */
-  public Set<K> keySet();
+  @Override
+  public int hashCode()
+  {
+    int hash = 7;
 
-  /**
-   * Method description
-   *
-   *
-   * @param key
-   * @param value
-   *
-   * @return
-   */
-  public V put(K key, V value);
+    hash = 17 * hash + ((this.object != null)
+                        ? this.object.hashCode()
+                        : 0);
 
-  /**
-   * Method description
-   *
-   *
-   * @param key
-   *
-   * @return
-   */
-  public V remove(K key);
-
-  /**
-   * Method description
-   *
-   *
-   * @return
-   */
-  public int size();
+    return hash;
+  }
 
   //~--- get methods ----------------------------------------------------------
 
@@ -98,11 +115,12 @@ public interface Cache<K, V> extends Serializable
    * Method description
    *
    *
-   * @param key
-   *
    * @return
    */
-  public V get(K key);
+  public long getHits()
+  {
+    return hits;
+  }
 
   /**
    * Method description
@@ -110,7 +128,10 @@ public interface Cache<K, V> extends Serializable
    *
    * @return
    */
-  public long getHits();
+  public long getLastAccess()
+  {
+    return lastAccess;
+  }
 
   /**
    * Method description
@@ -118,7 +139,10 @@ public interface Cache<K, V> extends Serializable
    *
    * @return
    */
-  public long getMissed();
+  public V getObject()
+  {
+    return object;
+  }
 
   /**
    * Method description
@@ -126,13 +150,34 @@ public interface Cache<K, V> extends Serializable
    *
    * @return
    */
-  public String getName();
+  public long getTime()
+  {
+    return time;
+  }
+
+  //~--- methods --------------------------------------------------------------
 
   /**
    * Method description
    *
-   *
-   * @return
    */
-  public boolean isEmpty();
+  void update()
+  {
+    lastAccess = System.currentTimeMillis();
+    hits++;
+  }
+
+  //~--- fields ---------------------------------------------------------------
+
+  /** Field description */
+  private long hits;
+
+  /** Field description */
+  private long lastAccess;
+
+  /** Field description */
+  private V object;
+
+  /** Field description */
+  private long time;
 }

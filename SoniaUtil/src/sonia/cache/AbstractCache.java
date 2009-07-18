@@ -35,8 +35,7 @@ package sonia.cache;
 
 //~--- JDK imports ------------------------------------------------------------
 
-import java.io.Serializable;
-
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -46,51 +45,19 @@ import java.util.Set;
  * @param <K>
  * @param <V>
  */
-public interface Cache<K, V> extends Serializable
+public abstract class AbstractCache<K, V> implements Cache<K, V>
 {
 
   /**
-   * Method description
+   * Constructs ...
    *
+   *
+   * @param name
    */
-  public void clear();
-
-  /**
-   * Method description
-   *
-   *
-   * @return
-   */
-  public Set<K> keySet();
-
-  /**
-   * Method description
-   *
-   *
-   * @param key
-   * @param value
-   *
-   * @return
-   */
-  public V put(K key, V value);
-
-  /**
-   * Method description
-   *
-   *
-   * @param key
-   *
-   * @return
-   */
-  public V remove(K key);
-
-  /**
-   * Method description
-   *
-   *
-   * @return
-   */
-  public int size();
+  public AbstractCache(String name)
+  {
+    this.name = name;
+  }
 
   //~--- get methods ----------------------------------------------------------
 
@@ -98,11 +65,59 @@ public interface Cache<K, V> extends Serializable
    * Method description
    *
    *
+   * @return
+   */
+  protected abstract Map<K, CacheObject<V>> getCacheMap();
+
+  //~--- methods --------------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   */
+  public void clear()
+  {
+    Map<K, CacheObject<V>> cacheMap = getCacheMap();
+
+    synchronized (cacheMap)
+    {
+      cacheMap.clear();
+    }
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  public Set<K> keySet()
+  {
+    return getCacheMap().keySet();
+  }
+
+  /**
+   * Method description
+   *
+   *
    * @param key
    *
    * @return
    */
-  public V get(K key);
+  public V remove(K key)
+  {
+    V result = null;
+    Map<K, CacheObject<V>> cacheMap = getCacheMap();
+
+    synchronized (cacheMap)
+    {
+      CacheObject<V> co = cacheMap.remove(key);
+
+      result = co.getObject();
+    }
+
+    return result;
+  }
 
   /**
    * Method description
@@ -110,7 +125,12 @@ public interface Cache<K, V> extends Serializable
    *
    * @return
    */
-  public long getHits();
+  public int size()
+  {
+    return getCacheMap().size();
+  }
+
+  //~--- get methods ----------------------------------------------------------
 
   /**
    * Method description
@@ -118,7 +138,10 @@ public interface Cache<K, V> extends Serializable
    *
    * @return
    */
-  public long getMissed();
+  public long getHits()
+  {
+    return hits;
+  }
 
   /**
    * Method description
@@ -126,7 +149,10 @@ public interface Cache<K, V> extends Serializable
    *
    * @return
    */
-  public String getName();
+  public long getMissed()
+  {
+    return missed;
+  }
 
   /**
    * Method description
@@ -134,5 +160,30 @@ public interface Cache<K, V> extends Serializable
    *
    * @return
    */
-  public boolean isEmpty();
+  public String getName()
+  {
+    return name;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  public boolean isEmpty()
+  {
+    return getCacheMap().isEmpty();
+  }
+
+  //~--- fields ---------------------------------------------------------------
+
+  /** Field description */
+  protected long hits = 0l;
+
+  /** Field description */
+  protected long missed = 0l;
+
+  /** Field description */
+  private String name;
 }
