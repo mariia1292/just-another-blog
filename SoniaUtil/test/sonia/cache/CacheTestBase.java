@@ -43,29 +43,18 @@ import static org.junit.Assert.*;
  *
  * @author Sebastian Sdorra
  */
-public class ExpirationMapTest
+public abstract class CacheTestBase
 {
 
   /**
    * Method description
    *
    *
-   * @throws InterruptedException
+   * @return
    */
-  @Test
-  public void expirationTest() throws InterruptedException
-  {
-    long time = 1000l;
-    Cache<String, String> cache = new ExpirationMap<String, String>("junit",
-                                    time, false);
+  protected abstract Cache<String, String> getCache();
 
-    assertEquals("value", cache.put("key", "value"));
-    assertEquals("value", cache.get("key"));
-    Thread.sleep(1001l);
-    assertNull(cache.get("key"));
-    assertTrue(cache.size() == 0);
-    assertTrue(cache.isEmpty());
-  }
+  //~--- methods --------------------------------------------------------------
 
   /**
    * Method description
@@ -74,17 +63,22 @@ public class ExpirationMapTest
   @Test
   public void simpleTest()
   {
-    long time = 5000l;
-    Cache<String, String> cache = new ExpirationMap<String, String>("junit",
-                                    time, false);
+    Cache<String, String> cache = getCache();
 
     assertEquals("value", cache.put("key", "value"));
     assertEquals("value", cache.get("key"));
+    assertTrue(cache.getHits() == 1l);
     assertEquals("key", cache.keySet().iterator().next());
     assertTrue(cache.size() == 1);
     assertEquals("value", cache.remove("key"));
     assertNull(cache.get("key"));
+    assertTrue(cache.getMissed() == 1l);
     assertTrue(cache.size() == 0);
+    assertTrue(cache.isEmpty());
+    assertEquals("value", cache.put("key", "value"));
+    assertEquals("new-value", cache.put("key", "new-value"));
+    assertTrue(cache.size() == 1);
+    cache.clear();
     assertTrue(cache.isEmpty());
   }
 }

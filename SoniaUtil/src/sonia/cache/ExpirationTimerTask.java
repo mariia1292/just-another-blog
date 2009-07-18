@@ -35,9 +35,11 @@ package sonia.cache;
 
 //~--- JDK imports ------------------------------------------------------------
 
-import java.io.Serializable;
-
-import java.util.Set;
+import java.util.Collection;
+import java.util.Map.Entry;
+import java.util.TimerTask;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -46,93 +48,63 @@ import java.util.Set;
  * @param <K>
  * @param <V>
  */
-public interface Cache<K, V> extends Serializable
+public class ExpirationTimerTask<K, V> extends TimerTask
 {
 
+  /** Field description */
+  private static Logger logger =
+    Logger.getLogger(ExpirationTimerTask.class.getName());
+
+  //~--- constructors ---------------------------------------------------------
+
   /**
-   * Method description
+   * Constructs ...
    *
+   *
+   * @param cache
+   * @param expirationTime
    */
-  public void clear();
+  public ExpirationTimerTask(ExpirationCache<K, V> cache, long expirationTime)
+  {
+    this.cache = cache;
+    this.expirationTime = expirationTime;
+  }
+
+  //~--- methods --------------------------------------------------------------
 
   /**
    * Method description
    *
-   *
-   * @return
    */
-  public Set<K> keySet();
+  @Override
+  public void run()
+  {
+    if (logger.isLoggable(Level.FINEST))
+    {
+      logger.finest("excecute expiration timer");
+    }
 
-  /**
-   * Method description
-   *
-   *
-   * @param key
-   * @param value
-   *
-   * @return
-   */
-  public V put(K key, V value);
+    if (!cache.isEmpty())
+    {
+      Collection<Entry<K, CacheObject<V>>> entries = cache.getEntries();
 
-  /**
-   * Method description
-   *
-   *
-   * @param key
-   *
-   * @return
-   */
-  public V remove(K key);
+      for (Entry<K, CacheObject<V>> entry : entries)
+      {
+        long time = System.currentTimeMillis();
 
-  /**
-   * Method description
-   *
-   *
-   * @return
-   */
-  public int size();
+        if (time - entry.getValue().getTime() > expirationTime)
+        {
+          cache.remove(entry.getKey());
+        }
+      }
+    }
+  }
 
-  //~--- get methods ----------------------------------------------------------
+  //~--- fields ---------------------------------------------------------------
 
-  /**
-   * Method description
-   *
-   *
-   * @param key
-   *
-   * @return
-   */
-  public V get(K key);
+  /** Field description */
+  private ExpirationCache<K, V> cache;
 
-  /**
-   * Method description
-   *
-   *
-   * @return
-   */
-  public long getHits();
-
-  /**
-   * Method description
-   *
-   *
-   * @return
-   */
-  public long getMissed();
-
-  /**
-   * Method description
-   *
-   *
-   * @return
-   */
-  public String getName();
-
-  /**
-   * Method description
-   *
-   *
-   * @return
-   */
-  public boolean isEmpty();
+  /** Field description */
+  private long expirationTime;
 }

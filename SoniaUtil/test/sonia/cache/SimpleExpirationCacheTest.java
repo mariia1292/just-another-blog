@@ -33,64 +33,56 @@
 
 package sonia.cache;
 
-//~--- JDK imports ------------------------------------------------------------
+//~--- non-JDK imports --------------------------------------------------------
 
-import java.io.Serializable;
+import org.junit.Test;
 
-import java.util.Set;
+import static org.junit.Assert.*;
 
 /**
  *
  * @author Sebastian Sdorra
- *
- * @param <K>
- * @param <V>
  */
-public interface Cache<K, V> extends Serializable
+public class SimpleExpirationCacheTest extends CacheTestBase
 {
 
   /**
    * Method description
    *
+   *
+   * @throws InterruptedException
    */
-  public void clear();
+  @Test
+  public void expirationTest() throws InterruptedException
+  {
+    Cache<String, String> cache = getCache();
+
+    assertEquals("value", cache.put("key", "value"));
+    assertEquals("value", cache.get("key"));
+    Thread.sleep(1001l);
+    assertNull(cache.get("key"));
+    assertTrue(cache.size() == 0);
+    assertTrue(cache.isEmpty());
+  }
 
   /**
    * Method description
    *
    *
-   * @return
+   * @throws InterruptedException
    */
-  public Set<K> keySet();
+  @Test
+  public void extendedExpirationTest() throws InterruptedException
+  {
+    long time = 1000l;
+    Cache<String, String> cache = new SimpleExpirationCache<String,
+                                    String>("junit", time, true);
 
-  /**
-   * Method description
-   *
-   *
-   * @param key
-   * @param value
-   *
-   * @return
-   */
-  public V put(K key, V value);
-
-  /**
-   * Method description
-   *
-   *
-   * @param key
-   *
-   * @return
-   */
-  public V remove(K key);
-
-  /**
-   * Method description
-   *
-   *
-   * @return
-   */
-  public int size();
+    assertEquals("value", cache.put("key", "value"));
+    assertFalse(cache.isEmpty());
+    Thread.sleep(3010l);
+    assertTrue(cache.isEmpty());
+  }
 
   //~--- get methods ----------------------------------------------------------
 
@@ -98,41 +90,13 @@ public interface Cache<K, V> extends Serializable
    * Method description
    *
    *
-   * @param key
-   *
    * @return
    */
-  public V get(K key);
+  @Override
+  protected Cache<String, String> getCache()
+  {
+    long time = 1000l;
 
-  /**
-   * Method description
-   *
-   *
-   * @return
-   */
-  public long getHits();
-
-  /**
-   * Method description
-   *
-   *
-   * @return
-   */
-  public long getMissed();
-
-  /**
-   * Method description
-   *
-   *
-   * @return
-   */
-  public String getName();
-
-  /**
-   * Method description
-   *
-   *
-   * @return
-   */
-  public boolean isEmpty();
+    return new SimpleExpirationCache<String, String>("junit", time, false);
+  }
 }

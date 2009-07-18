@@ -33,106 +33,46 @@
 
 package sonia.cache;
 
-//~--- JDK imports ------------------------------------------------------------
-
-import java.io.Serializable;
-
-import java.util.Set;
+import org.junit.Test;
+import static org.junit.Assert.*;
 
 /**
  *
  * @author Sebastian Sdorra
- *
- * @param <K>
- * @param <V>
  */
-public interface Cache<K, V> extends Serializable
+public class MRUCacheTest extends CacheTestBase
 {
 
   /**
    * Method description
    *
-   */
-  public void clear();
-
-  /**
-   * Method description
-   *
    *
    * @return
    */
-  public Set<K> keySet();
+  @Override
+  protected Cache<String, String> getCache()
+  {
+    return new MRUCache<String, String>("junit", 5);
+  }
 
-  /**
-   * Method description
-   *
-   *
-   * @param key
-   * @param value
-   *
-   * @return
-   */
-  public V put(K key, V value);
+  @Test
+  public void mruTest()
+  {
+   Cache<String, String> cache = getCache();
 
-  /**
-   * Method description
-   *
-   *
-   * @param key
-   *
-   * @return
-   */
-  public V remove(K key);
-
-  /**
-   * Method description
-   *
-   *
-   * @return
-   */
-  public int size();
-
-  //~--- get methods ----------------------------------------------------------
-
-  /**
-   * Method description
-   *
-   *
-   * @param key
-   *
-   * @return
-   */
-  public V get(K key);
-
-  /**
-   * Method description
-   *
-   *
-   * @return
-   */
-  public long getHits();
-
-  /**
-   * Method description
-   *
-   *
-   * @return
-   */
-  public long getMissed();
-
-  /**
-   * Method description
-   *
-   *
-   * @return
-   */
-  public String getName();
-
-  /**
-   * Method description
-   *
-   *
-   * @return
-   */
-  public boolean isEmpty();
+    assertTrue(cache.isEmpty());
+    assertEquals("value1", cache.put("key1", "value1"));
+    assertEquals("value2", cache.put("key2", "value2"));
+    assertEquals("value3", cache.put("key3", "value3"));
+    assertEquals("value4", cache.put("key4", "value4"));
+    assertEquals("value5", cache.put("key5", "value5"));
+    assertFalse(cache.isEmpty());
+    assertTrue(cache.size() == 5);
+    assertEquals("value2", cache.get("key2"));
+    assertEquals("value3", cache.get("key3"));
+    assertEquals("value4", cache.get("key4"));
+    assertEquals("value5", cache.get("key5"));
+    assertEquals("value7", cache.put("key7", "value7"));
+    assertNull(cache.get("key1"));
+  }
 }

@@ -35,9 +35,8 @@ package sonia.cache;
 
 //~--- JDK imports ------------------------------------------------------------
 
-import java.io.Serializable;
-
-import java.util.Set;
+import java.util.Collection;
+import java.util.Map;
 
 /**
  *
@@ -46,93 +45,14 @@ import java.util.Set;
  * @param <K>
  * @param <V>
  */
-public interface Cache<K, V> extends Serializable
+public interface ExpirationCache<K, V> extends Cache<K, V>
 {
 
   /**
    * Method description
    *
-   */
-  public void clear();
-
-  /**
-   * Method description
-   *
    *
    * @return
    */
-  public Set<K> keySet();
-
-  /**
-   * Method description
-   *
-   *
-   * @param key
-   * @param value
-   *
-   * @return
-   */
-  public V put(K key, V value);
-
-  /**
-   * Method description
-   *
-   *
-   * @param key
-   *
-   * @return
-   */
-  public V remove(K key);
-
-  /**
-   * Method description
-   *
-   *
-   * @return
-   */
-  public int size();
-
-  //~--- get methods ----------------------------------------------------------
-
-  /**
-   * Method description
-   *
-   *
-   * @param key
-   *
-   * @return
-   */
-  public V get(K key);
-
-  /**
-   * Method description
-   *
-   *
-   * @return
-   */
-  public long getHits();
-
-  /**
-   * Method description
-   *
-   *
-   * @return
-   */
-  public long getMissed();
-
-  /**
-   * Method description
-   *
-   *
-   * @return
-   */
-  public String getName();
-
-  /**
-   * Method description
-   *
-   *
-   * @return
-   */
-  public boolean isEmpty();
+  Collection<Map.Entry<K, CacheObject<V>>> getEntries();
 }

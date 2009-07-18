@@ -35,8 +35,8 @@ package sonia.cache;
 
 //~--- JDK imports ------------------------------------------------------------
 
-import java.io.Serializable;
-
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -46,22 +46,24 @@ import java.util.Set;
  * @param <K>
  * @param <V>
  */
-public interface Cache<K, V> extends Serializable
+public class MRUCache<K, V> extends AbstractCache<K, V>
 {
 
   /**
-   * Method description
+   * Constructs ...
    *
+   *
+   * @param name
+   * @param maxItems
    */
-  public void clear();
+  public MRUCache(String name, int maxItems)
+  {
+    super(name);
+    this.maxItems = maxItems;
+    this.cacheMap = new HashMap<K, CacheObject<V>>(maxItems);
+  }
 
-  /**
-   * Method description
-   *
-   *
-   * @return
-   */
-  public Set<K> keySet();
+  //~--- methods --------------------------------------------------------------
 
   /**
    * Method description
@@ -72,25 +74,17 @@ public interface Cache<K, V> extends Serializable
    *
    * @return
    */
-  public V put(K key, V value);
+  public V put(K key, V value)
+  {
+    while (maxItems <= cacheMap.size())
+    {
+      removeEntry();
+    }
 
-  /**
-   * Method description
-   *
-   *
-   * @param key
-   *
-   * @return
-   */
-  public V remove(K key);
+    cacheMap.put(key, new CacheObject<V>(value));
 
-  /**
-   * Method description
-   *
-   *
-   * @return
-   */
-  public int size();
+    return value;
+  }
 
   //~--- get methods ----------------------------------------------------------
 
@@ -102,7 +96,24 @@ public interface Cache<K, V> extends Serializable
    *
    * @return
    */
-  public V get(K key);
+  public V get(K key)
+  {
+    V value = null;
+    CacheObject<V> co = cacheMap.get(key);
+
+    if (co != null)
+    {
+      value = co.getObject();
+      co.update();
+      hits++;
+    }
+    else
+    {
+      missed++;
+    }
+
+    return value;
+  }
 
   /**
    * Method description
@@ -110,29 +121,43 @@ public interface Cache<K, V> extends Serializable
    *
    * @return
    */
-  public long getHits();
+  @Override
+  protected Map<K, CacheObject<V>> getCacheMap()
+  {
+    return cacheMap;
+  }
+
+  //~--- methods --------------------------------------------------------------
 
   /**
    * Method description
    *
-   *
-   * @return
    */
-  public long getMissed();
+  private void removeEntry()
+  {
+    Set<Map.Entry<K, CacheObject<V>>> entries = cacheMap.entrySet();
+    Map.Entry<K, CacheObject<V>> etr = null;
 
-  /**
-   * Method description
-   *
-   *
-   * @return
-   */
-  public String getName();
+    for (Map.Entry<K, CacheObject<V>> entry : entries)
+    {
+      CacheObject<V> value = entry.getValue();
 
-  /**
-   * Method description
-   *
-   *
-   * @return
-   */
-  public boolean isEmpty();
+      if ((etr == null) || (value.getHits() < etr.getValue().getHits())
+          || ((value.getHits() == etr.getValue().getHits())
+              && (value.getLastAccess() < etr.getValue().getLastAccess())))
+      {
+        etr = entry;
+      }
+    }
+
+    remove(etr.getKey());
+  }
+
+  //~--- fields ---------------------------------------------------------------
+
+  /** Field description */
+  private Map<K, CacheObject<V>> cacheMap;
+
+  /** Field description */
+  private int maxItems;
 }

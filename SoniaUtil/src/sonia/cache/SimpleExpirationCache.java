@@ -35,9 +35,11 @@ package sonia.cache;
 
 //~--- JDK imports ------------------------------------------------------------
 
-import java.io.Serializable;
-
-import java.util.Set;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Timer;
 
 /**
  *
@@ -46,22 +48,35 @@ import java.util.Set;
  * @param <K>
  * @param <V>
  */
-public interface Cache<K, V> extends Serializable
+public class SimpleExpirationCache<K, V> extends AbstractCache<K, V>
+        implements ExpirationCache<K, V>
 {
 
   /**
-   * Method description
+   * Constructs ...
    *
+   *
+   * @param name
+   * @param expirationTime
+   * @param intervalCheck
    */
-  public void clear();
+  public SimpleExpirationCache(String name, long expirationTime,
+                               boolean intervalCheck)
+  {
+    super(name);
+    this.expirationTime = expirationTime;
+    this.cacheMap = new HashMap<K, CacheObject<V>>();
 
-  /**
-   * Method description
-   *
-   *
-   * @return
-   */
-  public Set<K> keySet();
+    if (intervalCheck)
+    {
+      Timer timer = new Timer(name);
+
+      timer.schedule(new ExpirationTimerTask<K, V>(this, expirationTime), 0l,
+                     expirationTime);
+    }
+  }
+
+  //~--- methods --------------------------------------------------------------
 
   /**
    * Method description
@@ -72,25 +87,15 @@ public interface Cache<K, V> extends Serializable
    *
    * @return
    */
-  public V put(K key, V value);
+  public V put(K key, V value)
+  {
+    synchronized (cacheMap)
+    {
+      cacheMap.put(key, new CacheObject<V>(value));
+    }
 
-  /**
-   * Method description
-   *
-   *
-   * @param key
-   *
-   * @return
-   */
-  public V remove(K key);
-
-  /**
-   * Method description
-   *
-   *
-   * @return
-   */
-  public int size();
+    return value;
+  }
 
   //~--- get methods ----------------------------------------------------------
 
@@ -102,7 +107,37 @@ public interface Cache<K, V> extends Serializable
    *
    * @return
    */
-  public V get(K key);
+  public V get(K key)
+  {
+    V result = null;
+    CacheObject<V> co = cacheMap.get(key);
+
+    if (co != null)
+    {
+      long time = System.currentTimeMillis();
+
+      if (time - co.getTime() > expirationTime)
+      {
+        remove(key);
+      }
+      else
+      {
+        co.update();
+        result = co.getObject();
+      }
+    }
+
+    if (co != null)
+    {
+      hits++;
+    }
+    else
+    {
+      missed++;
+    }
+
+    return result;
+  }
 
   /**
    * Method description
@@ -110,7 +145,10 @@ public interface Cache<K, V> extends Serializable
    *
    * @return
    */
-  public long getHits();
+  public Map<K, CacheObject<V>> getCacheMap()
+  {
+    return cacheMap;
+  }
 
   /**
    * Method description
@@ -118,21 +156,16 @@ public interface Cache<K, V> extends Serializable
    *
    * @return
    */
-  public long getMissed();
+  public Collection<Entry<K, CacheObject<V>>> getEntries()
+  {
+    return cacheMap.entrySet();
+  }
 
-  /**
-   * Method description
-   *
-   *
-   * @return
-   */
-  public String getName();
+  //~--- fields ---------------------------------------------------------------
 
-  /**
-   * Method description
-   *
-   *
-   * @return
-   */
-  public boolean isEmpty();
+  /** Field description */
+  private final Map<K, CacheObject<V>> cacheMap;
+
+  /** Field description */
+  private long expirationTime;
 }
