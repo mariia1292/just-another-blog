@@ -42,6 +42,7 @@ import sonia.blog.api.dao.EntryDAO;
 import sonia.blog.entity.Attachment;
 import sonia.blog.entity.Blog;
 import sonia.blog.entity.Category;
+import sonia.blog.entity.Comment;
 import sonia.blog.entity.Entry;
 import sonia.blog.entity.Role;
 import sonia.blog.entity.Tag;
@@ -574,6 +575,16 @@ public class JpaEntryDAO extends JpaGenericDAO<Entry> implements EntryDAO
         for (Attachment a : attachments)
         {
           em.remove(em.merge(a));
+        }
+      }
+
+      List<Comment> comments = item.getComments();
+
+      if (Util.hasContent(comments))
+      {
+        for (Comment c : comments)
+        {
+          em.remove(em.merge(c));
         }
       }
 
