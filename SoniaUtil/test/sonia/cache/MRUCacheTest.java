@@ -33,7 +33,10 @@
 
 package sonia.cache;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import org.junit.Test;
+
 import static org.junit.Assert.*;
 
 /**
@@ -46,19 +49,11 @@ public class MRUCacheTest extends CacheTestBase
   /**
    * Method description
    *
-   *
-   * @return
    */
-  @Override
-  protected Cache<String, String> getCache()
-  {
-    return new MRUCache<String, String>("junit", 5);
-  }
-
   @Test
   public void mruTest()
   {
-   Cache<String, String> cache = getCache();
+    Cache cache = getCache();
 
     assertTrue(cache.isEmpty());
     assertEquals("value1", cache.put("key1", "value1"));
@@ -74,5 +69,19 @@ public class MRUCacheTest extends CacheTestBase
     assertEquals("value5", cache.get("key5"));
     assertEquals("value7", cache.put("key7", "value7"));
     assertNull(cache.get("key1"));
+  }
+
+  //~--- get methods ----------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  @Override
+  protected Cache getCache()
+  {
+    return new MRUCache("junit", 5);
   }
 }

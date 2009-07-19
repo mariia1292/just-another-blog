@@ -52,7 +52,7 @@ public abstract class CacheTestBase
    *
    * @return
    */
-  protected abstract Cache<String, String> getCache();
+  protected abstract Cache getCache();
 
   //~--- methods --------------------------------------------------------------
 
@@ -63,7 +63,7 @@ public abstract class CacheTestBase
   @Test
   public void simpleTest()
   {
-    Cache<String, String> cache = getCache();
+    Cache cache = getCache();
 
     assertEquals("value", cache.put("key", "value"));
     assertEquals("value", cache.get("key"));

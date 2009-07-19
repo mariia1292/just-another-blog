@@ -55,7 +55,7 @@ public class SimpleExpirationCacheTest extends CacheTestBase
   @Test
   public void expirationTest() throws InterruptedException
   {
-    Cache<String, String> cache = getCache();
+    Cache cache = getCache();
 
     assertEquals("value", cache.put("key", "value"));
     assertEquals("value", cache.get("key"));
@@ -75,8 +75,7 @@ public class SimpleExpirationCacheTest extends CacheTestBase
   public void extendedExpirationTest() throws InterruptedException
   {
     long time = 1000l;
-    Cache<String, String> cache = new SimpleExpirationCache<String,
-                                    String>("junit", time, true);
+    Cache cache = new SimpleExpirationCache("junit", time, true);
 
     assertEquals("value", cache.put("key", "value"));
     assertFalse(cache.isEmpty());
@@ -93,10 +92,10 @@ public class SimpleExpirationCacheTest extends CacheTestBase
    * @return
    */
   @Override
-  protected Cache<String, String> getCache()
+  protected Cache getCache()
   {
     long time = 1000l;
 
-    return new SimpleExpirationCache<String, String>("junit", time, false);
+    return new SimpleExpirationCache("junit", time, false);
   }
 }

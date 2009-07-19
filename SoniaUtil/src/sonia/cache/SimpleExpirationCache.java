@@ -45,11 +45,9 @@ import java.util.Timer;
  *
  * @author Sebastian Sdorra
  *
- * @param <K>
- * @param <V>
  */
-public class SimpleExpirationCache<K, V> extends AbstractCache<K, V>
-        implements ExpirationCache<K, V>
+public class SimpleExpirationCache extends AbstractCache
+        implements ExpirationCache
 {
 
   /**
@@ -65,13 +63,13 @@ public class SimpleExpirationCache<K, V> extends AbstractCache<K, V>
   {
     super(name);
     this.expirationTime = expirationTime;
-    this.cacheMap = new HashMap<K, CacheObject<V>>();
+    this.cacheMap = new HashMap<Object, CacheObject>();
 
     if (intervalCheck)
     {
       Timer timer = new Timer(name);
 
-      timer.schedule(new ExpirationTimerTask<K, V>(this, expirationTime), 0l,
+      timer.schedule(new ExpirationTimerTask(this, expirationTime), 0l,
                      expirationTime);
     }
   }
@@ -87,11 +85,11 @@ public class SimpleExpirationCache<K, V> extends AbstractCache<K, V>
    *
    * @return
    */
-  public V put(K key, V value)
+  public Object put(Object key, Object value)
   {
     synchronized (cacheMap)
     {
-      cacheMap.put(key, new CacheObject<V>(value));
+      cacheMap.put(key, new CacheObject(value));
     }
 
     return value;
@@ -107,10 +105,10 @@ public class SimpleExpirationCache<K, V> extends AbstractCache<K, V>
    *
    * @return
    */
-  public V get(K key)
+  public Object get(Object key)
   {
-    V result = null;
-    CacheObject<V> co = cacheMap.get(key);
+    Object result = null;
+    CacheObject co = cacheMap.get(key);
 
     if (co != null)
     {
@@ -145,7 +143,7 @@ public class SimpleExpirationCache<K, V> extends AbstractCache<K, V>
    *
    * @return
    */
-  public Map<K, CacheObject<V>> getCacheMap()
+  public Map<Object, CacheObject> getCacheMap()
   {
     return cacheMap;
   }
@@ -156,7 +154,7 @@ public class SimpleExpirationCache<K, V> extends AbstractCache<K, V>
    *
    * @return
    */
-  public Collection<Entry<K, CacheObject<V>>> getEntries()
+  public Collection<Entry<Object, CacheObject>> getEntries()
   {
     return cacheMap.entrySet();
   }
@@ -164,7 +162,7 @@ public class SimpleExpirationCache<K, V> extends AbstractCache<K, V>
   //~--- fields ---------------------------------------------------------------
 
   /** Field description */
-  private final Map<K, CacheObject<V>> cacheMap;
+  private final Map<Object, CacheObject> cacheMap;
 
   /** Field description */
   private long expirationTime;

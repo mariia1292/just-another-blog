@@ -43,10 +43,8 @@ import java.util.Set;
  *
  * @author Sebastian Sdorra
  *
- * @param <K>
- * @param <V>
  */
-public class LRUCache<K, V> extends AbstractCache<K, V>
+public class LRUCache extends AbstractCache
 {
 
   /**
@@ -60,7 +58,7 @@ public class LRUCache<K, V> extends AbstractCache<K, V>
   {
     super(name);
     this.maxItems = size;
-    this.cacheMap = new HashMap<K, CacheObject<V>>(size);
+    this.cacheMap = new HashMap<Object, CacheObject>(size);
   }
 
   //~--- methods --------------------------------------------------------------
@@ -74,14 +72,14 @@ public class LRUCache<K, V> extends AbstractCache<K, V>
    *
    * @return
    */
-  public V put(K key, V value)
+  public Object put(Object key, Object value)
   {
     while (maxItems <= cacheMap.size())
     {
       removeLastEntry();
     }
 
-    cacheMap.put(key, new CacheObject<V>(value));
+    cacheMap.put(key, new CacheObject(value));
 
     return value;
   }
@@ -96,10 +94,10 @@ public class LRUCache<K, V> extends AbstractCache<K, V>
    *
    * @return
    */
-  public V get(K key)
+  public Object get(Object key)
   {
-    V value = null;
-    CacheObject<V> co = cacheMap.get(key);
+    Object value = null;
+    CacheObject co = cacheMap.get(key);
 
     if (co != null)
     {
@@ -122,7 +120,7 @@ public class LRUCache<K, V> extends AbstractCache<K, V>
    * @return
    */
   @Override
-  protected Map<K, CacheObject<V>> getCacheMap()
+  protected Map<Object, CacheObject> getCacheMap()
   {
     return cacheMap;
   }
@@ -135,12 +133,12 @@ public class LRUCache<K, V> extends AbstractCache<K, V>
    */
   private void removeLastEntry()
   {
-    Set<Map.Entry<K, CacheObject<V>>> entries = cacheMap.entrySet();
-    Map.Entry<K, CacheObject<V>> lastCo = null;
+    Set<Map.Entry<Object, CacheObject>> entries = cacheMap.entrySet();
+    Map.Entry<Object, CacheObject> lastCo = null;
 
-    for (Map.Entry<K, CacheObject<V>> entry : entries)
+    for (Map.Entry<Object, CacheObject> entry : entries)
     {
-      CacheObject<V> value = entry.getValue();
+      CacheObject value = entry.getValue();
 
       if ((lastCo == null)
           || (value.getLastAccess() < lastCo.getValue().getLastAccess())
@@ -157,7 +155,7 @@ public class LRUCache<K, V> extends AbstractCache<K, V>
   //~--- fields ---------------------------------------------------------------
 
   /** Field description */
-  private final Map<K, CacheObject<V>> cacheMap;
+  private final Map<Object, CacheObject> cacheMap;
 
   /** Field description */
   private int maxItems;

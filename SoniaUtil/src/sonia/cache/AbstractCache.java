@@ -42,10 +42,8 @@ import java.util.Set;
  *
  * @author Sebastian Sdorra
  *
- * @param <K>
- * @param <V>
  */
-public abstract class AbstractCache<K, V> implements Cache<K, V>
+public abstract class AbstractCache implements Cache
 {
 
   /**
@@ -67,7 +65,7 @@ public abstract class AbstractCache<K, V> implements Cache<K, V>
    *
    * @return
    */
-  protected abstract Map<K, CacheObject<V>> getCacheMap();
+  protected abstract Map<Object, CacheObject> getCacheMap();
 
   //~--- methods --------------------------------------------------------------
 
@@ -77,7 +75,7 @@ public abstract class AbstractCache<K, V> implements Cache<K, V>
    */
   public void clear()
   {
-    Map<K, CacheObject<V>> cacheMap = getCacheMap();
+    Map<Object, CacheObject> cacheMap = getCacheMap();
 
     synchronized (cacheMap)
     {
@@ -91,7 +89,7 @@ public abstract class AbstractCache<K, V> implements Cache<K, V>
    *
    * @return
    */
-  public Set<K> keySet()
+  public Set<Object> keySet()
   {
     return getCacheMap().keySet();
   }
@@ -104,14 +102,14 @@ public abstract class AbstractCache<K, V> implements Cache<K, V>
    *
    * @return
    */
-  public V remove(K key)
+  public Object remove(Object key)
   {
-    V result = null;
-    Map<K, CacheObject<V>> cacheMap = getCacheMap();
+    Object result = null;
+    Map<Object, CacheObject> cacheMap = getCacheMap();
 
     synchronized (cacheMap)
     {
-      CacheObject<V> co = cacheMap.remove(key);
+      CacheObject co = cacheMap.remove(key);
 
       result = co.getObject();
     }
