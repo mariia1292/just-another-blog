@@ -33,6 +33,10 @@
 
 package sonia.cache;
 
+//~--- non-JDK imports --------------------------------------------------------
+
+import sonia.util.Util;
+
 //~--- JDK imports ------------------------------------------------------------
 
 import java.util.HashMap;
@@ -47,6 +51,11 @@ import java.util.Set;
 public class LRUCache extends AbstractCache
 {
 
+  /** Field description */
+  public static final String PARAMETER_MAXITEMS = "max-items";
+
+  //~--- constructors ---------------------------------------------------------
+
   /**
    * Constructs ...
    *
@@ -59,6 +68,40 @@ public class LRUCache extends AbstractCache
     super(name);
     this.maxItems = size;
     this.cacheMap = new HashMap<Object, CacheObject>(size);
+  }
+
+  /**
+   * Constructs ...
+   *
+   *
+   * @param name
+   * @param parameter
+   *
+   * @throws IllegalArgumentException
+   * @throws NumberFormatException
+   */
+  LRUCache(String name, Map<String, String> parameter)
+          throws IllegalArgumentException, NumberFormatException
+  {
+    super(name);
+
+    String maxItemsParams = parameter.get(PARAMETER_MAXITEMS);
+
+    if (Util.hasContent(maxItemsParams))
+    {
+      maxItems = Integer.parseInt(maxItemsParams);
+    }
+    else
+    {
+      StringBuffer msg = new StringBuffer();
+
+      msg.append("the parameter ").append(PARAMETER_MAXITEMS);
+      msg.append(" is required");
+
+      throw new IllegalArgumentException(msg.toString());
+    }
+
+    this.cacheMap = new HashMap<Object, CacheObject>(maxItems);
   }
 
   //~--- methods --------------------------------------------------------------
