@@ -24,6 +24,7 @@
           <h:column>
             <h:outputText value="#{Comment.authorName}: " />
             <blog:link object="#{Comment.entry}" value="#{Comment.content}" />
+            <h:outputText value=" (Spam)" rendered="#{Comment.spam}" />
           </h:column>
 
         </h:dataTable>
