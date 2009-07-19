@@ -1,10 +1,10 @@
 /**
  * Copyright (c) 2009, Sebastian Sdorra
  * All rights reserved.
- * 
+ *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
@@ -13,7 +13,7 @@
  * 3. Neither the name of JAB; nor the names of its
  *    contributors may be used to endorse or promote products derived from this
  *    software without specific prior written permission.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -24,10 +24,11 @@
  * ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- * 
+ *
  * http://kenai.com/projects/jab
- * 
+ *
  */
+
 
 
 package sonia.blog.dao.jpa;
@@ -35,9 +36,11 @@ package sonia.blog.dao.jpa;
 //~--- non-JDK imports --------------------------------------------------------
 
 import sonia.blog.api.app.BlogContext;
+import sonia.blog.api.app.BlogSession;
 import sonia.blog.api.dao.DAOListener;
 import sonia.blog.api.dao.DAOListener.Action;
 import sonia.blog.api.dao.GenericDAO;
+import sonia.blog.api.exception.BlogSecurityException;
 import sonia.blog.entity.Blog;
 
 import sonia.plugin.service.ServiceReference;
@@ -61,6 +64,17 @@ import javax.persistence.Query;
  */
 public abstract class JpaGenericDAO<T> implements GenericDAO<T>
 {
+
+  /** Field description */
+  public static final int ACTION_ADD = 0;
+
+  /** Field description */
+  public static final int ACTION_EDIT = 1;
+
+  /** Field description */
+  public static final int ACTION_REMOVE = 2;
+
+  //~--- constructors ---------------------------------------------------------
 
   /**
    * Constructs ...
@@ -99,12 +113,21 @@ public abstract class JpaGenericDAO<T> implements GenericDAO<T>
    * Method description
    *
    *
+   *
+   * @param session
    * @param item
    *
    * @return
    */
-  public boolean add(T item)
+  public boolean add(BlogSession session, T item)
   {
+    if (!isPrivileged(session, item, ACTION_ADD))
+    {
+      logUnprivilegedMessage(session, item, ACTION_ADD);
+
+      throw new BlogSecurityException("Author session is required");
+    }
+
     fireEvent(Action.PREADD, item);
 
     boolean result = true;
@@ -143,12 +166,21 @@ public abstract class JpaGenericDAO<T> implements GenericDAO<T>
    * Method description
    *
    *
+   *
+   * @param session
    * @param item
    *
    * @return
    */
-  public boolean edit(T item)
+  public boolean edit(BlogSession session, T item)
   {
+    if (!isPrivileged(session, item, ACTION_EDIT))
+    {
+      logUnprivilegedMessage(session, item, ACTION_EDIT);
+
+      throw new BlogSecurityException("Author session is required");
+    }
+
     fireEvent(Action.PREUPDATE, item);
 
     boolean result = true;
@@ -187,12 +219,21 @@ public abstract class JpaGenericDAO<T> implements GenericDAO<T>
    * Method description
    *
    *
+   *
+   * @param session
    * @param item
    *
    * @return
    */
-  public boolean remove(T item)
+  public boolean remove(BlogSession session, T item)
   {
+    if (!isPrivileged(session, item, ACTION_REMOVE))
+    {
+      logUnprivilegedMessage(session, item, ACTION_REMOVE);
+
+      throw new BlogSecurityException("Author session is required");
+    }
+
     fireEvent(Action.PREREMOVE, item);
 
     boolean result = true;
@@ -511,6 +552,63 @@ public abstract class JpaGenericDAO<T> implements GenericDAO<T>
         listener.handleEvent(action, object);
       }
     }
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param session
+   * @param item
+   * @param action
+   */
+  protected void logUnprivilegedMessage(BlogSession session, T item, int action)
+  {
+    StringBuffer msg = new StringBuffer();
+
+    msg.append("unprivileged user ").append(session.getUser().getName());
+    msg.append(" tried to ");
+
+    switch (action)
+    {
+      case JpaGenericDAO.ACTION_ADD :
+        msg.append("add");
+
+        break;
+
+      case JpaGenericDAO.ACTION_EDIT :
+        msg.append("modify");
+
+        break;
+
+      case JpaGenericDAO.ACTION_REMOVE :
+        msg.append("remove");
+
+        break;
+
+      default :
+        msg.append("unknown");
+    }
+
+    msg.append(" ").append(item);
+    getLogger().severe(msg.toString());
+  }
+
+  //~--- get methods ----------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   * @param session
+   * @param item
+   * @param action
+   *
+   * @return
+   */
+  protected boolean isPrivileged(BlogSession session, T item, int action)
+  {
+    return true;
   }
 
   //~--- fields ---------------------------------------------------------------

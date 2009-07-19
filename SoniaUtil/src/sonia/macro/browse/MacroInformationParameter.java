@@ -1,10 +1,10 @@
 /**
  * Copyright (c) 2009, Sebastian Sdorra
  * All rights reserved.
- * 
+ *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
@@ -13,7 +13,7 @@
  * 3. Neither the name of JAB; nor the names of its
  *    contributors may be used to endorse or promote products derived from this
  *    software without specific prior written permission.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -24,10 +24,11 @@
  * ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- * 
+ *
  * http://kenai.com/projects/jab
- * 
+ *
  */
+
 
 
 package sonia.macro.browse;
@@ -114,6 +115,28 @@ public class MacroInformationParameter
     return name;
   }
 
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  public Class<? extends MacroWidget> getWidget()
+  {
+    return widget;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  public String getWidgetParam()
+  {
+    return widgetParam;
+  }
+
   //~--- set methods ----------------------------------------------------------
 
   /**
@@ -149,32 +172,29 @@ public class MacroInformationParameter
     this.name = name;
   }
 
-  public Class<? extends MacroWidget> getWidget()
-  {
-    return widget;
-  }
-
+  /**
+   * Method description
+   *
+   *
+   * @param widget
+   */
   public void setWidget(Class<? extends MacroWidget> widget)
   {
     this.widget = widget;
   }
 
-  public String getWidgetParam()
-  {
-    return widgetParam;
-  }
-
+  /**
+   * Method description
+   *
+   *
+   * @param widgetParam
+   */
   public void setWidgetParam(String widgetParam)
   {
     this.widgetParam = widgetParam;
   }
 
   //~--- fields ---------------------------------------------------------------
-
-
-
-  private Class<? extends MacroWidget> widget;
-  private String widgetParam;
 
   /** Field description */
   private String description;
@@ -184,4 +204,10 @@ public class MacroInformationParameter
 
   /** Field description */
   private String name;
+
+  /** Field description */
+  private Class<? extends MacroWidget> widget;
+
+  /** Field description */
+  private String widgetParam;
 }

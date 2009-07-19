@@ -42,6 +42,7 @@ import org.w3c.tidy.TidyMessageListener;
 import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.app.BlogJob;
 import sonia.blog.api.app.BlogRequest;
+import sonia.blog.api.app.BlogSession;
 import sonia.blog.api.app.Constants;
 import sonia.blog.api.app.ResourceManager;
 import sonia.blog.api.dao.AttachmentDAO;
@@ -241,7 +242,7 @@ public class EntryBean extends AbstractEditorBean
 
       try
       {
-        if (entryDAO.remove(entry))
+        if (entryDAO.remove(getBlogSession(), entry))
         {
           File attachmentDir = new File(getDirectory(), "" + id);
 
@@ -280,14 +281,15 @@ public class EntryBean extends AbstractEditorBean
 
     try
     {
-      buildTagList();
-      cleanupContent();
-
       BlogRequest request = getRequest();
+      BlogSession session = request.getBlogSession();
+
+      buildTagList(session);
+      cleanupContent();
 
       if (entry.getId() == null)
       {
-        User author = request.getUser();
+        User author = session.getUser();
 
         if (entry.getTitle() == null)
         {
@@ -304,7 +306,7 @@ public class EntryBean extends AbstractEditorBean
 
         entry.setAuthor(author);
 
-        if (entryDAO.add(entry))
+        if (entryDAO.add(session, entry))
         {
           doTrackback(request.getCurrentBlog());
           getMessageHandler().info("createEntrySuccess");
@@ -317,7 +319,7 @@ public class EntryBean extends AbstractEditorBean
       }
       else
       {
-        if (entryDAO.edit(entry))
+        if (entryDAO.edit(session, entry))
         {
           doTrackback(request.getCurrentBlog());
           getMessageHandler().info("updateEntrySuccess");
@@ -683,8 +685,10 @@ public class EntryBean extends AbstractEditorBean
    * Method description
    *
    *
+   *
+   * @param session
    */
-  private void buildTagList()
+  private void buildTagList(BlogSession session)
   {
     List<Tag> tags = new ArrayList<Tag>();
     List<Tag> oldTags = entry.getTags();
@@ -716,7 +720,7 @@ public class EntryBean extends AbstractEditorBean
         if (t == null)
         {
           t = new Tag(tag);
-          tagDAO.add(t);
+          tagDAO.add(session, t);
         }
 
         tags.add(t);
@@ -731,11 +735,11 @@ public class EntryBean extends AbstractEditorBean
 
         if (t.getEntries().isEmpty())
         {
-          tagDAO.remove(t);
+          tagDAO.remove(session, t);
         }
         else
         {
-          tagDAO.edit(t);
+          tagDAO.edit(session, t);
         }
       }
     }

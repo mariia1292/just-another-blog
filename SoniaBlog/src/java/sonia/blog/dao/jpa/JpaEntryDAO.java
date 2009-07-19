@@ -35,6 +35,7 @@ package sonia.blog.dao.jpa;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.app.BlogSession;
 import sonia.blog.api.app.Constants;
 import sonia.blog.api.dao.EntryDAO;
@@ -550,12 +551,14 @@ public class JpaEntryDAO extends JpaGenericDAO<Entry> implements EntryDAO
    * Method description
    *
    *
+   *
+   * @param session
    * @param item
    *
    * @return
    */
   @Override
-  public boolean remove(Entry item)
+  public boolean remove(BlogSession session, Entry item)
   {
     boolean result = false;
     EntityManager em = createEntityManager();
@@ -928,5 +931,35 @@ public class JpaEntryDAO extends JpaGenericDAO<Entry> implements EntryDAO
   protected Logger getLogger()
   {
     return logger;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param session
+   * @param item
+   * @param action
+   *
+   * @return
+   */
+  @Override
+  protected boolean isPrivileged(BlogSession session, Entry item, int action)
+  {
+    boolean result = false;
+
+    if (!BlogContext.getInstance().isInstalled()
+        && (action == JpaGenericDAO.ACTION_ADD) && session.hasRole(Role.SYSTEM))
+    {
+      result = true;
+    }
+    else
+    {
+      result = session.hasRole(Role.CONTENTMANAGER)
+               || (session.hasRole(Role.AUTHOR)
+                   && session.getUser().equals(item.getAuthor()));
+    }
+
+    return result;
   }
 }

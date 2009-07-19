@@ -1,10 +1,10 @@
 /**
  * Copyright (c) 2009, Sebastian Sdorra
  * All rights reserved.
- * 
+ *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
@@ -13,7 +13,7 @@
  * 3. Neither the name of JAB; nor the names of its
  *    contributors may be used to endorse or promote products derived from this
  *    software without specific prior written permission.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -24,10 +24,11 @@
  * ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- * 
+ *
  * http://kenai.com/projects/jab
- * 
+ *
  */
+
 
 
 package sonia.blog.wui;
@@ -234,7 +235,8 @@ public abstract class AbstractEditorBean extends AbstractBean
     Attachment a = wrapper.getAttachment();
     File file = new File(getDirectory(), a.getFilePath());
 
-    if (BlogContext.getDAOFactory().getAttachmentDAO().remove(a))
+    if (BlogContext.getDAOFactory().getAttachmentDAO().remove(getBlogSession(),
+            a))
     {
       if (!file.delete())
       {
@@ -258,7 +260,8 @@ public abstract class AbstractEditorBean extends AbstractBean
   {
     String result = SUCCESS;
 
-    if (!BlogContext.getDAOFactory().getAttachmentDAO().edit(attachment))
+    if (!BlogContext.getDAOFactory().getAttachmentDAO().edit(getBlogSession(),
+            attachment))
     {
       result = FAILURE;
     }
@@ -325,7 +328,8 @@ public abstract class AbstractEditorBean extends AbstractBean
 
         attachment.setFilePath(path);
 
-        if (!BlogContext.getDAOFactory().getAttachmentDAO().add(attachment))
+        if (!BlogContext.getDAOFactory().getAttachmentDAO().add(
+                getBlogSession(), attachment))
         {
           result = UPLOAD_FAILURE;
         }
@@ -431,8 +435,8 @@ public abstract class AbstractEditorBean extends AbstractBean
   {
     BlogRequest request = getRequest();
     LinkBuilder linkBuilder = BlogContext.getInstance().getLinkBuilder();
-
     String result = linkBuilder.buildLink(request.getCurrentBlog(), "/image/");
+
     return result;
   }
 
@@ -688,7 +692,7 @@ public abstract class AbstractEditorBean extends AbstractBean
               }
 
               if (!BlogContext.getDAOFactory().getAttachmentDAO().add(
-                      attachment))
+                      getBlogSession(), attachment))
               {
                 result = UPLOAD_FAILURE;
               }
