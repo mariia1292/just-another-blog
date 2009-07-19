@@ -14,16 +14,16 @@
  *    contributors may be used to endorse or promote products derived from this
  *    software without specific prior written permission.
  *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * THIS SOFTWARE IS PROObjectIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
- * DISCLAIMED.  IN NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE FOR ANY
+ * DISCLAIMED.  IN NO EObjectENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE FOR ANY
  * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
- * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
- * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERObjectICES;
+ * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEObjectER CAUSED AND ON
  * ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
- * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * SOFTWARE, EObjectEN IF ADObjectISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  * http://kenai.com/projects/jab
  *
@@ -43,10 +43,8 @@ import java.util.Set;
  *
  * @author Sebastian Sdorra
  *
- * @param <K>
- * @param <V>
  */
-public class MRUCache<K, V> extends AbstractCache<K, V>
+public class MRUCache extends AbstractCache
 {
 
   /**
@@ -60,7 +58,7 @@ public class MRUCache<K, V> extends AbstractCache<K, V>
   {
     super(name);
     this.maxItems = maxItems;
-    this.cacheMap = new HashMap<K, CacheObject<V>>(maxItems);
+    this.cacheMap = new HashMap<Object, CacheObject>(maxItems);
   }
 
   //~--- methods --------------------------------------------------------------
@@ -74,14 +72,14 @@ public class MRUCache<K, V> extends AbstractCache<K, V>
    *
    * @return
    */
-  public V put(K key, V value)
+  public Object put(Object key, Object value)
   {
     while (maxItems <= cacheMap.size())
     {
       removeEntry();
     }
 
-    cacheMap.put(key, new CacheObject<V>(value));
+    cacheMap.put(key, new CacheObject(value));
 
     return value;
   }
@@ -96,10 +94,10 @@ public class MRUCache<K, V> extends AbstractCache<K, V>
    *
    * @return
    */
-  public V get(K key)
+  public Object get(Object key)
   {
-    V value = null;
-    CacheObject<V> co = cacheMap.get(key);
+    Object value = null;
+    CacheObject co = cacheMap.get(key);
 
     if (co != null)
     {
@@ -122,7 +120,7 @@ public class MRUCache<K, V> extends AbstractCache<K, V>
    * @return
    */
   @Override
-  protected Map<K, CacheObject<V>> getCacheMap()
+  protected Map<Object, CacheObject> getCacheMap()
   {
     return cacheMap;
   }
@@ -135,12 +133,12 @@ public class MRUCache<K, V> extends AbstractCache<K, V>
    */
   private void removeEntry()
   {
-    Set<Map.Entry<K, CacheObject<V>>> entries = cacheMap.entrySet();
-    Map.Entry<K, CacheObject<V>> etr = null;
+    Set<Map.Entry<Object, CacheObject>> entries = cacheMap.entrySet();
+    Map.Entry<Object, CacheObject> etr = null;
 
-    for (Map.Entry<K, CacheObject<V>> entry : entries)
+    for (Map.Entry<Object, CacheObject> entry : entries)
     {
-      CacheObject<V> value = entry.getValue();
+      CacheObject value = entry.getValue();
 
       if ((etr == null) || (value.getHits() < etr.getValue().getHits())
           || ((value.getHits() == etr.getValue().getHits())
@@ -156,7 +154,7 @@ public class MRUCache<K, V> extends AbstractCache<K, V>
   //~--- fields ---------------------------------------------------------------
 
   /** Field description */
-  private Map<K, CacheObject<V>> cacheMap;
+  private Map<Object, CacheObject> cacheMap;
 
   /** Field description */
   private int maxItems;

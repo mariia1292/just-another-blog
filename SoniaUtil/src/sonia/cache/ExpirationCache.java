@@ -42,10 +42,8 @@ import java.util.Map;
  *
  * @author Sebastian Sdorra
  *
- * @param <K>
- * @param <V>
  */
-public interface ExpirationCache<K, V> extends Cache<K, V>
+public interface ExpirationCache extends Cache
 {
 
   /**
@@ -54,5 +52,5 @@ public interface ExpirationCache<K, V> extends Cache<K, V>
    *
    * @return
    */
-  Collection<Map.Entry<K, CacheObject<V>>> getEntries();
+  Collection<Map.Entry<Object, CacheObject>> getEntries();
 }

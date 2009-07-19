@@ -43,10 +43,8 @@ import java.util.Set;
  *
  * @author Sebastian Sdorra
  *
- * @param <K>
- * @param <V>
  */
-public interface Cache<K, V> extends Serializable
+public interface Cache extends Serializable
 {
 
   /**
@@ -61,7 +59,7 @@ public interface Cache<K, V> extends Serializable
    *
    * @return
    */
-  public Set<K> keySet();
+  public Set<Object> keySet();
 
   /**
    * Method description
@@ -72,7 +70,7 @@ public interface Cache<K, V> extends Serializable
    *
    * @return
    */
-  public V put(K key, V value);
+  public Object put(Object key, Object value);
 
   /**
    * Method description
@@ -82,7 +80,7 @@ public interface Cache<K, V> extends Serializable
    *
    * @return
    */
-  public V remove(K key);
+  public Object remove(Object key);
 
   /**
    * Method description
@@ -102,7 +100,7 @@ public interface Cache<K, V> extends Serializable
    *
    * @return
    */
-  public V get(K key);
+  public Object get(Object key);
 
   /**
    * Method description

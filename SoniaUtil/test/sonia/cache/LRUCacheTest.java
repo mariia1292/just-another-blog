@@ -49,11 +49,13 @@ public class LRUCacheTest extends CacheTestBase
   /**
    * Method description
    *
+   *
+   * @throws InterruptedException
    */
   @Test
   public void lruTest() throws InterruptedException
   {
-    Cache<String, String> cache = getCache();
+    Cache cache = getCache();
 
     assertTrue(cache.isEmpty());
     assertEquals("value1", cache.put("key1", "value1"));
@@ -82,8 +84,8 @@ public class LRUCacheTest extends CacheTestBase
    * @return
    */
   @Override
-  protected Cache<String, String> getCache()
+  protected Cache getCache()
   {
-    return new LRUCache<String, String>("junit", 5);
+    return new LRUCache("junit", 5);
   }
 }

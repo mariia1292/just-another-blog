@@ -45,10 +45,8 @@ import java.util.logging.Logger;
  *
  * @author Sebastian Sdorra
  *
- * @param <K>
- * @param <V>
  */
-public class ExpirationTimerTask<K, V> extends TimerTask
+public class ExpirationTimerTask extends TimerTask
 {
 
   /** Field description */
@@ -64,7 +62,7 @@ public class ExpirationTimerTask<K, V> extends TimerTask
    * @param cache
    * @param expirationTime
    */
-  public ExpirationTimerTask(ExpirationCache<K, V> cache, long expirationTime)
+  public ExpirationTimerTask(ExpirationCache cache, long expirationTime)
   {
     this.cache = cache;
     this.expirationTime = expirationTime;
@@ -86,9 +84,9 @@ public class ExpirationTimerTask<K, V> extends TimerTask
 
     if (!cache.isEmpty())
     {
-      Collection<Entry<K, CacheObject<V>>> entries = cache.getEntries();
+      Collection<Entry<Object, CacheObject>> entries = cache.getEntries();
 
-      for (Entry<K, CacheObject<V>> entry : entries)
+      for (Entry<Object, CacheObject> entry : entries)
       {
         long time = System.currentTimeMillis();
 
@@ -103,7 +101,7 @@ public class ExpirationTimerTask<K, V> extends TimerTask
   //~--- fields ---------------------------------------------------------------
 
   /** Field description */
-  private ExpirationCache<K, V> cache;
+  private ExpirationCache cache;
 
   /** Field description */
   private long expirationTime;

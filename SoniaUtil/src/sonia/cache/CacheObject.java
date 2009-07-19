@@ -37,9 +37,8 @@ package sonia.cache;
  *
  * @author Sebastian Sdorra
  *
- * @param <V>
  */
-public class CacheObject<V>
+public class CacheObject
 {
 
   /**
@@ -48,7 +47,7 @@ public class CacheObject<V>
    *
    * @param object
    */
-  public CacheObject(V object)
+  public CacheObject(Object object)
   {
     this.object = object;
     this.time = System.currentTimeMillis();
@@ -80,7 +79,7 @@ public class CacheObject<V>
       return false;
     }
 
-    final CacheObject<V> other = (CacheObject<V>) obj;
+    final CacheObject other = (CacheObject) obj;
 
     if ((this.object != other.object)
         && ((this.object == null) ||!this.object.equals(other.object)))
@@ -139,7 +138,7 @@ public class CacheObject<V>
    *
    * @return
    */
-  public V getObject()
+  public Object getObject()
   {
     return object;
   }
@@ -176,7 +175,7 @@ public class CacheObject<V>
   private long lastAccess;
 
   /** Field description */
-  private V object;
+  private Object object;
 
   /** Field description */
   private long time;
