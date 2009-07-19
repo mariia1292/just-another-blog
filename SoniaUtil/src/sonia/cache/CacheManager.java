@@ -36,7 +36,6 @@ package sonia.cache;
 //~--- non-JDK imports --------------------------------------------------------
 
 import org.w3c.dom.Document;
-import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
@@ -91,6 +90,15 @@ public class CacheManager
 
     if (Util.hasContent(name))
     {
+      if (logger.isLoggable(Level.FINEST))
+      {
+        StringBuffer msg = new StringBuffer();
+
+        msg.append("add ").append(cache.getName()).append(" cache of type ");
+        msg.append(cache.getClass().getName());
+        logger.finest(msg.toString());
+      }
+
       caches.put(name, cache);
     }
     else
@@ -167,7 +175,15 @@ public class CacheManager
    */
   public void remove(String name)
   {
-    caches.remove(name);
+    Cache c = caches.remove(name);
+
+    if ((c != null) && logger.isLoggable(Level.FINEST))
+    {
+      StringBuffer msg = new StringBuffer();
+
+      msg.append("remove cache ").append(c.getName());
+      logger.finest(msg.toString());
+    }
   }
 
   //~--- get methods ----------------------------------------------------------

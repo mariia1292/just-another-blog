@@ -38,12 +38,15 @@ package sonia.blog.mapping;
 import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.app.BlogRequest;
 import sonia.blog.api.app.BlogResponse;
+import sonia.blog.api.app.Constants;
 import sonia.blog.api.link.LinkBuilder;
 import sonia.blog.api.mapping.FinalMapping;
 import sonia.blog.api.search.SearchContext;
 import sonia.blog.api.search.SearchEntry;
 import sonia.blog.api.search.SearchException;
 import sonia.blog.entity.Blog;
+
+import sonia.cache.Cache;
 
 import sonia.rss.AbstractBase;
 import sonia.rss.Channel;
@@ -130,7 +133,6 @@ public class AsyncMapping extends FinalMapping
 
   /**
    * Method description
-   * TODO: cache Channel Object
    *
    * @param request
    * @param response
@@ -145,52 +147,79 @@ public class AsyncMapping extends FinalMapping
 
     if (Util.hasContent(urlParam) && Util.hasContent(type))
     {
-      FeedParser parser = FeedParser.getInstance(type);
+      Channel channel = null;
+      StringBuffer cacheKey = new StringBuffer();
 
-      if (parser != null)
+      cacheKey.append(urlParam).append(":").append(type);
+
+      Cache cache =
+        BlogContext.getInstance().getCacheManager().get(Constants.CACHE_FEED);
+
+      if (cache != null)
       {
-        URL url = new URL(urlParam);
-        InputStream in = null;
+        channel = (Channel) cache.get(cacheKey.toString());
+      }
+      else if (logger.isLoggable(Level.WARNING))
+      {
+        StringBuffer msg = new StringBuffer();
 
-        try
+        msg.append("cache ").append(Constants.CACHE_FEED).append(" not found");
+        logger.warning(msg.toString());
+      }
+
+      if (channel == null)
+      {
+        FeedParser parser = FeedParser.getInstance(type);
+
+        if (parser != null)
         {
-          in = url.openStream();
+          URL url = new URL(urlParam);
+          InputStream in = null;
 
-          Channel channel = parser.load(in);
+          try
+          {
+            in = url.openStream();
+            channel = parser.load(in);
 
-          if (channel != null)
-          {
-            printChannel(response, request.getCurrentBlog(), channel);
-          }
-          else
-          {
-            if (logger.isLoggable(Level.WARNING))
+            if (channel != null)
             {
-              logger.warning("could not create channel object");
+              printChannel(response, request.getCurrentBlog(), channel);
+              cache.put(cacheKey.toString(), channel);
             }
+            else
+            {
+              if (logger.isLoggable(Level.WARNING))
+              {
+                logger.warning("could not create channel object");
+              }
 
-            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+              response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            }
+          }
+          finally
+          {
+            if (in != null)
+            {
+              in.close();
+            }
           }
         }
-        finally
+        else
         {
-          if (in != null)
+          if (logger.isLoggable(Level.WARNING))
           {
-            in.close();
+            StringBuffer log = new StringBuffer();
+
+            log.append("no parser for type ").append(type).append(" found");
+            logger.warning(log.toString());
           }
+
+          response.sendError(HttpServletResponse.SC_BAD_REQUEST);
         }
       }
       else
       {
-        if (logger.isLoggable(Level.WARNING))
-        {
-          StringBuffer log = new StringBuffer();
-
-          log.append("no parser for type ").append(type).append(" found");
-          logger.warning(log.toString());
-        }
-
-        response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+        printChannel(response, request.getCurrentBlog(), channel);
       }
     }
     else
@@ -235,12 +264,14 @@ public class AsyncMapping extends FinalMapping
       if (Util.hasContent(items))
       {
         Iterator<Item> itemIt = items.iterator();
+
         while (itemIt.hasNext())
         {
           writer.print("    {");
           printItem(writer, df, itemIt.next());
           writer.println(" }");
-          if ( itemIt.hasNext() )
+
+          if (itemIt.hasNext())
           {
             writer.print(", ");
           }
