@@ -33,6 +33,10 @@
 
 package sonia.cache;
 
+//~--- non-JDK imports --------------------------------------------------------
+
+import sonia.util.Util;
+
 //~--- JDK imports ------------------------------------------------------------
 
 import java.util.Collection;
@@ -50,6 +54,57 @@ public class SimpleExpirationCache extends AbstractCache
         implements ExpirationCache
 {
 
+  /** Field description */
+  private static final String PARAMETER_EXPIRATIONTIME = "expiration-time";
+
+  /** Field description */
+  private static final String PARAMETER_INTERVALCHECK = "interval-check";
+
+  //~--- constructors ---------------------------------------------------------
+
+  /**
+   * Constructs ...
+   *
+   *
+   * @param name
+   * @param parameter
+   *
+   * @throws IllegalArgumentException
+   * @throws NumberFormatException
+   */
+  SimpleExpirationCache(String name, Map<String, String> parameter)
+          throws NumberFormatException, IllegalArgumentException
+  {
+    super(name);
+    cacheMap = new HashMap<Object, CacheObject>();
+
+    String timeParam = parameter.get(PARAMETER_EXPIRATIONTIME);
+
+    if (Util.hasContent(timeParam))
+    {
+      expirationTime = Long.parseLong(timeParam);
+    }
+    else
+    {
+      StringBuffer msg = new StringBuffer();
+
+      msg.append("the parameter ").append(PARAMETER_EXPIRATIONTIME);
+      msg.append(" is required");
+
+      throw new IllegalArgumentException(msg.toString());
+    }
+
+    String checkParam = parameter.get(PARAMETER_INTERVALCHECK);
+
+    if (Util.hasContent(checkParam))
+    {
+      if (Boolean.parseBoolean(checkParam))
+      {
+        createTimer(name);
+      }
+    }
+  }
+
   /**
    * Constructs ...
    *
@@ -65,13 +120,7 @@ public class SimpleExpirationCache extends AbstractCache
     this.expirationTime = expirationTime;
     this.cacheMap = new HashMap<Object, CacheObject>();
 
-    if (intervalCheck)
-    {
-      Timer timer = new Timer(name);
-
-      timer.schedule(new ExpirationTimerTask(this, expirationTime), 0l,
-                     expirationTime);
-    }
+    if (intervalCheck) {}
   }
 
   //~--- methods --------------------------------------------------------------
@@ -157,6 +206,22 @@ public class SimpleExpirationCache extends AbstractCache
   public Collection<Entry<Object, CacheObject>> getEntries()
   {
     return cacheMap.entrySet();
+  }
+
+  //~--- methods --------------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   * @param name
+   */
+  private void createTimer(String name)
+  {
+    Timer timer = new Timer(name);
+
+    timer.schedule(new ExpirationTimerTask(this, expirationTime), 0l,
+                   expirationTime);
   }
 
   //~--- fields ---------------------------------------------------------------
