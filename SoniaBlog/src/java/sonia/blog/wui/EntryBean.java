@@ -727,6 +727,8 @@ public class EntryBean extends AbstractEditorBean
       }
     }
 
+    List<Tag> removeAbleTags = new ArrayList<Tag>();
+
     for (Tag t : oldTags)
     {
       if (!tags.contains(t))
@@ -735,7 +737,7 @@ public class EntryBean extends AbstractEditorBean
 
         if (t.getEntries().isEmpty())
         {
-          tagDAO.remove(session, t);
+          removeAbleTags.add(t);
         }
         else
         {
@@ -745,6 +747,16 @@ public class EntryBean extends AbstractEditorBean
     }
 
     entry.setTags(tags);
+
+    if (entry.getId() != null)
+    {
+      BlogContext.getDAOFactory().getEntryDAO().edit(session, entry);
+    }
+
+    for (Tag rt : removeAbleTags)
+    {
+      tagDAO.remove(session, rt);
+    }
   }
 
   /**
