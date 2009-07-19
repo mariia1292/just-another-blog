@@ -548,14 +548,16 @@ public class AdminBlogBean extends AbstractBean
    */
   public SelectItem[] getRoleItems()
   {
-    SelectItem[] items = new SelectItem[3];
+    SelectItem[] items = new SelectItem[4];
     ResourceBundle bundle = getResourceBundle("label");
 
     items[0] = new SelectItem(Role.READER,
                               bundle.getString(Role.READER.name()));
     items[1] = new SelectItem(Role.AUTHOR,
                               bundle.getString(Role.AUTHOR.name()));
-    items[2] = new SelectItem(Role.ADMIN, bundle.getString(Role.ADMIN.name()));
+    items[2] = new SelectItem(Role.CONTENTMANAGER,
+                              bundle.getString(Role.CONTENTMANAGER.name()));
+    items[3] = new SelectItem(Role.ADMIN, bundle.getString(Role.ADMIN.name()));
 
     return items;
   }

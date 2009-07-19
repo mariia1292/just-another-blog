@@ -15,6 +15,25 @@
         select e from Entry e
       </query>
     </named-query>
+    <named-query name="Entry.getAllByBlogAndUser">
+      <query>
+        select e from Entry e join e.blog b
+        where
+          b = :blog
+        and
+          e.author = :user
+        order by e.creationDate desc
+      </query>
+    </named-query>
+    <named-query name="Entry.countByBlogAndUser">
+      <query>
+        select count(e) from Entry e join e.blog b
+        where
+          b = :blog
+        and
+          e.author = :user
+      </query>
+    </named-query>
     <named-query name="Entry.findAllActives">
       <query>
         select e from Entry e
