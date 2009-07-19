@@ -1,10 +1,10 @@
 /**
  * Copyright (c) 2009, Sebastian Sdorra
  * All rights reserved.
- * 
+ *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
@@ -13,7 +13,7 @@
  * 3. Neither the name of JAB; nor the names of its
  *    contributors may be used to endorse or promote products derived from this
  *    software without specific prior written permission.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -24,10 +24,11 @@
  * ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- * 
+ *
  * http://kenai.com/projects/jab
- * 
+ *
  */
+
 
 
 package sonia.blog.devel;
@@ -38,6 +39,7 @@ import org.apache.derby.drda.NetworkServerControl;
 
 import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.app.BlogRequestListener;
+import sonia.blog.api.app.BlogSession;
 import sonia.blog.api.app.Constants;
 import sonia.blog.api.app.ResourceManager;
 import sonia.blog.api.dao.BlogDAO;
@@ -121,6 +123,7 @@ public class DevelBean extends AbstractBean
     EntryDAO entryDAO = daoFactory.getEntryDAO();
     CommentDAO commentDAO = daoFactory.getCommentDAO();
     CategoryDAO categoryDAO = daoFactory.getCategoryDAO();
+    BlogSession session = getRequest().getBlogSession();
 
     for (int i = 0; i < blogs; i++)
     {
@@ -131,7 +134,7 @@ public class DevelBean extends AbstractBean
       user.setEmail("user" + i + "@jab.de");
       user.setPassword(pwd);
       user.setLastLogin(new Date());
-      userDAO.add(user);
+      userDAO.add(session, user);
 
       for (int j = 0; j < blogs; j++)
       {
@@ -142,7 +145,7 @@ public class DevelBean extends AbstractBean
         blog.setTemplate("jab");
         blog.setEmail("user" + j + "@jab.de");
         blog.setDescription("Description Blog " + j);
-        blogDAO.add(blog);
+        blogDAO.add(session, blog);
         userDAO.setRole(blog, user, Role.ADMIN);
 
         for (int k = 0; k < categories; k++)
@@ -152,7 +155,7 @@ public class DevelBean extends AbstractBean
           category.setBlog(blog);
           category.setName("Category" + k);
           category.setDescription("Description Catgory " + k);
-          categoryDAO.add(category);
+          categoryDAO.add(session, category);
 
           for (int l = 0; l < entries; l++)
           {
@@ -170,7 +173,7 @@ public class DevelBean extends AbstractBean
             String teaser = createContent(l, 200);
 
             entry.setTeaser(teaser);
-            entryDAO.add(entry);
+            entryDAO.add(session, entry);
 
             for (int m = 0; m < comments; m++)
             {
@@ -184,7 +187,7 @@ public class DevelBean extends AbstractBean
 
               comment.setContent(commentContent);
               comment.setEntry(entry);
-              commentDAO.add(comment);
+              commentDAO.add(session, comment);
             }
           }
         }

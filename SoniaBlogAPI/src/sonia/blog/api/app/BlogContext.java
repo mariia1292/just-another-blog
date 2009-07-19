@@ -276,6 +276,21 @@ public final class BlogContext
    * Method description
    *
    *
+   * @param loginContext
+   * @param user
+   * @param blog
+   *
+   * @return
+   */
+  public BlogSession login(LoginContext loginContext, User user, Blog blog)
+  {
+    return new BlogSession(loginContext, user, blog);
+  }
+
+  /**
+   * Method description
+   *
+   *
    * @param request
    * @param blogSession
    *
@@ -294,7 +309,24 @@ public final class BlogContext
 
     blogSession.getLoginContext().logout();
     blogSession = null;
-    request.getSession().invalidate();
+
+    if (request != null)
+    {
+      request.getSession().invalidate();
+    }
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param blogSession
+   *
+   * @throws LoginException
+   */
+  public void logout(BlogSession blogSession) throws LoginException
+  {
+    logout(null, blogSession);
   }
 
   //~--- get methods ----------------------------------------------------------
@@ -663,6 +695,17 @@ public final class BlogContext
     }
 
     return sessionInformation;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  public BlogSession getSystemBlogSession()
+  {
+    return BlogSession.systemBlogSession;
   }
 
   /**

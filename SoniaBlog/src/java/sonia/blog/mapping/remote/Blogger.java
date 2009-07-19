@@ -1,10 +1,10 @@
 /**
  * Copyright (c) 2009, Sebastian Sdorra
  * All rights reserved.
- * 
+ *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
@@ -13,7 +13,7 @@
  * 3. Neither the name of JAB; nor the names of its
  *    contributors may be used to endorse or promote products derived from this
  *    software without specific prior written permission.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -24,10 +24,11 @@
  * ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- * 
+ *
  * http://kenai.com/projects/jab
- * 
+ *
  */
+
 
 
 package sonia.blog.mapping.remote;
@@ -38,6 +39,7 @@ import org.apache.xmlrpc.XmlRpcException;
 import org.apache.xmlrpc.common.XmlRpcNotAuthorizedException;
 
 import sonia.blog.api.app.BlogContext;
+import sonia.blog.api.app.BlogSession;
 import sonia.blog.api.dao.BlogDAO;
 import sonia.blog.api.dao.CategoryDAO;
 import sonia.blog.api.dao.EntryDAO;
@@ -109,13 +111,15 @@ public class Blogger
     logger.info("Blogger.deletePost");
 
     Boolean result = Boolean.FALSE;
-    LoginContext ctx = login(username, password);
     EntryDAO entryDAO = BlogContext.getDAOFactory().getEntryDAO();
     Entry entry = entryDAO.get(convertId(postId));
+    BlogSession session = null;
 
     if (entry != null)
     {
-      User user = getUser(ctx);
+      session = createBlogSession(entry.getBlog(), username, password);
+
+      User user = session.getUser();
       boolean prev = false;
 
       if (entry.getAuthor().equals(user) || user.isGlobalAdmin())
@@ -131,7 +135,7 @@ public class Blogger
 
       if (prev)
       {
-        result = entryDAO.remove(entry);
+        result = entryDAO.remove(session, entry);
       }
       else
       {
@@ -143,9 +147,9 @@ public class Blogger
       throw new XmlRpcException("post not found");
     }
 
-    if (ctx != null)
+    if (session != null)
     {
-      logout(ctx);
+      logout(session);
     }
 
     return result;
@@ -173,15 +177,17 @@ public class Blogger
     logger.info("Blogger.editPost");
 
     Boolean result = Boolean.FALSE;
-    LoginContext ctx = login(username, password);
     EntryDAO entryDAO = BlogContext.getDAOFactory().getEntryDAO();
     CategoryDAO categoryDAO = BlogContext.getDAOFactory().getCategoryDAO();
     Entry entry = entryDAO.get(convertId(postId));
+    BlogSession session = null;
 
     if (entry != null)
     {
+      session = createBlogSession(entry.getBlog(), username, password);
+
       boolean prev = false;
-      User user = getUser(ctx);
+      User user = session.getUser();
 
       if (user.equals(entry.getAuthor()) || user.isGlobalAdmin())
       {
@@ -258,7 +264,7 @@ public class Blogger
         entry.setTitle(title);
         entry.setContent(content);
         entry.publish();
-        result = entryDAO.edit(entry);
+        result = entryDAO.edit(session, entry);
       }
       else
       {
@@ -270,9 +276,9 @@ public class Blogger
       throw new XmlRpcException("post not found");
     }
 
-    if (ctx != null)
+    if (session != null)
     {
-      logout(ctx);
+      logout(session);
     }
 
     return result;
@@ -299,9 +305,9 @@ public class Blogger
     logger.info("Blogger.newPost");
 
     String result = null;
-    LoginContext ctx = login(username, password);
-    User user = getUser(ctx);
     Blog blog = findBlog(blogId);
+    BlogSession session = createBlogSession(blog, username, password);
+    User user = session.getUser();
 
     if (isAuthor(user, blog))
     {
@@ -342,7 +348,7 @@ public class Blogger
       entry.setAuthor(user);
       entry.publish();
 
-      if (entryDAO.add(entry))
+      if (entryDAO.add(session, entry))
       {
         result = entry.getId().toString();
       }
@@ -356,9 +362,9 @@ public class Blogger
       throw new XmlRpcException("user has no rights to create posts");
     }
 
-    if (ctx != null)
+    if (session != null)
     {
-      logout(ctx);
+      logout(session);
     }
 
     return result;
@@ -532,6 +538,33 @@ public class Blogger
    * Method description
    *
    *
+   * @param blog
+   * @param username
+   * @param password
+   *
+   * @return
+   *
+   * @throws XmlRpcNotAuthorizedException
+   */
+  protected BlogSession createBlogSession(Blog blog, String username,
+          String password)
+          throws XmlRpcNotAuthorizedException
+  {
+    LoginContext ctx = login(username, password);
+    User user = BlogContext.getDAOFactory().getUserDAO().get(username, true);
+
+    if (user != null)
+    {
+      throw new XmlRpcNotAuthorizedException("no such user");
+    }
+
+    return BlogContext.getInstance().login(ctx, user, blog);
+  }
+
+  /**
+   * Method description
+   *
+   *
    * @param blogId
    *
    * @return
@@ -602,6 +635,29 @@ public class Blogger
     try
     {
       ctx.logout();
+    }
+    catch (LoginException ex)
+    {
+      logger.log(Level.WARNING, null, ex);
+
+      throw new XmlRpcNotAuthorizedException("logout failure");
+    }
+  }
+
+  /**
+   * Method description
+   *
+   *
+   *
+   * @param session
+   *
+   * @throws XmlRpcNotAuthorizedException
+   */
+  protected void logout(BlogSession session) throws XmlRpcNotAuthorizedException
+  {
+    try
+    {
+      BlogContext.getInstance().logout(session);
     }
     catch (LoginException ex)
     {

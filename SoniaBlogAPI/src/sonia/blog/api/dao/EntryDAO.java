@@ -78,6 +78,16 @@ public interface EntryDAO extends GenericDAO<Entry>
    * Method description
    *
    *
+   * @param session
+   *
+   * @return
+   */
+  public long countModifyAbleEntries(BlogSession session);
+
+  /**
+   * Method description
+   *
+   *
    * @return
    */
   public List<Entry> findAllActives();
@@ -279,8 +289,6 @@ public interface EntryDAO extends GenericDAO<Entry>
    */
   public List<Entry> getAllModifyAbleEntries(BlogSession authorSession,
           int start, int max);
-
-  public long countModifyAbleEntries( BlogSession session );
 
   /**
    * Method description
