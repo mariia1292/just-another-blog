@@ -45,10 +45,14 @@ import sonia.blog.api.macro.LinkResource;
 import sonia.blog.api.macro.ScriptResource;
 import sonia.blog.api.macro.WebMacro;
 import sonia.blog.api.macro.WebResource;
+import sonia.blog.api.macro.browse.SelectWidget;
 import sonia.blog.entity.Attachment;
 import sonia.blog.entity.ContentObject;
 import sonia.blog.entity.Entry;
 import sonia.blog.entity.Page;
+
+import sonia.macro.browse.MacroInfo;
+import sonia.macro.browse.MacroInfoParameter;
 
 import sonia.util.Util;
 
@@ -63,6 +67,12 @@ import java.util.logging.Logger;
  *
  * @author Sebastian Sdorra
  */
+@MacroInfo(
+  name = "gallery",
+  displayName = "macro.gallery.displayName",
+  description = "macro.gallery.description",
+  resourceBundle = "sonia.blog.resources.label"
+)
 public class GalleryMacro extends AbstractBlogMacro implements WebMacro
 {
 
@@ -90,6 +100,12 @@ public class GalleryMacro extends AbstractBlogMacro implements WebMacro
    *
    * @param theme
    */
+  @MacroInfoParameter(
+    displayName = "macro.gallery.theme.displayName",
+    description = "macro.gallery.theme.description",
+    widget = SelectWidget.class,
+    widgetParam = "options=light_rounded|dark_rounded|light_square|dark_square;nullable=true"
+  )
   public void setTheme(String theme)
   {
     this.theme = theme;

@@ -35,29 +35,28 @@ package sonia.blog.api.macro.browse;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.app.BlogRequest;
+import sonia.blog.api.dao.AttachmentDAO;
+import sonia.blog.entity.Attachment;
 import sonia.blog.entity.ContentObject;
+import sonia.blog.entity.Entry;
+import sonia.blog.entity.Page;
 
 import sonia.util.Util;
 
 //~--- JDK imports ------------------------------------------------------------
 
+import java.util.List;
 import java.util.Map;
 
 /**
  *
+ *
  * @author Sebastian Sdorra
  */
-public class StringInputWidget extends AbstractBlogMacroWidget
+public class AttachmentWidget extends SelectWidget
 {
-
-  /** Field description */
-  public static final String PARAMETER_REGEX = "regex";
-
-  /** Field description */
-  public static final String PARAMETER_VALUE = "value";
-
-  //~--- get methods ----------------------------------------------------------
 
   /**
    * Method description
@@ -70,60 +69,49 @@ public class StringInputWidget extends AbstractBlogMacroWidget
    *
    * @return
    */
+  @Override
   public String getFormElement(BlogRequest request, ContentObject object,
                                String name, String param)
   {
-    StringBuffer formElement = new StringBuffer();
-    Map<String, String> params = buildParameterMap(param);
+    StringBuffer result = new StringBuffer();
+    List<Attachment> attachments = null;
+    AttachmentDAO attachmentDAO =
+      BlogContext.getDAOFactory().getAttachmentDAO();
 
-    formElement.append("<input type=\"text\" name=\"").append(name);
-    formElement.append("\"");
-
-    if ((params != null) &&!params.isEmpty())
+    if (object instanceof Entry)
     {
-      String value = params.get(PARAMETER_VALUE);
-
-      if (Util.hasContent(value))
-      {
-        formElement.append("value=\"").append(value).append("\"");
-      }
+      attachments = attachmentDAO.findAllByEntry((Entry) object);
+    }
+    else if (object instanceof Page)
+    {
+      attachments = attachmentDAO.getAll((Page) object);
     }
 
-    formElement.append(" />");
+    Map<String, String> params = buildParameterMap(param);
+    String filter = params.get("filter");
 
-    return formElement.toString();
-  }
+    result.append("<select name=\"").append(name).append("\">");
 
-  /**
-   * Method description
-   *
-   *
-   * @param request
-   * @param object
-   * @param name
-   * @param param
-   *
-   * @return
-   */
-  public String getResult(BlogRequest request, ContentObject object,
-                          String name, String param)
-  {
-    String value = request.getParameter(name);
-
-    if (Util.hasContent(value))
+    if ((params != null) && "true".equalsIgnoreCase(params.get("nullable")))
     {
-      Map<String, String> params = buildParameterMap(param);
-      String regex = params.get(PARAMETER_REGEX);
+      result.append("<option value=\"\">---</option>");
+    }
 
-      if (Util.hasContent(regex))
+    if (Util.hasContent(attachments))
+    {
+      for (Attachment attachment : attachments)
       {
-        if (!value.matches(regex))
+        if (Util.isBlank(filter) || attachment.getName().matches(filter))
         {
-          throw new ValidationException();
+          result.append("<option value=\"").append(attachment.getId());
+          result.append("\">").append(attachment.getName());
+          result.append("</option>");
         }
       }
     }
 
-    return value;
+    result.append("</select>");
+
+    return result.toString();
   }
 }

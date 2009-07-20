@@ -42,10 +42,10 @@ import sonia.blog.api.app.BlogRequest;
 import sonia.blog.api.app.Constants;
 import sonia.blog.api.app.ResourceManager;
 import sonia.blog.api.link.LinkBuilder;
-import sonia.blog.api.util.*;
-import sonia.blog.editor.LinkHandler;
+import sonia.blog.api.util.AbstractBean;
 import sonia.blog.entity.Attachment;
 import sonia.blog.entity.Blog;
+import sonia.blog.entity.ContentObject;
 import sonia.blog.util.AttachmentWrapper;
 
 import sonia.macro.Macro;
@@ -71,7 +71,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.zip.ZipEntry;
@@ -138,6 +137,14 @@ public abstract class AbstractEditorBean extends AbstractBean
   public abstract String saveDraft();
 
   //~--- get methods ----------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  public abstract ContentObject getObject();
 
   /**
    * Method description

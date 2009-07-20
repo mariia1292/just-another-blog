@@ -55,6 +55,7 @@ import sonia.blog.api.template.Template;
 import sonia.blog.entity.Attachment;
 import sonia.blog.entity.Blog;
 import sonia.blog.entity.Category;
+import sonia.blog.entity.ContentObject;
 import sonia.blog.entity.Entry;
 import sonia.blog.entity.Tag;
 import sonia.blog.entity.User;
@@ -486,6 +487,18 @@ public class EntryBean extends AbstractEditorBean
   public Entry getEntry()
   {
     return entry;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  @Override
+  public ContentObject getObject()
+  {
+    return getEntry();
   }
 
   /**

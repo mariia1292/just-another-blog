@@ -47,6 +47,7 @@ import sonia.blog.api.dao.PageDAO;
 import sonia.blog.api.link.LinkBuilder;
 import sonia.blog.entity.Attachment;
 import sonia.blog.entity.Blog;
+import sonia.blog.entity.ContentObject;
 import sonia.blog.entity.Page;
 import sonia.blog.wui.model.PageNavigationFilter;
 import sonia.blog.wui.model.PageNavigationTreeNode;
@@ -305,6 +306,18 @@ public class PageAuthorBean extends AbstractEditorBean
 
     return new PageNavigationTreeNode(pageDAO, request.getCurrentBlog(),
                                       filter, "root", "RootNode", false, false);
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  @Override
+  public ContentObject getObject()
+  {
+    return getPage();
   }
 
   /**
