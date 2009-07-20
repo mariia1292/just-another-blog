@@ -185,7 +185,7 @@ public interface Constants
 
   /** Field description */
   public static final String DEFAULT_DASHBOARD_RSS =
-    "http://news.just-another-blog.org/feed/index.rss2";
+    "http://www.just-another-blog.org/feed/index.rss2";
 
   /** Field description */
   public static final String DEFAULT_ENCODING = "UTF-8";
