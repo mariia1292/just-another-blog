@@ -65,25 +65,29 @@ public class SimpleExpirationCacheTest extends CacheTestBase
     assertTrue(cache.isEmpty());
   }
 
+  //~--- get methods ----------------------------------------------------------
+
   /**
    * Method description
    *
    *
-   * @throws InterruptedException
+   *
+   * @return
    */
-  @Test
-  public void extendedExpirationTest() throws InterruptedException
-  {
-    long time = 1000l;
-    Cache cache = new SimpleExpirationCache("junit", time, true);
 
-    assertEquals("value", cache.put("key", "value"));
-    assertFalse(cache.isEmpty());
-    Thread.sleep(3010l);
-    assertTrue(cache.isEmpty());
-  }
-
-  //~--- get methods ----------------------------------------------------------
+  /*
+   * @Test
+   * public void extendedExpirationTest() throws InterruptedException
+   * {
+   * long time = 1000l;
+   * Cache cache = new SimpleExpirationCache("junit", time, true);
+   *
+   * assertEquals("value", cache.put("key", "value"));
+   * assertFalse(cache.isEmpty());
+   * Thread.sleep(3010l);
+   * assertTrue(cache.isEmpty());
+   * }
+   */
 
   /**
    * Method description
