@@ -44,9 +44,15 @@ import sonia.blog.api.macro.AbstractBlogMacro;
 import sonia.blog.api.macro.ScriptResource;
 import sonia.blog.api.macro.WebMacro;
 import sonia.blog.api.macro.WebResource;
+import sonia.blog.api.macro.browse.AttachmentWidget;
+import sonia.blog.api.macro.browse.CheckboxWidget;
+import sonia.blog.api.macro.browse.StringInputWidget;
 import sonia.blog.entity.Attachment;
 import sonia.blog.entity.Blog;
 import sonia.blog.entity.ContentObject;
+
+import sonia.macro.browse.MacroInfo;
+import sonia.macro.browse.MacroInfoParameter;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -57,6 +63,12 @@ import java.util.List;
  *
  * @author Sebastian Sdorra
  */
+@MacroInfo(
+  name = "flvviewer",
+  displayName = "macro.flv.displayName",
+  description = "macro.flv.description",
+  resourceBundle = "sonia.blog.resources.label"
+)
 public class FLVMacro extends AbstractBlogMacro implements WebMacro
 {
 
@@ -79,6 +91,11 @@ public class FLVMacro extends AbstractBlogMacro implements WebMacro
    *
    * @param autoBuffering
    */
+  @MacroInfoParameter(
+    displayName = "macro.flv.autoBuffering.displayName",
+    description = "macro.flv.autoBuffering.description",
+    widget = CheckboxWidget.class
+  )
   public void setAutoBuffering(Boolean autoBuffering)
   {
     this.autoBuffering = autoBuffering;
@@ -90,6 +107,11 @@ public class FLVMacro extends AbstractBlogMacro implements WebMacro
    *
    * @param autoPlay
    */
+  @MacroInfoParameter(
+    displayName = "macro.flv.autoPlay.displayName",
+    description = "macro.flv.autoPlay.description",
+    widget = CheckboxWidget.class
+  )
   public void setAutoPlay(Boolean autoPlay)
   {
     this.autoPlay = autoPlay;
@@ -101,6 +123,12 @@ public class FLVMacro extends AbstractBlogMacro implements WebMacro
    *
    * @param height
    */
+  @MacroInfoParameter(
+    displayName = "macro.flv.height.displayName",
+    description = "macro.flv.height.description",
+    widget = StringInputWidget.class,
+    widgetParam = "regex=\\d+;value=360"
+  )
   public void setHeight(Integer height)
   {
     this.height = height;
@@ -112,6 +140,12 @@ public class FLVMacro extends AbstractBlogMacro implements WebMacro
    *
    * @param id
    */
+  @MacroInfoParameter(
+    displayName = "macro.flv.id.displayName",
+    description = "macro.flv.id.description",
+    widget = AttachmentWidget.class,
+    widgetParam = "filter=.*\\.(flv|f4v|avi)"
+  )
   public void setId(Long id)
   {
     this.id = id;
@@ -123,6 +157,12 @@ public class FLVMacro extends AbstractBlogMacro implements WebMacro
    *
    * @param width
    */
+  @MacroInfoParameter(
+    displayName = "macro.flv.width.displayName",
+    description = "macro.flv.width.description",
+    widget = StringInputWidget.class,
+    widgetParam = "regex=\\d+;value=480"
+  )
   public void setWidth(Integer width)
   {
     this.width = width;

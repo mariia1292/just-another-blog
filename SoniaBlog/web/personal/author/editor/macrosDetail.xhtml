@@ -30,12 +30,15 @@
             </h:column>
 
             <h:column>
-              <blog:widget widget="#{InfoParam.widget}" param="#{InfoParam.widgetParam}" name="#{InfoParam.name}" />
+              <blog:widget widget="#{InfoParam.widget}"
+                           object="#{EditorBean.object}"
+                           param="#{InfoParam.widgetParam}"
+                           name="#{InfoParam.name}" />
             </h:column>
 
           </h:dataTable>
 
-          <blog:widget widget="#{Macro.bodyWidget}" param="#{Macro.widgetParam}" name="__body" /><br />
+          <blog:widget widget="#{Macro.bodyWidget}" object="#{EditorBean.object}" param="#{Macro.widgetParam}" name="__body" /><br />
 
           <input type="submit" value="#{label.send}" />
 

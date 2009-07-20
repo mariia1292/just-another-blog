@@ -21,13 +21,13 @@
 
         <script type="text/javascript">
           var name = '#{Macro.name}';
-          var body = '<blog:widget widget="#{Macro.bodyWidget}" param="#{Macro.widgetParam}" name="__body" result="true" />';
+          var body = '<blog:widget widget="#{Macro.bodyWidget}" object="#{EditorBean.object}" param="#{Macro.widgetParam}" name="__body" result="true" />';
           var param = new Array();
           var paramName;
           var paramValue;
             <ui:repeat value="#{Macro.parameter}" var="InfoParam">
               paramName = '#{InfoParam.name}';
-              paramValue = '<blog:widget widget="#{InfoParam.widget}" param="#{InfoParam.widgetParam}" name="#{InfoParam.name}" result="true" />';
+              paramValue = '<blog:widget widget="#{InfoParam.widget}" object="#{EditorBean.object}" param="#{InfoParam.widgetParam}" name="#{InfoParam.name}" result="true" />';
               if ( paramName != '' &amp;&amp; paramValue != '' )
               {
                 param.push( paramName + "=" + paramValue );

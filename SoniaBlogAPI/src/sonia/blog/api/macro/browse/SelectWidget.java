@@ -78,6 +78,11 @@ public class SelectWidget extends AbstractBlogMacroWidget
 
         out.append("<select name=\"").append(name).append("\">");
 
+        if ("true".equalsIgnoreCase(params.get("nullable")))
+        {
+          out.append("<option value=\"\">---</option>");
+        }
+
         for (String option : options)
         {
           out.append("<option");
@@ -89,6 +94,12 @@ public class SelectWidget extends AbstractBlogMacroWidget
             out.append(" value=\"").append(option.substring(index + 1));
             out.append("\"");
             option = option.substring(0, index);
+          }
+
+          if (option.startsWith("*"))
+          {
+            out.append(" selected=\"true\"");
+            option = option.substring(1);
           }
 
           out.append(">").append(option).append("</option>");
@@ -123,6 +134,13 @@ public class SelectWidget extends AbstractBlogMacroWidget
   public String getResult(BlogRequest request, ContentObject obejct,
                           String name, String param)
   {
-    return request.getParameter(name);
+    String result = request.getParameter(name);
+
+    if (Util.isBlank(result))
+    {
+      result = null;
+    }
+
+    return result;
   }
 }
