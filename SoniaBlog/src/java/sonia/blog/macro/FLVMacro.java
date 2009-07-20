@@ -77,6 +77,28 @@ public class FLVMacro extends AbstractBlogMacro implements WebMacro
    * Method description
    *
    *
+   * @param autoBuffering
+   */
+  public void setAutoBuffering(Boolean autoBuffering)
+  {
+    this.autoBuffering = autoBuffering;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param autoPlay
+   */
+  public void setAutoPlay(Boolean autoPlay)
+  {
+    this.autoPlay = autoPlay;
+  }
+
+  /**
+   * Method description
+   *
+   *
    * @param height
    */
   public void setHeight(Integer height)
@@ -187,14 +209,16 @@ public class FLVMacro extends AbstractBlogMacro implements WebMacro
     // result.append("addScript(\"").append(playerPath);
     // result.append("flowplayer.min.js\");\n");
     // load flowplayer.swf
-    result.append("$f(\"flvplayer_").append(attchment.getId());
+    result.append("flowplayer(\"flvplayer_").append(attchment.getId());
     result.append("\", \"").append(playerPath);
     result.append("flowplayer.swf\", {\n");
 
     // configure player
     result.append("clip: {\n");
-    result.append("url: '").append(attachmentLink).append("',\n");
-    result.append("autoPlay: false\n");
+
+    // result.append("url: '").append(attachmentLink).append("',\n");
+    result.append("autoPlay: ").append(autoPlay).append(",\n");
+    result.append("autoBuffering: ").append(autoBuffering).append("\n");
     result.append("}\n");
     result.append("});\n");
     result.append("</script>\n");
@@ -207,6 +231,12 @@ public class FLVMacro extends AbstractBlogMacro implements WebMacro
   /** Field description */
   @Dao
   private AttachmentDAO attachmentDAO;
+
+  /** Field description */
+  private Boolean autoBuffering = false;
+
+  /** Field description */
+  private Boolean autoPlay;
 
   /** Field description */
   private Integer height = 360;
