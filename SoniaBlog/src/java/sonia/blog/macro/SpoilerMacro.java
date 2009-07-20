@@ -39,9 +39,14 @@ import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.macro.ScriptResource;
 import sonia.blog.api.macro.WebMacro;
 import sonia.blog.api.macro.WebResource;
+import sonia.blog.api.macro.browse.CheckboxWidget;
+import sonia.blog.api.macro.browse.StringInputWidget;
+import sonia.blog.api.macro.browse.StringTextAreaWidget;
 
 import sonia.macro.Macro;
 import sonia.macro.MacroResult;
+import sonia.macro.browse.MacroInfo;
+import sonia.macro.browse.MacroInfoParameter;
 
 import sonia.util.Util;
 
@@ -55,6 +60,14 @@ import java.util.Map;
  *
  * @author Sebastian Sdorra
  */
+@MacroInfo(
+  name = "spoiler",
+  displayName = "macro.spoiler.displayName",
+  description = "macro.spoiler.description",
+  resourceBundle = "sonia.blog.resources.label",
+  bodyWidget = StringTextAreaWidget.class,
+  widgetParam = "cols=110;rows=25"
+)
 public class SpoilerMacro implements WebMacro
 {
 
@@ -163,6 +176,12 @@ public class SpoilerMacro implements WebMacro
    *
    * @param macros
    */
+  @MacroInfoParameter(
+    displayName = "macro.spoiler.macros.displayName",
+    description = "macro.spoiler.macros.description",
+    widget = CheckboxWidget.class,
+    widgetParam = "checked=true"
+  )
   public void setMacros(Boolean macros)
   {
     this.macros = macros;
@@ -174,6 +193,11 @@ public class SpoilerMacro implements WebMacro
    *
    * @param style
    */
+  @MacroInfoParameter(
+    displayName = "macro.spoiler.style.displayName",
+    description = "macro.spoiler.style.description",
+    widget = StringInputWidget.class
+  )
   public void setStyle(String style)
   {
     this.style = style;
@@ -185,6 +209,11 @@ public class SpoilerMacro implements WebMacro
    *
    * @param styleClass
    */
+  @MacroInfoParameter(
+    displayName = "macro.spoiler.styleClass.displayName",
+    description = "macro.spoiler.styleClass.description",
+    widget = StringInputWidget.class
+  )
   public void setStyleClass(String styleClass)
   {
     this.styleClass = styleClass;
@@ -196,6 +225,12 @@ public class SpoilerMacro implements WebMacro
    *
    * @param title
    */
+  @MacroInfoParameter(
+    displayName = "macro.spoiler.title.displayName",
+    description = "macro.spoiler.title.description",
+    widget = StringInputWidget.class,
+    widgetParam = "value=Spoiler"
+  )
   public void setTitle(String title)
   {
     this.title = title;
