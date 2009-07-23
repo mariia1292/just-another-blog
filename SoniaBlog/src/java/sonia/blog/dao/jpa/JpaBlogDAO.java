@@ -42,6 +42,7 @@ import sonia.blog.api.app.ResourceManager;
 import sonia.blog.api.dao.BlogDAO;
 import sonia.blog.api.exception.BlogSecurityException;
 import sonia.blog.entity.Blog;
+import sonia.blog.entity.BlogHitCount;
 import sonia.blog.entity.BlogMember;
 import sonia.blog.entity.BlogParameter;
 import sonia.blog.entity.Role;
@@ -112,10 +113,34 @@ public class JpaBlogDAO extends JpaGenericDAO<Blog> implements BlogDAO
   @Override
   public boolean remove(BlogSession session, Blog blog)
   {
-    boolean result = false;
-
-    if (super.remove(session, blog))
+    if (!isPrivileged(session, blog, ACTION_REMOVE))
     {
+      logUnprivilegedMessage(session, blog, ACTION_REMOVE);
+
+      throw new BlogSecurityException("Admin Session is required");
+    }
+
+    boolean result = false;
+    EntityManager em = createEntityManager();
+
+    try
+    {
+      em.getTransaction().begin();
+
+      Query q = em.createNamedQuery("BlogHitCount.findByBlog");
+
+      q.setParameter("blog", blog);
+
+      List<BlogHitCount> hits = q.getResultList();
+
+      for (BlogHitCount hit : hits)
+      {
+        em.remove(em.merge(hit));
+      }
+
+      em.remove(em.merge(blog));
+      em.getTransaction().commit();
+
       ResourceManager resManager =
         BlogContext.getInstance().getResourceManager();
       File indexDir = resManager.getDirectory(Constants.RESOURCE_INDEX, blog,
@@ -137,6 +162,22 @@ public class JpaBlogDAO extends JpaGenericDAO<Blog> implements BlogDAO
       }
 
       result = true;
+    }
+    catch (Exception ex)
+    {
+      if (em.getTransaction().isActive())
+      {
+        em.getTransaction().rollback();
+      }
+
+      logger.log(Level.SEVERE, null, ex);
+    }
+    finally
+    {
+      if (em != null)
+      {
+        em.close();
+      }
     }
 
     return result;
