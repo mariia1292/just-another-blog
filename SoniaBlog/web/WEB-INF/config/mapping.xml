@@ -106,7 +106,7 @@
   </mapping>
 
   <mapping>
-    <regex>^/async/([a-zA-Z0-9]+)\.json$</regex>
+    <regex>^/async/([a-zA-Z0-9-_]+)\.json$</regex>
     <class>sonia.blog.mapping.AsyncMapping</class>
   </mapping>
 

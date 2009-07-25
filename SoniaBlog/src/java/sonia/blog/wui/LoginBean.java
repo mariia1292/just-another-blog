@@ -61,9 +61,11 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.faces.context.FacesContext;
 import javax.security.auth.login.LoginException;
 
 import javax.servlet.http.Cookie;
+import javax.xml.ws.Response;
 
 /**
  *
@@ -178,7 +180,6 @@ public class LoginBean extends AbstractBean
         if (c.getName().equals(Constants.COOKIE_NAME))
         {
           c.setMaxAge(0);
-          getResponse().addCookie(c);
         }
       }
     }

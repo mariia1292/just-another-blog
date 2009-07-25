@@ -31,22 +31,52 @@
                           rendered="#{BlogBean.template.contentCSS != null}" />
             convert_urls : false,
             <h:outputText value="document_base_url : '#{EntryBean.baseUrl}'," />
-
             <h:outputText value="imageHandlerPattern : '#{EntryBean.imageHandlerUri}'," />
-              
             fullscreen_new_window : true,
             fullscreen_settings : {
               theme_advanced_path_location : "top"
             }
           });
-          function popup()
-          {
+          function popup(){
             window.open(
               '${facesContext.externalContext.requestContextPath}/personal/author/editor/pages.jab?id=pageForm:navigationParent&amp;description=navigationParentLabel',
               'pages',
               'width=300,height=400,status=yes,scrollbars=yes,resizable=yes'
             );
           }
+          function updateNavigationOptions(parent, current){
+            var $select = $("#navigationPosition");
+            $select.empty();
+            if ( current != "" ){
+              $select.append( $("<option />").val(current).text("#{label.pagePostion_current}") );
+            }
+            var url = "${facesContext.externalContext.requestContextPath}/async/navigation-options.json";
+            if (parent != ""){
+              url += "?parent="+ parent;
+            }
+            if (current != ""){
+              if ( parent != "" ){
+                url += "&amp;";
+              } else {
+                url += "?";
+              }
+              url += "exclude=" + current;
+            }
+            $.getJSON(url, function(result){
+              $.each( result, function(index, option){
+                $select.append( $("<option />").val(option.value).text(option.label) );
+              });
+            });
+          }
+          function updateHiddenField(){
+            var value = $("#navigationPosition").val();
+            $("#pageForm\\:navigationPos").val(value);
+          }
+          $(document).ready(function(){
+            updateNavigationOptions("<h:outputText value="#{PageAuthorBean.page.parent.id}" rendered="#{!PageAuthorBean.new &amp;&amp; PageAuthorBean.page.parent != null}" />"
+              , "<h:outputText value="#{PageAuthorBean.page.navigationPosition}" rendered="#{!PageAuthorBean.new}" />"
+            );
+          });
         </script>
       </ui:define>
 
@@ -56,7 +86,7 @@
 
         <h1><h:outputText value="#{label.pages}" /></h1>
 
-        <h:form id="pageForm" enctype="multipart/form-data">
+        <h:form id="pageForm" enctype="multipart/form-data" onsubmit="updateHiddenField()">
 
           <h:panelGrid columns="2" styleClass="editor" columnClasses="e1,e2">
 
@@ -96,9 +126,11 @@
             <h:message for="navigationParent" />
 
             <h:outputLabel for="navigationPos" value="#{label.position}" />
-            <h:inputText id="navigationPos" value="#{PageAuthorBean.page.navigationPosition}" required="true">
-              <f:validateLongRange minimum="0" />
-            </h:inputText>
+            <h:panelGroup>
+              <select id="navigationPosition">
+              </select>
+              <h:inputHidden id="navigationPos" value="#{PageAuthorBean.page.navigationPosition}" required="true" />
+            </h:panelGroup>
             <h:message for="navigationPos" />
 
           </h:panelGrid>
