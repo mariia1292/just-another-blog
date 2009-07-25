@@ -180,7 +180,6 @@ public class CookieLoginModule extends SSOLoginModule
       cookie.setMaxAge(
           context.getConfiguration().getInteger(
             Constants.CONFIG_COKKIETIME, Constants.DEFAULT_COOKIETIME));
-      response.addCookie(cookie);
       user.setLastLogin(new Date());
       userDAO.edit(BlogContext.getInstance().getSystemBlogSession(), user);
     }

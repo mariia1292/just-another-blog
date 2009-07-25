@@ -111,6 +111,7 @@ public class JpaBlogDAO extends JpaGenericDAO<Blog> implements BlogDAO
    * @return
    */
   @Override
+  @SuppressWarnings("unchecked")
   public boolean remove(BlogSession session, Blog blog)
   {
     if (!isPrivileged(session, blog, ACTION_REMOVE))

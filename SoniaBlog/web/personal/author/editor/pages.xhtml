@@ -15,6 +15,7 @@
           {
             window.opener.document.getElementById( "#{param['id']}" ).value = id;
             window.opener.document.getElementById( "#{param['description']}" ).innerHTML = description;
+            window.opener.updateNavigationOptions(id, "");
             window.close();
           }
         </script>

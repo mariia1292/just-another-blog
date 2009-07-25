@@ -39,12 +39,16 @@ import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.app.BlogRequest;
 import sonia.blog.api.app.BlogResponse;
 import sonia.blog.api.app.Constants;
+import sonia.blog.api.dao.PageDAO;
 import sonia.blog.api.link.LinkBuilder;
 import sonia.blog.api.mapping.FinalMapping;
 import sonia.blog.api.search.SearchContext;
 import sonia.blog.api.search.SearchEntry;
 import sonia.blog.api.search.SearchException;
+import sonia.blog.api.util.PageNavigation;
 import sonia.blog.entity.Blog;
+import sonia.blog.entity.Page;
+import sonia.blog.entity.Role;
 
 import sonia.cache.Cache;
 
@@ -64,9 +68,11 @@ import java.io.PrintWriter;
 import java.net.URL;
 
 import java.text.DateFormat;
+import java.text.MessageFormat;
 
 import java.util.Iterator;
 import java.util.List;
+import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -101,8 +107,6 @@ public class AsyncMapping extends FinalMapping
                                     String[] param)
           throws IOException, ServletException
   {
-    System.out.println();
-
     if ((param != null) && (param.length > 0))
     {
       String provider = param[0];
@@ -118,6 +122,10 @@ public class AsyncMapping extends FinalMapping
         else if (provider.equals("feed"))
         {
           feed(request, response);
+        }
+        else if (provider.equals("navigation-options"))
+        {
+          navigationOptions(request, response);
         }
       }
       else
@@ -237,6 +245,71 @@ public class AsyncMapping extends FinalMapping
    * Method description
    *
    *
+   * @param request
+   * @param response
+   *
+   * @throws IOException
+   */
+  private void navigationOptions(BlogRequest request, BlogResponse response)
+          throws IOException
+  {
+    if (!request.getBlogSession().hasRole(Role.AUTHOR))
+    {
+      response.sendError(HttpServletResponse.SC_FORBIDDEN);
+    }
+    else
+    {
+      String idString = request.getParameter("parent");
+      String excludeString = request.getParameter("exclude");
+
+      // ugly workaround
+      if (Util.isBlank(excludeString))
+      {
+        excludeString = request.getParameter("amp;exclude");
+      }
+
+      Page page = null;
+      int exclude = -1;
+      PageDAO pageDAO = BlogContext.getDAOFactory().getPageDAO();
+
+      try
+      {
+        if (Util.hasContent(idString))
+        {
+          long id = Long.parseLong(idString);
+
+          page = pageDAO.get(id);
+        }
+
+        if (Util.hasContent(excludeString))
+        {
+          exclude = Integer.parseInt(excludeString);
+        }
+      }
+      catch (NumberFormatException ex)
+      {
+        response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+      }
+
+      List<? extends PageNavigation> pages = null;
+
+      if (page != null)
+      {
+        pages = pageDAO.getChildren(page);
+      }
+      else
+      {
+        pages = pageDAO.getAllRoot(request.getCurrentBlog());
+      }
+
+      printChildren(response, pages, exclude);
+    }
+  }
+
+  /**
+   * Method description
+   *
+   *
    * @param response
    * @param blog
    * @param channel
@@ -293,6 +366,80 @@ public class AsyncMapping extends FinalMapping
    * Method description
    *
    *
+   * @param response
+   * @param pages
+   * @param exclude
+   *
+   * @throws IOException
+   */
+  private void printChildren(BlogResponse response,
+                             List<? extends PageNavigation> pages, int exclude)
+          throws IOException
+  {
+    PrintWriter writer = response.getWriter();
+
+    writer.println("[");
+
+    if (pages != null)
+    {
+      ResourceBundle bundle =
+        ResourceBundle.getBundle("sonia.blog.resources.label");
+      int size = pages.size();
+      int firstPos = 1000;
+
+      if (size > 0)
+      {
+        firstPos = pages.get(0).getNavigationPosition() / 2;
+      }
+
+      String label = bundle.getString("pagePostion_first");
+
+      printOption(writer, label, firstPos);
+      label = bundle.getString("pagePostion_after");
+
+      for (int i = 0; i < size; i++)
+      {
+        PageNavigation page = pages.get(i);
+
+        if (exclude != page.getNavigationPosition())
+        {
+          writer.println(",");
+
+          int nextPos = 0;
+
+          try
+          {
+            if (i + 1 < size)
+            {
+              nextPos = ((pages.get(i + 1).getNavigationPosition()
+                          - page.getNavigationPosition()) / 2) + page
+                            .getNavigationPosition();
+            }
+            else
+            {
+              nextPos = page.getNavigationPosition() + 1000;
+            }
+
+            printOption(writer,
+                        MessageFormat.format(label, page.getNavigationTitle()),
+                        nextPos);
+          }
+          catch (Exception ex)
+          {
+            logger.log(Level.WARNING, null, ex);
+          }
+        }
+      }
+    }
+
+    writer.println();
+    writer.println("]");
+  }
+
+  /**
+   * Method description
+   *
+   *
    * @param writer
    * @param df
    * @param item
@@ -318,6 +465,23 @@ public class AsyncMapping extends FinalMapping
                  ? item.getLink()
                  : "");
     writer.print("\"");
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param writer
+   * @param label
+   * @param value
+   */
+  private void printOption(PrintWriter writer, String label, int value)
+  {
+    writer.print("  {\"label\": \"");
+    writer.print(label);
+    writer.print("\", \"value\": \"");
+    writer.print(value);
+    writer.print("\"}");
   }
 
   /**
