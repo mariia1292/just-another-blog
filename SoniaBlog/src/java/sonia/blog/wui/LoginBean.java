@@ -61,11 +61,9 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.faces.context.FacesContext;
 import javax.security.auth.login.LoginException;
 
 import javax.servlet.http.Cookie;
-import javax.xml.ws.Response;
 
 /**
  *
@@ -171,19 +169,11 @@ public class LoginBean extends AbstractBean
       session = null;
     }
 
-    Cookie[] cookies = getRequest().getCookies();
+    Cookie c = new Cookie(Constants.COOKIE_NAME, null);
 
-    if ((cookies != null) && (cookies.length > 0))
-    {
-      for (Cookie c : cookies)
-      {
-        if (c.getName().equals(Constants.COOKIE_NAME))
-        {
-          c.setMaxAge(0);
-        }
-      }
-    }
-
+    c.setMaxAge(0);
+    c.setPath(BlogContext.getInstance().getServletContext().getContextPath());
+    getResponse().addCookie(c);
     getMessageHandler().info("logoutSuccess");
     redirect();
 
@@ -349,6 +339,7 @@ public class LoginBean extends AbstractBean
       c.setMaxAge(
           context.getConfiguration().getInteger(
             Constants.CONFIG_COKKIETIME, Constants.DEFAULT_COOKIETIME));
+      c.setPath(BlogContext.getInstance().getServletContext().getContextPath());
       getResponse().addCookie(c);
     }
     catch (Exception ex)
