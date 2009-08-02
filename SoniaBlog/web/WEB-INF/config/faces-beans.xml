@@ -139,6 +139,12 @@
   </managed-bean>
 
   <managed-bean>
+    <managed-bean-name>SearchBean</managed-bean-name>
+    <managed-bean-class>sonia.blog.wui.SearchBean</managed-bean-class>
+    <managed-bean-scope>request</managed-bean-scope>
+  </managed-bean>
+
+  <managed-bean>
     <managed-bean-name>LostPasswordBean</managed-bean-name>
     <managed-bean-class>sonia.blog.wui.LostPasswordBean</managed-bean-class>
     <managed-bean-scope>request</managed-bean-scope>

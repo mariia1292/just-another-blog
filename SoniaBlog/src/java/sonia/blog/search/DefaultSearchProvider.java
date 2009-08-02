@@ -41,7 +41,6 @@ import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.queryParser.MultiFieldQueryParser;
-import org.apache.lucene.queryParser.ParseException;
 import org.apache.lucene.queryParser.QueryParser;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
@@ -57,19 +56,25 @@ import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.app.BlogSession;
 import sonia.blog.api.app.Constants;
 import sonia.blog.api.exception.BlogSecurityException;
-import sonia.blog.api.search.SearchContext;
+import sonia.blog.api.search.SearchCategory;
 import sonia.blog.api.search.SearchEntry;
 import sonia.blog.api.search.SearchException;
+import sonia.blog.api.search.SearchProvider;
 import sonia.blog.entity.Blog;
 import sonia.blog.entity.Role;
+
+import sonia.util.Util;
 
 //~--- JDK imports ------------------------------------------------------------
 
 import java.io.File;
 import java.io.IOException;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
+import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -77,12 +82,12 @@ import java.util.logging.Logger;
  *
  * @author Sebastian Sdorra
  */
-public class DefaultSearchContext implements SearchContext
+public class DefaultSearchProvider implements SearchProvider
 {
 
   /** Field description */
   private static Logger logger =
-    Logger.getLogger(DefaultSearchContext.class.getName());
+    Logger.getLogger(DefaultSearchProvider.class.getName());
 
   //~--- methods --------------------------------------------------------------
 
@@ -109,22 +114,22 @@ public class DefaultSearchContext implements SearchContext
    *
    *
    * @param blog
-   * @param search
+   * @param locale
+   * @param queryString
    *
    * @return
-   *
-   * @throws SearchException
    */
-  public List<SearchEntry> search(Blog blog, String search)
-          throws SearchException
+  public Collection<SearchCategory> search(Blog blog, Locale locale,
+          String queryString)
   {
-    List<SearchEntry> entries = new ArrayList<SearchEntry>();
+    Map<String, SearchCategory> categories = new HashMap<String,
+                                               SearchCategory>();
 
-    if ((blog != null) && (search != null))
+    if ((blog != null) && (queryString != null))
     {
       File directory = getDirectory(blog);
 
-      if (directory != null)
+      if ((directory != null) && directory.exists())
       {
         IndexReader reader = null;
         IndexSearcher searcher = null;
@@ -138,7 +143,7 @@ public class DefaultSearchContext implements SearchContext
           QueryParser parser = new MultiFieldQueryParser(new String[] {
                                  "content",
                                  "title" }, analyzer);
-          Query query = parser.parse(search);
+          Query query = parser.parse(queryString);
           TopDocs topDocs = searcher.search(query, blog.getEntriesPerPage());
           SimpleHTMLFormatter htmlFormatter = new SimpleHTMLFormatter();
           Highlighter highlighter = new Highlighter(htmlFormatter,
@@ -150,7 +155,7 @@ public class DefaultSearchContext implements SearchContext
             int id = docs[i].doc;
             Document doc = reader.document(id);
             String content = doc.get("content");
-            String searchResult = "...";
+            StringBuffer resultBuffer = new StringBuffer("...");
 
             if (content != null)
             {
@@ -164,17 +169,31 @@ public class DefaultSearchContext implements SearchContext
               {
                 if ((frag[j] != null) && (frag[j].getScore() > 0))
                 {
-                  searchResult += frag[j].toString() + "...";
+                  resultBuffer.append(frag[j].toString()).append("...");
                 }
               }
             }
 
-            entries.add(new DefaultSearchEntry(doc, searchResult, i));
+            String categoryName = doc.get("category");
+
+            if (Util.hasContent(categoryName))
+            {
+              SearchCategory category = categories.get(categoryName);
+
+              if (category == null)
+              {
+                category = new SearchCategory(categoryName,
+                                              getLabel(locale, categoryName));
+                categories.put(categoryName, category);
+              }
+
+              SearchEntry entry = new DefaultSearchEntry(doc,
+                                    resultBuffer.toString(),
+                                    category.getEntries().size());
+
+              category.getEntries().add(entry);
+            }
           }
-        }
-        catch (ParseException ex)
-        {
-          logger.log(Level.FINEST, null, ex);
         }
         catch (Exception ex)
         {
@@ -186,25 +205,25 @@ public class DefaultSearchContext implements SearchContext
         {
           try
           {
-            if (searcher != null)
-            {
-              searcher.close();
-            }
-
             if (reader != null)
             {
               reader.close();
             }
+
+            if (searcher != null)
+            {
+              searcher.close();
+            }
           }
           catch (IOException ex)
           {
-            logger.log(Level.WARNING, null, ex);
+            logger.log(Level.SEVERE, null, ex);
           }
         }
       }
     }
 
-    return entries;
+    return categories.values();
   }
 
   //~--- get methods ----------------------------------------------------------
@@ -213,11 +232,14 @@ public class DefaultSearchContext implements SearchContext
    * Method description
    *
    *
+   * @param session
+   * @param blog
+   *
    * @return
    */
-  public boolean isReIndexable()
+  public boolean isReindexable(BlogSession session, Blog blog)
   {
-    return true;
+    return session.hasRole(blog, Role.ADMIN);
   }
 
   /**
@@ -232,5 +254,27 @@ public class DefaultSearchContext implements SearchContext
   {
     return BlogContext.getInstance().getResourceManager().getDirectory(
         Constants.RESOURCE_INDEX, blog);
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param locale
+   * @param name
+   *
+   * @return
+   */
+  private String getLabel(Locale locale, String name)
+  {
+    String label = ResourceBundle.getBundle("sonia.blog.resources.label",
+                     locale).getString(name);
+
+    if (Util.isBlank(label))
+    {
+      label = name;
+    }
+
+    return label;
   }
 }

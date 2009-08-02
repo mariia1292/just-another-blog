@@ -35,32 +35,26 @@ package sonia.blog.wui;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import sonia.blog.api.app.BlogContext;
-import sonia.blog.api.app.Constants;
-import sonia.blog.api.dao.BlogDAO;
+import sonia.blog.api.search.SearchCategory;
+import sonia.blog.api.search.SearchEntry;
 import sonia.blog.api.util.AbstractBean;
-import sonia.blog.entity.Blog;
-import sonia.blog.util.BlogUtil;
-
-import sonia.plugin.service.Service;
 
 //~--- JDK imports ------------------------------------------------------------
 
 import java.util.List;
-import java.util.logging.Logger;
 
-import javax.faces.context.FacesContext;
-import javax.faces.model.SelectItem;
+import javax.faces.model.DataModel;
+import javax.faces.model.ListDataModel;
 
 /**
  *
  * @author Sebastian Sdorra
  */
-public class ConfigBean extends AbstractBean
+public class SearchBean extends AbstractBean
 {
 
   /** Field description */
-  private static Logger logger = Logger.getLogger(ConfigBean.class.getName());
+  public static final String NAME = "SearchBean";
 
   //~--- constructors ---------------------------------------------------------
 
@@ -68,50 +62,9 @@ public class ConfigBean extends AbstractBean
    * Constructs ...
    *
    */
-  public ConfigBean()
+  public SearchBean()
   {
     super();
-  }
-
-  //~--- methods --------------------------------------------------------------
-
-  /**
-   * Method description
-   *
-   *
-   * @return
-   */
-  public String reIndex()
-  {
-    BlogContext.getInstance().getSearchContext().reIndex(getBlogSession(),
-            getBlog());
-    getMessageHandler().info("rebuildIndex");
-
-    return SUCCESS;
-  }
-
-  /**
-   * Method description
-   *
-   *
-   * @return
-   */
-  public String save()
-  {
-    String result = SUCCESS;
-    BlogDAO blogDAO = BlogContext.getDAOFactory().getBlogDAO();
-
-    if (blogDAO.edit(getBlogSession(), blog))
-    {
-      getMessageHandler().info("unpdateConfigSuccess");
-    }
-    else
-    {
-      getMessageHandler().error("unpdateConfigFailure");
-      result = FAILURE;
-    }
-
-    return result;
   }
 
   //~--- get methods ----------------------------------------------------------
@@ -122,11 +75,9 @@ public class ConfigBean extends AbstractBean
    *
    * @return
    */
-  public Blog getBlog()
+  public DataModel getCategories()
   {
-    blog = getRequest().getCurrentBlog();
-
-    return blog;
+    return new ListDataModel(categories);
   }
 
   /**
@@ -135,9 +86,9 @@ public class ConfigBean extends AbstractBean
    *
    * @return
    */
-  public SelectItem[] getLocaleItems()
+  public SearchCategory getCategory()
   {
-    return BlogUtil.getLocaleItems(FacesContext.getCurrentInstance());
+    return category;
   }
 
   /**
@@ -146,9 +97,9 @@ public class ConfigBean extends AbstractBean
    *
    * @return
    */
-  public List<String> getProviders()
+  public DataModel getPageEntries()
   {
-    return providers;
+    return new ListDataModel(pageEntries);
   }
 
   /**
@@ -157,17 +108,79 @@ public class ConfigBean extends AbstractBean
    *
    * @return
    */
-  public SelectItem[] getTimeZoneItems()
+  public DataModel getSearchResults()
   {
-    return BlogUtil.getTimeZoneItems();
+    return new ListDataModel(category.getEntries());
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  public String getSearchString()
+  {
+    return searchString;
+  }
+
+  //~--- set methods ----------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   * @param categories
+   */
+  public void setCategories(List<SearchCategory> categories)
+  {
+    this.categories = categories;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param category
+   */
+  public void setCategory(SearchCategory category)
+  {
+    this.category = category;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param pageEntries
+   */
+  public void setPageEntries(List<SearchEntry> pageEntries)
+  {
+    this.pageEntries = pageEntries;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param searchString
+   */
+  public void setSearchString(String searchString)
+  {
+    this.searchString = searchString;
   }
 
   //~--- fields ---------------------------------------------------------------
 
   /** Field description */
-  private Blog blog;
+  public SearchCategory category;
 
   /** Field description */
-  @Service(Constants.SERVICE_BLOGCONFIGPROVIDER)
-  private List<String> providers;
+  private List<SearchCategory> categories;
+
+  /** Field description */
+  private List<SearchEntry> pageEntries;
+
+  /** Field description */
+  private String searchString;
 }

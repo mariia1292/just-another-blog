@@ -33,11 +33,13 @@
 
 package sonia.blog.api.search;
 
+import sonia.blog.api.exception.BlogException;
+
 /**
  *
  * @author Sebastian Sdorra
  */
-public class SearchException extends Exception
+public class SearchException extends BlogException
 {
 
   /** Field description */

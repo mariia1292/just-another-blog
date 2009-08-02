@@ -35,30 +35,63 @@ package sonia.blog.api.search;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.app.BlogSession;
+import sonia.blog.api.app.Constants;
 import sonia.blog.entity.Blog;
+
+import sonia.util.Util;
 
 //~--- JDK imports ------------------------------------------------------------
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 /**
  *
  * @author Sebastian Sdorra
  */
-public interface SearchContext
+public class SearchContext
 {
 
   /**
+   * Constructs ...
+   *
+   */
+  public SearchContext()
+  {
+    providers =
+      BlogContext.getInstance().getServiceRegistry().get(SearchProvider.class,
+        Constants.SERVICE_SEARCHPROVIDER).getAll();
+  }
+
+  //~--- methods --------------------------------------------------------------
+
+  /**
    * Method description
    *
    *
    *
-   * @param session, maust be a Admin- or a GlobalAdminSession
+   * @param session must be a Admin- or a GlobalAdminSession
    * @param blog
    *
+   *
+   * @throws SearchException
    */
-  public void reIndex(BlogSession session, Blog blog);
+  public void reIndex(BlogSession session, Blog blog) throws SearchException
+  {
+    if (Util.hasContent(providers))
+    {
+      for (SearchProvider provider : providers)
+      {
+        if (provider.isReindexable(session, blog))
+        {
+          provider.reIndex(session, blog);
+        }
+      }
+    }
+  }
 
   /**
    * Method description
@@ -66,22 +99,31 @@ public interface SearchContext
    *
    *
    * @param blog
-   * @param search
+   * @param locale
+   * @param query
    *
    * @return
    *
    * @throws SearchException
    */
-  public List<SearchEntry> search(Blog blog, String search)
-          throws SearchException;
+  public List<SearchCategory> search(Blog blog, Locale locale, String query)
+          throws SearchException
+  {
+    List<SearchCategory> categories = new ArrayList<SearchCategory>();
 
-  //~--- get methods ----------------------------------------------------------
+    if (Util.hasContent(providers))
+    {
+      for (SearchProvider provider : providers)
+      {
+        categories.addAll(provider.search(blog, locale, query));
+      }
+    }
 
-  /**
-   * Method description
-   *
-   *
-   * @return
-   */
-  public boolean isReIndexable();
+    return categories;
+  }
+
+  //~--- fields ---------------------------------------------------------------
+
+  /** Field description */
+  private List<SearchProvider> providers;
 }

@@ -668,13 +668,11 @@ public final class BlogContext
    */
   public SearchContext getSearchContext()
   {
-    if (searchContext == null)
+    if ( searchContext == null )
     {
-      searchContext = getServiceRegistry().get(SearchContext.class,
-              Constants.SERVICE_SEARCHCONTEXT);
+      searchContext = new SearchContext();
     }
-
-    return searchContext.get();
+    return searchContext;
   }
 
   /**
@@ -925,7 +923,7 @@ public final class BlogContext
   private ResourceManager resourceManager;
 
   /** Field description */
-  private ServiceReference<SearchContext> searchContext;
+  private SearchContext searchContext;
 
   /** Field description */
   private ServletContext servletContext;

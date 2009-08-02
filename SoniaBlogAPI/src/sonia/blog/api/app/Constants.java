@@ -52,6 +52,9 @@ public interface Constants
   public static final String CACHE_FEED = "feed.cache";
 
   /** Field description */
+  public static final String CACHE_SEARCH = "search.cache";
+
+  /** Field description */
   public static final String CONFIG_ADMIN_PAGESIZE = "admin.page-size";
 
   /** Field description */
@@ -393,9 +396,6 @@ public interface Constants
   public static final String SERVICE_REQUESTLISTENER = "/listener/request";
 
   /** Field description */
-  public static final String SERVICE_SEARCHCONTEXT = "/app/searchContext";
-
-  /** Field description */
   public static final String SERVICE_SEARCHPROVIDER = "/app/search";
 
   /** Field description */
@@ -440,4 +440,7 @@ public interface Constants
 
   /** Field description */
   public static final String TEMPLATE_PAGE = "page.xhtml";
+
+  /** Field description */
+  public static final String TEMPLATE_SEARCH = "search.xhtml";
 }
