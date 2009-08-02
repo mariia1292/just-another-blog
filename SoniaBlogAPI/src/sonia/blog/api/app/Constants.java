@@ -380,6 +380,10 @@ public interface Constants
   public static final String SERVICE_LINKBUILDER = "/app/linkBuilder";
 
   /** Field description */
+  public static final String SERVICE_MACROTEMPLATEPARSER =
+    "/app/macro/templateParser";
+
+  /** Field description */
   public static final String SERVICE_MAIL = "/app/mail";
 
   /** Field description */
@@ -390,6 +394,9 @@ public interface Constants
 
   /** Field description */
   public static final String SERVICE_SEARCHCONTEXT = "/app/searchContext";
+
+  /** Field description */
+  public static final String SERVICE_SEARCHPROVIDER = "/app/search";
 
   /** Field description */
   public static final String SERVICE_SPAMCHECK = "/app/spam/check";

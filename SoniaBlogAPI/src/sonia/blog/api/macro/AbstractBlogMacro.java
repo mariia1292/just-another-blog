@@ -35,7 +35,9 @@ package sonia.blog.api.macro;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.app.BlogRequest;
+import sonia.blog.api.exception.BlogException;
 import sonia.blog.entity.ContentObject;
 import sonia.blog.entity.Entry;
 import sonia.blog.entity.Page;
@@ -44,7 +46,11 @@ import sonia.macro.Macro;
 
 //~--- JDK imports ------------------------------------------------------------
 
+import java.io.IOException;
+
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -91,6 +97,37 @@ public abstract class AbstractBlogMacro implements Macro
     else
     {
       result = "-- object or request is null --";
+    }
+
+    return result;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param parameters
+   * @param path
+   *
+   * @return
+   */
+  protected String parseTemplate(Map<String, Object> parameters, String path)
+  {
+    String result = "-- error during template parsing --";
+    TemplateParser parser = BlogContext.getInstance().getMacroTemplateParser();
+
+    if (parser == null)
+    {
+      throw new BlogException("no macro templateParser available");
+    }
+
+    try
+    {
+      result = parser.parseTemplate(parameters, path);
+    }
+    catch (IOException ex)
+    {
+      Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
     }
 
     return result;
