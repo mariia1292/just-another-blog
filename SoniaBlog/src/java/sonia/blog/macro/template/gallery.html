@@ -1,0 +1,14 @@
+<div id="gallery_${id}">
+  <#list images as image>
+    <a title="${image.name}" rel="prettyPhoto[group_${id}]" href="${linkBase}image/${image.id}">
+      <img border="0" alt="${image.name}" src="${linkBase}image/${image.id}?type=thumb" />
+    </a>
+  </#list>
+</div>
+<script type="text/javascript" charset="UTF-8">
+  $(document).ready(function() {
+    $("div#gallery_${id} a").prettyPhoto({
+      theme: "${theme}"
+    });
+  });
+</script>
