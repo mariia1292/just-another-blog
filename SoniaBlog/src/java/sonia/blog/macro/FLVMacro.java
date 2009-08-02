@@ -57,7 +57,9 @@ import sonia.macro.browse.MacroInfoParameter;
 //~--- JDK imports ------------------------------------------------------------
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -71,6 +73,12 @@ import java.util.List;
 )
 public class FLVMacro extends AbstractBlogMacro implements WebMacro
 {
+
+  /** Field description */
+  private static final String TEMPLATE =
+    "sonia/blog/macro/template/flowplayer.html";
+
+  //~--- get methods ----------------------------------------------------------
 
   /**
    * Method description
@@ -227,7 +235,6 @@ public class FLVMacro extends AbstractBlogMacro implements WebMacro
   {
     String playerPath = linkBase + "resources/flowplayer/";
     String attachmentLink = linkBuilder.buildLink(request, attchment);
-    StringBuffer result = new StringBuffer();
 
     resources = new ArrayList<WebResource>();
 
@@ -236,34 +243,17 @@ public class FLVMacro extends AbstractBlogMacro implements WebMacro
 
     resources.add(sr);
 
-    // player block
-    result.append("<a id=\"flvplayer_").append(attchment.getId());
-    result.append("\" href=\"").append(attachmentLink);
-    result.append("\" style=\"display: block; width: ").append(width);
-    result.append("px; height: ").append(height).append("px\"></a>");
+    Map<String, Object> params = new HashMap<String, Object>();
 
-    // load player
-    result.append("<script type=\"text/javascript\">\n");
+    params.put("attachment", attchment);
+    params.put("playerPath", playerPath);
+    params.put("attachmentLink", attachmentLink);
+    params.put("width", width);
+    params.put("height", height);
+    params.put("autoPlay", autoPlay.toString());
+    params.put("autoBuffering", autoBuffering.toString());
 
-    // load flowplayer.min.js
-    // result.append("addScript(\"").append(playerPath);
-    // result.append("flowplayer.min.js\");\n");
-    // load flowplayer.swf
-    result.append("flowplayer(\"flvplayer_").append(attchment.getId());
-    result.append("\", \"").append(playerPath);
-    result.append("flowplayer.swf\", {\n");
-
-    // configure player
-    result.append("clip: {\n");
-
-    // result.append("url: '").append(attachmentLink).append("',\n");
-    result.append("autoPlay: ").append(autoPlay).append(",\n");
-    result.append("autoBuffering: ").append(autoBuffering).append("\n");
-    result.append("}\n");
-    result.append("});\n");
-    result.append("</script>\n");
-
-    return result.toString();
+    return parseTemplate(params, TEMPLATE);
   }
 
   //~--- fields ---------------------------------------------------------------
@@ -276,7 +266,7 @@ public class FLVMacro extends AbstractBlogMacro implements WebMacro
   private Boolean autoBuffering = false;
 
   /** Field description */
-  private Boolean autoPlay;
+  private Boolean autoPlay = false;
 
   /** Field description */
   private Integer height = 360;
