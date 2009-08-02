@@ -62,6 +62,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
+import sonia.blog.api.dao.DAOListener.Action;
 
 /**
  *
@@ -561,6 +562,7 @@ public class JpaEntryDAO extends JpaGenericDAO<Entry> implements EntryDAO
   @Override
   public boolean remove(BlogSession session, Entry item)
   {
+    fireEvent(Action.PREREMOVE, item);
     boolean result = false;
     EntityManager em = createEntityManager();
 
@@ -590,6 +592,7 @@ public class JpaEntryDAO extends JpaGenericDAO<Entry> implements EntryDAO
 
       em.remove(em.merge(item));
       em.getTransaction().commit();
+      fireEvent(Action.POSTREMOVE, item);
       result = true;
     }
     catch (Exception ex)
