@@ -37,6 +37,7 @@ package sonia.blog.dao.jpa;
 
 import sonia.blog.api.app.BlogSession;
 import sonia.blog.api.app.Constants;
+import sonia.blog.api.dao.DAOListener.Action;
 import sonia.blog.api.dao.PageDAO;
 import sonia.blog.api.exception.BlogSecurityException;
 import sonia.blog.api.util.BasicPageNavigation;
@@ -127,6 +128,8 @@ public class JpaPageDAO extends JpaGenericDAO<Page> implements PageDAO
       throw new BlogSecurityException("Author session is required");
     }
 
+    fireEvent(Action.PREREMOVE, item);
+
     boolean result = false;
     EntityManager em = createEntityManager();
 
@@ -146,6 +149,7 @@ public class JpaPageDAO extends JpaGenericDAO<Page> implements PageDAO
 
       em.remove(em.merge(item));
       em.getTransaction().commit();
+      fireEvent(Action.POSTREMOVE, item);
       result = true;
     }
     catch (Exception ex)

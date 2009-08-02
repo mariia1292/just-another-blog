@@ -40,6 +40,7 @@ import sonia.blog.api.app.BlogSession;
 import sonia.blog.api.app.Constants;
 import sonia.blog.api.app.ResourceManager;
 import sonia.blog.api.dao.BlogDAO;
+import sonia.blog.api.dao.DAOListener.Action;
 import sonia.blog.api.exception.BlogSecurityException;
 import sonia.blog.entity.Blog;
 import sonia.blog.entity.BlogHitCount;
@@ -121,6 +122,8 @@ public class JpaBlogDAO extends JpaGenericDAO<Blog> implements BlogDAO
       throw new BlogSecurityException("Admin Session is required");
     }
 
+    fireEvent(Action.PREREMOVE, blog);
+
     boolean result = false;
     EntityManager em = createEntityManager();
 
@@ -141,6 +144,7 @@ public class JpaBlogDAO extends JpaGenericDAO<Blog> implements BlogDAO
 
       em.remove(em.merge(blog));
       em.getTransaction().commit();
+      fireEvent(Action.POSTREMOVE, blog);
 
       ResourceManager resManager =
         BlogContext.getInstance().getResourceManager();

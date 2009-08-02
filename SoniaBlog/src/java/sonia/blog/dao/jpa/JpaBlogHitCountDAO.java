@@ -35,7 +35,6 @@ package sonia.blog.dao.jpa;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import sonia.blog.api.app.BlogSession;
 import sonia.blog.api.app.Constants;
 import sonia.blog.api.dao.BlogHitCountDAO;
 import sonia.blog.api.util.BlogWrapper;
