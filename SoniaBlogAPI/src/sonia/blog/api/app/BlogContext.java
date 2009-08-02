@@ -39,6 +39,7 @@ import sonia.blog.api.authentication.SSOCallbackHandler;
 import sonia.blog.api.dao.DAOFactory;
 import sonia.blog.api.exception.BlogException;
 import sonia.blog.api.link.LinkBuilder;
+import sonia.blog.api.macro.TemplateParser;
 import sonia.blog.api.mapping.MappingHandler;
 import sonia.blog.api.search.SearchContext;
 import sonia.blog.api.template.TemplateManager;
@@ -548,6 +549,23 @@ public final class BlogContext
    *
    * @return
    */
+  public TemplateParser getMacroTemplateParser()
+  {
+    if (macroTemplateParser == null)
+    {
+      macroTemplateParser = getServiceRegistry().get(TemplateParser.class,
+              Constants.SERVICE_MACROTEMPLATEPARSER);
+    }
+
+    return macroTemplateParser.get();
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
   public MailService getMailService()
   {
     if (mailService == null)
@@ -890,6 +908,9 @@ public final class BlogContext
 
   /** Field description */
   private Configuration loginConfiguration;
+
+  /** Field description */
+  private ServiceReference<TemplateParser> macroTemplateParser;
 
   /** Field description */
   private ServiceReference<MailService> mailService;

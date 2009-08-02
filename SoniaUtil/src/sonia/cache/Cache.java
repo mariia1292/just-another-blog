@@ -48,21 +48,21 @@ public interface Cache extends Serializable
 {
 
   /**
-   * Method description
+   * Removes all cached objects in this cache
    *
    */
   public void clear();
 
   /**
-   * Method description
+   * Returns a {@link java.util.Set} view of the keys contained in this cache.
    *
    *
-   * @return
+   * @return a Set view of the keys contained in this map
    */
   public Set<Object> keySet();
 
   /**
-   * Method description
+   * Put an object to this cache.
    *
    *
    * @param key
@@ -73,32 +73,34 @@ public interface Cache extends Serializable
   public Object put(Object key, Object value);
 
   /**
-   * Method description
+   * Removes an object from this cache.
    *
    *
-   * @param key
+   * @param key whose mapping is to be removed from the cache
    *
-   * @return
+   * @return a reference to the object that was removed
    */
   public Object remove(Object key);
 
   /**
-   * Method description
+   * Returns the count of all cached objects.
    *
    *
-   * @return
+   * @return the count of all cached objects
    */
   public int size();
 
   //~--- get methods ----------------------------------------------------------
 
   /**
-   * Method description
+   * Returns the value to which the specified key is mapped,
+   * or null if this cache contains no mapping for the key.
+   *
    *
    *
    * @param key
    *
-   * @return
+   * @return the cached object
    */
   public Object get(Object key);
 
@@ -119,18 +121,18 @@ public interface Cache extends Serializable
   public long getMissed();
 
   /**
-   * Method description
+   * Returns the name of this cache.
    *
    *
-   * @return
+   * @return the name of this cache
    */
   public String getName();
 
   /**
-   * Method description
+   * Returns true if this cache contains no elements.
    *
    *
-   * @return
+   * @return true if this collection contains no elements.
    */
   public boolean isEmpty();
 }

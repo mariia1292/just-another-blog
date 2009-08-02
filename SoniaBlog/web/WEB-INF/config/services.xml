@@ -110,4 +110,8 @@
     <impl class="sonia.blog.editor.FlowPlayerHandler" />
   </service>
 
+  <service class="sonia.blog.api.macro.TemplateParser" path="/app/macro/templateParser">
+    <impl class="sonia.blog.macro.FreemarkerTemplateParser" />
+  </service>
+
 </services>
