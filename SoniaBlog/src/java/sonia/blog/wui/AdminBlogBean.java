@@ -197,7 +197,7 @@ public class AdminBlogBean extends AbstractBean
     String result = SUCCESS;
     SearchContext context = BlogContext.getInstance().getSearchContext();
 
-    if ((context != null) && context.isReIndexable())
+    if (context != null)
     {
       context.reIndex(getBlogSession(), blog);
       getMessageHandler().info("rebuildIndex");
@@ -395,7 +395,7 @@ public class AdminBlogBean extends AbstractBean
     ResourceBundle label = getResourceBundle("label");
     SearchContext context = BlogContext.getInstance().getSearchContext();
 
-    if ((context != null) && context.isReIndexable())
+    if (context != null)
     {
       items.add(new NavigationMenuItem(label.getString("reIndexSearch"),
                                        "#{AdminBlogBean.rebuildIndex}"));

@@ -52,9 +52,6 @@ import sonia.blog.api.link.LinkBuilder;
 import sonia.blog.api.mapping.Mapping;
 import sonia.blog.api.mapping.MappingNavigation;
 import sonia.blog.api.navigation.NavigationProvider;
-import sonia.blog.api.search.SearchContext;
-import sonia.blog.api.search.SearchEntry;
-import sonia.blog.api.search.SearchException;
 import sonia.blog.api.spam.SpamCheck;
 import sonia.blog.api.spam.SpamInputProtection;
 import sonia.blog.api.template.Template;
@@ -84,7 +81,6 @@ import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.logging.Logger;
 
-import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.model.DataModel;
 import javax.faces.model.ListDataModel;
@@ -539,50 +535,6 @@ public class BlogBean extends AbstractBean
    *
    * @return
    */
-  public DataModel getSearchResult()
-  {
-    searchResult = new ListDataModel();
-
-    SearchContext context = BlogContext.getInstance().getSearchContext();
-    Blog blog = getRequest().getCurrentBlog();
-
-    try
-    {
-      List<SearchEntry> resultList = context.search(blog, searchString);
-
-      if (resultList != null)
-      {
-        searchResult.setWrappedData(resultList);
-      }
-    }
-    catch (SearchException ex)
-    {
-      FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN,
-                           ex.getMessage(), null);
-
-      FacesContext.getCurrentInstance().addMessage(null, msg);
-    }
-
-    return searchResult;
-  }
-
-  /**
-   * Method description
-   *
-   *
-   * @return
-   */
-  public String getSearchString()
-  {
-    return searchString;
-  }
-
-  /**
-   * Method description
-   *
-   *
-   * @return
-   */
   @SuppressWarnings("unchecked")
   public SpamInputProtection getSpamInputMethod()
   {
@@ -813,28 +765,6 @@ public class BlogBean extends AbstractBean
     this.pageEntries = pageEntries;
   }
 
-  /**
-   * Method description
-   *
-   *
-   * @param searchResult
-   */
-  public void setSearchResult(DataModel searchResult)
-  {
-    this.searchResult = searchResult;
-  }
-
-  /**
-   * Method description
-   *
-   *
-   * @param searchString
-   */
-  public void setSearchString(String searchString)
-  {
-    this.searchString = searchString;
-  }
-
   //~--- methods --------------------------------------------------------------
 
   /**
@@ -899,12 +829,6 @@ public class BlogBean extends AbstractBean
 
   /** Field description */
   private DataModel pageEntries;
-
-  /** Field description */
-  private DataModel searchResult;
-
-  /** Field description */
-  private String searchString;
 
   /** Field description */
   @Service(Constants.SERVICE_SPAMCHECK)

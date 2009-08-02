@@ -31,87 +31,46 @@
 
 
 
-package sonia.blog.wui;
-
-//~--- non-JDK imports --------------------------------------------------------
-
-import sonia.blog.api.app.BlogContext;
-import sonia.blog.api.app.Constants;
-import sonia.blog.api.dao.BlogDAO;
-import sonia.blog.api.util.AbstractBean;
-import sonia.blog.entity.Blog;
-import sonia.blog.util.BlogUtil;
-
-import sonia.plugin.service.Service;
+package sonia.blog.api.search;
 
 //~--- JDK imports ------------------------------------------------------------
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Logger;
-
-import javax.faces.context.FacesContext;
-import javax.faces.model.SelectItem;
 
 /**
  *
  * @author Sebastian Sdorra
  */
-public class ConfigBean extends AbstractBean
+public class SearchCategory
 {
-
-  /** Field description */
-  private static Logger logger = Logger.getLogger(ConfigBean.class.getName());
-
-  //~--- constructors ---------------------------------------------------------
 
   /**
    * Constructs ...
    *
-   */
-  public ConfigBean()
-  {
-    super();
-  }
-
-  //~--- methods --------------------------------------------------------------
-
-  /**
-   * Method description
    *
-   *
-   * @return
+   * @param name
+   * @param label
    */
-  public String reIndex()
+  public SearchCategory(String name, String label)
   {
-    BlogContext.getInstance().getSearchContext().reIndex(getBlogSession(),
-            getBlog());
-    getMessageHandler().info("rebuildIndex");
-
-    return SUCCESS;
+    this.label = label;
+    this.name = name;
   }
 
   /**
-   * Method description
+   * Constructs ...
    *
    *
-   * @return
+   * @param name
+   * @param label
+   * @param entries
    */
-  public String save()
+  public SearchCategory(String name, String label, List<SearchEntry> entries)
   {
-    String result = SUCCESS;
-    BlogDAO blogDAO = BlogContext.getDAOFactory().getBlogDAO();
-
-    if (blogDAO.edit(getBlogSession(), blog))
-    {
-      getMessageHandler().info("unpdateConfigSuccess");
-    }
-    else
-    {
-      getMessageHandler().error("unpdateConfigFailure");
-      result = FAILURE;
-    }
-
-    return result;
+    this.label = label;
+    this.entries = entries;
+    this.name = name;
   }
 
   //~--- get methods ----------------------------------------------------------
@@ -122,11 +81,13 @@ public class ConfigBean extends AbstractBean
    *
    * @return
    */
-  public Blog getBlog()
+  public List<SearchEntry> getEntries()
   {
-    blog = getRequest().getCurrentBlog();
-
-    return blog;
+    if ( entries == null )
+    {
+      entries = new ArrayList<SearchEntry>();
+    }
+    return entries;
   }
 
   /**
@@ -135,9 +96,9 @@ public class ConfigBean extends AbstractBean
    *
    * @return
    */
-  public SelectItem[] getLocaleItems()
+  public String getLabel()
   {
-    return BlogUtil.getLocaleItems(FacesContext.getCurrentInstance());
+    return label;
   }
 
   /**
@@ -146,28 +107,54 @@ public class ConfigBean extends AbstractBean
    *
    * @return
    */
-  public List<String> getProviders()
+  public String getName()
   {
-    return providers;
+    return name;
+  }
+
+  //~--- set methods ----------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   * @param entries
+   */
+  public void setEntries(List<SearchEntry> entries)
+  {
+    this.entries = entries;
   }
 
   /**
    * Method description
    *
    *
-   * @return
+   * @param label
    */
-  public SelectItem[] getTimeZoneItems()
+  public void setLabel(String label)
   {
-    return BlogUtil.getTimeZoneItems();
+    this.label = label;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param name
+   */
+  public void setName(String name)
+  {
+    this.name = name;
   }
 
   //~--- fields ---------------------------------------------------------------
 
   /** Field description */
-  private Blog blog;
+  private List<SearchEntry> entries;
 
   /** Field description */
-  @Service(Constants.SERVICE_BLOGCONFIGPROVIDER)
-  private List<String> providers;
+  private String label;
+
+  /** Field description */
+  private String name;
 }

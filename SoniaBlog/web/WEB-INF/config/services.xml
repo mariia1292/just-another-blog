@@ -54,10 +54,6 @@
 
   <service class="sonia.blog.api.app.InstallationListener" path="/listener/installation" />
 
-  <service class="sonia.blog.api.search.SearchContext" path="/app/searchContext">
-    <impl class="sonia.blog.search.DefaultSearchContext" />
-  </service>
-
   <service class="sonia.blog.api.link.LinkBuilder" path="/app/linkBuilder">
     <impl class="sonia.blog.link.DefaultLinkBuilder" />
   </service>
@@ -112,6 +108,10 @@
 
   <service class="sonia.blog.api.macro.TemplateParser" path="/app/macro/templateParser">
     <impl class="sonia.blog.macro.FreemarkerTemplateParser" />
+  </service>
+
+  <service class="sonia.blog.api.search.SearchProvider" path="/app/search">
+    <impl class="sonia.blog.search.DefaultSearchProvider" />
   </service>
 
 </services>

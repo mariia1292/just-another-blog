@@ -42,6 +42,7 @@ import sonia.blog.api.app.Constants;
 import sonia.blog.api.dao.PageDAO;
 import sonia.blog.api.link.LinkBuilder;
 import sonia.blog.api.mapping.FinalMapping;
+import sonia.blog.api.search.SearchCategory;
 import sonia.blog.api.search.SearchContext;
 import sonia.blog.api.search.SearchEntry;
 import sonia.blog.api.search.SearchException;
@@ -70,6 +71,7 @@ import java.net.URL;
 import java.text.DateFormat;
 import java.text.MessageFormat;
 
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -508,32 +510,39 @@ public class AsyncMapping extends FinalMapping
       {
         Blog blog = request.getCurrentBlog();
         SearchContext ctx = BlogContext.getInstance().getSearchContext();
-        List<SearchEntry> entries = ctx.search(blog, query);
+        Collection<SearchCategory> categories = ctx.search(blog,
+                                                  request.getLocale(), query);
 
-        if (Util.hasContent(entries))
+        if (Util.hasContent(categories))
         {
-          LinkBuilder linkBuilder = BlogContext.getInstance().getLinkBuilder();
-          Iterator<SearchEntry> entryIt = entries.iterator();
+          List<SearchEntry> entries = categories.iterator().next().getEntries();
 
-          while (entryIt.hasNext())
+          if (Util.hasContent(entries))
           {
-            SearchEntry e = entryIt.next();
+            LinkBuilder linkBuilder =
+              BlogContext.getInstance().getLinkBuilder();
+            Iterator<SearchEntry> entryIt = entries.iterator();
 
-            writer.print("  {");
-            writer.print(" value : '");
-            writer.print(e.getTitle());
-            writer.print("',");
-            writer.print(" url : '");
-            writer.print(linkBuilder.buildLink(request, e.getData()));
-            writer.print("'");
+            while (entryIt.hasNext())
+            {
+              SearchEntry e = entryIt.next();
 
-            if (entryIt.hasNext())
-            {
-              writer.println(" },");
-            }
-            else
-            {
-              writer.println(" }");
+              writer.print("  {");
+              writer.print(" value : '");
+              writer.print(e.getTitle());
+              writer.print("',");
+              writer.print(" url : '");
+              writer.print(linkBuilder.buildLink(request, e.getData()));
+              writer.print("'");
+
+              if (entryIt.hasNext())
+              {
+                writer.println(" },");
+              }
+              else
+              {
+                writer.println(" }");
+              }
             }
           }
         }

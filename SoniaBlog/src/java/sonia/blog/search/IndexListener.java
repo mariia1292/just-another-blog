@@ -177,7 +177,13 @@ public class IndexListener implements DAOListener
           IndexReader reader = IndexReader.open(blogDir);
           Term term = new Term("tid", tid);
 
-          reader.deleteDocuments(term);
+          int delCount = reader.deleteDocuments(term);
+          if ( logger.isLoggable(Level.INFO) )
+          {
+            StringBuffer log = new StringBuffer();
+            log.append("delete ").append(delCount).append(" documents");
+            logger.info(log.toString());
+          }
           reader.close();
         }
         catch (Exception ex)

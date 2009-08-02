@@ -505,6 +505,57 @@ public class BlogUtil
    *
    * @return
    */
+  public static <T> T getRequestBean(BlogRequest request, Class<T> type,
+                                     String name)
+  {
+    T result = null;
+    Object obj = request.getAttribute(name);
+
+    if (obj != null)
+    {
+      if (!type.isInstance(obj))
+      {
+        throw new BlogException("session object " + name
+                                + " is not an instance of " + type.getName());
+      }
+      else
+      {
+        result = (T) obj;
+      }
+    }
+    else
+    {
+      try
+      {
+        result = type.newInstance();
+
+        if (result instanceof AbstractBean)
+        {
+          ((AbstractBean) result).init();
+        }
+
+        request.setAttribute(name, result);
+      }
+      catch (Exception ex)
+      {
+        throw new BlogException("could not create new RequestBean", ex);
+      }
+    }
+
+    return result;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param request
+   * @param type
+   * @param name
+   * @param <T>
+   *
+   * @return
+   */
   @SuppressWarnings("unchecked")
   public static <T> T getSessionBean(BlogRequest request, Class<T> type,
                                      String name)

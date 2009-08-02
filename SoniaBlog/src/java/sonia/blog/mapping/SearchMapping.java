@@ -42,12 +42,17 @@ import sonia.blog.api.app.Constants;
 import sonia.blog.api.link.LinkBuilder;
 import sonia.blog.api.mapping.MappingNavigation;
 import sonia.blog.api.mapping.ScrollableFilterMapping;
+import sonia.blog.api.search.SearchCategory;
 import sonia.blog.api.search.SearchContext;
 import sonia.blog.api.search.SearchEntry;
 import sonia.blog.api.search.SearchException;
 import sonia.blog.entity.Blog;
+import sonia.blog.entity.ContentObject;
 import sonia.blog.util.BlogUtil;
 import sonia.blog.wui.BlogBean;
+import sonia.blog.wui.SearchBean;
+
+import sonia.cache.Cache;
 
 import sonia.util.Util;
 
@@ -56,13 +61,13 @@ import sonia.util.Util;
 import java.io.IOException;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.faces.model.ListDataModel;
 
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpSession;
 
 /**
  *
@@ -70,12 +75,6 @@ import javax.servlet.http.HttpSession;
  */
 public class SearchMapping extends ScrollableFilterMapping
 {
-
-  /** Field description */
-  private static final String SESSION_VAR = "sonia.session.search";
-
-  /** Field description */
-  private static final int TIMEOUT = 1000 * 60 * 5;
 
   /** Field description */
   private static Logger logger =
@@ -112,6 +111,7 @@ public class SearchMapping extends ScrollableFilterMapping
    * @throws ServletException
    */
   @Override
+  @SuppressWarnings("unchecked")
   protected String handleScrollableFilterMapping(BlogRequest request,
           BlogResponse response, String[] param, int start, int max)
           throws IOException, ServletException
@@ -122,33 +122,24 @@ public class SearchMapping extends ScrollableFilterMapping
     if (!Util.isBlank(searchParam))
     {
       Blog blog = request.getCurrentBlog();
-      List<SearchEntry> entries = null;
-      HttpSession session = request.getSession(true);
-      SearchSession searchSession =
-        (SearchSession) session.getAttribute(SESSION_VAR);
+      Locale locale = request.getLocale();
+      Cache cache =
+        BlogContext.getInstance().getCacheManager().get(Constants.CACHE_SEARCH);
+      CacheKey key = new CacheKey(blog, searchParam);
+      List<SearchCategory> categories = (List<SearchCategory>) cache.get(key);
 
-      if (searchSession != null)
-      {
-        long currentTime = System.currentTimeMillis();
-
-        if (!searchSession.getBlog().equals(blog)
-            || (currentTime - searchSession.getTime() > TIMEOUT))
-        {
-          session.removeAttribute(SESSION_VAR);
-        }
-        else
-        {
-          entries = searchSession.getEntries();
-        }
-      }
-
-      if (entries == null)
+      if (Util.isEmpty(categories))
       {
         SearchContext ctx = BlogContext.getInstance().getSearchContext();
 
         try
         {
-          entries = ctx.search(blog, searchParam);
+          categories = ctx.search(blog, locale, searchParam);
+
+          if (Util.hasContent(categories))
+          {
+            cache.put(key, categories);
+          }
         }
         catch (SearchException ex)
         {
@@ -157,32 +148,36 @@ public class SearchMapping extends ScrollableFilterMapping
       }
 
       String hitParam = request.getParameter("hit");
+      String categoryParam = request.getParameter("category");
+      SearchCategory category = getCategory(categories, categoryParam);
 
-      if (!Util.isBlank(hitParam))
+      if (category != null)
       {
-        try
+        if (Util.hasContent(hitParam))
         {
-          int hit = Integer.parseInt(hitParam);
+          try
+          {
+            int hit = Integer.parseInt(hitParam);
 
-          result = handleDetailView(request, searchParam, entries, hit);
+            result = handleDetailView(request, searchParam, categories,
+                                      category, hit);
+          }
+          catch (NumberFormatException ex)
+          {
+            logger.log(Level.SEVERE, null, ex);
+          }
         }
-        catch (NumberFormatException ex)
+        else
         {
-          logger.log(Level.SEVERE, null, ex);
+          result = handleListView(request, searchParam, categories, category,
+                                  start, max);
         }
-      }
-      else
-      {
-        result = handleListView(request, searchParam, entries, start, max);
       }
     }
     else
     {
-      BlogBean blogBean = BlogUtil.getSessionBean(request, BlogBean.class,
-                            BlogBean.NAME);
 
-      blogBean.setPageEntries(new ListDataModel());
-      result = buildTemplateViewId(request, Constants.TEMPLATE_LIST);
+      // TODO: error handling
     }
 
     return result;
@@ -194,14 +189,17 @@ public class SearchMapping extends ScrollableFilterMapping
    *
    * @param request
    * @param searchParam
-   * @param entries
+   * @param categories
+   * @param category
    * @param hit
    *
    * @return
    */
   private String handleDetailView(BlogRequest request, String searchParam,
-                                  List<SearchEntry> entries, int hit)
+                                  List<SearchCategory> categories,
+                                  SearchCategory category, int hit)
   {
+    List<SearchEntry> entries = category.getEntries();
     String result = null;
     int index = -1;
     SearchEntry entry = null;
@@ -223,13 +221,16 @@ public class SearchMapping extends ScrollableFilterMapping
 
       BlogBean blogBean = BlogUtil.getSessionBean(request, BlogBean.class,
                             BlogBean.NAME);
+      ContentObject co = entry.getData();
 
-      blogBean.setEntry(entry.getData());
+      setDisplayContent(request, co, false);
+      blogBean.setEntry(co);
 
       LinkBuilder builder = BlogContext.getInstance().getLinkBuilder();
       String prefix = builder.buildLink(request, "/search.jab");
 
-      prefix += "?search=" + searchParam + "&hit=";
+      prefix += "?category=" + category.getName();
+      prefix += "&search=" + searchParam + "&hit=";
 
       String previousUri = null;
       String nextUri = null;
@@ -260,15 +261,18 @@ public class SearchMapping extends ScrollableFilterMapping
    *
    * @param request
    * @param searchParam
-   * @param entries
+   * @param categories
+   * @param category
    * @param start
    * @param end
    *
    * @return
    */
   private String handleListView(BlogRequest request, String searchParam,
-                                List<SearchEntry> entries, int start, int end)
+                                List<SearchCategory> categories,
+                                SearchCategory category, int start, int end)
   {
+    List<SearchEntry> entries = category.getEntries();
     Blog blog = request.getCurrentBlog();
     String prevUri = null;
     String nextUri = null;
@@ -311,17 +315,61 @@ public class SearchMapping extends ScrollableFilterMapping
     StringBuffer detailPattern = new StringBuffer();
 
     detailPattern.append("/search.jab?search=").append(searchParam);
+    detailPattern.append("&category=").append(category.getName());
     detailPattern.append("&hit={0,number,#}");
 
     LinkBuilder linkBuilder = BlogContext.getInstance().getLinkBuilder();
     String pattern = linkBuilder.buildLink(request, detailPattern.toString());
-    BlogBean blogBean = BlogUtil.getSessionBean(request, BlogBean.class,
-                          BlogBean.NAME);
+    SearchBean searchBean = BlogUtil.getRequestBean(request, SearchBean.class,
+                              SearchBean.NAME);
 
-    blogBean.setPageEntries(new ListDataModel(entries));
+    searchBean.setSearchString(searchParam);
+    searchBean.setCategory(category);
+    searchBean.setCategories(categories);
+    searchBean.setPageEntries(entries);
     navigation = new SimpleMappingNavigation(prevUri, nextUri, pattern);
 
-    return buildTemplateViewId(request, Constants.TEMPLATE_LIST);
+    return buildTemplateViewId(request, Constants.TEMPLATE_SEARCH);
+  }
+
+  //~--- get methods ----------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   * @param categories
+   * @param current
+   *
+   * @return
+   */
+  private SearchCategory getCategory(List<SearchCategory> categories,
+                                     String current)
+  {
+    SearchCategory result = null;
+
+    if (Util.hasContent(categories))
+    {
+      if (Util.hasContent(current))
+      {
+        for (SearchCategory category : categories)
+        {
+          if (category.getName().equals(current))
+          {
+            result = category;
+
+            break;
+          }
+        }
+      }
+
+      if (result == null)
+      {
+        result = categories.get(0);
+      }
+    }
+
+    return result;
   }
 
   //~--- inner classes --------------------------------------------------------
@@ -330,26 +378,85 @@ public class SearchMapping extends ScrollableFilterMapping
    * Class description
    *
    *
-   * @version    Enter version here..., 09/01/29
-   * @author     Enter your name here...
+   * @version        Enter version here..., 09/08/02
+   * @author         Enter your name here...
    */
-  private static class SearchSession
+  private static class CacheKey
   {
 
     /**
      * Constructs ...
      *
      *
-     * @param search
      * @param blog
-     * @param entries
+     * @param query
      */
-    public SearchSession(String search, Blog blog, List<SearchEntry> entries)
+    public CacheKey(Blog blog, String query)
     {
-      this.search = search;
-      this.blog = blog;
-      this.entries = entries;
-      this.time = 0l;
+      this.id = blog.getId();
+      this.query = query;
+    }
+
+    //~--- methods ------------------------------------------------------------
+
+    /**
+     * Method description
+     *
+     *
+     * @param obj
+     *
+     * @return
+     */
+    @Override
+    public boolean equals(Object obj)
+    {
+      if (obj == null)
+      {
+        return false;
+      }
+
+      if (getClass() != obj.getClass())
+      {
+        return false;
+      }
+
+      final CacheKey other = (CacheKey) obj;
+
+      if ((this.id != other.id)
+          && ((this.id == null) ||!this.id.equals(other.id)))
+      {
+        return false;
+      }
+
+      if ((this.query == null)
+          ? (other.query != null)
+          : !this.query.equals(other.query))
+      {
+        return false;
+      }
+
+      return true;
+    }
+
+    /**
+     * Method description
+     *
+     *
+     * @return
+     */
+    @Override
+    public int hashCode()
+    {
+      int hash = 3;
+
+      hash = 29 * hash + ((this.id != null)
+                          ? this.id.hashCode()
+                          : 0);
+      hash = 29 * hash + ((this.query != null)
+                          ? this.query.hashCode()
+                          : 0);
+
+      return hash;
     }
 
     //~--- get methods --------------------------------------------------------
@@ -360,9 +467,9 @@ public class SearchMapping extends ScrollableFilterMapping
      *
      * @return
      */
-    public Blog getBlog()
+    public Long getId()
     {
-      return blog;
+      return id;
     }
 
     /**
@@ -371,46 +478,18 @@ public class SearchMapping extends ScrollableFilterMapping
      *
      * @return
      */
-    public List<SearchEntry> getEntries()
+    public String getQuery()
     {
-      return entries;
-    }
-
-    /**
-     * Method description
-     *
-     *
-     * @return
-     */
-    public String getSearch()
-    {
-      return search;
-    }
-
-    /**
-     * Method description
-     *
-     *
-     * @return
-     */
-    public long getTime()
-    {
-      return time;
+      return query;
     }
 
     //~--- fields -------------------------------------------------------------
 
     /** Field description */
-    private Blog blog;
+    private Long id;
 
     /** Field description */
-    private List<SearchEntry> entries;
-
-    /** Field description */
-    private String search;
-
-    /** Field description */
-    private long time;
+    private String query;
   }
 
 

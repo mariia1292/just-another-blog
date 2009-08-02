@@ -31,65 +31,62 @@
 
 
 
-package sonia.blog.search;
+package sonia.blog.api.search;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import org.apache.lucene.document.DateTools;
-import org.apache.lucene.document.Document;
-import org.apache.lucene.document.Field;
+import sonia.blog.api.app.BlogSession;
+import sonia.blog.entity.Blog;
 
-import sonia.blog.entity.Entry;
+//~--- JDK imports ------------------------------------------------------------
 
-import sonia.util.Util;
+import java.util.Collection;
+import java.util.Locale;
 
 /**
  *
  * @author Sebastian Sdorra
  */
-public class SearchHelper
+public interface SearchProvider
 {
 
   /**
    * Method description
    *
    *
-   * @param entry
+   * @param session
+   * @param blog
+   *
+   * @throws SearchException
+   */
+  public void reIndex(BlogSession session, Blog blog) throws SearchException;
+
+  /**
+   * Method description
+   *
+   *
+   * @param blog
+   * @param locale
+   * @param query
    *
    * @return
+   *
+   * @throws SearchException
    */
-  public static Document buildDocument(Entry entry)
-  {
-    Document doc = new Document();
+  public Collection<SearchCategory> search(Blog blog, Locale locale,
+          String query)
+          throws SearchException;
 
-    doc.add(new Field("tid", Entry.class.getName() + "-" + entry.getId(),
-                      Field.Store.YES, Field.Index.NOT_ANALYZED));
-    doc.add(new Field("type", Entry.class.getName(), Field.Store.YES,
-                      Field.Index.NOT_ANALYZED));
-    doc.add(new Field("id", entry.getId().toString(), Field.Store.YES,
-                      Field.Index.NOT_ANALYZED));
-    doc.add(new Field("author", entry.getAuthor().getDisplayName(),
-                      Field.Store.YES, Field.Index.NOT_ANALYZED));
-    doc.add(new Field("creationDate",
-                      DateTools.timeToString(entry.getCreationDate().getTime(),
-                        DateTools.Resolution.SECOND), Field.Store.YES,
-                          Field.Index.NOT_ANALYZED));
+  //~--- get methods ----------------------------------------------------------
 
-    if (entry.getLastUpdate() != null)
-    {
-      doc.add(new Field("lastUpdate",
-                        DateTools.timeToString(entry.getLastUpdate().getTime(),
-                          DateTools.Resolution.SECOND), Field.Store.YES,
-                            Field.Index.NOT_ANALYZED));
-    }
-
-    doc.add(new Field("title", entry.getTitle(), Field.Store.YES,
-                      Field.Index.ANALYZED));
-    doc.add(new Field("content", Util.extractHTMLText(entry.getContent()),
-                      Field.Store.YES, Field.Index.ANALYZED));
-    doc.add(new Field("category", "entry", Field.Store.YES,
-                      Field.Index.NOT_ANALYZED));
-
-    return doc;
-  }
+  /**
+   * Method description
+   *
+   *
+   *
+   * @param session
+   * @param blog
+   * @return
+   */
+  public boolean isReindexable(BlogSession session, Blog blog);
 }
