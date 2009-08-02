@@ -1,10 +1,10 @@
 /**
  * Copyright (c) 2009, Sebastian Sdorra
  * All rights reserved.
- * 
+ *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
@@ -13,7 +13,7 @@
  * 3. Neither the name of JAB; nor the names of its
  *    contributors may be used to endorse or promote products derived from this
  *    software without specific prior written permission.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -24,10 +24,11 @@
  * ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- * 
+ *
  * http://kenai.com/projects/jab
- * 
+ *
  */
+
 
 
 package sonia.jobqueue;
@@ -36,8 +37,13 @@ package sonia.jobqueue;
 
 import org.junit.Test;
 
+import sonia.logging.SimpleFormatter;
+
+import static org.junit.Assert.*;
+
 //~--- JDK imports ------------------------------------------------------------
 
+import java.util.logging.ConsoleHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -48,6 +54,53 @@ import java.util.logging.Logger;
 public class JobQueueTest
 {
 
+  /** Field description */
+  private static int COUNTER = 0;
+
+  /** Field description */
+  private static boolean ABORT = false;
+
+  /** Field description */
+  private static boolean START = false;
+
+  /** Field description */
+  private static boolean FINISH = false;
+
+  //~--- methods --------------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   */
+  @Test
+  public void queueListenerTest()
+  {
+    ABORT = false;
+    START = false;
+    FINISH = false;
+
+    JobQueue<ExceptionJob> queue = new JobQueue<ExceptionJob>(1);
+    ExceptionJobListener listener = new ExceptionJobListener();
+
+    queue.addListener(listener);
+    queue.start();
+    queue.processs(new ExceptionJob());
+    assertTrue(START);
+    assertTrue(ABORT);
+    assertFalse(FINISH);
+    ABORT = false;
+    START = false;
+    FINISH = false;
+    queue.processs(new ExceptionJob(false));
+    assertTrue(START);
+    assertFalse(ABORT);
+    assertTrue(FINISH);
+    queue.stop();
+    queue.removeListener(listener);
+    listener = null;
+    queue = null;
+  }
+
   /**
    * Method description
    *
@@ -55,42 +108,138 @@ public class JobQueueTest
    * @throws InterruptedException
    */
   @Test
-  public void test() throws InterruptedException
+  public void simpleQueueTest() throws InterruptedException
   {
-    Logger.getLogger("sonia").setLevel(Level.FINEST);
+    COUNTER = 0;
 
-    JobQueue<SleepJob> queue = new JobQueue<SleepJob>();
+    JobQueue<SleepJob> queue = new JobQueue<SleepJob>(1);
 
-    queue.addListener(new SleepJobListener());
-
-    for (int i = 0; i < 100; i++)
-    {
-      queue.add(new SleepJob(i));
-    }
-
+    assertTrue(queue.getHandlerCount() == 1);
+    assertTrue(queue.getMaxJobs() == 0);
+    assertFalse(queue.isRunning());
+    queue.add(new SleepJob());
+    queue.add(new SleepJob());
+    queue.add(new SleepJob());
+    assertTrue(queue.getJobs().size() == 3);
+    assertTrue(COUNTER == 0);
     queue.start();
-    System.out.println(queue.count());
+    assertTrue(queue.isRunning());
+    assertTrue(COUNTER == 0);
+    Thread.sleep(300l);
+    assertTrue(COUNTER == 3);
+    assertTrue(queue.isRunning());
+    assertTrue(queue.getMaxJobs() == 3);
 
-    for (int i = 100; i < 200; i++)
-    {
-      queue.add(new SleepJob(i));
-    }
+    long time = System.currentTimeMillis();
 
-    System.out.println(queue.count());
-
-    int i = 0;
-
-    for (SleepJob job : queue.getJobs())
-    {
-      i++;
-    }
-
-    System.out.println(i);
-
-    // Thread.sleep(1000 * 60 * 1);
+    queue.processs(new SleepJob());
+    assertTrue((System.currentTimeMillis() - time) >= 50);
+    assertTrue(queue.getMaxJobs() == 3);
+    assertTrue(queue.count() == 0);
+    queue.stop();
+    assertFalse(queue.isRunning());
   }
 
   //~--- inner classes --------------------------------------------------------
+
+  /**
+   * Class description
+   *
+   *
+   * @version        Enter version here..., 09/08/02
+   * @author         Enter your name here...
+   */
+  private class ExceptionJob implements Job
+  {
+
+    /**
+     * Constructs ...
+     *
+     */
+    public ExceptionJob()
+    {
+      this.throwEx = true;
+    }
+
+    /**
+     * Constructs ...
+     *
+     *
+     * @param throwEx
+     */
+    public ExceptionJob(boolean throwEx)
+    {
+      this.throwEx = throwEx;
+    }
+
+    //~--- methods ------------------------------------------------------------
+
+    /**
+     * Method description
+     *
+     *
+     * @throws JobException
+     */
+    public void excecute() throws JobException
+    {
+      if (throwEx)
+      {
+        throw new JobException("test");
+      }
+    }
+
+    //~--- fields -------------------------------------------------------------
+
+    /** Field description */
+    private boolean throwEx;
+  }
+
+
+  /**
+   * Class description
+   *
+   *
+   * @version    Enter version here..., 09/02/14
+   * @author     Enter your name here...
+   */
+  private class ExceptionJobListener implements JobListener
+  {
+
+    /**
+     * Method description
+     *
+     *
+     * @param job
+     * @param ex
+     */
+    public void aborted(Job job, JobException ex)
+    {
+      ABORT = true;
+    }
+
+    /**
+     * Method description
+     *
+     *
+     * @param job
+     */
+    public void finished(Job job)
+    {
+      FINISH = true;
+    }
+
+    /**
+     * Method description
+     *
+     *
+     * @param job
+     */
+    public void started(Job job)
+    {
+      START = true;
+    }
+  }
+
 
   /**
    * Class description
@@ -105,19 +254,6 @@ public class JobQueueTest
     /** Field description */
     private static final long serialVersionUID = -7434266792417661844L;
 
-    //~--- constructors -------------------------------------------------------
-
-    /**
-     * Constructs ...
-     *
-     *
-     * @param id
-     */
-    public SleepJob(int id)
-    {
-      this.id = id;
-    }
-
     //~--- methods ------------------------------------------------------------
 
     /**
@@ -128,70 +264,15 @@ public class JobQueueTest
      */
     public void excecute() throws JobException
     {
-      System.out.println("Hello from Job " + id + ", goto sleep");
-
       try
       {
-        Thread.sleep(5000);
+        Thread.sleep(50l);
+        COUNTER++;
       }
       catch (InterruptedException ex)
       {
         throw new JobException(ex);
       }
-
-      System.out.println("By from Job " + id);
-    }
-
-    //~--- fields -------------------------------------------------------------
-
-    /** Field description */
-    private int id;
-  }
-
-
-  /**
-   * Class description
-   *
-   *
-   * @version    Enter version here..., 09/02/14
-   * @author     Enter your name here...
-   */
-  private class SleepJobListener implements JobListener
-  {
-
-    /**
-     * Method description
-     *
-     *
-     * @param job
-     * @param ex
-     */
-    public void aborted(Job job, JobException ex)
-    {
-      System.out.println("abort " + job.getClass().getName());
-      ex.printStackTrace();
-    }
-
-    /**
-     * Method description
-     *
-     *
-     * @param job
-     */
-    public void finished(Job job)
-    {
-      System.out.println("finish " + job.getClass().getName());
-    }
-
-    /**
-     * Method description
-     *
-     *
-     * @param job
-     */
-    public void started(Job job)
-    {
-      System.out.println("start " + job.getClass().getName());
     }
   }
 }
