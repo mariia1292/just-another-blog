@@ -176,12 +176,11 @@ public class JobQueue<T extends Job>
    */
   public void processs(T job)
   {
-    add(job);
-
     try
     {
       synchronized (job)
       {
+        add(job);
         job.wait(1000l * timeoutLimit);
       }
     }
