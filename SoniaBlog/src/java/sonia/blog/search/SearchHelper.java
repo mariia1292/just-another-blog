@@ -39,8 +39,13 @@ import org.apache.lucene.document.DateTools;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
 
-import sonia.blog.entity.Entry;
+import org.w3c.dom.Comment;
 
+import sonia.blog.entity.ContentObject;
+import sonia.blog.entity.Entry;
+import sonia.blog.entity.Page;
+
+import sonia.blog.entity.PermaObject;
 import sonia.util.Util;
 
 /**
@@ -50,6 +55,20 @@ import sonia.util.Util;
 public class SearchHelper
 {
 
+  /** Field description */
+  private static final String CATEGORY_COMMENT = "comment";
+
+  /** Field description */
+  private static final String CATEGORY_ENTRY = "entry";
+
+  /** Field description */
+  private static final String CATEGORY_PAGE = "page";
+
+  /** Field description */
+  private static final String CATEGORY_UNKNOWN = "unknown";
+
+  //~--- methods --------------------------------------------------------------
+
   /**
    * Method description
    *
@@ -58,38 +77,81 @@ public class SearchHelper
    *
    * @return
    */
-  public static Document buildDocument(Entry entry)
+  public static Document buildDocument(ContentObject entry)
   {
     Document doc = new Document();
 
-    doc.add(new Field("tid", Entry.class.getName() + "-" + entry.getId(),
+    doc.add(new Field("tid", buildTypeId(entry),
                       Field.Store.YES, Field.Index.NOT_ANALYZED));
-    doc.add(new Field("type", Entry.class.getName(), Field.Store.YES,
+    doc.add(new Field("type", entry.getClass().getName(), Field.Store.YES,
                       Field.Index.NOT_ANALYZED));
     doc.add(new Field("id", entry.getId().toString(), Field.Store.YES,
                       Field.Index.NOT_ANALYZED));
-    doc.add(new Field("author", entry.getAuthor().getDisplayName(),
-                      Field.Store.YES, Field.Index.NOT_ANALYZED));
+    doc.add(new Field("author", entry.getAuthorName(), Field.Store.YES,
+                      Field.Index.NOT_ANALYZED));
     doc.add(new Field("creationDate",
                       DateTools.timeToString(entry.getCreationDate().getTime(),
                         DateTools.Resolution.SECOND), Field.Store.YES,
                           Field.Index.NOT_ANALYZED));
-
-    if (entry.getLastUpdate() != null)
-    {
-      doc.add(new Field("lastUpdate",
-                        DateTools.timeToString(entry.getLastUpdate().getTime(),
-                          DateTools.Resolution.SECOND), Field.Store.YES,
-                            Field.Index.NOT_ANALYZED));
-    }
-
     doc.add(new Field("title", entry.getTitle(), Field.Store.YES,
                       Field.Index.ANALYZED));
     doc.add(new Field("content", Util.extractHTMLText(entry.getContent()),
                       Field.Store.YES, Field.Index.ANALYZED));
-    doc.add(new Field("category", "entry", Field.Store.YES,
+    doc.add(new Field("category", getCategory(entry), Field.Store.YES,
                       Field.Index.NOT_ANALYZED));
 
     return doc;
+  }
+
+
+  /**
+   * Method description
+   *
+   *
+   *
+   * @param entry
+   *
+   * @return
+   */
+  public static String buildTypeId(PermaObject object)
+  {
+    StringBuffer result = new StringBuffer();
+    result.append( object.getClass().getName() );
+    result.append("-").append( object.getId() );
+    return result.toString();
+  }
+
+  //~--- get methods ----------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   * @param object
+   *
+   * @return
+   */
+  public static String getCategory(Object object)
+  {
+    String result = null;
+
+    if (object instanceof Entry)
+    {
+      result = CATEGORY_ENTRY;
+    }
+    else if (object instanceof Page)
+    {
+      result = CATEGORY_PAGE;
+    }
+    else if (object instanceof Comment)
+    {
+      result = CATEGORY_COMMENT;
+    }
+    else
+    {
+      result = CATEGORY_UNKNOWN;
+    }
+
+    return result;
   }
 }

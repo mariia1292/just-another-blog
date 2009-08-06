@@ -83,6 +83,17 @@ public interface PageDAO extends GenericDAO<Page>
    *
    * @return
    */
+  public List<Page> getAllByBlog(Blog blog, boolean published);
+
+  /**
+   * Method description
+   *
+   *
+   * @param blog
+   * @param published
+   *
+   * @return
+   */
   public List<? extends PageNavigation> getAllRoot(Blog blog,
           boolean published);
 

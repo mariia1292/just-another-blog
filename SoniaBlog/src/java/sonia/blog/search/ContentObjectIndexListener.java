@@ -46,7 +46,7 @@ import sonia.blog.api.app.Constants;
 import sonia.blog.api.app.ResourceManager;
 import sonia.blog.api.dao.DAOListener;
 import sonia.blog.entity.Blog;
-import sonia.blog.entity.Entry;
+import sonia.blog.entity.ContentObject;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -59,12 +59,12 @@ import java.util.logging.Logger;
  *
  * @author Sebastian Sdorra
  */
-public class IndexListener implements DAOListener
+public class ContentObjectIndexListener implements DAOListener
 {
 
   /** Field description */
   private static Logger logger =
-    Logger.getLogger(IndexListener.class.getName());
+    Logger.getLogger(ContentObjectIndexListener.class.getName());
 
   //~--- methods --------------------------------------------------------------
 
@@ -77,9 +77,9 @@ public class IndexListener implements DAOListener
    */
   public void handleEvent(Action action, Object item)
   {
-    if (item instanceof Entry)
+    if (item instanceof ContentObject)
     {
-      Entry entry = (Entry) item;
+      ContentObject entry = (ContentObject) item;
 
       switch (action)
       {
@@ -110,20 +110,21 @@ public class IndexListener implements DAOListener
    *
    *
    *
-   * @param entry
+   *
+   * @param co
    */
-  public void postPersists(Entry entry)
+  public void postPersists(ContentObject co)
   {
     Document doc = null;
     File blogDir = null;
 
-    if (entry.isPublished())
+    if (co.isPublished())
     {
-      blogDir = getDirectory(entry);
+      blogDir = getDirectory(co);
 
       if (blogDir != null)
       {
-        doc = SearchHelper.buildDocument(entry);
+        doc = SearchHelper.buildDocument(co);
       }
     }
 
@@ -155,20 +156,21 @@ public class IndexListener implements DAOListener
    *
    *
    *
-   * @param entry
+   *
+   * @param co
    */
-  public void postRemove(Entry entry)
+  public void postRemove(ContentObject co)
   {
     File blogDir = null;
 
-    if (entry.isPublished())
+    if (co.isPublished())
     {
-      blogDir = getDirectory(entry);
+      blogDir = getDirectory(co);
     }
 
     if (blogDir != null)
     {
-      String tid = buildTypeId(entry);
+      String tid = SearchHelper.buildTypeId(co);
 
       if (tid != null)
       {
@@ -176,14 +178,16 @@ public class IndexListener implements DAOListener
         {
           IndexReader reader = IndexReader.open(blogDir);
           Term term = new Term("tid", tid);
-
           int delCount = reader.deleteDocuments(term);
-          if ( logger.isLoggable(Level.INFO) )
+
+          if (logger.isLoggable(Level.INFO))
           {
             StringBuffer log = new StringBuffer();
+
             log.append("delete ").append(delCount).append(" documents");
             logger.info(log.toString());
           }
+
           reader.close();
         }
         catch (Exception ex)
@@ -199,26 +203,13 @@ public class IndexListener implements DAOListener
    *
    *
    *
-   * @param entry
+   *
+   * @param co
    */
-  public void postUpdate(Entry entry)
+  public void postUpdate(ContentObject co)
   {
-    postRemove(entry);
-    postPersists(entry);
-  }
-
-  /**
-   * Method description
-   *
-   *
-   *
-   * @param entry
-   *
-   * @return
-   */
-  private String buildTypeId(Entry entry)
-  {
-    return Entry.class.getName() + "-" + entry.getId();
+    postRemove(co);
+    postPersists(co);
   }
 
   //~--- get methods ----------------------------------------------------------
@@ -245,14 +236,15 @@ public class IndexListener implements DAOListener
    * Method description
    *
    *
-   * @param entry
+   *
+   * @param co
    *
    * @return
    */
-  private File getDirectory(Entry entry)
+  private File getDirectory(ContentObject co)
   {
     File result = null;
-    Blog blog = entry.getBlog();
+    Blog blog = co.getBlog();
 
     if (blog != null)
     {

@@ -47,6 +47,18 @@
 
       </ui:define>
 
+      <ui:define name="info">
+        <div id="submenu" class="vlist">
+        <ul>
+          <ui:repeat value="#{SearchBean.categories}" var="Category">
+            <li>
+              <a href="#">#{Category.label} (#{Category.size})</a>
+            </li>
+          </ui:repeat>
+        </ul>
+        </div>
+      </ui:define>
+
     </ui:composition>
 
   </body>

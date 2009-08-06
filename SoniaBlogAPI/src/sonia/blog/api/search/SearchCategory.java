@@ -73,6 +73,21 @@ public class SearchCategory
     this.name = name;
   }
 
+  //~--- methods --------------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  public int getSize()
+  {
+    return (entries != null)
+           ? entries.size()
+           : 0;
+  }
+
   //~--- get methods ----------------------------------------------------------
 
   /**
@@ -83,10 +98,11 @@ public class SearchCategory
    */
   public List<SearchEntry> getEntries()
   {
-    if ( entries == null )
+    if (entries == null)
     {
       entries = new ArrayList<SearchEntry>();
     }
+
     return entries;
   }
 
