@@ -40,9 +40,12 @@ import org.apache.lucene.document.Document;
 
 import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.dao.EntryDAO;
+import sonia.blog.api.dao.PageDAO;
 import sonia.blog.api.search.SearchEntry;
+import sonia.blog.entity.Blog;
 import sonia.blog.entity.ContentObject;
 import sonia.blog.entity.Entry;
+import sonia.blog.entity.Page;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -138,6 +141,25 @@ public class DefaultSearchEntry implements SearchEntry
    *
    * @return
    */
+  public Blog getBlog()
+  {
+    Blog blog = null;
+    ContentObject object = getData();
+
+    if (object != null)
+    {
+      blog = object.getBlog();
+    }
+
+    return blog;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
   public String getContent()
   {
     return searchResult;
@@ -177,26 +199,34 @@ public class DefaultSearchEntry implements SearchEntry
    */
   public ContentObject getData()
   {
-    ContentObject result = null;
-
-    try
+    if (data == null)
     {
-      Class clazz = Class.forName(document.get("type"));
-
-      if (clazz.equals(Entry.class))
+      try
       {
-        EntryDAO entryDAO = BlogContext.getDAOFactory().getEntryDAO();
-        Long id = Long.parseLong(document.get("id"));
+        Class clazz = Class.forName(document.get("type"));
 
-        result = entryDAO.get(id);
+        if (clazz.equals(Entry.class))
+        {
+          EntryDAO entryDAO = BlogContext.getDAOFactory().getEntryDAO();
+          Long id = Long.parseLong(document.get("id"));
+
+          data = entryDAO.get(id);
+        }
+        else if (clazz.equals(Page.class))
+        {
+          PageDAO pageDAO = BlogContext.getDAOFactory().getPageDAO();
+          Long id = Long.parseLong(document.get("id"));
+
+          data = pageDAO.get(id);
+        }
+      }
+      catch (Exception ex)
+      {
+        logger.log(Level.SEVERE, null, ex);
       }
     }
-    catch (Exception ex)
-    {
-      logger.log(Level.SEVERE, null, ex);
-    }
 
-    return result;
+    return data;
   }
 
   /**
@@ -243,6 +273,25 @@ public class DefaultSearchEntry implements SearchEntry
     return document.get("title");
   }
 
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  public boolean isPublished()
+  {
+    boolean published = false;
+    ContentObject object = getData();
+
+    if (object != null)
+    {
+      published = object.isPublished();
+    }
+
+    return published;
+  }
+
   //~--- set methods ----------------------------------------------------------
 
   /**
@@ -258,6 +307,9 @@ public class DefaultSearchEntry implements SearchEntry
   }
 
   //~--- fields ---------------------------------------------------------------
+
+  /** Field description */
+  private ContentObject data;
 
   /** Field description */
   private Document document;

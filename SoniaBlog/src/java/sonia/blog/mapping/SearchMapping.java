@@ -48,8 +48,11 @@ import sonia.blog.api.search.SearchEntry;
 import sonia.blog.api.search.SearchException;
 import sonia.blog.entity.Blog;
 import sonia.blog.entity.ContentObject;
+import sonia.blog.entity.Entry;
+import sonia.blog.entity.Page;
 import sonia.blog.util.BlogUtil;
 import sonia.blog.wui.BlogBean;
+import sonia.blog.wui.PageBean;
 import sonia.blog.wui.SearchBean;
 
 import sonia.cache.Cache;
@@ -64,8 +67,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import javax.faces.model.ListDataModel;
 
 import javax.servlet.ServletException;
 
@@ -217,14 +218,26 @@ public class SearchMapping extends ScrollableFilterMapping
 
     if (index >= 0)
     {
-      result = buildTemplateViewId(request, Constants.TEMPLATE_DETAIL);
-
-      BlogBean blogBean = BlogUtil.getSessionBean(request, BlogBean.class,
-                            BlogBean.NAME);
       ContentObject co = entry.getData();
 
       setDisplayContent(request, co, false);
-      blogBean.setEntry(co);
+
+      if (co instanceof Entry)
+      {
+        BlogBean blogBean = BlogUtil.getSessionBean(request, BlogBean.class,
+                              BlogBean.NAME);
+
+        blogBean.setEntry(co);
+        result = buildTemplateViewId(request, Constants.TEMPLATE_DETAIL);
+      }
+      else if (co instanceof Page)
+      {
+        PageBean pageBean = new PageBean();
+
+        pageBean.setPage((Page) co);
+        request.setAttribute(PageBean.NAME, pageBean);
+        result = buildTemplateViewId(request, Constants.TEMPLATE_PAGE);
+      }
 
       LinkBuilder builder = BlogContext.getInstance().getLinkBuilder();
       String prefix = builder.buildLink(request, "/search.jab");

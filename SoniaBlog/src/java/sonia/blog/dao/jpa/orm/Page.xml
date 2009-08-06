@@ -93,6 +93,12 @@
         order by p.navigationPosition, p.navigationTitle
       </query>
     </named-query>
+    <named-query name="Page.getAllByBlogAndPublished">
+      <query>
+        select p from Page p
+        where p.blog = :blog and p.published = :published
+      </query>
+    </named-query>
     <named-query name="Page.getPageChildren">
       <query>
         select p from Page p

@@ -74,6 +74,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -267,12 +268,21 @@ public class DefaultSearchProvider implements SearchProvider
    */
   private String getLabel(Locale locale, String name)
   {
-    String label = ResourceBundle.getBundle("sonia.blog.resources.label",
-                     locale).getString(name);
+    String label = name;
 
-    if (Util.isBlank(label))
+    try
     {
-      label = name;
+      label = ResourceBundle.getBundle("sonia.blog.resources.label",
+                                       locale).getString(name);
+    }
+    catch (MissingResourceException ex)
+    {
+      if (logger.isLoggable(Level.WARNING))
+      {
+        StringBuffer log = new StringBuffer();
+
+        log.append("missing resource key ").append(name);
+      }
     }
 
     return label;

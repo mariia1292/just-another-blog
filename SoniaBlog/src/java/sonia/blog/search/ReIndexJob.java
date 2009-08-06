@@ -43,14 +43,20 @@ import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.app.BlogJob;
 import sonia.blog.api.app.Constants;
 import sonia.blog.api.dao.EntryDAO;
+import sonia.blog.api.dao.PageDAO;
 import sonia.blog.entity.Blog;
+import sonia.blog.entity.ContentObject;
 import sonia.blog.entity.Entry;
+import sonia.blog.entity.Page;
 
 import sonia.jobqueue.JobException;
+
+import sonia.util.Util;
 
 //~--- JDK imports ------------------------------------------------------------
 
 import java.io.File;
+import java.io.IOException;
 
 import java.util.List;
 import java.util.logging.Level;
@@ -110,25 +116,12 @@ public class ReIndexJob implements BlogJob
       EntryDAO entryDAO = BlogContext.getDAOFactory().getEntryDAO();
       List<Entry> entries = entryDAO.findAllActivesByBlog(blog);
 
-      if (entries != null)
-      {
-        for (Entry e : entries)
-        {
-          try
-          {
-            Document doc = SearchHelper.buildDocument(e);
+      addObjects(entries, writer);
 
-            if (doc != null)
-            {
-              writer.addDocument(doc);
-            }
-          }
-          catch (Exception ex)
-          {
-            logger.log(Level.SEVERE, "error during indexing " + e, ex);
-          }
-        }
-      }
+      PageDAO pageDAO = BlogContext.getDAOFactory().getPageDAO();
+      List<Page> pages = pageDAO.getAllByBlog(blog, true);
+
+      addObjects(pages, writer);
     }
     catch (Exception ex)
     {
@@ -188,6 +181,39 @@ public class ReIndexJob implements BlogJob
   public String getName()
   {
     return "reindex";
+  }
+
+  //~--- methods --------------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   * @param objects
+   * @param writer
+   */
+  private void addObjects(List<? extends ContentObject> objects,
+                          IndexWriter writer)
+  {
+    if (Util.hasContent(objects))
+    {
+      for (ContentObject co : objects)
+      {
+        try
+        {
+          Document doc = SearchHelper.buildDocument(co);
+
+          if (doc != null)
+          {
+            writer.addDocument(doc);
+          }
+        }
+        catch (IOException ex)
+        {
+          logger.log(Level.SEVERE, null, ex);
+        }
+      }
+    }
   }
 
   //~--- fields ---------------------------------------------------------------

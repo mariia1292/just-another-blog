@@ -230,6 +230,26 @@ public class JpaPageDAO extends JpaGenericDAO<Page> implements PageDAO
    *
    * @return
    */
+  public List<Page> getAllByBlog(Blog blog, boolean published)
+  {
+    EntityManager em = createEntityManager();
+    Query q = em.createNamedQuery("Page.getAllByBlogAndPublished");
+
+    q.setParameter("published", published);
+    q.setParameter("blog", blog);
+
+    return excecuteListQuery(em, q);
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param blog
+   * @param published
+   *
+   * @return
+   */
   public List<? extends PageNavigation> getAllRoot(Blog blog, boolean published)
   {
     EntityManager em = createEntityManager();

@@ -71,6 +71,8 @@ public interface ContentObject extends PermaObject
    */
   public String getContent();
 
+  public Blog getBlog();
+
   /**
    * Method description
    *
@@ -102,6 +104,14 @@ public interface ContentObject extends PermaObject
    * @return
    */
   public String getTitle();
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  public boolean isPublished();
 
   //~--- set methods ----------------------------------------------------------
 
