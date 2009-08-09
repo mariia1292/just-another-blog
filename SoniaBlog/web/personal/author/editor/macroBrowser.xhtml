@@ -1,0 +1,46 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:blog="http://jab.nitilon.org/blog/"
+      xmlns:u1="http://jab.nitilon.org/blog/">
+  <body>
+
+    <ui:composition template="./template.xhtml">
+
+      <ui:define name="head">
+        <link rel="stylesheet" type="text/css" class="user" href="${facesContext.externalContext.requestContextPath}/resources/jquery/plugins/css/macroBrowser.css" />
+        <script type="text/javascript" src="${facesContext.externalContext.requestContextPath}/resources/tiny_mce/plugins/macro/js/dialog.js"></script>
+        <script type="text/javascript" src="${facesContext.externalContext.requestContextPath}/resources/jquery/jquery.min.js"></script>
+        <script type="text/javascript" src="${facesContext.externalContext.requestContextPath}/resources/jquery/plugins/js/macroBrowser.js"></script>
+        <script type="text/javascript">
+          $(document).ready(function(){
+            $("div.mbContainer").macroBrowser( "${facesContext.externalContext.requestContextPath}/async/mb.json", {
+              defaultIcon: "${facesContext.externalContext.requestContextPath}/resource/icon/document.gif",
+              insertCallback: function(data){
+                MacroDialog.insert( data );
+                window.close();
+              }
+            });
+          });
+        </script>
+      </ui:define>
+
+      <ui:define name="content">
+
+        <h3><h:outputText value="#{label.macros}" /></h3>
+
+        <div class="mbContainer"></div>
+          
+
+      </ui:define>
+
+      <ui:define name="footer"></ui:define>
+
+    </ui:composition>
+
+  </body>
+</html>
+

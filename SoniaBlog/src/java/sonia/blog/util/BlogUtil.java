@@ -505,6 +505,7 @@ public class BlogUtil
    *
    * @return
    */
+  @SuppressWarnings("unchecked")
   public static <T> T getRequestBean(BlogRequest request, Class<T> type,
                                      String name)
   {

@@ -23,7 +23,7 @@
       
       // Register the command so that it can be invoked by using tinyMCE.activeEditor.execCommand('mceExample');
       ed.addCommand('mceMacro', function() {
-        var address = url + '/../../../../personal/author/editor/macros.jab';
+        var address = url + '/../../../../personal/author/editor/macroBrowser.jab';
         var content = ed.selection.getContent();
         if ( content != null && content != "" )
         {
