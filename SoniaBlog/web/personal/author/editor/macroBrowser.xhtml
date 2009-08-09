@@ -19,6 +19,7 @@
           $(document).ready(function(){
             $("div.mbContainer").macroBrowser( "${facesContext.externalContext.requestContextPath}/async/mb.json", {
               defaultIcon: "${facesContext.externalContext.requestContextPath}/resource/icon/document.gif",
+              loadingImage: "${facesContext.externalContext.requestContextPath}/resources/jquery/plugins/img/loading.gif",
               insertCallback: function(data){
                 MacroDialog.insert( data );
                 window.close();

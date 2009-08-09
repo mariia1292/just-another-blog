@@ -29,7 +29,10 @@
  *
  */
 
- 
+
+div#load {
+  margin-top: 100px;
+}
 div.mbOverview {
   clear: both;
   padding: 5px;
