@@ -217,7 +217,7 @@ public class MacroBrowserAsyncMapping extends FinalMapping
           ContentObject co = getContentObject(request);
           Class<? extends MacroWidget> bodyWidget = info.getBodyWidget();
 
-          if (bodyWidget != null)
+          if (bodyWidget != null && ! MacroWidget.class.equals( bodyWidget ))
           {
             String bodyEl = getFormElement(request, bodyWidget, co,
                                            WIDGET_BODY, info.getWidgetParam());
