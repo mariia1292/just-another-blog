@@ -8,8 +8,8 @@
 <!-- You can turn off the Compile on Save (or Deploy on Save) setting -->
 <!-- in the project's Project Properties dialog box.-->
 <project name="OfficePlugin" default="default" basedir=".">
-    <description>Builds, tests, and runs the project OfficePlugin.</description>
-    <import file="nbproject/build-impl.xml"/>
+  <description>Builds, tests, and runs the project OfficePlugin.</description>
+  <import file="nbproject/build-impl.xml"/>
     <!--
 
     There exist several targets which are by default empty and which can be 
@@ -71,4 +71,13 @@
     nbproject/build-impl.xml file. 
 
     -->
+  <target name="-pre-jar">
+    <taskdef name="yuicompress" classname="sonia.ant.YuiCompressTask" classpath="${libs.YuiCompress.classpath}:../../SoniaAnt/dist/SoniaAnt.jar" />
+    <yuicompress replaceSourceFiles="true">
+      <fileset dir="${build.classes.dir}">
+        <include name="jab/resource/syntax/*/*" />
+      </fileset>
+    </yuicompress>
+  </target>
+
 </project>
