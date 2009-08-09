@@ -45,10 +45,14 @@
     var defaults = {
       defaultIcon : "#",
       insertLabel : "Insert",
-      backLabel : "Back",
+      listLabel : "Back",
+      detailLabel : "Back",
       previewLabel : "Preview",
       loadingImage : null,
-      insertCallback : function(){}
+      insertCallback : function(){},
+      listViewCallback : function(){},
+      detailViewCallback : function(){},
+      previewCallback : function(){}
     };
 
     options = $.extend({},defaults, options);
@@ -65,6 +69,7 @@
         $.each( result, function(index, content){
           $field.append(createMacro(content));
         });
+        options.listViewCallback();
       });
     }
 
@@ -116,6 +121,7 @@
         $.each(result, function(index, content){
           $field.append( createDetailMacro( content ) );
         });
+        options.detailViewCallback();
       });
     }
 
@@ -133,8 +139,8 @@
       ).append(
         $form
       );
-      //appendPreviewButton();
       appendInsertButton();
+      appendPreviewButton();
       appendListButton();
     }
 
@@ -145,7 +151,7 @@
     }
 
     function appendListButton(){
-      $field.append( $("<button />").text(options.backLabel).click(function(){
+      $field.append( $("<button />").text(options.listLabel).click(function(){
         listView();
       }));
     }
@@ -153,6 +159,12 @@
     function appendInsertButton(){
       $field.append( $("<button />").text(options.insertLabel).click(function(){
         insert();
+      }));
+    }
+
+    function appendDetailButton(){
+      $field.append( $("<button />").text(options.detailLabel).click(function(){
+        detailView(detailMacro)
       }));
     }
 
@@ -200,9 +212,17 @@
     }
 
     function preview(){
+      loadScreen();
       var parameters = { "action": "preview" };
       parameters = extendParameters(parameters);
-      $.post(url, parameters);
+      $.post(url, parameters, function(data){
+        clearLoadScreen();
+        $field.append(
+          $("<div />").addClass("mbPreview").html(data)
+        );
+        appendDetailButton();
+        options.previewCallback();
+      });
     }
 
     function insert(){
