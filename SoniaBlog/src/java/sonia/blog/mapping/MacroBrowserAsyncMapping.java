@@ -464,23 +464,15 @@ public class MacroBrowserAsyncMapping extends FinalMapping
 
       MacroResult result = parser.parseText(env, macroString);
       List<WebResource> resources = getResources(result);
-      List<WebResource> serviceResources = getServiceResources();
-
-      if (Util.hasContent(serviceResources))
-      {
-        resources.addAll(serviceResources);
-      }
 
       Collections.sort(resources);
 
-      writer.println( "<html><head><title>Preview</title>" );
       for (WebResource resource : Util.unique(resources))
       {
         writer.println(resource.toHTML());
       }
-      writer.println("</head><body>");
+
       writer.println(result.getText());
-      writer.println("</body></html>");
     }
   }
 
