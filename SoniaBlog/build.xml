@@ -133,8 +133,8 @@
     <taskdef name="yuicompress" classname="sonia.ant.YuiCompressTask" classpath="${libs.YuiCompress.classpath}:../SoniaAnt/dist/SoniaAnt.jar" />
     <yuicompress replaceSourceFiles="true">
       <fileset dir="${build.web.dir}/">
-        <include name="resources/jquery/plugins/js/autocomplete.js" />
-        <include name="resources/jquery/plugins/css/autocomplete.css" />
+        <include name="resources/jquery/plugins/js/*.js" />
+        <include name="resources/jquery/plugins/css/*.css" />
         <include name="resources/tiny_mce/plugins/attachment/editor_plugin.js" />
         <include name="resources/tiny_mce/plugins/attachment/*/*.js" />
         <include name="resources/tiny_mce/plugins/imgbrowser/editor_plugin.js" />

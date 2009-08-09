@@ -30,20 +30,24 @@
  */
 
  
-ul.autocomplete {
-  background-color: #ffffff;
-  border: 1px solid black;
+div.mbOverview {
+  clear: both;
+  padding: 5px;
+}
+div.mbOverview a {
+  float: left;
+}
+div.mbOverviewText {
+  float: left;
+  margin-left: 6px;
+}
+div.mbOverviewText p {
   padding: 0;
   margin: 0;
-  position: absolute;
 }
-ul.autocomplete li {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  text-align: left;
-  background-color: #ffffff;
+div.mbDetailParam {
+  margin-bottom: 3px;
 }
-ul.autocomplete li.selected {
-  background-color: #cccccc;
+span.mbDetailParamLabel {
+  margin-right: 5px;
 }

@@ -129,6 +129,11 @@ public class AsyncMapping extends FinalMapping
         {
           navigationOptions(request, response);
         }
+        else if (provider.equals("mb"))
+        {
+          new MacroBrowserAsyncMapping().handleFinalMapping(request, response,
+                  param);
+        }
       }
       else
       {

@@ -12,15 +12,7 @@
             <renderer-type>sonia.blog.header.renderer</renderer-type>
         </component>
     </tag>
-
-    <tag>
-        <tag-name>widget</tag-name>
-        <component>
-            <component-type>sonia.blog.widget</component-type>
-            <renderer-type>sonia.blog.widget.renderer</renderer-type>
-        </component>
-    </tag>
-
+    
     <tag>
         <tag-name>calendar</tag-name>
         <component>
