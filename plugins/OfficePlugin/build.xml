@@ -72,12 +72,13 @@
 
     -->
   <target name="-pre-jar">
-    <taskdef name="yuicompress" classname="sonia.ant.YuiCompressTask" classpath="${libs.YuiCompress.classpath}:../../SoniaAnt/dist/SoniaAnt.jar" />
+    <!--<taskdef name="yuicompress" classname="sonia.ant.YuiCompressTask" classpath="${libs.YuiCompress.classpath}:../../SoniaAnt/dist/SoniaAnt.jar" />
     <yuicompress replaceSourceFiles="true">
       <fileset dir="${build.classes.dir}">
-        <include name="jab/resource/syntax/*/*" />
+        <include name="jab/resource/syntax/scripts/*.js" />
+        <include name="jab/resource/syntax/styles/*.css" />
       </fileset>
-    </yuicompress>
+    </yuicompress>-->
   </target>
 
 </project>
