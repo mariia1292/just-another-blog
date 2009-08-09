@@ -152,7 +152,7 @@ public class FLVMacro extends AbstractBlogMacro implements WebMacro
     displayName = "macro.flv.id.displayName",
     description = "macro.flv.id.description",
     widget = AttachmentWidget.class,
-    widgetParam = "filter=.*\\.(flv|f4v|avi)"
+    widgetParam = "filter=.*\\.(flv|f4v|f4p|f4a|f4b|mp4|m4v)"
   )
   public void setId(Long id)
   {
