@@ -4,8 +4,10 @@
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:t="http://myfaces.apache.org/tomahawk"
-      xmlns:c="http://java.sun.com/jstl/core">
+      xmlns:c="http://java.sun.com/jstl/core"
+      xmlns:blog="http://jab.nitilon.org/blog/">
   <head>
+    <blog:header comments="false" />
     <script type="text/javascript" src="${facesContext.externalContext.requestContextPath}/resources/tiny_mce/tiny_mce_popup.js"></script>
     <ui:insert name="head" />
   </head>

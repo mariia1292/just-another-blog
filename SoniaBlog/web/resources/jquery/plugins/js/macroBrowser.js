@@ -59,6 +59,7 @@
 
     var $field = $(field);
     var detaiMacro = null;
+    var formParamters = null;
 
     listView();
 
@@ -122,6 +123,7 @@
           $field.append( createDetailMacro( content ) );
         });
         options.detailViewCallback();
+        writeFormParameters();
       });
     }
 
@@ -211,10 +213,31 @@
       return parameters;
     }
 
+    function readFormParameters(){
+      formParamters = [];
+      $("form [name]").each(function(i){
+        $this = $(this);
+        formParamters.push({ 
+          name: $this.attr("name"),
+          value: $this.val()
+        });
+      });
+    }
+
+    function writeFormParameters(){
+      if ( formParamters != null ){
+        $.each(formParamters, function(i, parameter){
+          $("form [name=" + parameter.name + "]").val( parameter.value );
+        });
+      }
+      formParamters = null;
+    }
+
     function preview(){
-      loadScreen();
+      readFormParameters();
       var parameters = { "action": "preview" };
       parameters = extendParameters(parameters);
+      loadScreen();
       $.post(url, parameters, function(data){
         clearLoadScreen();
         $field.append(
