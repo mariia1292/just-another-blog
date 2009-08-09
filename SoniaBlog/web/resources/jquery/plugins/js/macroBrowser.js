@@ -47,6 +47,7 @@
       insertLabel : "Insert",
       backLabel : "Back",
       previewLabel : "Preview",
+      loadingImage : null,
       insertCallback : function(){}
     };
 
@@ -58,12 +59,28 @@
     listView();
 
     function listView(){
-      $field.empty();
+      loadScreen();
       $.getJSON( url + "?action=list", function(result){
+        clearLoadScreen();
         $.each( result, function(index, content){
           $field.append(createMacro(content));
         });
       });
+    }
+
+    function clearLoadScreen(){
+      $("div#load").remove();
+    }
+
+    function loadScreen(){
+      $field.empty();
+      if ( options.loadingImage != null ){
+        $field.append(
+          $("<div />").attr("id", "load").css("text-align", "center").append(
+            $("<img />").attr("src", options.loadingImage)
+          )
+        );
+      }
     }
 
     function getIcon(content){
@@ -92,9 +109,10 @@
     }
 
     function detailView(name){
-      $field.empty();
+      loadScreen();
       detailMacro = name;
       $.getJSON(url + "?action=detail&name=" + name, function(result){
+        clearLoadScreen();
         $.each(result, function(index, content){
           $field.append( createDetailMacro( content ) );
         });
