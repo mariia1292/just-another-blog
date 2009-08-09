@@ -35,10 +35,16 @@ package sonia.blog.mapping;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import org.apache.commons.lang.StringEscapeUtils;
+
 import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.app.BlogRequest;
 import sonia.blog.api.app.BlogResponse;
+import sonia.blog.api.app.Constants;
 import sonia.blog.api.exception.BlogException;
+import sonia.blog.api.link.LinkBuilder;
+import sonia.blog.api.macro.WebMacro;
+import sonia.blog.api.macro.WebResource;
 import sonia.blog.api.macro.browse.BlogMacroWidget;
 import sonia.blog.api.mapping.FinalMapping;
 import sonia.blog.entity.ContentObject;
@@ -49,10 +55,13 @@ import sonia.blog.wui.PageAuthorBean;
 
 import sonia.macro.Macro;
 import sonia.macro.MacroParser;
+import sonia.macro.MacroResult;
 import sonia.macro.browse.MacroInformation;
 import sonia.macro.browse.MacroInformationParameter;
 import sonia.macro.browse.MacroInformationProvider;
 import sonia.macro.browse.MacroWidget;
+
+import sonia.plugin.service.ServiceReference;
 
 import sonia.util.Util;
 
@@ -62,14 +71,16 @@ import java.io.IOException;
 import java.io.PrintWriter;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletResponse;
-import org.apache.commons.lang.StringEscapeUtils;
 
 /**
  *
@@ -102,6 +113,75 @@ public class MacroBrowserAsyncMapping extends FinalMapping
   /** Field description */
   private static Logger logger =
     Logger.getLogger(MacroBrowserAsyncMapping.class.getName());
+
+  //~--- get methods ----------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   * @param request
+   * @param name
+   *
+   * @return
+   */
+  public String getMacroString(BlogRequest request, String name)
+  {
+    StringBuffer writer = new StringBuffer();
+    MacroParser parser = BlogContext.getInstance().getMacroParser();
+    Class<? extends Macro> macroClass = parser.getMacro(name);
+    MacroInformation info =
+      parser.getInformationProvider().getInformation(macroClass,
+        request.getLocale());
+
+    writer.append("{").append(name);
+
+    List<MacroInformationParameter> parameters = info.getParameter();
+    List<String> resultParamerters = new ArrayList<String>();
+
+    for (MacroInformationParameter param : parameters)
+    {
+      String paramName = param.getName();
+      String paramValue = request.getParameter(paramName);
+
+      if (Util.hasContent(paramName) && Util.hasContent(paramValue))
+      {
+        resultParamerters.add(
+            new StringBuffer(paramName).append("=").append(
+              paramValue).toString());
+      }
+    }
+
+    boolean first = true;
+
+    for (String param : resultParamerters)
+    {
+      if (first)
+      {
+        writer.append(":");
+        first = false;
+      }
+      else
+      {
+        writer.append(";");
+      }
+
+      writer.append(param);
+    }
+
+    writer.append("}");
+
+    String body = request.getParameter(WIDGET_BODY);
+
+    if (body != null)
+    {
+      writer.append(escape(body));
+    }
+
+    writer.append("{/").append(name).append("}");
+
+    return writer.toString();
+  }
 
   //~--- methods --------------------------------------------------------------
 
@@ -186,6 +266,21 @@ public class MacroBrowserAsyncMapping extends FinalMapping
    * Method description
    *
    *
+   * @param result
+   *
+   * @return
+   */
+  private String escape(String result)
+  {
+    return StringEscapeUtils.escapeHtml(result).replace(" ",
+            "&nbsp;").replace("'", "&#039;").replace("\n",
+                              "<br />").replace("\r", "");
+  }
+
+  /**
+   * Method description
+   *
+   *
    * @param request
    * @param response
    * @param writer
@@ -217,7 +312,7 @@ public class MacroBrowserAsyncMapping extends FinalMapping
           ContentObject co = getContentObject(request);
           Class<? extends MacroWidget> bodyWidget = info.getBodyWidget();
 
-          if (bodyWidget != null && ! MacroWidget.class.equals( bodyWidget ))
+          if ((bodyWidget != null) &&!MacroWidget.class.equals(bodyWidget))
           {
             String bodyEl = getFormElement(request, bodyWidget, co,
                                            WIDGET_BODY, info.getWidgetParam());
@@ -347,7 +442,47 @@ public class MacroBrowserAsyncMapping extends FinalMapping
    * @param writer
    */
   private void handlePreviewAction(BlogRequest request, BlogResponse response,
-                                   PrintWriter writer) {}
+                                   PrintWriter writer)
+  {
+    response.setContentType("text/html");
+
+    String name = request.getParameter(PARAMETER_NAME);
+
+    if (Util.hasContent(name))
+    {
+      String macroString = getMacroString(request, name);
+      MacroParser parser = BlogContext.getInstance().getMacroParser();
+      Map<String, Object> env = new HashMap<String, Object>();
+
+      env.put("object", getContentObject(request));
+      env.put("request", request);
+      env.put("blog", request.getCurrentBlog());
+
+      LinkBuilder builder = BlogContext.getInstance().getLinkBuilder();
+
+      env.put("linkBase", builder.buildLink(request, "/"));
+
+      MacroResult result = parser.parseText(env, macroString);
+      List<WebResource> resources = getResources(result);
+      List<WebResource> serviceResources = getServiceResources();
+
+      if (Util.hasContent(serviceResources))
+      {
+        resources.addAll(serviceResources);
+      }
+
+      Collections.sort(resources);
+
+      writer.println( "<html><head><title>Preview</title>" );
+      for (WebResource resource : Util.unique(resources))
+      {
+        writer.println(resource.toHTML());
+      }
+      writer.println("</head><body>");
+      writer.println(result.getText());
+      writer.println("</body></html>");
+    }
+  }
 
   /**
    * Method description
@@ -361,70 +496,13 @@ public class MacroBrowserAsyncMapping extends FinalMapping
                                   PrintWriter writer)
   {
     response.setContentType("text/plain");
+
     String name = request.getParameter(PARAMETER_NAME);
 
     if (Util.hasContent(name))
     {
-      MacroParser parser = BlogContext.getInstance().getMacroParser();
-      Class<? extends Macro> macroClass = parser.getMacro(name);
-      MacroInformation info =
-        parser.getInformationProvider().getInformation(macroClass,
-          request.getLocale());
-
-      writer.append("{").append(name);
-
-      List<MacroInformationParameter> parameters = info.getParameter();
-      List<String> resultParamerters = new ArrayList<String>();
-
-      for (MacroInformationParameter param : parameters)
-      {
-        String paramName = param.getName();
-        String paramValue = request.getParameter(paramName);
-
-        if (Util.hasContent(paramName) && Util.hasContent(paramValue))
-        {
-          resultParamerters.add(
-              new StringBuffer(paramName).append("=").append(
-                paramValue).toString());
-        }
-      }
-      boolean first = true;
-      for ( String param : resultParamerters )
-      {
-        if ( first )
-        {
-          writer.append(":");
-          first = false;
-        }
-        else
-        {
-          writer.append(";");
-        }
-        writer.append(param);
-      }
-      writer.append("}");
-      String body = request.getParameter( WIDGET_BODY );
-      if ( body != null )
-      {
-        writer.append(escape(body));
-      }
-      writer.append( "{/" ).append(name).append("}");
+      writer.write(getMacroString(request, name));
     }
-  }
-
-    /**
-   * Method description
-   *
-   *
-   * @param result
-   *
-   * @return
-   */
-  private String escape(String result)
-  {
-    return StringEscapeUtils.escapeHtml(result).replace(" ",
-            "&nbsp;").replace("'", "&#039;").replace("\n",
-                              "<br />").replace("\r", "");
   }
 
   /**
@@ -518,18 +596,74 @@ public class MacroBrowserAsyncMapping extends FinalMapping
    * Method description
    *
    *
+   * @param result
+   *
+   * @return
+   */
+  private List<WebResource> getResources(MacroResult result)
+  {
+    List<WebResource> resources = new ArrayList<WebResource>();
+    List<Macro> macros = result.getMacros();
+
+    if (Util.hasContent(macros))
+    {
+      for (Macro macro : macros)
+      {
+        if (macro instanceof WebMacro)
+        {
+          WebMacro webMacro = (WebMacro) macro;
+          List<WebResource> wr = webMacro.getResources();
+
+          if (Util.hasContent(wr))
+          {
+            resources.addAll(wr);
+          }
+        }
+      }
+    }
+
+    return resources;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  private List<WebResource> getServiceResources()
+  {
+    List<WebResource> result = null;
+    ServiceReference<WebResource> reference =
+      BlogContext.getInstance().getServiceRegistry().get(WebResource.class,
+        Constants.SERVICE_WEBRESOURCE);
+
+    if (reference != null)
+    {
+      result = reference.getAll();
+    }
+
+    return result;
+  }
+
+  /**
+   * Method description
+   *
+   *
    * @param clazz
    *
    * @return
    */
   private BlogMacroWidget getWidget(Class<? extends MacroWidget> clazz)
   {
-    if ( logger.isLoggable(Level.FINEST) )
+    if (logger.isLoggable(Level.FINEST))
     {
       StringBuffer log = new StringBuffer();
-      log.append( "create an instance of " ).append( clazz.getName() );
+
+      log.append("create an instance of ").append(clazz.getName());
       logger.finest(log.toString());
     }
+
     BlogMacroWidget widget = null;
 
     try
