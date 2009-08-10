@@ -73,7 +73,7 @@ public class CacheManager
    */
   public CacheManager()
   {
-    caches = new HashMap<String, Cache>();
+    caches = new HashMap<String, ObjectCache>();
   }
 
   //~--- methods --------------------------------------------------------------
@@ -84,7 +84,7 @@ public class CacheManager
    *
    * @param cache
    */
-  public void add(Cache cache)
+  public void add(ObjectCache cache)
   {
     String name = cache.getName();
 
@@ -115,9 +115,9 @@ public class CacheManager
   {
     if (!caches.isEmpty())
     {
-      Collection<Cache> cacheValues = caches.values();
+      Collection<ObjectCache> cacheValues = caches.values();
 
-      for (Cache cache : cacheValues)
+      for (ObjectCache cache : cacheValues)
       {
         cache.clear();
       }
@@ -175,7 +175,7 @@ public class CacheManager
    */
   public void remove(String name)
   {
-    Cache c = caches.remove(name);
+    ObjectCache c = caches.remove(name);
 
     if ((c != null) && logger.isLoggable(Level.FINEST))
     {
@@ -196,7 +196,7 @@ public class CacheManager
    *
    * @return
    */
-  public Cache get(String name)
+  public ObjectCache get(String name)
   {
     return caches.get(name);
   }
@@ -219,7 +219,7 @@ public class CacheManager
       try
       {
         String name = null;
-        Class<? extends Cache> clazz = null;
+        Class<? extends ObjectCache> clazz = null;
         Map<String, String> parameters = new HashMap<String, String>();
 
         for (int i = 0; i < children.getLength(); i++)
@@ -233,7 +233,7 @@ public class CacheManager
           }
           else if ("class".equals(childName))
           {
-            clazz = (Class<? extends Cache>) Class.forName(
+            clazz = (Class<? extends ObjectCache>) Class.forName(
               child.getTextContent().trim());
           }
           else if ("parameter".equals(childName))
@@ -266,7 +266,7 @@ public class CacheManager
 
             if (constructor != null)
             {
-              Cache cache = (Cache) constructor.newInstance(name, parameters);
+              ObjectCache cache = (ObjectCache) constructor.newInstance(name, parameters);
 
               add(cache);
             }
@@ -330,5 +330,5 @@ public class CacheManager
   //~--- fields ---------------------------------------------------------------
 
   /** Field description */
-  private Map<String, Cache> caches;
+  private Map<String, ObjectCache> caches;
 }

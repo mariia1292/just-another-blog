@@ -43,7 +43,7 @@ import java.util.Set;
  * @author Sebastian Sdorra
  *
  */
-public abstract class AbstractCache implements Cache
+public abstract class AbstractCache implements ObjectCache
 {
 
   /**
