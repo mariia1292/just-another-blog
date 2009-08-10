@@ -38,6 +38,7 @@ package sonia.blog.dao.jpa;
 import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.app.BlogSession;
 import sonia.blog.api.app.Constants;
+import sonia.blog.api.dao.DAOListener.Action;
 import sonia.blog.api.dao.EntryDAO;
 import sonia.blog.entity.Attachment;
 import sonia.blog.entity.Blog;
@@ -62,7 +63,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
-import sonia.blog.api.dao.DAOListener.Action;
 
 /**
  *
@@ -563,6 +563,7 @@ public class JpaEntryDAO extends JpaGenericDAO<Entry> implements EntryDAO
   public boolean remove(BlogSession session, Entry item)
   {
     fireEvent(Action.PREREMOVE, item);
+
     boolean result = false;
     EntityManager em = createEntityManager();
 

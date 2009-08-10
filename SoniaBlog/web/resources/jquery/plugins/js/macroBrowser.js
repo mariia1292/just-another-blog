@@ -58,8 +58,8 @@
     options = $.extend({},defaults, options);
 
     var $field = $(field);
-    var detaiMacro = null;
-    var formParamters = null;
+    var detailMacro = null;
+    var formParameters = null;
 
     listView();
 
@@ -214,35 +214,56 @@
     }
 
     function readFormParameters(){
-      formParamters = [];
+      formParameters = [];
       $("form [name]").each(function(i){
         $this = $(this);
-        formParamters.push({ 
+        var value = $this.val();
+        if ( $this.is(":checkbox" )){
+          if ( $this.is(":checked") ){
+            value = true;
+          }
+          else{
+            value = false;
+          }
+        }
+        formParameters.push({
           name: $this.attr("name"),
-          value: $this.val()
+          value: value
         });
       });
     }
 
     function writeFormParameters(){
-      if ( formParamters != null ){
-        $.each(formParamters, function(i, parameter){
-          $("form [name=" + parameter.name + "]").val( parameter.value );
+      if ( formParameters != null ){
+        $.each(formParameters, function(i, parameter){
+          var $input = $("form [name=" + parameter.name + "]");
+          if ( $input.is(":checkbox")){
+            if ( parameter.value == true ){
+              $input.attr("checked", "checked");
+            } else {
+              $input.remove(":checked");
+            }
+          } else {
+            $input.val( parameter.value );
+          }
         });
       }
-      formParamters = null;
+      formParameters = null;
     }
 
     function preview(){
       readFormParameters();
-      var parameters = { "action": "preview" };
+      var parameters = { "action": "getPreview" };
       parameters = extendParameters(parameters);
       loadScreen();
       $.post(url, parameters, function(data){
         clearLoadScreen();
         $field.append(
-          $("<div />").addClass("mbPreview").html(data)
+          $("<div />").addClass("mbPreview").append(
+            $("<iframe />").attr("src",url + "?action=preview&key="+data)
+          )
         );
+        appendInsertButton();
         appendDetailButton();
         options.previewCallback();
       });
@@ -250,7 +271,14 @@
 
     function insert(){
       var parameters = { "action": "result" };
-      parameters = extendParameters(parameters);
+      if (formParameters != null){
+        parameters["name"] = detailMacro;
+        $.each(formParameters, function(i,parameter){
+          parameters[parameter.name] = parameter.value;
+        });
+      } else {
+        parameters = extendParameters(parameters);
+      }
       $.post(url, parameters, function(data){
         options.insertCallback(data);
       });

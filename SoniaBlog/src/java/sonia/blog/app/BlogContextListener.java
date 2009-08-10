@@ -48,6 +48,9 @@ import sonia.blog.authentication.DefaultLoginModule;
 import sonia.blog.mapping.DefaultMappingHandler;
 import sonia.blog.util.BlogUtil;
 
+import sonia.cache.Cache;
+import sonia.cache.CacheInjector;
+
 import sonia.config.Config;
 import sonia.config.ConfigInjector;
 import sonia.config.ModifyableConfigurationMBean;
@@ -290,6 +293,9 @@ public class BlogContextListener implements ServletContextListener
     provider.registerInjector(Context.class, new ObjectInjector(context));
     provider.registerInjector(Dao.class,
                               new ObjectInjector(BlogContext.getDAOFactory()));
+    provider.registerInjector(
+        Cache.class,
+        new CacheInjector(BlogContext.getInstance().getCacheManager()));
     context.getMacroParser().setInjectionProvider(provider);
   }
 

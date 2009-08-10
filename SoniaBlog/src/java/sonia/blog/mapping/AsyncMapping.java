@@ -51,7 +51,7 @@ import sonia.blog.entity.Blog;
 import sonia.blog.entity.Page;
 import sonia.blog.entity.Role;
 
-import sonia.cache.Cache;
+import sonia.cache.ObjectCache;
 
 import sonia.rss.AbstractBase;
 import sonia.rss.Channel;
@@ -129,11 +129,6 @@ public class AsyncMapping extends FinalMapping
         {
           navigationOptions(request, response);
         }
-        else if (provider.equals("mb"))
-        {
-          new MacroBrowserAsyncMapping().handleFinalMapping(request, response,
-                  param);
-        }
       }
       else
       {
@@ -167,7 +162,7 @@ public class AsyncMapping extends FinalMapping
 
       cacheKey.append(urlParam).append(":").append(type);
 
-      Cache cache =
+      ObjectCache cache =
         BlogContext.getInstance().getCacheManager().get(Constants.CACHE_FEED);
 
       if (cache != null)

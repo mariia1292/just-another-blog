@@ -110,4 +110,9 @@
     <class>sonia.blog.mapping.AsyncMapping</class>
   </mapping>
 
+  <mapping>
+    <regex>^/personal/macrobrowser\.json$</regex>
+    <class>sonia.blog.mapping.MacroBrowserMapping</class>
+  </mapping>
+
 </mappings>
