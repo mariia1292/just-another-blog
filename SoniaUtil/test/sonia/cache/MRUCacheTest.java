@@ -53,7 +53,7 @@ public class MRUCacheTest extends CacheTestBase
   @Test
   public void mruTest()
   {
-    Cache cache = getCache();
+    ObjectCache cache = getCache();
 
     assertTrue(cache.isEmpty());
     assertEquals("value1", cache.put("key1", "value1"));
@@ -80,7 +80,7 @@ public class MRUCacheTest extends CacheTestBase
    * @return
    */
   @Override
-  protected Cache getCache()
+  protected ObjectCache getCache()
   {
     return new MRUCache("junit", 5);
   }

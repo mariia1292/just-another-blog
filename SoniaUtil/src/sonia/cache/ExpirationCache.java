@@ -43,7 +43,7 @@ import java.util.Map;
  * @author Sebastian Sdorra
  *
  */
-public interface ExpirationCache extends Cache
+public interface ExpirationCache extends ObjectCache
 {
 
   /**

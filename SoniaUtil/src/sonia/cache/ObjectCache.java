@@ -44,7 +44,7 @@ import java.util.Set;
  * @author Sebastian Sdorra
  *
  */
-public interface Cache extends Serializable
+public interface ObjectCache extends Serializable
 {
 
   /**
