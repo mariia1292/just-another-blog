@@ -55,7 +55,7 @@ import sonia.blog.wui.BlogBean;
 import sonia.blog.wui.PageBean;
 import sonia.blog.wui.SearchBean;
 
-import sonia.cache.Cache;
+import sonia.cache.ObjectCache;
 
 import sonia.util.Util;
 
@@ -124,7 +124,7 @@ public class SearchMapping extends ScrollableFilterMapping
     {
       Blog blog = request.getCurrentBlog();
       Locale locale = request.getLocale();
-      Cache cache =
+      ObjectCache cache =
         BlogContext.getInstance().getCacheManager().get(Constants.CACHE_SEARCH);
       CacheKey key = new CacheKey(blog, searchParam);
       List<SearchCategory> categories = (List<SearchCategory>) cache.get(key);

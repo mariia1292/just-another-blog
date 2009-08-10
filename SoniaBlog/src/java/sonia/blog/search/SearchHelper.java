@@ -44,8 +44,8 @@ import org.w3c.dom.Comment;
 import sonia.blog.entity.ContentObject;
 import sonia.blog.entity.Entry;
 import sonia.blog.entity.Page;
-
 import sonia.blog.entity.PermaObject;
+
 import sonia.util.Util;
 
 /**
@@ -81,8 +81,8 @@ public class SearchHelper
   {
     Document doc = new Document();
 
-    doc.add(new Field("tid", buildTypeId(entry),
-                      Field.Store.YES, Field.Index.NOT_ANALYZED));
+    doc.add(new Field("tid", buildTypeId(entry), Field.Store.YES,
+                      Field.Index.NOT_ANALYZED));
     doc.add(new Field("type", entry.getClass().getName(), Field.Store.YES,
                       Field.Index.NOT_ANALYZED));
     doc.add(new Field("id", entry.getId().toString(), Field.Store.YES,
@@ -103,21 +103,23 @@ public class SearchHelper
     return doc;
   }
 
-
   /**
    * Method description
    *
    *
    *
-   * @param entry
+   *
+   * @param object
    *
    * @return
    */
   public static String buildTypeId(PermaObject object)
   {
     StringBuffer result = new StringBuffer();
-    result.append( object.getClass().getName() );
-    result.append("-").append( object.getId() );
+
+    result.append(object.getClass().getName());
+    result.append("-").append(object.getId());
+
     return result.toString();
   }
 
