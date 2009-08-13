@@ -4,7 +4,8 @@
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:t="http://myfaces.apache.org/tomahawk"
-      xmlns:blog="http://jab.nitilon.org/blog/">
+      xmlns:blog="http://jab.nitilon.org/blog/"
+      xmlns:u1="http://jab.nitilon.org/blog/">
   <f:view contentType="text/html">
     <head>
 
@@ -96,7 +97,11 @@
                     <blog:search autoComplete="true" styleClass="searchForm" label="#{label.search}" />
 
                     <h3><h:outputText value="#{label.calendar}" /></h3>
-                    <blog:calendar styleClass="calendar" />
+                    <blog:calendar enableAjax="true" ajaxUrl="/async/calendar.json"
+                                   dayUrlPattern="/date/{0}-{1}-{2}/index.jab"
+                                   monthUrlPattern="/date/{0}-{1}/index.jab"
+                                   yearUrlPattern="/date/{0}/index.jab"
+                                   loadImage="/resources/jquery/plugins/img/loading.gif" />
 
                     <h:form id="extraNavigationForm">
                       <h3><h:outputText value="#{label.extraNavigation}" /></h3>
