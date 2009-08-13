@@ -53,9 +53,9 @@
               </a>
               <span class="hideme">.</span>
               <!-- end: skip link navigation -->
-            <!--<span>
-              <a href="#">Login</a> | <a href="#">Contact</a> | <a href="#">Imprint</a>
-            </span>-->
+              <!--<span>
+                <a href="#">Login</a> | <a href="#">Contact</a> | <a href="#">Imprint</a>
+              </span>-->
             </div>
 
           </div>
@@ -106,7 +106,11 @@
                     <blog:search label="#{label.search}" />
 
                     <h3><h:outputText value="#{label.calendar}" /></h3>
-                    <blog:calendar styleClass="calendar" />
+                    <blog:calendar enableAjax="true" ajaxUrl="/async/calendar.json"
+                                   dayUrlPattern="/date/{0}-{1}-{2}/index.jab"
+                                   monthUrlPattern="/date/{0}-{1}/index.jab"
+                                   yearUrlPattern="/date/{0}/index.jab"
+                                   loadImage="/resources/jquery/plugins/img/loading.gif" />
 
                     <h:form id="extraNavigationForm">
                       <h3><h:outputText value="#{label.extraNavigation}" /></h3>
@@ -142,6 +146,6 @@
 
       </div>
     </body>
-    
+
   </f:view>
 </html>

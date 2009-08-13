@@ -75,14 +75,14 @@
     }
 
     function clearLoadScreen(){
-      $("div#load").remove();
+      $("div.load").remove();
     }
 
     function loadScreen(){
       $field.empty();
       if ( options.loadingImage != null ){
         $field.append(
-          $("<div />").attr("id", "load").css("text-align", "center").append(
+          $("<div />").addClass("load").append(
             $("<img />").attr("src", options.loadingImage)
           )
         );

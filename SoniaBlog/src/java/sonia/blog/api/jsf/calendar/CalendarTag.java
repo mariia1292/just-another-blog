@@ -37,12 +37,36 @@ package sonia.blog.api.jsf.calendar;
 
 import sonia.jsf.base.BaseTag;
 
+//~--- JDK imports ------------------------------------------------------------
+
+import javax.el.ValueExpression;
+
+import javax.faces.component.UIComponent;
+
 /**
  *
  * @author Sebastian Sdorra
  */
 public class CalendarTag extends BaseTag
 {
+
+  /**
+   * Method description
+   *
+   */
+  @Override
+  public void release()
+  {
+    super.release();
+    enableAjax = null;
+    ajaxUrl = null;
+    dayUrlPattern = null;
+    monthUrlPattern = null;
+    yearUrlPattern = null;
+    loadImage = null;
+  }
+
+  //~--- get methods ----------------------------------------------------------
 
   /**
    * Method description
@@ -67,4 +91,134 @@ public class CalendarTag extends BaseTag
   {
     return CalendarComponent.RENDERER;
   }
+
+  //~--- set methods ----------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   * @param ajaxUrl
+   */
+  public void setAjaxUrl(ValueExpression ajaxUrl)
+  {
+    this.ajaxUrl = ajaxUrl;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param dayUrlPattern
+   */
+  public void setDayUrlPattern(ValueExpression dayUrlPattern)
+  {
+    this.dayUrlPattern = dayUrlPattern;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param enableAjax
+   */
+  public void setEnableAjax(ValueExpression enableAjax)
+  {
+    this.enableAjax = enableAjax;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param loadImage
+   */
+  public void setLoadImage(ValueExpression loadImage)
+  {
+    this.loadImage = loadImage;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param monthUrlPattern
+   */
+  public void setMonthUrlPattern(ValueExpression monthUrlPattern)
+  {
+    this.monthUrlPattern = monthUrlPattern;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param yearUrlPattern
+   */
+  public void setYearUrlPattern(ValueExpression yearUrlPattern)
+  {
+    this.yearUrlPattern = yearUrlPattern;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param component
+   */
+  @Override
+  protected void setProperties(UIComponent component)
+  {
+    super.setProperties(component);
+
+    if (enableAjax != null)
+    {
+      component.setValueExpression("enableAjax", enableAjax);
+    }
+
+    if (ajaxUrl != null)
+    {
+      component.setValueExpression("ajaxUrl", ajaxUrl);
+    }
+
+    if (dayUrlPattern != null)
+    {
+      component.setValueExpression("dayUrlPattern", dayUrlPattern);
+    }
+
+    if (monthUrlPattern != null)
+    {
+      component.setValueExpression("monthUrlPattern", monthUrlPattern);
+    }
+
+    if (yearUrlPattern != null)
+    {
+      component.setValueExpression("yearUrlPattern", yearUrlPattern);
+    }
+
+    if (loadImage != null)
+    {
+      component.setValueExpression("loadImage", loadImage);
+    }
+  }
+
+  //~--- fields ---------------------------------------------------------------
+
+  /** Field description */
+  private ValueExpression ajaxUrl;
+
+  /** Field description */
+  private ValueExpression dayUrlPattern;
+
+  /** Field description */
+  private ValueExpression enableAjax;
+
+  /** Field description */
+  private ValueExpression loadImage;
+
+  /** Field description */
+  private ValueExpression monthUrlPattern;
+
+  /** Field description */
+  private ValueExpression yearUrlPattern;
 }

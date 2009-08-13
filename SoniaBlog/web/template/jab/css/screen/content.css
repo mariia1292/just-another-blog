@@ -230,12 +230,14 @@
   * Selection-Calendar
   * 
   */
-  table.calendar { border: 1px solid gray; }
-  table.calendar thead tr th,
-  table.calendar tbody tr td { text-align: center; margin: 0; padding: 3px 6px; }
-  table.calendar tbody tr td.today { border: 1px gray dashed;  }
-  table.calendar tbody tr td span.weekdayHeader,
-  table.calendar tbody tr td span.weekenddayHeader { font-weight: bold; border-bottom: 1px solid; }
+  div.calendar div.load { text-align: center; margin-top: 50px }
+  div.calendar table { border: 1px solid gray; }
+  div.calendar table thead tr th,
+  div.calendar table tbody tr td { text-align: center; margin: 0; padding: 3px 6px; }
+  div.calendar table tbody tr td.today { border: 1px gray dashed;  }
+  div.calendar table tbody tr td span.weekdayHeader,
+  div.calendar table tbody tr td span.weekenddayHeader { font-weight: bold; border-bottom: 1px solid; }
+  div.calendar a:hover { cursor: pointer; }
 
   /**
   * dashboard

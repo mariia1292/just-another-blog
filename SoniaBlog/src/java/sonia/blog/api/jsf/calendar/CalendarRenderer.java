@@ -37,6 +37,7 @@ package sonia.blog.api.jsf.calendar;
 
 import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.app.BlogRequest;
+import sonia.blog.api.link.LinkBuilder;
 import sonia.blog.entity.Blog;
 import sonia.blog.util.BlogUtil;
 
@@ -47,9 +48,11 @@ import sonia.jsf.base.BaseRenderer;
 
 import java.io.IOException;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.faces.component.UIComponent;
@@ -86,118 +89,41 @@ public class CalendarRenderer extends BaseRenderer
       throw new IllegalArgumentException("wrong component");
     }
 
-    BaseComponent calendar = (BaseComponent) component;
+    CalendarComponent calendar = (CalendarComponent) component;
 
     if (isRendered(context, calendar))
     {
-      GregorianCalendar cal = new GregorianCalendar();
-      int currentDay = cal.get(Calendar.DAY_OF_MONTH) - 1;
-
-      cal.set(Calendar.DAY_OF_MONTH, 1);
-
-      int month = cal.get(Calendar.MONTH) + 1;
-      int year = cal.get(Calendar.YEAR);
-      int weeks = cal.getActualMaximum(Calendar.WEEK_OF_MONTH);
-      int firstDay = cal.get(Calendar.DAY_OF_WEEK);
-      int daysOfMonth = cal.getActualMaximum(Calendar.DAY_OF_MONTH);
-      BlogRequest request =
-        (BlogRequest) context.getExternalContext().getRequest();
-      Blog blog = request.getCurrentBlog();
-      Date startDate = BlogUtil.createStartDate(year, month - 1);
-      Date endDate = BlogUtil.createEndDate(year, month - 1);
-      List<Date> dates = getEntryDates(blog, startDate, endDate);
-      ResponseWriter writer = context.getResponseWriter();
-
-      writer.startElement("table", component);
-
-      if (!isBlank(calendar.getStyleClass()))
+      if (calendar.isEnableAjax())
       {
-        writer.writeAttribute("class", calendar.getStyleClass(), null);
+        encodeAjaxCalendar(context, calendar);
       }
       else
       {
-        writer.writeAttribute("class", "jabCalendar", null);
+        encodeHtmlCalendar(context, calendar);
       }
+    }
+  }
 
-      if (!isBlank(calendar.getStyle()))
-      {
-        writer.writeAttribute("style", calendar.getStyle(), null);
-      }
+  /**
+   * Method description
+   *
+   *
+   * @param options
+   * @param lb
+   * @param request
+   * @param name
+   * @param value
+   */
+  private void appendUrlOption(List<String> options, LinkBuilder lb,
+                               BlogRequest request, String name, String value)
+  {
+    if (value != null)
+    {
+      StringBuffer option = new StringBuffer();
 
-      writer.startElement("thead", null);
-      writer.startElement("tr", null);
-      writer.startElement("th", null);
-      writer.writeAttribute("colspan", "7", null);
-      writer.startElement("a", null);
-      writer.writeAttribute("href", buildLink(null, month, year, request),
-                            null);
-      writer.write("" + month);
-      writer.endElement("a");
-      writer.write(" ");
-      writer.startElement("a", null);
-      writer.writeAttribute("href", buildLink(null, null, year, request), null);
-      writer.write("" + year);
-      writer.endElement("a");
-      writer.endElement("th");
-      writer.endElement("tr");
-      writer.endElement("thead");
-      writer.startElement("tbody", null);
-
-      // start WeedHeader
-      writer.startElement("tr", null);
-      printDayHeader(writer, "Mo", STYLE_WEEKDAYHEADER);
-      printDayHeader(writer, "Di", STYLE_WEEKDAYHEADER);
-      printDayHeader(writer, "Mi", STYLE_WEEKDAYHEADER);
-      printDayHeader(writer, "Do", STYLE_WEEKDAYHEADER);
-      printDayHeader(writer, "Fr", STYLE_WEEKDAYHEADER);
-      printDayHeader(writer, "Sa", STYLE_WEEKENDDAYHEADER);
-      printDayHeader(writer, "So", STYLE_WEEKENDDAYHEADER);
-      writer.endElement("tr");
-
-      // end WeedHeader
-      // start month
-      int counter = 0;
-
-      for (int i = 0; i < weeks; i++)
-      {
-        writer.startElement("tr", null);
-
-        for (int j = 0; j < 7; j++)
-        {
-          writer.startElement("td", null);
-
-          if (counter == currentDay)
-          {
-            writer.writeAttribute("class", STYLE_TODAY, null);
-          }
-
-          String style = (j < 5)
-                         ? STYLE_WEEKDAY
-                         : STYLE_WEEKENDDAY;
-
-          if (i == 0)
-          {
-            if (j >= firstDay - 2)
-            {
-              counter++;
-              printDay(writer, request, counter, month, year, style, dates);
-            }
-          }
-          else if ((counter > 0) && (counter < daysOfMonth))
-          {
-            counter++;
-            printDay(writer, request, counter, month, year, style, dates);
-          }
-
-          writer.endElement("td");
-        }
-
-        writer.endElement("tr");
-      }
-
-      // end month
-      writer.endElement("tbody");
-      writer.endElement("table");
+      option.append("\"").append(name).append("\": \"");
+      option.append(lb.buildLink(request, value)).append("\"");
+      options.add(option.toString());
     }
   }
 
@@ -231,6 +157,221 @@ public class CalendarRenderer extends BaseRenderer
     }
 
     return link + "/index.jab";
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param context
+   * @param calendar
+   *
+   * @throws IOException
+   */
+  private void encodeAjaxCalendar(FacesContext context,
+                                  CalendarComponent calendar)
+          throws IOException
+  {
+    ResponseWriter writer = context.getResponseWriter();
+
+    writer.startElement("div", calendar);
+    writer.writeAttribute("class", "calendar", null);
+    writer.endElement("div");
+    writer.startElement("script", calendar);
+    writer.writeAttribute("type", "text/javascript", null);
+
+    if (context.getExternalContext().getRequestMap().get(
+            "sonia.blog.resource.calendar") == null)
+    {
+      writer.write("$.getScript(\"");
+      writer.write(context.getExternalContext().getRequestContextPath());
+      writer.write("/resources/jquery/plugins/js/calendar.js");
+      writer.write("\", function(){ ");
+      encodeAjaxCalendarScript(context, calendar, writer);
+      writer.write("}); ");
+      context.getExternalContext().getRequestMap().put(
+          "sonia.blog.resource.calendar", Boolean.TRUE);
+    }
+    else
+    {
+      writer.write("$.ready(function(){");
+      encodeAjaxCalendarScript(context, calendar, writer);
+      writer.write("});");
+    }
+
+    writer.endElement("script");
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param context
+   * @param calendar
+   * @param writer
+   *
+   * @throws IOException
+   */
+  private void encodeAjaxCalendarScript(FacesContext context,
+          CalendarComponent calendar, ResponseWriter writer)
+          throws IOException
+  {
+    BlogRequest request =
+      BlogUtil.getBlogRequest(context.getExternalContext().getRequest());
+    LinkBuilder lb = BlogContext.getInstance().getLinkBuilder();
+
+    writer.write("$(\"div.calendar\").calendar(\"");
+    writer.write(lb.buildLink(request, calendar.getAjaxUrl()));
+    writer.write("\", {\n");
+
+    List<String> options = new ArrayList<String>();
+
+    appendUrlOption(options, lb, request, "dayUrlPattern",
+                    calendar.getDayUrlPattern());
+    appendUrlOption(options, lb, request, "monthUrlPattern",
+                    calendar.getMonthUrlPattern());
+    appendUrlOption(options, lb, request, "yearUrlPattern",
+                    calendar.getYearUrlPattern());
+    appendUrlOption(options, lb, request, "loadingImage",
+                    calendar.getLoadImage());
+
+    Iterator<String> optionIt = options.iterator();
+
+    while (optionIt.hasNext())
+    {
+      String option = optionIt.next();
+
+      writer.write(option);
+
+      if (optionIt.hasNext())
+      {
+        writer.write(",\n");
+      }
+    }
+
+    writer.write("});\n");
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param context
+   * @param calendar
+   *
+   * @throws IOException
+   */
+  private void encodeHtmlCalendar(FacesContext context,
+                                  CalendarComponent calendar)
+          throws IOException
+  {
+    GregorianCalendar cal = new GregorianCalendar();
+    int currentDay = cal.get(Calendar.DAY_OF_MONTH) - 1;
+
+    cal.set(Calendar.DAY_OF_MONTH, 1);
+
+    int month = cal.get(Calendar.MONTH) + 1;
+    int year = cal.get(Calendar.YEAR);
+    int weeks = cal.getActualMaximum(Calendar.WEEK_OF_MONTH);
+    int firstDay = cal.get(Calendar.DAY_OF_WEEK);
+    int daysOfMonth = cal.getActualMaximum(Calendar.DAY_OF_MONTH);
+    BlogRequest request =
+      (BlogRequest) context.getExternalContext().getRequest();
+    Blog blog = request.getCurrentBlog();
+    Date startDate = BlogUtil.createStartDate(year, month - 1);
+    Date endDate = BlogUtil.createEndDate(year, month - 1);
+    List<Date> dates = getEntryDates(blog, startDate, endDate);
+    ResponseWriter writer = context.getResponseWriter();
+
+    writer.startElement("table", calendar);
+
+    if (!isBlank(calendar.getStyleClass()))
+    {
+      writer.writeAttribute("class", calendar.getStyleClass(), null);
+    }
+    else
+    {
+      writer.writeAttribute("class", "jabCalendar", null);
+    }
+
+    if (!isBlank(calendar.getStyle()))
+    {
+      writer.writeAttribute("style", calendar.getStyle(), null);
+    }
+
+    writer.startElement("thead", null);
+    writer.startElement("tr", null);
+    writer.startElement("th", null);
+    writer.writeAttribute("colspan", "7", null);
+    writer.startElement("a", null);
+    writer.writeAttribute("href", buildLink(null, month, year, request), null);
+    writer.write("" + month);
+    writer.endElement("a");
+    writer.write(" ");
+    writer.startElement("a", null);
+    writer.writeAttribute("href", buildLink(null, null, year, request), null);
+    writer.write("" + year);
+    writer.endElement("a");
+    writer.endElement("th");
+    writer.endElement("tr");
+    writer.endElement("thead");
+    writer.startElement("tbody", null);
+
+    // start WeedHeader
+    writer.startElement("tr", null);
+    printDayHeader(writer, "Mo", STYLE_WEEKDAYHEADER);
+    printDayHeader(writer, "Di", STYLE_WEEKDAYHEADER);
+    printDayHeader(writer, "Mi", STYLE_WEEKDAYHEADER);
+    printDayHeader(writer, "Do", STYLE_WEEKDAYHEADER);
+    printDayHeader(writer, "Fr", STYLE_WEEKDAYHEADER);
+    printDayHeader(writer, "Sa", STYLE_WEEKENDDAYHEADER);
+    printDayHeader(writer, "So", STYLE_WEEKENDDAYHEADER);
+    writer.endElement("tr");
+
+    // end WeedHeader
+    // start month
+    int counter = 0;
+
+    for (int i = 0; i < weeks; i++)
+    {
+      writer.startElement("tr", null);
+
+      for (int j = 0; j < 7; j++)
+      {
+        writer.startElement("td", null);
+
+        if (counter == currentDay)
+        {
+          writer.writeAttribute("class", STYLE_TODAY, null);
+        }
+
+        String style = (j < 5)
+                       ? STYLE_WEEKDAY
+                       : STYLE_WEEKENDDAY;
+
+        if (i == 0)
+        {
+          if (j >= firstDay - 2)
+          {
+            counter++;
+            printDay(writer, request, counter, month, year, style, dates);
+          }
+        }
+        else if ((counter > 0) && (counter < daysOfMonth))
+        {
+          counter++;
+          printDay(writer, request, counter, month, year, style, dates);
+        }
+
+        writer.endElement("td");
+      }
+
+      writer.endElement("tr");
+    }
+
+    // end month
+    writer.endElement("tbody");
+    writer.endElement("table");
   }
 
   /**

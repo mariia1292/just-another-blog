@@ -37,6 +37,12 @@ package sonia.blog.api.jsf.calendar;
 
 import sonia.jsf.base.BaseComponent;
 
+//~--- JDK imports ------------------------------------------------------------
+
+import javax.el.ValueExpression;
+
+import javax.faces.context.FacesContext;
+
 /**
  *
  * @author Sebastian Sdorra
@@ -61,7 +67,96 @@ public class CalendarComponent extends BaseComponent
     setRendererType(RENDERER);
   }
 
+  //~--- methods --------------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   * @param context
+   * @param obj
+   */
+  @Override
+  public void restoreState(FacesContext context, Object obj)
+  {
+    state = (Object[]) obj;
+    super.restoreState(context, state[0]);
+    enableAjax = (Boolean) state[1];
+    ajaxUrl = (String) state[2];
+    dayUrlPattern = (String) state[3];
+    monthUrlPattern = (String) state[4];
+    yearUrlPattern = (String) state[5];
+    loadImage = (String) state[6];
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param context
+   *
+   * @return
+   */
+  @Override
+  public Object saveState(FacesContext context)
+  {
+    if (state == null)
+    {
+      state = new Object[7];
+    }
+
+    state[0] = super.saveState(context);
+    state[1] = enableAjax;
+    state[2] = ajaxUrl;
+    state[3] = dayUrlPattern;
+    state[4] = monthUrlPattern;
+    state[5] = yearUrlPattern;
+    state[6] = loadImage;
+
+    return state;
+  }
+
   //~--- get methods ----------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  public String getAjaxUrl()
+  {
+    if (ajaxUrl != null)
+    {
+      return ajaxUrl;
+    }
+
+    ValueExpression ve = getValueExpression("ajaxUrl");
+
+    return (ve != null)
+           ? (String) ve.getValue(getFacesContext().getELContext())
+           : null;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  public String getDayUrlPattern()
+  {
+    if (dayUrlPattern != null)
+    {
+      return dayUrlPattern;
+    }
+
+    ValueExpression ve = getValueExpression("dayUrlPattern");
+
+    return (ve != null)
+           ? (String) ve.getValue(getFacesContext().getELContext())
+           : null;
+  }
 
   /**
    * Method description
@@ -74,4 +169,175 @@ public class CalendarComponent extends BaseComponent
   {
     return FAMILY;
   }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  public String getLoadImage()
+  {
+    if (loadImage != null)
+    {
+      return loadImage;
+    }
+
+    ValueExpression ve = getValueExpression("loadImage");
+
+    return (ve != null)
+           ? (String) ve.getValue(getFacesContext().getELContext())
+           : null;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  public String getMonthUrlPattern()
+  {
+    if (monthUrlPattern != null)
+    {
+      return monthUrlPattern;
+    }
+
+    ValueExpression ve = getValueExpression("monthUrlPattern");
+
+    return (ve != null)
+           ? (String) ve.getValue(getFacesContext().getELContext())
+           : null;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  public String getYearUrlPattern()
+  {
+    if (yearUrlPattern != null)
+    {
+      return yearUrlPattern;
+    }
+
+    ValueExpression ve = getValueExpression("yearUrlPattern");
+
+    return (ve != null)
+           ? (String) ve.getValue(getFacesContext().getELContext())
+           : null;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  public boolean isEnableAjax()
+  {
+    if (enableAjax != null)
+    {
+      return enableAjax;
+    }
+
+    ValueExpression ve = getValueExpression("enableAjax");
+
+    return (ve != null)
+           ? (Boolean) ve.getValue(getFacesContext().getELContext())
+           : false;
+  }
+
+  //~--- set methods ----------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   * @param ajaxUrl
+   */
+  public void setAjaxUrl(String ajaxUrl)
+  {
+    this.ajaxUrl = ajaxUrl;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param dayUrlPattern
+   */
+  public void setDayUrlPattern(String dayUrlPattern)
+  {
+    this.dayUrlPattern = dayUrlPattern;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param enableAjax
+   */
+  public void setEnableAjax(boolean enableAjax)
+  {
+    this.enableAjax = enableAjax;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param loadImage
+   */
+  public void setLoadImage(String loadImage)
+  {
+    this.loadImage = loadImage;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param monthUrlPattern
+   */
+  public void setMonthUrlPattern(String monthUrlPattern)
+  {
+    this.monthUrlPattern = monthUrlPattern;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param yearUrlPattern
+   */
+  public void setYearUrlPattern(String yearUrlPattern)
+  {
+    this.yearUrlPattern = yearUrlPattern;
+  }
+
+  //~--- fields ---------------------------------------------------------------
+
+  /** Field description */
+  private String ajaxUrl;
+
+  /** Field description */
+  private String dayUrlPattern;
+
+  /** Field description */
+  private Boolean enableAjax;
+
+  /** Field description */
+  private String loadImage;
+
+  /** Field description */
+  private String monthUrlPattern;
+
+  /** Field description */
+  private Object[] state;
+
+  /** Field description */
+  private String yearUrlPattern;
 }
