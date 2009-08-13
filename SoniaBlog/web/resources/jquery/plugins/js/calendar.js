@@ -78,7 +78,8 @@
       var counter = 0;
       var $tbody = $("<tbody />");
       appendDayHeadings($tbody);
-      for ( var i=0; i<calendar.weeks; i++ ){
+      var weeks = parseInt(calendar.weeks) + 1;
+      for ( var i=0; i<weeks; i++ ){
         
         var $tr = $("<tr />");
         for (var j=0; j<7; j++){
@@ -92,7 +93,7 @@
 
           if (( i == 0 && j >= firstDay) ||
              ( counter > 0 && counter < calendar.daysOfMonth )){
-            counter++;
+             counter++;
             if ( hasEvent(events, counter)){
               $td.append(
                 $("<a />").attr("href", createDayLink(calendar, counter)).text(counter)
