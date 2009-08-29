@@ -1,0 +1,17 @@
+div.scMain {}
+
+div.scResult {
+  padding: 5px;
+  border: 1px dashed gray;
+  width: 97%;
+  height: 450px;
+  padding: 0 15px;
+}
+
+div.scEdit textarea {
+  width: 600px;
+}
+
+div.scEdit textarea.scScript {
+  height: 300px;
+}
