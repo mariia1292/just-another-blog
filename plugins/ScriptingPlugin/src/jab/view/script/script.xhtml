@@ -1,0 +1,55 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:blog="http://jab.nitilon.org/blog/">
+
+  <body>
+
+    <ui:composition template="/personal/template.xhtml">
+
+      <ui:define name="title">
+        <h:outputText value="Scripting" />
+      </ui:define>
+
+      <ui:define name="head">
+        <link rel="stylesheet" type="text/css" class="user" href="${facesContext.externalContext.requestContextPath}/resource/script/scripting.css" />
+        <link rel="stylesheet" type="text/css" class="user" href="${facesContext.externalContext.requestContextPath}/resource/syntax/styles/shCore.css" />
+        <link rel="stylesheet" type="text/css" class="user" href="${facesContext.externalContext.requestContextPath}/resource/syntax/styles/shThemeDefault.css" />
+        
+        <script type="text/javascript" src="${facesContext.externalContext.requestContextPath}/resource/script/scripting.js"></script>
+        <script type="text/javascript" src="${facesContext.externalContext.requestContextPath}/resource/syntax/scripts/shCore.js"></script>
+        <script type="text/javascript" src="${facesContext.externalContext.requestContextPath}/resource/syntax/scripts/shBrushJScript.js"></script>
+        <script type="text/javascript">
+          $(document).ready(function(){
+            $("div.scMain").scripting( "${facesContext.externalContext.requestContextPath}/script.json", {
+              loadingImage: "${facesContext.externalContext.requestContextPath}/resources/jquery/plugins/img/loading.gif",
+              detailViewCallback: function(){
+                if (SyntaxHighlighter != "undefined"){
+                  SyntaxHighlighter.config.clipboardSwf = "${facesContext.externalContext.requestContextPath}/resource/syntax/scripts/clipboard.swf";
+                  SyntaxHighlighter.config.bloggerMode = true;
+                  SyntaxHighlighter.highlight( $("pre").get(0) );
+                }
+              }
+            });
+          });
+        </script>
+      </ui:define>
+
+      <ui:define name="content">
+
+        <h1>Scripting</h1>
+
+        <div class="scMain">
+
+        </div>
+
+      </ui:define>
+
+    </ui:composition>
+
+
+  </body>
+</html>

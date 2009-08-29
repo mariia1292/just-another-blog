@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+    Document   : spam-report.xml
+    Created on : August 29, 2009, 6:55 PM
+    Author     : Sebastian Sdorra
+    Description:
+        Purpose of the document follows.
+-->
+
+<script>
+  <title>Spam Report</title>
+  <description>List all Spams</description>
+  <author>Sebastian Sdorra</author>
+  <content>var commentDAO = daoFactory.commentDAO;
+var comments = commentDAO.all;
+var size = comments.size();
+var comment = null;
+var counter = 0;
+
+println("&lt;h3&gt;Spam Report&lt;/h3&gt;");
+println("&lt;ul&gt;");
+for ( i=0; i&lt;size; i++ ){
+  comment = comments.get(i);
+  if ( comment.spam ){
+    counter++;
+    println("&lt;li&gt;found spam at "+comment.entry.blog.identifier+"&lt;/li&gt;");
+  }
+}
+println("&lt;/ul&gt;");
+println( "found " + counter + " spam comments" );</content>
+</script>
