@@ -14,8 +14,6 @@ package sonia.blog.script;
 public interface ScriptConstants
 {
 
-  public static final String FILE_STORE = "store.xml";
-
   /** Field description */
   public static final String ACTION_EXCECUTE = "excecute";
 
@@ -33,6 +31,9 @@ public interface ScriptConstants
 
   /** Field description */
   public static final String DIRECTORY = "scripts";
+
+  /** Field description */
+  public static final String FILE_STORE = "store.xml";
 
   /** Field description */
   public static final String METAPROPERTIES_AUTHOR = "author";
@@ -57,5 +58,8 @@ public interface ScriptConstants
 
   /** Field description */
   public static final String[] SAMPLES = { "/sonia/blog/script/samples/list-blogs.xml",
-          "/sonia/blog/script/samples/spam-report.xml" };
+          "/sonia/blog/script/samples/spam-report.xml",
+          "/sonia/blog/script/samples/create-entry.xml",
+          "/sonia/blog/script/samples/activate-all-users.xml",
+          "/sonia/blog/script/samples/deactivate-all-users.xml" };
 }
