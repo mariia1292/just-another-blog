@@ -197,6 +197,7 @@ public class AvatarBean extends AbstractBean
         }
         else if ((d.width > 720) || (d.height > 576))
         {
+          tempFile = resManager.getTempFile("avatar-", ".up");
           imageHandler.scaleImage(temp, tempFile, imageFormat, 720, 576);
           result = AVATARCROP;
           temp.delete();
