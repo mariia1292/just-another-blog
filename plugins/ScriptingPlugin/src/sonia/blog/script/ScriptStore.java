@@ -14,8 +14,6 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import org.xml.sax.SAXException;
-
 import sonia.util.Util;
 import sonia.util.XmlUtil;
 
@@ -53,15 +51,27 @@ public class ScriptStore
    * Constructs ...
    *
    *
+   *
+   * @param manager
    * @param file
    */
-  public ScriptStore(File file)
+  public ScriptStore(ScriptManager manager, File file)
   {
     this.store = new HashMap<String, List<String>>();
     this.file = file;
+    this.manager = manager;
   }
 
   //~--- methods --------------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   */
+  public void clear()
+  {
+    store.clear();
+  }
 
   /**
    * Method description
@@ -77,7 +87,7 @@ public class ScriptStore
       {
         store.clear();
 
-        Document document = ScriptManager.getInstance().getDocument(file);
+        Document document = manager.getDocument(file);
         Element root = document.getDocumentElement();
         NodeList childNodes = root.getChildNodes();
 
@@ -95,11 +105,18 @@ public class ScriptStore
           }
         }
       }
-      catch (SAXException ex)
+      catch (Exception ex)
       {
         logger.log(Level.SEVERE, null, ex);
 
-        throw new IOException(ex.getMessage());
+        if (ex instanceof IOException)
+        {
+          throw(IOException) ex;
+        }
+        else
+        {
+          throw new IOException(ex.getMessage());
+        }
       }
     }
   }
@@ -156,6 +173,29 @@ public class ScriptStore
    * Method description
    *
    *
+   * @param key
+   * @param value
+   */
+  public void replace(String key, String value)
+  {
+    List<String> values = store.get(key);
+
+    if (value == null)
+    {
+      values = new ArrayList<String>();
+    }
+    else
+    {
+      values.clear();
+    }
+
+    values.add(value);
+  }
+
+  /**
+   * Method description
+   *
+   *
    * @throws IOException
    */
   public void store() throws IOException
@@ -164,7 +204,7 @@ public class ScriptStore
     {
       try
       {
-        Document document = ScriptManager.getInstance().getDocument();
+        Document document = manager.getDocument();
         Element root = document.createElement("script-store");
 
         for (String key : store.keySet())
@@ -243,6 +283,17 @@ public class ScriptStore
     return store.get(key);
   }
 
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  public boolean isEmpty()
+  {
+    return store.isEmpty();
+  }
+
   //~--- methods --------------------------------------------------------------
 
   /**
@@ -288,6 +339,9 @@ public class ScriptStore
 
   /** Field description */
   private File file;
+
+  /** Field description */
+  private ScriptManager manager;
 
   /** Field description */
   private Map<String, List<String>> store;

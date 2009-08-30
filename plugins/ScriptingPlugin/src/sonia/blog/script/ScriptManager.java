@@ -17,6 +17,8 @@ import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.app.BlogRequest;
 import sonia.blog.api.exception.BlogException;
 
+import sonia.util.Util;
+
 //~--- JDK imports ------------------------------------------------------------
 
 import java.io.File;
@@ -75,7 +77,7 @@ public class ScriptManager
 
     File storeFile = new File(directory, ScriptConstants.FILE_STORE);
 
-    store = new ScriptStore(storeFile);
+    store = new ScriptStore(this, storeFile);
 
     try
     {
@@ -174,10 +176,7 @@ public class ScriptManager
    */
   File createScriptFile()
   {
-    File dir = BlogContext.getInstance().getResourceManager().getDirectory(
-                   ScriptConstants.DIRECTORY);
-
-    return new File(dir, System.nanoTime() + ".xml");
+    return new File(directory, System.nanoTime() + ".xml");
   }
 
   /**
@@ -225,7 +224,8 @@ public class ScriptManager
         logger.log(Level.FINEST, null, ex);
       }
 
-      writer.append("ERROR: ").append(ex.getLocalizedMessage());
+      writer.append("<pre>").append(Util.getStacktraceAsString(ex));
+      writer.append("</pre>");
     }
   }
 

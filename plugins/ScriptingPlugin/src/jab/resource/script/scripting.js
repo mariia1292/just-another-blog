@@ -20,7 +20,8 @@
       listViewCallback: function(){},
       detailViewCallback: function(){},
       editViewCallback: function(){},
-      excecuteCallback: function(){}
+      excecuteCallback: function(){},
+      removeCallback: function(){}
     };
 
     options = $.extend({},defaults, options);
@@ -71,6 +72,12 @@
         ).append(
           " "
         ).append(
+          $("<button />").text("remove").click(function(){
+            removeScript( content.name );
+          })
+        ).append(
+          " "
+        ).append(
           $("<button />").text("excecute").click(function(){
             excecute(content);
           })
@@ -79,12 +86,6 @@
         ).append(
           $("<button />").text("back").click(function(){
             listScripts();
-          })
-        ).append(
-          " "
-        ).append(
-          $("<button />").text("remove").click(function(){
-            removeScript( content.name );
           })
         );
         options.detailViewCallback();
@@ -95,6 +96,7 @@
       loadScreen();
       $.post(url, {action: "remove", script: script}, function(){
         clearLoadScreen();
+        options.removeCallback();
         listScripts();
       });
     }
