@@ -123,16 +123,9 @@ public class SessionInformation implements SessionInformationMBean
   public String getImageDirectorySize()
   {
     long size = 0;
-    File attachments = new File(getResourceDir(),
-                                Constants.RESOURCE_ATTACHMENT);
+    File images = new File(getResourceDir(), Constants.RESOURCE_IMAGE);
 
-    if (attachments.exists())
-    {
-      for (File dir : attachments.listFiles())
-      {
-        size += Util.getLength(new File(dir, Constants.RESOURCE_IMAGE));
-      }
-    }
+    size = Util.getLength(images);
 
     return Util.formatSize((double) size);
   }
