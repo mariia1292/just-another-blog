@@ -163,6 +163,18 @@
     </delete>
   </target>
 
-  <target name="release" depends="changeEnvironment,removeSources,dist,tomcat" />
+  <target name="movePlugins">
+    <mkdir dir="${dist.dir}/plugins" />
+    <move todir="${dist.dir}/plugins">
+      <fileset dir="${build.web.dir}/WEB-INF/lib">
+        <include name="LdapPlugin.jar" />
+        <include name="ScriptingPlugin.jar" />
+        <include name="DevelPlugin.jar" />
+        <include name="WebIntegrationPlugin.jar" />
+      </fileset>
+    </move>
+  </target>
+
+  <target name="release" depends="changeEnvironment,removeSources,movePlugins,dist,tomcat" />
   
 </project>
