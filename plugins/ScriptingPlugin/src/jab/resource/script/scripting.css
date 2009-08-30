@@ -5,6 +5,7 @@ div.scResult {
   border: 1px dashed gray;
   width: 97%;
   padding: 0 15px;
+  margin-bottom: 1em;
   overflow: scroll;
 }
 
