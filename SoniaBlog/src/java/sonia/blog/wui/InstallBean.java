@@ -381,15 +381,32 @@ public class InstallBean extends AbstractBean
 
     if (isAllreadyInstalled(resourceDir))
     {
+      BlogContext context = BlogContext.getInstance();
+
+      if (listeners != null)
+      {
+        for (InstallationListener listener : listeners)
+        {
+          listener.beforeInstallation(context);
+        }
+      }
+
       writeBaseProperties();
 
       try
       {
-        BlogContext context = BlogContext.getInstance();
-
         context.getConfiguration().load();
         BlogContext.getDAOFactory().init();
         BlogUtil.configureLogger(context);
+
+        if (listeners != null)
+        {
+          for (InstallationListener listener : listeners)
+          {
+            listener.afterInstallation(context);
+          }
+        }
+
         redirect();
       }
       catch (IOException ex)
