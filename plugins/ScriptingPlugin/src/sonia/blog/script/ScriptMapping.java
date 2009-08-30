@@ -9,7 +9,6 @@ package sonia.blog.script;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.app.BlogRequest;
 import sonia.blog.api.app.BlogResponse;
 import sonia.blog.api.mapping.FinalMapping;
@@ -24,14 +23,6 @@ import java.io.PrintWriter;
 
 import java.util.Iterator;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
-import javax.script.ScriptContext;
-import javax.script.ScriptEngine;
-import javax.script.ScriptEngineManager;
-import javax.script.ScriptException;
-import javax.script.SimpleScriptContext;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletResponse;
@@ -42,13 +33,6 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class ScriptMapping extends FinalMapping
 {
-
-  /** Field description */
-  private static final String SCRIPT_ENGINE = "javascript";
-
-  /** Field description */
-  private static Logger logger =
-    Logger.getLogger(ScriptMapping.class.getName());
 
   //~--- methods --------------------------------------------------------------
 
@@ -88,12 +72,14 @@ public class ScriptMapping extends FinalMapping
         }
         else if (action.equalsIgnoreCase(ScriptConstants.ACTION_EXCECUTE))
         {
-          invokeScript(request, response, script);
+          script.invoke(request, response.getWriter());
         }
         else if (action.equalsIgnoreCase(ScriptConstants.ACTION_STORE))
         {
           storeScript(request, response, script);
-        } else if ( action.equalsIgnoreCase(ScriptConstants.ACTION_REMOVE) ){
+        }
+        else if (action.equalsIgnoreCase(ScriptConstants.ACTION_REMOVE))
+        {
           script.remove();
         }
       }
@@ -126,58 +112,6 @@ public class ScriptMapping extends FinalMapping
     }
 
     writer.append("\"");
-  }
-
-  /**
-   * Method description
-   *
-   *
-   *
-   *
-   * @param request
-   * @param response
-   * @param script
-   *
-   * @throws IOException
-   */
-  private void invokeScript(BlogRequest request, BlogResponse response,
-                            Script script)
-          throws IOException
-  {
-    ScriptEngineManager manager =
-      new ScriptEngineManager(BlogContext.getInstance().getServletContext()
-        .getClass().getClassLoader());
-    ScriptEngine engine = manager.getEngineByName(SCRIPT_ENGINE);
-    PrintWriter writer = response.getWriter();
-
-    try
-    {
-      engine.put("context", BlogContext.getInstance());
-      engine.put("daoFactory", BlogContext.getDAOFactory());
-      engine.put("request", request);
-      engine.put("session", request.getBlogSession());
-      engine.put("currentBlog", request.getCurrentBlog());
-
-      ScriptContext ctx = engine.getContext();
-
-      if (ctx == null)
-      {
-        ctx = new SimpleScriptContext();
-        engine.setContext(ctx);
-      }
-
-      ctx.setWriter(writer);
-      engine.eval(script.getContent(), ctx);
-    }
-    catch (ScriptException ex)
-    {
-      if (logger.isLoggable(Level.FINEST))
-      {
-        logger.log(Level.FINEST, null, ex);
-      }
-
-      printException(writer, ex);
-    }
   }
 
   /**
@@ -222,19 +156,6 @@ public class ScriptMapping extends FinalMapping
     }
 
     writer.println("]");
-  }
-
-  /**
-   * Method description
-   *
-   *
-   *
-   * @param writer
-   * @param ex
-   */
-  private void printException(PrintWriter writer, ScriptException ex)
-  {
-    writer.append("ERROR: ").append(ex.getLocalizedMessage());
   }
 
   /**
