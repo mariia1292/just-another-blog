@@ -14,6 +14,7 @@ import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
 import sonia.blog.api.app.BlogContext;
+import sonia.blog.api.app.BlogRequest;
 import sonia.blog.api.exception.BlogException;
 
 //~--- JDK imports ------------------------------------------------------------
@@ -21,11 +22,18 @@ import sonia.blog.api.exception.BlogException;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
+import java.io.Writer;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import javax.script.ScriptContext;
+import javax.script.ScriptEngine;
+import javax.script.ScriptEngineManager;
+import javax.script.ScriptException;
+import javax.script.SimpleScriptContext;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -45,6 +53,9 @@ public class ScriptManager
 {
 
   /** Field description */
+  private static final String SCRIPT_ENGINE = "javascript";
+
+  /** Field description */
   private static ScriptManager instance;
 
   /** Field description */
@@ -57,7 +68,26 @@ public class ScriptManager
    * Constructs ...
    *
    */
-  private ScriptManager() {}
+  private ScriptManager()
+  {
+    directory = BlogContext.getInstance().getResourceManager().getDirectory(
+      ScriptConstants.DIRECTORY);
+
+    File storeFile = new File(directory, ScriptConstants.FILE_STORE);
+
+    store = new ScriptStore(storeFile);
+
+    try
+    {
+      store.load();
+    }
+    catch (IOException ex)
+    {
+      logger.log(Level.SEVERE, null, ex);
+
+      throw new BlogException(ex);
+    }
+  }
 
   //~--- get methods ----------------------------------------------------------
 
@@ -76,8 +106,6 @@ public class ScriptManager
 
     return instance;
   }
-
-  //~--- get methods ----------------------------------------------------------
 
   /**
    * Method description
@@ -125,6 +153,17 @@ public class ScriptManager
     return scripts;
   }
 
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  public ScriptStore getStore()
+  {
+    return store;
+  }
+
   //~--- methods --------------------------------------------------------------
 
   /**
@@ -139,6 +178,55 @@ public class ScriptManager
                    ScriptConstants.DIRECTORY);
 
     return new File(dir, System.nanoTime() + ".xml");
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param request
+   * @param writer
+   * @param script
+   *
+   * @throws IOException
+   */
+  void invoke(BlogRequest request, Writer writer, Script script)
+          throws IOException
+  {
+    ScriptEngineManager manager =
+      new ScriptEngineManager(BlogContext.getInstance().getServletContext()
+        .getClass().getClassLoader());
+    ScriptEngine engine = manager.getEngineByName(SCRIPT_ENGINE);
+
+    try
+    {
+      engine.put("store", store);
+      engine.put("context", BlogContext.getInstance());
+      engine.put("daoFactory", BlogContext.getDAOFactory());
+      engine.put("request", request);
+      engine.put("session", request.getBlogSession());
+      engine.put("currentBlog", request.getCurrentBlog());
+
+      ScriptContext ctx = engine.getContext();
+
+      if (ctx == null)
+      {
+        ctx = new SimpleScriptContext();
+        engine.setContext(ctx);
+      }
+
+      ctx.setWriter(writer);
+      engine.eval(script.getContent(), ctx);
+    }
+    catch (ScriptException ex)
+    {
+      if (logger.isLoggable(Level.FINEST))
+      {
+        logger.log(Level.FINEST, null, ex);
+      }
+
+      writer.append("ERROR: ").append(ex.getLocalizedMessage());
+    }
   }
 
   /**
@@ -266,5 +354,11 @@ public class ScriptManager
   private DocumentBuilder builder;
 
   /** Field description */
+  private File directory;
+
+  /** Field description */
   private List<Script> scripts;
+
+  /** Field description */
+  private ScriptStore store;
 }

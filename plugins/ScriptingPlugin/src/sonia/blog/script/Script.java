@@ -14,6 +14,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import sonia.blog.api.app.BlogRequest;
 import sonia.blog.api.exception.BlogException;
 
 import sonia.util.Util;
@@ -21,6 +22,8 @@ import sonia.util.Util;
 //~--- JDK imports ------------------------------------------------------------
 
 import java.io.File;
+import java.io.IOException;
+import java.io.Writer;
 
 /**
  *
@@ -63,6 +66,21 @@ public class Script
   }
 
   //~--- methods --------------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   * @param request
+   * @param writer
+   *
+   *
+   * @throws IOException
+   */
+  public void invoke(BlogRequest request, Writer writer) throws IOException
+  {
+    ScriptManager.getInstance().invoke(request, writer, this);
+  }
 
   /**
    * Method description

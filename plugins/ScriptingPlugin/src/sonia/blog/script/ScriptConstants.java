@@ -14,6 +14,8 @@ package sonia.blog.script;
 public interface ScriptConstants
 {
 
+  public static final String FILE_STORE = "store.xml";
+
   /** Field description */
   public static final String ACTION_EXCECUTE = "excecute";
 
