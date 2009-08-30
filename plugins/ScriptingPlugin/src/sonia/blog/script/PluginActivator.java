@@ -12,6 +12,7 @@ package sonia.blog.script;
 import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.app.Constants;
 import sonia.blog.api.app.Context;
+import sonia.blog.api.app.InstallationListener;
 import sonia.blog.api.mapping.MappingHandler;
 import sonia.blog.api.navigation.NavigationProvider;
 
@@ -36,7 +37,7 @@ import java.util.logging.Logger;
  *
  * @author Sebastian Sdorra
  */
-public class PluginActivator implements Activator
+public class PluginActivator implements Activator, InstallationListener
 {
 
   /** Field description */
@@ -52,24 +53,48 @@ public class PluginActivator implements Activator
    * Method description
    *
    *
+   * @param ctx
+   */
+  public void afterInstallation(BlogContext ctx)
+  {
+    init();
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param ctx
+   */
+  public void beforeInstallation(BlogContext ctx)
+  {
+
+    // do nothing
+  }
+
+  /**
+   * Method description
+   *
+   *
    * @param context
    */
   public void start(PluginContext context)
   {
-    File main = BlogContext.getInstance().getResourceManager().getDirectory(
-                    ScriptConstants.DIRECTORY, false);
-
-    if (!main.exists())
+    if (BlogContext.getInstance().isInstalled())
     {
-      install(main);
+      init();
     }
+    else
+    {
+      ServiceReference<InstallationListener> reference =
+        BlogContext.getInstance().getServiceRegistry().get(
+            InstallationListener.class, Constants.SERVICE_INSTALLATIONLISTENER);
 
-    // register mapping
-    mappingHandler.add(MAPPING_REGEX, ScriptMapping.class);
-
-    // register navigation entry
-    navigationProvider = new ScriptNavigationProvider();
-    navigationProviderReference.add(navigationProvider);
+      if (reference != null)
+      {
+        reference.add(this);
+      }
+    }
   }
 
   /**
@@ -127,6 +152,28 @@ public class PluginActivator implements Activator
         logger.log(Level.WARNING, null, ex);
       }
     }
+  }
+
+  /**
+   * Method description
+   *
+   */
+  private void init()
+  {
+    File main = BlogContext.getInstance().getResourceManager().getDirectory(
+                    ScriptConstants.DIRECTORY, false);
+
+    if (!main.exists())
+    {
+      install(main);
+    }
+
+    // register mapping
+    mappingHandler.add(MAPPING_REGEX, ScriptMapping.class);
+
+    // register navigation entry
+    navigationProvider = new ScriptNavigationProvider();
+    navigationProviderReference.add(navigationProvider);
   }
 
   /**
