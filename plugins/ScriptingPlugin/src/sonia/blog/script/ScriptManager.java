@@ -89,6 +89,7 @@ public class ScriptManager
 
       throw new BlogException(ex);
     }
+    entityFactory = new EntityFactory();
   }
 
   //~--- get methods ----------------------------------------------------------
@@ -200,6 +201,7 @@ public class ScriptManager
     try
     {
       engine.put("store", store);
+      engine.put("entityFactory", entityFactory);
       engine.put("context", BlogContext.getInstance());
       engine.put("daoFactory", BlogContext.getDAOFactory());
       engine.put("request", request);
@@ -352,6 +354,8 @@ public class ScriptManager
 
   /** Field description */
   private DocumentBuilder builder;
+
+  private EntityFactory entityFactory;
 
   /** Field description */
   private File directory;

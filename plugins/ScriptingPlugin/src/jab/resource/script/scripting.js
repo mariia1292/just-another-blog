@@ -64,6 +64,8 @@
       $.post( url, { action: "view", script: content.name }, function(result){
         clearLoadScreen();
         $field.append(
+          $("<h2 />").text( content.title )
+        ).append(
           $("<pre />").addClass( "brush: js" ).text( result )
         ).append(
           $("<button />").text("edit").click(function(){
@@ -133,6 +135,12 @@
         ).append(
           $("<button />").text("store").click(function(){
             store( content.name )
+          })
+        ).append(
+          " "
+        ).append(
+          $("<button />").text("back").click(function(){
+            detailView( content );
           })
         )
       );
