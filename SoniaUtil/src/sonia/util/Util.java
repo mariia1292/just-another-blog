@@ -42,8 +42,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.PrintWriter;
 import java.io.Reader;
 import java.io.StringReader;
+import java.io.StringWriter;
 
 import java.net.URL;
 import java.net.URLConnection;
@@ -532,6 +534,24 @@ public class Util
    * Method description
    *
    *
+   * @param throwable
+   *
+   * @return
+   */
+  public static String getStacktraceAsString(Throwable throwable)
+  {
+    StringWriter writer = new StringWriter();
+    PrintWriter printWriter = new PrintWriter(writer);
+
+    appendStacktrace(printWriter, throwable);
+
+    return writer.toString();
+  }
+
+  /**
+   * Method description
+   *
+   *
    * @param file
    *
    * @return
@@ -616,5 +636,29 @@ public class Util
   public static boolean isEmpty(Collection<?> collection)
   {
     return (collection == null) || collection.isEmpty();
+  }
+
+  //~--- methods --------------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   * @param writer
+   * @param throwable
+   */
+  private static void appendStacktrace(PrintWriter writer, Throwable throwable)
+  {
+    if (throwable != null)
+    {
+      throwable.printStackTrace(writer);
+
+      Throwable cause = throwable.getCause();
+
+      if (cause != null)
+      {
+        appendStacktrace(writer, cause);
+      }
+    }
   }
 }
