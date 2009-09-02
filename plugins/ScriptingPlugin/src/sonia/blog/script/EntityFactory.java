@@ -17,6 +17,7 @@ import sonia.blog.entity.Category;
 import sonia.blog.entity.Comment;
 import sonia.blog.entity.Entry;
 import sonia.blog.entity.Page;
+import sonia.blog.entity.Role;
 import sonia.blog.entity.Trackback;
 import sonia.blog.entity.User;
 
@@ -135,5 +136,20 @@ public class EntityFactory
   public User createUser()
   {
     return new User();
+  }
+
+  //~--- get methods ----------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   * @param name
+   *
+   * @return
+   */
+  public Role getRole(String name)
+  {
+    return Role.valueOf(name);
   }
 }

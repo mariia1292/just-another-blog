@@ -46,6 +46,8 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
+import sonia.blog.api.exception.BlogSecurityException;
+import sonia.blog.entity.Role;
 
 /**
  *
@@ -193,6 +195,10 @@ public class ScriptManager
   void invoke(BlogRequest request, Writer writer, Script script)
           throws IOException
   {
+    if ( !request.getBlogSession().hasRole( Role.GLOBALADMIN ) )
+    {
+      throw new BlogSecurityException( "GlobalAdmin session is required" );
+    }
     ScriptEngineManager manager =
       new ScriptEngineManager(BlogContext.getInstance().getServletContext()
         .getClass().getClassLoader());
