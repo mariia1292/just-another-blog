@@ -257,7 +257,7 @@ public final class BlogSession implements Serializable
   private Blog blog;
 
   /** Field description */
-  private LoginContext loginContext;
+  private transient LoginContext loginContext;
 
   /** Field description */
   private Role role;

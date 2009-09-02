@@ -146,7 +146,7 @@ public abstract class JpaGenericDAO<T> implements GenericDAO<T>
       {
         StringBuffer msg = new StringBuffer();
 
-        msg.append("user ").append(session.getUser().getName());
+        msg.append("user ").append(getUser(session));
         msg.append(" added ").append(item);
         logger.finer(msg.toString());
       }
@@ -209,9 +209,10 @@ public abstract class JpaGenericDAO<T> implements GenericDAO<T>
 
       if (logger.isLoggable(Level.FINER))
       {
+        String user = null;
         StringBuffer msg = new StringBuffer();
 
-        msg.append("user ").append(session.getUser().getName());
+        msg.append("user ").append(getUser(session));
         msg.append(" edit ").append(item);
         logger.finer(msg.toString());
       }
@@ -276,7 +277,7 @@ public abstract class JpaGenericDAO<T> implements GenericDAO<T>
       {
         StringBuffer msg = new StringBuffer();
 
-        msg.append("user ").append(session.getUser().getName());
+        msg.append("user ").append(getUser(session));
         msg.append(" removes ").append(item);
         logger.finer(msg.toString());
       }
@@ -645,6 +646,26 @@ public abstract class JpaGenericDAO<T> implements GenericDAO<T>
   protected boolean isPrivileged(BlogSession session, T item, int action)
   {
     return true;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param session
+   *
+   * @return
+   */
+  private String getUser(BlogSession session)
+  {
+    String user = "anonymous";
+
+    if ((session != null) && (session.getUser() != null))
+    {
+      user = session.getUser().getName();
+    }
+
+    return user;
   }
 
   //~--- fields ---------------------------------------------------------------
