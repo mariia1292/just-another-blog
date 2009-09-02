@@ -35,6 +35,7 @@ package sonia.blog.wui;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import sonia.blog.api.app.BlogRequest;
 import sonia.blog.api.search.SearchCategory;
 import sonia.blog.api.search.SearchEntry;
 import sonia.blog.api.util.AbstractBean;
@@ -43,6 +44,7 @@ import sonia.blog.api.util.AbstractBean;
 
 import java.util.List;
 
+import javax.faces.context.FacesContext;
 import javax.faces.model.DataModel;
 import javax.faces.model.ListDataModel;
 
@@ -77,7 +79,9 @@ public class SearchBean extends AbstractBean
    */
   public DataModel getCategories()
   {
-    return new ListDataModel(categories);
+    categoryModel = new ListDataModel(categories);
+
+    return categoryModel;
   }
 
   /**
@@ -89,6 +93,30 @@ public class SearchBean extends AbstractBean
   public SearchCategory getCategory()
   {
     return category;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  public String getCategoryLink()
+  {
+    String result = "#";
+    SearchCategory cat = (SearchCategory) categoryModel.getRowData();
+
+    if (cat != null)
+    {
+      BlogRequest request = getRequest();
+      StringBuffer uri = new StringBuffer(request.getRequestURI());
+
+      uri.append("?search=").append(searchString).append("&category=");
+      uri.append(cat.getName());
+      result = uri.toString();
+    }
+
+    return result;
   }
 
   /**
@@ -177,6 +205,9 @@ public class SearchBean extends AbstractBean
 
   /** Field description */
   private List<SearchCategory> categories;
+
+  /** Field description */
+  private DataModel categoryModel;
 
   /** Field description */
   private List<SearchEntry> pageEntries;

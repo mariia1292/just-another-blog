@@ -16,7 +16,7 @@
 
       <ui:define name="content">
 
-        <h1>Search</h1>
+        <h1><h:outputText value="#{label.search}" /></h1>
 
         <h:panelGroup layout="block" styleClass="entryNavigation" rendered="#{BlogBean.navigationRendered}">
           <blog:link value="#{label.prev}" href="#{BlogBean.previousUri}" disabled="#{BlogBean.previousUri == null}" />
@@ -45,6 +45,19 @@
 
         </h:form>
 
+      </ui:define>
+
+      <ui:define name="info">
+        <h3><h:outputText value="#{label.searchCategories}" /></h3>
+        <div id="submenu" class="vlist">
+        <ul>
+          <ui:repeat value="#{SearchBean.categories}" var="Category">
+            <li>
+              <a href="#{SearchBean.categoryLink}">#{Category.label} (#{Category.size})</a>
+            </li>
+          </ui:repeat>
+        </ul>
+        </div>
       </ui:define>
 
     </ui:composition>
