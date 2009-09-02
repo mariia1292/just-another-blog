@@ -77,6 +77,14 @@ public class ContentObjectIndexListener implements DAOListener
    */
   public void handleEvent(Action action, Object item)
   {
+    if (logger.isLoggable(Level.FINEST))
+    {
+      StringBuffer msg = new StringBuffer();
+
+      msg.append("handle ").append(action).append(" at ").append(item);
+      logger.finest(msg.toString());
+    }
+
     if (item instanceof ContentObject)
     {
       ContentObject entry = (ContentObject) item;

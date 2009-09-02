@@ -128,6 +128,8 @@ public abstract class JpaGenericDAO<T> implements GenericDAO<T>
       throw new BlogSecurityException("Author session is required");
     }
 
+    Logger logger = getLogger();
+
     fireEvent(Action.PREADD, item);
 
     boolean result = true;
@@ -139,6 +141,16 @@ public abstract class JpaGenericDAO<T> implements GenericDAO<T>
     {
       em.persist(item);
       em.getTransaction().commit();
+
+      if (logger.isLoggable(Level.FINER))
+      {
+        StringBuffer msg = new StringBuffer();
+
+        msg.append("user ").append(session.getUser().getName());
+        msg.append(" added ").append(item);
+        logger.finer(msg.toString());
+      }
+
       fireEvent(Action.POSTADD, item);
     }
     catch (Exception ex)
@@ -148,7 +160,7 @@ public abstract class JpaGenericDAO<T> implements GenericDAO<T>
         em.getTransaction().rollback();
       }
 
-      getLogger().log(Level.SEVERE, null, ex);
+      logger.log(Level.SEVERE, null, ex);
       result = false;
     }
     finally
@@ -181,6 +193,8 @@ public abstract class JpaGenericDAO<T> implements GenericDAO<T>
       throw new BlogSecurityException("Author session is required");
     }
 
+    Logger logger = getLogger();
+
     fireEvent(Action.PREUPDATE, item);
 
     boolean result = true;
@@ -192,6 +206,16 @@ public abstract class JpaGenericDAO<T> implements GenericDAO<T>
     {
       item = em.merge(item);
       em.getTransaction().commit();
+
+      if (logger.isLoggable(Level.FINER))
+      {
+        StringBuffer msg = new StringBuffer();
+
+        msg.append("user ").append(session.getUser().getName());
+        msg.append(" edit ").append(item);
+        logger.finer(msg.toString());
+      }
+
       fireEvent(Action.POSTUPDATE, item);
     }
     catch (Exception ex)
@@ -201,7 +225,7 @@ public abstract class JpaGenericDAO<T> implements GenericDAO<T>
         em.getTransaction().rollback();
       }
 
-      getLogger().log(Level.SEVERE, null, ex);
+      logger.log(Level.SEVERE, null, ex);
       result = false;
     }
     finally
@@ -234,6 +258,8 @@ public abstract class JpaGenericDAO<T> implements GenericDAO<T>
       throw new BlogSecurityException("Author session is required");
     }
 
+    Logger logger = getLogger();
+
     fireEvent(Action.PREREMOVE, item);
 
     boolean result = true;
@@ -245,6 +271,16 @@ public abstract class JpaGenericDAO<T> implements GenericDAO<T>
     {
       em.remove(em.merge(item));
       em.getTransaction().commit();
+
+      if (logger.isLoggable(Level.FINER))
+      {
+        StringBuffer msg = new StringBuffer();
+
+        msg.append("user ").append(session.getUser().getName());
+        msg.append(" removes ").append(item);
+        logger.finer(msg.toString());
+      }
+
       fireEvent(Action.POSTREMOVE, item);
     }
     catch (Exception ex)
@@ -254,7 +290,7 @@ public abstract class JpaGenericDAO<T> implements GenericDAO<T>
         em.getTransaction().rollback();
       }
 
-      getLogger().log(Level.SEVERE, null, ex);
+      logger.log(Level.SEVERE, null, ex);
       result = false;
     }
     finally

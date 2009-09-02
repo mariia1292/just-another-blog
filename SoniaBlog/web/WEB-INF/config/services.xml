@@ -35,7 +35,7 @@
   <service class="sonia.blog.api.dao.DAOListener" path="/listener/trackback" />
   
   <service class="sonia.blog.api.dao.DAOListener" path="/listener/entry">
-    <impl class="sonia.blog.search.IndexListener" />
+    <impl class="sonia.blog.search.ContentObjectIndexListener" />
   </service>
   
   <service class="sonia.blog.api.dao.DAOListener" path="/listener/blogHitCount" />
