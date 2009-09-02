@@ -40,7 +40,9 @@
   
   <service class="sonia.blog.api.dao.DAOListener" path="/listener/blogHitCount" />
 
-  <service class="sonia.blog.api.dao.DAOListener" path="/listener/page" />
+  <service class="sonia.blog.api.dao.DAOListener" path="/listener/page">
+    <impl class="sonia.blog.search.ContentObjectIndexListener" />
+  </service>
 
   <service class="sonia.blog.api.dao.DAOListener" path="/listener/tag" />
 
