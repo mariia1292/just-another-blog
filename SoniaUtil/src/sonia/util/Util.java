@@ -411,7 +411,7 @@ public class Util
     URLConnection conn = url.openConnection();
     String type = conn.getContentType();
 
-    if (type.toLowerCase().startsWith("text"))
+    if (type != null && type.toLowerCase().startsWith("text"))
     {
       String encoding = conn.getContentEncoding();
       InputStream in = conn.getInputStream();
