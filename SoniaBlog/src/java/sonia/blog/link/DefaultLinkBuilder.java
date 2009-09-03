@@ -49,6 +49,7 @@ import sonia.blog.entity.Entry;
 import sonia.blog.entity.Page;
 import sonia.blog.entity.PermaObject;
 import sonia.blog.entity.Tag;
+import sonia.blog.entity.User;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -188,6 +189,10 @@ public class DefaultLinkBuilder implements LinkBuilder
       else if (object instanceof Attachment)
       {
         link += "attachment/" + object.getId();
+      }
+      else if (object instanceof User)
+      {
+        link += "author/" + object.getId() + "/index.jab";
       }
     }
 

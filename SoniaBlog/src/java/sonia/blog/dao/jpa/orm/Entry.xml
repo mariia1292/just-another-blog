@@ -168,6 +168,20 @@
           e.categories = :category
       </query>
     </named-query>
+    <named-query name="Entry.getAllByAuthor">
+      <query>
+        select
+          e from Entry e
+        where
+          e.blog = :blog
+        and
+          e.author = :author
+        and
+          e.published = :published
+        order by
+          e.publishingDate desc
+      </query>
+    </named-query>
     <named-query name="Entry.prev">
       <query>
         select e from Entry e join e.blog b
@@ -328,6 +342,51 @@
                                and
                                  e2.publishingDate &gt; :date )
         order by e.publishingDate desc, e.title
+      </query>
+    </named-query>
+    <named-query name="Entry.authorPrev">
+      <query>
+        select e from Entry e join e.blog b
+        where
+          b = :blog
+        and
+          e.author = :author
+        and
+          e.published = :published
+        and
+          e.publishingDate = ( select max(e2.publishingDate) from Entry e2 join e2.blog b2
+                               where
+                                 e2.published = :published
+                               and
+                                 b2 = :blog
+                               and
+                                 e2.author = :author
+                               and
+                                 e2.publishingDate &lt; :date )
+        order by e.publishingDate desc, e.title
+      </query>
+    </named-query>
+    <named-query name="Entry.authorNext">
+      <query>
+        select e from Entry e join e.blog b
+        where
+          e.published = :published
+        and
+          b = :blog
+        and
+          e.author = :author
+        and
+          e.publishingDate = ( select min(e2.publishingDate) from Entry e2 join e2.blog b2
+                               where
+                                 e2.published = :published
+                               and
+                                 b2 = :blog
+                               and
+                                 e2.author = :author
+                               and
+                                 e2.publishingDate &gt; :date )
+        order by
+          e.publishingDate desc, e.title
       </query>
     </named-query>
     <pre-persist method-name="prePersists" />

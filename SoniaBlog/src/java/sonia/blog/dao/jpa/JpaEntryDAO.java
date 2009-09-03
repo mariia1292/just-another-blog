@@ -647,6 +647,41 @@ public class JpaEntryDAO extends JpaGenericDAO<Entry> implements EntryDAO
    * Method description
    *
    *
+   * @param blog
+   * @param author
+   * @param published
+   * @param start
+   * @param max
+   *
+   * @return
+   */
+  public List<Entry> getAllByAuthor(Blog blog, User author, Boolean published,
+                                    int start, int max)
+  {
+    EntityManager em = createEntityManager();
+    Query q = em.createNamedQuery("Entry.getAllByAuthor");
+
+    q.setParameter("blog", blog);
+    q.setParameter("author", author);
+    q.setParameter("published", published);
+
+    if (start > 0)
+    {
+      q.setFirstResult(start);
+    }
+
+    if (max > 0)
+    {
+      q.setMaxResults(max);
+    }
+
+    return excecuteListQuery(em, q);
+  }
+
+  /**
+   * Method description
+   *
+   *
    * @param session
    * @param start
    * @param max
@@ -815,6 +850,31 @@ public class JpaEntryDAO extends JpaGenericDAO<Entry> implements EntryDAO
    *
    *
    * @param blog
+   * @param author
+   * @param entry
+   * @param published
+   *
+   * @return
+   */
+  public Entry getNextEntry(Blog blog, User author, Entry entry,
+                            Boolean published)
+  {
+    EntityManager em = createEntityManager();
+    Query q = em.createNamedQuery("Entry.authorNext");
+
+    q.setParameter("blog", blog);
+    q.setParameter("author", author);
+    q.setParameter("date", entry.getPublishingDate());
+    q.setParameter("published", published);
+
+    return excecuteQuery(em, q);
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param blog
    * @param entry
    * @param published
    *
@@ -934,6 +994,31 @@ public class JpaEntryDAO extends JpaGenericDAO<Entry> implements EntryDAO
     catch (NoResultException ex) {}
 
     return prevEntry;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param blog
+   * @param author
+   * @param entry
+   * @param published
+   *
+   * @return
+   */
+  public Entry getPreviousEntry(Blog blog, User author, Entry entry,
+                                Boolean published)
+  {
+    EntityManager em = createEntityManager();
+    Query q = em.createNamedQuery("Entry.authorPrev");
+
+    q.setParameter("blog", blog);
+    q.setParameter("author", author);
+    q.setParameter("date", entry.getPublishingDate());
+    q.setParameter("published", published);
+
+    return excecuteQuery(em, q);
   }
 
   /**

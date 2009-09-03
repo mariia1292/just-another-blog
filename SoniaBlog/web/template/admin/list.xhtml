@@ -35,7 +35,8 @@
               <h:outputText value="#{Entry.creationDate}">
                 <f:convertDateTime pattern="#{BlogBean.blog.dateFormat}" />
               </h:outputText>
-              <h:outputText value=", #{Entry.authorName}" />
+              <h:outputText value=", " />
+              <blog:link value="#{Entry.authorName}" object="#{Entry.author}" />
             </p>
           </ui:repeat>
 

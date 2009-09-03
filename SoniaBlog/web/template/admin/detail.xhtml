@@ -30,6 +30,14 @@
         <div class="content">
           <h:outputText value="#{BlogBean.entry.displayContent}" escape="false" />
         </div>
+        
+        <p>
+          <h:outputText value="#{BlogBean.entry.creationDate}">
+            <f:convertDateTime pattern="#{BlogBean.blog.dateFormat}" />
+          </h:outputText>
+          <h:outputText value=", " />
+          <blog:link value="#{BlogBean.entry.authorName}" object="#{BlogBean.entry.author}" />
+        </p>
 
         <h3><h:outputText value="#{label.links}" /></h3>
 

@@ -279,6 +279,21 @@ public interface EntryDAO extends GenericDAO<Entry>
   //~--- get methods ----------------------------------------------------------
 
   /**
+   * Method description
+   *
+   *
+   * @param blog
+   * @param author
+   * @param published
+   * @param start
+   * @param max
+   *
+   * @return
+   */
+  public List<Entry> getAllByAuthor(Blog blog, User author, Boolean published,
+                                    int start, int max);
+
+  /**
    *
    *
    * @param authorSession
@@ -348,6 +363,20 @@ public interface EntryDAO extends GenericDAO<Entry>
    *
    *
    * @param blog
+   * @param author
+   * @param entry
+   * @param published
+   *
+   * @return
+   */
+  public Entry getNextEntry(Blog blog, User author, Entry entry,
+                            Boolean published);
+
+  /**
+   * Method description
+   *
+   *
+   * @param blog
    * @param startDate
    * @param endDate
    * @param entry
@@ -396,5 +425,19 @@ public interface EntryDAO extends GenericDAO<Entry>
    * @return
    */
   public Entry getPreviousEntry(Blog blog, Tag tag, Entry entry,
+                                Boolean published);
+
+  /**
+   * Method description
+   *
+   *
+   * @param blog
+   * @param author
+   * @param entry
+   * @param published
+   *
+   * @return
+   */
+  public Entry getPreviousEntry(Blog blog, User author, Entry entry,
                                 Boolean published);
 }
