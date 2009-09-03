@@ -18,9 +18,9 @@
 
         <h1><h:outputText value="#{label.blogAdministration}" /></h1>
 
-        <h:form>
+        <h:form id="blogForm">
 
-          <h:dataTable value="#{AdminBlogBean.blogs}" var="Blog">
+          <h:dataTable id="blogTable" rows="#{AdminBlogBean.pageSize}" value="#{AdminBlogBean.blogs}" var="Blog">
 
             <h:column>
               <f:facet name="header">
@@ -74,6 +74,8 @@
             </h:column>
 
           </h:dataTable>
+
+          <blog:pager for="blogForm:blogTable" showPages="10" selectedStyle="font-weight: bold;" />
 
           <h:commandLink value="#{label.newBlog}" action="#{AdminBlogBean.newBlog}" />
 
