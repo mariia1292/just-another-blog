@@ -56,6 +56,9 @@ import sonia.blog.entity.BlogMember;
 import sonia.blog.entity.Role;
 import sonia.blog.entity.User;
 import sonia.blog.util.BlogUtil;
+import sonia.blog.wui.model.GenericDataModel;
+
+import sonia.config.Config;
 
 import sonia.plugin.service.Service;
 
@@ -450,14 +453,7 @@ public class AdminBlogBean extends AbstractBean
    */
   public DataModel getBlogs()
   {
-    blogs = new ListDataModel();
-
-    List<Blog> blogList = blogDAO.getAll();
-
-    if ((blogList != null) &&!blogList.isEmpty())
-    {
-      blogs.setWrappedData(blogList);
-    }
+    blogs = new GenericDataModel(blogDAO, pageSize);
 
     return blogs;
   }
@@ -547,6 +543,17 @@ public class AdminBlogBean extends AbstractBean
    *
    * @return
    */
+  public Integer getPageSize()
+  {
+    return pageSize;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
   public SelectItem[] getRoleItems()
   {
     SelectItem[] items = new SelectItem[4];
@@ -627,6 +634,10 @@ public class AdminBlogBean extends AbstractBean
 
   /** Field description */
   private DataModel members;
+
+  /** Field description */
+  @Config(Constants.CONFIG_ADMIN_PAGESIZE)
+  private Integer pageSize = new Integer(20);
 
   /** Field description */
   @Service(Constants.NAVIGATION_BLOGACTION)
