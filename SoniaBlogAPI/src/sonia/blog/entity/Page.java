@@ -131,6 +131,18 @@ public class Page
     return true;
   }
 
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  @Override
+  public String toString()
+  {
+    return "sonia.blog.entity.Page[id=" + id + "]";
+  }
+
   //~--- get methods ----------------------------------------------------------
 
   /**

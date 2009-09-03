@@ -74,7 +74,7 @@ public class Entry implements Serializable, ContentObject, CommentAble
 
     if (!category.getEntries().contains(this))
     {
-      categories.remove(this);
+      category.getEntries().add(this);
     }
   }
 
@@ -236,7 +236,7 @@ public class Entry implements Serializable, ContentObject, CommentAble
   @Override
   public String toString()
   {
-    return "sonia.blop.entity.Entry[id=" + id + "]";
+    return "sonia.blog.entity.Entry[id=" + id + "]";
   }
 
   //~--- get methods ----------------------------------------------------------

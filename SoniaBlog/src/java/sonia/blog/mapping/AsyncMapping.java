@@ -598,7 +598,12 @@ public class AsyncMapping extends FinalMapping
 
         if (Util.hasContent(categories))
         {
-          List<SearchEntry> entries = categories.iterator().next().getEntries();
+          List<SearchEntry> entries = new ArrayList<SearchEntry>();
+
+          for (SearchCategory cat : categories)
+          {
+            entries.addAll(cat.getEntries());
+          }
 
           if (Util.hasContent(entries))
           {
