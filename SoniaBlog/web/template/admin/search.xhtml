@@ -4,7 +4,8 @@
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:f="http://java.sun.com/jsf/core"
-      xmlns:blog="http://jab.nitilon.org/blog/">
+      xmlns:blog="http://jab.nitilon.org/blog/"
+      xmlns:t="http://myfaces.apache.org/tomahawk">
 
   <body>
 
@@ -50,14 +51,21 @@
       <ui:define name="info">
         <h3><h:outputText value="#{label.searchCategories}" /></h3>
         <div id="submenu" class="vlist">
-        <ul>
-          <ui:repeat value="#{SearchBean.categories}" var="Category">
-            <li>
-              <a href="#{SearchBean.categoryLink}">#{Category.label} (#{Category.size})</a>
-            </li>
-          </ui:repeat>
-        </ul>
+          <ul>
+            <ui:repeat value="#{SearchBean.categories}" var="Category">
+              <li>
+                <a href="#{SearchBean.categoryLink}">#{Category.label} (#{Category.size})</a>
+              </li>
+            </ui:repeat>
+          </ul>
         </div>
+
+        <h:form id="extraNavigationForm">
+          <h3><h:outputText value="#{label.extraNavigation}" /></h3>
+          <t:panelNavigation2 styleClass="overview" layout="list">
+            <t:navigationMenuItems value="#{BlogBean.extraNavigation}" />
+          </t:panelNavigation2>
+        </h:form>
       </ui:define>
 
     </ui:composition>

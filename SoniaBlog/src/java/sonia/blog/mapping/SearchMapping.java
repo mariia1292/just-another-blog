@@ -181,6 +181,11 @@ public class SearchMapping extends ScrollableFilterMapping
       // TODO: error handling
     }
 
+    if (result == null)
+    {
+      result = buildTemplateViewId(request, Constants.TEMPLATE_SEARCH);
+    }
+
     return result;
   }
 

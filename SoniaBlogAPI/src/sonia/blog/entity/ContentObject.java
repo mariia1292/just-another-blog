@@ -66,12 +66,18 @@ public interface ContentObject extends PermaObject
    * Method description
    *
    *
+   * @return
+   */
+  public Blog getBlog();
+
+  /**
+   * Method description
+   *
+   *
    *
    * @return
    */
   public String getContent();
-
-  public Blog getBlog();
 
   /**
    * Method description
