@@ -2,6 +2,11 @@
 </div>
 <script type="text/javascript" charset="UTF-8">
   $(document).ready(function() {
-    $("div#toc_${id}").toc();
+    $("div#toc_${id}").toc({
+      id: "${id}",
+      exclude: "${exclude}",
+      orderedList: ${orderedList}<#if container??>,
+      container: "${container}"</#if>
+    });
   });
 </script>
