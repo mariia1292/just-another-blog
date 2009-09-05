@@ -81,6 +81,7 @@ import java.io.PrintWriter;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -508,6 +509,7 @@ public class MacroBrowserMapping extends FinalMapping
     writer.println("[");
 
     boolean first = true;
+    List<MacroInformation> informations = new ArrayList<MacroInformation>();
 
     while (macroIt.hasNext())
     {
@@ -517,18 +519,31 @@ public class MacroBrowserMapping extends FinalMapping
 
       if (info != null)
       {
-        if (first)
-        {
-          first = false;
-        }
-        else
-        {
-          writer.println(",");
-        }
+        informations.add(info);
+      }
+    }
 
-        writer.append("  {");
-        printBasicInfo(writer, info);
-        writer.append(" }");
+    if (Util.hasContent(informations))
+    {
+      Collections.sort(informations, new MacroInformationComparator());
+
+      for (MacroInformation info : informations)
+      {
+        if (info != null)
+        {
+          if (first)
+          {
+            first = false;
+          }
+          else
+          {
+            writer.println(",");
+          }
+
+          writer.append("  {");
+          printBasicInfo(writer, info);
+          writer.append(" }");
+        }
       }
     }
 
@@ -783,6 +798,35 @@ public class MacroBrowserMapping extends FinalMapping
 
     return widget;
   }
+
+  //~--- inner classes --------------------------------------------------------
+
+  /**
+   * Class description
+   *
+   *
+   * @version        Enter version here..., 09/09/05
+   * @author         Enter your name here...
+   */
+  private static class MacroInformationComparator
+          implements Comparator<MacroInformation>
+  {
+
+    /**
+     * Method description
+     *
+     *
+     * @param o1
+     * @param o2
+     *
+     * @return
+     */
+    public int compare(MacroInformation o1, MacroInformation o2)
+    {
+      return o1.getDisplayName().compareTo(o2.getDisplayName());
+    }
+  }
+
 
   //~--- fields ---------------------------------------------------------------
 
