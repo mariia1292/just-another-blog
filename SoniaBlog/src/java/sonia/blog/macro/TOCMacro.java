@@ -42,7 +42,12 @@ import sonia.blog.api.macro.AbstractBlogMacro;
 import sonia.blog.api.macro.ScriptResource;
 import sonia.blog.api.macro.WebMacro;
 import sonia.blog.api.macro.WebResource;
+import sonia.blog.api.macro.browse.CheckboxWidget;
+import sonia.blog.api.macro.browse.StringInputWidget;
 import sonia.blog.entity.ContentObject;
+
+import sonia.macro.browse.MacroInfo;
+import sonia.macro.browse.MacroInfoParameter;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -55,6 +60,12 @@ import java.util.Map;
  *
  * @author Sebastian Sdorra
  */
+@MacroInfo(
+  name = "toc",
+  displayName = "macro.toc.displayName",
+  description = "macro.toc.description",
+  resourceBundle = "sonia.blog.resources.label"
+)
 public class TOCMacro extends AbstractBlogMacro implements WebMacro
 {
 
@@ -72,6 +83,72 @@ public class TOCMacro extends AbstractBlogMacro implements WebMacro
   public List<WebResource> getResources()
   {
     return resources;
+  }
+
+  //~--- set methods ----------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   * @param container
+   */
+  @MacroInfoParameter(
+    displayName = "macro.toc.container.displayName",
+    description = "macro.toc.container.description",
+    widget = StringInputWidget.class
+  )
+  public void setContainer(String container)
+  {
+    this.container = container;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param exclude
+   */
+  @MacroInfoParameter(
+    displayName = "macro.toc.exclude.displayName",
+    description = "macro.toc.exclude.description",
+    widget = StringInputWidget.class
+  )
+  public void setExclude(String exclude)
+  {
+    this.exclude = exclude;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param id
+   */
+  @MacroInfoParameter(
+    displayName = "macro.toc.id.displayName",
+    description = "macro.toc.id.description",
+    widget = StringInputWidget.class
+  )
+  public void setId(String id)
+  {
+    this.id = id;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param orderedList
+   */
+  @MacroInfoParameter(
+    displayName = "macro.toc.orderedList.displayName",
+    description = "macro.toc.orderedList.description",
+    widget = CheckboxWidget.class
+  )
+  public void setOrderedList(Boolean orderedList)
+  {
+    this.orderedList = orderedList;
   }
 
   //~--- methods --------------------------------------------------------------
@@ -99,9 +176,13 @@ public class TOCMacro extends AbstractBlogMacro implements WebMacro
     resources.add(tocScript);
 
     Map<String, Object> parameters = new HashMap<String, Object>();
-    long id = System.nanoTime();
 
-    parameters.put("id", Long.toString(id));
+    parameters.put("id", (id != null)
+                         ? id
+                         : object.getId().toString());
+    parameters.put("exclude", exclude);
+    parameters.put("orderedList", orderedList.toString());
+    parameters.put("container", container);
 
     return parseTemplate(parameters, TEMPLATE);
   }
@@ -109,8 +190,20 @@ public class TOCMacro extends AbstractBlogMacro implements WebMacro
   //~--- fields ---------------------------------------------------------------
 
   /** Field description */
+  private String container;
+
+  /** Field description */
+  private String exclude = "h1";
+
+  /** Field description */
+  private String id;
+
+  /** Field description */
   @Context
   private LinkBuilder linkBuilder;
+
+  /** Field description */
+  private Boolean orderedList = Boolean.FALSE;
 
   /** Field description */
   private List<WebResource> resources;
