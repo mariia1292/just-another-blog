@@ -50,6 +50,7 @@ import sonia.blog.util.BlogUtil;
 
 import sonia.cache.Cache;
 import sonia.cache.CacheInjector;
+import sonia.cache.DefaultCacheMBeanManager;
 
 import sonia.config.Config;
 import sonia.config.ConfigInjector;
@@ -340,6 +341,8 @@ public class BlogContextListener implements ServletContextListener
             new ModifyableConfigurationMBean(context.getConfiguration()),
             configName);
         mbs.registerMBean(new JobQueueMBean(context.getJobQueue()), queueName);
+        context.getCacheManager().setMbeanManager(
+            new DefaultCacheMBeanManager(mbs, "sonia.blog.jmx.cache:type="));
       }
     }
     catch (Exception ex)

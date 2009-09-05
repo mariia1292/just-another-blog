@@ -76,6 +76,18 @@ public class CacheManager
     caches = new HashMap<String, ObjectCache>();
   }
 
+  /**
+   * Constructs the CacheManager with JMX support
+   *
+   *
+   * @param mbeanManager
+   */
+  public CacheManager(CacheMBeanManager mbeanManager)
+  {
+    this.mbeanManager = mbeanManager;
+    caches = new HashMap<String, ObjectCache>();
+  }
+
   //~--- methods --------------------------------------------------------------
 
   /**
@@ -100,6 +112,11 @@ public class CacheManager
       }
 
       caches.put(name, cache);
+
+      if (mbeanManager != null)
+      {
+        mbeanManager.register(cache);
+      }
     }
     else
     {
@@ -175,14 +192,22 @@ public class CacheManager
    */
   public void remove(String name)
   {
-    ObjectCache c = caches.remove(name);
+    ObjectCache cache = caches.remove(name);
 
-    if ((c != null) && logger.isLoggable(Level.FINEST))
+    if (cache != null)
     {
-      StringBuffer msg = new StringBuffer();
+      if (mbeanManager != null)
+      {
+        mbeanManager.unregister(cache);
+      }
 
-      msg.append("remove cache ").append(c.getName());
-      logger.finest(msg.toString());
+      if (logger.isLoggable(Level.FINEST))
+      {
+        StringBuffer msg = new StringBuffer();
+
+        msg.append("remove cache ").append(cache.getName());
+        logger.finest(msg.toString());
+      }
     }
   }
 
@@ -199,6 +224,19 @@ public class CacheManager
   public ObjectCache get(String name)
   {
     return caches.get(name);
+  }
+
+  //~--- set methods ----------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   * @param mbeanManager
+   */
+  public void setMbeanManager(CacheMBeanManager mbeanManager)
+  {
+    this.mbeanManager = mbeanManager;
   }
 
   //~--- methods --------------------------------------------------------------
@@ -266,7 +304,8 @@ public class CacheManager
 
             if (constructor != null)
             {
-              ObjectCache cache = (ObjectCache) constructor.newInstance(name, parameters);
+              ObjectCache cache = (ObjectCache) constructor.newInstance(name,
+                                    parameters);
 
               add(cache);
             }
@@ -331,4 +370,7 @@ public class CacheManager
 
   /** Field description */
   private Map<String, ObjectCache> caches;
+
+  /** Field description */
+  private CacheMBeanManager mbeanManager;
 }
