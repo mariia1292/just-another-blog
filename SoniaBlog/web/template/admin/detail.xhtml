@@ -27,7 +27,7 @@
 
         <h1><h:outputText value="#{BlogBean.entry.title}" /></h1>
 
-        <div class="content">
+        <div id="content_#{BlogBean.entry.id}" class="content">
           <h:outputText value="#{BlogBean.entry.displayContent}" escape="false" />
         </div>
         

@@ -28,7 +28,7 @@
             <h2>
               <blog:link value="#{Entry.title}" object="#{Entry}" />
             </h2>
-            <div class="content">
+            <div id="content_#{Entry.id}" class="content">
               <h:outputText value="#{Entry.displayContent}" escape="false" />
             </div>
             <p>
