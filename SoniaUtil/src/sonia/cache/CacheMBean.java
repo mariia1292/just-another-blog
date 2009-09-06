@@ -99,6 +99,10 @@ public class CacheMBean implements DynamicMBean
     {
       cache.clear();
     }
+    else if ("reset".equals(actionName))
+    {
+      cache.reset();
+    }
     else
     {
       throw new ReflectionException(new NoSuchMethodException(actionName));
@@ -150,12 +154,8 @@ public class CacheMBean implements DynamicMBean
     {
       StringBuffer out = new StringBuffer();
 
-      System.out.println( cache.getHitRatio() );
-
       out.append(numberFormat.format(cache.getHitRatio())).append("%");
       result = out.toString();
-
-      System.out.println( result );
     }
 
     return result;
@@ -277,10 +277,13 @@ public class CacheMBean implements DynamicMBean
    */
   private MBeanOperationInfo[] getOperationInformation()
   {
-    MBeanOperationInfo[] operationInfo = new MBeanOperationInfo[1];
+    MBeanOperationInfo[] operationInfo = new MBeanOperationInfo[2];
 
     operationInfo[0] = new MBeanOperationInfo("clear", "clears the cache",
             null, "void", MBeanOperationInfo.ACTION);
+    operationInfo[1] = new MBeanOperationInfo("reset",
+            "clears the cache and reset all counters", null, "void",
+            MBeanOperationInfo.ACTION);
 
     return operationInfo;
   }

@@ -46,6 +46,7 @@ import sonia.blog.api.app.BlogRequest;
 import sonia.blog.api.app.BlogResponse;
 import sonia.blog.api.mapping.Mapping;
 import sonia.blog.api.mapping.MappingHandler;
+import sonia.blog.api.mapping.MappingInstructions;
 
 import sonia.util.Util;
 import sonia.util.XmlUtil;
@@ -124,53 +125,19 @@ public class DefaultMappingHandler implements MappingHandler
    *
    * @param request
    * @param response
+   * @param instructions
    *
    * @return
    *
    * @throws IOException
    * @throws ServletException
    */
-  public boolean handleMapping(BlogRequest request, BlogResponse response)
+  public boolean handleMapping(BlogRequest request, BlogResponse response,
+                               MappingInstructions instructions)
           throws IOException, ServletException
   {
     boolean result = true;
-    String uri = request.getRequestURI();
-
-    uri = uri.substring(request.getContextPath().length());
-
-    Class<? extends Mapping> mappingClass = null;
-    List<String> params = null;
-
-    for (String regex : mappingMap.keySet())
-    {
-      Pattern p = Pattern.compile(regex);
-      Matcher m = p.matcher(uri);
-
-      if (m.matches())
-      {
-        params = new ArrayList<String>();
-        mappingClass = mappingMap.get(regex);
-
-        int groupCount = m.groupCount();
-
-        if (groupCount > 0)
-        {
-          params = new ArrayList<String>();
-
-          for (int i = 0; i < groupCount; i++)
-          {
-            String param = m.group(i + 1);
-
-            if (!Util.isBlank(param))
-            {
-              params.add(param);
-            }
-          }
-        }
-
-        break;
-      }
-    }
+    Class<? extends Mapping> mappingClass = instructions.getMappingClass();
 
     if (mappingClass != null)
     {
@@ -194,7 +161,7 @@ public class DefaultMappingHandler implements MappingHandler
 
       request.setMapping(mapping);
       result = mapping.handleMapping(request, response,
-                                     params.toArray(new String[0]));
+                                     instructions.getParameters());
     }
 
     return result;
@@ -274,6 +241,70 @@ public class DefaultMappingHandler implements MappingHandler
   public Map<String, Class<? extends Mapping>> getAll()
   {
     return mappingMap;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param request
+   *
+   * @return
+   */
+  public MappingInstructions getMappingInstructions(BlogRequest request)
+  {
+    MappingInstructions instructions = null;
+    String uri = request.getRequestURI();
+
+    uri = uri.substring(request.getContextPath().length());
+
+    Class<? extends Mapping> mappingClass = null;
+    List<String> params = null;
+
+    for (String regex : mappingMap.keySet())
+    {
+      Pattern p = Pattern.compile(regex);
+      Matcher m = p.matcher(uri);
+
+      if (m.matches())
+      {
+        params = new ArrayList<String>();
+        mappingClass = mappingMap.get(regex);
+
+        int groupCount = m.groupCount();
+
+        if (groupCount > 0)
+        {
+          params = new ArrayList<String>();
+
+          for (int i = 0; i < groupCount; i++)
+          {
+            String param = m.group(i + 1);
+
+            if (!Util.isBlank(param))
+            {
+              params.add(param);
+            }
+          }
+        }
+
+        break;
+      }
+    }
+
+    if (mappingClass != null)
+    {
+      String[] paramArray = null;
+
+      if (params != null)
+      {
+        paramArray = params.toArray(new String[0]);
+      }
+
+      instructions = new MappingInstructions(mappingClass, paramArray);
+    }
+
+    return instructions;
   }
 
   //~--- methods --------------------------------------------------------------

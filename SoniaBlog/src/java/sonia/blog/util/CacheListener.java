@@ -31,113 +31,110 @@
 
 
 
-package sonia.blog.api.mapping;
+package sonia.blog.util;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import sonia.blog.api.app.BlogRequest;
-import sonia.blog.api.app.BlogResponse;
+import sonia.blog.api.app.BlogContext;
+import sonia.blog.api.app.Constants;
+import sonia.blog.api.dao.DAOListener;
+
+import sonia.cache.ObjectCache;
+
+import sonia.config.ConfigurationListener;
+import sonia.config.ModifyableConfiguration;
 
 //~--- JDK imports ------------------------------------------------------------
 
-import java.io.IOException;
-import java.io.InputStream;
-
-import java.util.Map;
-
-import javax.servlet.ServletException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
  * @author Sebastian Sdorra
  */
-public interface MappingHandler
+public class CacheListener implements DAOListener, ConfigurationListener
 {
 
-  /**
-   *  Method description
-   *
-   *
-   *
-   *  @param regex
-   *  @param mapping
-   */
-  public void add(String regex, Class<? extends Mapping> mapping);
+  /** Field description */
+  private static Logger logger =
+    Logger.getLogger(CacheListener.class.getName());
+
+  //~--- methods --------------------------------------------------------------
 
   /**
    * Method description
    *
    *
-   *
-   * @param regex
-   *
-   * @return
+   * @param config
+   * @param key
    */
-  public boolean contains(String regex);
+  public void configChanged(ModifyableConfiguration config, String key)
+  {
+    if (firstCall)
+    {
+      init();
+    }
+
+    if (cache != null)
+    {
+      cache.clear();
+    }
+  }
 
   /**
    * Method description
    *
    *
-   * @param request
-   * @param response
-   * @param instructions
-   *
-   * @return
-   *
-   * @throws IOException
-   * @throws ServletException
+   * @param action
+   * @param item
    */
-  public boolean handleMapping(BlogRequest request, BlogResponse response,
-                               MappingInstructions instructions)
-          throws IOException, ServletException;
+  public void handleEvent(Action action, Object item)
+  {
+    if (firstCall)
+    {
+      init();
+    }
+
+    if (cache != null)
+    {
+      switch (action)
+      {
+        case POSTADD :
+        case POSTREMOVE :
+        case POSTUPDATE :
+          if (logger.isLoggable(Level.FINE))
+          {
+            logger.fine("clear mapping cache");
+          }
+
+          cache.clear();
+      }
+    }
+  }
 
   /**
    * Method description
    *
-   *
-   * @param in
-   *
-   * @throws IOException
    */
-  public void load(InputStream in) throws IOException;
+  private void init()
+  {
+    cache =
+      BlogContext.getInstance().getCacheManager().get(Constants.CACHE_MAPPING);
 
-  /**
-   * Method description
-   *
-   *
-   *
-   * @param regex
-   */
-  public void remove(String regex);
+    if (cache != null)
+    {
+      BlogContext.getInstance().getConfiguration().addListener(this);
+    }
 
-  //~--- get methods ----------------------------------------------------------
+    firstCall = false;
+  }
 
-  /**
-   * Method description
-   *
-   *
-   * @param regex
-   *
-   * @return
-   */
-  public Class<? extends Mapping> get(String regex);
+  //~--- fields ---------------------------------------------------------------
 
-  /**
-   * Method description
-   *
-   *
-   * @return
-   */
-  public Map<String, Class<? extends Mapping>> getAll();
+  /** Field description */
+  private ObjectCache cache;
 
-  /**
-   * Method description
-   *
-   *
-   * @param request
-   *
-   * @return
-   */
-  public MappingInstructions getMappingInstructions(BlogRequest request);
+  /** Field description */
+  private boolean firstCall = true;
 }

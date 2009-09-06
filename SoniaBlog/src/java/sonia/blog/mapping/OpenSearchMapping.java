@@ -47,11 +47,13 @@ import java.io.IOException;
 import java.io.PrintWriter;
 
 import javax.servlet.ServletException;
+import sonia.cache.Cacheable;
 
 /**
  *
  * @author Sebastian Sdorra
  */
+@Cacheable
 public class OpenSearchMapping extends FinalMapping
 {
 

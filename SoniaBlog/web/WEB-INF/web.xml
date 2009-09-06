@@ -118,7 +118,19 @@
     <servlet-name>Faces Servlet</servlet-name>
     <url-pattern>*.jab</url-pattern>
   </servlet-mapping>
-  
+
+  <!-- Logout Servlet -->
+
+  <servlet>
+    <servlet-name>LogoutServlet</servlet-name>
+    <servlet-class>sonia.blog.authentication.LogoutServlet</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>LogoutServlet</servlet-name>
+    <url-pattern>/logout</url-pattern>
+  </servlet-mapping>
+
   <!-- JSF Library config -->
 
   <jsp-config>

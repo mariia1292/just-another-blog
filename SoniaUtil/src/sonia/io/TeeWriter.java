@@ -31,113 +31,83 @@
 
 
 
-package sonia.blog.api.mapping;
-
-//~--- non-JDK imports --------------------------------------------------------
-
-import sonia.blog.api.app.BlogRequest;
-import sonia.blog.api.app.BlogResponse;
+package sonia.io;
 
 //~--- JDK imports ------------------------------------------------------------
 
 import java.io.IOException;
-import java.io.InputStream;
-
-import java.util.Map;
-
-import javax.servlet.ServletException;
+import java.io.Writer;
 
 /**
  *
  * @author Sebastian Sdorra
  */
-public interface MappingHandler
+public class TeeWriter extends Writer
 {
 
   /**
-   *  Method description
+   * Constructs ...
    *
    *
-   *
-   *  @param regex
-   *  @param mapping
+   * @param writer1
+   * @param writer2
    */
-  public void add(String regex, Class<? extends Mapping> mapping);
+  public TeeWriter(Writer writer1, Writer writer2)
+  {
+    this.writer1 = writer1;
+    this.writer2 = writer2;
+  }
+
+  //~--- methods --------------------------------------------------------------
 
   /**
    * Method description
    *
-   *
-   *
-   * @param regex
-   *
-   * @return
-   */
-  public boolean contains(String regex);
-
-  /**
-   * Method description
-   *
-   *
-   * @param request
-   * @param response
-   * @param instructions
-   *
-   * @return
-   *
-   * @throws IOException
-   * @throws ServletException
-   */
-  public boolean handleMapping(BlogRequest request, BlogResponse response,
-                               MappingInstructions instructions)
-          throws IOException, ServletException;
-
-  /**
-   * Method description
-   *
-   *
-   * @param in
    *
    * @throws IOException
    */
-  public void load(InputStream in) throws IOException;
+  @Override
+  public void close() throws IOException
+  {
+    writer1.close();
+    writer2.close();
+  }
 
   /**
    * Method description
    *
    *
-   *
-   * @param regex
+   * @throws IOException
    */
-  public void remove(String regex);
-
-  //~--- get methods ----------------------------------------------------------
-
-  /**
-   * Method description
-   *
-   *
-   * @param regex
-   *
-   * @return
-   */
-  public Class<? extends Mapping> get(String regex);
+  @Override
+  public void flush() throws IOException
+  {
+    writer1.flush();
+    writer2.flush();
+  }
 
   /**
    * Method description
    *
    *
-   * @return
+   * @param cbuf
+   * @param off
+   * @param len
+   *
+   * @throws IOException
    */
-  public Map<String, Class<? extends Mapping>> getAll();
+  @Override
+  public void write(char[] cbuf, int off, int len) throws IOException
+  {
+    writer1.write(cbuf, off, len);
+    writer2.write(cbuf, off, len);
+  }
 
-  /**
-   * Method description
-   *
-   *
-   * @param request
-   *
-   * @return
-   */
-  public MappingInstructions getMappingInstructions(BlogRequest request);
+  //~--- fields ---------------------------------------------------------------
+
+  /** Field description */
+  private Writer writer1;
+
+  /** Field description */
+  private Writer writer2;
 }
