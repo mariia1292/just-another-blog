@@ -120,6 +120,22 @@ public abstract class AbstractCache implements ObjectCache
   /**
    * Method description
    *
+   */
+  public void reset()
+  {
+    Map<Object, CacheObject> cacheMap = getCacheMap();
+
+    synchronized (cacheMap)
+    {
+      cacheMap.clear();
+      hits = 0l;
+      missed = 0l;
+    }
+  }
+
+  /**
+   * Method description
+   *
    *
    * @return
    */
@@ -129,6 +145,21 @@ public abstract class AbstractCache implements ObjectCache
   }
 
   //~--- get methods ----------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  public double getHitRatio()
+  {
+    double dHits = (double) hits;
+    double dMissed = (double) missed;
+    return (dHits + dMissed > 0)
+           ? 100d / (dHits + dMissed) * dHits
+           : 0d;
+  }
 
   /**
    * Method description
