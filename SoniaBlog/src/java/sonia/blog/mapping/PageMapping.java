@@ -56,11 +56,13 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.servlet.ServletException;
+import sonia.cache.Cacheable;
 
 /**
  *
  * @author Sebastian Sdorra
  */
+@Cacheable
 public class PageMapping extends FilterMapping
 {
 

@@ -226,6 +226,19 @@ public class CacheManager
     return caches.get(name);
   }
 
+  /**
+   * Method description
+   *
+   *
+   * @param clazz
+   *
+   * @return
+   */
+  public static boolean isCacheable(Class<?> clazz)
+  {
+    return clazz.getAnnotation(Cacheable.class) != null;
+  }
+
   //~--- set methods ----------------------------------------------------------
 
   /**

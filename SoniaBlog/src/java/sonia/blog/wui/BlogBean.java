@@ -342,8 +342,12 @@ public class BlogBean extends AbstractBean
 
       if (config.getBoolean(Constants.CONFIG_ALLOW_REGISTRATION, Boolean.FALSE))
       {
-        navigation.add(new NavigationMenuItem(bundle.getString("register"),
-                "register"));
+        NavigationMenuItem registerItem = new NavigationMenuItem();
+
+        registerItem.setValue(bundle.getString("register"));
+        registerItem.setExternalLink(linkBuilder.buildLink(request,
+                "/register.jab"));
+        navigation.add(registerItem);
       }
     }
     else
@@ -358,12 +362,19 @@ public class BlogBean extends AbstractBean
 
       if (config.getBoolean(Constants.CONFIG_ALLOW_BLOGCREATION, Boolean.FALSE))
       {
-        navigation.add(new NavigationMenuItem(bundle.getString("createBlog"),
-                "createBlog"));
+        NavigationMenuItem createBlogItem = new NavigationMenuItem();
+
+        createBlogItem.setValue(bundle.getString("createBlog"));
+        createBlogItem.setExternalLink(linkBuilder.buildLink(request,
+                "/blog.jab"));
+        navigation.add(createBlogItem);
       }
 
-      navigation.add(new NavigationMenuItem(bundle.getString("logout"),
-              "#{LoginBean.logout}"));
+      NavigationMenuItem logoutItem = new NavigationMenuItem();
+
+      logoutItem.setValue(bundle.getString("logout"));
+      logoutItem.setExternalLink(linkBuilder.buildLink(request, "/logout"));
+      navigation.add(logoutItem);
     }
 
     List<NavigationProvider> providers = extraNavigationReference.getAll();

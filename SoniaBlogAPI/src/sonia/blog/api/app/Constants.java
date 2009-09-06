@@ -52,6 +52,9 @@ public interface Constants
   public static final String CACHE_FEED = "feed.cache";
 
   /** Field description */
+  public static final String CACHE_MAPPING = "mapping.cache";
+
+  /** Field description */
   public static final String CACHE_MBPREVIEW = "mbPreview.cache";
 
   /** Field description */

@@ -35,81 +35,28 @@ package sonia.blog.api.mapping;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import sonia.blog.api.app.BlogRequest;
-import sonia.blog.api.app.BlogResponse;
-
-//~--- JDK imports ------------------------------------------------------------
-
-import java.io.IOException;
-import java.io.InputStream;
-
-import java.util.Map;
-
-import javax.servlet.ServletException;
+import sonia.cache.CacheManager;
 
 /**
  *
  * @author Sebastian Sdorra
  */
-public interface MappingHandler
+public class MappingInstructions
 {
 
   /**
-   *  Method description
+   * Constructs ...
    *
    *
-   *
-   *  @param regex
-   *  @param mapping
+   * @param mappingClass
+   * @param parameters
    */
-  public void add(String regex, Class<? extends Mapping> mapping);
-
-  /**
-   * Method description
-   *
-   *
-   *
-   * @param regex
-   *
-   * @return
-   */
-  public boolean contains(String regex);
-
-  /**
-   * Method description
-   *
-   *
-   * @param request
-   * @param response
-   * @param instructions
-   *
-   * @return
-   *
-   * @throws IOException
-   * @throws ServletException
-   */
-  public boolean handleMapping(BlogRequest request, BlogResponse response,
-                               MappingInstructions instructions)
-          throws IOException, ServletException;
-
-  /**
-   * Method description
-   *
-   *
-   * @param in
-   *
-   * @throws IOException
-   */
-  public void load(InputStream in) throws IOException;
-
-  /**
-   * Method description
-   *
-   *
-   *
-   * @param regex
-   */
-  public void remove(String regex);
+  public MappingInstructions(Class<? extends Mapping> mappingClass,
+                             String[] parameters)
+  {
+    this.mappingClass = mappingClass;
+    this.parameters = parameters;
+  }
 
   //~--- get methods ----------------------------------------------------------
 
@@ -117,11 +64,12 @@ public interface MappingHandler
    * Method description
    *
    *
-   * @param regex
-   *
    * @return
    */
-  public Class<? extends Mapping> get(String regex);
+  public Class<? extends Mapping> getMappingClass()
+  {
+    return mappingClass;
+  }
 
   /**
    * Method description
@@ -129,15 +77,27 @@ public interface MappingHandler
    *
    * @return
    */
-  public Map<String, Class<? extends Mapping>> getAll();
+  public String[] getParameters()
+  {
+    return parameters;
+  }
 
   /**
    * Method description
    *
    *
-   * @param request
-   *
    * @return
    */
-  public MappingInstructions getMappingInstructions(BlogRequest request);
+  public boolean isCacheable()
+  {
+    return CacheManager.isCacheable(mappingClass);
+  }
+
+  //~--- fields ---------------------------------------------------------------
+
+  /** Field description */
+  private Class<? extends Mapping> mappingClass;
+
+  /** Field description */
+  private String[] parameters;
 }

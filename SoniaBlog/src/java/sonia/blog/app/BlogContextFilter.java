@@ -41,15 +41,23 @@ import sonia.blog.api.app.BlogRequest;
 import sonia.blog.api.app.BlogRequestListener;
 import sonia.blog.api.app.BlogResponse;
 import sonia.blog.api.app.Constants;
+import sonia.blog.api.app.ResponseCacheObject;
 import sonia.blog.api.link.LinkBuilder;
+import sonia.blog.api.mapping.MappingHandler;
+import sonia.blog.api.mapping.MappingInstructions;
 import sonia.blog.entity.Blog;
 import sonia.blog.wui.LoginBean;
+
+import sonia.cache.ObjectCache;
 
 import sonia.plugin.service.ServiceReference;
 
 //~--- JDK imports ------------------------------------------------------------
 
 import java.io.IOException;
+
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -69,6 +77,10 @@ public class BlogContextFilter implements Filter
 
   /** Field description */
   public static final String SSO_SESSION_VAR = "jab.auth.sso";
+
+  /** Field description */
+  private static Logger logger =
+    Logger.getLogger(BlogContextFilter.class.getName());
 
   //~--- methods --------------------------------------------------------------
 
@@ -138,11 +150,7 @@ public class BlogContextFilter implements Filter
       }
     }
 
-    if (BlogContext.getInstance().getMappingHandler().handleMapping(request,
-            response))
-    {
-      chain.doFilter(request, response);
-    }
+    handleRequest(request, response, chain);
 
     for (BlogRequestListener listener : listenerReference.getAll())
     {
@@ -160,9 +168,36 @@ public class BlogContextFilter implements Filter
    */
   public void init(FilterConfig config) throws ServletException
   {
-    configuration = BlogContext.getInstance().getConfiguration();
-    listenerReference = BlogContext.getInstance().getServiceRegistry().get(
-      BlogRequestListener.class, Constants.SERVICE_REQUESTLISTENER);
+    BlogContext blogCtx = BlogContext.getInstance();
+
+    configuration = blogCtx.getConfiguration();
+    listenerReference =
+      blogCtx.getServiceRegistry().get(BlogRequestListener.class,
+                                       Constants.SERVICE_REQUESTLISTENER);
+    cache = blogCtx.getCacheManager().get(Constants.CACHE_MAPPING);
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param request
+   *
+   * @return
+   */
+  private String createCacheKey(BlogRequest request)
+  {
+    StringBuffer result = new StringBuffer();
+
+    result.append(request.getCurrentBlog().getId()).append(":");
+    result.append(request.getRequestURI()).append(":");
+    result.append(request.getQueryString()).append(":");
+    result.append(request.getRedirect()).append(":");
+    result.append((request.getUser() != null)
+                  ? request.getUser().getId()
+                  : -1);
+
+    return result.toString();
   }
 
   /**
@@ -186,7 +221,77 @@ public class BlogContextFilter implements Filter
     loginBean.login(request, response);
   }
 
+  /**
+   * Method description
+   *
+   *
+   * @param request
+   * @param response
+   * @param chain
+   *
+   * @throws IOException
+   * @throws ServletException
+   */
+  private void handleRequest(BlogRequest request, BlogResponse response,
+                             FilterChain chain)
+          throws IOException, ServletException
+  {
+    MappingHandler mappingHandler =
+      BlogContext.getInstance().getMappingHandler();
+    MappingInstructions instructions =
+      mappingHandler.getMappingInstructions(request);
+    String cacheKey = null;
+    boolean process = true;
+
+    if ((cache != null) && (instructions != null) && instructions.isCacheable())
+    {
+      cacheKey = createCacheKey(request);
+
+      ResponseCacheObject cacheObject =
+        (ResponseCacheObject) cache.get(cacheKey);
+
+      if (cacheObject != null)
+      {
+        if (logger.isLoggable(Level.FINE))
+        {
+          StringBuffer msg = new StringBuffer();
+
+          msg.append("process page ").append(request.getRequestURI());
+          msg.append(" from cache");
+          logger.fine(msg.toString());
+        }
+
+        cacheObject.apply(response);
+        process = false;
+      }
+      else
+      {
+        response.setCacheEnabled(true);
+      }
+    }
+
+    if (process
+        && ((instructions == null)
+            || mappingHandler.handleMapping(request, response, instructions)))
+    {
+      chain.doFilter(request, response);
+    }
+
+    if ((cache != null) && (cacheKey != null) && response.isCacheEnabled())
+    {
+      ResponseCacheObject cacheObject = response.getCachedObject();
+
+      if (cacheObject != null)
+      {
+        cache.put(cacheKey, cacheObject);
+      }
+    }
+  }
+
   //~--- fields ---------------------------------------------------------------
+
+  /** Field description */
+  private ObjectCache cache;
 
   /** Field description */
   private BlogConfiguration configuration;
