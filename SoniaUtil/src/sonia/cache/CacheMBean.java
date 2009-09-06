@@ -35,6 +35,8 @@ package sonia.cache;
 
 //~--- JDK imports ------------------------------------------------------------
 
+import java.text.NumberFormat;
+
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -70,6 +72,9 @@ public class CacheMBean implements DynamicMBean
   public CacheMBean(ObjectCache cache)
   {
     this.cache = cache;
+    numberFormat = NumberFormat.getInstance();
+    numberFormat.setMaximumFractionDigits(2);
+    numberFormat.setMinimumFractionDigits(2);
   }
 
   //~--- methods --------------------------------------------------------------
@@ -140,6 +145,17 @@ public class CacheMBean implements DynamicMBean
     else if ("type".equals(attribute))
     {
       result = cache.getClass().getName();
+    }
+    else if ("hitRatio".equals(attribute))
+    {
+      StringBuffer out = new StringBuffer();
+
+      System.out.println( cache.getHitRatio() );
+
+      out.append(numberFormat.format(cache.getHitRatio())).append("%");
+      result = out.toString();
+
+      System.out.println( result );
     }
 
     return result;
@@ -233,7 +249,7 @@ public class CacheMBean implements DynamicMBean
    */
   private MBeanAttributeInfo[] getAttributeInformation()
   {
-    MBeanAttributeInfo[] attributeInfo = new MBeanAttributeInfo[5];
+    MBeanAttributeInfo[] attributeInfo = new MBeanAttributeInfo[6];
 
     attributeInfo[0] = new MBeanAttributeInfo("name", String.class.getName(),
             "the name of the cache", true, false, false);
@@ -246,6 +262,9 @@ public class CacheMBean implements DynamicMBean
     attributeInfo[4] = new MBeanAttributeInfo("missed",
             Integer.class.getName(), "the missed count of the cache", true,
             false, false);
+    attributeInfo[5] = new MBeanAttributeInfo("hitRatio",
+            String.class.getName(), "the hitRatio of the cache", true, false,
+            false);
 
     return attributeInfo;
   }
@@ -270,4 +289,7 @@ public class CacheMBean implements DynamicMBean
 
   /** Field description */
   private ObjectCache cache;
+
+  /** Field description */
+  private NumberFormat numberFormat;
 }

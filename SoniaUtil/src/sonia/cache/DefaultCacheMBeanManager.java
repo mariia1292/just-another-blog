@@ -84,6 +84,11 @@ public class DefaultCacheMBeanManager implements CacheMBeanManager
 
       if (name != null)
       {
+        if (server.isRegistered(name))
+        {
+          server.unregisterMBean(name);
+        }
+
         server.registerMBean(new CacheMBean(cache), name);
       }
     }

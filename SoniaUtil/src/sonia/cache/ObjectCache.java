@@ -83,6 +83,12 @@ public interface ObjectCache extends Serializable
   public Object remove(Object key);
 
   /**
+   * Clears the cache and reset all counters.
+   *
+   */
+  public void reset();
+
+  /**
    * Returns the count of all cached objects.
    *
    *
@@ -103,6 +109,14 @@ public interface ObjectCache extends Serializable
    * @return the cached object
    */
   public Object get(Object key);
+
+  /**
+   * Returns the hit ratio of the cache
+   *
+   *
+   * @return the hit ratio of the cache
+   */
+  public double getHitRatio();
 
   /**
    * Method description
