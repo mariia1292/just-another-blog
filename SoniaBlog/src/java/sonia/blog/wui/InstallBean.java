@@ -218,15 +218,6 @@ public class InstallBean extends AbstractBean
       category.setName(label.getString("defaultCategory"));
       category.setBlog(blog);
 
-      Entry entry = new Entry();
-
-      entry.setBlog(blog);
-      entry.addCateogory(category);
-      entry.setAuthor(admin);
-      entry.publish();
-      entry.setTitle(message.getString("firstEntryTitle"));
-      entry.setContent(message.getString("firstEntryContent"));
-
       if (logger.isLoggable(Level.FINE))
       {
         logger.fine("creating DAOFactory");
@@ -248,6 +239,15 @@ public class InstallBean extends AbstractBean
 
           if (daoFactory.getCategoryDAO().add(session, category))
           {
+            Entry entry = new Entry();
+
+            entry.setBlog(blog);
+            entry.addCateogory(category);
+            entry.setAuthor(admin);
+            entry.publish();
+            entry.setTitle(message.getString("firstEntryTitle"));
+            entry.setContent(message.getString("firstEntryContent"));
+
             if (daoFactory.getEntryDAO().add(session, entry))
             {
               error = false;
