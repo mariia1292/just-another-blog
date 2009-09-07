@@ -209,7 +209,6 @@ public abstract class JpaGenericDAO<T> implements GenericDAO<T>
 
       if (logger.isLoggable(Level.FINER))
       {
-        String user = null;
         StringBuffer msg = new StringBuffer();
 
         msg.append("user ").append(getUser(session));
