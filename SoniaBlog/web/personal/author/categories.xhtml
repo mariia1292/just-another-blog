@@ -1,0 +1,74 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:t="http://myfaces.apache.org/tomahawk">
+
+  <body>
+
+    <ui:composition template="../template.xhtml">
+
+      <ui:define name="title">
+        <h:outputText value="#{label.categories}" />
+      </ui:define>
+
+      <ui:define name="content">
+
+        <h1><h:outputText value="#{label.categories}" /></h1>
+
+        <h:form>
+
+          <h:dataTable value="#{CategoryBean.categories}" var="Category">
+
+            <h:column>
+              <f:facet name="header">
+                <h:outputText value="#{label.name}" />
+              </f:facet>
+              <h:outputText value="#{Category.name}" />
+            </h:column>
+
+            <h:column>
+              <f:facet name="header">
+                <h:outputText value="#{label.description}" />
+              </f:facet>
+              <h:outputText value="#{Category.description}" />
+            </h:column>
+
+            <h:column>
+              <f:facet name="header">
+                <h:outputText value="#{label.creationDate}" />
+              </f:facet>
+              <h:outputText value="#{Category.creationDate}">
+                <f:convertDateTime pattern="#{BlogBean.blog.dateFormat}" />
+              </h:outputText>
+            </h:column>
+
+            <h:column>
+              <f:facet name="header">
+                <h:outputText value="#{label.edit}" />
+              </f:facet>
+              <h:commandLink value="#{label.edit}" action="#{CategoryBean.edit}" />
+            </h:column>
+
+            <h:column>
+              <f:facet name="header">
+                <h:outputText value="#{label.remove}" />
+              </f:facet>
+              <h:commandLink value="#{label.remove}" action="#{CategoryBean.remove}" />
+            </h:column>
+
+          </h:dataTable>
+
+          <h:commandLink value="#{label.newCategory}" action="#{CategoryBean.newCategory}" />
+
+        </h:form>
+
+      </ui:define>
+
+
+    </ui:composition>
+
+  </body>
+</html>

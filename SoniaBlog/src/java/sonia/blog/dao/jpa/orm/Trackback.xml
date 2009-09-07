@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entity-mappings version="1.0" xmlns="http://java.sun.com/xml/ns/persistence/orm"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/persistence/orm http://java.sun.com/xml/ns/persistence/orm_1_0.xsd">
+  <persistence-unit-metadata>
+    <persistence-unit-defaults>
+      <access>FIELD</access>
+    </persistence-unit-defaults>
+  </persistence-unit-metadata>
+  <package>sonia.blog.entity</package>
+  <entity metadata-complete="true" name="Trackback" class="sonia.blog.entity.Trackback">
+    <table name="JAB_TRACKBACK" />
+    <named-query name="Trackback.count">
+      <query>
+        select count(t) from Trackback t
+      </query>
+    </named-query>
+    <named-query name="Trackback.getAll">
+      <query>
+        select t from Trackback t
+      </query>
+    </named-query>
+    <named-query name="Trackback.getAllByEntry">
+      <query>
+        select t from Trackback t join t.entry e where e = :entry
+      </query>
+    </named-query>
+    <named-query name="Trackback.countByEntryTypeAndUrl">
+      <query>
+        select count(t) from Trackback t join t.entry e where e = :entry and t.type = :type and t.url = :url
+      </query>
+    </named-query>
+    <pre-persist method-name="prePersists" />
+    <attributes>
+      <id name="id">
+        <generated-value strategy="IDENTITY" />
+      </id>
+      <basic name="blogname">
+        <column nullable="false" />
+      </basic>
+      <basic name="title">
+        <column nullable="false" />
+      </basic>
+      <basic name="url">
+        <column nullable="false" />
+      </basic>
+      <basic name="excerpt">
+        <column length="255" nullable="false" />
+      </basic>
+      <basic name="date">
+        <column name="TRACKBACKDATE" nullable="false" />
+        <temporal>TIMESTAMP</temporal>
+      </basic>
+    </attributes>
+  </entity>
+</entity-mappings>

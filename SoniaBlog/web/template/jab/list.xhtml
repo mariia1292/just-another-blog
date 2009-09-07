@@ -1,0 +1,53 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:blog="http://jab.nitilon.org/blog/"
+      xmlns:u1="http://jab.nitilon.org/blog/">
+
+  <body>
+
+    <ui:composition template="./template.xhtml">
+
+      <ui:define name="title">
+        <h:outputText value="#{BlogBean.blog.title}" />
+      </ui:define>
+
+      <ui:define name="content">
+
+        <h:panelGroup layout="block" styleClass="entryNavigation" rendered="#{BlogBean.navigationRendered}">
+          <blog:link value="#{label.prev}" href="#{BlogBean.previousUri}" disabled="#{BlogBean.previousUri == null}" />
+          <h:outputText value=" | " />
+          <blog:link value="#{label.next}" href="#{BlogBean.nextUri}" disabled="#{BlogBean.nextUri == null}" />
+        </h:panelGroup>
+
+        <h:form>
+
+          <ui:repeat value="#{BlogBean.pageEntries}" var="Entry">
+            <h2>
+              <blog:link value="#{Entry.title}" object="#{Entry}" />
+            </h2>
+
+            <div id="content_#{Entry.id}" class="content">
+              <h:outputText value="#{Entry.displayContent}" escape="false" />
+            </div>
+
+            <p>
+              <h:outputText value="#{Entry.creationDate}">
+                <f:convertDateTime pattern="#{BlogBean.blog.dateFormat}" />
+              </h:outputText>
+              <h:outputText value=", " />
+              <blog:link value="#{Entry.authorName}" object="#{Entry.author}" />
+            </p>
+          </ui:repeat>
+
+        </h:form>
+
+      </ui:define>
+
+    </ui:composition>
+
+  </body>
+</html>

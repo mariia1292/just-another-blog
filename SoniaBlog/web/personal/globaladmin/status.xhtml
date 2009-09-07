@@ -1,0 +1,136 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:blog="http://jab.nitilon.org/blog/"
+      xmlns:c="http://java.sun.com/jstl/core">
+
+  <body>
+
+    <ui:composition template="../template.xhtml">
+
+      <ui:define name="title">
+        <h:outputText value="#{label.status}" />
+      </ui:define>
+
+      <ui:define name="content">
+
+        <h1><h:outputText value="#{label.status}" /></h1>
+
+        <h2><h:outputText value="#{label.sessions}" /></h2>
+
+        <table>
+
+          <thead>
+            <tr>
+              <th><h:outputText value="#{label.sessions}" /></th>
+              <th><h:outputText value="#{label.count}" /></th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr>
+              <td><h:outputText value="#{label.openSessions}" /></td>
+              <td><h:outputText value="#{GlobalStatusBean.information.openSessions}" /></td>
+            </tr>
+            <tr>
+              <td><h:outputText value="#{label.totalSessions}" /></td>
+              <td><h:outputText value="#{GlobalStatusBean.information.totalSessions}" /></td>
+            </tr>
+          </tbody>
+
+        </table>
+
+        <h2><h:outputText value="#{label.objects}" /></h2>
+
+        <table>
+
+          <thead>
+            <tr>
+              <th><h:outputText value="#{label.table}" /></th>
+              <th><h:outputText value="#{label.count}" /></th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr>
+              <td><h:outputText value="#{label.blogs}" /></td>
+              <td><h:outputText value="#{GlobalStatusBean.information.totalBlogs}" /></td>
+            </tr>
+            <tr>
+              <td><h:outputText value="#{label.entries}" /></td>
+              <td><h:outputText value="#{GlobalStatusBean.information.totalEntries}" /></td>
+            </tr>
+            <tr>
+              <td><h:outputText value="#{label.pages}" /></td>
+              <td><h:outputText value="#{GlobalStatusBean.information.totalPages}" /></td>
+            </tr>
+            <tr>
+              <td><h:outputText value="#{label.attachments}" /></td>
+              <td><h:outputText value="#{GlobalStatusBean.information.totalAttachments}" /></td>
+            </tr>
+            <tr>
+              <td><h:outputText value="#{label.comments}" /></td>
+              <td><h:outputText value="#{GlobalStatusBean.information.totalComments}" /></td>
+            </tr>
+            <tr>
+              <td><h:outputText value="#{label.categories}" /></td>
+              <td><h:outputText value="#{GlobalStatusBean.information.totalCategories}" /></td>
+            </tr>
+            <tr>
+              <td><h:outputText value="#{label.tags}" /></td>
+              <td><h:outputText value="#{GlobalStatusBean.information.totalTags}" /></td>
+            </tr>
+            <tr>
+              <td><h:outputText value="#{label.users}" /></td>
+              <td><h:outputText value="#{GlobalStatusBean.information.totalUsers}" /></td>
+            </tr>
+          </tbody>
+
+        </table>
+
+        <h2><h:outputText value="#{label.resources}" /></h2>
+
+        <table>
+
+          <thead>
+            <tr>
+              <th><h:outputText value="#{label.resource}" /></th>
+              <th><h:outputText value="#{label.size}" /></th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr>
+              <td><h:outputText value="#{label.resourceDirectory}" /></td>
+              <td><h:outputText value="#{GlobalStatusBean.information.resourceDirectorySize}" /></td>
+            </tr>
+            <tr>
+              <td><h:outputText value="#{label.attachments}" /></td>
+              <td><h:outputText value="#{GlobalStatusBean.information.attachmentDirectorySize}" /></td>
+            </tr>
+            <tr>
+              <td><h:outputText value="#{label.images}" /></td>
+              <td><h:outputText value="#{GlobalStatusBean.information.imageDirectorySize}" /></td>
+            </tr>
+            <tr>
+              <td><h:outputText value="#{label.searchIndex}" /></td>
+              <td><h:outputText value="#{GlobalStatusBean.information.indexDirectorySize}" /></td>
+            </tr>
+          </tbody>
+
+        </table>
+
+
+        <c:forEach items="#{GlobalStatusBean.statusProviders}" var="provider">
+          <ui:include src="#{provider}" />
+        </c:forEach>
+
+      </ui:define>
+
+    </ui:composition>
+
+  </body>
+</html>

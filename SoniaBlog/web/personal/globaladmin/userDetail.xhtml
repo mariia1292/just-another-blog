@@ -1,0 +1,115 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:blog="http://jab.nitilon.org/blog/"
+      xmlns:c="http://java.sun.com/jstl/core">
+
+  <body>
+
+    <ui:composition template="../template.xhtml">
+
+      <ui:define name="title">
+        <h:outputText value="#{AdminUserBean.user.name}" />
+      </ui:define>
+
+      <ui:define name="content">
+
+        <h1><h:outputText value="#{AdminUserBean.user.name}" /></h1>
+
+        <h2><h:outputText value="#{label.properties}" /></h2>
+
+        <h:form>
+
+          <h:panelGrid columns="3">
+
+            <h:outputLabel for="displayName" value="#{label.displayName}" />
+            <h:inputText id="displayName" value="#{AdminUserBean.user.displayName}" required="true" />
+            <h:message for="displayName" />
+
+            <h:outputLabel for="email" value="#{label.email}" />
+            <h:inputText id="email" value="#{AdminUserBean.user.email}" required="true">
+              <f:validator validatorId="validator.mail" />
+            </h:inputText>
+            <h:message for="email" />
+
+            <h:outputLabel for="active" value="#{label.active}" />
+            <h:selectBooleanCheckbox id="active" value="#{AdminUserBean.user.active}" />
+            <h:message for="active" />
+
+            <h:outputLabel for="selfManaged" value="#{label.selfManaged}" />
+            <h:selectBooleanCheckbox id="selfManaged" value="#{AdminUserBean.user.selfManaged}" />
+            <h:message for="selfManaged" />
+
+            <h:outputLabel for="globalAdmin" value="#{label.globalAdmin}" />
+            <h:selectBooleanCheckbox id="globalAdmin" value="#{AdminUserBean.user.globalAdmin}" />
+            <h:message for="globalAdmin" />
+
+          </h:panelGrid>
+
+          <h:commandButton value="#{label.save}" action="#{AdminUserBean.save}" />
+
+        </h:form>
+
+        <h2><h:outputText value="#{label.changePassword}" /></h2>
+
+        <h:form id="pwd">
+
+          <h:panelGrid columns="3">
+
+            <h:outputLabel for="password" value="#{label.password}" />
+            <h:inputSecret id="password" value="#{AdminUserBean.user.password}" required="true" />
+            <h:message for="password" />
+
+            <h:outputLabel for="passwordRetry" value="#{label.passwordRepeat}" />
+            <h:inputSecret id="passwordRetry" value="#{AdminUserBean.passwordRetry}" required="true">
+              <f:validator validatorId="validator.password" />
+              <f:attribute name="passwordId" value="pwd:password" />
+            </h:inputSecret>
+            <h:message for="passwordRetry" />
+
+          </h:panelGrid>
+
+          <h:commandButton value="#{label.save}" action="#{AdminUserBean.saveWithPassword}" />
+
+        </h:form>
+
+        <h2><h:outputText value="#{label.membership}" /></h2>
+
+        <h:form>
+
+          <h:dataTable columnClasses="middle,none" value="#{AdminUserBean.members}" var="Member">
+
+            <h:column>
+              <f:facet name="header">
+                <h:outputText value="#{label.name}" />
+              </f:facet>
+              <h:outputText value="#{Member.blog.identifier} ( #{Member.blog.title} )" />
+            </h:column>
+
+            <h:column>
+              <f:facet name="header">
+                <h:outputText value="#{label.role}" />
+              </f:facet>
+              <h:selectOneRadio styleClass="list" value="#{Member.role}"
+                                onclick="submit();" valueChangeListener="#{AdminUserBean.roleChanged}">
+                <f:selectItems value="#{AdminUserBean.roleItems}" />
+              </h:selectOneRadio>
+            </h:column>
+
+          </h:dataTable>
+
+        </h:form>
+
+        <h:form>
+          <h:commandLink value="#{label.back}" action="back" />
+        </h:form>
+
+      </ui:define>
+
+    </ui:composition>
+
+  </body>
+</html>

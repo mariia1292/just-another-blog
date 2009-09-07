@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entity-mappings version="1.0" xmlns="http://java.sun.com/xml/ns/persistence/orm"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/persistence/orm http://java.sun.com/xml/ns/persistence/orm_1_0.xsd">
+  <persistence-unit-metadata>
+    <persistence-unit-defaults>
+      <access>FIELD</access>
+    </persistence-unit-defaults>
+  </persistence-unit-metadata>
+  <package>sonia.blog.entity</package>
+  <entity metadata-complete="true" name="Page" class="sonia.blog.entity.Page">
+    <table name="JAB_PAGE" />
+    <named-query name="Page.count">
+      <query>
+        select count(p) from Page p
+      </query>
+    </named-query>
+    <named-query name="Page.countByBlog">
+      <query>
+        select count(p) from Page p where p.blog = :blog
+      </query>
+    </named-query>
+    <named-query name="Page.getAll">
+      <query>
+        select p from Page p
+      </query>
+    </named-query>
+    <named-query name="Page.getAllRootWithPublished">
+      <query>
+        select new sonia.blog.api.util.BasicPageNavigation( p.id, p.navigationTitle, p.navigationPosition )
+        from Page p 
+        where p.blog = :blog and p.parent is null and p.published = :published
+        order by p.navigationPosition, p.navigationTitle
+      </query>
+    </named-query>
+    <named-query name="Page.getAllRoot">
+      <query>
+        select new sonia.blog.api.util.BasicPageNavigation( p.id, p.navigationTitle, p.navigationPosition )
+        from Page p
+        where p.blog = :blog and p.parent is null
+        order by p.navigationPosition, p.navigationTitle
+      </query>
+    </named-query>
+    <named-query name="Page.getChildrenWithPublished">
+      <query>
+        select new sonia.blog.api.util.BasicPageNavigation( p.id, p.navigationTitle, p.navigationPosition )
+        from Page p
+        where p.parent = :parent and p.published = :published
+        order by p.navigationPosition, p.navigationTitle
+      </query>
+    </named-query>
+    <named-query name="Page.getChildren">
+      <query>
+        select new sonia.blog.api.util.BasicPageNavigation( p.id, p.navigationTitle, p.navigationPosition )
+        from Page p
+        where p.parent = :parent
+        order by p.navigationPosition, p.navigationTitle
+      </query>
+    </named-query>
+    <named-query name="Page.getByIdBlogAndPublished">
+      <query>
+        select p from Page p
+        where p.id = :id and p.published = :published and p.blog = :blog
+      </query>
+    </named-query>
+    <named-query name="Page.getChildrenById">
+      <query>
+        select new sonia.blog.api.util.BasicPageNavigation( p.id, p.navigationTitle, p.navigationPosition )
+        from Page p
+        where p.parent.id = :id
+        order by p.navigationPosition, p.navigationTitle
+      </query>
+    </named-query>
+    <named-query name="Page.getChildrenByIdAndPublished">
+      <query>
+        select new sonia.blog.api.util.BasicPageNavigation( p.id, p.navigationTitle, p.navigationPosition )
+        from Page p
+        where p.parent.id = :id and p.published = :published
+        order by p.navigationPosition, p.navigationTitle
+      </query>
+    </named-query>
+    <named-query name="Page.getRootPages">
+      <query>
+        select p from Page p
+        where p.parent is null and p.blog = :blog
+        order by p.navigationPosition, p.navigationTitle
+      </query>
+    </named-query>
+    <named-query name="Page.getRootPagesWithPublished">
+      <query>
+        select p from Page p
+        where p.parent is null and p.blog = :blog and p.published = :published
+        order by p.navigationPosition, p.navigationTitle
+      </query>
+    </named-query>
+    <named-query name="Page.getAllByBlogAndPublished">
+      <query>
+        select p from Page p
+        where p.blog = :blog and p.published = :published
+      </query>
+    </named-query>
+    <named-query name="Page.getPageChildren">
+      <query>
+        select p from Page p
+        where p.parent = :parent
+        order by p.navigationPosition, p.navigationTitle
+      </query>
+    </named-query>
+    <named-query name="Page.getPageChildrenWithPublished">
+      <query>
+        select p from Page p
+        where p.parent = :parent and p.published = :published
+        order by p.navigationPosition, p.navigationTitle
+      </query>
+    </named-query>
+    <pre-persist method-name="prePersists" />
+    <pre-update method-name="preUpdate" />
+    <attributes>
+      <id name="id">
+        <generated-value strategy="IDENTITY" />
+      </id>
+      <basic name="title">
+        <column nullable="false" />
+      </basic>
+      <basic name="navigationTitle">
+        <column nullable="false" />
+      </basic>
+      <basic name="content">
+        <lob />
+      </basic>
+      <basic name="creationDate">
+        <column nullable="false" />
+        <temporal>TIMESTAMP</temporal>
+      </basic>
+      <basic name="lastUpdate">
+        <temporal>TIMESTAMP</temporal>
+      </basic>
+      <basic name="publishingDate">
+        <temporal>TIMESTAMP</temporal>
+      </basic>
+      <many-to-one name="parent" optional="true" fetch="LAZY" />
+      <many-to-one name="author" optional="false" />
+      <many-to-one name="blog" optional="false" fetch="LAZY" />
+      <one-to-many name="attachments" mapped-by="page">
+        <cascade>
+          <cascade-merge />
+          <cascade-remove />
+        </cascade>
+      </one-to-many>
+    </attributes>
+  </entity>
+</entity-mappings>

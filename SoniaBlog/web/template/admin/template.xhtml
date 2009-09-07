@@ -1,0 +1,151 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:t="http://myfaces.apache.org/tomahawk"
+      xmlns:blog="http://jab.nitilon.org/blog/">
+  <f:view contentType="text/html">
+    <head>
+
+      <meta http-equiv="Content-Type" content="test/*html*; Charset=utf-8"/>
+      <meta name="revisit-after" content="1 day"/>
+
+      <title><ui:insert name="title">JAB</ui:insert> | Just-Another-Blog</title>
+
+      <link rel="stylesheet" type="text/css" class="user" href="${facesContext.externalContext.requestContextPath}/template/admin/css/admin.css" />
+      <!--[if lte IE 7]>
+      <link rel="stylesheet" type="text/css" class="user" href="${facesContext.externalContext.requestContextPath}/template/admin/css/patches/patch_blog.css" />
+    <![endif]-->
+      <link rel="shortcut icon" type="image/vnd.microsoft.icon" href="${facesContext.externalContext.requestContextPath}/template/admin/images/favicon.ico" />
+      <link rel="icon" type="image/gif" href="${facesContext.externalContext.requestContextPath}/template/admin/images/icon-16.gif" />
+
+      <blog:header comments="false" />
+      <ui:insert name="head" />
+    </head>
+    <body>
+      <div id="page_margins">
+
+        <div id="header-line">
+          <div class="left">
+            <h:outputText value="#{BlogBean.blog.title}" rendered="#{BlogBean.installed}" />
+            <h:outputText value=" | "  rendered="#{BlogBean.installed}" />
+            <h:outputText value="#{BlogBean.blog.description}" rendered="#{BlogBean.installed}" />
+          </div>
+          <div class="right">
+            <h:outputText value="JAB | Just-Another-Blog" />
+          </div>
+          <div style="clear: both;">
+          </div>
+        </div>
+
+        <div id="page">
+
+          <div id="header">
+            <div id="topnav">
+              <!-- start: skip link navigation -->
+              <a class="skip" href="#navigation" title="skip link">
+                Skip to the navigation
+              </a>
+              <span class="hideme">.</span>
+              <a class="skip" href="#content" title="skip link">
+                Skip to the content
+              </a>
+              <span class="hideme">.</span>
+              <!-- end: skip link navigation -->
+              <!--<span>
+                <a href="#">Login</a> | <a href="#">Contact</a> | <a href="#">Imprint</a>
+              </span>-->
+            </div>
+
+          </div>
+
+          <!-- begin: main navigation #nav -->
+          <div id="nav"> <a id="navigation" name="navigation"></a>
+            <!-- skiplink anchor: navigation -->
+            <div id="nav_main" class="hlist">
+              <ui:insert name="mainNavigation">
+                <h:form id="mainNavigationForm">
+                  <t:panelNavigation2 styleClass="mainNavigation" layout="list">
+                    <t:navigationMenuItems value="#{BlogBean.mainNavigation}" />
+                  </t:panelNavigation2>
+                </h:form>
+              </ui:insert>
+            </div>
+          </div>
+          <!-- end: main navigation -->
+
+          <!-- begin: main content area #main -->
+          <div id="main"> <a id="content" name="content"></a>
+            <div id="col1">
+              <div id="col1_content" class="clearfix">
+                <h:messages id="messages" globalOnly="true"
+                            errorClass="warning" fatalClass="warning"
+                            warnClass="warning" infoClass="note" />
+                <ui:insert name="content" />
+              </div>
+            </div>
+            <div id="col3">
+              <div id="col3_content" class="clearfix">
+
+                <ui:insert name="info">
+
+                  <h:panelGroup rendered="#{BlogBean.installed}">
+
+                    <h3><h:outputText value="#{label.categories}" /></h3>
+                    <h:dataTable styleClass="overview" value="#{BlogBean.categories}" var="Category">
+                      <h:column>
+                        <blog:link value="#{Category.name}" object="#{Category}" />
+                      </h:column>
+                    </h:dataTable>
+
+                    <h3><h:outputText value="#{label.tags}" /></h3>
+                    <blog:tagCloud maxItems="30" />
+
+                    <h3><h:outputText value="#{label.search}" /></h3>
+                    <blog:search label="#{label.search}" />
+
+                    <h3><h:outputText value="#{label.calendar}" /></h3>
+                    <blog:calendar enableAjax="true" ajaxUrl="/async/calendar.json"
+                                   dayUrlPattern="/date/{0}-{1}-{2}/index.jab"
+                                   monthUrlPattern="/date/{0}-{1}/index.jab"
+                                   yearUrlPattern="/date/{0}/index.jab"
+                                   loadImage="/resources/jquery/plugins/img/loading.gif" />
+
+                    <h:form id="extraNavigationForm">
+                      <h3><h:outputText value="#{label.extraNavigation}" /></h3>
+                      <t:panelNavigation2 styleClass="overview" layout="list">
+                        <t:navigationMenuItems value="#{BlogBean.extraNavigation}" />
+                      </t:panelNavigation2>
+                    </h:form>
+
+                  </h:panelGroup>
+
+                </ui:insert>
+              </div>
+              <!-- IE Column Clearing -->
+              <div id="ie_clearing">&nbsp;</div>
+              <!-- End: IE Column Clearing -->
+            </div>
+            <!-- end: #col2 -->
+          </div>
+          <!-- end: #main -->
+          <!-- begin: #footer -->
+          <div id="footer">
+            <div class="float_left">
+              <a href="http://kenai.com/projects/jab" target="_blank">
+                JAB - Just Another Blog
+              </a>
+            </div>
+            <div class="float_right">
+              <h:outputText value="#{BlogBean.version}" rendered="#{BlogBean.version != null}" />
+            </div>
+          </div>
+          <!-- end: #footer -->
+        </div>
+
+      </div>
+    </body>
+
+  </f:view>
+</html>

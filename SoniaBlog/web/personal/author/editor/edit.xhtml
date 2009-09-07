@@ -1,0 +1,47 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core">
+  <body>
+
+    <ui:composition template="./template.xhtml">
+
+      <ui:define name="head">
+        <script type="text/javascript" src="${facesContext.externalContext.requestContextPath}/resources/tiny_mce/plugins/links/js/dialog.js"></script>
+      </ui:define>
+
+      <ui:define name="content">
+
+        <h3><h:outputText value="#{label.edit}" /></h3>
+
+        <h:form>
+
+          <h:panelGrid columns="3">
+
+            <h:outputLabel for="name" value="#{label.name}" />
+            <h:inputText id="name" value="#{EditorBean.attachment.name}" required="true" />
+            <h:message for="name" />
+
+            <h:outputLabel for="description" value="#{label.description}" />
+            <h:inputText id="description" value="#{EditorBean.attachment.description}" />
+            <h:message for="description" />
+
+          </h:panelGrid>
+
+          <h:commandButton value="#{label.save}" action="#{EditorBean.saveAttachment}" />
+          <h:commandButton value="#{label.back}" action="#{EditorBean.abortAttachmentEdit}" />
+
+        </h:form>
+
+      </ui:define>
+
+      <ui:define name="footer">
+      </ui:define>
+
+    </ui:composition>
+
+  </body>
+</html>
+

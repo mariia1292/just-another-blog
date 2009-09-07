@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+    Document   : cache-config.xml
+    Created on : July 19, 2009, 11:44 AM
+    Author     : Sebastian Sdorra
+    Description:
+        Purpose of the document follows.
+-->
+
+<caches>
+
+  <cache>
+    <name>Test</name>
+    <class>sonia.cache.LRUCache</class>
+    <parameter>
+      <param-name>max-items</param-name>
+      <param-value>10</param-value>
+    </parameter>
+  </cache>
+
+  <cache>
+    <name>Test-2</name>
+    <class>sonia.cache.MRUCache</class>
+    <parameter>
+      <param-name>max-items</param-name>
+      <param-value>10</param-value>
+    </parameter>
+  </cache>
+
+  <cache>
+    <name>Test-3</name>
+    <class>sonia.cache.SimpleExpirationCache</class>
+    <parameter>
+      <param-name>expiration-time</param-name>
+      <param-value>10000</param-value>
+    </parameter>
+  </cache>
+
+</caches>

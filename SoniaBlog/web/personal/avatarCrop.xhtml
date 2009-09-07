@@ -1,0 +1,62 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:blog="http://jab.nitilon.org/blog/"
+      xmlns:t="http://myfaces.apache.org/tomahawk">
+
+  <body>
+
+    <ui:composition template="./template.xhtml">
+
+      <ui:define name="head">
+        <script type="text/javascript" src="${facesContext.externalContext.requestContextPath}/resources/jquery/jquery.min.js"></script>
+        <script type="text/javascript" src="${facesContext.externalContext.requestContextPath}/resources/jcrop/js/jquery.jcrop.min.js"></script>
+        <link type="text/css" rel="stylesheet" href="${facesContext.externalContext.requestContextPath}/resources/jcrop/css/jquery.jcrop.css" />
+        <script language="Javascript">
+        jQuery(function(){
+          jQuery('#avatar').Jcrop({
+            setSelect: [ 0, 0, 50, 50 ],
+            allowResize: true,
+            aspectRatio: 1.0,
+            allowSelect: false,
+            onChange: function showCoords(c)
+            {
+              jQuery('#x').attr('value', c.x);
+              jQuery('#y').attr('value', c.y);
+              jQuery('#width').attr('value', c.w);
+              jQuery('#height').attr('value', c.h);
+            }
+          });
+        });
+        </script>
+      </ui:define>
+
+      <ui:define name="title">
+        <h:outputText value="#{label.avatar}" />
+      </ui:define>
+
+      <ui:define name="content">
+
+        <h1><h:outputText value="#{label.avatar}" /></h1>
+
+        <h:graphicImage id="avatar" url="#{AvatarBean.imagePath}" rendered="#{AvatarBean.imagePath != null}" />
+
+        <br />
+
+        <h:form prependId="false">
+          <h:inputHidden id="x" value="#{AvatarBean.x}" />
+          <h:inputHidden id="y" value="#{AvatarBean.y}" />
+          <h:inputHidden id="width" value="#{AvatarBean.width}" />
+          <h:inputHidden id="height" value="#{AvatarBean.height}" />
+          <h:commandButton value="#{label.save}" action="#{AvatarBean.crop}" />
+        </h:form>
+
+      </ui:define>
+
+    </ui:composition>
+    
+  </body>
+</html>

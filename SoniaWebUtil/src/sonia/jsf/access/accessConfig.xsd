@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            targetNamespace="http://dev.sonia.de/schema/accessConfig"
+            elementFormDefault="qualified" xmlns:tns="http://dev.sonia.de/schema/accessConfig">
+    <xsd:element name="access-config">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element name="rule" minOccurs="0" maxOccurs="unbounded">
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <xsd:element name="description" minOccurs="0"/>
+                            <xsd:element name="conditions" type="tns:condition" />
+                            <xsd:element name="actions">
+                                <xsd:complexType>
+                                    <xsd:sequence>
+                                        <xsd:element name="redirect" minOccurs="0"/>
+                                        <xsd:element name="forward" minOccurs="0"/>
+                                        <xsd:element name="jsf-navigation" minOccurs="0"/>
+                                        <xsd:element name="jsf-message" minOccurs="0" maxOccurs="unbounded"/>
+                                        <xsd:element name="action" minOccurs="0" maxOccurs="unbounded">
+                                            <xsd:complexType>
+                                                <xsd:sequence>
+                                                    <xsd:element name="class"/>
+                                                    <xsd:element name="init-param" minOccurs="0" maxOccurs="unbounded" type="tns:init-param"/>
+                                                </xsd:sequence>
+                                            </xsd:complexType>
+                                        </xsd:element>
+                                    </xsd:sequence>
+                                </xsd:complexType>
+                            </xsd:element>
+                            <xsd:element name="last" minOccurs="0" />
+                        </xsd:sequence>
+                    </xsd:complexType>
+                </xsd:element>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+    <xsd:complexType name="condition">
+        <xsd:sequence>
+            <xsd:element name="and" minOccurs="0" maxOccurs="unbounded" type="tns:condition"/>
+            <xsd:element name="or" minOccurs="0" maxOccurs="unbounded" type="tns:condition"/>
+            <xsd:element name="not" minOccurs="0" maxOccurs="unbounded" type="tns:condition"/>
+            <xsd:element name="isUser" minOccurs="0" maxOccurs="unbounded"/>
+            <xsd:element name="isUserInRole" minOccurs="0" maxOccurs="unbounded"/>
+            <xsd:element name="UriMatches" minOccurs="0" maxOccurs="unbounded"/>
+            <xsd:element name="ViewIdMatches" minOccurs="0" maxOccurs="unbounded"/>
+            <xsd:element name="condition" minOccurs="0" maxOccurs="unbounded">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="class"/>
+                        <xsd:element name="init-param" minOccurs="0" maxOccurs="unbounded" type="tns:init-param"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+            <xsd:element name="loggedIn" minOccurs="0" maxOccurs="unbounded" nillable="true"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="init-param">
+        <xsd:sequence>
+            <xsd:element name="param-name"/>
+            <xsd:element name="param-value"/>
+        </xsd:sequence>
+    </xsd:complexType>
+</xsd:schema>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+
+<!--
+    Document   : deactivate-all-users.xml
+    Created on : August 30, 2009, 2:18 PM
+    Author     : Sebastian Sdorra
+    Description:
+        Purpose of the document follows.
+-->
+
+<script>
+  <title>Deaktivate all other users</title>
+  <description>This script deactivates all other users</description>
+  <author>Sebastian Sdorra</author>
+  <content>var userDAO = daoFactory.userDAO;
+var me = request.user;
+var users = userDAO.all;
+var size = users.size();
+var user = null;
+var counter = 0;
+
+println("&lt;h3&gt;Deaktivate all other users&lt;/h3&gt;");
+println( "&lt;ul&gt;" );
+for (var i=0; i&lt;size; i++){
+  user = users.get(i);
+  if ( user.active &amp;&amp; ! user.equals( me ) ){
+    println( "&lt;li&gt;disable " + user.name + "&lt;/li&gt;" );
+    user.setActive(false);
+    userDAO.edit(session, user);
+    counter++;
+  }
+}
+println( "&lt;/ul&gt;" );
+println( "Disabled " + counter + " accounts" );
+  </content>
+</script>

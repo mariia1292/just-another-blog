@@ -1,0 +1,230 @@
+<?xml version='1.0' encoding='UTF-8'?>
+
+<!-- =========== FULL CONFIGURATION FILE ================================== -->
+<faces-config version="1.2" 
+    xmlns="http://java.sun.com/xml/ns/javaee" 
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_1_2.xsd">
+
+  <converter>
+    <converter-id>converter.category</converter-id>
+    <converter-class>sonia.blog.wui.converter.CategoryConverter</converter-class>
+  </converter>
+
+  <converter>
+    <converter-id>converter.locale</converter-id>
+    <converter-class>sonia.blog.wui.converter.LocaleConverter</converter-class>
+  </converter>
+
+  <converter>
+    <converter-id>converter.timeZone</converter-id>
+    <converter-class>sonia.blog.wui.converter.TimeZoneConverter</converter-class>
+  </converter>
+
+  <validator>
+    <validator-id>validator.url</validator-id>
+    <validator-class>sonia.blog.api.jsf.validator.URLValidator</validator-class>
+  </validator>
+
+  <validator>
+    <validator-id>validator.mail</validator-id>
+    <validator-class>sonia.blog.api.jsf.validator.MailValidator</validator-class>
+  </validator>
+
+  <validator>
+    <validator-id>validator.dateFormat</validator-id>
+    <validator-class>sonia.blog.api.jsf.validator.DateFormatValidator</validator-class>
+  </validator>
+
+  <validator>
+    <validator-id>validator.domain</validator-id>
+    <validator-class>sonia.blog.api.jsf.validator.DomainValidator</validator-class>
+  </validator>
+
+  <validator>
+    <validator-id>validator.password</validator-id>
+    <validator-class>sonia.blog.api.jsf.validator.PasswordValidator</validator-class>
+  </validator>
+
+  <validator>
+    <validator-id>validator.usermail</validator-id>
+    <validator-class>sonia.blog.api.jsf.validator.UserMailValidator</validator-class>
+  </validator>
+
+  <validator>
+    <validator-id>validator.username</validator-id>
+    <validator-class>sonia.blog.api.jsf.validator.UsernameValidator</validator-class>
+  </validator>
+
+  <lifecycle>
+    <phase-listener>
+      sonia.blog.app.AccessPhaseListener
+    </phase-listener>
+    <phase-listener>
+      sonia.blog.app.BlogContextPhaseListener
+    </phase-listener>
+  </lifecycle>
+  
+  <application>
+    <locale-config>
+      <default-locale>en</default-locale>
+      <supported-locale>en</supported-locale>
+      <supported-locale>de</supported-locale>
+    </locale-config>
+    <view-handler>
+      sonia.blog.wui.resolver.BlogViewHandler
+    </view-handler>
+    <resource-bundle>
+      <base-name>sonia.blog.resources.label</base-name>
+      <var>label</var>
+    </resource-bundle>
+    <resource-bundle>
+      <base-name>sonia.blog.resources.message</base-name>
+      <var>message</var>
+    </resource-bundle>
+  </application>
+
+  <component>
+    <display-name>header</display-name>
+    <component-type>sonia.blog.header</component-type>
+    <component-class>sonia.blog.api.jsf.header.HeaderComponent</component-class>
+    <component-extension>
+      <renderer-type>sonia.blog.header.renderer</renderer-type>
+    </component-extension>
+  </component>
+
+  <component>
+    <display-name>link</display-name>
+    <component-type>sonia.blog.link</component-type>
+    <component-class>sonia.blog.api.jsf.link.LinkComponent</component-class>
+    <component-extension>
+      <renderer-type>sonia.blog.link.renderer</renderer-type>
+    </component-extension>
+  </component>
+  
+  <component>
+    <display-name>search</display-name>
+    <component-type>sonia.blog.search</component-type>
+    <component-class>sonia.blog.api.jsf.search.SearchComponent</component-class>
+    <component-extension>
+      <renderer-type>sonia.blog.search.renderer</renderer-type>
+    </component-extension>
+  </component>
+
+  <component>
+    <display-name>calendar</display-name>
+    <component-type>sonia.blog.calendar</component-type>
+    <component-class>sonia.blog.api.jsf.calendar.CalendarComponent</component-class>
+    <component-extension>
+      <renderer-type>sonia.blog.calendar.renderer</renderer-type>
+    </component-extension>
+  </component>
+
+  <component>
+    <display-name>spamInput</display-name>
+    <component-type>sonia.blog.spamInput</component-type>
+    <component-class>sonia.blog.api.jsf.spam.SpamInputComponent</component-class>
+    <component-extension>
+      <renderer-type>sonia.blog.spamInput.renderer</renderer-type>
+    </component-extension>
+  </component>
+
+  <component>
+    <display-name>spamLabel</display-name>
+    <component-type>sonia.blog.spamLabel</component-type>
+    <component-class>sonia.blog.api.jsf.spam.SpamLabelComponent</component-class>
+    <component-extension>
+      <renderer-type>sonia.blog.spamLabel.renderer</renderer-type>
+    </component-extension>
+  </component>
+
+  <component>
+    <display-name>tagCloud</display-name>
+    <component-type>sonia.blog.tagcloud</component-type>
+    <component-class>sonia.blog.api.jsf.tagcloud.TagCloudComponent</component-class>
+    <component-extension>
+      <renderer-type>sonia.blog.tagcloud.renderer</renderer-type>
+    </component-extension>
+  </component>
+
+  <component>
+    <display-name>trackback</display-name>
+    <component-type>sonia.blog.trackback</component-type>
+    <component-class>sonia.blog.api.jsf.trackback.TrackBackComponent</component-class>
+    <component-extension>
+      <renderer-type>sonia.blog.trackback.renderer</renderer-type>
+    </component-extension>
+  </component>
+
+  <component>
+    <display-name>selectAction</display-name>
+    <component-type>sonia.blog.selectAction</component-type>
+    <component-class>sonia.blog.api.jsf.select.SelectActionComponent</component-class>
+    <component-extension>
+      <renderer-type>sonia.blog.selectAction.renderer</renderer-type>
+    </component-extension>
+  </component>
+
+  <component>
+    <display-name>pager</display-name>
+    <component-type>sonia.blog.pager</component-type>
+    <component-class>sonia.blog.api.jsf.pager.PagerComponent</component-class>
+    <component-extension>
+      <renderer-type>sonia.blog.pager.renderer</renderer-type>
+    </component-extension>
+  </component>
+
+  <render-kit>
+    <renderer>
+      <component-family>sonia.blog.header</component-family>
+      <renderer-type>sonia.blog.header.renderer</renderer-type>
+      <renderer-class>sonia.blog.api.jsf.header.HeaderRenderer</renderer-class>
+    </renderer>
+    <renderer>
+      <component-family>sonia.blog.calendar</component-family>
+      <renderer-type>sonia.blog.calendar.renderer</renderer-type>
+      <renderer-class>sonia.blog.api.jsf.calendar.CalendarRenderer</renderer-class>
+    </renderer>
+    <renderer>
+      <component-family>sonia.blog.link</component-family>
+      <renderer-type>sonia.blog.link.renderer</renderer-type>
+      <renderer-class>sonia.blog.api.jsf.link.LinkRenderer</renderer-class>
+    </renderer>
+    <renderer>
+      <component-family>sonia.blog.search</component-family>
+      <renderer-type>sonia.blog.search.renderer</renderer-type>
+      <renderer-class>sonia.blog.api.jsf.search.SearchRenderer</renderer-class>
+    </renderer>
+    <renderer>
+      <component-family>sonia.blog.spamInput</component-family>
+      <renderer-type>sonia.blog.spamInput.renderer</renderer-type>
+      <renderer-class>sonia.blog.api.jsf.spam.SpamInputRenderer</renderer-class>
+    </renderer>
+    <renderer>
+      <component-family>sonia.blog.spamLabel</component-family>
+      <renderer-type>sonia.blog.spamLabel.renderer</renderer-type>
+      <renderer-class>sonia.blog.api.jsf.spam.SpamLabelRenderer</renderer-class>
+    </renderer>
+    <renderer>
+      <component-family>sonia.blog.tagcloud</component-family>
+      <renderer-type>sonia.blog.tagcloud.renderer</renderer-type>
+      <renderer-class>sonia.blog.api.jsf.tagcloud.TagCloudRenderer</renderer-class>
+    </renderer>
+    <renderer>
+      <component-family>sonia.blog.selectAction</component-family>
+      <renderer-type>sonia.blog.selectAction.renderer</renderer-type>
+      <renderer-class>sonia.blog.api.jsf.select.SelectActionRenderer</renderer-class>
+    </renderer>
+    <renderer>
+      <component-family>sonia.blog.trackback</component-family>
+      <renderer-type>sonia.blog.trackback.renderer</renderer-type>
+      <renderer-class>sonia.blog.api.jsf.trackback.TrackBackRenderer</renderer-class>
+    </renderer>
+    <renderer>
+      <component-family>sonia.blog.pager</component-family>
+      <renderer-type>sonia.blog.pager.renderer</renderer-type>
+      <renderer-class>sonia.blog.api.jsf.pager.PagerRenderer</renderer-class>
+    </renderer>
+  </render-kit>
+    
+</faces-config>

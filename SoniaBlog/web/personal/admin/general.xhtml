@@ -1,0 +1,120 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:c="http://java.sun.com/jstl/core">
+  
+  <body>
+    
+    <ui:composition template="../template.xhtml">
+      
+      <ui:define name="title">
+        <h:outputText value="#{label.blogConfig}" />
+      </ui:define>
+      
+      <ui:define name="content">
+      
+        <h1><h:outputText value="#{label.blogConfig}" /></h1>
+        
+        <h:form>
+          
+          <h:panelGrid columns="3">
+            
+            <h:outputLabel for="name" value="#{label.title}" />
+            <h:inputText id="name" value="#{ConfigBean.blog.title}" required="true" />
+            <h:message for="name" />
+            
+            <h:outputLabel for="description" value="#{label.description}" />
+            <h:inputTextarea id="description" value="#{ConfigBean.blog.description}" />
+            <h:message for="description" />
+
+            <h:outputLabel for="startPage" value="#{label.startPage}" />
+            <h:inputText id="startPage" value="#{ConfigBean.blog.startPage}">
+              <f:validateLength maximum="255" />
+              <f:validator validatorId="validator.url" />
+            </h:inputText>
+            <h:message for="startPage" />
+
+            <h:outputLabel for="locale" value="#{label.locale}" />
+            <h:selectOneMenu id="locale" value="#{ConfigBean.blog.locale}" converter="converter.locale">
+              <f:selectItems value="#{ConfigBean.localeItems}" />
+            </h:selectOneMenu>
+            <h:message for="locale" />
+
+            <h:outputLabel for="timeZone" value="#{label.timeZone}" />
+            <h:selectOneMenu id="timeZone" value="#{ConfigBean.blog.timeZone}" converter="converter.timeZone">
+              <f:selectItems value="#{ConfigBean.timeZoneItems}" />
+            </h:selectOneMenu>
+            <h:message for="timeZone" />
+
+            <h:outputLabel for="allowMacros" value="#{label.allowMacros}" />
+            <h:selectBooleanCheckbox id="allowMacros" value="#{ConfigBean.blog.allowMacros}" />
+            <h:message for="allowMacros" />
+            
+            <h:outputLabel for="allowComments" value="#{label.allowComments}" />
+            <h:selectBooleanCheckbox id="allowComments" value="#{ConfigBean.blog.allowComments}" />
+            <h:message for="allowComments" />
+            
+            <h:outputLabel for="allowHtmlComments" value="#{label.allowHtmlComments}" />
+            <h:selectBooleanCheckbox id="allowHtmlComments" value="#{ConfigBean.blog.allowHtmlComments}" />
+            <h:message for="allowHtmlComments" />
+
+            <h:outputLabel for="autoPing" value="#{label.sendAutoPing}" />
+            <h:selectBooleanCheckbox id="autoPing" value="#{ConfigBean.blog.sendAutoPing}" />
+            <h:message for="autoPing" />
+            
+            <h:outputLabel for="entriesPerPage" value="#{label.entriesPerPage}" />
+            <h:inputText id="entriesPerPage" styleClass="short" value="#{ConfigBean.blog.entriesPerPage}" required="true">
+              <f:validateLongRange minimum="1" maximum="250" />
+            </h:inputText>
+            <h:message for="entriesPerPage" />
+            
+            <h:outputLabel for="thumbnailWidth" value="#{label.thumbnailWidth}" />
+            <h:inputText id="thumbnailWidth" styleClass="short" value="#{ConfigBean.blog.thumbnailWidth}" required="true" />
+            <h:message for="thumbnailWidth" />
+            
+            <h:outputLabel for="thumbnailHeight" value="#{label.thumbnailHeight}" />
+            <h:inputText id="thumbnailHeight" styleClass="short" value="#{ConfigBean.blog.thumbnailHeight}" required="true" />
+            <h:message for="thumbnailHeight" />
+            
+            <h:outputLabel for="imageWidth" value="#{label.imageWidth}" />
+            <h:inputText id="imageWidth" styleClass="short" value="#{ConfigBean.blog.imageWidth}" required="true" />
+            <h:message for="imageWidth" />
+            
+            <h:outputLabel for="imageHeight" value="#{label.imageHeight}" />
+            <h:inputText id="imageHeight" styleClass="short" value="#{ConfigBean.blog.imageHeight}" required="true" />
+            <h:message for="imageHeight" />
+
+            <h:outputLabel for="dateFormat" value="#{label.dateFormat}" />
+            <h:inputText id="dateFormat" value="#{ConfigBean.blog.dateFormat}" required="true">
+              <f:validator validatorId="validator.dateFormat" />
+            </h:inputText>
+            <h:message for="dateFormat" />
+            
+          </h:panelGrid>
+          
+          <h:commandButton value="#{label.save}" action="#{ConfigBean.save}" />
+          
+        </h:form>
+
+        <c:forEach items="#{ConfigBean.providers}" var="provider">
+          <ui:include src="#{provider}" />
+        </c:forEach>
+        
+        <h:form>
+        
+          <h2><h:outputText value="#{label.search}" /></h2>
+          
+          <h:commandButton value="#{label.reIndex}" action="#{ConfigBean.reIndex}" />
+          
+        </h:form>
+        
+      </ui:define>
+      
+      
+    </ui:composition>
+    
+  </body>
+</html>

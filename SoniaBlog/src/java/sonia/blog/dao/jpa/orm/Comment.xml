@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entity-mappings version="1.0" xmlns="http://java.sun.com/xml/ns/persistence/orm"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/persistence/orm http://java.sun.com/xml/ns/persistence/orm_1_0.xsd">
+  <persistence-unit-metadata>
+    <persistence-unit-defaults>
+      <access>FIELD</access>
+    </persistence-unit-defaults>
+  </persistence-unit-metadata>
+  <package>sonia.blog.entity</package>
+  <entity metadata-complete="true" name="Comment" class="sonia.blog.entity.Comment">
+    <table name="JAB_COMMENT" />
+    <named-query name="Comment.findAll">
+      <query>
+        select c from Comment c
+      </query>
+    </named-query>
+    <named-query name="Comment.findAllByBlog">
+      <query>
+        select c from Comment c join c.entry e join e.blog b where b = :blog and e.published = true order by c.creationDate desc
+      </query>
+    </named-query>
+    <named-query name="Comment.findAllActivesByEntry">
+      <query>
+        select c from Comment c join c.entry e where e = :entry and c.spam = false order by c.creationDate
+      </query>
+    </named-query>
+    <named-query name="Comment.count">
+      <query>
+        select count(c) from Comment c
+      </query>
+    </named-query>
+    <named-query name="Comment.countByBlog">
+      <query>
+        select count(c) from Comment c join c.entry e join e.blog b where b = :blog
+      </query>
+    </named-query>
+    <pre-persist method-name="prePersists" />
+    <attributes>
+      <id name="id">
+        <generated-value strategy="IDENTITY" />
+      </id>
+      <basic name="content">
+        <column nullable="false" length="2048" />
+      </basic>
+      <basic name="creationDate">
+        <column nullable="false" />
+        <temporal>TIMESTAMP</temporal>
+      </basic>
+      <many-to-one name="author" optional="false" />
+    </attributes>
+  </entity>
+</entity-mappings>

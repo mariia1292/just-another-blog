@@ -1,0 +1,40 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:blog="http://jab.nitilon.org/blog/"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core">
+  <body>
+
+    <ui:composition>
+
+      <h3><h:outputText value="#{label.comments}" /></h3>
+
+      <h:form>
+
+        <h:dataTable styleClass="small" value="#{DashboardBean.comments}" var="Comment" rendered="#{DashboardBean.comments.rowCount &gt; 0}">
+
+          <h:column>
+            <h:outputText value="#{Comment.creationDate}">
+              <f:convertDateTime pattern="#{BlogBean.blog.dateFormat}" />
+            </h:outputText>
+          </h:column>
+
+          <h:column>
+            <h:outputText value="#{Comment.authorName}: " />
+            <blog:link object="#{Comment.entry}" value="#{Comment.content}" />
+            <h:outputText value=" (Spam)" rendered="#{Comment.spam}" />
+          </h:column>
+
+        </h:dataTable>
+
+        <h:outputText value="#{message.noCommentsFound}" rendered="#{DashboardBean.comments.rowCount &lt;= 0}" />
+
+      </h:form>
+
+    </ui:composition>
+    
+  </body>
+</html>
+

@@ -1,0 +1,153 @@
+<?xml version='1.0' encoding='UTF-8'?>
+
+<!-- =========== FULL CONFIGURATION FILE ================================== -->
+<faces-config version="1.2" 
+    xmlns="http://java.sun.com/xml/ns/javaee" 
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_1_2.xsd">
+
+  <managed-bean>
+    <managed-bean-name>DashboardBean</managed-bean-name>
+    <managed-bean-class>sonia.blog.wui.DashboardBean</managed-bean-class>
+    <managed-bean-scope>request</managed-bean-scope>
+  </managed-bean>
+
+  <managed-bean>
+    <managed-bean-name>UserSettingsBean</managed-bean-name>
+    <managed-bean-class>sonia.blog.wui.UserSettingsBean</managed-bean-class>
+    <managed-bean-scope>request</managed-bean-scope>
+  </managed-bean>
+
+  <managed-bean>
+    <managed-bean-name>AvatarBean</managed-bean-name>
+    <managed-bean-class>sonia.blog.wui.AvatarBean</managed-bean-class>
+    <managed-bean-scope>session</managed-bean-scope>
+  </managed-bean>
+
+  <managed-bean>
+    <managed-bean-name>PluginBean</managed-bean-name>
+    <managed-bean-class>sonia.blog.wui.PluginBean</managed-bean-class>
+    <managed-bean-scope>request</managed-bean-scope>
+  </managed-bean>
+
+  <managed-bean>
+    <managed-bean-name>GlobalStatusBean</managed-bean-name>
+    <managed-bean-class>sonia.blog.wui.GlobalStatusBean</managed-bean-class>
+    <managed-bean-scope>request</managed-bean-scope>
+  </managed-bean>
+
+  <managed-bean>
+    <managed-bean-name>GlobalConfigBean</managed-bean-name>
+    <managed-bean-class>sonia.blog.wui.GlobalConfigBean</managed-bean-class>
+    <managed-bean-scope>request</managed-bean-scope>
+  </managed-bean>
+
+  <managed-bean>
+    <managed-bean-name>PersonalBean</managed-bean-name>
+    <managed-bean-class>sonia.blog.wui.PersonalBean</managed-bean-class>
+    <managed-bean-scope>request</managed-bean-scope>
+  </managed-bean>
+
+  <managed-bean>
+    <managed-bean-name>RegistrationBean</managed-bean-name>
+    <managed-bean-class>sonia.blog.wui.RegistrationBean</managed-bean-class>
+    <managed-bean-scope>request</managed-bean-scope>
+  </managed-bean>
+
+  <managed-bean>
+    <managed-bean-name>BlogCreationBean</managed-bean-name>
+    <managed-bean-class>sonia.blog.wui.BlogCreationBean</managed-bean-class>
+    <managed-bean-scope>request</managed-bean-scope>
+  </managed-bean>
+  
+  <managed-bean>
+    <managed-bean-name>TemplateBean</managed-bean-name>
+    <managed-bean-class>sonia.blog.wui.TemplateBean</managed-bean-class>
+    <managed-bean-scope>request</managed-bean-scope>
+  </managed-bean>
+  
+  <managed-bean>
+    <managed-bean-name>MemberBean</managed-bean-name>
+    <managed-bean-class>sonia.blog.wui.MemberBean</managed-bean-class>
+    <managed-bean-scope>request</managed-bean-scope>
+  </managed-bean>
+
+  <managed-bean>
+    <managed-bean-name>ConfigBean</managed-bean-name>
+    <managed-bean-class>sonia.blog.wui.ConfigBean</managed-bean-class>
+    <managed-bean-scope>session</managed-bean-scope>
+  </managed-bean>
+
+  <managed-bean>
+    <managed-bean-name>InstallBean</managed-bean-name>
+    <managed-bean-class>sonia.blog.wui.InstallBean</managed-bean-class>
+    <managed-bean-scope>session</managed-bean-scope>
+  </managed-bean>
+
+  <managed-bean>
+    <managed-bean-name>BlogBean</managed-bean-name>
+    <managed-bean-class>sonia.blog.wui.BlogBean</managed-bean-class>
+    <managed-bean-scope>session</managed-bean-scope>
+  </managed-bean>
+
+  <managed-bean>
+    <managed-bean-name>PageBean</managed-bean-name>
+    <managed-bean-class>sonia.blog.wui.PageBean</managed-bean-class>
+    <managed-bean-scope>request</managed-bean-scope>
+  </managed-bean>
+
+  <managed-bean>
+    <managed-bean-name>LoginBean</managed-bean-name>
+    <managed-bean-class>sonia.blog.wui.LoginBean</managed-bean-class>
+    <managed-bean-scope>session</managed-bean-scope>
+  </managed-bean>
+
+  <managed-bean>
+    <managed-bean-name>EntryBean</managed-bean-name>
+    <managed-bean-class>sonia.blog.wui.EntryBean</managed-bean-class>
+    <managed-bean-scope>session</managed-bean-scope>
+  </managed-bean>
+
+  <managed-bean>
+    <managed-bean-name>CategoryBean</managed-bean-name>
+    <managed-bean-class>sonia.blog.wui.CategoryBean</managed-bean-class>
+    <managed-bean-scope>session</managed-bean-scope>
+  </managed-bean>
+
+  <managed-bean>
+    <managed-bean-name>CommentBean</managed-bean-name>
+    <managed-bean-class>sonia.blog.wui.CommentBean</managed-bean-class>
+    <managed-bean-scope>session</managed-bean-scope>
+  </managed-bean>
+
+  <managed-bean>
+    <managed-bean-name>PageAuthorBean</managed-bean-name>
+    <managed-bean-class>sonia.blog.wui.PageAuthorBean</managed-bean-class>
+    <managed-bean-scope>session</managed-bean-scope>
+  </managed-bean>
+
+  <managed-bean>
+    <managed-bean-name>AdminBlogBean</managed-bean-name>
+    <managed-bean-class>sonia.blog.wui.AdminBlogBean</managed-bean-class>
+    <managed-bean-scope>session</managed-bean-scope>
+  </managed-bean>
+
+  <managed-bean>
+    <managed-bean-name>AdminUserBean</managed-bean-name>
+    <managed-bean-class>sonia.blog.wui.AdminUserBean</managed-bean-class>
+    <managed-bean-scope>session</managed-bean-scope>
+  </managed-bean>
+
+  <managed-bean>
+    <managed-bean-name>SearchBean</managed-bean-name>
+    <managed-bean-class>sonia.blog.wui.SearchBean</managed-bean-class>
+    <managed-bean-scope>request</managed-bean-scope>
+  </managed-bean>
+
+  <managed-bean>
+    <managed-bean-name>LostPasswordBean</managed-bean-name>
+    <managed-bean-class>sonia.blog.wui.LostPasswordBean</managed-bean-class>
+    <managed-bean-scope>request</managed-bean-scope>
+  </managed-bean>
+
+</faces-config>
