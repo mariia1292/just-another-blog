@@ -306,7 +306,7 @@ public abstract class AbstractEditorBean extends AbstractBean
 
       attachment.setMimeType(uploadedFile.getContentType());
       attachment.setSize(uploadedFile.getSize());
-      attachment.setName(uploadedFile.getName());
+      attachment.setName(getUploadedFilename());
       attachment.setDescription(uploadDescription);
       setRelation(attachment);
 
@@ -761,6 +761,29 @@ public abstract class AbstractEditorBean extends AbstractBean
     }
 
     return directory;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  private String getUploadedFilename()
+  {
+    String name = uploadedFile.getName();
+
+    if (Util.hasContent(name))
+    {
+      int index = name.lastIndexOf("\\");
+
+      if ((index > 0) && (name.length() > index + 1))
+      {
+        name = name.substring(index + 1);
+      }
+    }
+
+    return name;
   }
 
   //~--- fields ---------------------------------------------------------------

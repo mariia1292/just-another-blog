@@ -647,7 +647,6 @@ public class MacroBrowserMapping extends FinalMapping
           templateCSS);
       css = new LinkResource(99, LinkResource.TYPE_STYLESHEET, templateCSS,
                              LinkResource.REL_STYLESHEET, null, "user", false);
-      System.out.println(css.toHTML());
     }
 
     return css;
