@@ -136,15 +136,10 @@ public class GalleryMacro extends AbstractBlogMacro implements WebMacro
     if (Util.hasContent(images))
     {
       LinkBuilder linkBuilder = BlogContext.getInstance().getLinkBuilder();
-      String res = linkBuilder.buildLink(request, "/resources/");
+      String res = linkBuilder.getRelativeLink(request, "/resources/");
       String lRes = res + "prettyPhoto/";
 
       resources = new ArrayList<WebResource>();
-
-      ScriptResource jquery = new ScriptResource(20,
-                                res + "jquery/jquery.min.js");
-
-      resources.add(jquery);
 
       ScriptResource jqueryPrettyPhoto = new ScriptResource(21,
                                            lRes + "js/jquery.prettyPhoto.js");
@@ -161,7 +156,7 @@ public class GalleryMacro extends AbstractBlogMacro implements WebMacro
       long time = System.nanoTime();
       Map<String, Object> parameters = new HashMap<String, Object>();
 
-      parameters.put("linkBase", linkBase);
+      parameters.put("linkBase", request.getContextPath());
       parameters.put("id", String.valueOf(time));
       parameters.put("theme", theme);
       parameters.put("images", images);
