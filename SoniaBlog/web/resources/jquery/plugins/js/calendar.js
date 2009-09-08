@@ -76,8 +76,9 @@
       var today = calendar.today;
       var events = calendar.events.split(",");
       var counter = 0;
-      var $tbody = $("<tbody />");
-      appendDayHeadings($tbody);
+      var $table = $("<table />");
+      appendTableHeader(calendar, $table);
+      appendDayHeadings($table);
       var weeks = parseInt(calendar.weeks) + 1;
       for ( var i=0; i<weeks; i++ ){
         
@@ -109,14 +110,10 @@
 
           $tr.append($td);
         }
-        $tbody.append($tr);
+        $table.append($tr);
       }
       $field.append(
-        $("<table />").append(
-          createTableHeader(calendar)
-        ).append(
-          $tbody
-        )
+        $table
       );
     }
 
@@ -130,10 +127,10 @@
       $tbody.append($tr);
     }
 
-    function createTableHeader(calendar){
-      return $("<thead />").append(
+    function appendTableHeader(calendar, $table){
+      $table.append(
         $("<tr />").append(
-          $("<th />").attr("colspan", "7").append(
+          $("<th />").addClass("header").attr("colSpan", "7").append(
             $("<a />").text("<<").click(function(){
               previousYear(calendar);
             })
