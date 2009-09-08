@@ -93,6 +93,17 @@ public interface LinkBuilder
    * Method description
    *
    *
+   * @param request
+   * @param resource
+   *
+   * @return
+   */
+  public String getRelativeLink(BlogRequest request, String resource);
+
+  /**
+   * Method description
+   *
+   *
    * @return
    */
   public boolean isInit();
