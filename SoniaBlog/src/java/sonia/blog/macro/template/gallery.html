@@ -7,8 +7,10 @@
 </div>
 <script type="text/javascript">
   $(document).ready(function(){
-    $("div#gallery_${id} a").prettyPhoto({
-      theme: "${theme}"
-    });
+    if (!(jQuery.browser.msie && jQuery.broser.version == "7.0" )){
+      $("div#gallery_${id} a").prettyPhoto({
+        theme: "${theme}"
+      });
+    }
   });
 </script>
