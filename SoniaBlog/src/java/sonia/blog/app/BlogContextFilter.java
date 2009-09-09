@@ -76,6 +76,9 @@ public class BlogContextFilter implements Filter
 {
 
   /** Field description */
+  public static final String PARAM_DONTCACHE = "__dontCache";
+
+  /** Field description */
   public static final String SSO_SESSION_VAR = "jab.auth.sso";
 
   /** Field description */
@@ -243,7 +246,8 @@ public class BlogContextFilter implements Filter
     String cacheKey = null;
     boolean process = true;
 
-    if ((cache != null) && (instructions != null) && instructions.isCacheable())
+    if ((cache != null) && (instructions != null) && instructions.isCacheable()
+        && (request.getParameter(PARAM_DONTCACHE) == null))
     {
       cacheKey = createCacheKey(request);
 
