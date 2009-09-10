@@ -33,15 +33,11 @@
 
 package sonia.jobqueue;
 
-//~--- JDK imports ------------------------------------------------------------
-
-import java.io.Serializable;
-
 /**
  *
  * @author Sebastian Sdorra
  */
-public interface Job extends Serializable
+public interface Job
 {
 
   /**

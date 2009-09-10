@@ -477,7 +477,7 @@ public class AdminUserBean extends AbstractBean
 
   /** Field description */
   @Config(Constants.CONFIG_ADMIN_PAGESIZE)
-  private Integer pageSize = new Integer(20);
+  private Integer pageSize = Integer.valueOf(20);
 
   /** Field description */
   private String passwordRetry;

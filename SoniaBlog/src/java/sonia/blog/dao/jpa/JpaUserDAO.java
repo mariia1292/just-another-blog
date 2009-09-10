@@ -124,10 +124,7 @@ public class JpaUserDAO extends JpaGenericDAO<User> implements UserDAO
     }
     finally
     {
-      if (em != null)
-      {
-        em.close();
-      }
+      em.close();
     }
 
     return result;
@@ -157,10 +154,7 @@ public class JpaUserDAO extends JpaGenericDAO<User> implements UserDAO
     }
     finally
     {
-      if (em != null)
-      {
-        em.close();
-      }
+      em.close();
     }
 
     return result;
@@ -188,10 +182,7 @@ public class JpaUserDAO extends JpaGenericDAO<User> implements UserDAO
     }
     finally
     {
-      if (em != null)
-      {
-        em.close();
-      }
+      em.close();
     }
 
     return result;
@@ -229,10 +220,7 @@ public class JpaUserDAO extends JpaGenericDAO<User> implements UserDAO
     }
     finally
     {
-      if (em != null)
-      {
-        em.close();
-      }
+      em.close();
     }
 
     return result;
@@ -550,10 +538,7 @@ public class JpaUserDAO extends JpaGenericDAO<User> implements UserDAO
     }
     finally
     {
-      if (em != null)
-      {
-        em.close();
-      }
+      em.close();
     }
   }
 

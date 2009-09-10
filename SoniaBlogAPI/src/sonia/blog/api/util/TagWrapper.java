@@ -84,6 +84,65 @@ public class TagWrapper implements Comparable<TagWrapper>
     return result;
   }
 
+  /**
+   * Method description
+   *
+   *
+   * @param obj
+   *
+   * @return
+   */
+  @Override
+  public boolean equals(Object obj)
+  {
+    if (obj == null)
+    {
+      return false;
+    }
+
+    if (getClass() != obj.getClass())
+    {
+      return false;
+    }
+
+    final TagWrapper other = (TagWrapper) obj;
+
+    if ((this.count != other.count)
+        && ((this.count == null) ||!this.count.equals(other.count)))
+    {
+      return false;
+    }
+
+    if ((this.tag != other.tag)
+        && ((this.tag == null) ||!this.tag.equals(other.tag)))
+    {
+      return false;
+    }
+
+    return true;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  @Override
+  public int hashCode()
+  {
+    int hash = 7;
+
+    hash = 83 * hash + ((this.count != null)
+                        ? this.count.hashCode()
+                        : 0);
+    hash = 83 * hash + ((this.tag != null)
+                        ? this.tag.hashCode()
+                        : 0);
+
+    return hash;
+  }
+
   //~--- get methods ----------------------------------------------------------
 
   /**

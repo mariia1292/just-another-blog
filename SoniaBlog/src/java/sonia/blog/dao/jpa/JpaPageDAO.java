@@ -163,10 +163,7 @@ public class JpaPageDAO extends JpaGenericDAO<Page> implements PageDAO
     }
     finally
     {
-      if (em != null)
-      {
-        em.close();
-      }
+      em.close();
     }
 
     return result;

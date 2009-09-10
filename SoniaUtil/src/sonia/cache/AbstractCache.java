@@ -156,6 +156,7 @@ public abstract class AbstractCache implements ObjectCache
   {
     double dHits = (double) hits;
     double dMissed = (double) missed;
+
     return (dHits + dMissed > 0)
            ? 100d / (dHits + dMissed) * dHits
            : 0d;

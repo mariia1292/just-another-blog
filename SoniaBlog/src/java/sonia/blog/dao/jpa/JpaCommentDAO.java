@@ -150,10 +150,7 @@ public class JpaCommentDAO extends JpaGenericDAO<Comment> implements CommentDAO
     catch (NoResultException ex) {}
     finally
     {
-      if (em != null)
-      {
-        em.close();
-      }
+      em.close();
     }
 
     return comments;

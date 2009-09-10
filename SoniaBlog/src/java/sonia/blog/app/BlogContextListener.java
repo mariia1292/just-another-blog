@@ -228,7 +228,7 @@ public class BlogContextListener implements ServletContextListener
    */
   private String buildClasspath(ServletContext context)
   {
-    String classpath = "";
+    StringBuffer classpathBuffer = new StringBuffer();
     File libFile = new File(context.getRealPath("/WEB-INF/lib"));
 
     if (libFile.isDirectory())
@@ -245,7 +245,7 @@ public class BlogContextListener implements ServletContextListener
       {
         for (File child : children)
         {
-          classpath += child.getPath() + ":";
+          classpathBuffer.append(child.getPath()).append(":");
         }
       }
     }
@@ -254,8 +254,10 @@ public class BlogContextListener implements ServletContextListener
 
     if (classFile.isDirectory())
     {
-      classpath += classFile.getPath();
+      classpathBuffer.append(classFile.getPath());
     }
+
+    String classpath = classpathBuffer.toString();
 
     if (classpath.endsWith(":"))
     {

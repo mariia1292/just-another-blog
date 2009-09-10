@@ -46,6 +46,8 @@ import sonia.blog.entity.Blog;
 import sonia.blog.entity.Page;
 import sonia.blog.wui.PageBean;
 
+import sonia.cache.Cacheable;
+
 import sonia.util.Util;
 
 //~--- JDK imports ------------------------------------------------------------
@@ -56,7 +58,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.servlet.ServletException;
-import sonia.cache.Cacheable;
 
 /**
  *

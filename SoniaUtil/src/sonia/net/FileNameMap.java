@@ -77,6 +77,20 @@ public class FileNameMap implements java.net.FileNameMap
       {
         logger.log(Level.SEVERE, null, ex);
       }
+      finally
+      {
+        if (in != null)
+        {
+          try
+          {
+            in.close();
+          }
+          catch (IOException ex)
+          {
+            logger.log(Level.SEVERE, null, ex);
+          }
+        }
+      }
     }
   }
 

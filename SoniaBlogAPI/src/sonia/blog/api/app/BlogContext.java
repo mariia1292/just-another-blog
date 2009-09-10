@@ -668,10 +668,11 @@ public final class BlogContext
    */
   public SearchContext getSearchContext()
   {
-    if ( searchContext == null )
+    if (searchContext == null)
     {
       searchContext = new SearchContext();
     }
+
     return searchContext;
   }
 

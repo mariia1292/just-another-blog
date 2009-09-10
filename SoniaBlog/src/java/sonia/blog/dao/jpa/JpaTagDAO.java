@@ -164,10 +164,7 @@ public class JpaTagDAO extends JpaGenericDAO<Tag> implements TagDAO
     catch (NoResultException ex) {}
     finally
     {
-      if (em != null)
-      {
-        em.close();
-      }
+      em.close();
     }
 
     return tags;
@@ -196,10 +193,7 @@ public class JpaTagDAO extends JpaGenericDAO<Tag> implements TagDAO
     catch (NoResultException ex) {}
     finally
     {
-      if (em != null)
-      {
-        em.close();
-      }
+      em.close();
     }
 
     return tag;

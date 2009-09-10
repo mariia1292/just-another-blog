@@ -84,6 +84,65 @@ public class BlogWrapper implements Comparable<BlogWrapper>
     return result;
   }
 
+  /**
+   * Method description
+   *
+   *
+   * @param obj
+   *
+   * @return
+   */
+  @Override
+  public boolean equals(Object obj)
+  {
+    if (obj == null)
+    {
+      return false;
+    }
+
+    if (getClass() != obj.getClass())
+    {
+      return false;
+    }
+
+    final BlogWrapper other = (BlogWrapper) obj;
+
+    if ((this.blog != other.blog)
+        && ((this.blog == null) ||!this.blog.equals(other.blog)))
+    {
+      return false;
+    }
+
+    if ((this.count != other.count)
+        && ((this.count == null) ||!this.count.equals(other.count)))
+    {
+      return false;
+    }
+
+    return true;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  @Override
+  public int hashCode()
+  {
+    int hash = 3;
+
+    hash = 29 * hash + ((this.blog != null)
+                        ? this.blog.hashCode()
+                        : 0);
+    hash = 29 * hash + ((this.count != null)
+                        ? this.count.hashCode()
+                        : 0);
+
+    return hash;
+  }
+
   //~--- get methods ----------------------------------------------------------
 
   /**

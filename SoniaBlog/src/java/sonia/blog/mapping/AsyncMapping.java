@@ -714,7 +714,7 @@ public class AsyncMapping extends FinalMapping
       cal = Calendar.getInstance();
       cal.setTime(date);
 
-      Integer day = new Integer(cal.get(Calendar.DAY_OF_MONTH));
+      Integer day = Integer.valueOf(cal.get(Calendar.DAY_OF_MONTH));
 
       if (!days.contains(day))
       {

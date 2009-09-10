@@ -208,7 +208,7 @@ public class TagCloudRenderer extends BaseRenderer
    * @version    Enter version here..., 09/01/02
    * @author     Enter your name here...
    */
-  private class IdComparator implements Comparator<TagWrapper>
+  private static class IdComparator implements Comparator<TagWrapper>
   {
 
     /**

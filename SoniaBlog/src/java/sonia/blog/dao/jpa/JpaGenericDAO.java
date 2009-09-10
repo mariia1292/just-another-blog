@@ -165,10 +165,7 @@ public abstract class JpaGenericDAO<T> implements GenericDAO<T>
     }
     finally
     {
-      if (em != null)
-      {
-        em.close();
-      }
+      em.close();
     }
 
     return result;
@@ -230,10 +227,7 @@ public abstract class JpaGenericDAO<T> implements GenericDAO<T>
     }
     finally
     {
-      if (em != null)
-      {
-        em.close();
-      }
+      em.close();
     }
 
     return result;
@@ -295,10 +289,7 @@ public abstract class JpaGenericDAO<T> implements GenericDAO<T>
     }
     finally
     {
-      if (em != null)
-      {
-        em.close();
-      }
+      em.close();
     }
 
     return result;
@@ -326,10 +317,7 @@ public abstract class JpaGenericDAO<T> implements GenericDAO<T>
     catch (NoResultException ex) {}
     finally
     {
-      if (em != null)
-      {
-        em.close();
-      }
+      em.close();
     }
 
     return item;
@@ -381,8 +369,14 @@ public abstract class JpaGenericDAO<T> implements GenericDAO<T>
       q.setParameter("blog", blog);
     }
 
-    result = (Long) q.getSingleResult();
-    em.close();
+    try
+    {
+      result = (Long) q.getSingleResult();
+    }
+    finally
+    {
+      em.close();
+    }
 
     return result;
   }
@@ -437,10 +431,7 @@ public abstract class JpaGenericDAO<T> implements GenericDAO<T>
     catch (NoResultException ex) {}
     finally
     {
-      if (em != null)
-      {
-        em.close();
-      }
+      em.close();
     }
 
     return resultList;
@@ -484,10 +475,7 @@ public abstract class JpaGenericDAO<T> implements GenericDAO<T>
     catch (NoResultException ex) {}
     finally
     {
-      if (em != null)
-      {
-        em.close();
-      }
+      em.close();
     }
 
     return item;

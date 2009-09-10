@@ -88,6 +88,69 @@ public class RequestStatisticInformation
     return result;
   }
 
+  /**
+   * Method description
+   *
+   *
+   * @param obj
+   *
+   * @return
+   */
+  @Override
+  public boolean equals(Object obj)
+  {
+    if (obj == null)
+    {
+      return false;
+    }
+
+    if (getClass() != obj.getClass())
+    {
+      return false;
+    }
+
+    final RequestStatisticInformation other = (RequestStatisticInformation) obj;
+
+    if (this.hits != other.hits)
+    {
+      return false;
+    }
+
+    if (this.loadTime != other.loadTime)
+    {
+      return false;
+    }
+
+    if ((this.requestUri == null)
+        ? (other.requestUri != null)
+        : !this.requestUri.equals(other.requestUri))
+    {
+      return false;
+    }
+
+    return true;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  @Override
+  public int hashCode()
+  {
+    int hash = 5;
+
+    hash = 83 * hash + this.hits;
+    hash = 83 * hash + (int) (this.loadTime ^ (this.loadTime >>> 32));
+    hash = 83 * hash + ((this.requestUri != null)
+                        ? this.requestUri.hashCode()
+                        : 0);
+
+    return hash;
+  }
+
   //~--- get methods ----------------------------------------------------------
 
   /**

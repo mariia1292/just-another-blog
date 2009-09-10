@@ -89,7 +89,7 @@ public abstract class AbstractDataModel extends DataModel
   @Override
   public int getRowCount()
   {
-    rowCount = new Long(countData()).intValue();
+    rowCount = (int) countData();
 
     return rowCount;
   }

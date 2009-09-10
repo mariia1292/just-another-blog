@@ -165,10 +165,7 @@ public class JpaEntryDAO extends JpaGenericDAO<Entry> implements EntryDAO
       }
       finally
       {
-        if (em != null)
-        {
-          em.close();
-        }
+        em.close();
       }
     }
 
@@ -313,10 +310,7 @@ public class JpaEntryDAO extends JpaGenericDAO<Entry> implements EntryDAO
     catch (NoResultException ex) {}
     finally
     {
-      if (em != null)
-      {
-        em.close();
-      }
+      em.close();
     }
 
     return entries;
@@ -374,10 +368,7 @@ public class JpaEntryDAO extends JpaGenericDAO<Entry> implements EntryDAO
     catch (NoResultException ex) {}
     finally
     {
-      if (em != null)
-      {
-        em.close();
-      }
+      em.close();
     }
 
     return entries;
@@ -432,10 +423,7 @@ public class JpaEntryDAO extends JpaGenericDAO<Entry> implements EntryDAO
     catch (NoResultException ex) {}
     finally
     {
-      if (em != null)
-      {
-        em.close();
-      }
+      em.close();
     }
 
     return entries;
@@ -488,10 +476,7 @@ public class JpaEntryDAO extends JpaGenericDAO<Entry> implements EntryDAO
     catch (NoResultException ex) {}
     finally
     {
-      if (em != null)
-      {
-        em.close();
-      }
+      em.close();
     }
 
     return dates;
@@ -540,10 +525,7 @@ public class JpaEntryDAO extends JpaGenericDAO<Entry> implements EntryDAO
     catch (NoResultException ex) {}
     finally
     {
-      if (em != null)
-      {
-        em.close();
-      }
+      em.close();
     }
 
     return entries;
@@ -607,10 +589,7 @@ public class JpaEntryDAO extends JpaGenericDAO<Entry> implements EntryDAO
     }
     finally
     {
-      if (em != null)
-      {
-        em.close();
-      }
+      em.close();
     }
 
     return result;

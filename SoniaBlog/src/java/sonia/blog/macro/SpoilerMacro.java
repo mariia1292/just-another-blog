@@ -143,9 +143,9 @@ public class SpoilerMacro implements WebMacro
             }
           }
         }
-      }
 
-      body = childResult.getText();
+        body = childResult.getText();
+      }
     }
 
     result.append(body).append("\n");
