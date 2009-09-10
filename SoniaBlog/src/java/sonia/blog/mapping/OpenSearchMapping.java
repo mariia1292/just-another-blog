@@ -41,13 +41,14 @@ import sonia.blog.api.app.BlogResponse;
 import sonia.blog.api.mapping.FinalMapping;
 import sonia.blog.entity.Blog;
 
+import sonia.cache.Cacheable;
+
 //~--- JDK imports ------------------------------------------------------------
 
 import java.io.IOException;
 import java.io.PrintWriter;
 
 import javax.servlet.ServletException;
-import sonia.cache.Cacheable;
 
 /**
  *

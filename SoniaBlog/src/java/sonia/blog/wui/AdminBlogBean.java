@@ -637,7 +637,7 @@ public class AdminBlogBean extends AbstractBean
 
   /** Field description */
   @Config(Constants.CONFIG_ADMIN_PAGESIZE)
-  private Integer pageSize = new Integer(20);
+  private Integer pageSize = Integer.valueOf(20);
 
   /** Field description */
   @Service(Constants.NAVIGATION_BLOGACTION)

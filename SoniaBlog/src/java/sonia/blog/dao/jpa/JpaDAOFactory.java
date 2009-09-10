@@ -400,7 +400,7 @@ public class JpaDAOFactory extends DAOFactory
     {
       if (em.getTransaction().isActive())
       {
-        em.close();
+        em.getTransaction().rollback();
       }
 
       logger.log(Level.SEVERE, null, ex);

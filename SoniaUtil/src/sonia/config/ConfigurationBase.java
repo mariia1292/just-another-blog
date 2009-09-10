@@ -49,7 +49,7 @@ public abstract class ConfigurationBase implements Configuration
 {
 
   /** Field description */
-  protected static Pattern variablePattern =
+  protected static final Pattern variablePattern =
     Pattern.compile("\\$\\{([a-zA-Z0-9-\\._]+)\\}");
 
   //~--- get methods ----------------------------------------------------------

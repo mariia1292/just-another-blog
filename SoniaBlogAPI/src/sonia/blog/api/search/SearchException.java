@@ -33,6 +33,8 @@
 
 package sonia.blog.api.search;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import sonia.blog.api.exception.BlogException;
 
 /**

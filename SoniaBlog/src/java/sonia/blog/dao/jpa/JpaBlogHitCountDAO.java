@@ -121,10 +121,7 @@ public class JpaBlogHitCountDAO extends JpaGenericDAO<BlogHitCount>
     catch (NoResultException ex) {}
     finally
     {
-      if (em != null)
-      {
-        em.close();
-      }
+      em.close();
     }
 
     return hitCount;
@@ -280,10 +277,7 @@ public class JpaBlogHitCountDAO extends JpaGenericDAO<BlogHitCount>
     catch (NoResultException ex) {}
     finally
     {
-      if (em != null)
-      {
-        em.close();
-      }
+      em.close();
     }
 
     return result;
@@ -377,10 +371,7 @@ public class JpaBlogHitCountDAO extends JpaGenericDAO<BlogHitCount>
     catch (NoResultException ex) {}
     finally
     {
-      if (em != null)
-      {
-        em.close();
-      }
+      em.close();
     }
 
     return result;
@@ -414,10 +405,7 @@ public class JpaBlogHitCountDAO extends JpaGenericDAO<BlogHitCount>
     }
     finally
     {
-      if (em != null)
-      {
-        em.close();
-      }
+      em.close();
     }
 
     return result;

@@ -128,10 +128,7 @@ public class JpaCategoryDAO extends JpaGenericDAO<Category>
     catch (NoResultException ex) {}
     finally
     {
-      if (em != null)
-      {
-        em.close();
-      }
+      em.close();
     }
 
     return category;
@@ -213,10 +210,7 @@ public class JpaCategoryDAO extends JpaGenericDAO<Category>
     catch (NoResultException ex) {}
     finally
     {
-      if (em != null)
-      {
-        em.close();
-      }
+      em.close();
     }
 
     return category;

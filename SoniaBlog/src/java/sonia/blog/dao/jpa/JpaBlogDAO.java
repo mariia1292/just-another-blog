@@ -179,10 +179,7 @@ public class JpaBlogDAO extends JpaGenericDAO<Blog> implements BlogDAO
     }
     finally
     {
-      if (em != null)
-      {
-        em.close();
-      }
+      em.close();
     }
 
     return result;
@@ -456,10 +453,7 @@ public class JpaBlogDAO extends JpaGenericDAO<Blog> implements BlogDAO
     }
     finally
     {
-      if (em != null)
-      {
-        em.close();
-      }
+      em.close();
     }
   }
 

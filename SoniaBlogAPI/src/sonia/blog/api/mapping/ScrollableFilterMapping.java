@@ -180,9 +180,12 @@ public abstract class ScrollableFilterMapping extends FilterMapping
   @SuppressWarnings("unchecked")
   protected String getPageUri(BlogRequest request, int page)
   {
-    String uri =
-      request.getRequestURI().substring(request.getContextPath().length())
-      + "?page=" + page;
+    StringBuffer uri = new StringBuffer();
+
+    uri.append(
+        request.getRequestURI().substring(request.getContextPath().length()));
+    uri.append("?page=").append(page);
+
     Enumeration<String> enm = request.getParameterNames();
 
     while (enm.hasMoreElements())
@@ -191,10 +194,11 @@ public abstract class ScrollableFilterMapping extends FilterMapping
 
       if (!name.equals("page"))
       {
-        uri += "&" + name + "=" + request.getParameter(name);
+        uri.append("&").append(name).append("=").append(
+            request.getParameter(name));
       }
     }
 
-    return uri;
+    return uri.toString();
   }
 }

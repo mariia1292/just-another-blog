@@ -153,10 +153,7 @@ public class JpaAttachmentDAO extends JpaGenericDAO<Attachment>
     catch (NoResultException ex) {}
     finally
     {
-      if (em != null)
-      {
-        em.close();
-      }
+      em.close();
     }
 
     return attachments;
@@ -211,10 +208,7 @@ public class JpaAttachmentDAO extends JpaGenericDAO<Attachment>
     catch (NoResultException ex) {}
     finally
     {
-      if (em != null)
-      {
-        em.close();
-      }
+      em.close();
     }
 
     return attachments;
@@ -245,10 +239,7 @@ public class JpaAttachmentDAO extends JpaGenericDAO<Attachment>
     catch (NoResultException ex) {}
     finally
     {
-      if (em != null)
-      {
-        em.close();
-      }
+      em.close();
     }
 
     return attachment;

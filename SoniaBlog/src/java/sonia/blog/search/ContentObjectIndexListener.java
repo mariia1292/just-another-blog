@@ -151,8 +151,10 @@ public class ContentObjectIndexListener implements DAOListener
         writer.addDocument(doc);
         writer.optimize();
         writer.close();
-        if ( logger.isLoggable( Level.FINEST ) ){
-          logger.finest( "added 1 document to searchindex" );
+
+        if (logger.isLoggable(Level.FINEST))
+        {
+          logger.finest("added 1 document to searchindex");
         }
       }
       catch (Exception ex)

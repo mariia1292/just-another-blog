@@ -282,7 +282,7 @@ public class DefaultSearchProvider implements SearchProvider
         StringBuffer log = new StringBuffer();
 
         log.append("missing resource key ").append(name);
-        logger.warning( log.toString() );
+        logger.warning(log.toString());
       }
     }
 

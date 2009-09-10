@@ -88,6 +88,21 @@ public class CacheManager
     caches = new HashMap<String, ObjectCache>();
   }
 
+  //~--- get methods ----------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   * @param clazz
+   *
+   * @return
+   */
+  public static boolean isCacheable(Class<?> clazz)
+  {
+    return clazz.getAnnotation(Cacheable.class) != null;
+  }
+
   //~--- methods --------------------------------------------------------------
 
   /**
@@ -224,19 +239,6 @@ public class CacheManager
   public ObjectCache get(String name)
   {
     return caches.get(name);
-  }
-
-  /**
-   * Method description
-   *
-   *
-   * @param clazz
-   *
-   * @return
-   */
-  public static boolean isCacheable(Class<?> clazz)
-  {
-    return clazz.getAnnotation(Cacheable.class) != null;
   }
 
   //~--- set methods ----------------------------------------------------------

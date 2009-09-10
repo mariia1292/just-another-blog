@@ -236,6 +236,8 @@ public class TemplateManager
 
       if (informationFile.exists() && informationFile.isFile())
       {
+        FileInputStream fis = null;
+
         try
         {
           template = new Template();
@@ -243,7 +245,8 @@ public class TemplateManager
 
           Properties information = new Properties();
 
-          information.load(new FileInputStream(informationFile));
+          fis = new FileInputStream(informationFile);
+          information.load(fis);
           template.setAuthor(information.getProperty("author"));
           template.setName(information.getProperty("name"));
           template.setUrl(information.getProperty("url"));
@@ -255,6 +258,20 @@ public class TemplateManager
         catch (IOException ex)
         {
           logger.log(Level.SEVERE, null, ex);
+        }
+        finally
+        {
+          if (fis != null)
+          {
+            try
+            {
+              fis.close();
+            }
+            catch (IOException ex)
+            {
+              logger.log(Level.SEVERE, null, ex);
+            }
+          }
         }
       }
     }

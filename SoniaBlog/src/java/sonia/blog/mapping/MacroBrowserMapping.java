@@ -78,6 +78,7 @@ import sonia.util.Util;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.io.Serializable;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -808,7 +809,7 @@ public class MacroBrowserMapping extends FinalMapping
    * @author         Enter your name here...
    */
   private static class MacroInformationComparator
-          implements Comparator<MacroInformation>
+          implements Comparator<MacroInformation>, Serializable
   {
 
     /**

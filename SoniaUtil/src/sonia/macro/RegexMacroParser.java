@@ -111,9 +111,9 @@ public class RegexMacroParser extends MacroParser
       }
     }
 
-    for (String key : replaceMap.keySet())
+    for (Map.Entry<String, String> entry : replaceMap.entrySet())
     {
-      text = text.replace(key, replaceMap.get(key));
+      text = text.replace(entry.getKey(), entry.getValue());
     }
 
     result.setText(text);
