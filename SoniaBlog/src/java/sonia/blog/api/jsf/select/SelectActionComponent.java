@@ -84,7 +84,8 @@ public class SelectActionComponent extends BaseComponent
   @SuppressWarnings("unchecked")
   public void restoreState(FacesContext context, Object obj)
   {
-    state = (Object[]) obj;
+    Object[] state = (Object[]) obj;
+
     super.restoreState(context, state[0]);
     onblur = (String) state[1];
     onchange = (String) state[2];
@@ -113,10 +114,7 @@ public class SelectActionComponent extends BaseComponent
   @Override
   public Object saveState(FacesContext context)
   {
-    if (state == null)
-    {
-      state = new Object[15];
-    }
+    Object[] state = new Object[15];
 
     state[0] = super.saveState(context);
     state[1] = onblur;
@@ -631,7 +629,4 @@ public class SelectActionComponent extends BaseComponent
 
   /** Field description */
   private String onmouseup;
-
-  /** Field description */
-  private Object[] state;
 }

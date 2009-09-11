@@ -88,7 +88,8 @@ public class TagCloudComponent extends BaseComponent
   @Override
   public void restoreState(FacesContext context, Object obj)
   {
-    state = (Object[]) obj;
+    Object[] state = (Object[]) obj;
+
     super.restoreState(context, state[0]);
     minPercentage = (Integer) state[1];
     maxPercentage = (Integer) state[2];
@@ -106,10 +107,7 @@ public class TagCloudComponent extends BaseComponent
   @Override
   public Object saveState(FacesContext context)
   {
-    if (state == null)
-    {
-      state = new Object[4];
-    }
+    Object[] state = new Object[4];
 
     state[0] = super.saveState(context);
     state[1] = minPercentage;
@@ -238,7 +236,4 @@ public class TagCloudComponent extends BaseComponent
 
   /** Field description */
   private Integer minPercentage;
-
-  /** Field description */
-  private Object[] state;
 }

@@ -57,7 +57,8 @@ public abstract class BaseComponent extends UIComponentBase
   @Override
   public void restoreState(FacesContext context, Object obj)
   {
-    this.state = (Object[]) obj;
+    Object[] state = (Object[]) obj;
+
     super.restoreState(context, state[0]);
     style = (String) state[1];
     styleClass = (String) state[2];
@@ -75,10 +76,7 @@ public abstract class BaseComponent extends UIComponentBase
   @Override
   public Object saveState(FacesContext context)
   {
-    if (state == null)
-    {
-      state = new Object[4];
-    }
+    Object[] state = new Object[4];
 
     state[0] = super.saveState(context);
     state[1] = style;
@@ -189,9 +187,6 @@ public abstract class BaseComponent extends UIComponentBase
 
   /** Field description */
   private String role;
-
-  /** Field description */
-  private Object[] state;
 
   /** Field description */
   private String style;

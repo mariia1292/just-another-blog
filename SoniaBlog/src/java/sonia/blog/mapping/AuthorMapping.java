@@ -246,7 +246,7 @@ public class AuthorMapping extends ScrollableFilterMapping
 
     int size = entries.size();
 
-    if ((entries != null) && (size > max))
+    if (size > max)
     {
       int page = getCurrentPage(request);
 

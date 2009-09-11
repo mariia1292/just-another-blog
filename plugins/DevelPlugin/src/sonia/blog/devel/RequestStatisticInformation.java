@@ -82,7 +82,7 @@ public class RequestStatisticInformation
     {
       double r = getAverageLoadTime() - o.getAverageLoadTime();
 
-      result = new Long(Math.round(r)).intValue();
+      result = (int) Math.round(r);
     }
 
     return result;

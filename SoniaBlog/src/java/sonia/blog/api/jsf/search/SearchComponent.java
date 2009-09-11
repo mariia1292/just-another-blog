@@ -79,7 +79,8 @@ public class SearchComponent extends BaseComponent
   @Override
   public void restoreState(FacesContext context, Object obj)
   {
-    state = (Object[]) obj;
+    Object[] state = (Object[]) obj;
+
     super.restoreState(context, state[0]);
     target = (String) state[1];
     title = (String) state[2];
@@ -100,10 +101,7 @@ public class SearchComponent extends BaseComponent
   @Override
   public Object saveState(FacesContext context)
   {
-    if (state == null)
-    {
-      state = new Object[7];
-    }
+    Object[] state = new Object[7];
 
     state[0] = super.saveState(context);
     state[1] = target;
@@ -325,9 +323,6 @@ public class SearchComponent extends BaseComponent
 
   /** Field description */
   private String label;
-
-  /** Field description */
-  private Object[] state;
 
   /** Field description */
   private String target;

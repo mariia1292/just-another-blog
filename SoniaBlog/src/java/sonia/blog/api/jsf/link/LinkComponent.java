@@ -81,7 +81,8 @@ public class LinkComponent extends BaseComponent
   @Override
   public void restoreState(FacesContext context, Object obj)
   {
-    state = (Object[]) obj;
+    Object[] state = (Object[]) obj;
+
     super.restoreState(context, state[0]);
     value = (String) state[1];
     href = (String) state[2];
@@ -102,10 +103,7 @@ public class LinkComponent extends BaseComponent
   @Override
   public Object saveState(FacesContext context)
   {
-    if (state == null)
-    {
-      state = new Object[7];
-    }
+    Object[] state = new Object[7];
 
     state[0] = super.saveState(context);
     state[1] = value;
@@ -331,9 +329,6 @@ public class LinkComponent extends BaseComponent
 
   /** Field description */
   private PermaObject object;
-
-  /** Field description */
-  private Object[] state;
 
   /** Field description */
   private String target;

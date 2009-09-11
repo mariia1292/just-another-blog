@@ -42,6 +42,7 @@ import sonia.jsf.access.AccessHandler;
 //~--- JDK imports ------------------------------------------------------------
 
 import java.io.FileInputStream;
+import java.io.IOException;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -108,15 +109,31 @@ public class AccessPhaseListener implements PhaseListener
 
       String path = BlogContext.getInstance().getServletContext().getRealPath(
                         "/WEB-INF/config/access.xml");
+      FileInputStream fis = null;
 
       try
       {
-        accessHandler.readConfig(new FileInputStream(path));
+        fis = new FileInputStream(path);
+        accessHandler.readConfig(fis);
       }
-      catch (Exception ex)
+      catch (IOException ex)
       {
         accessHandler = null;
         logger.log(Level.SEVERE, null, ex);
+      }
+      finally
+      {
+        if (fis != null)
+        {
+          try
+          {
+            fis.close();
+          }
+          catch (IOException ex)
+          {
+            logger.log(Level.SEVERE, null, ex);
+          }
+        }
       }
     }
   }

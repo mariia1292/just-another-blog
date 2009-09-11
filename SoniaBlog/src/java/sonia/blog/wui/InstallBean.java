@@ -51,8 +51,6 @@ import sonia.blog.entity.Role;
 import sonia.blog.entity.User;
 import sonia.blog.util.BlogUtil;
 
-import sonia.config.StoreableConfiguration;
-
 import sonia.plugin.DefaultPluginStore;
 import sonia.plugin.service.Service;
 import sonia.plugin.service.ServiceReference;
@@ -290,36 +288,48 @@ public class InstallBean extends AbstractBean
         configuration.set(Constants.CONFIG_INSTALLED, Boolean.TRUE);
         BlogUtil.configureLogger(context);
 
-        if (configuration instanceof StoreableConfiguration)
+        FileOutputStream fos = null;
+
+        try
         {
-          try
+          fos = new FileOutputStream(BlogContext.getInstance().getConfigFile());
+          configuration.store(fos);
+
+          File pluginStore = context.getResourceManager().getDirectory(
+                                 Constants.RESOURCE_PLUGINSTORE);
+
+          if (!pluginStore.exists())
           {
-            configuration.store(
-                new FileOutputStream(
-                    BlogContext.getInstance().getConfigFile()));
+            pluginStore.mkdirs();
+          }
 
-            File pluginStore = context.getResourceManager().getDirectory(
-                                   Constants.RESOURCE_PLUGINSTORE);
+          context.getPluginContext().setStore(
+              new DefaultPluginStore(pluginStore));
 
-            if (!pluginStore.exists())
+          if (listeners != null)
+          {
+            for (InstallationListener listener : listeners)
             {
-              pluginStore.mkdirs();
-            }
-
-            context.getPluginContext().setStore(
-                new DefaultPluginStore(pluginStore));
-
-            if (listeners != null)
-            {
-              for (InstallationListener listener : listeners)
-              {
-                listener.beforeInstallation(context);
-              }
+              listener.beforeInstallation(context);
             }
           }
-          catch (Exception ex)
+        }
+        catch (Exception ex)
+        {
+          logger.log(Level.SEVERE, null, ex);
+        }
+        finally
+        {
+          if (fos != null)
           {
-            logger.log(Level.SEVERE, null, ex);
+            try
+            {
+              fos.close();
+            }
+            catch (IOException ex)
+            {
+              logger.log(Level.SEVERE, null, ex);
+            }
           }
         }
 

@@ -66,7 +66,7 @@ public class BlogsMacro implements Macro
    */
   public String doBody(Map<String, ?> environment, String body)
   {
-    String result = "";
+    StringBuffer result = new StringBuffer();
     BlogRequest request = (BlogRequest) environment.get("request");
     BlogDAO blogDAO = BlogContext.getDAOFactory().getBlogDAO();
     List<Blog> blogs = blogDAO.getAll(true, 0, 100);
@@ -75,19 +75,19 @@ public class BlogsMacro implements Macro
     {
       LinkBuilder linkBuilder = BlogContext.getInstance().getLinkBuilder();
 
-      result += "<ul>\n";
+      result.append("<ul>\n");
 
       for (Blog blog : blogs)
       {
-        result += "<li>";
-        result += "<a href=\"" + linkBuilder.buildLink(request, blog) + "\">";
-        result += blog.getTitle();
-        result += "</a>\n";
+        result.append("<li>");
+        result.append("<a href=\"");
+        result.append(linkBuilder.buildLink(request, blog)).append("\">");
+        result.append(blog.getTitle()).append("</a>\n");
       }
 
-      result += "</ul>\n";
+      result.append("</ul>\n");
     }
 
-    return result;
+    return result.toString();
   }
 }

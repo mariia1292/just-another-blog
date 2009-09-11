@@ -79,7 +79,8 @@ public class CalendarComponent extends BaseComponent
   @Override
   public void restoreState(FacesContext context, Object obj)
   {
-    state = (Object[]) obj;
+    Object[] state = (Object[]) obj;
+
     super.restoreState(context, state[0]);
     enableAjax = (Boolean) state[1];
     ajaxUrl = (String) state[2];
@@ -100,10 +101,7 @@ public class CalendarComponent extends BaseComponent
   @Override
   public Object saveState(FacesContext context)
   {
-    if (state == null)
-    {
-      state = new Object[7];
-    }
+    Object[] state = new Object[7];
 
     state[0] = super.saveState(context);
     state[1] = enableAjax;
@@ -334,9 +332,6 @@ public class CalendarComponent extends BaseComponent
 
   /** Field description */
   private String monthUrlPattern;
-
-  /** Field description */
-  private Object[] state;
 
   /** Field description */
   private String yearUrlPattern;

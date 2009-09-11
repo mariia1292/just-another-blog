@@ -71,16 +71,16 @@ public class Util
 {
 
   /** Field description */
-  public static final int MILLIS_DAY = 1000 * 60 * 60 * 24;
+  public static final long MILLIS_DAY = 1000 * 60 * 60 * 24;
 
   /** Field description */
-  public static final int MILLIS_HOUR = 1000 * 60 * 60;
+  public static final long MILLIS_HOUR = 1000 * 60 * 60;
 
   /** Field description */
-  public static final int MILLIS_MINUTE = 1000 * 60;
+  public static final long MILLIS_MINUTE = 1000 * 60;
 
   /** Field description */
-  public static final int MILLIS_SECOND = 1000;
+  public static final long MILLIS_SECOND = 1000;
 
   /** Field description */
   private static Logger logger = Logger.getLogger(Util.class.getName());

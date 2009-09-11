@@ -136,12 +136,13 @@ public class AdminUserBean extends AbstractBean
   public void roleChanged(ValueChangeEvent event)
   {
     BlogMember member = (BlogMember) members.getRowData();
-    Blog blog = member.getBlog();
-    User user = member.getUser();
-    Role role = (Role) event.getNewValue();
 
     if (member != null)
     {
+      Blog blog = member.getBlog();
+      User user = member.getUser();
+      Role role = (Role) event.getNewValue();
+
       try
       {
         userDAO.setRole(blog, user, role);

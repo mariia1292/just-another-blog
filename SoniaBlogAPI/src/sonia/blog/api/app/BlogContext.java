@@ -214,13 +214,30 @@ public final class BlogContext
 
     if (installed &&!configuration.isEmpty())
     {
+      FileOutputStream fos = null;
+
       try
       {
-        configuration.store(new FileOutputStream(getConfigFile()));
+        fos = new FileOutputStream(getConfigFile());
+        configuration.store(fos);
       }
       catch (IOException ex)
       {
         logger.log(Level.SEVERE, null, ex);
+      }
+      finally
+      {
+        if (fos != null)
+        {
+          try
+          {
+            fos.close();
+          }
+          catch (IOException ex)
+          {
+            logger.log(Level.SEVERE, null, ex);
+          }
+        }
       }
     }
   }
@@ -390,14 +407,31 @@ public final class BlogContext
         log.append("read config from ").append(config.getAbsolutePath());
         logger.info(log.toString());
 
+        FileInputStream fis = null;
+
         try
         {
-          configuration.load(new FileInputStream(config));
+          fis = new FileInputStream(config);
+          configuration.load(fis);
           key = configuration.getString(Constants.CONFIG_SECUREKEY);
         }
         catch (IOException ex)
         {
           logger.log(Level.SEVERE, null, ex);
+        }
+        finally
+        {
+          if (fis != null)
+          {
+            try
+            {
+              fis.close();
+            }
+            catch (IOException ex)
+            {
+              logger.log(Level.SEVERE, null, ex);
+            }
+          }
         }
       }
 
