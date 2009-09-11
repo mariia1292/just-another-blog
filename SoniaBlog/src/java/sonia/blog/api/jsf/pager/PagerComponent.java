@@ -79,7 +79,8 @@ public class PagerComponent extends BaseComponent
   @Override
   public void restoreState(FacesContext context, Object obj)
   {
-    state = (Object[]) obj;
+    Object[] state = (Object[]) obj;
+
     super.restoreState(context, state[0]);
     forParam = (String) state[1];
     showPages = (Integer) state[2];
@@ -98,10 +99,7 @@ public class PagerComponent extends BaseComponent
   @Override
   public Object saveState(FacesContext context)
   {
-    if (state == null)
-    {
-      state = new Object[5];
-    }
+    Object[] state = new Object[5];
 
     state[0] = super.saveState(context);
     state[1] = forParam;
@@ -265,7 +263,4 @@ public class PagerComponent extends BaseComponent
 
   /** Field description */
   private Integer showPages;
-
-  /** Field description */
-  private Object[] state;
 }

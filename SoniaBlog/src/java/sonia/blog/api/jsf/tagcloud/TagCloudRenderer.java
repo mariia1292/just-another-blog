@@ -47,6 +47,7 @@ import sonia.jsf.base.BaseRenderer;
 //~--- JDK imports ------------------------------------------------------------
 
 import java.io.IOException;
+import java.io.Serializable;
 
 import java.util.Collections;
 import java.util.Comparator;
@@ -208,8 +209,14 @@ public class TagCloudRenderer extends BaseRenderer
    * @version    Enter version here..., 09/01/02
    * @author     Enter your name here...
    */
-  private static class IdComparator implements Comparator<TagWrapper>
+  private static class IdComparator
+          implements Comparator<TagWrapper>, Serializable
   {
+
+    /** Field description */
+    private static final long serialVersionUID = 8131422663591665442L;
+
+    //~--- methods ------------------------------------------------------------
 
     /**
      * Method description

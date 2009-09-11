@@ -76,14 +76,15 @@ public class SpamLabelComponent extends BaseComponent
    *
    *
    * @param context
-   * @param state
+   * @param object
    */
   @Override
-  public void restoreState(FacesContext context, Object state)
+  public void restoreState(FacesContext context, Object object)
   {
-    this.state = (Object[]) state;
-    super.restoreState(context, this.state[0]);
-    method = (SpamInputProtection) this.state[1];
+    Object[] state = (Object[]) object;
+
+    super.restoreState(context, state[0]);
+    method = (SpamInputProtection) state[1];
   }
 
   /**
@@ -97,10 +98,7 @@ public class SpamLabelComponent extends BaseComponent
   @Override
   public Object saveState(FacesContext context)
   {
-    if (state == null)
-    {
-      state = new Object[2];
-    }
+    Object[] state = new Object[2];
 
     state[0] = super.saveState(context);
     state[1] = method;
@@ -159,7 +157,4 @@ public class SpamLabelComponent extends BaseComponent
 
   /** Field description */
   private SpamInputProtection method;
-
-  /** Field description */
-  private Object[] state;
 }

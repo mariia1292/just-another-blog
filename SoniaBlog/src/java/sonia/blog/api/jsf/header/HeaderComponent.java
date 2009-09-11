@@ -94,7 +94,8 @@ public class HeaderComponent extends BaseComponent
   @Override
   public void restoreState(FacesContext context, Object obj)
   {
-    state = (Object[]) obj;
+    Object[] state = (Object[]) obj;
+
     super.restoreState(context, state[0]);
     comments = (Boolean) state[1];
   }
@@ -110,10 +111,7 @@ public class HeaderComponent extends BaseComponent
   @Override
   public Object saveState(FacesContext context)
   {
-    if (state == null)
-    {
-      state = new Object[2];
-    }
+    Object[] state = new Object[2];
 
     state[0] = super.saveState(context);
     state[1] = comments;
@@ -244,7 +242,4 @@ public class HeaderComponent extends BaseComponent
 
   /** Field description */
   private Boolean comments;
-
-  /** Field description */
-  private Object[] state;
 }

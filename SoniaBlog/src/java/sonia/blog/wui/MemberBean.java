@@ -89,12 +89,13 @@ public class MemberBean extends AbstractBean
   public void roleChanged(ValueChangeEvent event)
   {
     BlogMember member = (BlogMember) members.getRowData();
-    User user = member.getUser();
-    Blog blog = member.getBlog();
-    Role role = (Role) event.getNewValue();
 
     if (member != null)
     {
+      User user = member.getUser();
+      Blog blog = member.getBlog();
+      Role role = (Role) event.getNewValue();
+
       try
       {
         UserDAO userDAO = BlogContext.getDAOFactory().getUserDAO();

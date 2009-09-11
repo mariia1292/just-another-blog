@@ -553,7 +553,7 @@ public class Blogger
     LoginContext ctx = login(username, password);
     User user = BlogContext.getDAOFactory().getUserDAO().get(username, true);
 
-    if (user != null)
+    if (user == null)
     {
       throw new XmlRpcNotAuthorizedException("no such user");
     }
