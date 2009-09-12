@@ -68,7 +68,6 @@ public class PluginActivator implements Activator
     mappingHandler.add(PdfViewerMapping.REGEX, PdfViewerMapping.class);
     parser = MacroParser.getInstance();
     parser.putMacro(PdfViewerMacro.NAME, PdfViewerMacro.class);
-    parser.putMacro(CodeMacro.NAME, CodeMacro.class);
 
     if (handler == null)
     {
@@ -79,8 +78,6 @@ public class PluginActivator implements Activator
     {
       handlerReference.add(handler);
     }
-
-    configProvider.add("/view/office/config.xhtml");
   }
 
   /**
@@ -91,7 +88,6 @@ public class PluginActivator implements Activator
    */
   public void stop(PluginContext context)
   {
-    parser.removeMacro(CodeMacro.NAME);
     parser.removeMacro(PdfViewerMacro.NAME);
     mappingHandler.remove(PdfViewerMapping.REGEX);
 
@@ -99,15 +95,9 @@ public class PluginActivator implements Activator
     {
       handlerReference.add(handler);
     }
-
-    configProvider.remove("/view/office/config.xhtml");
   }
 
   //~--- fields ---------------------------------------------------------------
-
-  /** Field description */
-  @Service(Constants.SERVICE_BLOGCONFIGPROVIDER)
-  private ServiceReference<String> configProvider;
 
   /** Field description */
   private PdfHandler handler;

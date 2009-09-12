@@ -5,27 +5,27 @@
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:c="http://java.sun.com/jstl/core">
-  
+
   <body>
-    
+
     <ui:composition template="../template.xhtml">
-      
+
       <ui:define name="title">
         <h:outputText value="#{label.blogConfig}" />
       </ui:define>
-      
+
       <ui:define name="content">
-      
+
         <h1><h:outputText value="#{label.blogConfig}" /></h1>
-        
+
         <h:form>
-          
+
           <h:panelGrid columns="3">
-            
+
             <h:outputLabel for="name" value="#{label.title}" />
             <h:inputText id="name" value="#{ConfigBean.blog.title}" required="true" />
             <h:message for="name" />
-            
+
             <h:outputLabel for="description" value="#{label.description}" />
             <h:inputTextarea id="description" value="#{ConfigBean.blog.description}" />
             <h:message for="description" />
@@ -52,11 +52,11 @@
             <h:outputLabel for="allowMacros" value="#{label.allowMacros}" />
             <h:selectBooleanCheckbox id="allowMacros" value="#{ConfigBean.blog.allowMacros}" />
             <h:message for="allowMacros" />
-            
+
             <h:outputLabel for="allowComments" value="#{label.allowComments}" />
             <h:selectBooleanCheckbox id="allowComments" value="#{ConfigBean.blog.allowComments}" />
             <h:message for="allowComments" />
-            
+
             <h:outputLabel for="allowHtmlComments" value="#{label.allowHtmlComments}" />
             <h:selectBooleanCheckbox id="allowHtmlComments" value="#{ConfigBean.blog.allowHtmlComments}" />
             <h:message for="allowHtmlComments" />
@@ -64,25 +64,25 @@
             <h:outputLabel for="autoPing" value="#{label.sendAutoPing}" />
             <h:selectBooleanCheckbox id="autoPing" value="#{ConfigBean.blog.sendAutoPing}" />
             <h:message for="autoPing" />
-            
+
             <h:outputLabel for="entriesPerPage" value="#{label.entriesPerPage}" />
             <h:inputText id="entriesPerPage" styleClass="short" value="#{ConfigBean.blog.entriesPerPage}" required="true">
               <f:validateLongRange minimum="1" maximum="250" />
             </h:inputText>
             <h:message for="entriesPerPage" />
-            
+
             <h:outputLabel for="thumbnailWidth" value="#{label.thumbnailWidth}" />
             <h:inputText id="thumbnailWidth" styleClass="short" value="#{ConfigBean.blog.thumbnailWidth}" required="true" />
             <h:message for="thumbnailWidth" />
-            
+
             <h:outputLabel for="thumbnailHeight" value="#{label.thumbnailHeight}" />
             <h:inputText id="thumbnailHeight" styleClass="short" value="#{ConfigBean.blog.thumbnailHeight}" required="true" />
             <h:message for="thumbnailHeight" />
-            
+
             <h:outputLabel for="imageWidth" value="#{label.imageWidth}" />
             <h:inputText id="imageWidth" styleClass="short" value="#{ConfigBean.blog.imageWidth}" required="true" />
             <h:message for="imageWidth" />
-            
+
             <h:outputLabel for="imageHeight" value="#{label.imageHeight}" />
             <h:inputText id="imageHeight" styleClass="short" value="#{ConfigBean.blog.imageHeight}" required="true" />
             <h:message for="imageHeight" />
@@ -92,29 +92,52 @@
               <f:validator validatorId="validator.dateFormat" />
             </h:inputText>
             <h:message for="dateFormat" />
-            
+
           </h:panelGrid>
-          
+
           <h:commandButton value="#{label.save}" action="#{ConfigBean.save}" />
-          
+
+        </h:form>
+
+        <h2><h:outputText value="#{label.syntaxHighlighterConfig}" /></h2>
+
+        <h:form>
+
+          <h:panelGrid columns="3">
+
+            <h:outputLabel for="codeTheme" value="#{label.codeTheme}" />
+            <h:selectOneMenu id="codeTheme" value="#{ConfigBean.codeTheme}">
+              <f:selectItem itemLabel="Default" itemValue="default" />
+              <f:selectItem itemLabel="Django" itemValue="django" />
+              <f:selectItem itemLabel="Emacs" itemValue="emacs" />
+              <f:selectItem itemLabel="FadeToGrey" itemValue="fadetogrey" />
+              <f:selectItem itemLabel="Midnight" itemValue="midnight" />
+              <f:selectItem itemLabel="RDark" itemValue="rdark" />
+            </h:selectOneMenu>
+            <h:message for="codeTheme" />
+
+          </h:panelGrid>
+
+          <h:commandButton action="#{ConfigBean.saveTheme}" value="#{label.save}" />
+
         </h:form>
 
         <c:forEach items="#{ConfigBean.providers}" var="provider">
           <ui:include src="#{provider}" />
         </c:forEach>
-        
+
         <h:form>
-        
+
           <h2><h:outputText value="#{label.search}" /></h2>
-          
+
           <h:commandButton value="#{label.reIndex}" action="#{ConfigBean.reIndex}" />
-          
+
         </h:form>
-        
+
       </ui:define>
-      
-      
+
+
     </ui:composition>
-    
+
   </body>
 </html>

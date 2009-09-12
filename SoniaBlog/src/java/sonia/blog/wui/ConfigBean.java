@@ -36,10 +36,13 @@ package sonia.blog.wui;
 //~--- non-JDK imports --------------------------------------------------------
 
 import sonia.blog.api.app.BlogContext;
+import sonia.blog.api.app.BlogSession;
 import sonia.blog.api.app.Constants;
 import sonia.blog.api.dao.BlogDAO;
+import sonia.blog.api.dao.Dao;
 import sonia.blog.api.util.AbstractBean;
 import sonia.blog.entity.Blog;
+import sonia.blog.macro.CodeMacro;
 import sonia.blog.util.BlogUtil;
 
 import sonia.plugin.service.Service;
@@ -47,7 +50,6 @@ import sonia.plugin.service.Service;
 //~--- JDK imports ------------------------------------------------------------
 
 import java.util.List;
-import java.util.logging.Logger;
 
 import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
@@ -58,11 +60,6 @@ import javax.faces.model.SelectItem;
  */
 public class ConfigBean extends AbstractBean
 {
-
-  /** Field description */
-  private static Logger logger = Logger.getLogger(ConfigBean.class.getName());
-
-  //~--- constructors ---------------------------------------------------------
 
   /**
    * Constructs ...
@@ -99,19 +96,35 @@ public class ConfigBean extends AbstractBean
   public String save()
   {
     String result = SUCCESS;
-    BlogDAO blogDAO = BlogContext.getDAOFactory().getBlogDAO();
 
     if (blogDAO.edit(getBlogSession(), blog))
     {
-      getMessageHandler().info("unpdateConfigSuccess");
+      getMessageHandler().info("updateConfigSuccess");
     }
     else
     {
-      getMessageHandler().error("unpdateConfigFailure");
+      getMessageHandler().error("updateConfigFailure");
       result = FAILURE;
     }
 
     return result;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  public String saveTheme()
+  {
+    BlogSession session = getBlogSession();
+
+    blogDAO.setParameter(session, blog, CodeMacro.CONFIG_THEME, codeTheme);
+
+    getMessageHandler().info("updateConfigSuccess");
+
+    return SUCCESS;
   }
 
   //~--- get methods ----------------------------------------------------------
@@ -127,6 +140,24 @@ public class ConfigBean extends AbstractBean
     blog = getRequest().getCurrentBlog();
 
     return blog;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  public String getCodeTheme()
+  {
+    if (codeTheme == null)
+    {
+      Blog b = getBlog();
+
+      codeTheme = blogDAO.getParameter(b, CodeMacro.CONFIG_THEME);
+    }
+
+    return codeTheme;
   }
 
   /**
@@ -162,10 +193,30 @@ public class ConfigBean extends AbstractBean
     return BlogUtil.getTimeZoneItems();
   }
 
+  //~--- set methods ----------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   * @param codeTheme
+   */
+  public void setCodeTheme(String codeTheme)
+  {
+    this.codeTheme = codeTheme;
+  }
+
   //~--- fields ---------------------------------------------------------------
 
   /** Field description */
   private Blog blog;
+
+  /** Field description */
+  @Dao
+  private BlogDAO blogDAO;
+
+  /** Field description */
+  private String codeTheme;
 
   /** Field description */
   @Service(Constants.SERVICE_BLOGCONFIGPROVIDER)
