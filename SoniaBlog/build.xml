@@ -173,6 +173,13 @@
         <include name="WebIntegrationPlugin.jar" />
       </fileset>
     </move>
+    <mkdir dir="${dist.dir}/plugins/OfficePlugin" />
+    <move todir="${dist.dir}/plugins/OfficePlugin">
+      <fileset dir="${build.web.dir}/WEB-INF/lib">
+        <include name="OfficePlugin.jar" />
+        <include name="PDFRenderer.jar" />
+      </fileset>
+    </move>
   </target>
 
   <target name="release" depends="changeEnvironment,removeSources,movePlugins,dist,tomcat" />
