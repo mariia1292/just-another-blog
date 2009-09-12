@@ -52,8 +52,6 @@ import sonia.util.Util;
 
 //~--- JDK imports ------------------------------------------------------------
 
-import java.util.Date;
-
 import javax.security.auth.login.LoginException;
 
 import javax.servlet.http.Cookie;
@@ -180,8 +178,8 @@ public class CookieLoginModule extends SSOLoginModule
       cookie.setMaxAge(
           context.getConfiguration().getInteger(
             Constants.CONFIG_COKKIETIME, Constants.DEFAULT_COOKIETIME));
-      user.setLastLogin(new Date());
-      userDAO.edit(BlogContext.getInstance().getSystemBlogSession(), user);
+      userDAO.setLastLogin(BlogContext.getInstance().getSystemBlogSession(),
+                           user);
     }
 
     return user;

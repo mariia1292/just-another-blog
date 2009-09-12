@@ -43,6 +43,7 @@ import sonia.blog.entity.User;
 //~--- JDK imports ------------------------------------------------------------
 
 import java.util.List;
+import sonia.blog.api.app.BlogSession;
 
 /**
  *
@@ -230,6 +231,14 @@ public interface UserDAO extends GenericDAO<User>
   public Role getRole(Blog blog, User user);
 
   //~--- set methods ----------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   * @param user
+   */
+  public void setLastLogin(BlogSession session, User user);
 
   /**
    * Method description
