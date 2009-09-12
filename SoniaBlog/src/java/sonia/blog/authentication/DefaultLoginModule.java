@@ -36,7 +36,6 @@ package sonia.blog.authentication;
 //~--- non-JDK imports --------------------------------------------------------
 
 import sonia.blog.api.app.BlogContext;
-import sonia.blog.api.app.BlogSession;
 import sonia.blog.api.app.Constants;
 import sonia.blog.api.authentication.RolePrincipal;
 import sonia.blog.api.dao.UserDAO;
@@ -54,7 +53,6 @@ import java.security.Principal;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Date;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -141,8 +139,7 @@ public class DefaultLoginModule extends LoginModule
 
     if (u != null)
     {
-      u.setLastLogin(new Date());
-      userDAO.edit(BlogContext.getInstance().getSystemBlogSession(), u);
+      userDAO.setLastLogin(BlogContext.getInstance().getSystemBlogSession(), u);
     }
 
     return u;

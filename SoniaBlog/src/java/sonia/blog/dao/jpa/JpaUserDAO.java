@@ -35,6 +35,7 @@ package sonia.blog.dao.jpa;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import sonia.blog.api.app.BlogSession;
 import sonia.blog.api.app.Constants;
 import sonia.blog.api.dao.UserDAO;
 import sonia.blog.entity.Blog;
@@ -44,6 +45,7 @@ import sonia.blog.entity.User;
 
 //~--- JDK imports ------------------------------------------------------------
 
+import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -490,6 +492,45 @@ public class JpaUserDAO extends JpaGenericDAO<User> implements UserDAO
   }
 
   //~--- set methods ----------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   *
+   * @param session
+   * @param user
+   */
+  public void setLastLogin(BlogSession session, User user)
+  {
+    if ( ! session.hasRole(Role.SYSTEM) ){
+      throw new SecurityException( "System session is required" );
+    }
+    user.setLastLogin(new Date());
+
+    EntityManager em = createEntityManager();
+
+    em.getTransaction().begin();
+
+    try
+    {
+      user = em.merge(user);
+      em.getTransaction().commit();
+    }
+    catch (Exception ex)
+    {
+      if (em.getTransaction().isActive())
+      {
+        em.getTransaction().rollback();
+      }
+
+      logger.log(Level.SEVERE, null, ex);
+    }
+    finally
+    {
+      em.close();
+    }
+  }
 
   /**
    * Method description

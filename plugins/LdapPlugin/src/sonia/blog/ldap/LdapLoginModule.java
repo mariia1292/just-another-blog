@@ -304,17 +304,35 @@ public class LdapLoginModule extends LoginModule
   private void updateUser(UserDAO userDAO, User user, LdapUser lu)
           throws LoginException
   {
-    user.setDisplayName(lu.getDisplayName());
-    user.setEmail(lu.getMail());
-    user.setLastLogin(new Date());
+    boolean update = false;
+
+    if (!user.getDisplayName().equals(lu.getDisplayName()))
+    {
+      user.setDisplayName(lu.getDisplayName());
+      update = true;
+    }
+
+    if (!user.getEmail().equals(lu.getMail()))
+    {
+      user.setEmail(lu.getMail());
+    }
 
     BlogSession session = BlogContext.getInstance().getSystemBlogSession();
 
-    if (!userDAO.edit(session, user))
+    if (update)
     {
-      logger.severe("error during user update");
+      user.setLastLogin(new Date());
 
-      throw new LoginException("error during user update");
+      if (!userDAO.edit(session, user))
+      {
+        logger.severe("error during user update");
+
+        throw new LoginException("error during user update");
+      }
+    }
+    else
+    {
+      userDAO.setLastLogin(session, user);
     }
   }
 
