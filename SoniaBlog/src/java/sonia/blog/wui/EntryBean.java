@@ -35,10 +35,6 @@ package sonia.blog.wui;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import org.w3c.tidy.Tidy;
-import org.w3c.tidy.TidyMessage;
-import org.w3c.tidy.TidyMessageListener;
-
 import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.app.BlogJob;
 import sonia.blog.api.app.BlogRequest;
@@ -70,8 +66,6 @@ import sonia.util.Util;
 
 //~--- JDK imports ------------------------------------------------------------
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 
 import java.net.URL;
@@ -286,7 +280,6 @@ public class EntryBean extends AbstractEditorBean
       BlogSession session = request.getBlogSession();
 
       buildTagList(session);
-      cleanupContent();
 
       if (entry.getId() == null)
       {
@@ -542,57 +535,6 @@ public class EntryBean extends AbstractEditorBean
    *
    * @return
    */
-  public Tidy getTitdy()
-  {
-    if (tidy == null)
-    {
-      tidy = new Tidy();
-      tidy.setQuiet(true);
-      tidy.setMessageListener(new TidyMessageListener()
-      {
-        public void messageReceived(TidyMessage message)
-        {
-          String msg = message.getLine() + " : " + message.getColumn() + " "
-                       + message.getMessage();
-
-          if ((message.getLevel() == TidyMessage.Level.INFO)
-              || (message.getLevel() == TidyMessage.Level.SUMMARY))
-          {
-            logger.info(msg);
-          }
-          else if (message.getLevel() == TidyMessage.Level.WARNING)
-          {
-            logger.warning(msg);
-          }
-          else if (message.getLevel() == TidyMessage.Level.ERROR)
-          {
-            logger.severe(msg);
-          }
-        }
-      });
-      tidy.setPrintBodyOnly(true);
-
-      File configDir =
-        BlogContext.getInstance().getConfigFile().getParentFile();
-      String path = new File(configDir, "tidy.properties").getPath();
-
-      if (logger.isLoggable(Level.INFO))
-      {
-        logger.info("load tidy configuration " + path);
-      }
-
-      tidy.setConfigurationFromFile(path);
-    }
-
-    return tidy;
-  }
-
-  /**
-   * Method description
-   *
-   *
-   * @return
-   */
   public String getTrackbackURL()
   {
     return trackbackURL;
@@ -775,41 +717,6 @@ public class EntryBean extends AbstractEditorBean
   /**
    * Method description
    *
-   */
-  private void cleanupContent()
-  {
-    if (BlogContext.getInstance().getConfiguration().getBoolean(
-            Constants.CONFIG_CLEANUPCODE, Boolean.FALSE))
-    {
-      getTitdy();
-
-      ByteArrayInputStream bais = null;
-      ByteArrayOutputStream baos = null;
-      String content = entry.getContent();
-
-      if ((content != null) && (content.length() > 0))
-      {
-        bais = new ByteArrayInputStream(content.getBytes());
-        baos = new ByteArrayOutputStream();
-        tidy.parse(bais, baos);
-        entry.setContent(baos.toString());
-      }
-
-      String teaser = entry.getTeaser();
-
-      if ((teaser != null) && (teaser.length() > 0))
-      {
-        bais = new ByteArrayInputStream(teaser.getBytes());
-        baos = new ByteArrayOutputStream();
-        tidy.parse(bais, baos);
-        entry.setTeaser(baos.toString());
-      }
-    }
-  }
-
-  /**
-   * Method description
-   *
    *
    * @param blog
    */
@@ -890,9 +797,6 @@ public class EntryBean extends AbstractEditorBean
 
   /** Field description */
   private String tagString;
-
-  /** Field description */
-  private Tidy tidy;
 
   /** Field description */
   private String trackbackURL;
