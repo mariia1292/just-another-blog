@@ -111,8 +111,6 @@ public class GlobalConfigBean extends AbstractConfigBean
             Constants.DEFAULT_PASSWORD_MINLENGTH);
     spamInputMethod = config.getString(Constants.CONFIG_SPAMMETHOD);
     defaultBlog = config.getLong(Constants.CONFIG_DEFAULTBLOG);
-    cleanupCode = config.getBoolean(Constants.CONFIG_CLEANUPCODE,
-                                    Boolean.FALSE);
     sso = config.getInteger(Constants.CONFIG_SSO, Constants.SSO_ONEPERSESSION);
     domain = config.getString(Constants.CONFIG_DOMAIN, "");
     smtpServer = config.getString(Constants.CONFIG_SMTPSERVER);
@@ -166,7 +164,6 @@ public class GlobalConfigBean extends AbstractConfigBean
     config.set(Constants.CONFIG_PASSWORD_MINLENGTH, passwordMinLength);
     config.set(Constants.CONFIG_SPAMMETHOD, spamInputMethod);
     config.set(Constants.CONFIG_DEFAULTBLOG, defaultBlog);
-    config.set(Constants.CONFIG_CLEANUPCODE, cleanupCode);
     config.set(Constants.CONFIG_SSO, sso);
     config.set(Constants.CONFIG_DOMAIN, domain);
     config.set(Constants.CONFIG_SMTPSERVER, smtpServer);
@@ -473,17 +470,6 @@ public class GlobalConfigBean extends AbstractConfigBean
    *
    * @return
    */
-  public boolean isCleanupCode()
-  {
-    return cleanupCode;
-  }
-
-  /**
-   * Method description
-   *
-   *
-   * @return
-   */
   public boolean isRegisterAcknowledgement()
   {
     return registerAcknowledgement;
@@ -522,17 +508,6 @@ public class GlobalConfigBean extends AbstractConfigBean
   public void setAllowRegistration(boolean allowRegistration)
   {
     this.allowRegistration = allowRegistration;
-  }
-
-  /**
-   * Method description
-   *
-   *
-   * @param cleanupCode
-   */
-  public void setCleanupCode(boolean cleanupCode)
-  {
-    this.cleanupCode = cleanupCode;
   }
 
   /**
@@ -700,9 +675,6 @@ public class GlobalConfigBean extends AbstractConfigBean
 
   /** Field description */
   private boolean allowRegistration;
-
-  /** Field description */
-  private boolean cleanupCode;
 
   /** Field description */
   private Long defaultBlog;
