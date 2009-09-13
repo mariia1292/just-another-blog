@@ -38,7 +38,14 @@ package sonia.blog.util;
 import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.app.Constants;
 import sonia.blog.api.dao.DAOListener;
+import sonia.blog.entity.Blog;
+import sonia.blog.entity.Category;
+import sonia.blog.entity.Comment;
+import sonia.blog.entity.Entry;
+import sonia.blog.entity.Page;
+import sonia.blog.entity.Trackback;
 
+import sonia.cache.ClearCondition;
 import sonia.cache.ObjectCache;
 
 import sonia.config.ConfigurationListener;
@@ -103,13 +110,41 @@ public class CacheListener implements DAOListener, ConfigurationListener
         case POSTADD :
         case POSTREMOVE :
         case POSTUPDATE :
-          if (logger.isLoggable(Level.FINE))
-          {
-            logger.fine("clear mapping cache");
-          }
-
-          cache.clear();
+          clearCache(item);
       }
+    }
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param item
+   */
+  private void clearCache(Object item)
+  {
+    Long id = getId(item);
+
+    if (id != null)
+    {
+      if (logger.isLoggable(Level.FINE))
+      {
+        StringBuffer log = new StringBuffer();
+
+        log.append("clear mapping cache for blog ").append(id.toString());
+        logger.fine(log.toString());
+      }
+
+      cache.clear(new BlogClearCondition(id));
+    }
+    else
+    {
+      if (logger.isLoggable(Level.FINE))
+      {
+        logger.fine("clear whole mapping cache");
+      }
+
+      cache.clear();
     }
   }
 
@@ -129,6 +164,93 @@ public class CacheListener implements DAOListener, ConfigurationListener
 
     firstCall = false;
   }
+
+  //~--- get methods ----------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   * @param item
+   *
+   * @return
+   */
+  private Long getId(Object item)
+  {
+    Long id = null;
+
+    if (item instanceof Blog)
+    {
+      id = ((Blog) item).getId();
+    }
+    else if (item instanceof Entry)
+    {
+      id = ((Entry) item).getBlog().getId();
+    }
+    else if (item instanceof Page)
+    {
+      id = ((Page) item).getBlog().getId();
+    }
+    else if (item instanceof Comment)
+    {
+      id = ((Comment) item).getEntry().getBlog().getId();
+    }
+    else if (item instanceof Category)
+    {
+      id = ((Category) item).getBlog().getId();
+    }
+    else if (item instanceof Trackback)
+    {
+      id = ((Trackback) item).getEntry().getId();
+    }
+
+    return id;
+  }
+
+  //~--- inner classes --------------------------------------------------------
+
+  /**
+   * Class description
+   *
+   *
+   * @version        Enter version here..., 09/09/13
+   * @author         Enter your name here...
+   */
+  private static class BlogClearCondition implements ClearCondition
+  {
+
+    /**
+     * Constructs ...
+     *
+     *
+     * @param id
+     */
+    public BlogClearCondition(Long id)
+    {
+      this.id = id.toString();
+    }
+
+    //~--- methods ------------------------------------------------------------
+
+    /**
+     * Method description
+     *
+     *
+     * @param key
+     *
+     * @return
+     */
+    public boolean matches(Object key)
+    {
+      return key.toString().startsWith(id + ":");
+    }
+
+    //~--- fields -------------------------------------------------------------
+
+    /** Field description */
+    private String id;
+  }
+
 
   //~--- fields ---------------------------------------------------------------
 

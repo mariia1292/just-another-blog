@@ -125,12 +125,12 @@ public class ResponseCacheObject
             break;
 
           case Header.TYPE_INT :
-            response.addIntHeader(content, header.getIntValue());
+            response.addIntHeader(header.getName(), header.getIntValue());
 
             break;
 
           case Header.TYPE_DATE :
-            response.addDateHeader(content, header.getDateValue());
+            response.addDateHeader(header.getName(), header.getDateValue());
 
             break;
         }
@@ -139,7 +139,7 @@ public class ResponseCacheObject
 
     if (content != null)
     {
-      response.getWriter().println(content);
+      response.getOutputStream().write(content);
     }
   }
 
@@ -151,7 +151,7 @@ public class ResponseCacheObject
    *
    * @param content
    */
-  public void setContent(String content)
+  public void setContent(byte[] content)
   {
     this.content = content;
   }
@@ -311,7 +311,7 @@ public class ResponseCacheObject
   //~--- fields ---------------------------------------------------------------
 
   /** Field description */
-  private String content;
+  private byte[] content;
 
   /** Field description */
   private String contentType;

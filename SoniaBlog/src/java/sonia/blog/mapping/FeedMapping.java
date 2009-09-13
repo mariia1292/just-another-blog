@@ -51,6 +51,8 @@ import sonia.blog.entity.Comment;
 import sonia.blog.entity.Entry;
 import sonia.blog.entity.Tag;
 
+import sonia.cache.Cacheable;
+
 import sonia.rss.Channel;
 import sonia.rss.FeedParser;
 import sonia.rss.Item;
@@ -75,6 +77,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author Sebastian Sdorra
  */
+@Cacheable
 public class FeedMapping extends FinalMapping
 {
 
