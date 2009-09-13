@@ -35,14 +35,20 @@ package sonia.blog.api.app;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import sonia.blog.api.exception.BlogException;
+
 import sonia.io.TeeWriter;
+
+import sonia.web.io.TeeServletOutputStream;
 
 //~--- JDK imports ------------------------------------------------------------
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletResponseWrapper;
 
@@ -130,13 +136,63 @@ public class BlogResponse extends HttpServletResponseWrapper
    */
   public ResponseCacheObject getCachedObject()
   {
-    if (cacheEnabled && (cacheWriter != null))
+    if (cacheEnabled && (cacheWriter != null || cacheStream != null))
     {
-      cacheWriter.flush();
-      cacheObject.setContent(cacheWriter.toString());
+      try
+      {
+        if (cacheStream != null)
+        {
+          stream.flush();
+          cacheObject.setContent(cacheStream.toByteArray());
+        }
+        else
+        {
+          writer.flush();
+          cacheObject.setContent(cacheWriter.toString().getBytes());
+        }
+      }
+      catch (IOException ex)
+      {
+        throw new BlogException(ex);
+      }
     }
 
     return cacheObject;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   *
+   * @throws IOException
+   */
+  @Override
+  public ServletOutputStream getOutputStream() throws IOException
+  {
+    ServletOutputStream result = null;
+
+    if (cacheEnabled)
+    {
+      if (stream != null)
+      {
+        result = stream;
+      }
+      else
+      {
+        cacheStream = new ByteArrayOutputStream();
+        stream = new TeeServletOutputStream(super.getOutputStream(),
+                cacheStream);
+        result = stream;
+      }
+    }
+    else
+    {
+      result = super.getOutputStream();
+    }
+    
+    return result;
   }
 
   /**
@@ -232,7 +288,13 @@ public class BlogResponse extends HttpServletResponseWrapper
   private ResponseCacheObject cacheObject;
 
   /** Field description */
+  private ByteArrayOutputStream cacheStream;
+
+  /** Field description */
   private StringWriter cacheWriter;
+
+  /** Field description */
+  private ServletOutputStream stream;
 
   /** Field description */
   private PrintWriter writer;
