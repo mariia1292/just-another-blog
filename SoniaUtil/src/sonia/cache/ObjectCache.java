@@ -54,6 +54,14 @@ public interface ObjectCache extends Serializable
   public void clear();
 
   /**
+   * Removes all cached objects matched by the condition
+   *
+   *
+   * @param condition
+   */
+  public void clear(ClearCondition condition);
+
+  /**
    * Returns a {@link java.util.Set} view of the keys contained in this cache.
    *
    *

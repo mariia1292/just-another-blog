@@ -87,6 +87,28 @@ public abstract class AbstractCache implements ObjectCache
    * Method description
    *
    *
+   * @param condition
+   */
+  public void clear(ClearCondition condition)
+  {
+    Map<Object, CacheObject> cacheMap = getCacheMap();
+
+    synchronized (cacheMap)
+    {
+      for (Object key : cacheMap.keySet())
+      {
+        if (condition.matches(key))
+        {
+          cacheMap.remove(key);
+        }
+      }
+    }
+  }
+
+  /**
+   * Method description
+   *
+   *
    * @return
    */
   public Set<Object> keySet()
