@@ -44,7 +44,6 @@ import sonia.blog.entity.Blog;
 //~--- JDK imports ------------------------------------------------------------
 
 import java.util.List;
-import java.util.logging.Logger;
 
 import javax.faces.model.DataModel;
 import javax.faces.model.ListDataModel;
@@ -55,11 +54,6 @@ import javax.faces.model.ListDataModel;
  */
 public class TemplateBean extends AbstractBean
 {
-
-  /** Field description */
-  private static Logger logger = Logger.getLogger(TemplateBean.class.getName());
-
-  //~--- constructors ---------------------------------------------------------
 
   /**
    * Constructs ...

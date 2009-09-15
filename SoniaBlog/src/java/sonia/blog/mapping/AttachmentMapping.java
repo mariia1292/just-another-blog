@@ -43,6 +43,8 @@ import sonia.blog.entity.Attachment;
 import sonia.blog.entity.Blog;
 import sonia.blog.entity.Role;
 
+import sonia.web.util.WebUtil;
+
 //~--- JDK imports ------------------------------------------------------------
 
 import java.io.File;
@@ -106,8 +108,8 @@ public class AttachmentMapping extends AbstractAttachmentMapping
         {
           File out = getFile(response, attachment);
 
-          printFile(response, attachment.getName(), attachment.getMimeType(),
-                    out);
+          printFile(request, response, attachment.getName(),
+                    attachment.getMimeType(), out);
         }
         else
         {

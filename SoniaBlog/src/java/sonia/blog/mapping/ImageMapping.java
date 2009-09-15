@@ -146,17 +146,21 @@ public class ImageMapping extends AbstractAttachmentMapping
    * Method description
    *
    *
+   *
+   * @param request
    * @param response
    * @param attachment
    *
    * @throws IOException
    */
-  private void printDirect(BlogResponse response, Attachment attachment)
+  private void printDirect(BlogRequest request, BlogResponse response,
+                           Attachment attachment)
           throws IOException
   {
     File file = getFile(response, attachment);
 
-    printFile(response, attachment.getName(), attachment.getMimeType(), file);
+    printFile(request, response, attachment.getName(),
+              attachment.getMimeType(), file);
   }
 
   /**
@@ -182,7 +186,7 @@ public class ImageMapping extends AbstractAttachmentMapping
 
     if (Util.hasContent(type) && type.equals("orginal"))
     {
-      printDirect(response, attachment);
+      printDirect(request, response, attachment);
     }
     else
     {
@@ -191,7 +195,7 @@ public class ImageMapping extends AbstractAttachmentMapping
 
       if (out.exists())
       {
-        printFile(response, attachment.getName(), mimeType, out);
+        printFile(request, response, attachment.getName(), mimeType, out);
       }
       else
       {
@@ -204,7 +208,7 @@ public class ImageMapping extends AbstractAttachmentMapping
 
         if (out.exists())
         {
-          printFile(response, attachment.getName(), mimeType, out);
+          printFile(request, response, attachment.getName(), mimeType, out);
         }
         else
         {
