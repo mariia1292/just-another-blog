@@ -36,11 +36,14 @@ package sonia.blog.mapping;
 //~--- non-JDK imports --------------------------------------------------------
 
 import sonia.blog.api.app.BlogContext;
+import sonia.blog.api.app.BlogRequest;
 import sonia.blog.api.app.BlogResponse;
 import sonia.blog.api.mapping.FinalMapping;
 import sonia.blog.entity.Attachment;
 
 import sonia.util.Util;
+
+import sonia.web.util.WebUtil;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -76,19 +79,76 @@ public abstract class AbstractAttachmentMapping extends FinalMapping
    * Method description
    *
    *
+   *
+   * @param request
    * @param response
    * @param name
    * @param mimeType
    * @param file
    */
-  protected void printFile(BlogResponse response, String name, String mimeType,
-                           File file)
+  protected void printFile(BlogRequest request, BlogResponse response,
+                           String name, String mimeType, File file)
   {
     response.setContentType(mimeType);
     response.setContentLength((int) file.length());
     response.setHeader("Content-Disposition", "filename=\"" + name + "\";");
     response.setDateHeader("Last-Modified", file.lastModified());
+    WebUtil.addETagHeader(response, file);
 
+    if (WebUtil.isModified(request, file))
+    {
+      print(response, file);
+    }
+    else
+    {
+      if (getLogger().isLoggable(Level.FINE))
+      {
+        getLogger().fine("send status 304, not modified");
+      }
+
+      response.setStatus(HttpServletResponse.SC_NOT_MODIFIED);
+    }
+  }
+
+  //~--- get methods ----------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   *
+   * @param response
+   * @param attachment
+   *
+   * @return
+   *
+   * @throws IOException
+   */
+  protected File getFile(BlogResponse response, Attachment attachment)
+          throws IOException
+  {
+    File file =
+      BlogContext.getInstance().getResourceManager().getFile(attachment);
+
+    if ((file == null) ||!file.exists() || file.isDirectory())
+    {
+      response.sendError(HttpServletResponse.SC_NOT_FOUND);
+    }
+
+    return file;
+  }
+
+  //~--- methods --------------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   * @param response
+   * @param file
+   */
+  private void print(BlogResponse response, File file)
+  {
     OutputStream out = null;
     InputStream in = null;
 
@@ -121,33 +181,5 @@ public abstract class AbstractAttachmentMapping extends FinalMapping
         getLogger().log(Level.SEVERE, null, e);
       }
     }
-  }
-
-  //~--- get methods ----------------------------------------------------------
-
-  /**
-   * Method description
-   *
-   *
-   *
-   * @param response
-   * @param attachment
-   *
-   * @return
-   *
-   * @throws IOException
-   */
-  protected File getFile(BlogResponse response, Attachment attachment)
-          throws IOException
-  {
-    File file =
-      BlogContext.getInstance().getResourceManager().getFile(attachment);
-
-    if ((file == null) ||!file.exists() || file.isDirectory())
-    {
-      response.sendError(HttpServletResponse.SC_NOT_FOUND);
-    }
-
-    return file;
   }
 }
