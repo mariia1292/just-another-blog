@@ -16,6 +16,8 @@ import org.xml.sax.SAXException;
 import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.app.BlogRequest;
 import sonia.blog.api.exception.BlogException;
+import sonia.blog.api.exception.BlogSecurityException;
+import sonia.blog.entity.Role;
 
 import sonia.util.Util;
 
@@ -46,8 +48,6 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
-import sonia.blog.api.exception.BlogSecurityException;
-import sonia.blog.entity.Role;
 
 /**
  *
@@ -91,6 +91,7 @@ public class ScriptManager
 
       throw new BlogException(ex);
     }
+
     entityFactory = new EntityFactory();
   }
 
@@ -195,10 +196,11 @@ public class ScriptManager
   void invoke(BlogRequest request, Writer writer, Script script)
           throws IOException
   {
-    if ( !request.getBlogSession().hasRole( Role.GLOBALADMIN ) )
+    if (!request.getBlogSession().hasRole(Role.GLOBALADMIN))
     {
-      throw new BlogSecurityException( "GlobalAdmin session is required" );
+      throw new BlogSecurityException("GlobalAdmin session is required");
     }
+
     ScriptEngineManager manager =
       new ScriptEngineManager(BlogContext.getInstance().getServletContext()
         .getClass().getClassLoader());
@@ -220,6 +222,14 @@ public class ScriptManager
       {
         ctx = new SimpleScriptContext();
         engine.setContext(ctx);
+      }
+
+      if (logger.isLoggable(Level.INFO))
+      {
+        StringBuffer msg = new StringBuffer();
+
+        msg.append("invoke script ").append(script.getTitle());
+        logger.info(msg.toString());
       }
 
       ctx.setWriter(writer);
@@ -250,6 +260,14 @@ public class ScriptManager
   void store(Document document, File file)
           throws TransformerConfigurationException, TransformerException
   {
+    if (logger.isLoggable(Level.FINE))
+    {
+      StringBuffer msg = new StringBuffer();
+
+      msg.append("store script file ").append(file.getName());
+      logger.fine(msg.toString());
+    }
+
     TransformerFactory factory = TransformerFactory.newInstance();
     Transformer transformer = factory.newTransformer();
 
@@ -361,10 +379,11 @@ public class ScriptManager
   /** Field description */
   private DocumentBuilder builder;
 
-  private EntityFactory entityFactory;
-
   /** Field description */
   private File directory;
+
+  /** Field description */
+  private EntityFactory entityFactory;
 
   /** Field description */
   private List<Script> scripts;
