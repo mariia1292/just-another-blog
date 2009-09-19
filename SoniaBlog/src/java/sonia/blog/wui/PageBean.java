@@ -117,15 +117,18 @@ public class PageBean extends AbstractBean
     {
       NavigationMenuItem childNav = new NavigationMenuItem();
 
-      if (child.getId().equals(p.getId()))
+      if (page.getId() != null)
       {
-        childNav.setOpen(true);
-        buildSubNavigation(childNav, linkBase, breadcrum, 0);
-      }
+        if (child.getId().equals(p.getId()))
+        {
+          childNav.setOpen(true);
+          buildSubNavigation(childNav, linkBase, breadcrum, 0);
+        }
 
-      if (page.getId().equals(child.getId()))
-      {
-        childNav.setActive(true);
+        if (page.getId().equals(child.getId()))
+        {
+          childNav.setActive(true);
+        }
       }
 
       childNav.setValue(child.getNavigationTitle());

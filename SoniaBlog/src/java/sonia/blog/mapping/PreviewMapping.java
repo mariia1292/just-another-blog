@@ -41,10 +41,13 @@ import sonia.blog.api.app.Constants;
 import sonia.blog.api.mapping.FilterMapping;
 import sonia.blog.api.mapping.MappingNavigation;
 import sonia.blog.entity.ContentObject;
+import sonia.blog.entity.Entry;
+import sonia.blog.entity.Page;
 import sonia.blog.util.BlogUtil;
 import sonia.blog.wui.BlogBean;
 import sonia.blog.wui.EntryBean;
 import sonia.blog.wui.PageAuthorBean;
+import sonia.blog.wui.PageBean;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -95,14 +98,30 @@ public class PreviewMapping extends FilterMapping
     if ((param != null) && (param.length == 1))
     {
       ContentObject object = getObject(request, param[0]);
-      BlogBean blogBean = BlogUtil.getSessionBean(request, BlogBean.class,
-                            BlogBean.NAME);
 
-      if ((blogBean != null) && (object != null))
+      if (object != null)
       {
         setDisplayContent(request, object, false);
-        blogBean.setEntry(object);
-        result = buildTemplateViewId(request, Constants.TEMPLATE_DETAIL);
+
+        if (object instanceof Entry)
+        {
+          BlogBean blogBean = BlogUtil.getSessionBean(request, BlogBean.class,
+                                BlogBean.NAME);
+
+          if (blogBean != null)
+          {
+            blogBean.setEntry(object);
+            result = buildTemplateViewId(request, Constants.TEMPLATE_DETAIL);
+          }
+        }
+        else if (object instanceof Page)
+        {
+          PageBean pageBean = new PageBean();
+
+          pageBean.setPage((Page) object);
+          request.setAttribute(PageBean.NAME, pageBean);
+          result = buildTemplateViewId(request, Constants.TEMPLATE_PAGE);
+        }
       }
     }
 
