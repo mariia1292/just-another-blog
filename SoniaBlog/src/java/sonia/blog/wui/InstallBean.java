@@ -280,7 +280,7 @@ public class InstallBean extends AbstractBean
 
       if (error)
       {
-        getMessageHandler().error("unknownError");
+        getMessageHandler().error(getRequest(), "unknownError");
       }
       else
       {
@@ -339,7 +339,7 @@ public class InstallBean extends AbstractBean
     else
     {
       result = FAILURE;
-      getMessageHandler().error("passwordsNotEqual");
+      getMessageHandler().error(getRequest(), "passwordsNotEqual");
     }
 
     return result;
@@ -421,20 +421,21 @@ public class InstallBean extends AbstractBean
       }
       catch (IOException ex)
       {
-        getMessageHandler().error("unknownError");
+        getMessageHandler().error(getRequest(), "unknownError");
         logger.log(Level.SEVERE, null, ex);
       }
     }
     else if (resourceDir.isFile())
     {
-      getMessageHandler().error("form:resourceDir", "resourcePathIsFile");
+      getMessageHandler().error(getRequest(), "form:resourceDir",
+                                "resourcePathIsFile");
       result = FAILURE;
     }
     else if (!resourceDir.exists())
     {
       if (!resourceDir.mkdirs())
       {
-        getMessageHandler().error("form:resourceDir",
+        getMessageHandler().error(getRequest(), "form:resourceDir",
                                   "resourcePathCreationFailure");
         result = FAILURE;
       }
@@ -474,13 +475,14 @@ public class InstallBean extends AbstractBean
     catch (Exception ex)
     {
       logger.log(Level.WARNING, null, ex);
-      getMessageHandler().error("form:dbDriver", "dbDriverNotFound");
+      getMessageHandler().error(getRequest(), "form:dbDriver",
+                                "dbDriverNotFound");
       result = FAILURE;
     }
 
     if (!checkConnection())
     {
-      getMessageHandler().error("dbNoConnection");
+      getMessageHandler().error(getRequest(), "dbNoConnection");
       result = FAILURE;
     }
 

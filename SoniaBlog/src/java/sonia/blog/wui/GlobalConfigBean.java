@@ -200,7 +200,8 @@ public class GlobalConfigBean extends AbstractConfigBean
       if (Util.isBlank(smtpServer))
       {
         result = false;
-        getMessageHandler().warn("mailForm:servername", "mailNotConfigured");
+        getMessageHandler().warn(getRequest(), "mailForm:servername",
+                                 "mailNotConfigured");
       }
     }
 

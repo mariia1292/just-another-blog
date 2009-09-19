@@ -82,7 +82,7 @@ public class ConfigBean extends AbstractBean
   {
     BlogContext.getInstance().getSearchContext().reIndex(getBlogSession(),
             getBlog());
-    getMessageHandler().info("rebuildIndex");
+    getMessageHandler().info(getRequest(), "rebuildIndex");
 
     return SUCCESS;
   }
@@ -99,11 +99,11 @@ public class ConfigBean extends AbstractBean
 
     if (blogDAO.edit(getBlogSession(), blog))
     {
-      getMessageHandler().info("updateConfigSuccess");
+      getMessageHandler().info(getRequest(), "updateConfigSuccess");
     }
     else
     {
-      getMessageHandler().error("updateConfigFailure");
+      getMessageHandler().error(getRequest(), "updateConfigFailure");
       result = FAILURE;
     }
 
@@ -121,8 +121,7 @@ public class ConfigBean extends AbstractBean
     BlogSession session = getBlogSession();
 
     blogDAO.setParameter(session, blog, CodeMacro.CONFIG_THEME, codeTheme);
-
-    getMessageHandler().info("updateConfigSuccess");
+    getMessageHandler().info(getRequest(), "updateConfigSuccess");
 
     return SUCCESS;
   }

@@ -250,11 +250,11 @@ public abstract class AbstractEditorBean extends AbstractBean
         logger.warning("could not remove file " + file.getAbsolutePath());
       }
 
-      getMessageHandler().info("removeAttachmentSuccess");
+      getMessageHandler().info(getRequest(), "removeAttachmentSuccess");
     }
     else
     {
-      getMessageHandler().error("removeAttachmentFailure");
+      getMessageHandler().error(getRequest(), "removeAttachmentFailure");
     }
   }
 

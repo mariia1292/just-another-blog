@@ -200,11 +200,11 @@ public class PageAuthorBean extends AbstractEditorBean
     if (pageDAO.remove(getBlogSession(), page))
     {
       newPage();
-      getMessageHandler().info("removePageSuccess");
+      getMessageHandler().info(getRequest(), "removePageSuccess");
     }
     else
     {
-      getMessageHandler().error("removePageFailure");
+      getMessageHandler().error(getRequest(), "removePageFailure");
       result = FAILURE;
     }
 
@@ -243,17 +243,17 @@ public class PageAuthorBean extends AbstractEditorBean
     }
 
     String result = SUCCESS;
-    BlogSession session = getBlogSession();
+    BlogSession session = request.getBlogSession();
 
     if (page.getId() == null)
     {
       if (pageDAO.add(session, page))
       {
-        getMessageHandler().info("createPageSuccess");
+        getMessageHandler().info(request, "createPageSuccess");
       }
       else
       {
-        getMessageHandler().error("pageActionFailure");
+        getMessageHandler().error(request, "pageActionFailure");
         result = FAILURE;
       }
     }
@@ -261,11 +261,11 @@ public class PageAuthorBean extends AbstractEditorBean
     {
       if (pageDAO.edit(session, page))
       {
-        getMessageHandler().info("updatePageSuccess");
+        getMessageHandler().info(request, "updatePageSuccess");
       }
       else
       {
-        getMessageHandler().error("pageActionFailure");
+        getMessageHandler().error(request, "pageActionFailure");
         result = FAILURE;
       }
     }

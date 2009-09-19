@@ -109,7 +109,7 @@ public class RegistrationBean extends AbstractBean
     }
     else
     {
-      getMessageHandler().error("registrationDisabled");
+      getMessageHandler().error(getRequest(), "registrationDisabled");
       result = FAILURE;
     }
 
@@ -185,17 +185,17 @@ public class RegistrationBean extends AbstractBean
       try
       {
         userDAO.setRole(blog, user, role);
-        getMessageHandler().info("registrationSuccess");
+        getMessageHandler().info(getRequest(), "registrationSuccess");
       }
       catch ( /* TODO replace with DAOException */Exception ex)
       {
         logger.log(Level.SEVERE, null, ex);
-        getMessageHandler().error("unknownError");
+        getMessageHandler().error(getRequest(), "unknownError");
       }
     }
     else
     {
-      getMessageHandler().error("unknownError");
+      getMessageHandler().error(getRequest(), "unknownError");
     }
 
     return result;
@@ -246,7 +246,7 @@ public class RegistrationBean extends AbstractBean
     }
     catch (Exception ex)
     {
-      getMessageHandler().error("unknownError");
+      getMessageHandler().error(request,"unknownError");
       logger.log(Level.SEVERE, null, ex);
     }
   }

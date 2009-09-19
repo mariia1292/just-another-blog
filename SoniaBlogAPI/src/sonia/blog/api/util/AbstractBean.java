@@ -40,7 +40,9 @@ import sonia.blog.api.app.BlogRequest;
 import sonia.blog.api.app.BlogResponse;
 import sonia.blog.api.app.BlogSession;
 
-import sonia.jsf.util.MessageHandler;
+import sonia.jsf.util.FacesMessageHandler;
+
+import sonia.web.msg.MessageHandler;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -71,6 +73,12 @@ public class AbstractBean
 
   /** Field description */
   public static final String SUCCESS = "success";
+
+  /** Field description */
+  public static final int TYPE_BACKEND = 0;
+
+  /** Field description */
+  public static final int TYPE_FRONTEND = 1;
 
   /** Field description */
   private static Logger logger = Logger.getLogger(AbstractBean.class.getName());
@@ -226,7 +234,10 @@ public class AbstractBean
       ResourceBundle bundle =
         context.getApplication().getResourceBundle(context, "message");
 
-      this.messageHandler = new MessageHandler(bundle, true);
+      if (getType() == TYPE_BACKEND)
+      {
+        this.messageHandler = new FacesMessageHandler(bundle, true);
+      }
     }
 
     return messageHandler;
@@ -295,8 +306,19 @@ public class AbstractBean
     return blogResponse;
   }
 
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  protected int getType()
+  {
+    return TYPE_BACKEND;
+  }
+
   //~--- fields ---------------------------------------------------------------
 
   /** Field description */
-  private MessageHandler messageHandler;
+  private FacesMessageHandler messageHandler;
 }

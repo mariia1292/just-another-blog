@@ -35,6 +35,7 @@ package sonia.blog.wui;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import sonia.blog.api.app.BlogRequest;
 import sonia.blog.api.app.BlogSession;
 import sonia.blog.api.dao.CategoryDAO;
 import sonia.blog.api.dao.Dao;
@@ -118,18 +119,18 @@ public class CategoryBean extends AbstractBean
     {
       if (categoryDAO.remove(getBlogSession(), cat))
       {
-        getMessageHandler().info("removeCategorySuccess");
+        getMessageHandler().info(getRequest(), "removeCategorySuccess");
       }
       else
       {
         result = FAILURE;
-        getMessageHandler().error("categoryActionFailure");
+        getMessageHandler().error(getRequest(), "categoryActionFailure");
       }
     }
     else
     {
       result = FAILURE;
-      getMessageHandler().warn("categoryHasEntries");
+      getMessageHandler().warn(getRequest(), "categoryHasEntries");
     }
 
     return result;
@@ -144,7 +145,8 @@ public class CategoryBean extends AbstractBean
   public String save()
   {
     String result = SUCCESS;
-    BlogSession session = getBlogSession();
+    BlogRequest request = getRequest();
+    BlogSession session = request.getBlogSession();
 
     category.setBlog(session.getBlog());
 
@@ -152,24 +154,24 @@ public class CategoryBean extends AbstractBean
     {
       if (categoryDAO.edit(session, category))
       {
-        getMessageHandler().info("updateCategorySuccess");
+        getMessageHandler().info(request, "updateCategorySuccess");
       }
       else
       {
         result = FAILURE;
-        getMessageHandler().error("categoryActionFailure");
+        getMessageHandler().error(request, "categoryActionFailure");
       }
     }
     else
     {
       if (categoryDAO.add(session, category))
       {
-        getMessageHandler().info("createCategorySuccess");
+        getMessageHandler().info(request, "createCategorySuccess");
       }
       else
       {
         result = FAILURE;
-        getMessageHandler().error("categoryActionFailure");
+        getMessageHandler().error(request, "categoryActionFailure");
       }
     }
 

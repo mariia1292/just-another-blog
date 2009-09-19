@@ -127,7 +127,7 @@ public class AvatarBean extends AbstractBean
     {
       logger.log(Level.SEVERE, null, ex);
       result = FAILURE;
-      getMessageHandler().error("unknownError");
+      getMessageHandler().error(getRequest(), "unknownError");
     }
 
     return result;
@@ -183,7 +183,7 @@ public class AvatarBean extends AbstractBean
           }
           else
           {
-            getMessageHandler().error("unknownError");
+            getMessageHandler().error(getRequest(), "unknownError");
           }
         }
         else if ((d.width < 50) || (d.height < 50))
@@ -396,11 +396,11 @@ public class AvatarBean extends AbstractBean
           }
         }
 
-        getMessageHandler().info("successUpdateAvatar");
+        getMessageHandler().info(getRequest(), "successUpdateAvatar");
       }
       else
       {
-        getMessageHandler().error("failureUpdateAvatar");
+        getMessageHandler().error(getRequest(), "failureUpdateAvatar");
       }
     }
     else

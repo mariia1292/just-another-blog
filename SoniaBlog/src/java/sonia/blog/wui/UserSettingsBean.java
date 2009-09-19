@@ -84,12 +84,12 @@ public class UserSettingsBean extends AbstractBean
 
     if (userDAO.saveMember(member))
     {
-      getMessageHandler().info("userSettingsUpdateSuccess");
+      getMessageHandler().info(getRequest(), "userSettingsUpdateSuccess");
     }
     else
     {
       result = FAILURE;
-      getMessageHandler().error("unknownError");
+      getMessageHandler().error(getRequest(), "unknownError");
     }
 
     return result;
@@ -136,14 +136,14 @@ public class UserSettingsBean extends AbstractBean
           }
           else
           {
-            getMessageHandler().warn("passwordIsWrong");
+            getMessageHandler().warn(getRequest(), "passwordIsWrong");
           }
         }
       }
     }
     else
     {
-      getMessageHandler().warn("passwordsNotEqual");
+      getMessageHandler().warn(getRequest(), "passwordsNotEqual");
       result = FAILURE;
     }
 
@@ -282,12 +282,12 @@ public class UserSettingsBean extends AbstractBean
 
     if (userDAO.edit(getBlogSession(), user))
     {
-      getMessageHandler().info("userSettingsUpdateSuccess");
+      getMessageHandler().info(getRequest(), "userSettingsUpdateSuccess");
     }
     else
     {
       result = FAILURE;
-      getMessageHandler().error("unknownError");
+      getMessageHandler().error(getRequest(), "unknownError");
     }
 
     return result;

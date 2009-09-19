@@ -110,7 +110,7 @@ public abstract class AbstractConfigBean extends AbstractBean
       try
       {
         config.store();
-        getMessageHandler().info("successStoreConfig");
+        getMessageHandler().info(getRequest(), "successStoreConfig");
       }
       catch (Exception ex)
       {
@@ -118,7 +118,7 @@ public abstract class AbstractConfigBean extends AbstractBean
 
         log.append("exception in ").append(getClass().getName());
         logger.log(Level.SEVERE, log.toString(), ex);
-        getMessageHandler().error("failureStoreConfig");
+        getMessageHandler().error(getRequest(), "failureStoreConfig");
         result = FAILURE;
       }
     }

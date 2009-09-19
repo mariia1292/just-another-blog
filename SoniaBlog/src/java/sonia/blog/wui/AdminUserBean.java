@@ -146,12 +146,12 @@ public class AdminUserBean extends AbstractBean
       try
       {
         userDAO.setRole(blog, user, role);
-        getMessageHandler().info("changeRoleSuccess");
+        getMessageHandler().info(getRequest(), "changeRoleSuccess");
       }
       catch (Exception ex)
       {
         logger.log(Level.SEVERE, null, ex);
-        getMessageHandler().error("changeRoleFailure");
+        getMessageHandler().error(getRequest(), "changeRoleFailure");
       }
     }
   }
@@ -176,36 +176,36 @@ public class AdminUserBean extends AbstractBean
         {
           if (userDAO.add(session, user))
           {
-            getMessageHandler().info("userSettingsUpdateSuccess");
+            getMessageHandler().info(getRequest(), "userSettingsUpdateSuccess");
             result = SUCCESS;
           }
           else
           {
-            getMessageHandler().error("unknownError");
+            getMessageHandler().error(getRequest(), "unknownError");
           }
         }
         else
         {
           if (userDAO.edit(session, user))
           {
-            getMessageHandler().info("userSettingsUpdateSuccess");
+            getMessageHandler().info(getRequest(), "userSettingsUpdateSuccess");
             result = SUCCESS;
           }
           else
           {
-            getMessageHandler().error("unknownError");
+            getMessageHandler().error(getRequest(), "unknownError");
           }
         }
       }
       else
       {
-        getMessageHandler().warn(null, "nameAllreadyExists", null,
+        getMessageHandler().warn(getRequest(), null, "nameAllreadyExists", null,
                                  user.getName());
       }
     }
     else
     {
-      getMessageHandler().warn(null, "emailAllreadyExists", null,
+      getMessageHandler().warn(getRequest(), null, "emailAllreadyExists", null,
                                user.getEmail());
     }
 

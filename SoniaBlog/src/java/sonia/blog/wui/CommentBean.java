@@ -104,11 +104,11 @@ public class CommentBean extends AbstractBean
 
       if (commentDAO.remove(getBlogSession(), comm))
       {
-        getMessageHandler().info("removeCommentSuccess");
+        getMessageHandler().info(getRequest(), "removeCommentSuccess");
       }
       else
       {
-        getMessageHandler().error("removeCommentFailure");
+        getMessageHandler().error(getRequest() , "removeCommentFailure");
       }
     }
   }
@@ -128,11 +128,11 @@ public class CommentBean extends AbstractBean
 
     if (commentDAO.edit(getBlogSession(), comm))
     {
-      getMessageHandler().info("toggleSpamSuccess");
+      getMessageHandler().info(getRequest(), "toggleSpamSuccess");
     }
     else
     {
-      getMessageHandler().error("toggleSpamFailure");
+      getMessageHandler().error(getRequest(),"toggleSpamFailure");
     }
   }
 

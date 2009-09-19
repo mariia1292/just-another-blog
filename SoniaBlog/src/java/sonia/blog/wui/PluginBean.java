@@ -85,7 +85,7 @@ public class PluginBean extends AbstractBean
     if (plugin != null)
     {
       context.start(plugin);
-      getMessageHandler().info("pluginStarted");
+      getMessageHandler().info(getRequest(), "pluginStarted");
     }
 
     return SUCCESS;
@@ -104,7 +104,7 @@ public class PluginBean extends AbstractBean
     if (plugin != null)
     {
       context.stop(plugin);
-      getMessageHandler().info("pluginStopped");
+      getMessageHandler().info(getRequest(), "pluginStopped");
     }
 
     return SUCCESS;

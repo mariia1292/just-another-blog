@@ -88,11 +88,11 @@ public class TemplateBean extends AbstractBean
       if (blogDAO.edit(getBlogSession(), blog))
       {
         result = SUCCESS;
-        getMessageHandler().info("changeTemplateSuccess");
+        getMessageHandler().info(getRequest(), "changeTemplateSuccess");
       }
       else
       {
-        getMessageHandler().error("changeTemplateFailure");
+        getMessageHandler().error(getRequest(), "changeTemplateFailure");
       }
     }
 

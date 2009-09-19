@@ -101,12 +101,12 @@ public class MemberBean extends AbstractBean
         UserDAO userDAO = BlogContext.getDAOFactory().getUserDAO();
 
         userDAO.setRole(blog, user, role);
-        getMessageHandler().info("changeRoleSuccess");
+        getMessageHandler().info(getRequest(), "changeRoleSuccess");
       }
       catch (Exception ex)
       {
         logger.log(Level.SEVERE, null, ex);
-        getMessageHandler().error("changeRoleFailure");
+        getMessageHandler().error(getRequest(), "changeRoleFailure");
       }
     }
   }
