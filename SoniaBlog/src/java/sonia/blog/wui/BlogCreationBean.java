@@ -107,7 +107,7 @@ public class BlogCreationBean extends AbstractBean
     }
     else
     {
-      getMessageHandler().error("blogform:servername", "nameAllreadyExists",
+      getMessageHandler().error(getRequest(), "blogform:servername", "nameAllreadyExists",
                                 null, blog.getIdentifier());
       result = FAILURE;
     }
@@ -223,22 +223,22 @@ public class BlogCreationBean extends AbstractBean
           catch ( /* TODO replace with DAOException */Exception ex)
           {
             logger.log(Level.SEVERE, null, ex);
-            getMessageHandler().error("couldNotCreateMember");
+            getMessageHandler().error(getRequest(), "couldNotCreateMember");
           }
         }
         else
         {
-          getMessageHandler().error("couldNotCreateCategory");
+          getMessageHandler().error(getRequest(), "couldNotCreateCategory");
         }
       }
       else
       {
-        getMessageHandler().error("couldNotCreateBlog");
+        getMessageHandler().error(getRequest(), "couldNotCreateBlog");
       }
     }
     else
     {
-      getMessageHandler().error("blogCreationDisabled");
+      getMessageHandler().error(getRequest(), "blogCreationDisabled");
     }
 
     return result;

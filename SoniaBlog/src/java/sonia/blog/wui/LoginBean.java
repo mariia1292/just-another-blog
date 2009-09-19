@@ -114,12 +114,12 @@ public class LoginBean extends AbstractBean
         createCookie();
       }
 
-      getMessageHandler().info("loginSuccess");
+      getMessageHandler().info(getRequest(), "loginSuccess");
       redirect();
     }
     catch (LoginException ex)
     {
-      getMessageHandler().warn("loginFailure");
+      getMessageHandler().warn(getRequest(), "loginFailure");
       logger.log(Level.WARNING, null, ex);
     }
 
@@ -174,7 +174,7 @@ public class LoginBean extends AbstractBean
     c.setMaxAge(0);
     c.setPath(BlogContext.getInstance().getServletContext().getContextPath());
     getResponse().addCookie(c);
-    getMessageHandler().info("logoutSuccess");
+    getMessageHandler().info(getRequest(), "logoutSuccess");
     redirect();
 
     return SUCCESS;

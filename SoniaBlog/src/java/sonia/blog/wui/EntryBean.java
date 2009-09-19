@@ -246,12 +246,12 @@ public class EntryBean extends AbstractEditorBean
             Util.delete(attachmentDir);
           }
 
-          getMessageHandler().info("removeEntrySuccess");
+          getMessageHandler().info(getRequest(), "removeEntrySuccess");
           result = newEntry();
         }
         else
         {
-          getMessageHandler().error("removeEntryFailure");
+          getMessageHandler().error(getRequest(), "removeEntryFailure");
         }
       }
       catch (Exception ex)
@@ -303,12 +303,12 @@ public class EntryBean extends AbstractEditorBean
         if (entryDAO.add(session, entry))
         {
           doTrackback(request.getCurrentBlog());
-          getMessageHandler().info("createEntrySuccess");
+          getMessageHandler().info(request, "createEntrySuccess");
         }
         else
         {
           result = FAILURE;
-          getMessageHandler().error("entryActionFailure");
+          getMessageHandler().error(request, "entryActionFailure");
         }
       }
       else
@@ -316,12 +316,12 @@ public class EntryBean extends AbstractEditorBean
         if (entryDAO.edit(session, entry))
         {
           doTrackback(request.getCurrentBlog());
-          getMessageHandler().info("updateEntrySuccess");
+          getMessageHandler().info(request, "updateEntrySuccess");
         }
         else
         {
           result = FAILURE;
-          getMessageHandler().error("entryActionFailure");
+          getMessageHandler().error(request, "entryActionFailure");
         }
       }
     }
@@ -357,12 +357,12 @@ public class EntryBean extends AbstractEditorBean
     try
     {
       BlogUtil.sendTrackbackPing(entry, new URL(trackbackURL));
-      getMessageHandler().info("sendTrackBackSuccess");
+      getMessageHandler().info(getRequest(), "sendTrackBackSuccess");
     }
     catch (Exception ex)
     {
       logger.log(Level.SEVERE, null, ex);
-      getMessageHandler().warn("sendTrackBackFailure");
+      getMessageHandler().warn(getRequest(), "sendTrackBackFailure");
     }
   }
 

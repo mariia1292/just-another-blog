@@ -33,6 +33,10 @@
 
 package sonia.jsf.util;
 
+//~--- non-JDK imports --------------------------------------------------------
+
+import sonia.web.msg.MessageHandler;
+
 //~--- JDK imports ------------------------------------------------------------
 
 import java.text.MessageFormat;
@@ -44,11 +48,13 @@ import java.util.logging.Logger;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 
+import javax.servlet.http.HttpServletRequest;
+
 /**
  *
  * @author Sebastian Sdorra
  */
-public class MessageHandler
+public class FacesMessageHandler extends MessageHandler
 {
 
   /**
@@ -57,9 +63,9 @@ public class MessageHandler
    *
    * @param bundle
    */
-  public MessageHandler(ResourceBundle bundle)
+  public FacesMessageHandler(ResourceBundle bundle)
   {
-    this.bundle = bundle;
+    super(bundle);
   }
 
   /**
@@ -69,13 +75,13 @@ public class MessageHandler
    * @param bundle
    * @param enableLogging
    */
-  public MessageHandler(ResourceBundle bundle, boolean enableLogging)
+  public FacesMessageHandler(ResourceBundle bundle, boolean enableLogging)
   {
-    this.bundle = bundle;
+    super(bundle);
 
     if (enableLogging)
     {
-      logger = Logger.getLogger(MessageHandler.class.getName());
+      logger = Logger.getLogger(FacesMessageHandler.class.getName());
     }
   }
 
@@ -85,9 +91,11 @@ public class MessageHandler
    * Method description
    *
    *
+   *
+   * @param request
    * @param key
    */
-  public void error(String key)
+  public void error(HttpServletRequest request, String key)
   {
     send(null, FacesMessage.SEVERITY_ERROR, key, null);
   }
@@ -96,10 +104,12 @@ public class MessageHandler
    * Method description
    *
    *
+   *
+   * @param request
    * @param clientId
    * @param key
    */
-  public void error(String clientId, String key)
+  public void error(HttpServletRequest request, String clientId, String key)
   {
     send(clientId, FacesMessage.SEVERITY_ERROR, key, null);
   }
@@ -108,11 +118,14 @@ public class MessageHandler
    * Method description
    *
    *
+   *
+   * @param request
    * @param clientId
    * @param key
    * @param detailKey
    */
-  public void error(String clientId, String key, String detailKey)
+  public void error(HttpServletRequest request, String clientId, String key,
+                    String detailKey)
   {
     send(clientId, FacesMessage.SEVERITY_ERROR, key, detailKey);
   }
@@ -121,13 +134,15 @@ public class MessageHandler
    * Method description
    *
    *
+   *
+   * @param request
    * @param clientId
    * @param key
    * @param detailKey
    * @param params
    */
-  public void error(String clientId, String key, String detailKey,
-                    Object... params)
+  public void error(HttpServletRequest request, String clientId, String key,
+                    String detailKey, Object... params)
   {
     send(clientId, FacesMessage.SEVERITY_ERROR, key, detailKey, params);
   }
@@ -136,13 +151,15 @@ public class MessageHandler
    * Method description
    *
    *
+   *
+   * @param request
    * @param clientId
    * @param key
    * @param detailKey
    * @param params
    */
-  public void fatal(String clientId, String key, String detailKey,
-                    Object... params)
+  public void fatal(HttpServletRequest request, String clientId, String key,
+                    String detailKey, Object... params)
   {
     send(clientId, FacesMessage.SEVERITY_FATAL, key, detailKey, params);
   }
@@ -151,9 +168,11 @@ public class MessageHandler
    * Method description
    *
    *
+   *
+   * @param request
    * @param key
    */
-  public void fatal(String key)
+  public void fatal(HttpServletRequest request, String key)
   {
     send(null, FacesMessage.SEVERITY_FATAL, key, null);
   }
@@ -162,10 +181,12 @@ public class MessageHandler
    * Method description
    *
    *
+   *
+   * @param request
    * @param clientId
    * @param key
    */
-  public void fatal(String clientId, String key)
+  public void fatal(HttpServletRequest request, String clientId, String key)
   {
     send(clientId, FacesMessage.SEVERITY_FATAL, key, null);
   }
@@ -174,11 +195,14 @@ public class MessageHandler
    * Method description
    *
    *
+   *
+   * @param request
    * @param clientId
    * @param key
    * @param detailKey
    */
-  public void fatal(String clientId, String key, String detailKey)
+  public void fatal(HttpServletRequest request, String clientId, String key,
+                    String detailKey)
   {
     send(clientId, FacesMessage.SEVERITY_FATAL, key, detailKey);
   }
@@ -187,13 +211,15 @@ public class MessageHandler
    * Method description
    *
    *
+   *
+   * @param request
    * @param clientId
    * @param key
    * @param detailKey
    * @param params
    */
-  public void info(String clientId, String key, String detailKey,
-                   Object... params)
+  public void info(HttpServletRequest request, String clientId, String key,
+                   String detailKey, Object... params)
   {
     send(clientId, FacesMessage.SEVERITY_INFO, key, detailKey, params);
   }
@@ -202,9 +228,11 @@ public class MessageHandler
    * Method description
    *
    *
+   *
+   * @param request
    * @param key
    */
-  public void info(String key)
+  public void info(HttpServletRequest request, String key)
   {
     send(null, FacesMessage.SEVERITY_INFO, key, null);
   }
@@ -213,10 +241,12 @@ public class MessageHandler
    * Method description
    *
    *
+   *
+   * @param request
    * @param clientId
    * @param key
    */
-  public void info(String clientId, String key)
+  public void info(HttpServletRequest request, String clientId, String key)
   {
     send(clientId, FacesMessage.SEVERITY_INFO, key, null);
   }
@@ -225,11 +255,14 @@ public class MessageHandler
    * Method description
    *
    *
+   *
+   * @param request
    * @param clientId
    * @param key
    * @param detailKey
    */
-  public void info(String clientId, String key, String detailKey)
+  public void info(HttpServletRequest request, String clientId, String key,
+                   String detailKey)
   {
     send(clientId, FacesMessage.SEVERITY_INFO, key, detailKey);
   }
@@ -238,13 +271,15 @@ public class MessageHandler
    * Method description
    *
    *
+   *
+   * @param request
    * @param clientId
    * @param key
    * @param detailKey
    * @param params
    */
-  public void warn(String clientId, String key, String detailKey,
-                   Object... params)
+  public void warn(HttpServletRequest request, String clientId, String key,
+                   String detailKey, Object... params)
   {
     send(clientId, FacesMessage.SEVERITY_WARN, key, detailKey, params);
   }
@@ -253,9 +288,11 @@ public class MessageHandler
    * Method description
    *
    *
+   *
+   * @param request
    * @param key
    */
-  public void warn(String key)
+  public void warn(HttpServletRequest request, String key)
   {
     send(null, FacesMessage.SEVERITY_WARN, key, null);
   }
@@ -264,10 +301,12 @@ public class MessageHandler
    * Method description
    *
    *
+   *
+   * @param request
    * @param clientId
    * @param key
    */
-  public void warn(String clientId, String key)
+  public void warn(HttpServletRequest request, String clientId, String key)
   {
     send(clientId, FacesMessage.SEVERITY_WARN, key, null);
   }
@@ -276,11 +315,14 @@ public class MessageHandler
    * Method description
    *
    *
+   *
+   * @param request
    * @param clientId
    * @param key
    * @param detailKey
    */
-  public void warn(String clientId, String key, String detailKey)
+  public void warn(HttpServletRequest request, String clientId, String key,
+                   String detailKey)
   {
     send(clientId, FacesMessage.SEVERITY_WARN, key, detailKey);
   }
@@ -369,9 +411,6 @@ public class MessageHandler
   }
 
   //~--- fields ---------------------------------------------------------------
-
-  /** Field description */
-  private ResourceBundle bundle;
 
   /** Field description */
   private Logger logger;

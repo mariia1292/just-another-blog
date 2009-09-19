@@ -118,7 +118,8 @@ public class BlogBean extends AbstractBean
    */
   public void addComment()
   {
-    BlogSession session = getBlogSession();
+    BlogRequest request = getRequest();
+    BlogSession session = request.getBlogSession();
 
     if (entry instanceof CommentAble)
     {
@@ -143,26 +144,27 @@ public class BlogBean extends AbstractBean
       if (entry instanceof Entry)
       {
         CommentDAO commentDAO = BlogContext.getDAOFactory().getCommentDAO();
+        
 
         if (commentDAO.add(session, comment))
         {
           if (comment.isSpam())
           {
-            getMessageHandler().warn("createCommentSpam");
+            getMessageHandler().warn(request, "createCommentSpam");
           }
           else
           {
-            getMessageHandler().info("createCommentSuccess");
+            getMessageHandler().info(request, "createCommentSuccess");
           }
         }
         else
         {
-          getMessageHandler().error("createCommentFailure");
+          getMessageHandler().error(request, "createCommentFailure");
         }
       }
       else
       {
-        getMessageHandler().error("commentOnlyOnEntries");
+        getMessageHandler().error(request, "commentOnlyOnEntries");
       }
 
       Comment newComment = new Comment();
@@ -174,7 +176,7 @@ public class BlogBean extends AbstractBean
     }
     else
     {
-      getMessageHandler().error("commentOnlyOnEntries");
+      getMessageHandler().error(request, "commentOnlyOnEntries");
     }
   }
 

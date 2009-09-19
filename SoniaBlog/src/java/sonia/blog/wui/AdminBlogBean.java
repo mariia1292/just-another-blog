@@ -130,8 +130,9 @@ public class AdminBlogBean extends AbstractBean
     if ((b != null) &&!b.equals(blog))
     {
       result = false;
-      getMessageHandler().error("blogform:servername", "nameAllreadyExists",
-                                null, blog.getIdentifier());
+      getMessageHandler().error(getRequest(), "blogform:servername",
+                                "nameAllreadyExists", null,
+                                blog.getIdentifier());
     }
 
     return result;
@@ -152,12 +153,12 @@ public class AdminBlogBean extends AbstractBean
     try
     {
       Util.delete(imageDir);
-      getMessageHandler().info("successClearImageCache");
+      getMessageHandler().info(getRequest(), "successClearImageCache");
     }
     catch (Exception ex)
     {
       logger.log(Level.SEVERE, null, ex);
-      getMessageHandler().error("failureClearImageCache");
+      getMessageHandler().error(getRequest(), "failureClearImageCache");
     }
 
     return result;
@@ -203,11 +204,11 @@ public class AdminBlogBean extends AbstractBean
     if (context != null)
     {
       context.reIndex(getBlogSession(), blog);
-      getMessageHandler().info("rebuildIndex");
+      getMessageHandler().info(getRequest(), "rebuildIndex");
     }
     else
     {
-      getMessageHandler().warn("failureRebuildIndex");
+      getMessageHandler().warn(getRequest(), "failureRebuildIndex");
       result = FAILURE;
     }
 
@@ -306,13 +307,13 @@ public class AdminBlogBean extends AbstractBean
       }
       else
       {
-        getMessageHandler().warn("cantDeleteCurrentBlog");
+        getMessageHandler().warn(getRequest(), "cantDeleteCurrentBlog");
         result = FAILURE;
       }
     }
     else
     {
-      getMessageHandler().error("unknownError");
+      getMessageHandler().error(getRequest(), "unknownError");
       result = FAILURE;
     }
 
@@ -338,12 +339,12 @@ public class AdminBlogBean extends AbstractBean
       try
       {
         userDAO.setRole(blog, user, role);
-        getMessageHandler().info("changeRoleSuccess");
+        getMessageHandler().info(getRequest(), "changeRoleSuccess");
       }
       catch (Exception ex)
       {
         logger.log(Level.SEVERE, null, ex);
-        getMessageHandler().error("changeRoleFailure");
+        getMessageHandler().error(getRequest(), "changeRoleFailure");
       }
     }
   }
@@ -365,12 +366,12 @@ public class AdminBlogBean extends AbstractBean
         if (blog.getId() != null)
         {
           blogDAO.edit(getBlogSession(), blog);
-          getMessageHandler().info("updateBlogSuccess");
+          getMessageHandler().info(getRequest(), "updateBlogSuccess");
         }
         else
         {
           blogDAO.add(getBlogSession(), blog);
-          getMessageHandler().info("createBlogSuccess");
+          getMessageHandler().info(getRequest(), "createBlogSuccess");
         }
       }
     }
