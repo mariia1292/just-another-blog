@@ -35,6 +35,8 @@ package sonia.cache;
 
 //~--- JDK imports ------------------------------------------------------------
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -95,13 +97,22 @@ public abstract class AbstractCache implements ObjectCache
 
     synchronized (cacheMap)
     {
+      List<Object> removeList = new ArrayList<Object>();
+
       for (Object key : cacheMap.keySet())
       {
         if (condition.matches(key))
         {
-          cacheMap.remove(key);
+          removeList.add(key);
         }
       }
+
+      for (Object key : removeList)
+      {
+        cacheMap.remove(key);
+      }
+
+      removeList = null;
     }
   }
 
