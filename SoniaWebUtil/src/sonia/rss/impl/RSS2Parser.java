@@ -50,6 +50,8 @@ import sonia.rss.Item;
 
 import sonia.util.XmlUtil;
 
+import sonia.web.util.WebUtil;
+
 //~--- JDK imports ------------------------------------------------------------
 
 import java.io.IOException;
@@ -60,7 +62,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 
 import java.util.List;
 import java.util.Locale;
@@ -147,10 +148,6 @@ public class RSS2Parser extends FeedParser
 
   /** Field description */
   public static final String MIMETYPE = "application/rss+xml";
-
-  /** Field description */
-  public static final SimpleDateFormat HTTP_DATE_FORMAT =
-    new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss zzz", Locale.ENGLISH);
 
   /** Field description */
   public static final String TYPE = "RSS2";
@@ -262,7 +259,7 @@ public class RSS2Parser extends FeedParser
         Element channelPubDateEl = doc.createElement(ELEMENT_PUBDATE);
 
         channelPubDateEl.setTextContent(
-            HTTP_DATE_FORMAT.format(channel.getPubDate()));
+            WebUtil.formatHttpDate(channel.getPubDate()));
         channelEl.appendChild(channelPubDateEl);
       }
 
@@ -304,7 +301,7 @@ public class RSS2Parser extends FeedParser
             Element itemPubDateEl = doc.createElement(ELEMENT_PUBDATE);
 
             itemPubDateEl.setTextContent(
-                HTTP_DATE_FORMAT.format(item.getPubDate()));
+                WebUtil.formatHttpDate(item.getPubDate()));
             itemEl.appendChild(itemPubDateEl);
           }
 
@@ -593,7 +590,7 @@ public class RSS2Parser extends FeedParser
         }
         else if (name.equals(ELEMENT_PUBDATE))
         {
-          item.setPubDate(HTTP_DATE_FORMAT.parse(value));
+          item.setPubDate(WebUtil.parseHttpDate(value));
         }
       }
     }
