@@ -16,12 +16,12 @@
 
       <ui:define name="head">
         <link rel="stylesheet" type="text/css" class="user" href="${facesContext.externalContext.requestContextPath}/resource/script/scripting.css" />
-        <link rel="stylesheet" type="text/css" class="user" href="${facesContext.externalContext.requestContextPath}/resource/syntax/styles/shCore.css" />
-        <link rel="stylesheet" type="text/css" class="user" href="${facesContext.externalContext.requestContextPath}/resource/syntax/styles/shThemeDefault.css" />
+        <link rel="stylesheet" type="text/css" class="user" href="${facesContext.externalContext.requestContextPath}/resources/syntaxhighlighter/styles/shCore.css" />
+        <link rel="stylesheet" type="text/css" class="user" href="${facesContext.externalContext.requestContextPath}/resources/syntaxhighlighter/styles/shThemeDefault.css" />
         
         <script type="text/javascript" src="${facesContext.externalContext.requestContextPath}/resource/script/scripting.js"></script>
-        <script type="text/javascript" src="${facesContext.externalContext.requestContextPath}/resource/syntax/scripts/shCore.js"></script>
-        <script type="text/javascript" src="${facesContext.externalContext.requestContextPath}/resource/syntax/scripts/shBrushJScript.js"></script>
+        <script type="text/javascript" src="${facesContext.externalContext.requestContextPath}/resources/syntaxhighlighter/scripts/shCore.js"></script>
+        <script type="text/javascript" src="${facesContext.externalContext.requestContextPath}/resources/syntaxhighlighter/scripts/shBrushJScript.js"></script>
         <script type="text/javascript">
           $(document).ready(function(){
             $("div.scMain").scripting( "${facesContext.externalContext.requestContextPath}/script.json", {
