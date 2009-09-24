@@ -4,7 +4,7 @@
   <short-name>blog</short-name>
   <uri>http://jab.nitilon.org/blog/</uri>
   <tag>
-    <name>tagList</name>
+    <name>tagCloud</name>
     <tag-class>sonia.blog.api.jsf.tagcloud.TagCloudTag</tag-class>
     <body-content>empty</body-content>
     <attribute>
@@ -87,7 +87,13 @@
   <tag>
     <name>calendar</name>
     <tag-class>sonia.blog.api.jsf.calendar.CalendarTag</tag-class>
-    <body-content>JSP</body-content>
+    <body-content>empty</body-content>
+    <attribute>
+      <name>id</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.Object</type>
+    </attribute>
     <attribute>
       <name>style</name>
       <required>false</required>
@@ -150,50 +156,15 @@
     </attribute>
   </tag>
   <tag>
-    <name>content</name>
-    <tag-class>sonia.blog.api.jsf.content.ContentTag</tag-class>
-    <body-content>JSP</body-content>
-    <attribute>
-      <name>style</name>
-      <required>false</required>
-      <rtexprvalue>true</rtexprvalue>
-      <type>java.lang.Object</type>
-    </attribute>
-    <attribute>
-      <name>styleClass</name>
-      <required>false</required>
-      <rtexprvalue>true</rtexprvalue>
-      <type>java.lang.Object</type>
-    </attribute>
-    <attribute>
-      <name>role</name>
-      <required>false</required>
-      <rtexprvalue>true</rtexprvalue>
-      <type>java.lang.Object</type>
-    </attribute>
-    <attribute>
-      <name>object</name>
-      <required>true</required>
-      <rtexprvalue>true</rtexprvalue>
-      <type>java.lang.Object</type>
-    </attribute>
-    <attribute>
-      <name>teaser</name>
-      <required>false</required>
-      <rtexprvalue>true</rtexprvalue>
-      <type>java.lang.Object</type>
-    </attribute>
-    <attribute>
-      <name>rendered</name>
-      <required>false</required>
-      <rtexprvalue>true</rtexprvalue>
-      <type>java.lang.Object</type>
-    </attribute>
-  </tag>
-  <tag>
     <name>link</name>
     <tag-class>sonia.blog.api.jsf.link.LinkTag</tag-class>
     <body-content>JSP</body-content>
+    <attribute>
+      <name>id</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.Object</type>
+    </attribute>
     <attribute>
       <name>style</name>
       <required>false</required>
@@ -252,7 +223,13 @@
   <tag>
     <name>search</name>
     <tag-class>sonia.blog.api.jsf.search.SearchTag</tag-class>
-    <body-content>JSP</body-content>
+    <body-content>empty</body-content>
+    <attribute>
+      <name>id</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.Object</type>
+    </attribute>
     <attribute>
       <name>style</name>
       <required>false</required>
@@ -313,6 +290,12 @@
     <tag-class>sonia.blog.api.jsf.search.SearchTag</tag-class>
     <body-content>JSP</body-content>
     <attribute>
+      <name>id</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.Object</type>
+    </attribute>
+    <attribute>
       <name>title</name>
       <required>false</required>
       <rtexprvalue>true</rtexprvalue>
@@ -353,6 +336,12 @@
     <name>selectAction</name>
     <tag-class>sonia.blog.api.jsf.select.SelectActionTag</tag-class>
     <body-content>empty</body-content>
+    <attribute>
+      <name>id</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.Object</type>
+    </attribute>
     <attribute>
       <name>style</name>
       <required>false</required>
@@ -467,6 +456,12 @@
     <tag-class>sonia.blog.api.jsf.trackback.TrackBackTag</tag-class>
     <body-content>empty</body-content>
     <attribute>
+      <name>id</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.Object</type>
+    </attribute>
+    <attribute>
       <name>object</name>
       <required>true</required>
       <rtexprvalue>true</rtexprvalue>
@@ -477,6 +472,12 @@
     <name>pager</name>
     <tag-class>sonia.blog.api.jsf.pager.PagerTag</tag-class>
     <body-content>empty</body-content>
+    <attribute>
+      <name>id</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.Object</type>
+    </attribute>
     <attribute>
       <name>for</name>
       <required>true</required>
@@ -531,6 +532,12 @@
     <tag-class>sonia.blog.api.jsf.header.HeaderTag</tag-class>
     <body-content>empty</body-content>
     <attribute>
+      <name>id</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.Object</type>
+    </attribute>
+    <attribute>
       <name>comments</name>
       <required>false</required>
       <rtexprvalue>true</rtexprvalue>
@@ -542,10 +549,28 @@
     <tag-class>sonia.blog.api.jsf.messages.MessagesTag</tag-class>
     <body-content>empty</body-content>
     <attribute>
+      <name>id</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.Object</type>
+    </attribute>
+    <attribute>
+      <name>role</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.Object</type>
+    </attribute>
+    <attribute>
       <name>rendered</name>
       <required>false</required>
       <rtexprvalue>true</rtexprvalue>
       <type>java.lang.object</type>
+    </attribute>
+    <attribute>
+      <name>style</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.Object</type>
     </attribute>
     <attribute>
       <name>styleClass</name>
