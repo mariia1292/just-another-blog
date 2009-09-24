@@ -85,4 +85,12 @@
         </component>
     </tag>
 
+    <tag>
+        <tag-name>messages</tag-name>
+        <component>
+            <component-type>sonia.blog.messages</component-type>
+            <renderer-type>sonia.blog.messages.renderer</renderer-type>
+        </component>
+    </tag>
+
 </facelet-taglib>

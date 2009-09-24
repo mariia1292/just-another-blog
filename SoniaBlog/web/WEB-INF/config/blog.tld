@@ -463,7 +463,7 @@
     </attribute>
   </tag>
   <tag>
-    <name>pager</name>
+    <name>trackback</name>
     <tag-class>sonia.blog.api.jsf.trackback.TrackBackTag</tag-class>
     <body-content>empty</body-content>
     <attribute>
@@ -536,8 +536,43 @@
       <rtexprvalue>true</rtexprvalue>
       <type>java.lang.object</type>
     </attribute>
+  </tag>
+  <tag>
+    <name>messages</name>
+    <tag-class>sonia.blog.api.jsf.messages.MessagesTag</tag-class>
+    <body-content>empty</body-content>
     <attribute>
-      <name>cacheType</name>
+      <name>rendered</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.object</type>
+    </attribute>
+    <attribute>
+      <name>styleClass</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.object</type>
+    </attribute>
+    <attribute>
+      <name>infoClass</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.object</type>
+    </attribute>
+    <attribute>
+      <name>warnClass</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.object</type>
+    </attribute>
+    <attribute>
+      <name>errorClass</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.object</type>
+    </attribute>
+    <attribute>
+      <name>fatalClass</name>
       <required>false</required>
       <rtexprvalue>true</rtexprvalue>
       <type>java.lang.object</type>
