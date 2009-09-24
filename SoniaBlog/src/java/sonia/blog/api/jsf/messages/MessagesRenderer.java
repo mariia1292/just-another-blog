@@ -156,6 +156,16 @@ public class MessagesRenderer extends BaseRenderer
         }
 
         writer.append("\"styleClass\": \"").append(styleClass).append("\"");
+        first = false;
+      }
+
+      String style = msgCmp.getStyle();
+      if ( Util.hasContent(style) ){
+        if ( !first )
+        {
+          writer.append( "," );
+        }
+        writer.append("\"style\": \"").append(style).append("\"");
       }
 
       writer.append("});");

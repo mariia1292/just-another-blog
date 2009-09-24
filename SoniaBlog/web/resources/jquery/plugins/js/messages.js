@@ -48,7 +48,8 @@
       warnClass: "warn",
       errorClass: "error",
       fatalClass: "fatal",
-      styleClass: null
+      styleClass: null,
+      style: null
     };
 
     options = $.extend({},defaults, options);
@@ -65,6 +66,9 @@
             $ul = $("<ul />");
             if ( options.styleClass != null ){
               $ul.addClass( options.styleClass );
+            }
+            if ( options.style != null ){
+              $ul.attr( "style", options.style );
             }
           }
           var $li = $("<li />").text( item.summary );
