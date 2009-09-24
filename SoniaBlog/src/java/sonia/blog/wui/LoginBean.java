@@ -304,6 +304,20 @@ public class LoginBean extends AbstractBean
     this.username = username;
   }
 
+  //~--- get methods ----------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  @Override
+  protected int getType()
+  {
+    return TYPE_FRONTEND;
+  }
+
   //~--- methods --------------------------------------------------------------
 
   /**

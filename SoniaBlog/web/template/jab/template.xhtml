@@ -41,9 +41,9 @@
               </a>
               <span class="hideme">.</span>
               <!-- end: skip link navigation -->
-            <!--<span>
-              <a href="#">Login</a> | <a href="#">Contact</a> | <a href="#">Imprint</a>
-            </span>-->
+              <!--<span>
+                <a href="#">Login</a> | <a href="#">Contact</a> | <a href="#">Imprint</a>
+              </span>-->
             </div>
             <div id="title">
               <h1><h:outputText value="#{BlogBean.blog.title}" rendered="#{BlogBean.installed}" /></h1>
@@ -70,9 +70,12 @@
           <div id="main"> <a id="content" name="content"></a>
             <div id="col1">
               <div id="col1_content" class="clearfix">
-                <h:messages id="messages" globalOnly="true"
+                <h:messages id="messages" styleClass="messages" globalOnly="true"
                             errorClass="warning" fatalClass="warning"
                             warnClass="warning" infoClass="note" />
+                <blog:messages styleClass="messages" errorClass="warning" 
+                               fatalClass="warning" warnClass="warning"
+                               infoClass="note" />
                 <ui:insert name="content" />
               </div>
             </div>
@@ -111,7 +114,7 @@
                     </h:form>
 
                   </h:panelGroup>
-                  
+
                 </ui:insert>
               </div>
               <!-- IE Column Clearing -->

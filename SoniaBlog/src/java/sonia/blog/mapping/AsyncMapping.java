@@ -43,6 +43,7 @@ import sonia.blog.api.dao.EntryDAO;
 import sonia.blog.api.dao.PageDAO;
 import sonia.blog.api.link.LinkBuilder;
 import sonia.blog.api.mapping.FinalMapping;
+import sonia.blog.api.msg.BlogMessage;
 import sonia.blog.api.search.SearchCategory;
 import sonia.blog.api.search.SearchContext;
 import sonia.blog.api.search.SearchEntry;
@@ -85,6 +86,7 @@ import java.util.logging.Logger;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  *
@@ -137,6 +139,10 @@ public class AsyncMapping extends FinalMapping
         else if (provider.equals("calendar"))
         {
           calendar(request, response);
+        }
+        else if (provider.equals("messages"))
+        {
+          messages(request, response);
         }
       }
       else
@@ -324,6 +330,65 @@ public class AsyncMapping extends FinalMapping
 
       response.sendError(HttpServletResponse.SC_BAD_REQUEST);
     }
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param request
+   * @param response
+   *
+   * @throws IOException
+   */
+  private void messages(BlogRequest request, BlogResponse response)
+          throws IOException
+  {
+    PrintWriter writer = response.getWriter();
+
+    writer.println("[");
+
+    HttpSession session = request.getSession();
+
+    if (session != null)
+    {
+      List<BlogMessage> messages =
+        (List<BlogMessage>) session.getAttribute(BlogMessage.SESSION_VAR);
+
+      if (Util.hasContent(messages))
+      {
+        Iterator<BlogMessage> messageIt = messages.iterator();
+
+        while (messageIt.hasNext())
+        {
+          BlogMessage msg = messageIt.next();
+
+          writer.append("{ \"level\": ").append(
+              Integer.toString(msg.getLevel())).append(
+              ", \"summary\": \"").append(msg.getSummary()).append(
+              "\", \"detail\": \"");
+
+          if (msg.getDetail() != null)
+          {
+            writer.append(msg.getDetail());
+          }
+
+          writer.append("\"}");
+
+          if (messageIt.hasNext())
+          {
+            writer.println(",");
+          }
+          else
+          {
+            writer.println();
+          }
+        }
+        messages.clear();
+      }
+    }
+
+    writer.println("]");
   }
 
   /**

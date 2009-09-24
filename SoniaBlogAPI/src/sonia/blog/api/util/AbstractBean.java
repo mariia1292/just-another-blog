@@ -39,6 +39,7 @@ import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.app.BlogRequest;
 import sonia.blog.api.app.BlogResponse;
 import sonia.blog.api.app.BlogSession;
+import sonia.blog.api.msg.BlogMessageHandler;
 
 import sonia.jsf.util.FacesMessageHandler;
 
@@ -238,6 +239,10 @@ public class AbstractBean
       {
         this.messageHandler = new FacesMessageHandler(bundle, true);
       }
+      else if (getType() == TYPE_FRONTEND)
+      {
+        this.messageHandler = new BlogMessageHandler(bundle);
+      }
     }
 
     return messageHandler;
@@ -320,5 +325,5 @@ public class AbstractBean
   //~--- fields ---------------------------------------------------------------
 
   /** Field description */
-  private FacesMessageHandler messageHandler;
+  private MessageHandler messageHandler;
 }

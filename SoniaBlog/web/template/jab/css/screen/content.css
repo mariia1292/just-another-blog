@@ -65,14 +65,14 @@
     margin-left: 2px;
   }
 
-  #messages {
+  ul.messages {
     overflow: hidden;
     list-style: none;
     margin: 0;
     padding: 0;
   }
 
-  #messages li { margin: 0; }
+  ul.messages li { margin: 0; }
 
   p { line-height: 1.5em; margin: 0 0 1em 0; }
 

@@ -144,7 +144,6 @@ public class BlogBean extends AbstractBean
       if (entry instanceof Entry)
       {
         CommentDAO commentDAO = BlogContext.getDAOFactory().getCommentDAO();
-        
 
         if (commentDAO.add(session, comment))
         {
@@ -776,6 +775,20 @@ public class BlogBean extends AbstractBean
   public void setPageEntries(DataModel pageEntries)
   {
     this.pageEntries = pageEntries;
+  }
+
+  //~--- get methods ----------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  @Override
+  protected int getType()
+  {
+    return TYPE_FRONTEND;
   }
 
   //~--- methods --------------------------------------------------------------

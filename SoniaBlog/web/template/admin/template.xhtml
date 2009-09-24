@@ -15,8 +15,8 @@
 
       <link rel="stylesheet" type="text/css" class="user" href="${facesContext.externalContext.requestContextPath}/template/admin/css/admin.css" />
       <!--[if lte IE 7]>
-      <link rel="stylesheet" type="text/css" class="user" href="${facesContext.externalContext.requestContextPath}/template/admin/css/patches/patch_blog.css" />
-    <![endif]-->
+        <link rel="stylesheet" type="text/css" class="user" href="${facesContext.externalContext.requestContextPath}/template/admin/css/patches/patch_blog.css" />
+      <![endif]-->
       <link rel="shortcut icon" type="image/vnd.microsoft.icon" href="${facesContext.externalContext.requestContextPath}/template/admin/images/favicon.ico" />
       <link rel="icon" type="image/gif" href="${facesContext.externalContext.requestContextPath}/template/admin/images/icon-16.gif" />
 
@@ -79,9 +79,12 @@
           <div id="main"> <a id="content" name="content"></a>
             <div id="col1">
               <div id="col1_content" class="clearfix">
-                <h:messages id="messages" globalOnly="true"
+                <h:messages id="messages" styleClass="messages" globalOnly="true"
                             errorClass="warning" fatalClass="warning"
                             warnClass="warning" infoClass="note" />
+                <blog:messages styleClass="messages" errorClass="warning"
+                               fatalClass="warning" warnClass="warning"
+                               infoClass="note" />
                 <ui:insert name="content" />
               </div>
             </div>

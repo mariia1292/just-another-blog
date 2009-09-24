@@ -174,6 +174,15 @@
     </component-extension>
   </component>
 
+  <component>
+    <display-name>messages</display-name>
+    <component-type>sonia.blog.messages</component-type>
+    <component-class>sonia.blog.api.jsf.messages.MessagesComponent</component-class>
+    <component-extension>
+      <renderer-type>sonia.blog.messages.renderer</renderer-type>
+    </component-extension>
+  </component>
+
   <render-kit>
     <renderer>
       <component-family>sonia.blog.header</component-family>
@@ -224,6 +233,11 @@
       <component-family>sonia.blog.pager</component-family>
       <renderer-type>sonia.blog.pager.renderer</renderer-type>
       <renderer-class>sonia.blog.api.jsf.pager.PagerRenderer</renderer-class>
+    </renderer>
+    <renderer>
+      <component-family>sonia.blog.messages</component-family>
+      <renderer-type>sonia.blog.messages.renderer</renderer-type>
+      <renderer-class>sonia.blog.api.jsf.messages.MessagesRenderer</renderer-class>
     </renderer>
   </render-kit>
     
