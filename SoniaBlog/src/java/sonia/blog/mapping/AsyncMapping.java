@@ -341,6 +341,7 @@ public class AsyncMapping extends FinalMapping
    *
    * @throws IOException
    */
+  @SuppressWarnings("unchecked")
   private void messages(BlogRequest request, BlogResponse response)
           throws IOException
   {
@@ -384,6 +385,7 @@ public class AsyncMapping extends FinalMapping
             writer.println();
           }
         }
+
         messages.clear();
       }
     }
