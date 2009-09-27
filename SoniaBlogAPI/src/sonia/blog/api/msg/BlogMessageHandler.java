@@ -337,6 +337,7 @@ public class BlogMessageHandler extends MessageHandler
    * @param detail
    * @param params
    */
+  @SuppressWarnings("unchecked")
   private void sendMessage(HttpServletRequest request, int level,
                            String clientId, String summary, String detail,
                            Object[] params)

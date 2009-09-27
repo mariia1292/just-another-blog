@@ -35,24 +35,21 @@ package sonia.blog.macro;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import sonia.blog.api.app.BlogContext;
-import sonia.blog.api.app.BlogRequest;
-import sonia.blog.api.dao.BlogDAO;
-import sonia.blog.api.link.LinkBuilder;
-import sonia.blog.entity.Blog;
+import sonia.blog.api.app.Context;
 
 import sonia.macro.Macro;
+import sonia.macro.MacroParser;
+import sonia.macro.MacroResult;
 
 //~--- JDK imports ------------------------------------------------------------
 
-import java.util.List;
 import java.util.Map;
 
 /**
  *
  * @author Sebastian Sdorra
  */
-public class BlogsMacro implements Macro
+public class TabMacro implements Macro
 {
 
   /**
@@ -66,28 +63,88 @@ public class BlogsMacro implements Macro
    */
   public String doBody(Map<String, Object> environment, String body)
   {
-    StringBuffer result = new StringBuffer();
-    BlogRequest request = (BlogRequest) environment.get("request");
-    BlogDAO blogDAO = BlogContext.getDAOFactory().getBlogDAO();
-    List<Blog> blogs = blogDAO.getAll(true, 0, 100);
+    MacroResult result = parser.parseText(environment, body);
 
-    if ((blogs != null) &&!blogs.isEmpty())
-    {
-      LinkBuilder linkBuilder = BlogContext.getInstance().getLinkBuilder();
+    content = result.getText();
 
-      result.append("<ul>\n");
+    TabsMacro macro = (TabsMacro) environment.get(TabsMacro.ENV_TABCONTAINER);
 
-      for (Blog blog : blogs)
-      {
-        result.append("<li>");
-        result.append("<a href=\"");
-        result.append(linkBuilder.buildLink(request, blog)).append("\">");
-        result.append(blog.getTitle()).append("</a>\n");
-      }
+    macro.addTab(this);
 
-      result.append("</ul>\n");
-    }
-
-    return result.toString();
+    return "";
   }
+
+  //~--- get methods ----------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  public String getContent()
+  {
+    return content;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  public String getLabel()
+  {
+    return label;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  public String getName()
+  {
+    return name;
+  }
+
+  //~--- set methods ----------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   * @param label
+   */
+  public void setLabel(String label)
+  {
+    this.label = label;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param name
+   */
+  public void setName(String name)
+  {
+    this.name = name;
+  }
+
+  //~--- fields ---------------------------------------------------------------
+
+  /** Field description */
+  private String content;
+
+  /** Field description */
+  private String label;
+
+  /** Field description */
+  private String name;
+
+  /** Field description */
+  @Context
+  private MacroParser parser;
 }

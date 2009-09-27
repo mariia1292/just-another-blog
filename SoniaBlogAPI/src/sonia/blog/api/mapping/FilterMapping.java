@@ -187,7 +187,7 @@ public abstract class FilterMapping implements Mapping
   protected void setDisplayContent(BlogRequest request, ContentObject object,
                                    boolean teaser)
   {
-    Map<String, ?> env = getEnvironment(request, object);
+    Map<String, Object> env = getEnvironment(request, object);
 
     setDisplayContent(env, object, teaser);
   }
@@ -206,7 +206,7 @@ public abstract class FilterMapping implements Mapping
   {
     for (ContentObject object : objects)
     {
-      Map<String, ?> env = getEnvironment(request, object);
+      Map<String, Object> env = getEnvironment(request, object);
 
       setDisplayContent(env, object, teaser);
     }
@@ -223,7 +223,7 @@ public abstract class FilterMapping implements Mapping
    *
    * @return
    */
-  private Map<String, ?> getEnvironment(BlogRequest request,
+  private Map<String, Object> getEnvironment(BlogRequest request,
           ContentObject object)
   {
     Map<String, Object> env = new HashMap<String, Object>();
@@ -249,7 +249,7 @@ public abstract class FilterMapping implements Mapping
    * @param object
    * @param teaser
    */
-  private void setDisplayContent(Map<String, ?> env, ContentObject object,
+  private void setDisplayContent(Map<String, Object> env, ContentObject object,
                                  boolean teaser)
   {
     MacroParser parser = BlogContext.getInstance().getMacroParser();

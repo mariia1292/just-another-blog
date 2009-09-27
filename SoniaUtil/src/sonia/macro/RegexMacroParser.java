@@ -77,7 +77,7 @@ public class RegexMacroParser extends MacroParser
    *
    * @return
    */
-  public MacroResult parseText(Map<String, ?> environment, String text)
+  public MacroResult parseText(Map<String, Object> environment, String text)
   {
     MacroResult result = new MacroResult();
     Pattern p = Pattern.compile(REGEX, Pattern.DOTALL);
@@ -142,7 +142,7 @@ public class RegexMacroParser extends MacroParser
       }
       else if (type.isAssignableFrom(Short.class))
       {
-        result = value;
+        result = Short.parseShort(value);
       }
       else if (type.isAssignableFrom(Integer.class))
       {

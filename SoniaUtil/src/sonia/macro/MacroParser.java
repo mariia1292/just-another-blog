@@ -97,7 +97,7 @@ public abstract class MacroParser
    *
    * @return
    */
-  public abstract MacroResult parseText(Map<String, ?> environment,
+  public abstract MacroResult parseText(Map<String, Object> environment,
           String text);
 
   /**

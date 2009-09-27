@@ -1,0 +1,35 @@
+<div id="tabs_${id}" class="tabContainer">
+  <div class="tabNav">
+    <table>
+      <tbody>
+        <tr>
+          <#list tabs as tab>
+            <td title="${tab.label}" class="tabButton <#if tab_index == 0>active<#else>inactive</#if>">
+              ${tab.label}
+            </td>
+          </#list>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="tabs" style="height: ${height}">
+    <#list tabs as tab>
+      <div title="${tab.label}" class="tab <#if tab_index == 0>active<#else>inactive</#if>">
+        ${tab.content}
+      </div>
+    </#list>
+  </div>
+</div>
+<script type="text/javascript">
+  $(document).ready(function(){
+    $(".tabButton").click(function(){
+      var label = $(this).text();
+      $("#tabs_${id} div.tab").fadeOut(300);
+      setTimeout(function(){
+        $("#tabs_${id} div.tab[title="+label+"]").fadeIn(500);
+      }, 305);
+      $("#tabs_${id} td.active").removeClass("active").addClass("inactive");
+      $("#tabs_${id} td[title="+label+"]").addClass("active").removeClass("inactive");
+    });
+  });
+</script>

@@ -83,8 +83,10 @@ public abstract class AbstractBlogMacro implements Macro
    *
    * @return
    */
-  public String doBody(Map<String, ?> environment, String body)
+  public String doBody(Map<String, Object> environment, String body)
   {
+    this.environment = environment;
+
     String result = null;
     ContentObject object = (ContentObject) environment.get("object");
     BlogRequest request = (BlogRequest) environment.get("request");
@@ -160,4 +162,9 @@ public abstract class AbstractBlogMacro implements Macro
   {
     return object instanceof Page;
   }
+
+  //~--- fields ---------------------------------------------------------------
+
+  /** Field description */
+  protected Map<String, Object> environment;
 }
