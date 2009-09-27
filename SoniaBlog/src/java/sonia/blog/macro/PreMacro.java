@@ -57,7 +57,7 @@ public class PreMacro implements Macro
    *
    * @return
    */
-  public String doBody(Map<String, ?> environment, String body)
+  public String doBody(Map<String, Object> environment, String body)
   {
     return body;
   }

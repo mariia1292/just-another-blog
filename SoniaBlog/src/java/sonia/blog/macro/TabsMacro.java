@@ -35,16 +35,17 @@ package sonia.blog.macro;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.app.BlogRequest;
-import sonia.blog.api.dao.BlogDAO;
-import sonia.blog.api.link.LinkBuilder;
-import sonia.blog.entity.Blog;
+import sonia.blog.api.app.Context;
+import sonia.blog.api.macro.AbstractBlogMacro;
+import sonia.blog.entity.ContentObject;
 
-import sonia.macro.Macro;
+import sonia.macro.MacroParser;
 
 //~--- JDK imports ------------------------------------------------------------
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -52,42 +53,81 @@ import java.util.Map;
  *
  * @author Sebastian Sdorra
  */
-public class BlogsMacro implements Macro
+public class TabsMacro extends AbstractBlogMacro
 {
+
+  /** Field description */
+  public static final String ENV_TABCONTAINER = "sonia.blog.tab-container";
+
+  /** Field description */
+  private static final String TEMPLATE = "/sonia/blog/macro/template/tabs.html";
+
+  //~--- methods --------------------------------------------------------------
 
   /**
    * Method description
    *
    *
-   * @param environment
+   * @param tab
+   */
+  public void addTab(TabMacro tab)
+  {
+    tabs.add(tab);
+  }
+
+  //~--- set methods ----------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   * @param height
+   */
+  public void setHeight(String height)
+  {
+    this.height = height;
+  }
+
+  //~--- methods --------------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   * @param request
+   * @param linkBase
+   * @param object
    * @param body
    *
    * @return
    */
-  public String doBody(Map<String, Object> environment, String body)
+  @Override
+  protected String doBody(BlogRequest request, String linkBase,
+                          ContentObject object, String body)
   {
-    StringBuffer result = new StringBuffer();
-    BlogRequest request = (BlogRequest) environment.get("request");
-    BlogDAO blogDAO = BlogContext.getDAOFactory().getBlogDAO();
-    List<Blog> blogs = blogDAO.getAll(true, 0, 100);
+    tabs = new ArrayList<TabMacro>();
+    environment.put(ENV_TABCONTAINER, this);
+    parser.parseText(environment, body);
+    environment.remove(ENV_TABCONTAINER);
 
-    if ((blogs != null) &&!blogs.isEmpty())
-    {
-      LinkBuilder linkBuilder = BlogContext.getInstance().getLinkBuilder();
+    Map<String, Object> env = new HashMap<String, Object>();
 
-      result.append("<ul>\n");
+    env.put("id", object.getId());
+    env.put("height", height);
+    env.put("tabs", tabs);
 
-      for (Blog blog : blogs)
-      {
-        result.append("<li>");
-        result.append("<a href=\"");
-        result.append(linkBuilder.buildLink(request, blog)).append("\">");
-        result.append(blog.getTitle()).append("</a>\n");
-      }
-
-      result.append("</ul>\n");
-    }
-
-    return result.toString();
+    return parseTemplate(env, TEMPLATE);
   }
+
+  //~--- fields ---------------------------------------------------------------
+
+  /** Field description */
+  private String height = "250px";
+
+  /** Field description */
+  @Context
+  private MacroParser parser;
+
+  /** Field description */
+  private List<TabMacro> tabs;
 }
