@@ -46,6 +46,8 @@ import sonia.blog.api.app.BlogRequest;
 import sonia.blog.api.app.BlogResponse;
 import sonia.blog.api.app.Constants;
 import sonia.blog.api.exception.BlogException;
+import sonia.blog.api.macro.WebMacro;
+import sonia.blog.api.macro.WebResource;
 import sonia.blog.api.util.AbstractBean;
 import sonia.blog.entity.Attachment;
 import sonia.blog.entity.Blog;
@@ -54,6 +56,9 @@ import sonia.blog.entity.Entry;
 import sonia.blog.entity.Page;
 
 import sonia.logging.LogManager;
+
+import sonia.macro.Macro;
+import sonia.macro.MacroResult;
 
 import sonia.util.Util;
 import sonia.util.XmlUtil;
@@ -102,6 +107,36 @@ public class BlogUtil
   private static Logger logger = Logger.getLogger(BlogUtil.class.getName());
 
   //~--- methods --------------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   * @param resources
+   * @param result
+   */
+  public static void addWebMacroResources(List<WebResource> resources,
+          MacroResult result)
+  {
+    List<Macro> macros = result.getMacros();
+
+    if (Util.hasContent(macros))
+    {
+      for (Macro macro : macros)
+      {
+        if (macro instanceof WebMacro)
+        {
+          WebMacro wm = (WebMacro) macro;
+          List<WebResource> wmRes = wm.getResources();
+
+          if (wmRes != null)
+          {
+            resources.addAll(wmRes);
+          }
+        }
+      }
+    }
+  }
 
   /**
    * Method description
