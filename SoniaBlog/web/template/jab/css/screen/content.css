@@ -294,6 +294,10 @@
   .tabs {
     width: 100%;
     border: 1px solid gray;
+    overflow: scroll;
+  }
+  .tabContainer .tab {
+    padding: 0.5em;
   }
   .tabs .inactive { display: none; }
 }

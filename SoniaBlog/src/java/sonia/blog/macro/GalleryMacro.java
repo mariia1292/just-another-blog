@@ -62,6 +62,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import sonia.blog.api.macro.browse.StringInputWidget;
 
 /**
  *
@@ -94,6 +95,70 @@ public class GalleryMacro extends AbstractBlogMacro implements WebMacro
   }
 
   //~--- set methods ----------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   * @param descriptionExclude
+   */
+  @MacroInfoParameter(
+    displayName = "macro.gallery.descriptionExclude.displayName",
+    description = "macro.gallery.descriptionExclude.description",
+    widget = StringInputWidget.class
+  )
+  public void setDescriptionExclude(String descriptionExclude)
+  {
+    this.descriptionExclude = descriptionExclude;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param descriptionInclude
+   */
+  @MacroInfoParameter(
+    displayName = "macro.gallery.descriptionInclude.displayName",
+    description = "macro.gallery.descriptionInclude.description",
+    widget = StringInputWidget.class
+  )
+  public void setDescriptionInclude(String descriptionInclude)
+  {
+    this.descriptionInclude = descriptionInclude;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param exclude
+   */
+  @MacroInfoParameter(
+    displayName = "macro.gallery.exclude.displayName",
+    description = "macro.gallery.exclude.description",
+    widget = StringInputWidget.class
+  )
+  public void setExclude(String exclude)
+  {
+    this.exclude = exclude;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param include
+   */
+  @MacroInfoParameter(
+    displayName = "macro.gallery.include.displayName",
+    description = "macro.gallery.include.description",
+    widget = StringInputWidget.class
+  )
+  public void setInclude(String include)
+  {
+    this.include = include;
+  }
 
   /**
    * Method description
@@ -189,6 +254,69 @@ public class GalleryMacro extends AbstractBlogMacro implements WebMacro
       images = attachmentDAO.getAllImages((Page) object);
     }
 
+    if (Util.hasContent(images))
+    {
+      List<Attachment> includeList = null;
+
+      if (Util.hasContent(include))
+      {
+        includeList = new ArrayList<Attachment>();
+
+        for (Attachment image : images)
+        {
+          if (include.matches(image.getName()))
+          {
+            includeList.add(image);
+          }
+        }
+      }
+
+      if (Util.hasContent(descriptionInclude))
+      {
+        if (includeList == null)
+        {
+          includeList = new ArrayList<Attachment>();
+        }
+
+        for (Attachment image : images)
+        {
+          if (descriptionInclude.matches(image.getDescription()))
+          {
+            includeList.add(image);
+          }
+        }
+      }
+
+      if (includeList != null)
+      {
+        images = includeList;
+      }
+
+      List<Attachment> removeList = new ArrayList<Attachment>();
+
+      if (Util.hasContent(exclude))
+      {
+        for (Attachment image : images)
+        {
+          if (exclude.matches(image.getName()))
+          {
+            removeList.add(image);
+          }
+        }
+      }
+
+      if (Util.hasContent(descriptionExclude))
+      {
+        for (Attachment image : images)
+        {
+          if (descriptionExclude.matches(image.getName()))
+          {
+            removeList.add(image);
+          }
+        }
+      }
+    }
+
     return images;
   }
 
@@ -197,6 +325,18 @@ public class GalleryMacro extends AbstractBlogMacro implements WebMacro
   /** Field description */
   @Dao
   private AttachmentDAO attachmentDAO;
+
+  /** Field description */
+  private String descriptionExclude;
+
+  /** Field description */
+  private String descriptionInclude;
+
+  /** Field description */
+  private String exclude;
+
+  /** Field description */
+  private String include;
 
   /** Field description */
   private List<WebResource> resources;
