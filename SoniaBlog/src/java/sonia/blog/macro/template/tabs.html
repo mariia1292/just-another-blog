@@ -22,7 +22,7 @@
 </div>
 <script type="text/javascript">
   $(document).ready(function(){
-    $(".tabButton").click(function(){
+    $("#tabs_${id} .tabButton").click(function(){
       var label = $(this).attr("title");
       $("#tabs_${id} div.tab").fadeOut(300);
       setTimeout(function(){
