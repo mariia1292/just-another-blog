@@ -31,41 +31,31 @@
 
 
 
-package sonia.blog.mapping;
-
-//~--- non-JDK imports --------------------------------------------------------
-
-import sonia.blog.api.mapping.MappingNavigation;
-import sonia.blog.entity.PermaObject;
-
-import sonia.util.Util;
+package sonia.blog.api.jsf.message;
 
 //~--- JDK imports ------------------------------------------------------------
 
-import java.text.MessageFormat;
+import javax.el.ValueExpression;
+
+import javax.faces.component.UIComponent;
+import javax.faces.webapp.UIComponentELTag;
 
 /**
  *
  * @author Sebastian Sdorra
  */
-public class SimpleMappingNavigation implements MappingNavigation
+public class MessageTag extends UIComponentELTag
 {
 
   /**
-   * Constructs ...
+   * Method description
    *
-   *
-   *
-   * @param previousUri
-   * @param nextUri
-   * @param detailPattern
    */
-  public SimpleMappingNavigation(String previousUri, String nextUri,
-                                 String detailPattern)
+  @Override
+  public void release()
   {
-    this.previousUri = previousUri;
-    this.nextUri = nextUri;
-    this.detailPattern = detailPattern;
+    super.release();
+    forComponent = null;
   }
 
   //~--- get methods ----------------------------------------------------------
@@ -74,52 +64,58 @@ public class SimpleMappingNavigation implements MappingNavigation
    * Method description
    *
    *
-   * @param object
+   * @return
+   */
+  @Override
+  public String getComponentType()
+  {
+    return MessageComponent.FAMILY;
+  }
+
+  /**
+   * Method description
+   *
    *
    * @return
    */
-  public String getDetailUri(PermaObject object)
+  @Override
+  public String getRendererType()
   {
-    String result = null;
+    return MessageComponent.RENDERER;
+  }
 
-    if (!Util.isBlank(detailPattern))
+  //~--- set methods ----------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   * @param forComponent
+   */
+  public void setFor(ValueExpression forComponent)
+  {
+    this.forComponent = forComponent;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param component
+   */
+  @Override
+  protected void setProperties(UIComponent component)
+  {
+    super.setProperties(component);
+
+    if (forComponent != null)
     {
-      result = MessageFormat.format(detailPattern, object.getId());
+      component.setValueExpression("for", forComponent);
     }
-
-    return result;
-  }
-
-  /**
-   * Method description
-   *
-   *
-   * @return
-   */
-  public String getNextUri()
-  {
-    return nextUri;
-  }
-
-  /**
-   * Method description
-   *
-   *
-   * @return
-   */
-  public String getPreviousUri()
-  {
-    return previousUri;
   }
 
   //~--- fields ---------------------------------------------------------------
 
   /** Field description */
-  private String detailPattern;
-
-  /** Field description */
-  private String nextUri;
-
-  /** Field description */
-  private String previousUri;
+  private ValueExpression forComponent;
 }

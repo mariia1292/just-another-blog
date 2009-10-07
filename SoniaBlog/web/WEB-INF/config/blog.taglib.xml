@@ -93,4 +93,20 @@
         </component>
     </tag>
 
+    <tag>
+        <tag-name>message</tag-name>
+        <component>
+            <component-type>sonia.blog.message</component-type>
+            <renderer-type>sonia.blog.message.renderer</renderer-type>
+        </component>
+    </tag>
+
+     <tag>
+        <tag-name>commentForm</tag-name>
+        <component>
+            <component-type>sonia.blog.commentForm</component-type>
+            <renderer-type>sonia.blog.commentForm.renderer</renderer-type>
+        </component>
+    </tag>
+
 </facelet-taglib>

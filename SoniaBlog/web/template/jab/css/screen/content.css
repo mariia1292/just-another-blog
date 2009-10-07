@@ -195,6 +195,10 @@
   #commentForm input[type=text] { width: 220pt; }
   #commentForm textarea { width: 220pt; height: 150pt; }
 
+  #commentForm .note {background: #fff; padding: 0; border-top: none; border-bottom: none;}
+  #commentForm .important {background: #fff; padding: 0; border-top: none; border-bottom: none;}
+  #commentForm .warning {background: #fff; padding: 0; border-top: none; border-bottom: none;}
+
   input.short { width: 80pt ; }
   .full { width: 100%; }
 

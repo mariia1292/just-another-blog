@@ -6,7 +6,8 @@
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:blog="http://jab.nitilon.org/blog/"
       xmlns:t="http://myfaces.apache.org/tomahawk"
-      xmlns:c="http://java.sun.com/jstl/core">
+      xmlns:c="http://java.sun.com/jstl/core"
+      xmlns:u1="http://jab.nitilon.org/blog/">
 
   <body>
 
@@ -74,7 +75,7 @@
 
         <t:div styleClass="comments" rendered="#{BlogBean.showComments}">
 
-          <a rel="comments"></a>
+          <a name="comments"></a>
 
           <h3><h:outputText value="#{label.comments}" /></h3>
 
@@ -106,45 +107,39 @@
 
           </h:dataTable>
 
-          <h:form id="commentForm" prependId="false">
-
+          <blog:commentForm id="commentForm" entry="#{BlogBean.entry}">
+            
             <h:panelGrid columns="3">
 
               <c:if test="#{! LoginBean.authenticated}">
 
                 <h:outputLabel for="name" value="#{label.name}" />
-                <h:inputText id="name" value="#{BlogBean.comment.authorName}" required="true" />
-                <h:message for="name" />
+                <h:inputText id="name" value="#{BlogBean.comment.authorName}" />
+                <blog:message for="name" />
 
                 <h:outputLabel for="mail" value="#{label.email}" />
-                <h:inputText id="mail" value="#{BlogBean.comment.authorMail}">
-                  <f:validator validatorId="validator.mail" />
-                </h:inputText>
-                <h:message for="mail" />
+                <h:inputText id="mail" value="#{BlogBean.comment.authorMail}" />
+                <blog:message for="mail" />
 
                 <h:outputLabel for="url" value="#{label.url}" />
-                <h:inputText id="url" value="#{BlogBean.comment.authorURL}">
-                  <f:validator validatorId="validator.url" />
-                </h:inputText>
-                <h:message for="url" />
+                <h:inputText id="url" value="#{BlogBean.comment.authorURL}" />
+                <blog:message for="url" />
 
               </c:if>
 
               <h:outputLabel for="commentContent" value="#{label.content}" />
-              <h:inputTextarea id="commentContent" value="#{BlogBean.comment.content}" required="true">
-                <f:validateLength maximum="255" />
-              </h:inputTextarea>
-              <h:message for="commentContent" />
+              <h:inputTextarea id="commentContent" value="#{BlogBean.comment.content}" />
+              <blog:message for="commentContent" />
 
               <blog:spamLabel method="#{BlogBean.spamInputMethod}" />
-              <blog:spamInput id="spam" />
-              <h:message for="spam" />
+              <h:inputText id="spam" />
+              <blog:message for="spam" />
 
             </h:panelGrid>
 
-            <h:commandButton value="#{label.save}" action="#{BlogBean.addComment}" />
+            <input type="submit" value="#{label.save}" />
 
-          </h:form>
+          </blog:commentForm>
 
         </t:div>
 

@@ -180,24 +180,27 @@ public class TagMapping extends ScrollableFilterMapping
 
       Entry next = entryDAO.getNextEntry(blog, tag, entry, true);
       Entry prev = entryDAO.getPreviousEntry(blog, tag, entry, true);
-      String prefix = "/tag/" + tag.getId() + "/";
-      LinkBuilder linkBuilder = BlogContext.getInstance().getLinkBuilder();
       String nextUri = null;
       String prevUri = null;
+      String baseLink =
+        new StringBuffer("/tag/").append(tag.getId()).append("/").toString();
 
       if (prev != null)
       {
-        prevUri = prefix + prev.getId() + ".jab";
-        prevUri = linkBuilder.buildLink(request, prevUri);
+        prevUri = new StringBuffer(baseLink).append(prev.getId()).append(
+          ".jab").toString();
       }
 
       if (next != null)
       {
-        nextUri = prefix + next.getId() + ".jab";
-        nextUri = linkBuilder.buildLink(request, nextUri);
+        nextUri = new StringBuffer(baseLink).append(next.getId()).append(
+          ".jab").toString();
       }
 
-      navigation = new SimpleMappingNavigation(prevUri, nextUri);
+      String detailPattern =
+        new StringBuffer(baseLink).append("{0,number,#}.jab").toString();
+
+      navigation = new SimpleMappingNavigation(prevUri, nextUri, detailPattern);
       result = buildTemplateViewId(request, Constants.TEMPLATE_DETAIL);
     }
 

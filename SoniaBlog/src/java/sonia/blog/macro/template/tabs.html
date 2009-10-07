@@ -4,7 +4,7 @@
       <tbody>
         <tr>
           <#list tabs as tab>
-            <td title="${tab.label}" class="tabButton <#if tab_index == 0>active<#else>inactive</#if>">
+            <td title="${tab.name}" class="tabButton <#if tab_index == 0>active<#else>inactive</#if>">
               ${tab.label}
             </td>
           </#list>
@@ -14,7 +14,7 @@
   </div>
   <div class="tabs" style="height: ${height}">
     <#list tabs as tab>
-      <div title="${tab.label}" class="tab <#if tab_index == 0>active<#else>inactive</#if>">
+      <div title="${tab.name}" class="tab <#if tab_index == 0>active<#else>inactive</#if>">
         ${tab.content}
       </div>
     </#list>

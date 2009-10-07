@@ -31,95 +31,44 @@
 
 
 
-package sonia.blog.mapping;
-
-//~--- non-JDK imports --------------------------------------------------------
-
-import sonia.blog.api.mapping.MappingNavigation;
-import sonia.blog.entity.PermaObject;
-
-import sonia.util.Util;
+package sonia.blog.api.jsf.message;
 
 //~--- JDK imports ------------------------------------------------------------
 
-import java.text.MessageFormat;
+import java.io.IOException;
+
+import javax.faces.component.UIComponent;
+import javax.faces.context.FacesContext;
+import javax.faces.context.ResponseWriter;
+import javax.faces.render.Renderer;
 
 /**
  *
  * @author Sebastian Sdorra
  */
-public class SimpleMappingNavigation implements MappingNavigation
+public class MessageRenderer extends Renderer
 {
 
   /**
-   * Constructs ...
-   *
-   *
-   *
-   * @param previousUri
-   * @param nextUri
-   * @param detailPattern
-   */
-  public SimpleMappingNavigation(String previousUri, String nextUri,
-                                 String detailPattern)
-  {
-    this.previousUri = previousUri;
-    this.nextUri = nextUri;
-    this.detailPattern = detailPattern;
-  }
-
-  //~--- get methods ----------------------------------------------------------
-
-  /**
    * Method description
    *
    *
-   * @param object
+   * @param context
+   * @param component
    *
-   * @return
+   * @throws IOException
    */
-  public String getDetailUri(PermaObject object)
+  @Override
+  public void encodeBegin(FacesContext context, UIComponent component)
+          throws IOException
   {
-    String result = null;
+    MessageComponent msgCmp = (MessageComponent) component;
+    String f = msgCmp.getFor();
+    ResponseWriter writer = context.getResponseWriter();
 
-    if (!Util.isBlank(detailPattern))
-    {
-      result = MessageFormat.format(detailPattern, object.getId());
-    }
-
-    return result;
+    writer.startElement("span", msgCmp);
+    writer.writeAttribute("id", "message_" + f, null);
+    writer.writeAttribute("style", "display: none", null);
+    writer.endElement("span");
   }
-
-  /**
-   * Method description
-   *
-   *
-   * @return
-   */
-  public String getNextUri()
-  {
-    return nextUri;
-  }
-
-  /**
-   * Method description
-   *
-   *
-   * @return
-   */
-  public String getPreviousUri()
-  {
-    return previousUri;
-  }
-
-  //~--- fields ---------------------------------------------------------------
-
-  /** Field description */
-  private String detailPattern;
-
-  /** Field description */
-  private String nextUri;
-
-  /** Field description */
-  private String previousUri;
 }

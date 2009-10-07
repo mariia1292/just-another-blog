@@ -114,7 +114,11 @@
     <load-on-startup>1</load-on-startup>
   </servlet>
 
-  <servlet-mapping>
+    <servlet>
+        <servlet-name>CommentAction</servlet-name>
+        <servlet-class>sonia.blog.wui.servlet.CommentAction</servlet-class>
+    </servlet>
+    <servlet-mapping>
     <servlet-name>Faces Servlet</servlet-name>
     <url-pattern>*.jab</url-pattern>
   </servlet-mapping>
@@ -142,7 +146,11 @@
 
   <!-- core config -->
 
-  <session-config>
+    <servlet-mapping>
+        <servlet-name>CommentAction</servlet-name>
+        <url-pattern>/create-comment</url-pattern>
+    </servlet-mapping>
+    <session-config>
     <session-timeout>
             30
     </session-timeout>

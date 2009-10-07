@@ -363,10 +363,14 @@ public class AsyncMapping extends FinalMapping
         while (messageIt.hasNext())
         {
           BlogMessage msg = messageIt.next();
+          String clientId = (msg.getClientId() != null)
+                            ? msg.getClientId()
+                            : "";
 
           writer.append("{ \"level\": ").append(
               Integer.toString(msg.getLevel())).append(
-              ", \"summary\": \"").append(msg.getSummary()).append(
+              ", \"clientId\": \"").append(clientId).append(
+              "\", \"summary\": \"").append(msg.getSummary()).append(
               "\", \"detail\": \"");
 
           if (msg.getDetail() != null)
