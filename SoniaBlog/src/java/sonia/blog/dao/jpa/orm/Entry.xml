@@ -122,8 +122,8 @@
         and
           e.published = true
         and
-          e.creationDate between :start and :end
-        order by e.publishingDate desc
+          e.publishingDate between :start and :end
+        order by e.publishingDate desc, e.title
       </query>
     </named-query>
     <named-query name="Entry.calendar">

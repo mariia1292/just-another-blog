@@ -190,8 +190,8 @@ public class DateMapping extends ScrollableFilterMapping
     {
       response.sendError(HttpServletResponse.SC_NOT_FOUND);
     }
-    else if ((entry.getCreationDate().getTime() < startDate.getTime())
-             || (entry.getCreationDate().getTime() > endDate.getTime()))
+    else if ((entry.getPublishingDate().getTime() < startDate.getTime())
+             || (entry.getPublishingDate().getTime() > endDate.getTime()))
     {
       response.sendError(HttpServletResponse.SC_BAD_REQUEST);
     }
