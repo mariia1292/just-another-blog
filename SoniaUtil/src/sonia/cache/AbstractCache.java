@@ -185,6 +185,17 @@ public abstract class AbstractCache implements ObjectCache
    *
    * @return
    */
+  public Map<String, Object> getAdvancedInformations()
+  {
+    return null;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
   public double getHitRatio()
   {
     double dHits = (double) hits;

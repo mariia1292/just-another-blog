@@ -37,6 +37,7 @@ package sonia.cache;
 
 import java.io.Serializable;
 
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -119,7 +120,15 @@ public interface ObjectCache extends Serializable
   public Object get(Object key);
 
   /**
-   * Returns the hit ratio of the cache
+   * Returns a map of advanced informations.
+   *
+   *
+   * @return a map of advanced informations
+   */
+  public Map<String, Object> getAdvancedInformations();
+
+  /**
+   * Returns the hit ratio of the cache.
    *
    *
    * @return the hit ratio of the cache

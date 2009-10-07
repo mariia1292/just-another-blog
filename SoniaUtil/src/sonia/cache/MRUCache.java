@@ -194,6 +194,14 @@ public class MRUCache extends AbstractCache
     remove(etr.getKey());
   }
 
+    @Override
+  public Map<String, Object> getAdvancedInformations()
+  {
+    Map<String,Object> informations = new HashMap<String, Object>();
+    informations.put("max-items", maxItems);
+    return informations;
+  }
+
   //~--- fields ---------------------------------------------------------------
 
   /** Field description */
