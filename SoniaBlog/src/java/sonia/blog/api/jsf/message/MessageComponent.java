@@ -31,41 +31,74 @@
 
 
 
-package sonia.blog.mapping;
-
-//~--- non-JDK imports --------------------------------------------------------
-
-import sonia.blog.api.mapping.MappingNavigation;
-import sonia.blog.entity.PermaObject;
-
-import sonia.util.Util;
+package sonia.blog.api.jsf.message;
 
 //~--- JDK imports ------------------------------------------------------------
 
-import java.text.MessageFormat;
+import javax.el.ValueExpression;
+
+import javax.faces.component.UIComponentBase;
+import javax.faces.context.FacesContext;
 
 /**
  *
  * @author Sebastian Sdorra
  */
-public class SimpleMappingNavigation implements MappingNavigation
+public class MessageComponent extends UIComponentBase
 {
+
+  /** Field description */
+  public static final String FAMILY = "sonia.blog.message";
+
+  /** Field description */
+  public static final String RENDERER = "sonia.blog.message.renderer";
+
+  //~--- constructors ---------------------------------------------------------
 
   /**
    * Constructs ...
    *
-   *
-   *
-   * @param previousUri
-   * @param nextUri
-   * @param detailPattern
    */
-  public SimpleMappingNavigation(String previousUri, String nextUri,
-                                 String detailPattern)
+  public MessageComponent()
   {
-    this.previousUri = previousUri;
-    this.nextUri = nextUri;
-    this.detailPattern = detailPattern;
+    setRendererType(RENDERER);
+  }
+
+  //~--- methods --------------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   * @param context
+   * @param obj
+   */
+  @Override
+  public void restoreState(FacesContext context, Object obj)
+  {
+    Object[] state = (Object[]) obj;
+
+    super.restoreState(context, state[0]);
+    forComponent = (String) state[1];
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param context
+   *
+   * @return
+   */
+  @Override
+  public Object saveState(FacesContext context)
+  {
+    Object[] state = new Object[2];
+
+    state[0] = super.saveState(context);
+    state[1] = forComponent;
+
+    return state;
   }
 
   //~--- get methods ----------------------------------------------------------
@@ -74,52 +107,49 @@ public class SimpleMappingNavigation implements MappingNavigation
    * Method description
    *
    *
-   * @param object
+   * @return
+   */
+  @Override
+  public String getFamily()
+  {
+    return FAMILY;
+  }
+
+  /**
+   * Method description
+   *
    *
    * @return
    */
-  public String getDetailUri(PermaObject object)
+  public String getFor()
   {
-    String result = null;
-
-    if (!Util.isBlank(detailPattern))
+    if (forComponent != null)
     {
-      result = MessageFormat.format(detailPattern, object.getId());
+      return forComponent;
     }
 
-    return result;
+    ValueExpression ve = getValueExpression("for");
+
+    return (ve != null)
+           ? (String) ve.getValue(getFacesContext().getELContext())
+           : null;
   }
+
+  //~--- set methods ----------------------------------------------------------
 
   /**
    * Method description
    *
    *
-   * @return
+   * @param forComponent
    */
-  public String getNextUri()
+  public void setFor(String forComponent)
   {
-    return nextUri;
-  }
-
-  /**
-   * Method description
-   *
-   *
-   * @return
-   */
-  public String getPreviousUri()
-  {
-    return previousUri;
+    this.forComponent = forComponent;
   }
 
   //~--- fields ---------------------------------------------------------------
 
   /** Field description */
-  private String detailPattern;
-
-  /** Field description */
-  private String nextUri;
-
-  /** Field description */
-  private String previousUri;
+  private String forComponent;
 }

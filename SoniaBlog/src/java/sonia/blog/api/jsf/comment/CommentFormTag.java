@@ -31,41 +31,34 @@
 
 
 
-package sonia.blog.mapping;
+package sonia.blog.api.jsf.comment;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import sonia.blog.api.mapping.MappingNavigation;
-import sonia.blog.entity.PermaObject;
-
-import sonia.util.Util;
+import sonia.jsf.base.BaseTag;
 
 //~--- JDK imports ------------------------------------------------------------
 
-import java.text.MessageFormat;
+import javax.el.ValueExpression;
+
+import javax.faces.component.UIComponent;
 
 /**
  *
  * @author Sebastian Sdorra
  */
-public class SimpleMappingNavigation implements MappingNavigation
+public class CommentFormTag extends BaseTag
 {
 
   /**
-   * Constructs ...
+   * Method description
    *
-   *
-   *
-   * @param previousUri
-   * @param nextUri
-   * @param detailPattern
    */
-  public SimpleMappingNavigation(String previousUri, String nextUri,
-                                 String detailPattern)
+  @Override
+  public void release()
   {
-    this.previousUri = previousUri;
-    this.nextUri = nextUri;
-    this.detailPattern = detailPattern;
+    super.release();
+    entry = null;
   }
 
   //~--- get methods ----------------------------------------------------------
@@ -74,52 +67,58 @@ public class SimpleMappingNavigation implements MappingNavigation
    * Method description
    *
    *
-   * @param object
+   * @return
+   */
+  @Override
+  public String getComponentType()
+  {
+    return CommentFormComponent.FAMILY;
+  }
+
+  /**
+   * Method description
+   *
    *
    * @return
    */
-  public String getDetailUri(PermaObject object)
+  @Override
+  public String getRendererType()
   {
-    String result = null;
+    return CommentFormComponent.RENDERER;
+  }
 
-    if (!Util.isBlank(detailPattern))
+  //~--- set methods ----------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   * @param entry
+   */
+  public void setEntry(ValueExpression entry)
+  {
+    this.entry = entry;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param component
+   */
+  @Override
+  protected void setProperties(UIComponent component)
+  {
+    super.setProperties(component);
+
+    if (entry != null)
     {
-      result = MessageFormat.format(detailPattern, object.getId());
+      component.setValueExpression("entry", entry);
     }
-
-    return result;
-  }
-
-  /**
-   * Method description
-   *
-   *
-   * @return
-   */
-  public String getNextUri()
-  {
-    return nextUri;
-  }
-
-  /**
-   * Method description
-   *
-   *
-   * @return
-   */
-  public String getPreviousUri()
-  {
-    return previousUri;
   }
 
   //~--- fields ---------------------------------------------------------------
 
   /** Field description */
-  private String detailPattern;
-
-  /** Field description */
-  private String nextUri;
-
-  /** Field description */
-  private String previousUri;
+  private ValueExpression entry;
 }

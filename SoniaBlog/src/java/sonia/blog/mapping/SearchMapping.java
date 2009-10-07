@@ -244,11 +244,10 @@ public class SearchMapping extends ScrollableFilterMapping
         result = buildTemplateViewId(request, Constants.TEMPLATE_PAGE);
       }
 
-      LinkBuilder builder = BlogContext.getInstance().getLinkBuilder();
-      String prefix = builder.buildLink(request, "/search.jab");
+      StringBuilder prefix = new StringBuilder("/search.jab");
 
-      prefix += "?category=" + category.getName();
-      prefix += "&search=" + searchParam + "&hit=";
+      prefix.append("?category=").append(category.getName());
+      prefix.append("&search=").append(searchParam).append("&hit=");
 
       String previousUri = null;
       String nextUri = null;
@@ -257,17 +256,21 @@ public class SearchMapping extends ScrollableFilterMapping
       {
         SearchEntry pe = entries.get(hit - 1);
 
-        previousUri = prefix + pe.getId();
+        previousUri = new StringBuilder(prefix).append(pe.getId()).toString();
       }
 
       if ((hit + 1) < entries.size())
       {
         SearchEntry ne = entries.get(hit + 1);
 
-        nextUri = prefix + ne.getId();
+        nextUri = new StringBuilder(prefix).append(ne.getId()).toString();
       }
 
-      navigation = new SimpleMappingNavigation(previousUri, nextUri);
+      String detailPattern =
+        new StringBuilder(prefix).append("{0,number,#}").toString();
+
+      navigation = new SimpleMappingNavigation(previousUri, nextUri,
+              detailPattern);
     }
 
     return result;

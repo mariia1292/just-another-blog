@@ -603,4 +603,38 @@
       <type>java.lang.object</type>
     </attribute>
   </tag>
+  <tag>
+    <name>message</name>
+    <tag-class>sonia.blog.api.jsf.messages.MessageTag</tag-class>
+    <body-content>empty</body-content>
+    <attribute>
+      <name>for</name>
+      <required>true</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.Object</type>
+    </attribute>
+  </tag>
+  <tag>
+    <name>commentForm</name>
+    <tag-class>sonia.blog.api.jsf.comment.CommentFormTag</tag-class>
+    <body-content>empty</body-content>
+    <attribute>
+      <name>id</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.Object</type>
+    </attribute>
+    <attribute>
+      <name>rendered</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.Object</type>
+    </attribute>
+    <attribute>
+      <name>entry</name>
+      <required>true</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.Object</type>
+    </attribute>
+  </tag>
 </taglib>

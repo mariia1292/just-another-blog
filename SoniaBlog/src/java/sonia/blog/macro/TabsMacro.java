@@ -42,6 +42,8 @@ import sonia.blog.entity.ContentObject;
 
 import sonia.macro.MacroParser;
 
+import sonia.util.Util;
+
 //~--- JDK imports ------------------------------------------------------------
 
 import java.util.ArrayList;
@@ -72,6 +74,11 @@ public class TabsMacro extends AbstractBlogMacro
    */
   public void addTab(TabMacro tab)
   {
+    if (Util.isBlank(tab.getName()))
+    {
+      tab.setName(nameBase + tabs.size());
+    }
+
     tabs.add(tab);
   }
 
@@ -106,6 +113,8 @@ public class TabsMacro extends AbstractBlogMacro
                           ContentObject object, String body)
   {
     tabs = new ArrayList<TabMacro>();
+    nameBase = new StringBuffer("tabs_").append(
+      object.getId().toString()).append("_").toString();
     environment.put(ENV_TABCONTAINER, this);
     parser.parseText(environment, body);
     environment.remove(ENV_TABCONTAINER);
@@ -123,6 +132,9 @@ public class TabsMacro extends AbstractBlogMacro
 
   /** Field description */
   private String height = "250px";
+
+  /** Field description */
+  private String nameBase;
 
   /** Field description */
   @Context

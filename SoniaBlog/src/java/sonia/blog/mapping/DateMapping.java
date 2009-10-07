@@ -165,7 +165,7 @@ public class DateMapping extends ScrollableFilterMapping
    *
    * @param request
    * @param response
-   * @param uriPrefix
+   * @param baseLink
    * @param id
    * @param startDate
    * @param endDate
@@ -175,7 +175,7 @@ public class DateMapping extends ScrollableFilterMapping
    * @throws IOException
    */
   private String handleDetailView(BlogRequest request, BlogResponse response,
-                                  String uriPrefix, Long id, Date startDate,
+                                  String baseLink, Long id, Date startDate,
                                   Date endDate)
           throws IOException
   {
@@ -207,23 +207,25 @@ public class DateMapping extends ScrollableFilterMapping
     Entry next = entryDAO.getNextEntry(blog, startDate, endDate, entry, true);
     Entry prev = entryDAO.getPreviousEntry(blog, startDate, endDate, entry,
                    true);
-    LinkBuilder linkBuilder = BlogContext.getInstance().getLinkBuilder();
     String nextUri = null;
     String prevUri = null;
 
     if (prev != null)
     {
-      prevUri = uriPrefix + prev.getId() + ".jab";
-      prevUri = linkBuilder.buildLink(request, prevUri);
+      prevUri = new StringBuilder(baseLink).append(prev.getId()).append(
+        ".jab").toString();
     }
 
     if (next != null)
     {
-      nextUri = uriPrefix + next.getId() + ".jab";
-      nextUri = linkBuilder.buildLink(request, nextUri);
+      nextUri = new StringBuilder(baseLink).append(next.getId()).append(
+        ".jab").toString();
     }
 
-    navigation = new SimpleMappingNavigation(prevUri, nextUri);
+    String detailPattern =
+      new StringBuilder(baseLink).append("{0,number,#}.jab").toString();
+
+    navigation = new SimpleMappingNavigation(prevUri, nextUri, detailPattern);
 
     return buildTemplateViewId(blog, Constants.TEMPLATE_DETAIL);
   }

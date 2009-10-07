@@ -55,45 +55,79 @@
     options = $.extend({},defaults, options);
 
     var $field = $(field);
+    var $ul = null;
 
     $field.empty();
 
     $.getJSON(url, function(result){
-      var $ul = null;
       $.each(result, function(index, item){
         if ( item.summary != "" ){
-          if ( $ul == null ){
-            $ul = $("<ul />");
-            if ( options.styleClass != null ){
-              $ul.addClass( options.styleClass );
-            }
-            if ( options.style != null ){
-              $ul.attr( "style", options.style );
-            }
+          if ( item.clientId != "" ){
+            append(item);
+          } else {
+            appendGlobal(item);
           }
-          var $li = $("<li />").text( item.summary );
-          switch ( item.level ){
-            case 0: 
-              $li.addClass( options.infoClass );
-              break;
-            case 1:
-              $li.addClass( options.warnClass );
-              break;
-            case 2:
-              $li.addClass( options.errorClass );
-              break;
-            case 3:
-              $li.addClass( options.fatalClass );
-              break;
-          }
-          $ul.append( $li );
         }
       });
 
       if ( $ul != null ){
         $field.append( $ul );
       }
+      
     });
+
+    function append(item){
+      var element = $("#message_" + item.clientId);
+      if ( element.length > 0 ){
+        addText(item, element);
+        addClass(item, element);
+        element.show();
+      }
+      else if (console != "undefined") {
+        console.debug( "#message_" + item.clientId + " not found" );
+      }
+    }
+
+    function addText(item, element){
+      element.text( item.summary );
+      if ( item.detail != "" ){
+        element.attr( "title", item.detail );
+      }
+    }
+
+    function addClass(item, element){
+      switch ( item.level ){
+        case 0:
+          element.addClass( options.infoClass );
+          break;
+        case 1:
+          element.addClass( options.warnClass );
+          break;
+        case 2:
+          element.addClass( options.errorClass );
+          break;
+        case 3:
+          element.addClass( options.fatalClass );
+          break;
+      }
+    }
+
+    function appendGlobal(item){
+      if ( $ul == null ){
+        $ul = $("<ul />");
+        if ( options.styleClass != null ){
+          $ul.addClass( options.styleClass );
+        }
+        if ( options.style != null ){
+          $ul.attr( "style", options.style );
+        }
+      }
+      var $li = $("<li />");
+      addText( item, $li );
+      addClass( item, $li );
+      $ul.append( $li );
+    }
+    
   }
 
   })(jQuery);

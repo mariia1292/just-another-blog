@@ -187,27 +187,26 @@ public class AuthorMapping extends ScrollableFilterMapping
 
       prefix.append(author.getId()).append("/");
 
-      LinkBuilder linkBuilder = BlogContext.getInstance().getLinkBuilder();
+      String baseLink = prefix.toString();
       String prevUri = null;
       String nextUri = null;
 
       if (prev != null)
       {
-        StringBuffer prevBuffer = new StringBuffer(prefix);
-
-        prevUri = prevBuffer.append(prev.getId()).append(".jab").toString();
-        prevUri = linkBuilder.buildLink(request, prevUri);
+        prevUri = new StringBuffer(baseLink).append(prev.getId()).append(
+          ".jab").toString();
       }
 
       if (next != null)
       {
-        StringBuffer nextBuffer = new StringBuffer(prefix);
-
-        nextUri = nextBuffer.append(next.getId()).append(".jab").toString();
-        nextUri = linkBuilder.buildLink(request, nextUri);
+        nextUri = new StringBuffer(baseLink).append(next.getId()).append(
+          ".jab").toString();
       }
 
-      navigation = new SimpleMappingNavigation(prevUri, nextUri);
+      String detailPattern =
+        new StringBuffer(baseLink).append("{0,number,#}.jab").toString();
+
+      navigation = new SimpleMappingNavigation(prevUri, nextUri, detailPattern);
       result = buildTemplateViewId(request, Constants.TEMPLATE_DETAIL);
     }
 

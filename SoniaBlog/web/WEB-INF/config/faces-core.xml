@@ -183,6 +183,24 @@
     </component-extension>
   </component>
 
+  <component>
+    <display-name>message</display-name>
+    <component-type>sonia.blog.message</component-type>
+    <component-class>sonia.blog.api.jsf.message.MessageComponent</component-class>
+    <component-extension>
+      <renderer-type>sonia.blog.message.renderer</renderer-type>
+    </component-extension>
+  </component>
+
+  <component>
+    <display-name>commentForm</display-name>
+    <component-type>sonia.blog.commentForm</component-type>
+    <component-class>sonia.blog.api.jsf.comment.CommentFormComponent</component-class>
+    <component-extension>
+      <renderer-type>sonia.blog.commentForm.renderer</renderer-type>
+    </component-extension>
+  </component>
+
   <render-kit>
     <renderer>
       <component-family>sonia.blog.header</component-family>
@@ -238,6 +256,16 @@
       <component-family>sonia.blog.messages</component-family>
       <renderer-type>sonia.blog.messages.renderer</renderer-type>
       <renderer-class>sonia.blog.api.jsf.messages.MessagesRenderer</renderer-class>
+    </renderer>
+    <renderer>
+      <component-family>sonia.blog.message</component-family>
+      <renderer-type>sonia.blog.message.renderer</renderer-type>
+      <renderer-class>sonia.blog.api.jsf.message.MessageRenderer</renderer-class>
+    </renderer>
+    <renderer>
+      <component-family>sonia.blog.commentForm</component-family>
+      <renderer-type>sonia.blog.commentForm.renderer</renderer-type>
+      <renderer-class>sonia.blog.api.jsf.comment.CommentFormRenderer</renderer-class>
     </renderer>
   </render-kit>
     

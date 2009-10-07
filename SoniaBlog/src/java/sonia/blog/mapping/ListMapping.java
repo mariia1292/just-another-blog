@@ -170,23 +170,26 @@ public class ListMapping extends ScrollableFilterMapping
       Blog blog = request.getCurrentBlog();
       Entry next = entryDAO.getNextEntry(blog, entry, true);
       Entry prev = entryDAO.getPreviousEntry(blog, entry, true);
-      LinkBuilder linkBuilder = BlogContext.getInstance().getLinkBuilder();
       String nextUri = null;
       String prevUri = null;
+      String baseLink = "/list/";
 
       if (prev != null)
       {
-        prevUri = "/list/" + prev.getId() + ".jab";
-        prevUri = linkBuilder.buildLink(request, prevUri);
+        prevUri = new StringBuilder(baseLink).append(prev.getId()).append(
+          ".jab").toString();
       }
 
       if (next != null)
       {
-        nextUri = "/list/" + next.getId() + ".jab";
-        nextUri = linkBuilder.buildLink(request, nextUri);
+        nextUri = new StringBuilder(baseLink).append(next.getId()).append(
+          ".jab").toString();
       }
 
-      navigation = new SimpleMappingNavigation(prevUri, nextUri);
+      String detailPattern =
+        new StringBuilder(baseLink).append("{0,number,#}.jab").toString();
+
+      navigation = new SimpleMappingNavigation(prevUri, nextUri, detailPattern);
       result = buildTemplateViewId(blog, Constants.TEMPLATE_DETAIL);
     }
 

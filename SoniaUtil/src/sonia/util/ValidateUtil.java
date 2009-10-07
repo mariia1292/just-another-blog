@@ -31,42 +31,28 @@
 
 
 
-package sonia.blog.mapping;
-
-//~--- non-JDK imports --------------------------------------------------------
-
-import sonia.blog.api.mapping.MappingNavigation;
-import sonia.blog.entity.PermaObject;
-
-import sonia.util.Util;
+package sonia.util;
 
 //~--- JDK imports ------------------------------------------------------------
 
-import java.text.MessageFormat;
+import java.net.MalformedURLException;
+import java.net.URL;
+
+import java.text.SimpleDateFormat;
 
 /**
  *
  * @author Sebastian Sdorra
  */
-public class SimpleMappingNavigation implements MappingNavigation
+public class ValidateUtil
 {
 
-  /**
-   * Constructs ...
-   *
-   *
-   *
-   * @param previousUri
-   * @param nextUri
-   * @param detailPattern
-   */
-  public SimpleMappingNavigation(String previousUri, String nextUri,
-                                 String detailPattern)
-  {
-    this.previousUri = previousUri;
-    this.nextUri = nextUri;
-    this.detailPattern = detailPattern;
-  }
+  /** Field description */
+  private static final String REGEX_DOMAINNAME = "^[A-z0-9][\\w\\-\\.]+$";
+
+  /** Field description */
+  private static final String REGEX_MAIL =
+    "^[A-z0-9][\\w.-]*@[A-z0-9][\\w\\-\\.]+\\.[A-z0-9]{2,6}$";
 
   //~--- get methods ----------------------------------------------------------
 
@@ -74,18 +60,20 @@ public class SimpleMappingNavigation implements MappingNavigation
    * Method description
    *
    *
-   * @param object
+   * @param dateFormat
    *
    * @return
    */
-  public String getDetailUri(PermaObject object)
+  public static boolean isDateFormat(String dateFormat)
   {
-    String result = null;
+    boolean result = false;
 
-    if (!Util.isBlank(detailPattern))
+    try
     {
-      result = MessageFormat.format(detailPattern, object.getId());
+      new SimpleDateFormat(dateFormat);
+      result = true;
     }
+    catch (IllegalArgumentException ex) {}
 
     return result;
   }
@@ -94,32 +82,47 @@ public class SimpleMappingNavigation implements MappingNavigation
    * Method description
    *
    *
+   * @param domainName
+   *
    * @return
    */
-  public String getNextUri()
+  public static boolean isDomainName(String domainName)
   {
-    return nextUri;
+    return Util.hasContent(domainName) && domainName.matches(REGEX_DOMAINNAME);
   }
 
   /**
    * Method description
    *
    *
+   * @param mail
+   *
    * @return
    */
-  public String getPreviousUri()
+  public static boolean isMail(String mail)
   {
-    return previousUri;
+    return Util.hasContent(mail) && mail.matches(REGEX_MAIL);
   }
 
-  //~--- fields ---------------------------------------------------------------
+  /**
+   * Method description
+   *
+   *
+   * @param url
+   *
+   * @return
+   */
+  public static boolean isUrl(String url)
+  {
+    boolean result = false;
 
-  /** Field description */
-  private String detailPattern;
+    try
+    {
+      new URL(url);
+      result = true;
+    }
+    catch (MalformedURLException ex) {}
 
-  /** Field description */
-  private String nextUri;
-
-  /** Field description */
-  private String previousUri;
+    return result;
+  }
 }
