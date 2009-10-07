@@ -38,9 +38,13 @@ package sonia.blog.macro;
 import sonia.blog.api.app.BlogRequest;
 import sonia.blog.api.app.Context;
 import sonia.blog.api.macro.AbstractBlogMacro;
+import sonia.blog.api.macro.WebMacro;
+import sonia.blog.api.macro.WebResource;
 import sonia.blog.entity.ContentObject;
 
+import sonia.macro.Macro;
 import sonia.macro.MacroParser;
+import sonia.macro.MacroResult;
 
 import sonia.util.Util;
 
@@ -55,7 +59,7 @@ import java.util.Map;
  *
  * @author Sebastian Sdorra
  */
-public class TabsMacro extends AbstractBlogMacro
+public class TabsMacro extends AbstractBlogMacro implements WebMacro
 {
 
   /** Field description */
@@ -80,6 +84,19 @@ public class TabsMacro extends AbstractBlogMacro
     }
 
     tabs.add(tab);
+  }
+
+  //~--- get methods ----------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  public List<WebResource> getResources()
+  {
+    return resources;
   }
 
   //~--- set methods ----------------------------------------------------------
@@ -113,6 +130,7 @@ public class TabsMacro extends AbstractBlogMacro
                           ContentObject object, String body)
   {
     tabs = new ArrayList<TabMacro>();
+    resources = new ArrayList<WebResource>();
     nameBase = new StringBuffer("tabs_").append(
       object.getId().toString()).append("_").toString();
     environment.put(ENV_TABCONTAINER, this);
@@ -139,6 +157,9 @@ public class TabsMacro extends AbstractBlogMacro
   /** Field description */
   @Context
   private MacroParser parser;
+
+  /** Field description */
+  private List<WebResource> resources;
 
   /** Field description */
   private List<TabMacro> tabs;

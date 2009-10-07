@@ -36,6 +36,8 @@ package sonia.blog.macro;
 //~--- non-JDK imports --------------------------------------------------------
 
 import sonia.blog.api.app.Context;
+import sonia.blog.api.macro.WebResource;
+import sonia.blog.util.BlogUtil;
 
 import sonia.macro.Macro;
 import sonia.macro.MacroParser;
@@ -43,6 +45,8 @@ import sonia.macro.MacroResult;
 
 //~--- JDK imports ------------------------------------------------------------
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -70,6 +74,11 @@ public class TabMacro implements Macro
     TabsMacro macro = (TabsMacro) environment.get(TabsMacro.ENV_TABCONTAINER);
 
     macro.addTab(this);
+
+    List<WebResource> resources = new ArrayList<WebResource>();
+
+    BlogUtil.addWebMacroResources(resources, result);
+    macro.getResources().addAll(resources);
 
     return "";
   }
