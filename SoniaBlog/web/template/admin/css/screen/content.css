@@ -273,5 +273,40 @@
   ul.feeds li {
     margin-left: 0;
   }
+
+ /**
+  * Tabs
+  *
+  */
+  .tabContainer {
+    width: 100%;
+  }
+  .tabContainer table {
+    padding: 0;
+    margin: 0 0 0 1px;
+    border-collapse: collapse;
+  }
+  .tabContainer td {
+    padding: 0.5em;
+    border-top: 1px solid gray;
+    border-left: 1px solid gray;
+    border-right: 1px solid gray;
+  }
+  .tabContainer td.active {
+    border-bottom: medium none !important;
+  }
+  .tabContainer td.inactive {
+    background-color: #ccc;
+    cursor: pointer;
+  }
+  .tabs {
+    width: 100%;
+    border: 1px solid gray;
+    overflow: auto;
+  }
+  .tabContainer .tab {
+    padding: 0.5em;
+  }
+  .tabs .inactive { display: none; }
 }
 
