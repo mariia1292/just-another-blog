@@ -294,7 +294,7 @@
   .tabs {
     width: 100%;
     border: 1px solid gray;
-    overflow: scroll;
+    overflow: auto;
   }
   .tabContainer .tab {
     padding: 0.5em;
