@@ -126,6 +126,37 @@ public class BlogResponse extends HttpServletResponseWrapper
     super.addIntHeader(name, value);
   }
 
+  /**
+   * Method description
+   *
+   *
+   * @param sc
+   *
+   * @throws IOException
+   */
+  @Override
+  public void sendError(int sc) throws IOException
+  {
+    statusCode = sc;
+    super.sendError(sc);
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param sc
+   * @param msg
+   *
+   * @throws IOException
+   */
+  @Override
+  public void sendError(int sc, String msg) throws IOException
+  {
+    statusCode = sc;
+    super.sendError(sc, msg);
+  }
+
   //~--- get methods ----------------------------------------------------------
 
   /**
@@ -136,7 +167,7 @@ public class BlogResponse extends HttpServletResponseWrapper
    */
   public ResponseCacheObject getCachedObject()
   {
-    if (cacheEnabled && (cacheWriter != null || cacheStream != null))
+    if (cacheEnabled && ((cacheWriter != null) || (cacheStream != null)))
     {
       try
       {
@@ -191,8 +222,19 @@ public class BlogResponse extends HttpServletResponseWrapper
     {
       result = super.getOutputStream();
     }
-    
+
     return result;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  public int getStatusCode()
+  {
+    return statusCode;
   }
 
   /**
@@ -279,6 +321,33 @@ public class BlogResponse extends HttpServletResponseWrapper
     super.setContentType(type);
   }
 
+  /**
+   * Method description
+   *
+   *
+   * @param sc
+   */
+  @Override
+  public void setStatus(int sc)
+  {
+    statusCode = sc;
+    super.setStatus(sc);
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param sc
+   * @param sm
+   */
+  @Override
+  public void setStatus(int sc, String sm)
+  {
+    statusCode = sc;
+    super.setStatus(sc, sm);
+  }
+
   //~--- fields ---------------------------------------------------------------
 
   /** Field description */
@@ -292,6 +361,9 @@ public class BlogResponse extends HttpServletResponseWrapper
 
   /** Field description */
   private StringWriter cacheWriter;
+
+  /** Field description */
+  private int statusCode = HttpServletResponse.SC_OK;
 
   /** Field description */
   private ServletOutputStream stream;

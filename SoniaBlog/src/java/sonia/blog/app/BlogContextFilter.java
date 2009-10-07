@@ -281,7 +281,8 @@ public class BlogContextFilter implements Filter
       chain.doFilter(request, response);
     }
 
-    if ((cache != null) && (cacheKey != null) && response.isCacheEnabled())
+    if ((cache != null) && (cacheKey != null) && response.isCacheEnabled()
+        && (response.getStatusCode() < 300))
     {
       ResponseCacheObject cacheObject = response.getCachedObject();
 
