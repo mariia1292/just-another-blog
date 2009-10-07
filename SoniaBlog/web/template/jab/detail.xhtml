@@ -85,6 +85,8 @@
 
               <h:graphicImage value="/avatar/#{Comment.author.avatar}" 
                               rendered="#{Comment.author != null &amp;&amp; Comment.author.avatar != null}" />
+              <h:graphicImage value="/avatar/unknown.gif"
+                              rendered="#{Comment.author == null || Comment.author.avatar == null}" />
 
             </h:column>
 

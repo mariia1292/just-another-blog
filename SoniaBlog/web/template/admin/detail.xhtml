@@ -5,7 +5,8 @@
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:blog="http://jab.nitilon.org/blog/"
-      xmlns:t="http://myfaces.apache.org/tomahawk">
+      xmlns:t="http://myfaces.apache.org/tomahawk"
+      xmlns:c="http://java.sun.com/jstl/core">
 
   <body>
 
@@ -83,6 +84,8 @@
 
               <h:graphicImage value="/avatar/#{Comment.author.avatar}"
                               rendered="#{Comment.author != null &amp;&amp; Comment.author.avatar != null}" />
+              <h:graphicImage value="/avatar/unknown.gif"
+                              rendered="#{Comment.author == null || Comment.author.avatar == null}" />
 
             </h:column>
 
