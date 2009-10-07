@@ -71,7 +71,7 @@ public class RandomMapping extends FilterMapping
    */
   public MappingNavigation getMappingNavigation()
   {
-    return null;
+    return navigation;
   }
 
   //~--- methods --------------------------------------------------------------
@@ -115,6 +115,15 @@ public class RandomMapping extends FilterMapping
       }
     }
 
+    String detailPattern = "/list/{0,number,#}.jab";
+
+    navigation = new SimpleMappingNavigation(null, null, detailPattern);
+
     return buildTemplateViewId(blog, Constants.TEMPLATE_DETAIL);
   }
+
+  //~--- fields ---------------------------------------------------------------
+
+  /** Field description */
+  private MappingNavigation navigation;
 }
