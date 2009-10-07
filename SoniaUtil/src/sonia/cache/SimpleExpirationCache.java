@@ -98,7 +98,9 @@ public class SimpleExpirationCache extends AbstractCache
 
     if (Util.hasContent(checkParam))
     {
-      if (Boolean.parseBoolean(checkParam))
+      intervalCheck = Boolean.parseBoolean(checkParam);
+
+      if (intervalCheck)
       {
         createTimer(name);
       }
@@ -192,6 +194,23 @@ public class SimpleExpirationCache extends AbstractCache
    *
    * @return
    */
+  @Override
+  public Map<String, Object> getAdvancedInformations()
+  {
+    Map<String, Object> informations = new HashMap<String, Object>();
+
+    informations.put(PARAMETER_EXPIRATIONTIME, expirationTime);
+    informations.put(PARAMETER_INTERVALCHECK, intervalCheck);
+
+    return informations;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
   public Map<Object, CacheObject> getCacheMap()
   {
     return cacheMap;
@@ -231,4 +250,7 @@ public class SimpleExpirationCache extends AbstractCache
 
   /** Field description */
   private long expirationTime;
+
+  /** Field description */
+  private boolean intervalCheck;
 }

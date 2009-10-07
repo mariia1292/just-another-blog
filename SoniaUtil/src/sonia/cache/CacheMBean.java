@@ -37,6 +37,8 @@ package sonia.cache;
 
 import java.text.NumberFormat;
 
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -157,6 +159,10 @@ public class CacheMBean implements DynamicMBean
       out.append(numberFormat.format(cache.getHitRatio())).append("%");
       result = out.toString();
     }
+    else if (cache.getAdvancedInformations() != null)
+    {
+      result = cache.getAdvancedInformations().get(attribute);
+    }
 
     return result;
   }
@@ -249,7 +255,15 @@ public class CacheMBean implements DynamicMBean
    */
   private MBeanAttributeInfo[] getAttributeInformation()
   {
-    MBeanAttributeInfo[] attributeInfo = new MBeanAttributeInfo[6];
+    Map<String, Object> informations = cache.getAdvancedInformations();
+    int size = 6;
+
+    if (informations != null)
+    {
+      size += informations.size();
+    }
+
+    MBeanAttributeInfo[] attributeInfo = new MBeanAttributeInfo[size];
 
     attributeInfo[0] = new MBeanAttributeInfo("name", String.class.getName(),
             "the name of the cache", true, false, false);
@@ -265,6 +279,19 @@ public class CacheMBean implements DynamicMBean
     attributeInfo[5] = new MBeanAttributeInfo("hitRatio",
             String.class.getName(), "the hitRatio of the cache", true, false,
             false);
+
+    if (informations != null)
+    {
+      int i = 6;
+
+      for (Entry<String, Object> entry : informations.entrySet())
+      {
+        attributeInfo[i] = new MBeanAttributeInfo(entry.getKey(),
+                entry.getValue().getClass().getName(), "advanced information",
+                true, false, false);
+        i++;
+      }
+    }
 
     return attributeInfo;
   }
