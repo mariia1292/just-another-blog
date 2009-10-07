@@ -55,6 +55,7 @@ import sonia.blog.wui.BlogBean;
 import sonia.blog.wui.PageBean;
 import sonia.blog.wui.SearchBean;
 
+import sonia.cache.Cacheable;
 import sonia.cache.ObjectCache;
 
 import sonia.util.Util;
@@ -74,6 +75,7 @@ import javax.servlet.ServletException;
  *
  * @author Sebastian Sdorra
  */
+@Cacheable
 public class SearchMapping extends ScrollableFilterMapping
 {
 

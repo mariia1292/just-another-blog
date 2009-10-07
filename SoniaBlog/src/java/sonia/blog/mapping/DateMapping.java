@@ -48,6 +48,8 @@ import sonia.blog.entity.Entry;
 import sonia.blog.util.BlogUtil;
 import sonia.blog.wui.BlogBean;
 
+import sonia.cache.Cacheable;
+
 //~--- JDK imports ------------------------------------------------------------
 
 import java.io.IOException;
@@ -66,6 +68,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author Sebastian Sdorra
  */
+@Cacheable
 public class DateMapping extends ScrollableFilterMapping
 {
 
