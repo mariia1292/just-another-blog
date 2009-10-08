@@ -416,7 +416,7 @@ public class BlogBean extends AbstractBean
     {
       List<? extends PageNavigation> pageNav =
         BlogContext.getDAOFactory().getPageDAO().getAllRoot(
-            request.getCurrentBlog());
+            request.getCurrentBlog(), true);
 
       if (pageNav != null)
       {
