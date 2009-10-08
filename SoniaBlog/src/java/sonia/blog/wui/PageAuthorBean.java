@@ -197,14 +197,22 @@ public class PageAuthorBean extends AbstractEditorBean
   {
     String result = SUCCESS;
 
-    if (pageDAO.remove(getBlogSession(), page))
+    if (Util.isEmpty(pageDAO.getChildren(page.toPageNavigation())))
     {
-      newPage();
-      getMessageHandler().info(getRequest(), "removePageSuccess");
+      if (pageDAO.remove(getBlogSession(), page))
+      {
+        newPage();
+        getMessageHandler().info(getRequest(), "removePageSuccess");
+      }
+      else
+      {
+        getMessageHandler().error(getRequest(), "removePageFailure");
+        result = FAILURE;
+      }
     }
     else
     {
-      getMessageHandler().error(getRequest(), "removePageFailure");
+      getMessageHandler().warn(getRequest(), "removePageFailureChildren");
       result = FAILURE;
     }
 
