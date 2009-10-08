@@ -137,6 +137,17 @@ public class Page
    *
    * @return
    */
+  public PageNavigation toPageNavigation()
+  {
+    return this;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
   @Override
   public String toString()
   {
