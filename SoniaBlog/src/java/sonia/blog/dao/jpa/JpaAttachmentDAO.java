@@ -45,6 +45,7 @@ import sonia.blog.entity.Page;
 //~--- JDK imports ------------------------------------------------------------
 
 import java.util.List;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.persistence.EntityManager;
@@ -225,21 +226,35 @@ public class JpaAttachmentDAO extends JpaGenericDAO<Attachment>
    */
   public Attachment findByBlogAndId(Blog blog, Long id)
   {
-    Attachment attachment = null;
-    EntityManager em = createEntityManager();
+    Attachment attachment = get(id);
 
-    try
+    if (attachment != null)
     {
-      Query q = em.createNamedQuery("Attachment.findByBlogAndId");
+      Entry e = attachment.getEntry();
+      Page p = attachment.getPage();
 
-      q.setParameter("blog", blog);
-      q.setParameter("id", id);
-      attachment = (Attachment) q.getSingleResult();
+      if (!(((e != null) && e.getBlog().equals(blog))
+            || ((p != null) && p.getBlog().equals(blog))))
+      {
+        attachment = null;
+
+        if (logger.isLoggable(Level.WARNING))
+        {
+          StringBuffer msg = new StringBuffer();
+
+          msg.append("attachment ").append(id);
+          msg.append(" is not an an attachment of ");
+          msg.append(blog.getIdentifier());
+          logger.warning(msg.toString());
+        }
+      }
     }
-    catch (NoResultException ex) {}
-    finally
+    else if (logger.isLoggable(Level.WARNING))
     {
-      em.close();
+      StringBuffer msg = new StringBuffer();
+
+      msg.append("could not find attachment with id ").append(id);
+      logger.warning(msg.toString());
     }
 
     return attachment;

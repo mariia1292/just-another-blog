@@ -15,11 +15,6 @@
         select a from Attachment a join a.entry e where e = :entry order by a.creationDate desc
       </query>
     </named-query>
-    <named-query name="Attachment.findByBlogAndId">
-      <query>
-        select a from Attachment a join a.entry e join e.blog b where b = :blog and a.id = :id
-      </query>
-    </named-query>
     <named-query name="Attachment.findAllImagesByEntry">
       <query>
         select a from Attachment a join a.entry e where e = :entry and a.mimeType like 'image/%'
