@@ -128,4 +128,8 @@
     <impl class="sonia.blog.search.DefaultSearchProvider" />
   </service>
 
+  <service class="sonia.blog.api.editor.EditorProvider" path="/app/editor">
+    <impl class="sonia.blog.editor.TinyMCEProvider" />
+  </service>
+
 </services>
