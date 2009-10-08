@@ -41,6 +41,7 @@ import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.app.BlogRequest;
 import sonia.blog.api.app.Constants;
 import sonia.blog.api.app.ResourceManager;
+import sonia.blog.api.editor.EditorProvider;
 import sonia.blog.api.link.LinkBuilder;
 import sonia.blog.api.util.AbstractBean;
 import sonia.blog.entity.Attachment;
@@ -52,6 +53,8 @@ import sonia.macro.Macro;
 import sonia.macro.MacroParser;
 import sonia.macro.browse.MacroInformation;
 import sonia.macro.browse.MacroInformationProvider;
+
+import sonia.plugin.service.ServiceReference;
 
 import sonia.util.Util;
 
@@ -438,6 +441,35 @@ public abstract class AbstractEditorBean extends AbstractBean
    *
    * @return
    */
+  public String getEditor()
+  {
+    ServiceReference<EditorProvider> reference =
+      BlogContext.getInstance().getServiceRegistry().get(EditorProvider.class,
+        Constants.SERVICE_EDITORPROVIDER);
+
+    if (reference != null)
+    {
+      editorProvider = reference.get();
+    }
+
+    String result = "";
+
+    if (editorProvider != null)
+    {
+      result = editorProvider.renderEditor(getRequest(),
+              new String[] { "content",
+                             "teaser" });
+    }
+
+    return result;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
   public String getImageHandlerUri()
   {
     BlogRequest request = getRequest();
@@ -796,6 +828,9 @@ public abstract class AbstractEditorBean extends AbstractBean
 
   /** Field description */
   private File directory;
+
+  /** Field description */
+  private EditorProvider editorProvider;
 
   /** Field description */
   private String imageSize = "";
