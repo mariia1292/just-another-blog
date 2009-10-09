@@ -94,6 +94,7 @@ public class DashboardBean extends AbstractBean
     {
       EntryBean entryBean = getEntryBean();
 
+      entryBean.setSessionVar();
       entryBean.edit(draft);
     }
     else
