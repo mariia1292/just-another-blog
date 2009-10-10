@@ -64,7 +64,8 @@ import java.util.Map;
   name = "toc",
   displayName = "macro.toc.displayName",
   description = "macro.toc.description",
-  resourceBundle = "sonia.blog.resources.label"
+  resourceBundle = "sonia.blog.resources.label",
+  preview = false
 )
 public class TOCMacro extends AbstractBlogMacro implements WebMacro
 {

@@ -113,8 +113,9 @@ public class DefaultMacroInformationProvider extends MacroInformationProvider
     String displayName = getString(bundle, macro.displayName());
     String description = getString(bundle, macro.description());
     String icon = getString(bundle, macro.icon());
+    boolean preview = macro.preview();
     MacroInformation info = new MacroInformation(name, displayName,
-                              description, icon);
+                              description, icon, preview);
     Class<? extends MacroWidget> widget = macro.bodyWidget();
 
     if (widget != null)

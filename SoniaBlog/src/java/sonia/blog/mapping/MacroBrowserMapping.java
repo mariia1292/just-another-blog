@@ -327,6 +327,8 @@ public class MacroBrowserMapping extends FinalMapping
         {
           writer.append("  { ");
           printBasicInfo(writer, info);
+          writer.append(", \"preview\":").append(
+              Boolean.toString(info.isPreview()));
 
           ContentObject co = getContentObject(request);
           Class<? extends MacroWidget> bodyWidget = info.getBodyWidget();
