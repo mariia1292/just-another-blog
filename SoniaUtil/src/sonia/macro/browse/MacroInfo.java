@@ -57,4 +57,5 @@ public @interface MacroInfo
   String resourceBundle()                   default "";
   Class<? extends MacroWidget> bodyWidget() default MacroWidget.class;
   String widgetParam()                      default "";
+  boolean preview()                         default true;
 }

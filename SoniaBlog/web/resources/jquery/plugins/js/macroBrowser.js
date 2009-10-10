@@ -142,7 +142,9 @@
         $form
       );
       appendInsertButton();
-      appendPreviewButton();
+      if ( content.preview ){
+        appendPreviewButton();
+      }
       appendListButton();
     }
 

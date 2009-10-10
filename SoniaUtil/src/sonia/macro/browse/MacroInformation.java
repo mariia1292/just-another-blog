@@ -113,16 +113,38 @@ public class MacroInformation
    * @param displayName
    * @param description
    * @param icon
+   * @param preview
+   */
+  public MacroInformation(String name, String displayName, String description,
+                          String icon, boolean preview)
+  {
+    this.name = name;
+    this.displayName = displayName;
+    this.description = description;
+    this.icon = icon;
+    this.preview = preview;
+  }
+
+  /**
+   * Constructs ...
+   *
+   *
+   * @param name
+   * @param displayName
+   * @param description
+   * @param icon
+   * @param preview
    * @param parameter
    */
   public MacroInformation(String name, String displayName, String description,
-                          String icon,
+                          String icon, boolean preview,
                           List<MacroInformationParameter> parameter)
   {
     this.name = name;
     this.displayName = displayName;
     this.description = description;
     this.icon = icon;
+    this.preview = preview;
     this.parameter = parameter;
   }
 
@@ -207,6 +229,17 @@ public class MacroInformation
     return widgetParam;
   }
 
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  public boolean isPreview()
+  {
+    return preview;
+  }
+
   //~--- set methods ----------------------------------------------------------
 
   /**
@@ -279,6 +312,17 @@ public class MacroInformation
    * Method description
    *
    *
+   * @param preview
+   */
+  public void setPreview(boolean preview)
+  {
+    this.preview = preview;
+  }
+
+  /**
+   * Method description
+   *
+   *
    * @param widgetParam
    */
   public void setWidgetParam(String widgetParam)
@@ -307,6 +351,9 @@ public class MacroInformation
 
   /** Field description */
   private List<MacroInformationParameter> parameter;
+
+  /** Field description */
+  private boolean preview;
 
   /** Field description */
   private String widgetParam;
