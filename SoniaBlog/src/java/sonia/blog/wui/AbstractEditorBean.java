@@ -457,8 +457,8 @@ public abstract class AbstractEditorBean extends AbstractBean
     if (editorProvider != null)
     {
       result = editorProvider.renderEditor(getRequest(),
-              new String[] { "content",
-                             "teaser" });
+              new String[] { "editorForm:content",
+                             "editorForm:teaser" });
     }
 
     return result;
