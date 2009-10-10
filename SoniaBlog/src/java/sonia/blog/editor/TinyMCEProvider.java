@@ -67,16 +67,32 @@ public class TinyMCEProvider implements EditorProvider
 
     result.append("<script type=\"text/javascript\" src=\"");
     result.append(request.getContextPath());
-    result.append("/resources/tiny_mce/tiny_mce.js\"></script>\n");
+    result.append("/resources/tiny_mce/jquery.tinymce.js\"></script>\n");
     result.append("<script type=\"text/javascript\">\n");
-    result.append("tinyMCE.init({\n");
+    result.append("$(document).ready(function(){\n");
+    result.append("$(\"");
+
+    for (int i = 0; i < ids.length; i++)
+    {
+      if (i > 0)
+      {
+        result.append(", ");
+      }
+
+      result.append("#").append(ids[i].replaceAll(":", "\\\\\\\\:"));
+    }
+
+    result.append("\").tinymce({");
+    result.append("script_url : \"");
+    result.append(request.getContextPath());
+    result.append("/resources/tiny_mce/tiny_mce.js\",\n");
     result.append("theme : \"advanced\",\n");
     result.append("mode : \"textareas\",\n");
     result.append("skin : \"jab\",\n");
 
     /*
      * result.append("language: \"").append(request.getLocale().toString()).append(
-     *   "\",\n");
+     * "\",\n");
      */
     result.append(
         "plugins : \"fullscreen,safari,emotions,imgbrowser,attachment,links,table,macro,imgresize\",\n");
@@ -105,6 +121,7 @@ public class TinyMCEProvider implements EditorProvider
     result.append("fullscreen_settings : {\n");
     result.append("theme_advanced_path_location : \"top\"\n");
     result.append("}\n");
+    result.append("});\n");
     result.append("});\n");
     result.append("</script>\n");
 
