@@ -67,7 +67,6 @@ import java.util.logging.Logger;
 
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIParameter;
-import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 
 /**
@@ -97,8 +96,6 @@ public class PageAuthorBean extends AbstractEditorBean
   {
     super();
     page = new Page();
-
-    FacesContext ctx;
   }
 
   //~--- methods --------------------------------------------------------------
@@ -236,6 +233,7 @@ public class PageAuthorBean extends AbstractEditorBean
     if (page.getTitle() == null)
     {
       page.setTitle("NewPage " + blog.getDateFormatter().format(new Date()));
+      page.setPublished(false);
     }
 
     if (page.getNavigationTitle() == null)

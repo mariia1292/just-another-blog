@@ -775,7 +775,7 @@ public class EntryBean extends AbstractEditorBean
    * Method description
    *
    */
-  private void setSessionVar()
+  public void setSessionVar()
   {
     getRequest().getSession().setAttribute("editor", "entry");
   }

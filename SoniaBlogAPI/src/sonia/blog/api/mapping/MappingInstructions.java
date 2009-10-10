@@ -66,6 +66,17 @@ public class MappingInstructions
    *
    * @return
    */
+  public String[] getCacheKeys()
+  {
+    return CacheManager.getCacheKeys(mappingClass);
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
   public Class<? extends Mapping> getMappingClass()
   {
     return mappingClass;
