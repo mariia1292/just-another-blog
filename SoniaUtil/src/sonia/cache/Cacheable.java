@@ -48,4 +48,8 @@ import java.lang.annotation.Target;
 @Documented
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Cacheable {}
+public @interface Cacheable
+{
+  
+  String[] value() default {};
+}

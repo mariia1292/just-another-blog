@@ -75,7 +75,7 @@ import javax.servlet.ServletException;
  *
  * @author Sebastian Sdorra
  */
-@Cacheable
+@Cacheable({"user"})
 public class SearchMapping extends ScrollableFilterMapping
 {
 

@@ -98,6 +98,27 @@ public class CacheManager
    *
    * @return
    */
+  public static String[] getCacheKeys(Class<?> clazz)
+  {
+    String[] result = null;
+    Cacheable ca = clazz.getAnnotation(Cacheable.class);
+
+    if (ca != null)
+    {
+      result = ca.value();
+    }
+
+    return result;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param clazz
+   *
+   * @return
+   */
   public static boolean isCacheable(Class<?> clazz)
   {
     return clazz.getAnnotation(Cacheable.class) != null;

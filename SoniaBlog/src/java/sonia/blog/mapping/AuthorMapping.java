@@ -70,7 +70,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author Sebastian Sdorra
  */
-@Cacheable
+@Cacheable({"user"})
 public class AuthorMapping extends ScrollableFilterMapping
 {
 

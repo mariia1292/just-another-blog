@@ -185,20 +185,37 @@ public class BlogContextFilter implements Filter
    *
    *
    * @param request
+   * @param cacheKeys
    *
    * @return
    */
-  private String createCacheKey(BlogRequest request)
+  private String createCacheKey(BlogRequest request, String[] cacheKeys)
   {
     StringBuffer result = new StringBuffer();
 
     result.append(request.getCurrentBlog().getId()).append(":");
     result.append(request.getRequestURI()).append(":");
     result.append(request.getQueryString()).append(":");
-    result.append(request.getRedirect()).append(":");
-    result.append((request.getUser() != null)
-                  ? request.getUser().getId()
-                  : -1);
+    result.append(request.getRedirect());
+
+    if (cacheKeys != null)
+    {
+      for (String key : cacheKeys)
+      {
+        if (key.equalsIgnoreCase("user"))
+        {
+          result.append(":user=");
+          result.append((request.getUser() != null)
+                        ? request.getUser().getId()
+                        : -1);
+        }
+        else if (key.equalsIgnoreCase("ip"))
+        {
+          result.append(":ip=");
+          result.append(request.getRemoteAddr());
+        }
+      }
+    }
 
     return result.toString();
   }
@@ -249,7 +266,7 @@ public class BlogContextFilter implements Filter
     if ((cache != null) && (instructions != null) && instructions.isCacheable()
         && (request.getParameter(PARAM_DONTCACHE) == null))
     {
-      cacheKey = createCacheKey(request);
+      cacheKey = createCacheKey(request, instructions.getCacheKeys());
 
       ResponseCacheObject cacheObject =
         (ResponseCacheObject) cache.get(cacheKey);
@@ -265,6 +282,7 @@ public class BlogContextFilter implements Filter
           logger.fine(msg.toString());
         }
 
+        response.setHeader("x-jab-cache", "true");
         cacheObject.apply(response);
         process = false;
       }

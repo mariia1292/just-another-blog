@@ -77,7 +77,7 @@ public class StringInputWidget extends AbstractBlogMacroWidget
     Map<String, String> params = buildParameterMap(param);
 
     formElement.append("<input type=\"text\" name=\"").append(name);
-    formElement.append("\"");
+    formElement.append("\" id=\"").append(name).append("\"");
 
     if ((params != null) &&!params.isEmpty())
     {
@@ -85,7 +85,7 @@ public class StringInputWidget extends AbstractBlogMacroWidget
 
       if (Util.hasContent(value))
       {
-        formElement.append("value=\"").append(value).append("\"");
+        formElement.append(" value=\"").append(value).append("\"");
       }
     }
 

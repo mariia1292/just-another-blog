@@ -90,11 +90,11 @@ public class TinyMCEProvider implements EditorProvider
     if (Util.hasContent(contentCSS))
     {
       contentCSS = linkBuilder.getRelativeLink(request, contentCSS);
-      result.append("content_css : \"").append(contentCSS).append("\"");
+      result.append("content_css : \"").append(contentCSS).append("?_=\"");
       result.append(" + new Date().getTime(),\n");
     }
 
-    String baseUrl = linkBuilder.buildLink(request, "/");
+    String baseUrl = linkBuilder.buildLink(request, "");
 
     result.append("convert_urls : false,\n");
     result.append("document_base_url : \"").append(baseUrl);
