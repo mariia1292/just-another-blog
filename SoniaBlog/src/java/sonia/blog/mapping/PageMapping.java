@@ -58,12 +58,13 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  *
  * @author Sebastian Sdorra
  */
-@Cacheable({"user"})
+@Cacheable({ "user" })
 public class PageMapping extends FilterMapping
 {
 
@@ -121,6 +122,10 @@ public class PageMapping extends FilterMapping
           {
             setPage(request, page);
             result = Constants.TEMPLATE_PAGE;
+          }
+          else
+          {
+            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
           }
         }
         catch (NumberFormatException ex)

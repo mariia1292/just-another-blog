@@ -154,6 +154,10 @@ public class FeedMapping extends FinalMapping
         {
           items = buildCommentItems(request, response, linkBuilder, null, max);
         }
+        else
+        {
+          response.sendError(HttpServletResponse.SC_NOT_FOUND);
+        }
       }
       catch (NumberFormatException ex)
       {
