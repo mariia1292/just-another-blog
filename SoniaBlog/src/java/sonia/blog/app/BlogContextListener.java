@@ -116,6 +116,10 @@ public class BlogContextListener implements ServletContextListener
     "/sonia/blog/dao/jpa/profile/mysql-profile.properties";
 
   /** Field description */
+  private static final String DBPROFILE_MYSQLINNODB =
+    "/sonia/blog/dao/jpa/profile/mysql-innodb-profile.properties";
+
+  /** Field description */
   private static final String DBPROFILE_ORACLE =
     "/sonia/blog/dao/jpa/profile/oracle-profile.properties";
 
@@ -413,7 +417,7 @@ public class BlogContextListener implements ServletContextListener
     // register database profiles
     registry.register(String.class, Constants.SERVICE_DBPROFILE).add(
         DBPROFILE_DERBYEMBEDDED).add(DBPROFILE_DERBY).add(DBPROFILE_MYSQL).add(
-        DBPROFILE_ORACLE).add(DBPROFILE_POSTGRESQL);
+        DBPROFILE_MYSQLINNODB).add(DBPROFILE_ORACLE).add(DBPROFILE_POSTGRESQL);
 
     MappingHandler mappingHandler = new DefaultMappingHandler();
 
