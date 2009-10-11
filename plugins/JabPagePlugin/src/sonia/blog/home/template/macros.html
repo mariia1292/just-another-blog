@@ -1,0 +1,16 @@
+<table<#if style ??> style="${style}"</#if><#if styleClass ??> class="${class}"</#if>>
+  <thead>
+    <tr>
+      <th>DisplayName</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <#list macros as macro>
+    <tr>
+      <td>${macro.displayName}</td>
+      <td>${macro.description}</td>
+    </tr>
+    </#list>
+  </tbody>
+</table>
