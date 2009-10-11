@@ -171,6 +171,7 @@
         <include name="ScriptingPlugin.jar" />
         <include name="DevelPlugin.jar" />
         <include name="WebIntegrationPlugin.jar" />
+        <include name="JabPagePlugin.jar" />
       </fileset>
     </move>
     <mkdir dir="${dist.dir}/plugins/OfficePlugin" />

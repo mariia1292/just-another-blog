@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+    Document   : plugin.xml
+    Created on : October 11, 2009, 11:35 AM
+    Author     : Sebastian Sdorra
+    Description:
+        Purpose of the document follows.
+-->
+
+<plugin  xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+   xmlns='http://dev.sonia.de/schema/plugin-schema'
+   xsi:schemaLocation='http://dev.sonia.de/schema/plugin-schema file:/Users/sdorra/Projects/jab/SoniaUtil/src/sonia/plugin/plugin-schema.xsd'>
+  <name>jab.page</name>
+  <display-name>JAB Homepage</display-name>
+  <description>adds Macros for the jab homepage</description>
+  <version>0.0.1</version>
+  <vendor>Sebastian Sdorra</vendor>
+  <activator>sonia.blog.home.PluginActivator</activator>
+  <autostart>true</autostart>
+</plugin>

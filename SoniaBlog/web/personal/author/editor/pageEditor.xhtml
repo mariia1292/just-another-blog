@@ -52,7 +52,7 @@
           }
           function updateHiddenField(){
             var value = $("#navigationPosition").val();
-            $("#pageForm\\:navigationPos").val(value);
+            $("#editorForm\\:navigationPos").val(value);
           }
           $(document).ready(function(){
             updateNavigationOptions("<h:outputText value="#{PageAuthorBean.page.parent.id}" rendered="#{!PageAuthorBean.new &amp;&amp; PageAuthorBean.page.parent != null}" />"

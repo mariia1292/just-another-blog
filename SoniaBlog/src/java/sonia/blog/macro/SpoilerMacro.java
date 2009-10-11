@@ -36,7 +36,6 @@ package sonia.blog.macro;
 //~--- non-JDK imports --------------------------------------------------------
 
 import sonia.blog.api.app.BlogContext;
-import sonia.blog.api.macro.ScriptResource;
 import sonia.blog.api.macro.WebMacro;
 import sonia.blog.api.macro.WebResource;
 import sonia.blog.api.macro.browse.CheckboxWidget;
@@ -88,12 +87,6 @@ public class SpoilerMacro implements WebMacro
     }
 
     resources = new ArrayList<WebResource>();
-
-    String linkBase = (String) environment.get("linkBase");
-    ScriptResource jquery = new ScriptResource(20,
-                              linkBase + "resources/jquery/jquery.min.js");
-
-    resources.add(jquery);
 
     long time = System.nanoTime();
     StringBuffer result = new StringBuffer();

@@ -1,0 +1,20 @@
+<table<#if style ??> style="${style}"</#if><#if styleClass ??> class="${class}"</#if>>
+  <thead>
+    <tr>
+      <th>DisplayName</th>
+      <th>Description</th>
+      <th>Version</th>
+      <th>Vendor</th>
+    </tr>
+  </thead>
+  <tbody>
+    <#list plugins as plugin>
+    <tr>
+      <td>${plugin.displayName}</td>
+      <td>${plugin.description}</td>
+      <td>${plugin.version}</td>
+      <td>${plugin.vendor}</td>
+    </tr>
+    </#list>
+  </tbody>
+</table>

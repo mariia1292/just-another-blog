@@ -80,11 +80,11 @@ public class SearchRenderer extends BaseRenderer
     if (isRendered(context, searchCompnent))
     {
       renderBegin(context, searchCompnent, writer);
-    }
 
-    if (searchCompnent.isAutoComplete())
-    {
-      renderAutoComplete(context, searchCompnent, writer);
+      if (searchCompnent.isAutoComplete())
+      {
+        renderAutoComplete(context, searchCompnent, writer);
+      }
     }
   }
 
@@ -112,6 +112,7 @@ public class SearchRenderer extends BaseRenderer
     {
       ResponseWriter writer = context.getResponseWriter();
 
+      writer.endElement("div");
       writer.endElement("form");
     }
   }
@@ -216,6 +217,7 @@ public class SearchRenderer extends BaseRenderer
     writer.startElement("form", searchComponent);
     writer.writeAttribute("action", searchUri, null);
     writer.writeAttribute("method", "get", null);
+    writer.startElement("div", null);
 
     if (searchComponent.getStyle() != null)
     {
