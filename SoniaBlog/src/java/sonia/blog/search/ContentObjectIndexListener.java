@@ -40,6 +40,9 @@ import org.apache.lucene.document.Document;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.Term;
+import org.apache.lucene.store.Directory;
+import org.apache.lucene.store.FSDirectory;
+import org.apache.lucene.util.Version;
 
 import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.app.Constants;
@@ -145,7 +148,9 @@ public class ContentObjectIndexListener implements DAOListener
 
       try
       {
-        IndexWriter writer = new IndexWriter(blogDir, new StandardAnalyzer(),
+        Directory directory = FSDirectory.open(blogDir);
+        IndexWriter writer = new IndexWriter(directory,
+                               new StandardAnalyzer(Version.LUCENE_CURRENT),
                                IndexWriter.MaxFieldLength.UNLIMITED);
 
         writer.addDocument(doc);
@@ -189,7 +194,8 @@ public class ContentObjectIndexListener implements DAOListener
       {
         try
         {
-          IndexReader reader = IndexReader.open(blogDir);
+          Directory directory = FSDirectory.open(blogDir);
+          IndexReader reader = IndexReader.open(directory, false);
           Term term = new Term("tid", tid);
           int delCount = reader.deleteDocuments(term);
 
