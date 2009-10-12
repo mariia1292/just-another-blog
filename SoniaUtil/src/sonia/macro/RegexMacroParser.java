@@ -59,7 +59,7 @@ public class RegexMacroParser extends MacroParser
 
   /** Field description */
   private static final String REGEX =
-    "\\{([a-zA-Z0-9]*)([:;=/-_a-zA-Z0-9]*)\\b[^\\}]*\\}(.*?)\\{/\\1\\}";
+    "\\{([a-zA-Z0-9]*)([:;=/-_\\.,a-zA-Z0-9]*)\\b[^\\}]*\\}(.*?)\\{/\\1\\}";
 
   /** Field description */
   private static Logger logger =
