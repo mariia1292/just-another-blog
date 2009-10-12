@@ -69,7 +69,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author Sebastian Sdorra
  */
-@Cacheable({"user"})
+@Cacheable({ "user", "locale" })
 public class TagMapping extends ScrollableFilterMapping
 {
 
