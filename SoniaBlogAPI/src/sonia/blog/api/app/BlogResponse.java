@@ -179,7 +179,7 @@ public class BlogResponse extends HttpServletResponseWrapper
         else
         {
           writer.flush();
-          cacheObject.setContent(cacheWriter.toString().getBytes());
+          cacheObject.setContent(cacheWriter.toString().getBytes("UTF-8"));
         }
       }
       catch (IOException ex)
