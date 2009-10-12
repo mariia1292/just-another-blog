@@ -204,15 +204,17 @@ public class BlogContextFilter implements Filter
       {
         if (key.equalsIgnoreCase("user"))
         {
-          result.append(":user=");
-          result.append((request.getUser() != null)
-                        ? request.getUser().getId()
-                        : -1);
+          result.append(":user=").append((request.getUser() != null)
+                                         ? request.getUser().getId()
+                                         : -1);
         }
         else if (key.equalsIgnoreCase("ip"))
         {
-          result.append(":ip=");
-          result.append(request.getRemoteAddr());
+          result.append(":ip=").append(request.getRemoteAddr());
+        }
+        else if (key.equalsIgnoreCase("locale"))
+        {
+          result.append(":locale=").append(request.getLocale().toString());
         }
       }
     }
