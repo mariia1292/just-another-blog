@@ -35,18 +35,27 @@ package sonia.blog.search;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import org.apache.lucene.analysis.Analyzer;
+import org.apache.lucene.analysis.de.GermanAnalyzer;
+import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.DateTools;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
+import org.apache.lucene.util.Version;
 
 import org.w3c.dom.Comment;
 
+import sonia.blog.entity.Blog;
 import sonia.blog.entity.ContentObject;
 import sonia.blog.entity.Entry;
 import sonia.blog.entity.Page;
 import sonia.blog.entity.PermaObject;
 
 import sonia.util.Util;
+
+//~--- JDK imports ------------------------------------------------------------
+
+import java.util.Locale;
 
 /**
  *
@@ -124,6 +133,43 @@ public class SearchHelper
   }
 
   //~--- get methods ----------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   * @param blog
+   *
+   * @return
+   */
+  public static Analyzer getAnalyzer(Blog blog)
+  {
+    return getAnalyzer(blog.getLocale());
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param locale
+   *
+   * @return
+   */
+  public static Analyzer getAnalyzer(Locale locale)
+  {
+    Analyzer analyzer = null;
+
+    if (Locale.GERMAN.equals(locale))
+    {
+      analyzer = new GermanAnalyzer();
+    }
+    else
+    {
+      analyzer = new StandardAnalyzer(Version.LUCENE_CURRENT);
+    }
+
+    return analyzer;
+  }
 
   /**
    * Method description

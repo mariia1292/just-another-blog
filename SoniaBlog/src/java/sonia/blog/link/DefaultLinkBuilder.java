@@ -96,42 +96,42 @@ public class DefaultLinkBuilder implements LinkBuilder
    */
   public String buildLink(BlogRequest request, Blog blog, String link)
   {
-    String prefix = "";
+    StringBuffer result = new StringBuffer();
 
     if (!link.contains("://"))
     {
       if (request.isSecure())
       {
-        prefix = "https://";
+        result.append("https://");
       }
       else
       {
-        prefix = "http://";
+        result.append("http://");
       }
 
       if (blog != null)
       {
-        prefix += blog.getIdentifier();
+        result.append(blog.getIdentifier());
       }
       else if (BlogContext.getInstance().isInstalled())
       {
-        prefix += request.getCurrentBlog().getIdentifier();
+        result.append(request.getCurrentBlog().getIdentifier());
       }
       else
       {
-        prefix += request.getServerName();
+        result.append(request.getServerName());
       }
 
-      prefix += ":" + request.getServerPort();
-      prefix += request.getContextPath();
+      result.append(":").append(request.getServerPort());
+      result.append(request.getContextPath());
 
       if (!link.startsWith("/"))
       {
-        prefix += "/";
+        result.append("/");
       }
     }
 
-    return prefix + link;
+    return result.append(link).toString();
   }
 
   /**
@@ -145,15 +145,15 @@ public class DefaultLinkBuilder implements LinkBuilder
    */
   public String buildLink(BlogRequest request, PermaObject object)
   {
-    String link = null;
+    StringBuffer link = new StringBuffer();
 
     if (object instanceof Blog)
     {
-      link = buildLink(request, (Blog) object, "");
+      link.append(buildLink(request, (Blog) object, ""));
     }
     else
     {
-      link = buildLink(request, "");
+      link.append(buildLink(request, ""));
 
       if (object instanceof ContentObject)
       {
@@ -165,37 +165,37 @@ public class DefaultLinkBuilder implements LinkBuilder
 
           if (navigation != null)
           {
-            link = navigation.getDetailUri(object);
+            link = new StringBuffer(navigation.getDetailUri(object));
           }
         }
         else if (object instanceof Entry)
         {
-          link += "list/" + object.getId() + ".jab";
+          link.append("list/").append(object.getId()).append(".jab");
         }
         else if (object instanceof Page)
         {
-          link += "page/" + object.getId() + ".jab";
+          link.append("page/").append(object.getId()).append(".jab");
         }
       }
       else if (object instanceof Category)
       {
-        link += "category/" + object.getId() + "/index.jab";
+        link.append("category/").append(object.getId()).append("/index.jab");
       }
       else if (object instanceof Tag)
       {
-        link += "tag/" + ((Tag) object).getId() + "/index.jab";
+        link.append("tag/").append(object.getId()).append("/index.jab");
       }
       else if (object instanceof Attachment)
       {
-        link += "attachment/" + object.getId();
+        link.append("attachment/").append(object.getId());
       }
       else if (object instanceof User)
       {
-        link += "author/" + object.getId() + "/index.jab";
+        link.append("author/").append(object.getId()).append("/index.jab");
       }
     }
 
-    return link;
+    return link.toString();
   }
 
   /**

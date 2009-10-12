@@ -51,6 +51,8 @@ import org.apache.lucene.search.highlight.QueryScorer;
 import org.apache.lucene.search.highlight.SimpleHTMLFormatter;
 import org.apache.lucene.search.highlight.TextFragment;
 import org.apache.lucene.search.highlight.TokenSources;
+import org.apache.lucene.store.Directory;
+import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.util.Version;
 
 import sonia.blog.api.app.BlogContext;
@@ -79,8 +81,6 @@ import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.apache.lucene.store.Directory;
-import org.apache.lucene.store.FSDirectory;
 
 /**
  *
@@ -141,10 +141,11 @@ public class DefaultSearchProvider implements SearchProvider
         try
         {
           Directory directory = FSDirectory.open(blogDirectory);
+
           reader = IndexReader.open(directory, true);
           searcher = new IndexSearcher(reader);
 
-          Analyzer analyzer = new StandardAnalyzer(Version.LUCENE_CURRENT);
+          Analyzer analyzer = SearchHelper.getAnalyzer(locale);
           QueryParser parser = new MultiFieldQueryParser(new String[] {
                                  "content",
                                  "title" }, analyzer);
