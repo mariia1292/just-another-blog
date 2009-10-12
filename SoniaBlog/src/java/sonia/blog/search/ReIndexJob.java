@@ -115,9 +115,8 @@ public class ReIndexJob implements BlogJob
 
       Directory directory = FSDirectory.open(file);
 
-      writer = new IndexWriter(directory,
-                               new StandardAnalyzer(Version.LUCENE_CURRENT),
-                               true, IndexWriter.MaxFieldLength.UNLIMITED);
+      writer = new IndexWriter(directory, SearchHelper.getAnalyzer(blog), true,
+                               IndexWriter.MaxFieldLength.UNLIMITED);
 
       EntryDAO entryDAO = BlogContext.getDAOFactory().getEntryDAO();
       List<Entry> entries = entryDAO.findAllActivesByBlog(blog);

@@ -150,7 +150,7 @@ public class ContentObjectIndexListener implements DAOListener
       {
         Directory directory = FSDirectory.open(blogDir);
         IndexWriter writer = new IndexWriter(directory,
-                               new StandardAnalyzer(Version.LUCENE_CURRENT),
+                               SearchHelper.getAnalyzer(co.getBlog()),
                                IndexWriter.MaxFieldLength.UNLIMITED);
 
         writer.addDocument(doc);
