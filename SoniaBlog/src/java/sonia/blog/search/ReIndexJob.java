@@ -38,6 +38,9 @@ package sonia.blog.search;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.IndexWriter;
+import org.apache.lucene.store.Directory;
+import org.apache.lucene.store.FSDirectory;
+import org.apache.lucene.util.Version;
 
 import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.app.BlogJob;
@@ -110,8 +113,11 @@ public class ReIndexJob implements BlogJob
         file.mkdirs();
       }
 
-      writer = new IndexWriter(file, new StandardAnalyzer(), true,
-                               IndexWriter.MaxFieldLength.UNLIMITED);
+      Directory directory = FSDirectory.open(file);
+
+      writer = new IndexWriter(directory,
+                               new StandardAnalyzer(Version.LUCENE_CURRENT),
+                               true, IndexWriter.MaxFieldLength.UNLIMITED);
 
       EntryDAO entryDAO = BlogContext.getDAOFactory().getEntryDAO();
       List<Entry> entries = entryDAO.findAllActivesByBlog(blog);
