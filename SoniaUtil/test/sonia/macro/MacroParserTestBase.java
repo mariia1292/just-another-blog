@@ -145,7 +145,7 @@ public abstract class MacroParserTestBase
      *
      * @return
      */
-    public String doBody(Map<String, ?> environment, String body)
+    public String doBody(Map<String, Object> environment, String body)
     {
       return "BODY: " + body;
     }
@@ -171,7 +171,7 @@ public abstract class MacroParserTestBase
      *
      * @return
      */
-    public String doBody(Map<String, ?> environment, String body)
+    public String doBody(Map<String, Object> environment, String body)
     {
       return p1 + "=" + (n1 + n2);
     }
@@ -243,7 +243,7 @@ public abstract class MacroParserTestBase
      *
      * @return
      */
-    public String doBody(Map<String, ?> environment, String body)
+    public String doBody(Map<String, Object> environment, String body)
     {
       return "Hello from SimpleMacro";
     }
@@ -253,7 +253,7 @@ public abstract class MacroParserTestBase
   //~--- fields ---------------------------------------------------------------
 
   /** Field description */
-  private Map<String, String> env = new HashMap<String, String>();
+  private Map<String, Object> env = new HashMap<String, Object>();
 
   /** Field description */
   private MacroParser parser;
