@@ -35,9 +35,7 @@ package sonia.blog.office;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.app.BlogRequest;
-import sonia.blog.api.app.Constants;
 import sonia.blog.api.dao.AttachmentDAO;
 import sonia.blog.api.dao.Dao;
 import sonia.blog.api.macro.AbstractBlogMacro;
@@ -45,42 +43,33 @@ import sonia.blog.api.macro.LinkResource;
 import sonia.blog.api.macro.ScriptResource;
 import sonia.blog.api.macro.WebMacro;
 import sonia.blog.api.macro.WebResource;
+import sonia.blog.api.macro.browse.AttachmentWidget;
+import sonia.blog.api.macro.browse.SelectWidget;
+import sonia.blog.api.macro.browse.StringTextAreaWidget;
 import sonia.blog.entity.Attachment;
-import sonia.blog.entity.Blog;
 import sonia.blog.entity.ContentObject;
-import sonia.blog.entity.Entry;
 
-import sonia.config.Config;
+import sonia.macro.browse.MacroInfo;
+import sonia.macro.browse.MacroInfoParameter;
 
 //~--- JDK imports ------------------------------------------------------------
 
-import com.sun.pdfview.PDFFile;
-import com.sun.pdfview.PDFPage;
-
-import java.awt.Graphics2D;
-import java.awt.Image;
-import java.awt.Rectangle;
-import java.awt.image.BufferedImage;
-
-import java.io.File;
-import java.io.FilenameFilter;
-import java.io.IOException;
-import java.io.RandomAccessFile;
-
-import java.nio.ByteBuffer;
-import java.nio.channels.FileChannel;
-
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
-import javax.imageio.ImageIO;
+import java.util.Map;
 
 /**
  *
  * @author Sebastian Sdorra
  */
+@MacroInfo(
+  name = "pdfviewer",
+  displayName = "macro.pdfviewer.displayName",
+  description = "macro.pdfviewer.description",
+  resourceBundle = "sonia.blog.office.label",
+  bodyWidget = StringTextAreaWidget.class
+)
 public class PdfViewerMacro extends AbstractBlogMacro implements WebMacro
 {
 
@@ -88,11 +77,11 @@ public class PdfViewerMacro extends AbstractBlogMacro implements WebMacro
   public static final String NAME = "pdfviewer";
 
   /** Field description */
-  private static String PDFMIMETYPE = "application/pdf";
+  private static final String PDFMIMETYPE = "application/pdf";
 
   /** Field description */
-  private static Logger logger =
-    Logger.getLogger(PdfViewerMacro.class.getName());
+  private static final String TEMPLATE =
+    "/sonia/blog/office/template/pdfgallery.html";
 
   //~--- get methods ----------------------------------------------------------
 
@@ -115,6 +104,12 @@ public class PdfViewerMacro extends AbstractBlogMacro implements WebMacro
    *
    * @param id
    */
+  @MacroInfoParameter(
+    displayName = "macro.pdfviewer.id.displayName",
+    description = "macro.pdfviewer.id.description",
+    widget = AttachmentWidget.class,
+    widgetParam = ".*\\.pdf"
+  )
   public void setId(Long id)
   {
     this.id = id;
@@ -126,16 +121,38 @@ public class PdfViewerMacro extends AbstractBlogMacro implements WebMacro
    *
    * @param theme
    */
+  @MacroInfoParameter(
+    displayName = "macro.pdfviewer.theme.displayName",
+    description = "macro.pdfviewer.theme.description",
+    widget = SelectWidget.class,
+    widgetParam = "options=light_rounded|dark_rounded|light_square|dark_square;nullable=true"
+  )
   public void setTheme(String theme)
   {
     this.theme = theme;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param type
+   */
+  @MacroInfoParameter(
+    displayName = "macro.pdfviewer.type.displayName",
+    description = "macro.pdfviewer.type.description",
+    widget = SelectWidget.class,
+    widgetParam = "options=hidden|thumb|linklist"
+  )
+  public void setType(String type)
+  {
+    this.type = type;
   }
 
   //~--- methods --------------------------------------------------------------
 
   /**
    * Method description
-   *
    *
    *
    * @param request
@@ -149,105 +166,26 @@ public class PdfViewerMacro extends AbstractBlogMacro implements WebMacro
   protected String doBody(BlogRequest request, String linkBase,
                           ContentObject object, String body)
   {
-    String result = null;
-    Blog blog = request.getCurrentBlog();
-    BlogContext context = BlogContext.getInstance();
+    String result = "";
 
-    if ((object != null) && (object instanceof Entry))
+    if (id != null)
     {
-      if (id != null)
+      Attachment attachment =
+        attachmentDAO.findByBlogAndId(request.getCurrentBlog(), id);
+
+      if ((attachment != null)
+          && attachment.getMimeType().equalsIgnoreCase(PDFMIMETYPE))
       {
-        Attachment attachment = attachmentDAO.findByBlogAndId(blog, id);
-
-        if (attachment.getMimeType().equalsIgnoreCase(PDFMIMETYPE))
-        {
-          File attachmentFile =
-            context.getResourceManager().getFile(attachment);
-
-          if (attachmentFile.exists())
-          {
-            result = createPdfImageGallery(request, linkBase, id,
-                                           attachmentFile, body);
-          }
-          else
-          {
-            result = "-- file not found --";
-          }
-        }
-        else
-        {
-          result = "-- file is not a pdf --";
-        }
+        result = printGallery(linkBase, attachment, object.getId(), body);
       }
       else
       {
-        result = "-- id param is required --";
+        result = "-- pdf attachment not found --";
       }
     }
     else
     {
-      result = "-- entry not found --";
-    }
-
-    return result;
-  }
-
-  /**
-   * Field description
-   *
-   * @param request
-   * @param linkBase
-   * @param id
-   * @param attachmentFile
-   * @param body
-   *
-   * @return
-   */
-
-  /**
-   * Method description
-   *
-   *
-   *
-   * @param request
-   * @param linkBase
-   * @param id
-   * @param attachmentFile
-   * @param body
-   *
-   * @return
-   */
-  private String createPdfImageGallery(BlogRequest request, String linkBase,
-          long id, File attachmentFile, String body)
-  {
-    String result = null;
-    File resDir = BlogContext.getInstance().getResourceManager().getDirectory(
-                      Constants.RESOURCE_ATTACHMENT, request.getCurrentBlog());
-    File pdfDir = new File(resDir, "pdfviewer" + File.separator + id);
-
-    if (pdfDir.exists())
-    {
-      result = printPdfImageGallery(linkBase, pdfDir, body);
-    }
-    else
-    {
-      if (pdfDir.mkdirs())
-      {
-        try
-        {
-          createPdfImageGallery(pdfDir, attachmentFile);
-          result = printPdfImageGallery(linkBase, pdfDir, body);
-        }
-        catch (Exception ex)
-        {
-          logger.log(Level.SEVERE, null, ex);
-          result = "-- " + ex.getLocalizedMessage() + " --";
-        }
-      }
-      else
-      {
-        result = "-- cant create pdf directory --";
-      }
+      result = "-- parameter id is requiered --";
     }
 
     return result;
@@ -257,151 +195,47 @@ public class PdfViewerMacro extends AbstractBlogMacro implements WebMacro
    * Method description
    *
    *
-   * @param pdfDir
-   * @param attachmentFile
-   *
-   * @throws IOException
-   */
-  private void createPdfImageGallery(File pdfDir, File attachmentFile)
-          throws IOException
-  {
-    RandomAccessFile raf = new RandomAccessFile(attachmentFile, "r");
-    FileChannel channel = raf.getChannel();
-    ByteBuffer buf = channel.map(FileChannel.MapMode.READ_ONLY, 0,
-                                 channel.size());
-    PDFFile pdf = new PDFFile(buf);
-    int pages = pdf.getNumPages();
-
-    for (int i = 1; i < pages; i++)
-    {
-      PDFPage page = pdf.getPage(i);
-
-      createPdfPage(page,
-                    new File(pdfDir, String.valueOf(i) + "." + extension));
-    }
-  }
-
-  /**
-   * Method description
-   *
-   *
-   * @param page
-   * @param file
-   *
-   * @throws IOException
-   */
-  private void createPdfPage(PDFPage page, File file) throws IOException
-  {
-    Rectangle rect = new Rectangle(0, 0, (int) page.getBBox().getWidth(),
-                                   (int) page.getBBox().getHeight());
-    BufferedImage bufferedImage = new BufferedImage(rect.width, rect.height,
-                                    BufferedImage.TYPE_INT_RGB);
-
-    // generate the image
-    Image image = page.getImage(rect.width, rect.height,    // width & height
-                                rect,                       // clip rect
-                                null,                       // null for the ImageObserver
-                                true,                       // fill background with white
-                                true                        // block until drawing is done
-                                  );
-    Graphics2D bufImageGraphics = bufferedImage.createGraphics();
-
-    bufImageGraphics.drawImage(image, 0, 0, null);
-    ImageIO.write(bufferedImage, format, file);
-  }
-
-  /**
-   * Method description
-   *
-   *
-   *
    * @param linkBase
-   * @param pdfDir
+   * @param attachment
+   * @param galleryId
    * @param body
    *
    * @return
    */
-  private String printPdfImageGallery(String linkBase, File pdfDir, String body)
+  private String printGallery(String linkBase, Attachment attachment,
+                              Long galleryId, String body)
   {
-    StringBuffer result = new StringBuffer();
-    String res = linkBase + "resources/prettyPhoto/";
-
     resources = new ArrayList<WebResource>();
+    resources.add(
+        new ScriptResource(
+            21, linkBase + "resources/prettyPhoto/js/jquery.prettyPhoto.js"));
 
-    ScriptResource jquery = new ScriptResource(20,
-                              linkBase + "resources/jquery/jquery.min.js");
+    LinkResource prettyPhotoCSS = new LinkResource(22);
 
-    resources.add(jquery);
+    prettyPhotoCSS.setRel(LinkResource.REL_STYLESHEET);
+    prettyPhotoCSS.setType(LinkResource.TYPE_STYLESHEET);
+    prettyPhotoCSS.setHref(linkBase
+                           + "resources/prettyPhoto/css/prettyPhoto.css");
+    resources.add(prettyPhotoCSS);
+    resources.add(new ScriptResource(23,
+                                     linkBase
+                                     + "resource/script/jquery.pdfgallery.js"));
 
-    LinkResource css = new LinkResource(100);
+    Map<String, Object> parameter = new HashMap<String, Object>();
 
-    css.setRel(LinkResource.REL_STYLESHEET);
-    css.setType(LinkResource.TYPE_STYLESHEET);
-    css.setHref(res + "css/prettyPhoto.css");
-    resources.add(css);
+    parameter.put("id", galleryId.toString());
+    parameter.put("theme", theme);
 
-    ScriptResource js = new ScriptResource(101,
-                          res + "js/jquery.prettyPhoto.js");
+    StringBuffer url = new StringBuffer(linkBase).append("macros/pdfviewer/");
 
-    resources.add(js);
+    url.append(attachment.getId()).append("/index.json");
+    parameter.put("url", url.toString());
+    parameter.put("loadingImage",
+                  linkBase + "resources/jquery/plugins/img/loading.gif");
+    parameter.put("body", body);
+    parameter.put("type", type);
 
-    File[] files = pdfDir.listFiles(new FilenameFilter()
-    {
-      public boolean accept(File dir, String name)
-      {
-        return name.endsWith("." + extension);
-      }
-    });
-    long time = System.nanoTime();
-    String name = "pdfgallery_" + pdfDir.getName();
-
-    result.append("<span id=\"").append(name).append("\">\n");
-
-    String path = pdfDir.getName() + "/";
-    String baseLink = linkBase + "macros/pdfviewer/" + path;
-
-    if ((files != null) && (files.length > 0))
-    {
-      for (int i = 1; i < files.length; i++)
-      {
-        String link = baseLink + i + "." + extension;
-
-        result.append("<a title=\"Page ").append(i).append("\" ");
-        result.append("rel=\"prettyPhoto[").append(time);
-        result.append("]\" href=\"").append(link).append("\"");
-
-        if (i > 1)
-        {
-          result.append(" style=\"display: none;\">");
-        }
-        else
-        {
-          if ((body == null) || (body.trim().length() == 0))
-          {
-            StringBuffer bodyBuffer = new StringBuffer();
-
-            bodyBuffer.append("<img src=\"").append(linkBase);
-            bodyBuffer.append("resource/icon/document.gif\" alt=\"PDF\" />");
-            body = bodyBuffer.toString();
-          }
-
-          result.append(">").append(body);
-        }
-
-        result.append("</a>\n");
-      }
-    }
-
-    result.append("</span>\n");
-    result.append("<script type=\"text/javascript\">\n");
-    result.append("$(document).ready(function() {\n");
-    result.append("$(\"span#").append(name).append(" a\").prettyPhoto({\n");
-    result.append("theme: '").append(theme).append("'\n");
-    result.append("});\n");
-    result.append("});\n");
-    result.append("</script>\n");
-
-    return result.toString();
+    return parseTemplate(parameter, TEMPLATE);
   }
 
   //~--- fields ---------------------------------------------------------------
@@ -411,14 +245,6 @@ public class PdfViewerMacro extends AbstractBlogMacro implements WebMacro
   private AttachmentDAO attachmentDAO;
 
   /** Field description */
-  @Config(Constants.CONFIG_IMAGEEXTENSION)
-  private String extension = Constants.DEFAULT_IMAGE_EXTENSION;
-
-  /** Field description */
-  @Config(Constants.CONFIG_IMAGEFORMAT)
-  private String format = Constants.DEFAULT_IMAGE_FORMAT;
-
-  /** Field description */
   private Long id;
 
   /** Field description */
@@ -426,4 +252,7 @@ public class PdfViewerMacro extends AbstractBlogMacro implements WebMacro
 
   /** Field description */
   private String theme = "dark_square";
+
+  /** Field description */
+  private String type = "hidden";
 }
