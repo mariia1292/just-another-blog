@@ -78,6 +78,13 @@ public class PluginActivator implements Activator
     {
       handlerReference.add(handler);
     }
+
+    if (renderer == null)
+    {
+      renderer = new DefaultPDFRenderer();
+    }
+
+    getRendererReference().add(renderer);
   }
 
   /**
@@ -93,8 +100,33 @@ public class PluginActivator implements Activator
 
     if ((handler != null) && (handlerReference != null))
     {
-      handlerReference.add(handler);
+      handlerReference.remove(handler);
     }
+
+    if ((renderer != null) && (rendererReference != null))
+    {
+      rendererReference.remove(renderer);
+    }
+  }
+
+  //~--- get methods ----------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  private ServiceReference<PDFRenderer> getRendererReference()
+  {
+    if (rendererReference == null)
+    {
+      rendererReference =
+        BlogContext.getInstance().getServiceRegistry().register(
+          PDFRenderer.class, PDFRenderer.SERVICE);
+    }
+
+    return rendererReference;
   }
 
   //~--- fields ---------------------------------------------------------------
@@ -111,4 +143,10 @@ public class PluginActivator implements Activator
 
   /** Field description */
   private MacroParser parser;
+
+  /** Field description */
+  private PDFRenderer renderer;
+
+  /** Field description */
+  private ServiceReference<PDFRenderer> rendererReference;
 }

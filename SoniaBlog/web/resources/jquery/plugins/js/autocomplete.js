@@ -63,7 +63,7 @@
       }, 200);
     });
 
-    $field.keydown(function(event){
+    $field.keyup(function(event){
       switch ( event.keyCode )
       {
         // ESC
@@ -141,7 +141,6 @@
       clear();
       if ( value.length >= options.minChars )
       {
-        value += "~";
         if ($output.length == "")
         {
           createOutputContainer();
