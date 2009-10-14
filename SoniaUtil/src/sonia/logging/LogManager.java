@@ -209,7 +209,7 @@ public class LogManager
    *
    * @return
    */
-  public String removeVar(Object key)
+  public String removeVar(String key)
   {
     return vars.remove(key);
   }
@@ -453,7 +453,7 @@ public class LogManager
 
       if (Util.hasContent(name))
       {
-        Logger l = Logger.getLogger(name);
+        Logger l = getLogger(name);
 
         if (removeOldHandlers)
         {
@@ -549,6 +549,19 @@ public class LogManager
   }
 
   //~--- get methods ----------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   * @param name
+   *
+   * @return
+   */
+  private Logger getLogger(String name)
+  {
+    return java.util.logging.LogManager.getLogManager().getLogger(name);
+  }
 
   /**
    * Method description
