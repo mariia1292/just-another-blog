@@ -164,40 +164,47 @@ public class PdfViewerMapping extends FinalMapping
                                      getDirectory(blog, attachment),
                                      attachment, format, extension);
 
-    response.setContentType("application/x-javascript");
-
-    PrintWriter writer = null;
-
-    try
+    if ((imageGallery != null) && Util.hasContent(imageGallery.getImages()))
     {
-      writer = response.getWriter();
+      response.setContentType("application/x-javascript");
 
-      List<String> images = imageGallery.getImages();
-      int size = images.size();
+      PrintWriter writer = null;
 
-      writer.println("[");
-      writer.append("{\"title\":\"").append(imageGallery.getTitle());
-      writer.append("\", \"size\": ");
-      writer.append(Integer.toString(size));
-      writer.append(", \"pages\": [\n");
-
-      for (int i = 0; i < size; i++)
+      try
       {
-        writer.append("{ \"name\": \"").append(images.get(i));
-        writer.append("\", \"nr\": ").append(Integer.toString(i + 1));
-        writer.append(" }");
+        writer = response.getWriter();
 
-        if ((i + 1) < size)
+        List<String> images = imageGallery.getImages();
+        int size = images.size();
+
+        writer.println("[");
+        writer.append("{\"title\":\"").append(imageGallery.getTitle());
+        writer.append("\", \"size\": ");
+        writer.append(Integer.toString(size));
+        writer.append(", \"pages\": [\n");
+
+        for (int i = 0; i < size; i++)
         {
-          writer.append(",\n");
-        }
-      }
+          writer.append("{ \"name\": \"").append(images.get(i));
+          writer.append("\", \"nr\": ").append(Integer.toString(i + 1));
+          writer.append(" }");
 
-      writer.println("]}]");
+          if ((i + 1) < size)
+          {
+            writer.append(",\n");
+          }
+        }
+
+        writer.println("]}]");
+      }
+      finally
+      {
+        writer.close();
+      }
     }
-    finally
+    else
     {
-      writer.close();
+      response.sendError(HttpServletResponse.SC_NOT_FOUND);
     }
   }
 

@@ -38,7 +38,6 @@ package sonia.blog.office;
 import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.app.BlogJob;
 import sonia.blog.api.app.ResourceManager;
-import sonia.blog.api.dao.AttachmentDAO;
 import sonia.blog.entity.Attachment;
 import sonia.blog.entity.Blog;
 
@@ -238,7 +237,7 @@ public class DefaultPDFRenderer implements PDFRenderer
      */
     public String getName()
     {
-      return "PDFRendererJOB";
+      return PDFRendererJob.class.getSimpleName();
     }
 
     //~--- methods ------------------------------------------------------------
