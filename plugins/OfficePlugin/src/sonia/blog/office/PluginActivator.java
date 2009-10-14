@@ -38,7 +38,6 @@ package sonia.blog.office;
 import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.app.Constants;
 import sonia.blog.api.app.Context;
-import sonia.blog.api.dao.DAOListener;
 import sonia.blog.api.editor.AttachmentHandler;
 import sonia.blog.api.mapping.MappingHandler;
 import sonia.blog.api.search.SearchProvider;
@@ -135,10 +134,6 @@ public class PluginActivator implements Activator
   //~--- fields ---------------------------------------------------------------
 
   /** Field description */
-  @Service(Constants.LISTENER_ATTACHMENT)
-  private ServiceReference<DAOListener> attachmentListenerReference;
-
-  /** Field description */
   private PdfHandler handler;
 
   /** Field description */
@@ -161,7 +156,4 @@ public class PluginActivator implements Activator
   /** Field description */
   private ServiceReference<PDFRenderer> rendererReference;
 
-  /** Field description */
-  @Service(Constants.SERVICE_SEARCHPROVIDER)
-  private ServiceReference<SearchProvider> searchProviderReference;
 }

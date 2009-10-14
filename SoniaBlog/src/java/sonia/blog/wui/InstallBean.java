@@ -298,9 +298,9 @@ public class InstallBean extends AbstractBean
           File pluginStore = context.getResourceManager().getDirectory(
                                  Constants.RESOURCE_PLUGINSTORE);
 
-          if (!pluginStore.exists())
+          if (!pluginStore.exists() &&!pluginStore.mkdirs())
           {
-            pluginStore.mkdirs();
+            throw new BlogException("could not create pluginstore directory");
           }
 
           context.getPluginContext().setStore(

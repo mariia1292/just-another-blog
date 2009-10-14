@@ -46,5 +46,5 @@ public interface Job
    *
    * @throws JobException
    */
-  public abstract void excecute() throws JobException;
+  public void excecute() throws JobException;
 }

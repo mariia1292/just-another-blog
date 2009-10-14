@@ -38,6 +38,7 @@ package sonia.blog.dao.jpa;
 import sonia.blog.api.app.BlogSession;
 import sonia.blog.api.app.Constants;
 import sonia.blog.api.dao.UserDAO;
+import sonia.blog.api.exception.BlogSecurityException;
 import sonia.blog.entity.Blog;
 import sonia.blog.entity.BlogMember;
 import sonia.blog.entity.Role;
@@ -503,9 +504,11 @@ public class JpaUserDAO extends JpaGenericDAO<User> implements UserDAO
    */
   public void setLastLogin(BlogSession session, User user)
   {
-    if ( ! session.hasRole(Role.SYSTEM) ){
-      throw new SecurityException( "System session is required" );
+    if (!session.hasRole(Role.SYSTEM))
+    {
+      throw new BlogSecurityException("System session is required");
     }
+
     user.setLastLogin(new Date());
 
     EntityManager em = createEntityManager();
@@ -514,7 +517,7 @@ public class JpaUserDAO extends JpaGenericDAO<User> implements UserDAO
 
     try
     {
-      user = em.merge(user);
+      em.merge(user);
       em.getTransaction().commit();
     }
     catch (Exception ex)

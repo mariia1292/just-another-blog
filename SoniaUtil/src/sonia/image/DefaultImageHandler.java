@@ -114,14 +114,19 @@ public class DefaultImageHandler implements ImageStreamHandler, ImageFileHandler
     }
     finally
     {
-      if (fis != null)
+      try
       {
-        fis.close();
+        if (fis != null)
+        {
+          fis.close();
+        }
       }
-
-      if (fos != null)
+      finally
       {
-        fos.close();
+        if (fos != null)
+        {
+          fos.close();
+        }
       }
     }
   }
@@ -220,14 +225,19 @@ public class DefaultImageHandler implements ImageStreamHandler, ImageFileHandler
     }
     finally
     {
-      if (fis != null)
+      try
       {
-        fis.close();
+        if (fis != null)
+        {
+          fis.close();
+        }
       }
-
-      if (fos != null)
+      finally
       {
-        fos.close();
+        if (fos != null)
+        {
+          fos.close();
+        }
       }
     }
   }
@@ -259,14 +269,19 @@ public class DefaultImageHandler implements ImageStreamHandler, ImageFileHandler
     }
     finally
     {
-      if (fis != null)
+      try
       {
-        fis.close();
+        if (fis != null)
+        {
+          fis.close();
+        }
       }
-
-      if (fos != null)
+      finally
       {
-        fos.close();
+        if (fos != null)
+        {
+          fos.close();
+        }
       }
     }
   }
@@ -319,14 +334,19 @@ public class DefaultImageHandler implements ImageStreamHandler, ImageFileHandler
     }
     finally
     {
-      if (fis != null)
+      try
       {
-        fis.close();
+        if (fis != null)
+        {
+          fis.close();
+        }
       }
-
-      if (fos != null)
+      finally
       {
-        fos.close();
+        if (fos != null)
+        {
+          fos.close();
+        }
       }
     }
   }
@@ -380,14 +400,19 @@ public class DefaultImageHandler implements ImageStreamHandler, ImageFileHandler
     }
     finally
     {
-      if (fis != null)
+      try
       {
-        fis.close();
+        if (fis != null)
+        {
+          fis.close();
+        }
       }
-
-      if (fos != null)
+      finally
       {
-        fos.close();
+        if (fos != null)
+        {
+          fos.close();
+        }
       }
     }
   }
@@ -440,14 +465,19 @@ public class DefaultImageHandler implements ImageStreamHandler, ImageFileHandler
     }
     finally
     {
-      if (fis != null)
+      try
       {
-        fis.close();
+        if (fis != null)
+        {
+          fis.close();
+        }
       }
-
-      if (fos != null)
+      finally
       {
-        fos.close();
+        if (fos != null)
+        {
+          fos.close();
+        }
       }
     }
   }

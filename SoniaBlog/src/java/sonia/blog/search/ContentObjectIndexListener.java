@@ -55,6 +55,7 @@ import java.io.File;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import sonia.blog.api.exception.BlogException;
 
 /**
  *
@@ -139,9 +140,9 @@ public class ContentObjectIndexListener implements DAOListener
 
     if (doc != null)
     {
-      if (!blogDir.exists())
+      if (!blogDir.exists() && ! blogDir.mkdirs())
       {
-        blogDir.mkdirs();
+        throw new BlogException( "could not create index directory" );
       }
 
       try

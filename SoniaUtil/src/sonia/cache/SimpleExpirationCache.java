@@ -122,7 +122,10 @@ public class SimpleExpirationCache extends AbstractCache
     this.expirationTime = expirationTime;
     this.cacheMap = new HashMap<Object, CacheObject>();
 
-    if (intervalCheck) {}
+    if (intervalCheck)
+    {
+      createTimer(name);
+    }
   }
 
   //~--- methods --------------------------------------------------------------

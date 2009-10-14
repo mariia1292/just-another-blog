@@ -117,11 +117,25 @@ public class AvatarBean extends AbstractBean
         imageHandler.cropImage(tempFile, temp, imageFormat, x, y, width,
                                height);
         imageHandler.scaleImageFix(temp, avatar, imageFormat, 50, 50);
-        temp.delete();
+
+        if (!temp.delete() && logger.isLoggable(Level.WARNING))
+        {
+          StringBuffer msg = new StringBuffer();
+
+          msg.append("could not delete tempFile ").append(temp.getName());
+          logger.warning(msg.toString());
+        }
       }
 
       updateAvatar(avatar.getName());
-      tempFile.delete();
+
+      if (!tempFile.delete() && logger.isLoggable(Level.WARNING))
+      {
+        StringBuffer msg = new StringBuffer();
+
+        msg.append("could not delete tempFile ").append(tempFile.getName());
+        logger.warning(msg.toString());
+      }
     }
     catch (IOException ex)
     {
@@ -193,14 +207,28 @@ public class AvatarBean extends AbstractBean
           // TODO replace with scale with background
           imageHandler.scaleImageFix(temp, avatar, imageFormat, width, height);
           updateAvatar(avatar.getName());
-          temp.delete();
+
+          if (!temp.delete() && logger.isLoggable(Level.WARNING))
+          {
+            StringBuffer msg = new StringBuffer();
+
+            msg.append("could not delete tempFile ").append(temp.getName());
+            logger.warning(msg.toString());
+          }
         }
         else if ((d.width > 720) || (d.height > 576))
         {
           tempFile = resManager.getTempFile("avatar-", ".up");
           imageHandler.scaleImage(temp, tempFile, imageFormat, 720, 576);
           result = AVATARCROP;
-          temp.delete();
+
+          if (!temp.delete() && logger.isLoggable(Level.WARNING))
+          {
+            StringBuffer msg = new StringBuffer();
+
+            msg.append("could not delete tempFile ").append(temp.getName());
+            logger.warning(msg.toString());
+          }
         }
         else
         {

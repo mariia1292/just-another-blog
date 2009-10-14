@@ -40,6 +40,8 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import org.xml.sax.SAXException;
+
 import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.app.BlogJob;
 import sonia.blog.api.dao.TrackbackDAO;
@@ -69,6 +71,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import javax.xml.parsers.ParserConfigurationException;
 
 /**
  *
@@ -124,7 +128,14 @@ public class TrackbackJob implements BlogJob
 
       for (URL url : urls)
       {
-        parse(url);
+        try
+        {
+          parse(url);
+        }
+        catch (Exception ex)
+        {
+          throw new JobException(ex);
+        }
       }
     }
   }
@@ -204,8 +215,13 @@ public class TrackbackJob implements BlogJob
    *
    *
    * @param url
+   *
+   * @throws IOException
+   * @throws ParserConfigurationException
+   * @throws SAXException
    */
   private void parse(URL url)
+          throws IOException, SAXException, ParserConfigurationException
   {
     try
     {
@@ -237,83 +253,81 @@ public class TrackbackJob implements BlogJob
    *
    *
    * @param rdfContent
+   *
+   * @throws IOException
+   * @throws ParserConfigurationException
+   * @throws SAXException
    */
   private void parseRdfContent(String rdfContent)
+          throws IOException, SAXException, ParserConfigurationException
   {
-    try
+    Document doc =
+      XmlUtil.buildDocument(new ByteArrayInputStream(rdfContent.getBytes()));
+    NodeList nodeList = doc.getElementsByTagName("rdf:Description");
+
+    if (XmlUtil.hasContent(nodeList))
     {
-      Document doc =
-        XmlUtil.buildDocument(new ByteArrayInputStream(rdfContent.getBytes()));
-      NodeList nodeList = doc.getElementsByTagName("rdf:Description");
-
-      if (XmlUtil.hasContent(nodeList))
+      for (int i = 0; i < nodeList.getLength(); i++)
       {
-        for (int i = 0; i < nodeList.getLength(); i++)
+        Node node = nodeList.item(i);
+        NamedNodeMap attributes = node.getAttributes();
+        String ping = XmlUtil.getAttributeValue(attributes, "trackback:ping");
+        URL url = new URL(ping);
+        TrackbackDAO trackbackDAO =
+          BlogContext.getDAOFactory().getTrackbackDAO();
+
+        if (trackbackDAO.count(entry, Trackback.TYPE_SEND, ping) == 0)
         {
-          Node node = nodeList.item(i);
-          NamedNodeMap attributes = node.getAttributes();
-          String ping = XmlUtil.getAttributeValue(attributes, "trackback:ping");
-          URL url = new URL(ping);
-          TrackbackDAO trackbackDAO =
-            BlogContext.getDAOFactory().getTrackbackDAO();
+          String identifier = XmlUtil.getAttributeValue(attributes,
+                                "dc:identifier");
+          String title = XmlUtil.getAttributeValue(attributes, "dc:title");
 
-          if (trackbackDAO.count(entry, Trackback.TYPE_SEND, ping) == 0)
+          if (BlogUtil.sendTrackbackPing(entry, url))
           {
-            String identifier = XmlUtil.getAttributeValue(attributes,
-                                  "dc:identifier");
-            String title = XmlUtil.getAttributeValue(attributes, "dc:title");
+            Trackback trackback = new Trackback(Trackback.TYPE_SEND, ping);
 
-            if (BlogUtil.sendTrackbackPing(entry, url))
+            trackback.setEntry(entry);
+
+            String excerpt = bundle.getString("sendTrackbackExcerpt");
+
+            identifier = Util.hasContent(identifier)
+                         ? identifier
+                         : ping;
+            title = Util.hasContent(title)
+                    ? title
+                    : identifier;
+            trackback.setTitle(title);
+            excerpt = MessageFormat.format(excerpt, title, identifier);
+            trackback.setExcerpt(excerpt);
+
+            if (BlogContext.getDAOFactory().getTrackbackDAO().add(
+                    BlogContext.getInstance().getSystemBlogSession(),
+                    trackback))
             {
-              Trackback trackback = new Trackback(Trackback.TYPE_SEND, ping);
-
-              trackback.setEntry(entry);
-
-              String excerpt = bundle.getString("sendTrackbackExcerpt");
-
-              identifier = Util.hasContent(identifier)
-                           ? identifier
-                           : ping;
-              title = Util.hasContent(title)
-                      ? title
-                      : identifier;
-              trackback.setTitle(title);
-              excerpt = MessageFormat.format(excerpt, title, identifier);
-              trackback.setExcerpt(excerpt);
-
-              if (BlogContext.getDAOFactory().getTrackbackDAO().add(
-                      BlogContext.getInstance().getSystemBlogSession(),
-                      trackback))
+              if (logger.isLoggable(Level.INFO))
               {
-                if (logger.isLoggable(Level.INFO))
-                {
-                  StringBuffer log = new StringBuffer();
+                StringBuffer log = new StringBuffer();
 
-                  log.append("trackback send to ").append(ping);
-                  log.append(" success");
-                  logger.info(log.toString());
-                }
-              }
-              else
-              {
-                logger.severe("error occured during trackback save");
+                log.append("trackback send to ").append(ping);
+                log.append(" success");
+                logger.info(log.toString());
               }
             }
-          }
-          else if (logger.isLoggable(Level.FINE))
-          {
-            StringBuffer log = new StringBuffer();
-
-            log.append("trackback to ").append(ping);
-            log.append(" allready send");
-            logger.fine(log.toString());
+            else
+            {
+              logger.severe("error occured during trackback save");
+            }
           }
         }
+        else if (logger.isLoggable(Level.FINE))
+        {
+          StringBuffer log = new StringBuffer();
+
+          log.append("trackback to ").append(ping);
+          log.append(" allready send");
+          logger.fine(log.toString());
+        }
       }
-    }
-    catch (Exception ex)
-    {
-      logger.log(Level.FINER, null, ex);
     }
   }
 
