@@ -51,8 +51,6 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
 
@@ -74,9 +72,9 @@ public class JpaUserDAO extends JpaGenericDAO<User> implements UserDAO
    *
    * @param entityManagerFactory
    */
-  public JpaUserDAO(EntityManagerFactory entityManagerFactory)
+  public JpaUserDAO(JpaStrategy strategy)
   {
-    super(entityManagerFactory, User.class, Constants.LISTENER_USER);
+    super(strategy, User.class, Constants.LISTENER_USER);
   }
 
   //~--- methods --------------------------------------------------------------
@@ -115,22 +113,13 @@ public class JpaUserDAO extends JpaGenericDAO<User> implements UserDAO
    */
   public long count(String filter)
   {
-    long result = -1;
-    EntityManager em = createEntityManager();
-    Query q = em.createNamedQuery("User.countByFilter");
+    
+    Query q = strategy.getNamedQuery("User.countByFilter", false);
 
     q.setParameter("filter", filter);
 
-    try
-    {
-      result = (Long) q.getSingleResult();
-    }
-    finally
-    {
-      em.close();
-    }
 
-    return result;
+    return (Long) q.getSingleResult();
   }
 
   /**
@@ -144,23 +133,14 @@ public class JpaUserDAO extends JpaGenericDAO<User> implements UserDAO
    */
   public long count(String filter, boolean active)
   {
-    long result = -1;
-    EntityManager em = createEntityManager();
-    Query q = em.createNamedQuery("User.countByFilterAndActive");
+    
+    Query q = strategy.getNamedQuery("User.countByFilterAndActive", false);
 
     q.setParameter("filter", filter);
     q.setParameter("active", active);
 
-    try
-    {
-      result = (Long) q.getSingleResult();
-    }
-    finally
-    {
-      em.close();
-    }
-
-    return result;
+    
+    return (Long) q.getSingleResult();
   }
 
   /**
@@ -173,22 +153,12 @@ public class JpaUserDAO extends JpaGenericDAO<User> implements UserDAO
    */
   public long count(boolean active)
   {
-    long result = -1;
-    EntityManager em = createEntityManager();
-    Query q = em.createNamedQuery("User.countByActive");
+    
+    Query q = strategy.getNamedQuery("User.countByActive", false);
 
     q.setParameter("active", active);
 
-    try
-    {
-      result = (Long) q.getSingleResult();
-    }
-    finally
-    {
-      em.close();
-    }
-
-    return result;
+    return (Long) q.getSingleResult();
   }
 
   /**
@@ -202,29 +172,21 @@ public class JpaUserDAO extends JpaGenericDAO<User> implements UserDAO
   public boolean saveMember(BlogMember member)
   {
     boolean result = false;
-    EntityManager em = createEntityManager();
+    
 
-    em.getTransaction().begin();
 
     try
     {
-      em.merge(member);
-      em.getTransaction().commit();
+      strategy.edit(member);
+      strategy.flush();
       result = true;
     }
     catch (Exception ex)
     {
-      if (em.getTransaction().isActive())
-      {
-        em.getTransaction().rollback();
-      }
 
       logger.log(Level.SEVERE, null, ex);
     }
-    finally
-    {
-      em.close();
-    }
+
 
     return result;
   }
@@ -242,13 +204,13 @@ public class JpaUserDAO extends JpaGenericDAO<User> implements UserDAO
    */
   public User get(String username, boolean active)
   {
-    EntityManager em = createEntityManager();
-    Query q = em.createNamedQuery("User.getByNameAndActive");
+    
+    Query q = strategy.getNamedQuery("User.getByNameAndActive", false);
 
     q.setParameter("name", username);
     q.setParameter("active", active);
 
-    return excecuteQuery(em, q);
+    return excecuteQuery(q);
   }
 
   /**
@@ -261,12 +223,12 @@ public class JpaUserDAO extends JpaGenericDAO<User> implements UserDAO
    */
   public User get(String username)
   {
-    EntityManager em = createEntityManager();
-    Query q = em.createNamedQuery("User.getByName");
+    
+    Query q = strategy.getNamedQuery("User.getByName", false);
 
     q.setParameter("name", username);
 
-    return excecuteQuery(em, q);
+    return excecuteQuery(q);
   }
 
   /**
@@ -281,14 +243,14 @@ public class JpaUserDAO extends JpaGenericDAO<User> implements UserDAO
    */
   public User get(String username, String password, boolean active)
   {
-    EntityManager em = createEntityManager();
-    Query q = em.createNamedQuery("User.getByNamePasswordAndActive");
+    
+    Query q = strategy.getNamedQuery("User.getByNamePasswordAndActive", false);
 
     q.setParameter("name", username);
     q.setParameter("password", password);
     q.setParameter("active", active);
 
-    return excecuteQuery(em, q);
+    return excecuteQuery(q);
   }
 
   /**
@@ -328,14 +290,14 @@ public class JpaUserDAO extends JpaGenericDAO<User> implements UserDAO
    */
   public List<User> getAll(boolean active, int start, int max)
   {
-    EntityManager em = createEntityManager();
-    Query q = em.createNamedQuery("User.getAllByActive");
+    
+    Query q = strategy.getNamedQuery("User.getAllByActive", false);
 
     q.setParameter("active", active);
     q.setFirstResult(start);
     q.setMaxResults(max);
 
-    return excecuteListQuery(em, q);
+    return excecuteListQuery(q);
   }
 
   /**
@@ -350,14 +312,14 @@ public class JpaUserDAO extends JpaGenericDAO<User> implements UserDAO
    */
   public List<User> getAll(String filter, int start, int max)
   {
-    EntityManager em = createEntityManager();
-    Query q = em.createNamedQuery("User.getAllByFilter");
+    
+    Query q = strategy.getNamedQuery("User.getAllByFilter", false);
 
     q.setParameter("filter", filter);
     q.setFirstResult(start);
     q.setMaxResults(max);
 
-    return excecuteListQuery(em, q);
+    return excecuteListQuery(q);
   }
 
   /**
@@ -373,15 +335,15 @@ public class JpaUserDAO extends JpaGenericDAO<User> implements UserDAO
    */
   public List<User> getAll(String filter, boolean active, int start, int max)
   {
-    EntityManager em = createEntityManager();
-    Query q = em.createNamedQuery("User.getAllByFilterAndActive");
+    
+    Query q = strategy.getNamedQuery("User.getAllByFilterAndActive", false);
 
     q.setParameter("filter", filter);
     q.setParameter("active", active);
     q.setFirstResult(start);
     q.setMaxResults(max);
 
-    return excecuteListQuery(em, q);
+    return excecuteListQuery(q);
   }
 
   /**
@@ -394,12 +356,12 @@ public class JpaUserDAO extends JpaGenericDAO<User> implements UserDAO
    */
   public User getByMail(String mail)
   {
-    EntityManager em = createEntityManager();
-    Query q = em.createNamedQuery("User.getByMail");
+    
+    Query q = strategy.getNamedQuery("User.getByMail", false);
 
     q.setParameter("mail", mail);
 
-    return excecuteQuery(em, q);
+    return excecuteQuery(q);
   }
 
   /**
@@ -413,13 +375,13 @@ public class JpaUserDAO extends JpaGenericDAO<User> implements UserDAO
    */
   public User getByNameAndCode(String username, String code)
   {
-    EntityManager em = createEntityManager();
-    Query q = em.createNamedQuery("User.getByNameAndCode");
+    
+    Query q = strategy.getNamedQuery("User.getByNameAndCode", false);
 
     q.setParameter("name", username);
     q.setParameter("code", code);
 
-    return excecuteQuery(em, q);
+    return excecuteQuery(q);
   }
 
   /**
@@ -433,13 +395,13 @@ public class JpaUserDAO extends JpaGenericDAO<User> implements UserDAO
    */
   public BlogMember getMember(Blog blog, User user)
   {
-    EntityManager em = createEntityManager();
-    Query q = em.createNamedQuery("BlogMember.getByBlogAndUser");
+    
+    Query q = strategy.getNamedQuery("BlogMember.getByBlogAndUser", false);
 
     q.setParameter("blog", blog);
     q.setParameter("user", user);
 
-    return excecuteQuery(BlogMember.class, em, q);
+    return excecuteQuery(BlogMember.class, q);
   }
 
   /**
@@ -454,14 +416,14 @@ public class JpaUserDAO extends JpaGenericDAO<User> implements UserDAO
    */
   public List<BlogMember> getMembers(User user, int start, int max)
   {
-    EntityManager em = createEntityManager();
-    Query q = em.createNamedQuery("BlogMember.getAllByUser");
+    
+    Query q = strategy.getNamedQuery("BlogMember.getAllByUser", false);
 
     q.setParameter("user", user);
     q.setFirstResult(start);
     q.setMaxResults(max);
 
-    return excecuteListQuery(BlogMember.class, em, q);
+    return excecuteListQuery(BlogMember.class, q);
   }
 
   /**
@@ -475,14 +437,14 @@ public class JpaUserDAO extends JpaGenericDAO<User> implements UserDAO
    */
   public Role getRole(Blog blog, User user)
   {
-    EntityManager em = createEntityManager();
-    Query q = em.createNamedQuery("BlogMember.getByBlogAndUser");
+    
+    Query q = strategy.getNamedQuery("BlogMember.getByBlogAndUser", false);
 
     q.setParameter("blog", blog);
     q.setParameter("user", user);
 
     Role role = null;
-    BlogMember member = excecuteQuery(BlogMember.class, em, q);
+    BlogMember member = excecuteQuery(BlogMember.class, q);
 
     if (member != null)
     {
@@ -511,27 +473,15 @@ public class JpaUserDAO extends JpaGenericDAO<User> implements UserDAO
 
     user.setLastLogin(new Date());
 
-    EntityManager em = createEntityManager();
-
-    em.getTransaction().begin();
-
     try
     {
-      em.merge(user);
-      em.getTransaction().commit();
+      strategy.edit(user);
+      strategy.flush();
     }
     catch (Exception ex)
     {
-      if (em.getTransaction().isActive())
-      {
-        em.getTransaction().rollback();
-      }
 
       logger.log(Level.SEVERE, null, ex);
-    }
-    finally
-    {
-      em.close();
     }
   }
 
@@ -545,8 +495,8 @@ public class JpaUserDAO extends JpaGenericDAO<User> implements UserDAO
    */
   public void setRole(Blog blog, User user, Role role)
   {
-    EntityManager em = createEntityManager();
-    Query q = em.createNamedQuery("BlogMember.getByBlogAndUser");
+    
+    Query q = strategy.getNamedQuery("BlogMember.getByBlogAndUser", false);
 
     q.setParameter("blog", blog);
     q.setParameter("user", user);
@@ -559,30 +509,24 @@ public class JpaUserDAO extends JpaGenericDAO<User> implements UserDAO
     }
     catch (NoResultException ex) {}
 
-    em.getTransaction().begin();
-
     try
     {
       if (member == null)
       {
         member = new BlogMember(blog, user, role);
-        em.persist(member);
+        strategy.store(member);
       }
       else
       {
         member.setRole(role);
-        em.merge(member);
+        strategy.edit(member);
       }
 
-      em.getTransaction().commit();
+      strategy.flush();
     }
     catch (Exception ex)
     {
       logger.log(Level.SEVERE, null, ex);
-    }
-    finally
-    {
-      em.close();
     }
   }
 

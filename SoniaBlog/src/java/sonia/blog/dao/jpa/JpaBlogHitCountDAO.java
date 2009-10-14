@@ -52,8 +52,6 @@ import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.logging.Logger;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
 
@@ -77,9 +75,9 @@ public class JpaBlogHitCountDAO extends JpaGenericDAO<BlogHitCount>
    *
    * @param entityManagerFactory
    */
-  public JpaBlogHitCountDAO(EntityManagerFactory entityManagerFactory)
+  public JpaBlogHitCountDAO(JpaStrategy strategy)
   {
-    super(entityManagerFactory, BlogHitCount.class,
+    super(strategy, BlogHitCount.class,
           Constants.LISTENER_BLOGHITCOUNT);
   }
 
@@ -108,8 +106,7 @@ public class JpaBlogHitCountDAO extends JpaGenericDAO<BlogHitCount>
   public BlogHitCount findByBlogAndDate(Blog blog, Date date)
   {
     BlogHitCount hitCount = null;
-    EntityManager em = createEntityManager();
-    Query q = em.createNamedQuery("BlogHitCount.findByBlogAndDate");
+    Query q = strategy.getNamedQuery("BlogHitCount.findByBlogAndDate", false);
 
     q.setParameter("blog", blog);
     q.setParameter("date", date);
@@ -119,10 +116,6 @@ public class JpaBlogHitCountDAO extends JpaGenericDAO<BlogHitCount>
       hitCount = (BlogHitCount) q.getSingleResult();
     }
     catch (NoResultException ex) {}
-    finally
-    {
-      em.close();
-    }
 
     return hitCount;
   }
@@ -263,8 +256,7 @@ public class JpaBlogHitCountDAO extends JpaGenericDAO<BlogHitCount>
   public List<HitWrapper> getHitsPerMonthByBlog(Blog blog)
   {
     List<HitWrapper> result = null;
-    EntityManager em = createEntityManager();
-    Query q = em.createNamedQuery("BlogHitCount.findByBlog");
+    Query q = strategy.getNamedQuery("BlogHitCount.findByBlog", false);
 
     q.setParameter("blog", blog);
 
@@ -275,10 +267,6 @@ public class JpaBlogHitCountDAO extends JpaGenericDAO<BlogHitCount>
       result = buildHitWrapper(hitCounts);
     }
     catch (NoResultException ex) {}
-    finally
-    {
-      em.close();
-    }
 
     return result;
   }
@@ -358,8 +346,7 @@ public class JpaBlogHitCountDAO extends JpaGenericDAO<BlogHitCount>
   private List<BlogWrapper> findBetween(Date startDate, Date endDate)
   {
     List<BlogWrapper> result = null;
-    EntityManager em = createEntityManager();
-    Query q = em.createNamedQuery("BlogHitCount.findBetween");
+    Query q = strategy.getNamedQuery("BlogHitCount.findBetween", false);
 
     q.setParameter("start", startDate);
     q.setParameter("end", endDate);
@@ -369,10 +356,6 @@ public class JpaBlogHitCountDAO extends JpaGenericDAO<BlogHitCount>
       result = q.getResultList();
     }
     catch (NoResultException ex) {}
-    finally
-    {
-      em.close();
-    }
 
     return result;
   }
@@ -391,23 +374,12 @@ public class JpaBlogHitCountDAO extends JpaGenericDAO<BlogHitCount>
    */
   private Long getHitsByBlogBetween(Blog blog, Date startDate, Date endDate)
   {
-    Long result = 0l;
-    EntityManager em = createEntityManager();
-    Query q = em.createNamedQuery("BlogHitCount.getSumBetweenByBlog");
+    Query q = strategy.getNamedQuery("BlogHitCount.getSumBetweenByBlog", false);
 
     q.setParameter("blog", blog);
     q.setParameter("start", startDate);
     q.setParameter("end", endDate);
 
-    try
-    {
-      result = (Long) q.getSingleResult();
-    }
-    finally
-    {
-      em.close();
-    }
-
-    return result;
+    return (Long) q.getSingleResult();
   }
 }

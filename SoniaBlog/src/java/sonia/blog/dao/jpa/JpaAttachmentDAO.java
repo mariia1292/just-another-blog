@@ -49,8 +49,6 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
 
@@ -72,12 +70,13 @@ public class JpaAttachmentDAO extends JpaGenericDAO<Attachment>
    * Constructs ...
    *
    *
+   *
+   * @param strategy
    * @param entityManagerFactory
    */
-  public JpaAttachmentDAO(EntityManagerFactory entityManagerFactory)
+  public JpaAttachmentDAO(JpaStrategy strategy)
   {
-    super(entityManagerFactory, Attachment.class,
-          Constants.LISTENER_ATTACHMENT);
+    super(strategy, Attachment.class, Constants.LISTENER_ATTACHMENT);
   }
 
   //~--- methods --------------------------------------------------------------
@@ -133,8 +132,7 @@ public class JpaAttachmentDAO extends JpaGenericDAO<Attachment>
   public List<Attachment> findAllByEntry(Entry entry, int start, int max)
   {
     List<Attachment> attachments = null;
-    EntityManager em = createEntityManager();
-    Query q = em.createNamedQuery("Attachment.findAllByEntry");
+    Query q = strategy.getNamedQuery("Attachment.findAllByEntry", false);
 
     q.setParameter("entry", entry);
 
@@ -153,10 +151,6 @@ public class JpaAttachmentDAO extends JpaGenericDAO<Attachment>
       attachments = q.getResultList();
     }
     catch (NoResultException ex) {}
-    finally
-    {
-      em.close();
-    }
 
     return attachments;
   }
@@ -188,8 +182,7 @@ public class JpaAttachmentDAO extends JpaGenericDAO<Attachment>
   public List<Attachment> findAllImagesByEntry(Entry entry, int start, int max)
   {
     List<Attachment> attachments = null;
-    EntityManager em = createEntityManager();
-    Query q = em.createNamedQuery("Attachment.findAllImagesByEntry");
+    Query q = strategy.getNamedQuery("Attachment.findAllImagesByEntry", false);
 
     q.setParameter("entry", entry);
 
@@ -208,10 +201,6 @@ public class JpaAttachmentDAO extends JpaGenericDAO<Attachment>
       attachments = q.getResultList();
     }
     catch (NoResultException ex) {}
-    finally
-    {
-      em.close();
-    }
 
     return attachments;
   }
@@ -298,12 +287,11 @@ public class JpaAttachmentDAO extends JpaGenericDAO<Attachment>
    */
   public List<Attachment> getAll(Page page)
   {
-    EntityManager em = createEntityManager();
-    Query q = em.createNamedQuery("Attachment.getAllByPage");
+    Query q = strategy.getNamedQuery("Attachment.getAllByPage", false);
 
     q.setParameter("page", page);
 
-    return excecuteListQuery(em, q);
+    return excecuteListQuery(q);
   }
 
   /**
@@ -321,12 +309,11 @@ public class JpaAttachmentDAO extends JpaGenericDAO<Attachment>
     List<Attachment> result = new ArrayList<Attachment>();
     List<Attachment> pageResult = null;
     List<Attachment> entryResult = null;
-    EntityManager em = createEntityManager();
 
-    try
-    {
+
       Query q =
-        em.createNamedQuery("Attachment.entry.getAllByBlogAndPublished");
+        strategy.getNamedQuery("Attachment.entry.getAllByBlogAndPublished",
+                               false);
 
       q.setParameter("blog", blog);
       q.setParameter("published", published);
@@ -337,7 +324,8 @@ public class JpaAttachmentDAO extends JpaGenericDAO<Attachment>
         result.addAll(entryResult);
       }
 
-      q = em.createNamedQuery("Attachment.page.getAllByBlogAndPublished");
+      q = strategy.getNamedQuery("Attachment.page.getAllByBlogAndPublished",
+                                 false);
       q.setParameter("blog", blog);
       q.setParameter("published", published);
       pageResult = q.getResultList();
@@ -346,11 +334,6 @@ public class JpaAttachmentDAO extends JpaGenericDAO<Attachment>
       {
         result.addAll(pageResult);
       }
-    }
-    finally
-    {
-      em.close();
-    }
 
     entryResult = null;
     pageResult = null;
@@ -368,12 +351,11 @@ public class JpaAttachmentDAO extends JpaGenericDAO<Attachment>
    */
   public List<Attachment> getAllImages(Page page)
   {
-    EntityManager em = createEntityManager();
-    Query q = em.createNamedQuery("Attachment.getAllImagesByPage");
+    Query q = strategy.getNamedQuery("Attachment.getAllImagesByPage", false);
 
     q.setParameter("page", page);
 
-    return excecuteListQuery(em, q);
+    return excecuteListQuery(q);
   }
 
   /**

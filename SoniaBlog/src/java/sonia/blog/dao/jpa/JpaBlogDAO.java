@@ -81,11 +81,12 @@ public class JpaBlogDAO extends JpaGenericDAO<Blog> implements BlogDAO
    * Constructs ...
    *
    *
-   * @param entityManagerFactory
+   *
+   * @param strategy
    */
-  public JpaBlogDAO(EntityManagerFactory entityManagerFactory)
+  public JpaBlogDAO(JpaStrategy strategy)
   {
-    super(entityManagerFactory, Blog.class, Constants.LISTENER_BLOG);
+    super(strategy, Blog.class, Constants.LISTENER_BLOG);
   }
 
   //~--- methods --------------------------------------------------------------
@@ -125,13 +126,10 @@ public class JpaBlogDAO extends JpaGenericDAO<Blog> implements BlogDAO
     fireEvent(Action.PREREMOVE, blog);
 
     boolean result = false;
-    EntityManager em = createEntityManager();
 
     try
     {
-      em.getTransaction().begin();
-
-      Query q = em.createNamedQuery("BlogHitCount.findByBlog");
+      Query q = strategy.getNamedQuery("BlogHitCount.findByBlog", false);
 
       q.setParameter("blog", blog);
 
@@ -139,11 +137,11 @@ public class JpaBlogDAO extends JpaGenericDAO<Blog> implements BlogDAO
 
       for (BlogHitCount hit : hits)
       {
-        em.remove(em.merge(hit));
+        strategy.remove(hit);
       }
 
-      em.remove(em.merge(blog));
-      em.getTransaction().commit();
+      strategy.remove(blog);
+      strategy.flush();
       fireEvent(Action.POSTREMOVE, blog);
 
       ResourceManager resManager =
@@ -170,16 +168,9 @@ public class JpaBlogDAO extends JpaGenericDAO<Blog> implements BlogDAO
     }
     catch (Exception ex)
     {
-      if (em.getTransaction().isActive())
-      {
-        em.getTransaction().rollback();
-      }
+
 
       logger.log(Level.SEVERE, null, ex);
-    }
-    finally
-    {
-      em.close();
     }
 
     return result;
@@ -198,13 +189,12 @@ public class JpaBlogDAO extends JpaGenericDAO<Blog> implements BlogDAO
    */
   public Blog get(String identifier, boolean active)
   {
-    EntityManager em = createEntityManager();
-    Query q = em.createNamedQuery("Blog.getByIdentifierAndActive");
+    Query q = strategy.getNamedQuery("Blog.getByIdentifierAndActive", false);
 
     q.setParameter("identifier", identifier);
     q.setParameter("active", active);
 
-    return excecuteQuery(em, q);
+    return excecuteQuery( q);
   }
 
   /**
@@ -217,12 +207,11 @@ public class JpaBlogDAO extends JpaGenericDAO<Blog> implements BlogDAO
    */
   public Blog get(String identifier)
   {
-    EntityManager em = createEntityManager();
-    Query q = em.createNamedQuery("Blog.getByIdentifier");
+    Query q = strategy.getNamedQuery("Blog.getByIdentifier", false);
 
     q.setParameter("identifier", identifier);
 
-    return excecuteQuery(em, q);
+    return excecuteQuery( q);
   }
 
   /**
@@ -262,14 +251,13 @@ public class JpaBlogDAO extends JpaGenericDAO<Blog> implements BlogDAO
    */
   public List<Blog> getAll(boolean active, int start, int max)
   {
-    EntityManager em = createEntityManager();
-    Query q = em.createNamedQuery("Blog.getByActive");
+    Query q = strategy.getNamedQuery("Blog.getByActive", false);
 
     q.setParameter("active", active);
     q.setFirstResult(start);
     q.setMaxResults(max);
 
-    return excecuteListQuery(em, q);
+    return excecuteListQuery( q);
   }
 
   /**
@@ -284,14 +272,13 @@ public class JpaBlogDAO extends JpaGenericDAO<Blog> implements BlogDAO
    */
   public List<BlogMember> getMembers(Blog blog, int start, int max)
   {
-    EntityManager em = createEntityManager();
-    Query q = em.createNamedQuery("BlogMember.getAllByBlog");
+    Query q = strategy.getNamedQuery("BlogMember.getAllByBlog", false);
 
     q.setParameter("blog", blog);
     q.setFirstResult(start);
     q.setMaxResults(max);
 
-    return excecuteListQuery(BlogMember.class, em, q);
+    return excecuteListQuery(BlogMember.class,  q);
   }
 
   /**
@@ -308,15 +295,14 @@ public class JpaBlogDAO extends JpaGenericDAO<Blog> implements BlogDAO
   public List<BlogMember> getMembers(Blog blog, boolean active, int start,
                                      int max)
   {
-    EntityManager em = createEntityManager();
-    Query q = em.createNamedQuery("BlogMember.getAllByBalogAndActive");
+    Query q = strategy.getNamedQuery("BlogMember.getAllByBalogAndActive", false);
 
     q.setParameter("blog", blog);
     q.setParameter("active", active);
     q.setFirstResult(start);
     q.setMaxResults(max);
 
-    return excecuteListQuery(BlogMember.class, em, q);
+    return excecuteListQuery(BlogMember.class, q);
   }
 
   /**
@@ -331,14 +317,13 @@ public class JpaBlogDAO extends JpaGenericDAO<Blog> implements BlogDAO
    */
   public List<BlogMember> getMembers(Blog blog, boolean active, boolean notify)
   {
-    EntityManager em = createEntityManager();
-    Query q = em.createNamedQuery("BlogMember.getAllByBlogActiveAndNotify");
+    Query q = strategy.getNamedQuery("BlogMember.getAllByBlogActiveAndNotify", false);
 
     q.setParameter("blog", blog);
     q.setParameter("active", active);
     q.setParameter("notify", notify);
 
-    return excecuteListQuery(BlogMember.class, em, q);
+    return excecuteListQuery(BlogMember.class, q);
   }
 
   /**
@@ -352,13 +337,12 @@ public class JpaBlogDAO extends JpaGenericDAO<Blog> implements BlogDAO
    */
   public String getParameter(Blog blog, String name)
   {
-    EntityManager em = createEntityManager();
-    Query q = em.createNamedQuery("BlogParameter.getValueByBlogAndName");
+    Query q = strategy.getNamedQuery("BlogParameter.getValueByBlogAndName", false);
 
     q.setParameter("blog", blog);
     q.setParameter("name", name);
 
-    return excecuteQuery(String.class, em, q);
+    return excecuteQuery(String.class, q);
   }
 
   /**
@@ -371,13 +355,12 @@ public class JpaBlogDAO extends JpaGenericDAO<Blog> implements BlogDAO
    */
   public Map<String, String> getParameters(Blog blog)
   {
-    EntityManager em = createEntityManager();
-    Query q = em.createNamedQuery("BlogParameter.getAllByBlog");
+    Query q = strategy.getNamedQuery("BlogParameter.getAllByBlog", false);
 
     q.setParameter("blog", blog);
 
     Map<String, String> paramMap = new HashMap<String, String>();
-    List<BlogParameter> parameters = excecuteListQuery(BlogParameter.class, em,
+    List<BlogParameter> parameters = excecuteListQuery(BlogParameter.class,
                                        q);
 
     if (Util.hasContent(parameters))
@@ -411,8 +394,7 @@ public class JpaBlogDAO extends JpaGenericDAO<Blog> implements BlogDAO
       throw new BlogSecurityException("AdminSession is required");
     }
 
-    EntityManager em = createEntityManager();
-    Query q = em.createNamedQuery("BlogParameter.getByBlogAndName");
+    Query q = strategy.getNamedQuery("BlogParameter.getByBlogAndName", false);
 
     q.setParameter("blog", blog);
     q.setParameter("name", name);
@@ -427,33 +409,24 @@ public class JpaBlogDAO extends JpaGenericDAO<Blog> implements BlogDAO
 
     try
     {
-      em.getTransaction().begin();
 
       if (param != null)
       {
         param.setValue(value);
-        em.merge(param);
+        strategy.edit(param);
       }
       else
       {
         param = new BlogParameter(blog, name, value);
-        em.persist(param);
+        strategy.store(param);
       }
 
-      em.getTransaction().commit();
+      strategy.flush();
     }
     catch (Exception ex)
     {
-      if (em.getTransaction().isActive())
-      {
-        em.getTransaction().rollback();
-      }
 
       logger.log(Level.SEVERE, null, ex);
-    }
-    finally
-    {
-      em.close();
     }
   }
 

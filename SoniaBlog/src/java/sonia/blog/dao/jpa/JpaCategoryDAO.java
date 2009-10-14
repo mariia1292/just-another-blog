@@ -45,8 +45,6 @@ import sonia.blog.entity.Category;
 import java.util.List;
 import java.util.logging.Logger;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
 
@@ -70,9 +68,9 @@ public class JpaCategoryDAO extends JpaGenericDAO<Category>
    *
    * @param entityManagerFactory
    */
-  public JpaCategoryDAO(EntityManagerFactory entityManagerFactory)
+  public JpaCategoryDAO(JpaStrategy strategy)
   {
-    super(entityManagerFactory, Category.class, Constants.LISTENER_CATEGORY);
+    super(strategy, Category.class, Constants.LISTENER_CATEGORY);
   }
 
   //~--- methods --------------------------------------------------------------
@@ -115,8 +113,7 @@ public class JpaCategoryDAO extends JpaGenericDAO<Category>
   public Category get(Blog blog, String name)
   {
     Category category = null;
-    EntityManager em = createEntityManager();
-    Query q = em.createNamedQuery("Category.getByBlogAndName");
+    Query q = strategy.getNamedQuery("Category.getByBlogAndName", false);
 
     q.setParameter("blog", blog);
     q.setParameter("name", name);
@@ -126,10 +123,6 @@ public class JpaCategoryDAO extends JpaGenericDAO<Category>
       category = (Category) q.getSingleResult();
     }
     catch (NoResultException ex) {}
-    finally
-    {
-      em.close();
-    }
 
     return category;
   }
@@ -198,8 +191,7 @@ public class JpaCategoryDAO extends JpaGenericDAO<Category>
   public Category getFirst(Blog blog)
   {
     Category category = null;
-    EntityManager em = createEntityManager();
-    Query q = em.createNamedQuery("Category.findFirstByBlog");
+    Query q = strategy.getNamedQuery("Category.findFirstByBlog", false);
 
     q.setParameter("blog", blog);
 
@@ -208,10 +200,7 @@ public class JpaCategoryDAO extends JpaGenericDAO<Category>
       category = (Category) q.getSingleResult();
     }
     catch (NoResultException ex) {}
-    finally
-    {
-      em.close();
-    }
+
 
     return category;
   }

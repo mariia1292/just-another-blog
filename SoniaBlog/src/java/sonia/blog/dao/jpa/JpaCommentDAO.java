@@ -46,8 +46,6 @@ import sonia.blog.entity.Entry;
 import java.util.List;
 import java.util.logging.Logger;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
 
@@ -70,9 +68,9 @@ public class JpaCommentDAO extends JpaGenericDAO<Comment> implements CommentDAO
    *
    * @param entityManagerFactory
    */
-  public JpaCommentDAO(EntityManagerFactory entityManagerFactory)
+  public JpaCommentDAO(JpaStrategy strategy)
   {
-    super(entityManagerFactory, Comment.class, Constants.LISTENER_COMMENT);
+    super(strategy, Comment.class, Constants.LISTENER_COMMENT);
   }
 
   //~--- methods --------------------------------------------------------------
@@ -128,8 +126,7 @@ public class JpaCommentDAO extends JpaGenericDAO<Comment> implements CommentDAO
   public List<Comment> findAllActivesByEntry(Entry entry, int start, int max)
   {
     List<Comment> comments = null;
-    EntityManager em = createEntityManager();
-    Query q = em.createNamedQuery("Comment.findAllActivesByEntry");
+    Query q = strategy.getNamedQuery("Comment.findAllActivesByEntry", false);
 
     q.setParameter("entry", entry);
 
@@ -148,10 +145,7 @@ public class JpaCommentDAO extends JpaGenericDAO<Comment> implements CommentDAO
       comments = q.getResultList();
     }
     catch (NoResultException ex) {}
-    finally
-    {
-      em.close();
-    }
+
 
     return comments;
   }
