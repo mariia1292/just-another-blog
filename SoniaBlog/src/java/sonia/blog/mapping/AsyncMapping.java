@@ -39,7 +39,6 @@ import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.app.BlogRequest;
 import sonia.blog.api.app.BlogResponse;
 import sonia.blog.api.app.Constants;
-import sonia.blog.api.dao.EntryDAO;
 import sonia.blog.api.dao.PageDAO;
 import sonia.blog.api.link.LinkBuilder;
 import sonia.blog.api.mapping.FinalMapping;
@@ -52,7 +51,6 @@ import sonia.blog.api.util.PageNavigation;
 import sonia.blog.entity.Blog;
 import sonia.blog.entity.Page;
 import sonia.blog.entity.Role;
-import sonia.blog.util.BlogUtil;
 
 import sonia.cache.ObjectCache;
 
@@ -75,9 +73,7 @@ import java.text.DateFormat;
 import java.text.MessageFormat;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collection;
-import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -136,10 +132,6 @@ public class AsyncMapping extends FinalMapping
         {
           navigationOptions(request, response);
         }
-        else if (provider.equals("calendar"))
-        {
-          calendar(request, response);
-        }
         else if (provider.equals("messages"))
         {
           messages(request, response);
@@ -153,80 +145,6 @@ public class AsyncMapping extends FinalMapping
     else
     {
       response.sendError(HttpServletResponse.SC_NOT_FOUND);
-    }
-  }
-
-  /**
-   * Method description
-   *
-   *
-   * @param request
-   * @param response
-   *
-   * @throws IOException
-   */
-  private void calendar(BlogRequest request, BlogResponse response)
-          throws IOException
-  {
-    Calendar calendar = getCalendar(request);
-    PrintWriter writer = null;
-    EntryDAO entryDAO = BlogContext.getDAOFactory().getEntryDAO();
-    int year = calendar.get(Calendar.YEAR);
-    int month = calendar.get(Calendar.MONTH);
-    Date startDate = BlogUtil.createStartDate(year, month);
-    Date endData = BlogUtil.createEndDate(year, month);
-    List<Date> events = entryDAO.findAllCalendarDates(request.getCurrentBlog(),
-                          startDate, endData);
-    Calendar today = Calendar.getInstance();
-
-    try
-    {
-      writer = response.getWriter();
-      writer.print("{\"year\":");
-      writer.print(year);
-      writer.print(", \"month\":");
-      writer.print(month + 1);
-      writer.print(", \"weeks\":");
-      writer.print(calendar.getActualMaximum(Calendar.WEEK_OF_MONTH));
-      writer.print(", \"firstDay\":");
-      writer.print(calendar.get(Calendar.DAY_OF_WEEK));
-      writer.print(", \"daysOfMonth\":");
-      writer.print(calendar.getActualMaximum(Calendar.DAY_OF_MONTH));
-
-      if (today.get(Calendar.MONTH) == month)
-      {
-        writer.print(", \"today\":");
-        writer.print(today.get(Calendar.DAY_OF_MONTH));
-      }
-
-      writer.print(", \"events\": \"");
-
-      if (Util.hasContent(events))
-      {
-        List<Integer> days = getDays(events);
-        Iterator<Integer> dayIt = days.iterator();
-
-        while (dayIt.hasNext())
-        {
-          Integer day = dayIt.next();
-
-          writer.print(day);
-
-          if (dayIt.hasNext())
-          {
-            writer.print(",");
-          }
-        }
-      }
-
-      writer.println("\"}");
-    }
-    finally
-    {
-      if (writer != null)
-      {
-        writer.close();
-      }
     }
   }
 
@@ -713,86 +631,5 @@ public class AsyncMapping extends FinalMapping
     }
 
     writer.println("]");
-  }
-
-  //~--- get methods ----------------------------------------------------------
-
-  /**
-   * Method description
-   *
-   *
-   * @param request
-   *
-   * @return
-   */
-  private Calendar getCalendar(BlogRequest request)
-  {
-    Calendar calendar = null;
-    int year = -1;
-    int month = -1;
-
-    try
-    {
-      String yearParam = request.getParameter("year");
-      String monthParam = request.getParameter("month");
-
-      if (Util.hasContent(yearParam))
-      {
-        year = Integer.parseInt(yearParam);
-      }
-      else
-      {
-        year = Calendar.getInstance().get(Calendar.YEAR);
-      }
-
-      if (Util.hasContent(monthParam))
-      {
-        month = Integer.parseInt(monthParam) - 1;
-      }
-      else
-      {
-        month = Calendar.getInstance().get(Calendar.MONTH);
-      }
-
-      calendar = Calendar.getInstance();
-      calendar.set(Calendar.YEAR, year);
-      calendar.set(Calendar.MONTH, month);
-      calendar.set(Calendar.DAY_OF_MONTH, 1);
-    }
-    catch (NumberFormatException ex)
-    {
-      logger.log(Level.WARNING, null, ex);
-    }
-
-    return calendar;
-  }
-
-  /**
-   * Method description
-   *
-   *
-   * @param dates
-   *
-   * @return
-   */
-  private List<Integer> getDays(List<Date> dates)
-  {
-    List<Integer> days = new ArrayList<Integer>();
-    Calendar cal = null;
-
-    for (Date date : dates)
-    {
-      cal = Calendar.getInstance();
-      cal.setTime(date);
-
-      Integer day = Integer.valueOf(cal.get(Calendar.DAY_OF_MONTH));
-
-      if (!days.contains(day))
-      {
-        days.add(day);
-      }
-    }
-
-    return days;
   }
 }
