@@ -232,7 +232,7 @@ public class AuthorMapping extends ScrollableFilterMapping
                                 int start, int max)
   {
     List<Entry> entries = entryDAO.getAllByAuthor(blog, author, true, start,
-                            max);
+                            max + 1);
     String prevUri = null;
     String nextUri = null;
 
