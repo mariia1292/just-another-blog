@@ -83,6 +83,30 @@ public class BlogRequest extends HttpServletRequestWrapper
   public BlogRequest(HttpServletRequest request)
   {
     super(request);
+
+    if (logger.isLoggable(Level.FINEST))
+    {
+      startTime = System.currentTimeMillis();
+    }
+  }
+
+  //~--- methods --------------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   */
+  public void finish()
+  {
+    if (logger.isLoggable(Level.FINEST))
+    {
+      StringBuffer msg = new StringBuffer();
+
+      msg.append("request at ").append(getRequestURI());
+      msg.append(" finished in ");
+      msg.append(System.currentTimeMillis() - startTime).append("ms");
+      logger.finest(msg.toString());
+    }
   }
 
   //~--- get methods ----------------------------------------------------------
@@ -319,6 +343,17 @@ public class BlogRequest extends HttpServletRequestWrapper
    *
    * @return
    */
+  public long getStartTime()
+  {
+    return startTime;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
   public User getUser()
   {
     BlogSession bs = getBlogSession();
@@ -472,6 +507,9 @@ public class BlogRequest extends HttpServletRequestWrapper
 
   /** Field description */
   private String redirect;
+
+  /** Field description */
+  private long startTime = -1l;
 
   /** Field description */
   private String viewId;

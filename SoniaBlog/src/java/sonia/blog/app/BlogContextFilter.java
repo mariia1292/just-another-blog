@@ -311,6 +311,8 @@ public class BlogContextFilter implements Filter
         cache.put(cacheKey, cacheObject);
       }
     }
+
+    request.finish();
   }
 
   //~--- fields ---------------------------------------------------------------
