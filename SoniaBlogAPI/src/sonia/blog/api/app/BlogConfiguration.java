@@ -116,13 +116,19 @@ public class BlogConfiguration extends XmlConfiguration
 
     if (!backupDir.exists())
     {
-      backupDir.mkdirs();
+      if (!backupDir.mkdirs())
+      {
+        throw new IOException("could not create backup directory");
+      }
     }
 
     File backupFile = new File(backupDir,
                                "config-" + new Date().getTime() + ".xml");
 
-    file.renameTo(backupFile);
+    if (!file.renameTo(backupFile))
+    {
+      throw new IOException("could not backup config");
+    }
 
     FileOutputStream fos = new FileOutputStream(file);
 
@@ -134,7 +140,10 @@ public class BlogConfiguration extends XmlConfiguration
     {
       if (!file.exists() && backupFile.exists())
       {
-        backupFile.renameTo(file);
+        if (!backupFile.renameTo(file))
+        {
+          throw new IOException("could not restore config");
+        }
       }
 
       throw ex;

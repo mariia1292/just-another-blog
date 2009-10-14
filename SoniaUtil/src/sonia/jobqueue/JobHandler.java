@@ -60,7 +60,6 @@ public class JobHandler extends Thread
   public JobHandler(JobQueue queue, int handlerNumber)
   {
     this.queue = queue;
-    this.handlerNumber = handlerNumber;
     this.stop = false;
 
     if (logger.isLoggable(Level.FINE))
@@ -167,9 +166,6 @@ public class JobHandler extends Thread
   }
 
   //~--- fields ---------------------------------------------------------------
-
-  /** Field description */
-  private int handlerNumber;
 
   /** Field description */
   private String name;

@@ -42,6 +42,7 @@ import sonia.blog.api.app.BlogRequest;
 import sonia.blog.api.app.Constants;
 import sonia.blog.api.app.ResourceManager;
 import sonia.blog.api.editor.EditorProvider;
+import sonia.blog.api.exception.BlogException;
 import sonia.blog.api.link.LinkBuilder;
 import sonia.blog.api.util.AbstractBean;
 import sonia.blog.entity.Attachment;
@@ -323,9 +324,9 @@ public abstract class AbstractEditorBean extends AbstractBean
         File rootDir = getDirectory();
         File dir = getAttachmentDirectory(rootDir);
 
-        if (!dir.exists())
+        if (!dir.exists() && ! dir.mkdirs())
         {
-          dir.mkdirs();
+          throw new BlogException( "could not create attachment directory" );
         }
 
         File file = new File(dir, "" + System.currentTimeMillis());
@@ -691,9 +692,9 @@ public abstract class AbstractEditorBean extends AbstractBean
         File root = getDirectory();
         File dir = getAttachmentDirectory(root);
 
-        if (!dir.exists())
+        if (!dir.exists() &&!dir.mkdirs())
         {
-          dir.mkdirs();
+          throw new BlogException("could not create attachment directory");
         }
 
         while (ze != null)

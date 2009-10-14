@@ -130,9 +130,9 @@ public class Script
    */
   public void remove()
   {
-    if (file != null)
+    if ((file != null) &&!file.delete())
     {
-      file.delete();
+      throw new BlogException("could not delete script file");
     }
 
     ScriptManager.getInstance().getScripts().remove(this);

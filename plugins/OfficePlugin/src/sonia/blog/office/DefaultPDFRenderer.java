@@ -164,7 +164,10 @@ public class DefaultPDFRenderer implements PDFRenderer
     {
       try
       {
-        directory.mkdirs();
+        if (!directory.mkdirs())
+        {
+          throw new JobException("could not create directory for pdf images");
+        }
 
         List<String> images = new ArrayList<String>();
         RandomAccessFile raf = new RandomAccessFile(pdfFile, "r");

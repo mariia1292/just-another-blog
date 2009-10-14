@@ -39,6 +39,7 @@ import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.app.Constants;
 import sonia.blog.api.app.Context;
 import sonia.blog.api.dao.Dao;
+import sonia.blog.api.exception.BlogException;
 import sonia.blog.api.macro.LinkResource;
 import sonia.blog.api.macro.ScriptResource;
 import sonia.blog.api.macro.WebResource;
@@ -190,9 +191,9 @@ public class BlogContextListener implements ServletContextListener
         File pluginStore = context.getResourceManager().getDirectory(
                                Constants.RESOURCE_PLUGINSTORE);
 
-        if (!pluginStore.exists())
+        if (!pluginStore.exists() &&!pluginStore.mkdirs())
         {
-          pluginStore.mkdirs();
+          throw new BlogException("could not create the pluginstore");
         }
 
         context.getPluginContext().setStore(
