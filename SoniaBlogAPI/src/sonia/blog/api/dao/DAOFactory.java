@@ -111,6 +111,12 @@ public abstract class DAOFactory
    * Method description
    *
    */
+  public abstract void release();
+
+  /**
+   * Method description
+   *
+   */
   public abstract void update();
 
   //~--- get methods ----------------------------------------------------------

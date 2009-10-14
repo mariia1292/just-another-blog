@@ -58,7 +58,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Logger;
+/*import java.util.logging.Level;
+import java.util.logging.Logger;*/
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletResponse;
@@ -71,8 +72,8 @@ public abstract class FilterMapping implements Mapping
 {
 
   /** Field description */
-  private static Logger logger =
-    Logger.getLogger(FilterMapping.class.getName());
+  /*private static Logger logger =
+    Logger.getLogger(FilterMapping.class.getName());*/
 
   //~--- methods --------------------------------------------------------------
 
@@ -115,7 +116,7 @@ public abstract class FilterMapping implements Mapping
 
     if (Util.isBlank(viewId))
     {
-      logger.severe("viewid is null, sending '404 not found'");
+      //logger.severe("viewid is null, sending '404 not found'");
       resonse.sendError(HttpServletResponse.SC_NOT_FOUND);
     }
     else

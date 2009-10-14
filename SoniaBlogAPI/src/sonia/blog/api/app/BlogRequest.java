@@ -95,6 +95,8 @@ public class BlogRequest extends HttpServletRequestWrapper
   /**
    * Method description
    *
+   *
+   * @param success
    */
   public void finish()
   {
@@ -107,6 +109,8 @@ public class BlogRequest extends HttpServletRequestWrapper
       msg.append(System.currentTimeMillis() - startTime).append("ms");
       logger.finest(msg.toString());
     }
+
+    BlogContext.getDAOFactory().release();
   }
 
   //~--- get methods ----------------------------------------------------------
