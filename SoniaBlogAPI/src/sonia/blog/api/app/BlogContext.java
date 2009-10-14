@@ -70,6 +70,7 @@ import sonia.security.authentication.LoginCallbackHandler;
 import sonia.security.cipher.Cipher;
 import sonia.security.cipher.DefaultCipher;
 
+import sonia.util.ServiceLocator;
 import sonia.util.Util;
 
 //~--- JDK imports ------------------------------------------------------------
@@ -97,7 +98,7 @@ import javax.servlet.ServletContext;
  *
  * @author Sebastian Sdorra
  */
-public final class BlogContext
+public class BlogContext
 {
 
   /** Field description */
@@ -109,7 +110,7 @@ public final class BlogContext
    * Constructs ...
    *
    */
-  public BlogContext()
+  protected BlogContext()
   {
     this.injectionProvider = new DefaultInjectionProvider();
     this.pluginContext = new PluginContext();
@@ -139,7 +140,8 @@ public final class BlogContext
   {
     if (instance == null)
     {
-      instance = new BlogContext();
+      instance = ServiceLocator.locateService(BlogContext.class,
+              new BlogContext());
     }
 
     return instance;
