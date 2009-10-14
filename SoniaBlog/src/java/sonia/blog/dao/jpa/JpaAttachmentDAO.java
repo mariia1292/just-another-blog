@@ -44,6 +44,7 @@ import sonia.blog.entity.Page;
 
 //~--- JDK imports ------------------------------------------------------------
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -303,6 +304,58 @@ public class JpaAttachmentDAO extends JpaGenericDAO<Attachment>
     q.setParameter("page", page);
 
     return excecuteListQuery(em, q);
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param blog
+   * @param published
+   *
+   * @return
+   */
+  @SuppressWarnings("unchecked")
+  public List<Attachment> getAll(Blog blog, boolean published)
+  {
+    List<Attachment> result = new ArrayList<Attachment>();
+    List<Attachment> pageResult = null;
+    List<Attachment> entryResult = null;
+    EntityManager em = createEntityManager();
+
+    try
+    {
+      Query q =
+        em.createNamedQuery("Attachment.entry.getAllByBlogAndPublished");
+
+      q.setParameter("blog", blog);
+      q.setParameter("published", published);
+      entryResult = q.getResultList();
+
+      if (entryResult != null)
+      {
+        result.addAll(entryResult);
+      }
+
+      q = em.createNamedQuery("Attachment.page.getAllByBlogAndPublished");
+      q.setParameter("blog", blog);
+      q.setParameter("published", published);
+      pageResult = q.getResultList();
+
+      if (pageResult != null)
+      {
+        result.addAll(pageResult);
+      }
+    }
+    finally
+    {
+      em.close();
+    }
+
+    entryResult = null;
+    pageResult = null;
+
+    return result;
   }
 
   /**

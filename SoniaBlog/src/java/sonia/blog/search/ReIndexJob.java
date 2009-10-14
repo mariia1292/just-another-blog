@@ -35,12 +35,10 @@ package sonia.blog.search;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
-import org.apache.lucene.util.Version;
 
 import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.app.BlogJob;

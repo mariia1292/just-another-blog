@@ -132,6 +132,17 @@ public interface AttachmentDAO extends GenericDAO<Attachment>
    * Method description
    *
    *
+   * @param blog
+   * @param active
+   *
+   * @return
+   */
+  public List<Attachment> getAll(Blog blog, boolean published);
+
+  /**
+   * Method description
+   *
+   *
    * @param page
    *
    * @return

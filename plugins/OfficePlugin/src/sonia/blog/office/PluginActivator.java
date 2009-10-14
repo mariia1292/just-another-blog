@@ -37,8 +37,11 @@ package sonia.blog.office;
 
 import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.app.Constants;
+import sonia.blog.api.app.Context;
+import sonia.blog.api.dao.DAOListener;
 import sonia.blog.api.editor.AttachmentHandler;
 import sonia.blog.api.mapping.MappingHandler;
+import sonia.blog.api.search.SearchProvider;
 
 import sonia.macro.MacroParser;
 
@@ -46,6 +49,7 @@ import sonia.plugin.Activator;
 import sonia.plugin.PluginContext;
 import sonia.plugin.service.Service;
 import sonia.plugin.service.ServiceReference;
+import sonia.plugin.service.ServiceRegistry;
 
 /**
  *
@@ -121,15 +125,18 @@ public class PluginActivator implements Activator
   {
     if (rendererReference == null)
     {
-      rendererReference =
-        BlogContext.getInstance().getServiceRegistry().register(
-          PDFRenderer.class, PDFRenderer.SERVICE);
+      rendererReference = registry.register(PDFRenderer.class,
+              PDFRenderer.SERVICE);
     }
 
     return rendererReference;
   }
 
   //~--- fields ---------------------------------------------------------------
+
+  /** Field description */
+  @Service(Constants.LISTENER_ATTACHMENT)
+  private ServiceReference<DAOListener> attachmentListenerReference;
 
   /** Field description */
   private PdfHandler handler;
@@ -145,8 +152,16 @@ public class PluginActivator implements Activator
   private MacroParser parser;
 
   /** Field description */
+  @Context
+  private ServiceRegistry registry;
+
+  /** Field description */
   private PDFRenderer renderer;
 
   /** Field description */
   private ServiceReference<PDFRenderer> rendererReference;
+
+  /** Field description */
+  @Service(Constants.SERVICE_SEARCHPROVIDER)
+  private ServiceReference<SearchProvider> searchProviderReference;
 }

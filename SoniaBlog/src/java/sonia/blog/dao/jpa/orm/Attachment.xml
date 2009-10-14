@@ -45,6 +45,18 @@
         select a from Attachment a where a.page = :page and a.mimeType like 'image/%'
       </query>
     </named-query>
+    <named-query name="Attachment.entry.getAllByBlogAndPublished">
+      <query>
+        select a from Attachment a join a.entry e join e.blog b
+        where b = :blog and e.published = :published
+      </query>
+    </named-query>
+    <named-query name="Attachment.page.getAllByBlogAndPublished">
+      <query>
+        select a from Attachment a join a.page p join p.blog b
+        where b = :blog and p.published = :published
+      </query>
+    </named-query>
     <pre-persist method-name="prePersists" />
     <attributes>
       <id name="id">
