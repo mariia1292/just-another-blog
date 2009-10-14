@@ -111,53 +111,60 @@ public class BlogContextFilter implements Filter
     BlogRequest request = new BlogRequest((HttpServletRequest) req);
     BlogResponse response = new BlogResponse((HttpServletResponse) resp);
 
-    for (BlogRequestListener listener : listenerReference.getAll())
+    try
     {
-      listener.beforeMapping(request);
-    }
-
-    if (request.getUserPrincipal() == null)
-    {
-      int value = configuration.getInteger(Constants.CONFIG_SSO,
-                    Constants.SSO_ONEPERSESSION);
-
-      if ((value == Constants.SSO_ONEPERSESSION)
-          && (request.getSession(true).getAttribute(SSO_SESSION_VAR) == null))
+      for (BlogRequestListener listener : listenerReference.getAll())
       {
-        doSSOLogin(request, response);
-        request.getSession().setAttribute(SSO_SESSION_VAR, Boolean.TRUE);
-      }
-      else if (value == Constants.SSO_EVERYREQUEST)
-      {
-        doSSOLogin(request, response);
-      }
-    }
-
-    if (BlogContext.getInstance().isInstalled())
-    {
-      LinkBuilder builder = BlogContext.getInstance().getLinkBuilder();
-
-      if (!builder.isInit())
-      {
-        builder.init(request);
+        listener.beforeMapping(request);
       }
 
-      if ((request.getSession() == null) || request.getSession().isNew())
+      if (request.getUserPrincipal() == null)
       {
-        Blog blog = request.getCurrentBlog();
+        int value = configuration.getInteger(Constants.CONFIG_SSO,
+                      Constants.SSO_ONEPERSESSION);
 
-        if (blog != null)
+        if ((value == Constants.SSO_ONEPERSESSION)
+            && (request.getSession(true).getAttribute(SSO_SESSION_VAR) == null))
         {
-          BlogContext.getDAOFactory().getBlogHitCountDAO().increase(blog);
+          doSSOLogin(request, response);
+          request.getSession().setAttribute(SSO_SESSION_VAR, Boolean.TRUE);
+        }
+        else if (value == Constants.SSO_EVERYREQUEST)
+        {
+          doSSOLogin(request, response);
         }
       }
+
+      if (BlogContext.getInstance().isInstalled())
+      {
+        LinkBuilder builder = BlogContext.getInstance().getLinkBuilder();
+
+        if (!builder.isInit())
+        {
+          builder.init(request);
+        }
+
+        if ((request.getSession() == null) || request.getSession().isNew())
+        {
+          Blog blog = request.getCurrentBlog();
+
+          if (blog != null)
+          {
+            BlogContext.getDAOFactory().getBlogHitCountDAO().increase(blog);
+          }
+        }
+      }
+
+      handleRequest(request, response, chain);
+
+      for (BlogRequestListener listener : listenerReference.getAll())
+      {
+        listener.afterMapping(request);
+      }
     }
-
-    handleRequest(request, response, chain);
-
-    for (BlogRequestListener listener : listenerReference.getAll())
+    finally
     {
-      listener.afterMapping(request);
+      request.finish();
     }
   }
 
@@ -311,8 +318,6 @@ public class BlogContextFilter implements Filter
         cache.put(cacheKey, cacheObject);
       }
     }
-
-    request.finish();
   }
 
   //~--- fields ---------------------------------------------------------------

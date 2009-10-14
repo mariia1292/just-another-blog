@@ -51,8 +51,6 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
 
@@ -81,14 +79,14 @@ public abstract class JpaGenericDAO<T> implements GenericDAO<T>
    *
    *
    *
-   * @param entityManagerFactory
+   *
+   * @param strategy
    * @param clazz
    * @param servicePath
    */
-  public JpaGenericDAO(EntityManagerFactory entityManagerFactory,
-                       Class<T> clazz, String servicePath)
+  public JpaGenericDAO(JpaStrategy strategy, Class<T> clazz, String servicePath)
   {
-    this.entityManagerFactory = entityManagerFactory;
+    this.strategy = strategy;
     this.clazz = clazz;
 
     BlogContext context = BlogContext.getInstance();
@@ -133,14 +131,10 @@ public abstract class JpaGenericDAO<T> implements GenericDAO<T>
     fireEvent(Action.PREADD, item);
 
     boolean result = true;
-    EntityManager em = createEntityManager();
-
-    em.getTransaction().begin();
 
     try
     {
-      em.persist(item);
-      em.getTransaction().commit();
+      strategy.store(item);
 
       if (logger.isLoggable(Level.FINER))
       {
@@ -155,17 +149,8 @@ public abstract class JpaGenericDAO<T> implements GenericDAO<T>
     }
     catch (Exception ex)
     {
-      if (em.getTransaction().isActive())
-      {
-        em.getTransaction().rollback();
-      }
-
       logger.log(Level.SEVERE, null, ex);
       result = false;
-    }
-    finally
-    {
-      em.close();
     }
 
     return result;
@@ -195,14 +180,11 @@ public abstract class JpaGenericDAO<T> implements GenericDAO<T>
     fireEvent(Action.PREUPDATE, item);
 
     boolean result = true;
-    EntityManager em = createEntityManager();
-
-    em.getTransaction().begin();
 
     try
     {
-      item = em.merge(item);
-      em.getTransaction().commit();
+      strategy.edit(item);
+      strategy.flush();
 
       if (logger.isLoggable(Level.FINER))
       {
@@ -217,17 +199,8 @@ public abstract class JpaGenericDAO<T> implements GenericDAO<T>
     }
     catch (Exception ex)
     {
-      if (em.getTransaction().isActive())
-      {
-        em.getTransaction().rollback();
-      }
-
       logger.log(Level.SEVERE, null, ex);
       result = false;
-    }
-    finally
-    {
-      em.close();
     }
 
     return result;
@@ -257,14 +230,11 @@ public abstract class JpaGenericDAO<T> implements GenericDAO<T>
     fireEvent(Action.PREREMOVE, item);
 
     boolean result = true;
-    EntityManager em = createEntityManager();
-
-    em.getTransaction().begin();
 
     try
     {
-      em.remove(em.merge(item));
-      em.getTransaction().commit();
+      strategy.remove(item);
+      strategy.flush();
 
       if (logger.isLoggable(Level.FINER))
       {
@@ -279,17 +249,8 @@ public abstract class JpaGenericDAO<T> implements GenericDAO<T>
     }
     catch (Exception ex)
     {
-      if (em.getTransaction().isActive())
-      {
-        em.getTransaction().rollback();
-      }
-
       logger.log(Level.SEVERE, null, ex);
       result = false;
-    }
-    finally
-    {
-      em.close();
     }
 
     return result;
@@ -308,17 +269,13 @@ public abstract class JpaGenericDAO<T> implements GenericDAO<T>
   public T get(Long id)
   {
     T item = null;
-    EntityManager em = createEntityManager();
 
     try
     {
-      item = em.find(clazz, id);
+      item = strategy.get(clazz, id);
     }
     catch (NoResultException ex) {}
-    finally
-    {
-      em.close();
-    }
+    finally {}
 
     return item;
   }
@@ -360,36 +317,14 @@ public abstract class JpaGenericDAO<T> implements GenericDAO<T>
    */
   protected long countQuery(String queryName, Blog blog)
   {
-    long result = 0;
-    EntityManager em = createEntityManager();
-    Query q = em.createNamedQuery(queryName);
+    Query q = strategy.getNamedQuery(queryName, false);
 
     if (blog != null)
     {
       q.setParameter("blog", blog);
     }
 
-    try
-    {
-      result = (Long) q.getSingleResult();
-    }
-    finally
-    {
-      em.close();
-    }
-
-    return result;
-  }
-
-  /**
-   * Method description
-   *
-   *
-   * @return
-   */
-  protected EntityManager createEntityManager()
-  {
-    return entityManagerFactory.createEntityManager();
+    return (Long) q.getSingleResult();
   }
 
   /**
@@ -397,14 +332,13 @@ public abstract class JpaGenericDAO<T> implements GenericDAO<T>
    *
    *
    *
-   * @param em
    * @param q
    *
    * @return
    */
-  protected List<T> excecuteListQuery(EntityManager em, Query q)
+  protected List<T> excecuteListQuery(Query q)
   {
-    return excecuteListQuery(clazz, em, q);
+    return excecuteListQuery(clazz, q);
   }
 
   /**
@@ -412,15 +346,13 @@ public abstract class JpaGenericDAO<T> implements GenericDAO<T>
    *
    *
    * @param type
-   * @param em
    * @param q
    * @param <O>
    *
    * @return
    */
   @SuppressWarnings("unchecked")
-  protected <O> List<O> excecuteListQuery(Class<O> type, EntityManager em,
-          Query q)
+  protected <O> List<O> excecuteListQuery(Class<O> type, Query q)
   {
     List<O> resultList = null;
 
@@ -429,10 +361,6 @@ public abstract class JpaGenericDAO<T> implements GenericDAO<T>
       resultList = q.getResultList();
     }
     catch (NoResultException ex) {}
-    finally
-    {
-      em.close();
-    }
 
     return resultList;
   }
@@ -442,14 +370,13 @@ public abstract class JpaGenericDAO<T> implements GenericDAO<T>
    *
    *
    *
-   * @param em
    * @param q
    *
    * @return
    */
-  protected T excecuteQuery(EntityManager em, Query q)
+  protected T excecuteQuery(Query q)
   {
-    return excecuteQuery(clazz, em, q);
+    return excecuteQuery(clazz, q);
   }
 
   /**
@@ -457,14 +384,13 @@ public abstract class JpaGenericDAO<T> implements GenericDAO<T>
    *
    *
    * @param type
-   * @param em
    * @param q
    * @param <O>
    *
    * @return
    */
   @SuppressWarnings("unchecked")
-  protected <O> O excecuteQuery(Class<O> type, EntityManager em, Query q)
+  protected <O> O excecuteQuery(Class<O> type, Query q)
   {
     O item = null;
 
@@ -473,10 +399,6 @@ public abstract class JpaGenericDAO<T> implements GenericDAO<T>
       item = (O) q.getSingleResult();
     }
     catch (NoResultException ex) {}
-    finally
-    {
-      em.close();
-    }
 
     return item;
   }
@@ -537,8 +459,7 @@ public abstract class JpaGenericDAO<T> implements GenericDAO<T>
   @SuppressWarnings("unchecked")
   protected List<T> findList(String queryName, Blog blog, int start, int max)
   {
-    EntityManager em = createEntityManager();
-    Query q = em.createNamedQuery(queryName);
+    Query q = strategy.getNamedQuery(queryName, false);
 
     if (blog != null)
     {
@@ -555,7 +476,7 @@ public abstract class JpaGenericDAO<T> implements GenericDAO<T>
       q.setMaxResults(max);
     }
 
-    return excecuteListQuery(em, q);
+    return excecuteListQuery(q);
   }
 
   /**
@@ -658,7 +579,7 @@ public abstract class JpaGenericDAO<T> implements GenericDAO<T>
   //~--- fields ---------------------------------------------------------------
 
   /** Field description */
-  protected EntityManagerFactory entityManagerFactory;
+  protected JpaStrategy strategy;
 
   /** Field description */
   private Class<T> clazz;

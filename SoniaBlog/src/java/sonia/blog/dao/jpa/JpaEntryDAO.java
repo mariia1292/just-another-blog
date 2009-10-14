@@ -59,8 +59,6 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
 
@@ -82,9 +80,9 @@ public class JpaEntryDAO extends JpaGenericDAO<Entry> implements EntryDAO
    *
    * @param entityManagerFactory
    */
-  public JpaEntryDAO(EntityManagerFactory entityManagerFactory)
+  public JpaEntryDAO(JpaStrategy strategy)
   {
-    super(entityManagerFactory, Entry.class, Constants.LISTENER_ENTRY);
+    super(strategy, Entry.class, Constants.LISTENER_ENTRY);
   }
 
   //~--- methods --------------------------------------------------------------
@@ -110,12 +108,11 @@ public class JpaEntryDAO extends JpaGenericDAO<Entry> implements EntryDAO
    */
   public long count(Category category)
   {
-    EntityManager em = createEntityManager();
-    Query q = em.createNamedQuery("Entry.countByCategory");
+    Query q = strategy.getNamedQuery("Entry.countByCategory", false);
 
     q.setParameter("category", category);
 
-    return excecuteQuery(Long.class, em, q);
+    return excecuteQuery(Long.class, q);
   }
 
   /**
@@ -146,27 +143,19 @@ public class JpaEntryDAO extends JpaGenericDAO<Entry> implements EntryDAO
     if (session.hasRole(Role.AUTHOR))
     {
       Query q = null;
-      EntityManager em = createEntityManager();
-
-      try
-      {
         if (session.hasRole(Role.CONTENTMANAGER))
         {
-          q = em.createNamedQuery("Entry.countByBlog");
+          q = strategy.getNamedQuery("Entry.countByBlog", false);
         }
         else
         {
-          q = em.createNamedQuery("Entry.countByBlogAndUser");
+          q = strategy.getNamedQuery("Entry.countByBlogAndUser", false);
           q.setParameter("user", session.getUser());
         }
 
         q.setParameter("blog", session.getBlog());
         result = (Long) q.getSingleResult();
-      }
-      finally
-      {
-        em.close();
-      }
+
     }
 
     return result;
@@ -286,8 +275,7 @@ public class JpaEntryDAO extends JpaGenericDAO<Entry> implements EntryDAO
           Date endDate, int start, int max)
   {
     List<Entry> entries = null;
-    EntityManager em = createEntityManager();
-    Query q = em.createNamedQuery("Entry.findByBlogAndDate");
+    Query q = strategy.getNamedQuery("Entry.findByBlogAndDate", false);
 
     q.setParameter("blog", blog);
     q.setParameter("start", startDate);
@@ -308,10 +296,7 @@ public class JpaEntryDAO extends JpaGenericDAO<Entry> implements EntryDAO
       entries = q.getResultList();
     }
     catch (NoResultException ex) {}
-    finally
-    {
-      em.close();
-    }
+
 
     return entries;
   }
@@ -345,8 +330,7 @@ public class JpaEntryDAO extends JpaGenericDAO<Entry> implements EntryDAO
   public List<Entry> findAllByBlogAndTag(Blog blog, Tag tag, int start, int max)
   {
     List<Entry> entries = null;
-    EntityManager em = createEntityManager();
-    Query q = em.createNamedQuery("Entry.findByBlogAndTag");
+    Query q = strategy.getNamedQuery("Entry.findByBlogAndTag", false);
 
     q.setParameter("blog", blog);
     q.setParameter("tag", tag);
@@ -366,10 +350,6 @@ public class JpaEntryDAO extends JpaGenericDAO<Entry> implements EntryDAO
       entries = q.getResultList();
     }
     catch (NoResultException ex) {}
-    finally
-    {
-      em.close();
-    }
 
     return entries;
   }
@@ -401,8 +381,7 @@ public class JpaEntryDAO extends JpaGenericDAO<Entry> implements EntryDAO
   public List<Entry> findAllByCategory(Category category, int start, int max)
   {
     List<Entry> entries = null;
-    EntityManager em = createEntityManager();
-    Query q = em.createNamedQuery("Entry.findByCategory");
+    Query q = strategy.getNamedQuery("Entry.findByCategory", false);
 
     q.setParameter("category", category);
 
@@ -421,10 +400,6 @@ public class JpaEntryDAO extends JpaGenericDAO<Entry> implements EntryDAO
       entries = q.getResultList();
     }
     catch (NoResultException ex) {}
-    finally
-    {
-      em.close();
-    }
 
     return entries;
   }
@@ -462,11 +437,9 @@ public class JpaEntryDAO extends JpaGenericDAO<Entry> implements EntryDAO
           Date endDate, int start, int max)
   {
     List<Date> dates = null;
-    EntityManager em = createEntityManager();
-
     try
     {
-      Query q = em.createNamedQuery("Entry.calendar");
+      Query q = strategy.getNamedQuery("Entry.calendar", false);
 
       q.setParameter("blog", blog);
       q.setParameter("start", startDate);
@@ -474,10 +447,7 @@ public class JpaEntryDAO extends JpaGenericDAO<Entry> implements EntryDAO
       dates = q.getResultList();
     }
     catch (NoResultException ex) {}
-    finally
-    {
-      em.close();
-    }
+
 
     return dates;
   }
@@ -512,8 +482,7 @@ public class JpaEntryDAO extends JpaGenericDAO<Entry> implements EntryDAO
           int start, int max)
   {
     List<Entry> entries = null;
-    EntityManager em = createEntityManager();
-    Query q = em.createNamedQuery("Entry.findAllDraftsByBlogAndUser");
+    Query q = strategy.getNamedQuery("Entry.findAllDraftsByBlogAndUser", false);
 
     q.setParameter("blog", blog);
     q.setParameter("user", user);
@@ -523,10 +492,6 @@ public class JpaEntryDAO extends JpaGenericDAO<Entry> implements EntryDAO
       entries = q.getResultList();
     }
     catch (NoResultException ex) {}
-    finally
-    {
-      em.close();
-    }
 
     return entries;
   }
@@ -547,11 +512,9 @@ public class JpaEntryDAO extends JpaGenericDAO<Entry> implements EntryDAO
     fireEvent(Action.PREREMOVE, item);
 
     boolean result = false;
-    EntityManager em = createEntityManager();
 
     try
     {
-      em.getTransaction().begin();
 
       List<Attachment> attachments = item.getAttachments();
 
@@ -559,7 +522,7 @@ public class JpaEntryDAO extends JpaGenericDAO<Entry> implements EntryDAO
       {
         for (Attachment a : attachments)
         {
-          em.remove(em.merge(a));
+          strategy.remove(a);
         }
       }
 
@@ -569,27 +532,19 @@ public class JpaEntryDAO extends JpaGenericDAO<Entry> implements EntryDAO
       {
         for (Comment c : comments)
         {
-          em.remove(em.merge(c));
+          strategy.remove(c);
         }
       }
 
-      em.remove(em.merge(item));
-      em.getTransaction().commit();
+      strategy.remove(item);
+      strategy.flush();
       fireEvent(Action.POSTREMOVE, item);
       result = true;
     }
     catch (Exception ex)
     {
-      if (em.getTransaction().isActive())
-      {
-        em.getTransaction().rollback();
-      }
 
       logger.log(Level.SEVERE, null, ex);
-    }
-    finally
-    {
-      em.close();
     }
 
     return result;
@@ -637,8 +592,7 @@ public class JpaEntryDAO extends JpaGenericDAO<Entry> implements EntryDAO
   public List<Entry> getAllByAuthor(Blog blog, User author, Boolean published,
                                     int start, int max)
   {
-    EntityManager em = createEntityManager();
-    Query q = em.createNamedQuery("Entry.getAllByAuthor");
+    Query q = strategy.getNamedQuery("Entry.getAllByAuthor", false);
 
     q.setParameter("blog", blog);
     q.setParameter("author", author);
@@ -654,7 +608,7 @@ public class JpaEntryDAO extends JpaGenericDAO<Entry> implements EntryDAO
       q.setMaxResults(max);
     }
 
-    return excecuteListQuery(em, q);
+    return excecuteListQuery( q);
   }
 
   /**
@@ -675,22 +629,21 @@ public class JpaEntryDAO extends JpaGenericDAO<Entry> implements EntryDAO
     if (session.hasRole(Role.AUTHOR))
     {
       Query q = null;
-      EntityManager em = createEntityManager();
 
       if (session.hasRole(Role.CONTENTMANAGER))
       {
-        q = em.createNamedQuery("Entry.findAllByBlog");
+        q = strategy.getNamedQuery("Entry.findAllByBlog", false);
       }
       else
       {
-        q = em.createNamedQuery("Entry.getAllByBlogAndUser");
+        q = strategy.getNamedQuery("Entry.getAllByBlogAndUser", false);
         q.setParameter("user", session.getUser());
       }
 
       q.setParameter("blog", session.getBlog());
       q.setFirstResult(start);
       q.setMaxResults(max);
-      entries = excecuteListQuery(em, q);
+      entries = excecuteListQuery(q);
     }
     else
     {
@@ -713,8 +666,7 @@ public class JpaEntryDAO extends JpaGenericDAO<Entry> implements EntryDAO
   public Entry getNextEntry(Blog blog, Entry entry, Boolean published)
   {
     Entry nextEntry = null;
-    EntityManager em = createEntityManager();
-    Query q = em.createNamedQuery("Entry.next");
+    Query q = strategy.getNamedQuery("Entry.next", false);
 
     q.setParameter("blog", blog);
     q.setParameter("published", published);
@@ -742,8 +694,7 @@ public class JpaEntryDAO extends JpaGenericDAO<Entry> implements EntryDAO
   public Entry getNextEntry(Category category, Entry entry, Boolean published)
   {
     Entry nextEntry = null;
-    EntityManager em = createEntityManager();
-    Query q = em.createNamedQuery("Entry.categoryNext");
+    Query q = strategy.getNamedQuery("Entry.categoryNext", false);
 
     q.setParameter("category", category);
     q.setParameter("published", published);
@@ -773,8 +724,7 @@ public class JpaEntryDAO extends JpaGenericDAO<Entry> implements EntryDAO
   public Entry getNextEntry(Blog blog, Tag tag, Entry entry, Boolean published)
   {
     Entry nextEntry = null;
-    EntityManager em = createEntityManager();
-    Query q = em.createNamedQuery("Entry.tagNext");
+    Query q = strategy.getNamedQuery("Entry.tagNext", false);
 
     q.setParameter("tag", tag);
     q.setParameter("blog", blog);
@@ -806,8 +756,7 @@ public class JpaEntryDAO extends JpaGenericDAO<Entry> implements EntryDAO
                             Entry entry, Boolean published)
   {
     Entry nextEntry = null;
-    EntityManager em = createEntityManager();
-    Query q = em.createNamedQuery("Entry.dateNext");
+    Query q = strategy.getNamedQuery("Entry.dateNext", false);
 
     q.setParameter("start", startDate);
     q.setParameter("end", endDate);
@@ -838,15 +787,14 @@ public class JpaEntryDAO extends JpaGenericDAO<Entry> implements EntryDAO
   public Entry getNextEntry(Blog blog, User author, Entry entry,
                             Boolean published)
   {
-    EntityManager em = createEntityManager();
-    Query q = em.createNamedQuery("Entry.authorNext");
+    Query q = strategy.getNamedQuery("Entry.authorNext", false);
 
     q.setParameter("blog", blog);
     q.setParameter("author", author);
     q.setParameter("date", entry.getPublishingDate());
     q.setParameter("published", published);
 
-    return excecuteQuery(em, q);
+    return excecuteQuery( q);
   }
 
   /**
@@ -862,8 +810,7 @@ public class JpaEntryDAO extends JpaGenericDAO<Entry> implements EntryDAO
   public Entry getPreviousEntry(Blog blog, Entry entry, Boolean published)
   {
     Entry nextEntry = null;
-    EntityManager em = createEntityManager();
-    Query q = em.createNamedQuery("Entry.prev");
+    Query q = strategy.getNamedQuery("Entry.prev", false);
 
     q.setParameter("blog", blog);
     q.setParameter("published", published);
@@ -892,8 +839,7 @@ public class JpaEntryDAO extends JpaGenericDAO<Entry> implements EntryDAO
                                 Boolean published)
   {
     Entry nextEntry = null;
-    EntityManager em = createEntityManager();
-    Query q = em.createNamedQuery("Entry.categoryPrev");
+    Query q = strategy.getNamedQuery("Entry.categoryPrev", false);
 
     q.setParameter("category", category);
     q.setParameter("published", published);
@@ -924,8 +870,7 @@ public class JpaEntryDAO extends JpaGenericDAO<Entry> implements EntryDAO
                                 Boolean published)
   {
     Entry nextEntry = null;
-    EntityManager em = createEntityManager();
-    Query q = em.createNamedQuery("Entry.tagPrev");
+    Query q = strategy.getNamedQuery("Entry.tagPrev", false);
 
     q.setParameter("tag", tag);
     q.setParameter("blog", blog);
@@ -957,8 +902,7 @@ public class JpaEntryDAO extends JpaGenericDAO<Entry> implements EntryDAO
                                 Entry entry, Boolean published)
   {
     Entry prevEntry = null;
-    EntityManager em = createEntityManager();
-    Query q = em.createNamedQuery("Entry.datePrev");
+    Query q = strategy.getNamedQuery("Entry.datePrev", false);
 
     q.setParameter("start", startDate);
     q.setParameter("end", endDate);
@@ -989,15 +933,14 @@ public class JpaEntryDAO extends JpaGenericDAO<Entry> implements EntryDAO
   public Entry getPreviousEntry(Blog blog, User author, Entry entry,
                                 Boolean published)
   {
-    EntityManager em = createEntityManager();
-    Query q = em.createNamedQuery("Entry.authorPrev");
+    Query q = strategy.getNamedQuery("Entry.authorPrev", false);
 
     q.setParameter("blog", blog);
     q.setParameter("author", author);
     q.setParameter("date", entry.getPublishingDate());
     q.setParameter("published", published);
 
-    return excecuteQuery(em, q);
+    return excecuteQuery(q);
   }
 
   /**

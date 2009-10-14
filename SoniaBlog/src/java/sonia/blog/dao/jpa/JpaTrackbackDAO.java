@@ -69,9 +69,9 @@ public class JpaTrackbackDAO extends JpaGenericDAO<Trackback>
    *
    * @param entityManagerFactory
    */
-  public JpaTrackbackDAO(EntityManagerFactory entityManagerFactory)
+  public JpaTrackbackDAO(JpaStrategy strategy)
   {
-    super(entityManagerFactory, Trackback.class, Constants.LISTENER_TRACKBACK);
+    super(strategy, Trackback.class, Constants.LISTENER_TRACKBACK);
   }
 
   //~--- methods --------------------------------------------------------------
@@ -99,8 +99,8 @@ public class JpaTrackbackDAO extends JpaGenericDAO<Trackback>
    */
   public long count(Entry entry, int type, String url)
   {
-    EntityManager em = createEntityManager();
-    Query q = em.createNamedQuery("Trackback.countByEntryTypeAndUrl");
+    
+    Query q = strategy.getNamedQuery("Trackback.countByEntryTypeAndUrl", false);
 
     q.setParameter("entry", entry);
     q.setParameter("type", type);
@@ -146,12 +146,12 @@ public class JpaTrackbackDAO extends JpaGenericDAO<Trackback>
    */
   public List<Trackback> getAll(Entry entry)
   {
-    EntityManager em = createEntityManager();
-    Query q = em.createNamedQuery("Trackback.getAllByEntry");
+    
+    Query q = strategy.getNamedQuery("Trackback.getAllByEntry", false);
 
     q.setParameter("entry", entry);
 
-    return excecuteListQuery(em, q);
+    return excecuteListQuery( q);
   }
 
   /**
@@ -166,14 +166,14 @@ public class JpaTrackbackDAO extends JpaGenericDAO<Trackback>
    */
   public List<Trackback> getAll(Entry entry, int start, int max)
   {
-    EntityManager em = createEntityManager();
-    Query q = em.createNamedQuery("Trackback.getAllByEntry");
+    
+    Query q = strategy.getNamedQuery("Trackback.getAllByEntry", false);
 
     q.setParameter("entry", entry);
     q.setFirstResult(start);
     q.setMaxResults(max);
 
-    return excecuteListQuery(em, q);
+    return excecuteListQuery( q);
   }
 
   /**

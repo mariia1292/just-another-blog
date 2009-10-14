@@ -95,10 +95,7 @@ public class JpaDAOFactory extends DAOFactory
   @Override
   public void close()
   {
-    if (entityManagerFactory != null)
-    {
-      entityManagerFactory.close();
-    }
+    strategy.close();
   }
 
   /**
@@ -145,8 +142,10 @@ public class JpaDAOFactory extends DAOFactory
       parameters.put("toplink.application-location", tmpDir.getAbsolutePath());
     }
 
-    entityManagerFactory = Persistence.createEntityManagerFactory(pu,
-            parameters);
+    EntityManagerFactory emf = Persistence.createEntityManagerFactory(pu,
+                                 parameters);
+
+    strategy = new JpaStrategy(emf);
   }
 
   /**
@@ -174,6 +173,19 @@ public class JpaDAOFactory extends DAOFactory
    *
    */
   @Override
+  public void release()
+  {
+    if (strategy != null)
+    {
+      strategy.release();
+    }
+  }
+
+  /**
+   * Method description
+   *
+   */
+  @Override
   public void update()
   {
     throw new UnsupportedOperationException("Not supported yet.");
@@ -192,7 +204,7 @@ public class JpaDAOFactory extends DAOFactory
   {
     if (attachmentDAO == null)
     {
-      attachmentDAO = new JpaAttachmentDAO(entityManagerFactory);
+      attachmentDAO = new JpaAttachmentDAO(strategy);
     }
 
     return attachmentDAO;
@@ -209,7 +221,7 @@ public class JpaDAOFactory extends DAOFactory
   {
     if (blogDAO == null)
     {
-      blogDAO = new JpaBlogDAO(entityManagerFactory);
+      blogDAO = new JpaBlogDAO(strategy);
     }
 
     return blogDAO;
@@ -226,7 +238,7 @@ public class JpaDAOFactory extends DAOFactory
   {
     if (blogHitCountDAO == null)
     {
-      blogHitCountDAO = new JpaBlogHitCountDAO(entityManagerFactory);
+      blogHitCountDAO = new JpaBlogHitCountDAO(strategy);
     }
 
     return blogHitCountDAO;
@@ -243,7 +255,7 @@ public class JpaDAOFactory extends DAOFactory
   {
     if (categoryDAO == null)
     {
-      categoryDAO = new JpaCategoryDAO(entityManagerFactory);
+      categoryDAO = new JpaCategoryDAO(strategy);
     }
 
     return categoryDAO;
@@ -260,7 +272,7 @@ public class JpaDAOFactory extends DAOFactory
   {
     if (commentDAO == null)
     {
-      commentDAO = new JpaCommentDAO(entityManagerFactory);
+      commentDAO = new JpaCommentDAO(strategy);
     }
 
     return commentDAO;
@@ -275,18 +287,7 @@ public class JpaDAOFactory extends DAOFactory
   @Override
   public Object getConnection()
   {
-    return entityManagerFactory;
-  }
-
-  /**
-   * Method description
-   *
-   *
-   * @return
-   */
-  public EntityManagerFactory getEntityManagerFactory()
-  {
-    return entityManagerFactory;
+    return strategy.getEntityManagerFactory();
   }
 
   /**
@@ -300,7 +301,7 @@ public class JpaDAOFactory extends DAOFactory
   {
     if (entryDAO == null)
     {
-      entryDAO = new JpaEntryDAO(entityManagerFactory);
+      entryDAO = new JpaEntryDAO(strategy);
     }
 
     return entryDAO;
@@ -317,7 +318,7 @@ public class JpaDAOFactory extends DAOFactory
   {
     if (pageDAO == null)
     {
-      pageDAO = new JpaPageDAO(entityManagerFactory);
+      pageDAO = new JpaPageDAO(strategy);
     }
 
     return pageDAO;
@@ -334,7 +335,7 @@ public class JpaDAOFactory extends DAOFactory
   {
     if (tagDAO == null)
     {
-      tagDAO = new JpaTagDAO(entityManagerFactory);
+      tagDAO = new JpaTagDAO(strategy);
     }
 
     return tagDAO;
@@ -351,7 +352,7 @@ public class JpaDAOFactory extends DAOFactory
   {
     if (trackbackDAO == null)
     {
-      trackbackDAO = new JpaTrackbackDAO(entityManagerFactory);
+      trackbackDAO = new JpaTrackbackDAO(strategy);
     }
 
     return trackbackDAO;
@@ -368,7 +369,7 @@ public class JpaDAOFactory extends DAOFactory
   {
     if (userDAO == null)
     {
-      userDAO = new JpaUserDAO(entityManagerFactory);
+      userDAO = new JpaUserDAO(strategy);
     }
 
     return userDAO;
@@ -384,33 +385,24 @@ public class JpaDAOFactory extends DAOFactory
    */
   private void excecuteCommands(DatabaseProfile profile)
   {
-    EntityManager em = entityManagerFactory.createEntityManager();
+    EntityManager em = strategy.getEntityManager(true);
     InputStream in = profile.getCreationCommands();
 
     try
     {
-      em.getTransaction().begin();
-
       CommandExcecuter ce = new CommandExcecuter(em);
 
       ce.readLines(in);
-      em.getTransaction().commit();
+      strategy.flush();
     }
     catch (Exception ex)
     {
-      if (em.getTransaction().isActive())
-      {
-        em.getTransaction().rollback();
-      }
-
       logger.log(Level.SEVERE, null, ex);
 
       throw new DAOException(ex);
     }
     finally
     {
-      em.close();
-
       if (in != null)
       {
         try
@@ -561,13 +553,13 @@ public class JpaDAOFactory extends DAOFactory
   private CommentDAO commentDAO;
 
   /** Field description */
-  private EntityManagerFactory entityManagerFactory;
-
-  /** Field description */
   private EntryDAO entryDAO;
 
   /** Field description */
   private PageDAO pageDAO;
+
+  /** Field description */
+  private JpaStrategy strategy;
 
   /** Field description */
   private TagDAO tagDAO;

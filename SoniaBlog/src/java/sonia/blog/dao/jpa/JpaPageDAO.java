@@ -55,8 +55,6 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
 
 /**
@@ -77,9 +75,9 @@ public class JpaPageDAO extends JpaGenericDAO<Page> implements PageDAO
    *
    * @param entityManagerFactory
    */
-  public JpaPageDAO(EntityManagerFactory entityManagerFactory)
+  public JpaPageDAO(JpaStrategy strategy)
   {
-    super(entityManagerFactory, Page.class, Constants.LISTENER_PAGE);
+    super(strategy, Page.class, Constants.LISTENER_PAGE);
   }
 
   //~--- methods --------------------------------------------------------------
@@ -131,11 +129,9 @@ public class JpaPageDAO extends JpaGenericDAO<Page> implements PageDAO
     fireEvent(Action.PREREMOVE, item);
 
     boolean result = false;
-    EntityManager em = createEntityManager();
 
     try
     {
-      em.getTransaction().begin();
 
       List<Attachment> attachments = item.getAttachments();
 
@@ -143,27 +139,19 @@ public class JpaPageDAO extends JpaGenericDAO<Page> implements PageDAO
       {
         for (Attachment a : attachments)
         {
-          em.remove(em.merge(a));
+          strategy.remove(a);
         }
       }
 
-      em.remove(em.merge(item));
-      em.getTransaction().commit();
+      strategy.remove(item);
+      strategy.flush();
       fireEvent(Action.POSTREMOVE, item);
       result = true;
     }
     catch (Exception ex)
     {
-      if (em.getTransaction().isActive())
-      {
-        em.getTransaction().rollback();
-      }
 
       logger.log(Level.SEVERE, null, ex);
-    }
-    finally
-    {
-      em.close();
     }
 
     return result;
@@ -183,14 +171,13 @@ public class JpaPageDAO extends JpaGenericDAO<Page> implements PageDAO
    */
   public Page get(Long id, Blog blog, boolean published)
   {
-    EntityManager em = createEntityManager();
-    Query q = em.createNamedQuery("Page.getByIdBlogAndPublished");
+    Query q = strategy.getNamedQuery("Page.getByIdBlogAndPublished", false);
 
     q.setParameter("id", id);
     q.setParameter("blog", blog);
     q.setParameter("published", published);
 
-    return excecuteQuery(em, q);
+    return excecuteQuery( q);
   }
 
   /**
@@ -229,13 +216,12 @@ public class JpaPageDAO extends JpaGenericDAO<Page> implements PageDAO
    */
   public List<Page> getAllByBlog(Blog blog, boolean published)
   {
-    EntityManager em = createEntityManager();
-    Query q = em.createNamedQuery("Page.getAllByBlogAndPublished");
+    Query q = strategy.getNamedQuery("Page.getAllByBlogAndPublished", false);
 
     q.setParameter("published", published);
     q.setParameter("blog", blog);
 
-    return excecuteListQuery(em, q);
+    return excecuteListQuery( q);
   }
 
   /**
@@ -249,13 +235,12 @@ public class JpaPageDAO extends JpaGenericDAO<Page> implements PageDAO
    */
   public List<? extends PageNavigation> getAllRoot(Blog blog, boolean published)
   {
-    EntityManager em = createEntityManager();
-    Query q = em.createNamedQuery("Page.getAllRootWithPublished");
+    Query q = strategy.getNamedQuery("Page.getAllRootWithPublished", false);
 
     q.setParameter("blog", blog);
     q.setParameter("published", published);
 
-    return excecuteListQuery(BasicPageNavigation.class, em, q);
+    return excecuteListQuery(BasicPageNavigation.class, q);
   }
 
   /**
@@ -268,12 +253,11 @@ public class JpaPageDAO extends JpaGenericDAO<Page> implements PageDAO
    */
   public List<? extends PageNavigation> getAllRoot(Blog blog)
   {
-    EntityManager em = createEntityManager();
-    Query q = em.createNamedQuery("Page.getAllRoot");
+    Query q = strategy.getNamedQuery("Page.getAllRoot", false);
 
     q.setParameter("blog", blog);
 
-    return excecuteListQuery(BasicPageNavigation.class, em, q);
+    return excecuteListQuery(BasicPageNavigation.class, q);
   }
 
   /**
@@ -288,13 +272,12 @@ public class JpaPageDAO extends JpaGenericDAO<Page> implements PageDAO
   public List<? extends PageNavigation> getChildren(Page parent,
           boolean published)
   {
-    EntityManager em = createEntityManager();
-    Query q = em.createNamedQuery("Page.getChildrenWithPublished");
+    Query q = strategy.getNamedQuery("Page.getChildrenWithPublished", false);
 
     q.setParameter("parent", parent);
     q.setParameter("published", published);
 
-    return excecuteListQuery(BasicPageNavigation.class, em, q);
+    return excecuteListQuery(BasicPageNavigation.class, q);
   }
 
   /**
@@ -307,12 +290,11 @@ public class JpaPageDAO extends JpaGenericDAO<Page> implements PageDAO
    */
   public List<? extends PageNavigation> getChildren(Page parent)
   {
-    EntityManager em = createEntityManager();
-    Query q = em.createNamedQuery("Page.getChildren");
+    Query q = strategy.getNamedQuery("Page.getChildren", false);
 
     q.setParameter("parent", parent);
 
-    return excecuteListQuery(BasicPageNavigation.class, em, q);
+    return excecuteListQuery(BasicPageNavigation.class, q);
   }
 
   /**
@@ -325,12 +307,11 @@ public class JpaPageDAO extends JpaGenericDAO<Page> implements PageDAO
    */
   public List<? extends PageNavigation> getChildren(PageNavigation parent)
   {
-    EntityManager em = createEntityManager();
-    Query q = em.createNamedQuery("Page.getChildrenById");
+    Query q = strategy.getNamedQuery("Page.getChildrenById", false);
 
     q.setParameter("id", parent.getId());
 
-    return excecuteListQuery(BasicPageNavigation.class, em, q);
+    return excecuteListQuery(BasicPageNavigation.class, q);
   }
 
   /**
@@ -345,13 +326,12 @@ public class JpaPageDAO extends JpaGenericDAO<Page> implements PageDAO
   public List<? extends PageNavigation> getChildren(PageNavigation parent,
           boolean published)
   {
-    EntityManager em = createEntityManager();
-    Query q = em.createNamedQuery("Page.getChildrenByIdAndPublished");
+    Query q = strategy.getNamedQuery("Page.getChildrenByIdAndPublished", false);
 
     q.setParameter("id", parent.getId());
     q.setParameter("published", published);
 
-    return excecuteListQuery(BasicPageNavigation.class, em, q);
+    return excecuteListQuery(BasicPageNavigation.class, q);
   }
 
   /**
@@ -364,12 +344,11 @@ public class JpaPageDAO extends JpaGenericDAO<Page> implements PageDAO
    */
   public List<Page> getPageChildren(Page parent)
   {
-    EntityManager em = createEntityManager();
-    Query q = em.createNamedQuery("Page.getPageChildren");
+    Query q = strategy.getNamedQuery("Page.getPageChildren", false);
 
     q.setParameter("parent", parent);
 
-    return excecuteListQuery(em, q);
+    return excecuteListQuery( q);
   }
 
   /**
@@ -383,13 +362,12 @@ public class JpaPageDAO extends JpaGenericDAO<Page> implements PageDAO
    */
   public List<Page> getPageChildren(Page parent, boolean published)
   {
-    EntityManager em = createEntityManager();
-    Query q = em.createNamedQuery("Page.getPageChildrenWithPublished");
+    Query q = strategy.getNamedQuery("Page.getPageChildrenWithPublished", false);
 
     q.setParameter("published", published);
     q.setParameter("parent", parent);
 
-    return excecuteListQuery(em, q);
+    return excecuteListQuery( q);
   }
 
   /**
@@ -402,12 +380,11 @@ public class JpaPageDAO extends JpaGenericDAO<Page> implements PageDAO
    */
   public List<Page> getRootPages(Blog blog)
   {
-    EntityManager em = createEntityManager();
-    Query q = em.createNamedQuery("Page.getRootPages");
+    Query q = strategy.getNamedQuery("Page.getRootPages", false);
 
     q.setParameter("blog", blog);
 
-    return excecuteListQuery(em, q);
+    return excecuteListQuery( q);
   }
 
   /**
@@ -421,13 +398,12 @@ public class JpaPageDAO extends JpaGenericDAO<Page> implements PageDAO
    */
   public List<Page> getRootPages(Blog blog, boolean published)
   {
-    EntityManager em = createEntityManager();
-    Query q = em.createNamedQuery("Page.getRootPagesWithPublished");
+    Query q = strategy.getNamedQuery("Page.getRootPagesWithPublished", false);
 
     q.setParameter("published", published);
     q.setParameter("blog", blog);
 
-    return excecuteListQuery(em, q);
+    return excecuteListQuery( q);
   }
 
   /**

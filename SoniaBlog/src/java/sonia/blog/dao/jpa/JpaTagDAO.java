@@ -46,8 +46,6 @@ import sonia.blog.entity.Tag;
 import java.util.List;
 import java.util.logging.Logger;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
 
@@ -69,9 +67,9 @@ public class JpaTagDAO extends JpaGenericDAO<Tag> implements TagDAO
    *
    * @param entityManagerFactory
    */
-  public JpaTagDAO(EntityManagerFactory entityManagerFactory)
+  public JpaTagDAO(JpaStrategy strategy)
   {
-    super(entityManagerFactory, Tag.class, Constants.LISTENER_TAG);
+    super(strategy, Tag.class, Constants.LISTENER_TAG);
   }
 
   //~--- methods --------------------------------------------------------------
@@ -142,8 +140,7 @@ public class JpaTagDAO extends JpaGenericDAO<Tag> implements TagDAO
   public List<TagWrapper> findByBlogAndCount(Blog blog, int start, int max)
   {
     List<TagWrapper> tags = null;
-    EntityManager em = createEntityManager();
-    Query q = em.createNamedQuery("Tag.findByBlogAndCount");
+    Query q = strategy.getNamedQuery("Tag.findByBlogAndCount", false);
 
     q.setParameter("blog", blog);
 
@@ -162,10 +159,6 @@ public class JpaTagDAO extends JpaGenericDAO<Tag> implements TagDAO
       tags = q.getResultList();
     }
     catch (NoResultException ex) {}
-    finally
-    {
-      em.close();
-    }
 
     return tags;
   }
@@ -181,8 +174,7 @@ public class JpaTagDAO extends JpaGenericDAO<Tag> implements TagDAO
   public Tag findByName(String name)
   {
     Tag tag = null;
-    EntityManager em = createEntityManager();
-    Query q = em.createNamedQuery("Tag.findByName");
+    Query q = strategy.getNamedQuery("Tag.findByName", false);
 
     q.setParameter("name", name);
 
@@ -191,10 +183,7 @@ public class JpaTagDAO extends JpaGenericDAO<Tag> implements TagDAO
       tag = (Tag) q.getSingleResult();
     }
     catch (NoResultException ex) {}
-    finally
-    {
-      em.close();
-    }
+
 
     return tag;
   }
