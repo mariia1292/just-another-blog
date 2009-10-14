@@ -60,12 +60,15 @@
     function monthView(year, month){
       loadingView();
       var postUrl = url;
-      if ( year != null ){
-        postUrl += "?year=" + year;
-        if ( month != null ){
-          postUrl += "&month=" + month;
-        }
+      if ( year == null )
+      {
+        year = new Date().getFullYear();
       }
+      if ( month == null )
+      {
+        month = new Date().getMonth() + 1;
+      }
+      postUrl += "?year=" + year + "&month=" + month;
       $.getJSON(postUrl, function(result){
         clearLoadingView();
         createCalendar(result);
