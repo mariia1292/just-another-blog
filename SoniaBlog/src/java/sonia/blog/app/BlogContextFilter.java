@@ -273,7 +273,8 @@ public class BlogContextFilter implements Filter
     boolean process = true;
 
     if ((cache != null) && (instructions != null) && instructions.isCacheable()
-        && (request.getParameter(PARAM_DONTCACHE) == null))
+        && (request.getParameter(PARAM_DONTCACHE) == null)
+        && BlogContext.getInstance().isInstalled())
     {
       cacheKey = createCacheKey(request, instructions.getCacheKeys());
 
