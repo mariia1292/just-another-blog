@@ -95,7 +95,10 @@ public class JpaDAOFactory extends DAOFactory
   @Override
   public void close()
   {
-    strategy.close();
+    if (strategy != null)
+    {
+      strategy.close();
+    }
   }
 
   /**

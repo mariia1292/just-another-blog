@@ -560,7 +560,17 @@ public class LogManager
    */
   private Logger getLogger(String name)
   {
-    return java.util.logging.LogManager.getLogManager().getLogger(name);
+    java.util.logging.LogManager manager =
+      java.util.logging.LogManager.getLogManager();
+    Logger l = manager.getLogger(name);
+
+    if (l == null)
+    {
+      l = Logger.getLogger(name);
+      manager.addLogger(l);
+    }
+
+    return l;
   }
 
   /**
