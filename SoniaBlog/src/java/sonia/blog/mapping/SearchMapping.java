@@ -56,7 +56,6 @@ import sonia.blog.wui.PageBean;
 import sonia.blog.wui.SearchBean;
 
 import sonia.cache.Cacheable;
-import sonia.cache.ObjectCache;
 
 import sonia.util.Util;
 
@@ -70,6 +69,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.servlet.ServletException;
+import sonia.blog.api.app.Context;
 
 /**
  *
@@ -126,28 +126,15 @@ public class SearchMapping extends ScrollableFilterMapping
     {
       Blog blog = request.getCurrentBlog();
       Locale locale = request.getLocale();
-      ObjectCache cache =
-        BlogContext.getInstance().getCacheManager().get(Constants.CACHE_SEARCH);
-      CacheKey key = new CacheKey(blog, searchParam);
-      List<SearchCategory> categories = (List<SearchCategory>) cache.get(key);
+      List<SearchCategory> categories = null;
 
-      if (Util.isEmpty(categories))
+      try
       {
-        SearchContext ctx = BlogContext.getInstance().getSearchContext();
-
-        try
-        {
-          categories = ctx.search(blog, locale, searchParam);
-
-          if (Util.hasContent(categories))
-          {
-            cache.put(key, categories);
-          }
-        }
-        catch (SearchException ex)
-        {
-          logger.log(Level.SEVERE, null, ex);
-        }
+        categories = searchContext.search(blog, locale, searchParam);
+      }
+      catch (SearchException ex)
+      {
+        logger.log(Level.SEVERE, null, ex);
       }
 
       String hitParam = request.getParameter("hit");
@@ -395,129 +382,12 @@ public class SearchMapping extends ScrollableFilterMapping
     return result;
   }
 
-  //~--- inner classes --------------------------------------------------------
-
-  /**
-   * Class description
-   *
-   *
-   * @version        Enter version here..., 09/08/02
-   * @author         Enter your name here...
-   */
-  private static class CacheKey
-  {
-
-    /**
-     * Constructs ...
-     *
-     *
-     * @param blog
-     * @param query
-     */
-    public CacheKey(Blog blog, String query)
-    {
-      this.id = blog.getId();
-      this.query = query;
-    }
-
-    //~--- methods ------------------------------------------------------------
-
-    /**
-     * Method description
-     *
-     *
-     * @param obj
-     *
-     * @return
-     */
-    @Override
-    public boolean equals(Object obj)
-    {
-      if (obj == null)
-      {
-        return false;
-      }
-
-      if (getClass() != obj.getClass())
-      {
-        return false;
-      }
-
-      final CacheKey other = (CacheKey) obj;
-
-      if ((this.id != other.id)
-          && ((this.id == null) ||!this.id.equals(other.id)))
-      {
-        return false;
-      }
-
-      if ((this.query == null)
-          ? (other.query != null)
-          : !this.query.equals(other.query))
-      {
-        return false;
-      }
-
-      return true;
-    }
-
-    /**
-     * Method description
-     *
-     *
-     * @return
-     */
-    @Override
-    public int hashCode()
-    {
-      int hash = 3;
-
-      hash = 29 * hash + ((this.id != null)
-                          ? this.id.hashCode()
-                          : 0);
-      hash = 29 * hash + ((this.query != null)
-                          ? this.query.hashCode()
-                          : 0);
-
-      return hash;
-    }
-
-    //~--- get methods --------------------------------------------------------
-
-    /**
-     * Method description
-     *
-     *
-     * @return
-     */
-    public Long getId()
-    {
-      return id;
-    }
-
-    /**
-     * Method description
-     *
-     *
-     * @return
-     */
-    public String getQuery()
-    {
-      return query;
-    }
-
-    //~--- fields -------------------------------------------------------------
-
-    /** Field description */
-    private Long id;
-
-    /** Field description */
-    private String query;
-  }
-
-
   //~--- fields ---------------------------------------------------------------
 
   /** Field description */
   private MappingNavigation navigation;
+
+  /** Field description */
+  @Context
+  private SearchContext searchContext;
 }

@@ -46,7 +46,8 @@
     var defaults = {
       id: 'jqueryAutocomplete',
       maxItems : 5,
-      minChars : 2
+      minChars : 2,
+      cache: true
     };
 
     options = $.extend({},defaults, options);
@@ -56,6 +57,11 @@
     var selected = null;
 
     var index = -1;
+    var cache = null;
+
+     if ( options.cache ){
+       cache = [];
+     }
 
     $field.blur(function(){
       setTimeout( function(){
@@ -63,7 +69,7 @@
       }, 200);
     });
 
-    $field.keyup(function(event){
+    $field.keydown(function(event){
       switch ( event.keyCode )
       {
         // ESC
@@ -92,7 +98,7 @@
            break;
         // ALL OTHER
         default:
-          processKeyPress();
+          setTimeout(processKeyPress, 10);
       }
     });
 
@@ -145,26 +151,45 @@
         {
           createOutputContainer();
         }
-        $output.show();
+        $output.empty().show();
 
         url = createQueryUrl(value);
-
-        $.getJSON( url, function(result)
-        {
-          $.each(result, function(index, content)
-          {
-            if ( index < options.maxItems )
-            {
-              $output.append( createOutputElement(content) );
-            }
-
-          });
-        });
+        
+        processRequest( url );
       }
     }
 
-    function clear()
-    {
+    function processRequest(url){
+      if ( cache != null ){
+        var result = cache[url];
+        if ( result != null ){
+          processResult(result);
+        } else {
+          request(url);
+        }
+      } else {
+        request(url);
+      }
+    }
+
+    function request(url){
+      $.getJSON( url, function(content){
+        if ( cache != null ){
+          cache[url] = content;
+        }
+        processResult(content)
+      });
+    }
+
+    function processResult(result){
+      $.each(result, function(index, content){
+        if ( index < options.maxItems ){
+          $output.append( createOutputElement(content) );
+        }
+      });
+    }
+
+    function clear(){
       index = -1;
       selected = null;
       $output.empty();

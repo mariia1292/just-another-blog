@@ -187,7 +187,7 @@ public class SearchRenderer extends BaseRenderer
     writer.write(clientId);
     writer.write("\").autocomplete(\"");
     writer.write(context.getExternalContext().getRequestContextPath());
-    writer.write("/async/search.json\", {id: \"result_");
+    writer.write("/quicksearch.json\", {id: \"result_");
     writer.write(clientId);
     writer.write("\"});");
   }

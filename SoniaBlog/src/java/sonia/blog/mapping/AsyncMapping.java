@@ -40,15 +40,9 @@ import sonia.blog.api.app.BlogRequest;
 import sonia.blog.api.app.BlogResponse;
 import sonia.blog.api.app.Constants;
 import sonia.blog.api.dao.PageDAO;
-import sonia.blog.api.link.LinkBuilder;
 import sonia.blog.api.mapping.FinalMapping;
 import sonia.blog.api.msg.BlogMessage;
-import sonia.blog.api.search.SearchCategory;
-import sonia.blog.api.search.SearchContext;
-import sonia.blog.api.search.SearchEntry;
-import sonia.blog.api.search.SearchException;
 import sonia.blog.api.util.PageNavigation;
-import sonia.blog.entity.Blog;
 import sonia.blog.entity.Page;
 import sonia.blog.entity.Role;
 
@@ -76,8 +70,6 @@ import java.net.URL;
 import java.text.DateFormat;
 import java.text.MessageFormat;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -125,11 +117,7 @@ public class AsyncMapping extends FinalMapping
       {
         response.setContentType("application/x-javascript");
 
-        if (provider.equals("search"))
-        {
-          search(request, response);
-        }
-        else if (provider.equals("feed"))
+        if (provider.equals("feed"))
         {
           feed(request, response);
         }
@@ -573,81 +561,6 @@ public class AsyncMapping extends FinalMapping
         in.close();
       }
     }
-  }
-
-  /**
-   * Method description
-   *
-   *
-   * @param request
-   * @param response
-   *
-   * @throws IOException
-   */
-  private void search(BlogRequest request, BlogResponse response)
-          throws IOException
-  {
-    PrintWriter writer = response.getWriter();
-
-    writer.println("[");
-
-    String query = request.getParameter("query");
-
-    if (Util.hasContent(query))
-    {
-      try
-      {
-        Blog blog = request.getCurrentBlog();
-        SearchContext ctx = BlogContext.getInstance().getSearchContext();
-        Collection<SearchCategory> categories = ctx.search(blog,
-                                                  request.getLocale(), query);
-
-        if (Util.hasContent(categories))
-        {
-          List<SearchEntry> entries = new ArrayList<SearchEntry>();
-
-          for (SearchCategory cat : categories)
-          {
-            entries.addAll(cat.getEntries());
-          }
-
-          if (Util.hasContent(entries))
-          {
-            LinkBuilder linkBuilder =
-              BlogContext.getInstance().getLinkBuilder();
-            Iterator<SearchEntry> entryIt = entries.iterator();
-
-            while (entryIt.hasNext())
-            {
-              SearchEntry e = entryIt.next();
-
-              writer.print("  {");
-              writer.print(" value : '");
-              writer.print(e.getTitle());
-              writer.print("',");
-              writer.print(" url : '");
-              writer.print(linkBuilder.buildLink(request, e.getData()));
-              writer.print("'");
-
-              if (entryIt.hasNext())
-              {
-                writer.println(" },");
-              }
-              else
-              {
-                writer.println(" }");
-              }
-            }
-          }
-        }
-      }
-      catch (SearchException ex)
-      {
-        logger.log(Level.SEVERE, null, ex);
-      }
-    }
-
-    writer.println("]");
   }
 
   //~--- get methods ----------------------------------------------------------
