@@ -236,6 +236,10 @@ public class FeedMapping extends FinalMapping
     {
       feed.setEntries(buildTagItems(request, response, id, maxItems));
     }
+    else
+    {
+      response.sendError(HttpServletResponse.SC_NOT_FOUND);
+    }
   }
 
   /**
