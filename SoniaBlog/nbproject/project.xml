@@ -39,6 +39,10 @@
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
                 <library>
+                    <file>${libs.Rome.classpath}</file>
+                    <path-in-war>WEB-INF/lib</path-in-war>
+                </library>
+                <library>
                     <file>${reference.SoniaUtil.jar}</file>
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>

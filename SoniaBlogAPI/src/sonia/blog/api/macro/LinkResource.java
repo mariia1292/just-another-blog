@@ -45,6 +45,9 @@ public class LinkResource extends WebResource
 {
 
   /** Field description */
+  public static final String REL_ATOMFEED = "alternate";
+
+  /** Field description */
   public static final String REL_FAVICON = "shortcut icon";
 
   /** Field description */
@@ -55,6 +58,9 @@ public class LinkResource extends WebResource
 
   /** Field description */
   public static final String REL_STYLESHEET = "stylesheet";
+
+  /** Field description */
+  public static final String TYPE_ATOMFEED = "application/atom+xml";
 
   /** Field description */
   public static final String TYPE_OPENSEARCH =

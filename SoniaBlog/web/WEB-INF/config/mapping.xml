@@ -41,7 +41,7 @@
   </mapping>
 
   <mapping>
-    <regex>^/feed/([a-zA-Z]*)[/]?([0-9-)]*)\.(rss|rss2|atom)$</regex>
+    <regex>^/feed/(rss|rss2|atom)/([a-zA-Z]*)[/]?([0-9-)]*)\.xml$</regex>
     <class>sonia.blog.mapping.FeedMapping</class>
   </mapping>
 
