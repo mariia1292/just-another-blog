@@ -20,15 +20,6 @@
   </cache>
 
   <cache>
-    <name>search.cache</name>
-    <class>sonia.cache.SimpleExpirationCache</class>
-    <parameter>
-      <param-name>expiration-time</param-name>
-      <param-value>300000</param-value>
-    </parameter>
-  </cache>
-
-  <cache>
     <name>mbPreview.cache</name>
     <class>sonia.cache.SimpleExpirationCache</class>
     <parameter>

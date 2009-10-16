@@ -58,9 +58,6 @@ public interface Constants
   public static final String CACHE_MBPREVIEW = "mbPreview.cache";
 
   /** Field description */
-  public static final String CACHE_SEARCH = "search.cache";
-
-  /** Field description */
   public static final String CONFIG_ADMIN_PAGESIZE = "admin.page-size";
 
   /** Field description */
