@@ -410,7 +410,7 @@ public class FeedMapping extends FinalMapping
       SyndEntry item = new SyndEntryImpl();
 
       item.setAuthor(entry.getAuthorName());
-      item.setUri(uri);
+      item.setLink(uri);
       item.setPublishedDate(entry.getPublishingDate());
       item.setContents(contents);
       item.setTitle(entry.getTitle());
@@ -512,7 +512,6 @@ public class FeedMapping extends FinalMapping
     feed.setTitle(blog.getTitle());
     feed.setDescription(blog.getDescription());
     feed.setPublishedDate(blog.getCreationDate());
-    feed.setUri(link);
     feed.setLink(link);
   }
 

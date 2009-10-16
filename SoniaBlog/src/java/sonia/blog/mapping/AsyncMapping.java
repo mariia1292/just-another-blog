@@ -54,18 +54,22 @@ import sonia.blog.entity.Role;
 
 import sonia.cache.ObjectCache;
 
-import sonia.rss.AbstractBase;
-import sonia.rss.Channel;
-import sonia.rss.FeedParser;
-import sonia.rss.Item;
+import sonia.io.TeeWriter;
 
 import sonia.util.Util;
 
 //~--- JDK imports ------------------------------------------------------------
 
+import com.sun.syndication.feed.synd.SyndEntry;
+import com.sun.syndication.feed.synd.SyndFeed;
+import com.sun.syndication.io.SyndFeedInput;
+
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.io.Writer;
 
 import java.net.URL;
 
@@ -74,6 +78,7 @@ import java.text.MessageFormat;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -160,93 +165,45 @@ public class AsyncMapping extends FinalMapping
           throws IOException
   {
     String urlParam = request.getParameter("url");
-    String type = request.getParameter("type");
 
-    if (Util.hasContent(urlParam) && Util.hasContent(type))
+    if (Util.hasContent(urlParam))
     {
-      Channel channel = null;
-      StringBuffer cacheKey = new StringBuffer();
-
-      cacheKey.append(urlParam).append(":").append(type);
-
-      ObjectCache cache =
+      PrintWriter writer = response.getWriter();
+      ObjectCache feedCache =
         BlogContext.getInstance().getCacheManager().get(Constants.CACHE_FEED);
 
-      if (cache != null)
+      if (feedCache != null)
       {
-        channel = (Channel) cache.get(cacheKey.toString());
-      }
-      else if (logger.isLoggable(Level.WARNING))
-      {
-        StringBuffer msg = new StringBuffer();
+        String cacheKey =
+          new StringBuffer(urlParam).append(":").append(
+              request.getCurrentBlog().getDateFormat()).toString();
+        String result = (String) feedCache.get(cacheKey);
 
-        msg.append("cache ").append(Constants.CACHE_FEED).append(" not found");
-        logger.warning(msg.toString());
-      }
-
-      if (channel == null)
-      {
-        FeedParser parser = FeedParser.getInstance(type);
-
-        if (parser != null)
+        if (Util.hasContent(result))
         {
-          URL url = new URL(urlParam);
-          InputStream in = null;
-
-          try
-          {
-            in = url.openStream();
-            channel = parser.load(in);
-
-            if (channel != null)
-            {
-              printChannel(response, request.getCurrentBlog(), channel);
-              cache.put(cacheKey.toString(), channel);
-            }
-            else
-            {
-              if (logger.isLoggable(Level.WARNING))
-              {
-                logger.warning("could not create channel object");
-              }
-
-              response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            }
-          }
-          finally
-          {
-            if (in != null)
-            {
-              in.close();
-            }
-          }
+          writer.write(result);
+          writer.close();
+          writer = null;
         }
         else
         {
-          if (logger.isLoggable(Level.WARNING))
-          {
-            StringBuffer log = new StringBuffer();
+          StringWriter cacheWriter = new StringWriter();
+          TeeWriter w = new TeeWriter(writer, cacheWriter);
 
-            log.append("no parser for type ").append(type).append(" found");
-            logger.warning(log.toString());
-          }
-
-          response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+          processFeed(request, response, w, urlParam);
+          w.flush();
+          feedCache.put(cacheKey, cacheWriter.toString());
+          writer.close();
         }
       }
-      else
+      else if (writer != null)
       {
-        printChannel(response, request.getCurrentBlog(), channel);
+        processFeed(request, response, writer, urlParam);
       }
     }
     else
     {
-      if (logger.isLoggable(Level.WARNING))
-      {
-        logger.warning("url or feed is empty or null");
-      }
-
-      response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+      response.sendError(HttpServletResponse.SC_NOT_FOUND);
     }
   }
 
@@ -385,62 +342,6 @@ public class AsyncMapping extends FinalMapping
    *
    *
    * @param response
-   * @param blog
-   * @param channel
-   *
-   * @throws IOException
-   */
-  private void printChannel(BlogResponse response, Blog blog, Channel channel)
-          throws IOException
-  {
-    PrintWriter writer = null;
-
-    try
-    {
-      writer = response.getWriter();
-      writer.println("[");
-
-      DateFormat df = blog.getDateFormatter();
-
-      writer.print("  {");
-      printItem(writer, df, channel);
-      writer.println(", \"items\": [");
-
-      List<Item> items = channel.getItems();
-
-      if (Util.hasContent(items))
-      {
-        Iterator<Item> itemIt = items.iterator();
-
-        while (itemIt.hasNext())
-        {
-          writer.print("    {");
-          printItem(writer, df, itemIt.next());
-          writer.println(" }");
-
-          if (itemIt.hasNext())
-          {
-            writer.print(", ");
-          }
-        }
-      }
-
-      writer.println("]}]");
-    }
-    finally
-    {
-      if (writer != null)
-      {
-        writer.close();
-      }
-    }
-  }
-
-  /**
-   * Method description
-   *
-   *
-   * @param response
    * @param pages
    * @param exclude
    *
@@ -515,30 +416,71 @@ public class AsyncMapping extends FinalMapping
    *
    *
    * @param writer
-   * @param df
-   * @param item
+   * @param format
+   * @param key
+   * @param value
+   * @param last
    *
    * @throws IOException
    */
-  private void printItem(PrintWriter writer, DateFormat df, AbstractBase item)
+  private void printDate(Writer writer, DateFormat format, String key,
+                         Date value, boolean last)
           throws IOException
   {
-    writer.print(" \"title\": \"");
-    writer.print((item.getTitle() != null)
-                 ? item.getTitle()
-                 : "");
-    writer.print("\", \"date\": \"");
-
-    if ((df != null) && (item.getPubDate() != null))
+    if (format != null)
     {
-      writer.print(df.format(item.getPubDate()));
+      printString(writer, key, (value != null)
+                               ? format.format(value)
+                               : null, last);
+    }
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param request
+   * @param writer
+   * @param feed
+   *
+   * @throws IOException
+   */
+  @SuppressWarnings("unchecked")
+  private void printFeed(BlogRequest request, Writer writer, SyndFeed feed)
+          throws IOException
+  {
+    DateFormat format = request.getCurrentBlog().getDateFormatter();
+
+    writer.append("{\n");
+    printString(writer, "title", feed.getTitle(), false);
+    printDate(writer, format, "date", feed.getPublishedDate(), false);
+    printString(writer, "link", feed.getLink(), false);
+    writer.append("\"items\": [\n");
+
+    List<SyndEntry> entries = feed.getEntries();
+
+    if (Util.hasContent(entries))
+    {
+      Iterator<SyndEntry> entryIt = entries.iterator();
+
+      while (entryIt.hasNext())
+      {
+        SyndEntry entry = entryIt.next();
+
+        writer.append("{");
+        printString(writer, "title", entry.getTitle(), false);
+        printDate(writer, format, "date", entry.getPublishedDate(), false);
+        printString(writer, "link", entry.getLink(), true);
+        writer.append("}");
+
+        if (entryIt.hasNext())
+        {
+          writer.append(",\n");
+        }
+      }
     }
 
-    writer.print("\", \"link\": \"");
-    writer.print((item.getLink() != null)
-                 ? item.getLink()
-                 : "");
-    writer.print("\"");
+    writer.append("]}");
   }
 
   /**
@@ -556,6 +498,81 @@ public class AsyncMapping extends FinalMapping
     writer.print("\", \"value\": \"");
     writer.print(value);
     writer.print("\"}");
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param writer
+   * @param key
+   * @param value
+   * @param last
+   *
+   * @throws IOException
+   */
+  private void printString(Writer writer, String key, String value,
+                           boolean last)
+          throws IOException
+  {
+    if (Util.hasContent(key))
+    {
+      writer.append("\"").append(key).append("\": ").append("\"");
+
+      if (value != null)
+      {
+        writer.append(value);
+      }
+
+      writer.append("\"");
+
+      if (!last)
+      {
+        writer.append(", ");
+      }
+    }
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param request
+   * @param response
+   * @param writer
+   * @param url
+   *
+   * @throws IOException
+   */
+  private void processFeed(BlogRequest request, BlogResponse response,
+                           Writer writer, String url)
+          throws IOException
+  {
+    URL feedUrl = new URL(url);
+    InputStream in = null;
+
+    try
+    {
+      in = feedUrl.openConnection().getInputStream();
+
+      SyndFeed feed = getFeed(in);
+
+      if (feed != null)
+      {
+        printFeed(request, writer, feed);
+      }
+      else
+      {
+        response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+      }
+    }
+    finally
+    {
+      if (in != null)
+      {
+        in.close();
+      }
+    }
   }
 
   /**
@@ -631,5 +648,31 @@ public class AsyncMapping extends FinalMapping
     }
 
     writer.println("]");
+  }
+
+  //~--- get methods ----------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   * @param in
+   *
+   * @return
+   */
+  private SyndFeed getFeed(InputStream in)
+  {
+    SyndFeed result = null;
+
+    try
+    {
+      result = new SyndFeedInput().build(new InputStreamReader(in));
+    }
+    catch (Exception ex)
+    {
+      logger.log(Level.SEVERE, null, ex);
+    }
+
+    return result;
   }
 }

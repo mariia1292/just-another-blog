@@ -191,7 +191,7 @@ public interface Constants
 
   /** Field description */
   public static final String DEFAULT_DASHBOARD_RSS =
-    "http://www.just-another-blog.org/feed/index.rss2";
+    "http://www.just-another-blog.org/feed/atom/index.xml";
 
   /** Field description */
   public static final String DEFAULT_ENCODING = "UTF-8";

@@ -259,7 +259,7 @@ public class DashboardBean extends AbstractBean
     StringBuffer url = new StringBuffer();
 
     url.append(getRequest().getContextPath()).append("/async/feed.json?url=");
-    url.append(rssUrl).append("&type=rss2");
+    url.append(rssUrl);
 
     return url.toString();
   }
