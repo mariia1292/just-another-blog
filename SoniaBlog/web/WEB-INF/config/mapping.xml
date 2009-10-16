@@ -125,4 +125,10 @@
     <class>sonia.blog.mapping.CalendarMapping</class>
   </mapping>
 
+  <mapping>
+    <regex>^/quicksearch.json$</regex>
+    <class>sonia.blog.mapping.QuickSearchMapping</class>
+  </mapping>
+
+
 </mappings>
