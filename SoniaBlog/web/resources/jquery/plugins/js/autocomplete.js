@@ -86,7 +86,10 @@
           break;
         // RETURN
         case 13:
-          processSelection();
+          if ( selected != null ){
+            event.preventDefault();
+            processSelection();
+          }
           break;
         // LEFT
         case 37:
@@ -102,53 +105,41 @@
       }
     });
 
-    function selectUp()
-    {
-      if ( index > 0 )
-      {
-              index--;
-      select();
+    function selectUp(){
+      if ( index > 0 ){
+        index--;
+        select();
       }
     }
 
-    function selectDown()
-    {
+    function selectDown(){
       index++;
       select();
     }
 
-    function select()
-    {
+    function select(){
       var $children = $output.children();
       $children.removeClass( "selected" );
-      if ( $children.length >= index )
-      {
+      if ( $children.length >= index ){
         var $child = $children.eq(index);
         $child.addClass("selected");
         selected = $child.children().eq(0).attr("href");
-      }
-      else
-      {
+      } else {
         index--;
       }
     }
 
-    function processSelection()
-    {
-      if ( selected != null )
-      {
+    function processSelection(){
+      if ( selected != null ){
         location.href = selected;
       }
     }
 
-    function processKeyPress()
-    {
+    function processKeyPress(){
       var value = $field.val();
       clear();
-      if ( value.length >= options.minChars )
-      {
-        if ($output.length == "")
-        {
+      if ( value.length >= options.minChars ){
+        if ($output.length == ""){
           createOutputContainer();
         }
         $output.empty().show();
@@ -195,24 +186,20 @@
       $output.empty();
     }
 
-    function createOutputElement(content)
-    {
+    function createOutputElement(content){
       return $("<li />").append($("<a />").attr("href", content.url).text(content.value) );
     }
 
-    function createQueryUrl(value)
-    {
+    function createQueryUrl(value){
       var index = url.indexOf( "?query=" );
-      if ( index > 0 )
-      {
+      if ( index > 0 ){
         url = url.substring(0, index);
       }
       url += "?query=" + value;
       return url;
     }
 
-    function createOutputContainer()
-    {
+    function createOutputContainer(){
       // TODO replace the 4
       var p = findPosition(field, $field.height() +4 );
       $("body").append( $("<ul />").attr("id", options.id).addClass( "autocomplete" ).css( "top",  p.top + "px").css( "left", p.left + "px" ) );
@@ -220,8 +207,7 @@
       $output.width( $field.width() );
     }
 
-    function findPosition( el, height )
-    {
+    function findPosition( el, height ){
       var top = height;
       var left = 0;
       do {
