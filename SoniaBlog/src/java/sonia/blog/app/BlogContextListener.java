@@ -591,21 +591,35 @@ public class BlogContextListener implements ServletContextListener
   {
     ServiceRegistry registry = context.getServiceRegistry();
     String ctxPath = context.getServletContext().getContextPath();
-    LinkResource entryRSS = new LinkResource(0);
+    LinkResource entryAtom = new LinkResource(0);
+
+    entryAtom.setRel(LinkResource.REL_ATOMFEED);
+    entryAtom.setType(LinkResource.TYPE_ATOMFEED);
+    entryAtom.setTitle("{2} - Atom entries");
+    entryAtom.setHref(ctxPath + "/feed/atom/index.xml");
+
+    LinkResource entryRSS = new LinkResource(1);
 
     entryRSS.setRel(LinkResource.REL_RSSFEED);
     entryRSS.setType(LinkResource.TYPE_RSSFEED);
-    entryRSS.setTitle("{2} - entries");
-    entryRSS.setHref(ctxPath + "/feed/index.rss2");
+    entryRSS.setTitle("{2} - RSS entries");
+    entryRSS.setHref(ctxPath + "/feed/rss/index.xml");
 
-    LinkResource commentRSS = new LinkResource(1);
+    LinkResource commentAtom = new LinkResource(3);
+
+    commentAtom.setRel(LinkResource.REL_ATOMFEED);
+    commentAtom.setType(LinkResource.TYPE_ATOMFEED);
+    commentAtom.setTitle("{2} - Atom comments");
+    commentAtom.setHref(ctxPath + "/feed/atom/comments.xml");
+
+    LinkResource commentRSS = new LinkResource(3);
 
     commentRSS.setRel(LinkResource.REL_RSSFEED);
     commentRSS.setType(LinkResource.TYPE_RSSFEED);
-    commentRSS.setTitle("{2} - comments");
-    commentRSS.setHref(ctxPath + "/feed/comments.rss2");
+    commentRSS.setTitle("{2} - RSS comments");
+    commentRSS.setHref(ctxPath + "/feed/rss/comments.xml");
 
-    LinkResource opensearch = new LinkResource(2);
+    LinkResource opensearch = new LinkResource(4);
 
     opensearch.setRel(LinkResource.REL_OPENSEARCH);
     opensearch.setType(LinkResource.TYPE_OPENSEARCH);
@@ -619,7 +633,8 @@ public class BlogContextListener implements ServletContextListener
                                   + "/resources/jquery/plugins/js/messages.js");
 
     registry.register(WebResource.class, Constants.SERVICE_WEBRESOURCE).add(
-        entryRSS).add(commentRSS).add(opensearch).add(jquery).add(jqueryMsgs);
+        entryAtom).add(entryRSS).add(commentAtom).add(commentRSS).add(
+        opensearch).add(jquery).add(jqueryMsgs);
   }
 
   //~--- get methods ----------------------------------------------------------

@@ -38,6 +38,7 @@ package sonia.blog.mapping;
 import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.app.BlogRequest;
 import sonia.blog.api.app.BlogResponse;
+import sonia.blog.api.app.Context;
 import sonia.blog.api.dao.CategoryDAO;
 import sonia.blog.api.dao.CommentDAO;
 import sonia.blog.api.dao.DAOFactory;
@@ -53,24 +54,35 @@ import sonia.blog.entity.Tag;
 
 import sonia.cache.Cacheable;
 
-import sonia.rss.Channel;
-import sonia.rss.FeedParser;
-import sonia.rss.Item;
-
 import sonia.util.Util;
 
 //~--- JDK imports ------------------------------------------------------------
 
+import com.sun.syndication.feed.WireFeed;
+import com.sun.syndication.feed.atom.Feed;
+import com.sun.syndication.feed.rss.Channel;
+import com.sun.syndication.feed.synd.SyndCategory;
+import com.sun.syndication.feed.synd.SyndCategoryImpl;
+import com.sun.syndication.feed.synd.SyndContent;
+import com.sun.syndication.feed.synd.SyndContentImpl;
+import com.sun.syndication.feed.synd.SyndEntry;
+import com.sun.syndication.feed.synd.SyndEntryImpl;
+import com.sun.syndication.feed.synd.SyndFeed;
+import com.sun.syndication.feed.synd.SyndFeedImpl;
+import com.sun.syndication.io.FeedException;
+import com.sun.syndication.io.SyndFeedOutput;
+
 import java.io.IOException;
+import java.io.PrintWriter;
 
 import java.net.MalformedURLException;
-import java.net.URL;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.servlet.ServletException;
-import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 
 /**
@@ -80,6 +92,29 @@ import javax.servlet.http.HttpServletResponse;
 @Cacheable
 public class FeedMapping extends FinalMapping
 {
+
+  /** Field description */
+  private static final String FEED_CATEGORY = "category";
+
+  /** Field description */
+  private static final String FEED_COMMENT = "comments";
+
+  /** Field description */
+  private static final String FEED_DEFAULT = "index";
+
+  /** Field description */
+  private static final String FEED_TAG = "tag";
+
+  /** Field description */
+  private static final String TYPE_ATOM = "atom";
+
+  /** Field description */
+  private static final String TYPE_RSS = "rss";
+
+  /** Field description */
+  private static Logger logger = Logger.getLogger(FeedMapping.class.getName());
+
+  //~--- methods --------------------------------------------------------------
 
   /**
    * Method description
@@ -99,74 +134,50 @@ public class FeedMapping extends FinalMapping
   {
     if ((param != null) && (param.length > 1))
     {
-      String type = param[param.length - 1];
+      WireFeed wireFeed = null;
+      String type = param[0];
 
-      if (type == null)
+      if (TYPE_ATOM.equals(type))
+      {
+        wireFeed = new Feed("atom_1.0");
+      }
+      else if (TYPE_RSS.equals(type))
+      {
+        wireFeed = new Channel("rss_2.0");
+      }
+
+      if (wireFeed != null)
+      {
+        SyndFeed feed = new SyndFeedImpl(wireFeed);
+
+        fillFeed(request, feed);
+
+        String query = param[1];
+        String parameter = (param.length > 2)
+                           ? param[2]
+                           : null;
+
+        appendItems(request, response, feed, query, parameter);
+
+        PrintWriter writer = response.getWriter();
+
+        try
+        {
+          new SyndFeedOutput().output(feed, writer, true);
+        }
+        catch (FeedException ex)
+        {
+          logger.log(Level.SEVERE, null, ex);
+        }
+        finally
+        {
+          writer.close();
+        }
+      }
+      else
       {
         response.sendError(HttpServletResponse.SC_NOT_FOUND);
       }
-
-      FeedParser parser = FeedParser.getInstance(type);
-
-      if (parser == null)
-      {
-        response.sendError(HttpServletResponse.SC_NOT_FOUND);
-      }
-
-      LinkBuilder linkBuilder = BlogContext.getInstance().getLinkBuilder();
-      Blog blog = request.getCurrentBlog();
-      List<Item> items = null;
-      int max = blog.getEntriesPerPage();
-
-      try
-      {
-        if (param[0].equals("index"))
-        {
-          items = buildItems(request, blog, linkBuilder, max);
-        }
-        else if (param[0].equals("category"))
-        {
-          Long id = Long.parseLong(param[1]);
-
-          items = buildCategoryItems(request, response, blog, linkBuilder, id,
-                                     max);
-        }
-        else if (param[0].equals("tag"))
-        {
-          Long id = Long.parseLong(param[1]);
-
-          items = buildTagItems(request, response, linkBuilder, id, max);
-        }
-        else if (param[0].equals("comment"))
-        {
-          if (!Util.isBlank(param[1]) &&!param[1].equals("index"))
-          {
-            Long id = Long.parseLong(param[1]);
-
-            items = buildCommentItems(request, response, linkBuilder, id, max);
-          }
-          else
-          {
-            response.sendError(HttpServletResponse.SC_NOT_FOUND);
-          }
-        }
-        else if (param[0].equals("comments"))
-        {
-          items = buildCommentItems(request, response, linkBuilder, null, max);
-        }
-        else
-        {
-          response.sendError(HttpServletResponse.SC_NOT_FOUND);
-        }
-      }
-      catch (NumberFormatException ex)
-      {
-        response.sendError(HttpServletResponse.SC_BAD_REQUEST);
-      }
-
-      Channel channel = buildChannel(request, linkBuilder, blog, items);
-
-      printChannel(response, parser, channel);
     }
     else
     {
@@ -180,8 +191,60 @@ public class FeedMapping extends FinalMapping
    *
    * @param request
    * @param response
+   * @param feed
+   * @param queryType
+   * @param parameter
+   *
+   *
+   * @throws IOException
+   * @throws MalformedURLException
+   */
+  private void appendItems(BlogRequest request, BlogResponse response,
+                           SyndFeed feed, String queryType, String parameter)
+          throws MalformedURLException, IOException
+  {
+    Blog blog = request.getCurrentBlog();
+    int maxItems = blog.getEntriesPerPage();
+    Long id = null;
+
+    if (Util.hasContent(parameter))
+    {
+      try
+      {
+        id = Long.parseLong(parameter);
+      }
+      catch (NumberFormatException ex)
+      {
+        response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+      }
+    }
+
+    if (FEED_DEFAULT.equals(queryType))
+    {
+      feed.setEntries(buildItems(request, blog, maxItems));
+    }
+    else if (FEED_COMMENT.equals(queryType))
+    {
+      feed.setEntries(buildCommentItems(request, response, id, maxItems));
+    }
+    else if (FEED_CATEGORY.equals(queryType) && (id != null))
+    {
+      feed.setEntries(buildCategoryItems(request, response, blog, id,
+                                         maxItems));
+    }
+    else if (FEED_TAG.equals(queryType) && (id != null))
+    {
+      feed.setEntries(buildTagItems(request, response, id, maxItems));
+    }
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param request
+   * @param response
    * @param blog
-   * @param linkBuilder
    * @param id
    * @param max
    *
@@ -189,12 +252,11 @@ public class FeedMapping extends FinalMapping
    *
    * @throws IOException
    */
-  private List<Item> buildCategoryItems(BlogRequest request,
-          BlogResponse response, Blog blog, LinkBuilder linkBuilder, Long id,
-          int max)
+  private List<SyndEntry> buildCategoryItems(BlogRequest request,
+          BlogResponse response, Blog blog, Long id, int max)
           throws IOException
   {
-    List<Item> items = null;
+    List<SyndEntry> items = null;
     DAOFactory factory = BlogContext.getDAOFactory();
     CategoryDAO categoryDAO = factory.getCategoryDAO();
     Category category = categoryDAO.get(id);
@@ -204,7 +266,7 @@ public class FeedMapping extends FinalMapping
       EntryDAO entryDAO = factory.getEntryDAO();
       List<Entry> entries = entryDAO.findAllByCategory(category, 0, max);
 
-      items = buildEntryItems(request, linkBuilder, entries);
+      items = buildEntryItems(request, entries);
     }
     else
     {
@@ -219,39 +281,7 @@ public class FeedMapping extends FinalMapping
    *
    *
    * @param request
-   * @param linkBuilder
-   * @param blog
-   * @param items
-   *
-   * @return
-   *
-   * @throws MalformedURLException
-   */
-  private Channel buildChannel(BlogRequest request, LinkBuilder linkBuilder,
-                               Blog blog, List<Item> items)
-          throws MalformedURLException
-  {
-    String link = linkBuilder.buildLink(request, blog);
-    Channel channel = new Channel(blog.getTitle(), new URL(link),
-                                  blog.getDescription());
-
-    channel.setPubDate(blog.getCreationDate());
-
-    if ((items != null) &&!items.isEmpty())
-    {
-      channel.setItems(items);
-    }
-
-    return channel;
-  }
-
-  /**
-   * Method description
-   *
-   *
-   * @param request
    * @param response
-   * @param linkBuilder
    * @param id
    * @param max
    *
@@ -259,11 +289,11 @@ public class FeedMapping extends FinalMapping
    *
    * @throws IOException
    */
-  private List<Item> buildCommentItems(BlogRequest request,
-          BlogResponse response, LinkBuilder linkBuilder, Long id, int max)
+  private List<SyndEntry> buildCommentItems(BlogRequest request,
+          BlogResponse response, Long id, int max)
           throws IOException
   {
-    List<Item> items = null;
+    List<SyndEntry> items = null;
     DAOFactory factory = BlogContext.getDAOFactory();
     EntryDAO entryDAO = factory.getEntryDAO();
     CommentDAO commentDAO = factory.getCommentDAO();
@@ -291,11 +321,11 @@ public class FeedMapping extends FinalMapping
 
     if ((comments != null) &&!comments.isEmpty())
     {
-      items = buildCommentItems(request, linkBuilder, comments);
+      items = buildCommentItems(request, comments);
     }
     else
     {
-      items = new ArrayList<Item>();
+      items = new ArrayList<SyndEntry>();
     }
 
     return items;
@@ -306,28 +336,41 @@ public class FeedMapping extends FinalMapping
    *
    *
    * @param request
-   * @param linkBuilder
    * @param comments
    *
    * @return
    *
    * @throws MalformedURLException
    */
-  private List<Item> buildCommentItems(BlogRequest request,
-          LinkBuilder linkBuilder, List<Comment> comments)
+  private List<SyndEntry> buildCommentItems(BlogRequest request,
+          List<Comment> comments)
           throws MalformedURLException
   {
-    List<Item> items = new ArrayList<Item>();
+    List<SyndEntry> items = new ArrayList<SyndEntry>();
 
     for (Comment comment : comments)
     {
       Entry entry = comment.getEntry();
-      String link = linkBuilder.buildLink(request, entry);
-      Item item = new Item(entry.getTitle(), new URL(link),
-                           comment.getContent());
+      StringBuffer link = new StringBuffer(linkBuilder.buildLink(request,
+                            entry));
+
+      link.append("#").append(comment.getId());
+
+      SyndEntry item = new SyndEntryImpl();
 
       item.setAuthor(comment.getAuthorName());
-      item.setPubDate(comment.getCreationDate());
+      item.setLink(link.toString());
+      item.setPublishedDate(comment.getCreationDate());
+      item.setTitle(
+          new StringBuffer("RE: ").append(entry.getTitle()).toString());
+
+      List<SyndContent> contents = new ArrayList<SyndContent>();
+      SyndContent content = new SyndContentImpl();
+
+      content.setValue(comment.getContent());
+      content.setType("text/html");
+      contents.add(content);
+      item.setContents(contents);
       items.add(item);
     }
 
@@ -339,30 +382,53 @@ public class FeedMapping extends FinalMapping
    *
    *
    * @param request
-   * @param linkBuilder
    * @param entries
    *
    * @return
    *
    * @throws MalformedURLException
    */
-  private List<Item> buildEntryItems(BlogRequest request,
-                                     LinkBuilder linkBuilder,
-                                     List<Entry> entries)
+  private List<SyndEntry> buildEntryItems(BlogRequest request,
+          List<Entry> entries)
           throws MalformedURLException
   {
-    List<Item> items = new ArrayList<Item>();
+    List<SyndEntry> items = new ArrayList<SyndEntry>();
 
     for (Entry entry : entries)
     {
       String description = Util.isBlank(entry.getTeaser())
                            ? entry.getContent()
                            : entry.getTeaser();
-      String link = linkBuilder.buildLink(request, entry);
-      Item item = new Item(entry.getTitle(), new URL(link), description);
+      List<SyndContent> contents = new ArrayList<SyndContent>();
+      SyndContent content = new SyndContentImpl();
+
+      content.setType("text/html");
+      content.setValue(description);
+      contents.add(content);
+
+      String uri = linkBuilder.buildLink(request, entry);
+      SyndEntry item = new SyndEntryImpl();
 
       item.setAuthor(entry.getAuthorName());
-      item.setPubDate(entry.getCreationDate());
+      item.setUri(uri);
+      item.setPublishedDate(entry.getPublishingDate());
+      item.setContents(contents);
+      item.setTitle(entry.getTitle());
+
+      List<SyndCategory> feedCategories = new ArrayList<SyndCategory>();
+      List<Category> categories = entry.getCategories();
+
+      for (Category category : categories)
+      {
+        SyndCategory cat = new SyndCategoryImpl();
+
+        cat.setName(category.getName());
+        cat.setTaxonomyUri(linkBuilder.buildLink(request, category));
+        feedCategories.add(cat);
+      }
+
+      item.setCategories(feedCategories);
+      item.setUpdatedDate(entry.getLastUpdate());
       items.add(item);
     }
 
@@ -375,22 +441,20 @@ public class FeedMapping extends FinalMapping
    *
    * @param request
    * @param blog
-   * @param linkBuilder
    * @param max
    *
    * @return
    *
    * @throws MalformedURLException
    */
-  private List<Item> buildItems(BlogRequest request, Blog blog,
-                                LinkBuilder linkBuilder, int max)
+  private List<SyndEntry> buildItems(BlogRequest request, Blog blog, int max)
           throws MalformedURLException
   {
-    List<Item> items = null;
+    List<SyndEntry> items = null;
     EntryDAO entryDAO = BlogContext.getDAOFactory().getEntryDAO();
     List<Entry> entries = entryDAO.findAllActivesByBlog(blog, 0, max);
 
-    items = buildEntryItems(request, linkBuilder, entries);
+    items = buildEntryItems(request, entries);
 
     return items;
   }
@@ -401,7 +465,6 @@ public class FeedMapping extends FinalMapping
    *
    * @param request
    * @param response
-   * @param linkBuilder
    * @param id
    * @param max
    *
@@ -409,11 +472,11 @@ public class FeedMapping extends FinalMapping
    *
    * @throws IOException
    */
-  private List<Item> buildTagItems(BlogRequest request, BlogResponse response,
-                                   LinkBuilder linkBuilder, Long id, int max)
+  private List<SyndEntry> buildTagItems(BlogRequest request,
+          BlogResponse response, Long id, int max)
           throws IOException
   {
-    List<Item> items = null;
+    List<SyndEntry> items = null;
     DAOFactory factory = BlogContext.getDAOFactory();
     TagDAO tagDAO = factory.getTagDAO();
     Tag tag = tagDAO.get(id);
@@ -424,7 +487,7 @@ public class FeedMapping extends FinalMapping
       EntryDAO entryDAO = factory.getEntryDAO();
       List<Entry> entries = entryDAO.findAllByBlogAndTag(blog, tag, 0, max);
 
-      items = buildEntryItems(request, linkBuilder, entries);
+      items = buildEntryItems(request, entries);
     }
     else
     {
@@ -438,30 +501,24 @@ public class FeedMapping extends FinalMapping
    * Method description
    *
    *
-   * @param response
-   * @param parser
-   * @param channel
-   *
-   * @throws IOException
+   * @param request
+   * @param feed
    */
-  private void printChannel(BlogResponse response, FeedParser parser,
-                            Channel channel)
-          throws IOException
+  private void fillFeed(BlogRequest request, SyndFeed feed)
   {
-    response.setContentType(parser.getMimeType());
+    Blog blog = request.getCurrentBlog();
+    String link = linkBuilder.buildLink(request, blog);
 
-    ServletOutputStream out = response.getOutputStream();
-
-    try
-    {
-      parser.store(channel, out);
-    }
-    finally
-    {
-      if (out != null)
-      {
-        out.close();
-      }
-    }
+    feed.setTitle(blog.getTitle());
+    feed.setDescription(blog.getDescription());
+    feed.setPublishedDate(blog.getCreationDate());
+    feed.setUri(link);
+    feed.setLink(link);
   }
+
+  //~--- fields ---------------------------------------------------------------
+
+  /** Field description */
+  @Context
+  private LinkBuilder linkBuilder;
 }
