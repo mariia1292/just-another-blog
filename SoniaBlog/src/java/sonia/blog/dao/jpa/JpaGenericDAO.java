@@ -135,6 +135,7 @@ public abstract class JpaGenericDAO<T> implements GenericDAO<T>
     try
     {
       strategy.store(item);
+      strategy.flush();
 
       if (logger.isLoggable(Level.FINER))
       {

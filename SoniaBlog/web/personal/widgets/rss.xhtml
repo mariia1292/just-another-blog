@@ -17,16 +17,14 @@
 
       <script type="text/javascript">
         $(document).ready(function(){
-          $.getJSON( "#{DashboardBean.rssUrl}", function(result, status){
+          $.getJSON( "#{DashboardBean.rssUrl}", function(channel, status){
             if ( status == "success" ){
               $("#feedTitle").empty();
               $("#feedItems").empty();
-              $.each(result, function(index, channel){
-                $("#feedTitle").append( $("<a />").attr("href", channel.link).attr("target", "_blank").text( channel.title ) );
-                $.each( channel.items, function(i,item){
-                  $("#feedItems").append($("<li />").text(item.date + " - ").append( $("<a />").attr("href", item.link).attr("target", "_blank").text(item.title)));
-                  if ( i == 3 ) return false;
-                });
+              $("#feedTitle").append( $("<a />").attr("href", channel.link).attr("target", "_blank").text( channel.title ) );
+              $.each( channel.items, function(i,item){
+                $("#feedItems").append($("<li />").text(item.date + " - ").append( $("<a />").attr("href", item.link).attr("target", "_blank").text(item.title)));
+                if ( i == 3 ) return false;
               });
             } else {
               $("#feedItems li:first").text( "#{message.rssCouldNotLoadChannel}" );
