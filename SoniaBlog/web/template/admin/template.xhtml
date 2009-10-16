@@ -17,8 +17,8 @@
       <!--[if lte IE 7]>
         <link rel="stylesheet" type="text/css" class="user" href="${facesContext.externalContext.requestContextPath}/template/admin/css/patches/patch_blog.css" />
       <![endif]-->
-      <link rel="shortcut icon" type="image/vnd.microsoft.icon" href="${facesContext.externalContext.requestContextPath}/template/admin/images/favicon.ico" />
-      <link rel="icon" type="image/gif" href="${facesContext.externalContext.requestContextPath}/template/admin/images/icon-16.gif" />
+      <link rel="shortcut icon" type="image/vnd.microsoft.icon" href="${facesContext.externalContext.requestContextPath}/resources/images/favicon.ico" />
+      <link rel="icon" type="image/gif" href="${facesContext.externalContext.requestContextPath}/resources/images/icons/jab/icon-16.gif" />
 
       <blog:header comments="false" />
       <ui:insert name="head" />
@@ -98,6 +98,10 @@
                     <h3><h:outputText value="#{label.categories}" /></h3>
                     <h:dataTable styleClass="overview" value="#{BlogBean.categories}" var="Category">
                       <h:column>
+                        <blog:link href="/feed/atom/category/#{Category.id}.xml" target="_blank">
+                          <h:graphicImage value="/resources/images/icons/feed/icon-14.png" />
+                        </blog:link>
+                        <h:outputText value=" " />
                         <blog:link value="#{Category.name}" object="#{Category}" />
                       </h:column>
                     </h:dataTable>

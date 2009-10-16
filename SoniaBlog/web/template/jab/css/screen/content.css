@@ -177,6 +177,7 @@
 
   table.overview { margin-bottom: 0.5em; }
   table.overview td, table.overview th { padding: 0; }
+  table.overview td img, table.overview th img { vertical-align: middle; }
 
   table.list { margin: 0; padding: 0; }
   table.list td,
