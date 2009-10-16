@@ -37,7 +37,6 @@ package sonia.blog.search;
 
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.TokenStream;
-import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.queryParser.MultiFieldQueryParser;
@@ -53,7 +52,6 @@ import org.apache.lucene.search.highlight.TextFragment;
 import org.apache.lucene.search.highlight.TokenSources;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
-import org.apache.lucene.util.Version;
 
 import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.app.BlogSession;
@@ -150,6 +148,17 @@ public class DefaultSearchProvider implements SearchProvider
                                  "content",
                                  "title" }, analyzer);
           Query query = parser.parse(queryString);
+
+          if (logger.isLoggable(Level.FINER))
+          {
+            StringBuffer msg = new StringBuffer();
+
+            msg.append("start search witch query \"").append(query.toString());
+            msg.append("\" and analyzer ");
+            msg.append(analyzer.getClass().getName());
+            logger.finer(msg.toString());
+          }
+
           TopDocs topDocs = searcher.search(query, blog.getEntriesPerPage());
           SimpleHTMLFormatter htmlFormatter = new SimpleHTMLFormatter();
           Highlighter highlighter = new Highlighter(htmlFormatter,

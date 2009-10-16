@@ -159,7 +159,7 @@ public class SearchHelper
   {
     Analyzer analyzer = null;
 
-    if (Locale.GERMAN.equals(locale))
+    if (Locale.GERMAN.equals(locale) || Locale.GERMANY.equals(locale))
     {
       analyzer = new GermanAnalyzer();
     }
