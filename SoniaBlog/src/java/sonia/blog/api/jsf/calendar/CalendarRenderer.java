@@ -185,7 +185,7 @@ public class CalendarRenderer extends BaseRenderer
     {
       writer.write("$.getScript(\"");
       writer.write(context.getExternalContext().getRequestContextPath());
-      writer.write("/resources/jquery/plugins/js/calendar.js");
+      writer.write("/resources/jquery/plugins/js/jquery.calendar.js");
       writer.write("\", function(){ ");
       encodeAjaxCalendarScript(context, calendar, writer);
       writer.write("}); ");
