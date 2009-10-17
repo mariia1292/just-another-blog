@@ -9,26 +9,16 @@
 
     <ui:composition>
 
-      <h3 id="feedTitle"><h:outputText value="#{label.news}" /></h3>
-
-      <ul id="feedItems" class="feeds">
-        <li><h:outputText value="#{label.newsLoading}" /></li>
-      </ul>
+      <div id="newsFeed" />
 
       <script type="text/javascript">
         $(document).ready(function(){
-          $.getJSON( "#{DashboardBean.rssUrl}", function(channel, status){
-            if ( status == "success" ){
-              $("#feedTitle").empty();
-              $("#feedItems").empty();
-              $("#feedTitle").append( $("<a />").attr("href", channel.link).attr("target", "_blank").text( channel.title ) );
-              $.each( channel.items, function(i,item){
-                $("#feedItems").append($("<li />").text(item.date + " - ").append( $("<a />").attr("href", item.link).attr("target", "_blank").text(item.title)));
-                if ( i == 3 ) return false;
-              });
-            } else {
-              $("#feedItems li:first").text( "#{message.rssCouldNotLoadChannel}" );
-            }
+          $.getScript( "${facesContext.externalContext.requestContextPath}/resources/jquery/plugins/js/jquery.feeds.js", function(){
+            $("#newsFeed").feeds("#{DashboardBean.rssUrl}",{
+              maxItems: 5,
+              errorMsg: "#{message.rssCouldNotLoadChannel}",
+              loaingImage: "${facesContext.externalContext.requestContextPath}/resources/jquery/plugins/img/loading.gif"
+            });
           });
         });
       </script>
