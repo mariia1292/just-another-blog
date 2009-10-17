@@ -41,7 +41,6 @@ import org.apache.myfaces.custom.navmenu.UINavigationMenuItem;
 import sonia.blog.api.app.BlogConfiguration;
 import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.app.BlogRequest;
-import sonia.blog.api.app.BlogSession;
 import sonia.blog.api.app.Constants;
 import sonia.blog.api.app.Context;
 import sonia.blog.api.dao.CategoryDAO;
@@ -107,76 +106,6 @@ public class BlogBean extends AbstractBean
   public BlogBean()
   {
     super();
-  }
-
-  //~--- methods --------------------------------------------------------------
-
-  /**
-   * Method description
-   *
-   *
-   */
-  public void addComment()
-  {
-    BlogRequest request = getRequest();
-    BlogSession session = request.getBlogSession();
-
-    if (entry instanceof CommentAble)
-    {
-      CommentAble ca = (CommentAble) entry;
-
-      if (session != null)
-      {
-        comment.setAuthorMail(null);
-        comment.setAuthorName(null);
-        comment.setAuthorURL(null);
-        comment.setAuthor(session.getUser());
-      }
-      else
-      {
-        session = BlogContext.getInstance().getSystemBlogSession();
-      }
-
-      comment.setAuthorAddress(getRequest().getRemoteAddr());
-      ca.addComment(comment);
-      checkSpam(comment);
-
-      if (entry instanceof Entry)
-      {
-        CommentDAO commentDAO = BlogContext.getDAOFactory().getCommentDAO();
-
-        if (commentDAO.add(session, comment))
-        {
-          if (comment.isSpam())
-          {
-            getMessageHandler().warn(request, "createCommentSpam");
-          }
-          else
-          {
-            getMessageHandler().info(request, "createCommentSuccess");
-          }
-        }
-        else
-        {
-          getMessageHandler().error(request, "createCommentFailure");
-        }
-      }
-      else
-      {
-        getMessageHandler().error(request, "commentOnlyOnEntries");
-      }
-
-      Comment newComment = new Comment();
-
-      newComment.setAuthorMail(comment.getAuthorMail());
-      newComment.setAuthorName(comment.getAuthorName());
-      newComment.setAuthorURL(comment.getAuthorURL());
-      comment = newComment;
-    }
-    else
-    {
-      getMessageHandler().error(request, "commentOnlyOnEntries");
-    }
   }
 
   //~--- get methods ----------------------------------------------------------
@@ -791,36 +720,6 @@ public class BlogBean extends AbstractBean
     return TYPE_FRONTEND;
   }
 
-  //~--- methods --------------------------------------------------------------
-
-  /**
-   * Method description
-   *
-   *
-   * @param comment
-   */
-  private void checkSpam(Comment comment)
-  {
-    comment.setSpam(false);
-
-    List<SpamCheck> list = spamCheckReference.getAll();
-
-    if (Util.hasContent(list))
-    {
-      BlogRequest request = getRequest();
-
-      for (SpamCheck check : list)
-      {
-        if (check.isSpam(request, comment))
-        {
-          comment.setSpam(true);
-
-          break;
-        }
-      }
-    }
-  }
-
   //~--- fields ---------------------------------------------------------------
 
   /** Field description */
@@ -855,10 +754,6 @@ public class BlogBean extends AbstractBean
 
   /** Field description */
   private DataModel pageEntries;
-
-  /** Field description */
-  @Service(Constants.SERVICE_SPAMCHECK)
-  private ServiceReference<SpamCheck> spamCheckReference;
 
   /** Field description */
   @Service(Constants.SERVICE_SPAMPROTECTIONMETHOD)
