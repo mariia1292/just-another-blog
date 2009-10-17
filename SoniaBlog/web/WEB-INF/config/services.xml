@@ -132,4 +132,8 @@
     <impl class="sonia.blog.editor.TinyMCEProvider" />
   </service>
 
+  <service class="sonia.config.ConfigurationListener" path="/config/listener">
+    <impl class="sonia.blog.util.CacheListener" />
+  </service>
+
 </services>

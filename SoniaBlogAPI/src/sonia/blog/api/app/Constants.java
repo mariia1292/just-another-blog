@@ -362,6 +362,8 @@ public interface Constants
   /** Field description */
   public static final String SERVICE_CACHEMANAGER = "/app/cacheManager";
 
+  public static final String SERVICE_CONFIGLISTENER = "/config/listener";
+
   /** Field description */
   public static final String SERVICE_CONTEXTLISTENER = "/contextListener";
 

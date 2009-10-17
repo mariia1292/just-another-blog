@@ -85,6 +85,11 @@ public class CacheListener implements DAOListener, ConfigurationListener
 
     if (cache != null)
     {
+      if (logger.isLoggable(Level.FINE))
+      {
+        logger.fine("clear whole mapping cache");
+      }
+
       cache.clear();
     }
   }
@@ -156,12 +161,6 @@ public class CacheListener implements DAOListener, ConfigurationListener
   {
     cache =
       BlogContext.getInstance().getCacheManager().get(Constants.CACHE_MAPPING);
-
-    if (cache != null)
-    {
-      BlogContext.getInstance().getConfiguration().addListener(this);
-    }
-
     firstCall = false;
   }
 
