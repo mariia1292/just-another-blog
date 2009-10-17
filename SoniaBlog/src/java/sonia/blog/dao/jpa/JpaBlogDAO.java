@@ -60,8 +60,6 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
 
@@ -168,8 +166,6 @@ public class JpaBlogDAO extends JpaGenericDAO<Blog> implements BlogDAO
     }
     catch (Exception ex)
     {
-
-
       logger.log(Level.SEVERE, null, ex);
     }
 
@@ -194,7 +190,7 @@ public class JpaBlogDAO extends JpaGenericDAO<Blog> implements BlogDAO
     q.setParameter("identifier", identifier);
     q.setParameter("active", active);
 
-    return excecuteQuery( q);
+    return excecuteQuery(q);
   }
 
   /**
@@ -211,7 +207,7 @@ public class JpaBlogDAO extends JpaGenericDAO<Blog> implements BlogDAO
 
     q.setParameter("identifier", identifier);
 
-    return excecuteQuery( q);
+    return excecuteQuery(q);
   }
 
   /**
@@ -257,7 +253,52 @@ public class JpaBlogDAO extends JpaGenericDAO<Blog> implements BlogDAO
     q.setFirstResult(start);
     q.setMaxResults(max);
 
-    return excecuteListQuery( q);
+    return excecuteListQuery(q);
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param filter
+   * @param active
+   * @param start
+   * @param max
+   *
+   * @return
+   */
+  public List<Blog> getAll(String filter, boolean active, int start, int max)
+  {
+    Query q = strategy.getNamedQuery("Blog.getAllByFilterAndActive",
+                                     false);
+
+    q.setParameter("filter", createFilter(filter));
+    q.setParameter("active", active);
+    q.setFirstResult(start);
+    q.setMaxResults(max);
+
+    return excecuteListQuery(q);
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param filter
+   * @param start
+   * @param max
+   *
+   * @return
+   */
+  public List<Blog> getAll(String filter, int start, int max)
+  {
+    Query q = strategy.getNamedQuery("Blog.getAllByFilter", false);
+
+    q.setParameter("filter", createFilter(filter));
+    q.setFirstResult(start);
+    q.setMaxResults(max);
+
+    return excecuteListQuery(q);
   }
 
   /**
@@ -278,7 +319,7 @@ public class JpaBlogDAO extends JpaGenericDAO<Blog> implements BlogDAO
     q.setFirstResult(start);
     q.setMaxResults(max);
 
-    return excecuteListQuery(BlogMember.class,  q);
+    return excecuteListQuery(BlogMember.class, q);
   }
 
   /**
@@ -295,7 +336,8 @@ public class JpaBlogDAO extends JpaGenericDAO<Blog> implements BlogDAO
   public List<BlogMember> getMembers(Blog blog, boolean active, int start,
                                      int max)
   {
-    Query q = strategy.getNamedQuery("BlogMember.getAllByBalogAndActive", false);
+    Query q = strategy.getNamedQuery("BlogMember.getAllByBalogAndActive",
+                                     false);
 
     q.setParameter("blog", blog);
     q.setParameter("active", active);
@@ -317,7 +359,8 @@ public class JpaBlogDAO extends JpaGenericDAO<Blog> implements BlogDAO
    */
   public List<BlogMember> getMembers(Blog blog, boolean active, boolean notify)
   {
-    Query q = strategy.getNamedQuery("BlogMember.getAllByBlogActiveAndNotify", false);
+    Query q = strategy.getNamedQuery("BlogMember.getAllByBlogActiveAndNotify",
+                                     false);
 
     q.setParameter("blog", blog);
     q.setParameter("active", active);
@@ -337,7 +380,8 @@ public class JpaBlogDAO extends JpaGenericDAO<Blog> implements BlogDAO
    */
   public String getParameter(Blog blog, String name)
   {
-    Query q = strategy.getNamedQuery("BlogParameter.getValueByBlogAndName", false);
+    Query q = strategy.getNamedQuery("BlogParameter.getValueByBlogAndName",
+                                     false);
 
     q.setParameter("blog", blog);
     q.setParameter("name", name);
@@ -360,8 +404,7 @@ public class JpaBlogDAO extends JpaGenericDAO<Blog> implements BlogDAO
     q.setParameter("blog", blog);
 
     Map<String, String> paramMap = new HashMap<String, String>();
-    List<BlogParameter> parameters = excecuteListQuery(BlogParameter.class,
-                                       q);
+    List<BlogParameter> parameters = excecuteListQuery(BlogParameter.class, q);
 
     if (Util.hasContent(parameters))
     {
@@ -409,7 +452,6 @@ public class JpaBlogDAO extends JpaGenericDAO<Blog> implements BlogDAO
 
     try
     {
-
       if (param != null)
       {
         param.setValue(value);
@@ -425,7 +467,6 @@ public class JpaBlogDAO extends JpaGenericDAO<Blog> implements BlogDAO
     }
     catch (Exception ex)
     {
-
       logger.log(Level.SEVERE, null, ex);
     }
   }

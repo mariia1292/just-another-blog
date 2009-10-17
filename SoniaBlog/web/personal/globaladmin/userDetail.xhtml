@@ -15,6 +15,11 @@
         <h:outputText value="#{AdminUserBean.user.name}" />
       </ui:define>
 
+      <ui:define name="head">
+        <script type="text/javascript" src="${facesContext.externalContext.requestContextPath}/resources/jquery/plugins/js/jquery.autocomplete.js"></script>
+        <link rel="stylesheet" type="text/css" class="user" href="${facesContext.externalContext.requestContextPath}/resources/jquery/plugins/css/autocomplete.css" />
+      </ui:define>
+
       <ui:define name="content">
 
         <h1><h:outputText value="#{AdminUserBean.user.name}" /></h1>
@@ -100,6 +105,28 @@
             </h:column>
 
           </h:dataTable>
+
+        </h:form>
+
+        <h2><h:outputText value="#{label.addMembership}" /></h2>
+
+        <h:form id="addBlogForm">
+
+          <h:inputText id="addBlog" value="#{AdminUserBean.addBlogName}" required="true" />
+          <h:commandButton value="#{label.addMembership}" action="#{AdminUserBean.addBlog}" />
+          <script type="text/javascript">
+          $("#addBlogForm\\:addBlog").autocomplete("${facesContext.externalContext.requestContextPath}/async/blog.json",{
+            queryParam : "filter",
+            formatter : function(field, blog){
+              return $("<a />").attr("href", "javascript:return false;").attr("rel", blog.identifier).text( blog.identifier + " (" + blog.title + ")" ).click(function(){
+                field.val( blog.identifier );
+              });
+            },
+            processSelection: function(field, selection){
+              field.val( selection.attr("rel") );
+            }
+          });
+          </script>
 
         </h:form>
 

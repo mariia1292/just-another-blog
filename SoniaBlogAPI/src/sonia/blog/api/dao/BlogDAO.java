@@ -88,6 +88,33 @@ public interface BlogDAO extends GenericDAO<Blog>
    * Method description
    *
    *
+   *
+   * @param filter
+   * @param active
+   * @param start
+   * @param max
+   *
+   * @return
+   */
+  public List<Blog> getAll(String filter, boolean active, int start, int max);
+
+  /**
+   * Method description
+   *
+   *
+   *
+   * @param filter
+   * @param start
+   * @param max
+   *
+   * @return
+   */
+  public List<Blog> getAll(String filter, int start, int max);
+
+  /**
+   * Method description
+   *
+   *
    * @param blog
    * @param active
    * @param notify
