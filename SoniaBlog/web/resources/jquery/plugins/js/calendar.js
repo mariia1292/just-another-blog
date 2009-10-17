@@ -82,18 +82,19 @@
       var $table = $("<table />");
       appendTableHeader(calendar, $table);
       appendDayHeadings($table);
-      var weeks = parseInt(calendar.weeks) + 1;
+      var weeks = parseInt(calendar.weeks);
+      var firstDay = calendar.firstDay - 2;
+      if ( firstDay < 0 ){
+        firstDay = 6;
+        weeks++;
+      }
+
       for ( var i=0; i<weeks; i++ ){
         
         var $tr = $("<tr />");
         for (var j=0; j<7; j++){
           
           var $td = $("<td />");
-
-          var firstDay = calendar.firstDay - 2;
-          if ( firstDay < 0 ){
-            firstDay = 6;
-          }
 
           if (( i == 0 && j >= firstDay) ||
              ( counter > 0 && counter < calendar.daysOfMonth )){
