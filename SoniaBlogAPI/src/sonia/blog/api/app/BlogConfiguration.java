@@ -35,7 +35,10 @@ package sonia.blog.api.app;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import sonia.config.ConfigurationListener;
 import sonia.config.XmlConfiguration;
+
+import sonia.plugin.service.ServiceReference;
 
 import sonia.security.cipher.DefaultCipher;
 
@@ -49,6 +52,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  *
@@ -156,4 +160,40 @@ public class BlogConfiguration extends XmlConfiguration
       }
     }
   }
+
+  /**
+   * Method description
+   *
+   *
+   * @param key
+   */
+  @Override
+  protected void fireConfigChangedEvent(String key)
+  {
+    super.fireConfigChangedEvent(key);
+
+    if (listenerReference == null)
+    {
+      listenerReference = BlogContext.getInstance().getServiceRegistry().get(
+        ConfigurationListener.class, Constants.SERVICE_CONFIGLISTENER);
+    }
+
+    if (listenerReference != null)
+    {
+      List<ConfigurationListener> serviceListeners = listenerReference.getAll();
+
+      if (Util.hasContent(serviceListeners))
+      {
+        for (ConfigurationListener listener : serviceListeners)
+        {
+          listener.configChanged(this, key);
+        }
+      }
+    }
+  }
+
+  //~--- fields ---------------------------------------------------------------
+
+  /** Field description */
+  private ServiceReference<ConfigurationListener> listenerReference;
 }

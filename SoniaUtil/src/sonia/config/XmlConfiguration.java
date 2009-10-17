@@ -52,6 +52,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -381,8 +382,15 @@ public class XmlConfiguration extends StringBasedConfiguration
 
       if (value != null)
       {
-        properties.put(key, new String[] { value });
-        fireConfigChangedEvent(key);
+        String[] newValue = new String[] { value };
+        String[] oldValue = properties.get(key);
+
+        properties.put(key, newValue);
+
+        if ((oldValue == null) ||!Arrays.deepEquals(oldValue, newValue))
+        {
+          fireConfigChangedEvent(key);
+        }
       }
     }
     else
@@ -445,7 +453,7 @@ public class XmlConfiguration extends StringBasedConfiguration
    *
    * @param key
    */
-  private void fireConfigChangedEvent(String key)
+  protected void fireConfigChangedEvent(String key)
   {
     for (ConfigurationListener listener : listeners)
     {
@@ -456,7 +464,7 @@ public class XmlConfiguration extends StringBasedConfiguration
   //~--- fields ---------------------------------------------------------------
 
   /** Field description */
-  private final List<ConfigurationListener> listeners;
+  protected final List<ConfigurationListener> listeners;
 
   /** Field description */
   private Map<String, String[]> properties;

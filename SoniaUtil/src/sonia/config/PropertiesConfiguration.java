@@ -326,8 +326,11 @@ public class PropertiesConfiguration extends StringBasedConfiguration
 
     if (!isBlank(value))
     {
+      String oldValue = properties.getProperty(key);
       properties.setProperty(key, value);
-      fireConfigChangedEvent(key);
+      if ( oldValue == null || ! value.equals( oldValue ) ){
+        fireConfigChangedEvent(key);
+      }
     }
   }
 
@@ -395,7 +398,7 @@ public class PropertiesConfiguration extends StringBasedConfiguration
    *
    * @param key
    */
-  private void fireConfigChangedEvent(String key)
+  protected void fireConfigChangedEvent(String key)
   {
     for (ConfigurationListener listener : listeners)
     {
@@ -406,7 +409,7 @@ public class PropertiesConfiguration extends StringBasedConfiguration
   //~--- fields ---------------------------------------------------------------
 
   /** Field description */
-  private final List<ConfigurationListener> listeners;
+  protected final List<ConfigurationListener> listeners;
 
   /** Field description */
   protected String delimeter = ";";
