@@ -315,7 +315,7 @@ public class JpaUserDAO extends JpaGenericDAO<User> implements UserDAO
     
     Query q = strategy.getNamedQuery("User.getAllByFilter", false);
 
-    q.setParameter("filter", filter);
+    q.setParameter("filter", createFilter(filter));
     q.setFirstResult(start);
     q.setMaxResults(max);
 
@@ -338,7 +338,7 @@ public class JpaUserDAO extends JpaGenericDAO<User> implements UserDAO
     
     Query q = strategy.getNamedQuery("User.getAllByFilterAndActive", false);
 
-    q.setParameter("filter", filter);
+    q.setParameter("filter", createFilter(filter));
     q.setParameter("active", active);
     q.setFirstResult(start);
     q.setMaxResults(max);

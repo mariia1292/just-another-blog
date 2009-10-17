@@ -117,6 +117,39 @@ public class AdminBlogBean extends AbstractBean
    * Method description
    *
    *
+   * @return
+   */
+  public String addMember()
+  {
+    BlogRequest request = getRequest();
+
+    if (Util.hasContent(addMemberName))
+    {
+      User user = userDAO.get(addMemberName);
+
+      if (user != null)
+      {
+        userDAO.setRole(blog, user, Role.READER);
+        getMessageHandler().info(request, "addUserToBlogSuccess");
+        addMemberName = null;
+      }
+      else
+      {
+        getMessageHandler().warn(request, "addUserToBlogFailure");
+      }
+    }
+    else
+    {
+      getMessageHandler().warn(request, "addUserToBlogFailure");
+    }
+
+    return DETAIL;
+  }
+
+  /**
+   * Method description
+   *
+   *
    *
    * @param blogDAO
    *
@@ -425,6 +458,17 @@ public class AdminBlogBean extends AbstractBean
   /**
    * Method description
    *
+   *
+   * @return
+   */
+  public String getAddMemberName()
+  {
+    return addMemberName;
+  }
+
+  /**
+   * Method description
+   *
    * @return
    */
   public long getAttachmentCount()
@@ -614,6 +658,17 @@ public class AdminBlogBean extends AbstractBean
    * Method description
    *
    *
+   * @param addMemberName
+   */
+  public void setAddMemberName(String addMemberName)
+  {
+    this.addMemberName = addMemberName;
+  }
+
+  /**
+   * Method description
+   *
+   *
    * @param blog
    */
   public void setBlog(Blog blog)
@@ -622,6 +677,9 @@ public class AdminBlogBean extends AbstractBean
   }
 
   //~--- fields ---------------------------------------------------------------
+
+  /** Field description */
+  private String addMemberName;
 
   /** Field description */
   private Blog blog;

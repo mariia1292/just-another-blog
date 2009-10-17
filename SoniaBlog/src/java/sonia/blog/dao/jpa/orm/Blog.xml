@@ -15,7 +15,17 @@
         select b from Blog as b where b.identifier = :identifier
       </query>
     </named-query>
-        <named-query name="Blog.getByIdentifierAndActive">
+    <named-query name="Blog.getAllByFilter">
+      <query>
+        select b from Blog as b where b.identifier like :filter
+      </query>
+    </named-query>
+    <named-query name="Blog.getAllByFilterAndActive">
+      <query>
+        select b from Blog as b where b.active = :active and b.identifier like :filter
+      </query>
+    </named-query>
+    <named-query name="Blog.getByIdentifierAndActive">
       <query>
         select b from Blog as b where b.active = :active and b.identifier = :identifier
       </query>

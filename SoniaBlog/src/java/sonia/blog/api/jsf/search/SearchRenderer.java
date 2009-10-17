@@ -148,7 +148,7 @@ public class SearchRenderer extends BaseRenderer
       writer.write("\\\" /> \"); ");
       writer.write("$.getScript(\"");
       writer.write(context.getExternalContext().getRequestContextPath());
-      writer.write("/resources/jquery/plugins/js/autocomplete.js");
+      writer.write("/resources/jquery/plugins/js/jquery.autocomplete.js");
       writer.write("\", function(){ ");
       renderAutoCompleteScript(context, searchCompnent, writer);
       writer.write("}); ");

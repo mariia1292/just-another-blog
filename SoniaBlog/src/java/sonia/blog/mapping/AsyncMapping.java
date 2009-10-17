@@ -41,12 +41,16 @@ import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.app.BlogRequest;
 import sonia.blog.api.app.BlogResponse;
 import sonia.blog.api.app.Constants;
+import sonia.blog.api.dao.BlogDAO;
 import sonia.blog.api.dao.PageDAO;
+import sonia.blog.api.dao.UserDAO;
 import sonia.blog.api.mapping.FinalMapping;
 import sonia.blog.api.msg.BlogMessage;
 import sonia.blog.api.util.PageNavigation;
+import sonia.blog.entity.Blog;
 import sonia.blog.entity.Page;
 import sonia.blog.entity.Role;
+import sonia.blog.entity.User;
 
 import sonia.cache.ObjectCache;
 
@@ -131,6 +135,14 @@ public class AsyncMapping extends FinalMapping
         {
           messages(request, response);
         }
+        else if (provider.equals("user"))
+        {
+          user(request, response);
+        }
+        else if (provider.equals("blog"))
+        {
+          blog(request, response);
+        }
       }
       else
       {
@@ -140,6 +152,70 @@ public class AsyncMapping extends FinalMapping
     else
     {
       response.sendError(HttpServletResponse.SC_NOT_FOUND);
+    }
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param request
+   * @param response
+   *
+   * @throws IOException
+   */
+  private void blog(BlogRequest request, BlogResponse response)
+          throws IOException
+  {
+    if (request.isUserInRole(Role.GLOBALADMIN))
+    {
+      String filter = request.getParameter("filter");
+
+      if (filter == null)
+      {
+        filter = "";
+      }
+
+      PrintWriter writer = response.getWriter();
+
+      try
+      {
+        writer.println("[");
+
+        BlogDAO blogDAO = BlogContext.getDAOFactory().getBlogDAO();
+        List<Blog> blogs = blogDAO.getAll(filter, 0, 10);
+
+        if (Util.hasContent(blogs))
+        {
+          Iterator<Blog> it = blogs.iterator();
+
+          while (it.hasNext())
+          {
+            Blog blog = it.next();
+
+            writer.append("{");
+            printString(writer, "identifier", blog.getIdentifier(), false);
+            printString(writer, "title", blog.getTitle(), false);
+            printBoolean(writer, "active", blog.isActive(), true);
+            writer.append("}");
+
+            if (it.hasNext())
+            {
+              writer.append(",");
+            }
+          }
+        }
+
+        writer.println("]");
+      }
+      finally
+      {
+        writer.close();
+      }
+    }
+    else
+    {
+      response.sendError(HttpServletResponse.SC_FORBIDDEN);
     }
   }
 
@@ -324,6 +400,33 @@ public class AsyncMapping extends FinalMapping
       }
 
       printChildren(response, pages, exclude);
+    }
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param writer
+   * @param key
+   * @param value
+   * @param last
+   *
+   * @throws IOException
+   */
+  private void printBoolean(Writer writer, String key, boolean value,
+                            boolean last)
+          throws IOException
+  {
+    if (Util.hasContent(key))
+    {
+      writer.append("\"").append(key).append("\": ");
+      writer.append(Boolean.toString(value));
+
+      if (!last)
+      {
+        writer.append(", ");
+      }
     }
   }
 
@@ -565,6 +668,70 @@ public class AsyncMapping extends FinalMapping
     }
   }
 
+  /**
+   * Method description
+   *
+   *
+   * @param request
+   * @param response
+   *
+   * @throws IOException
+   */
+  private void user(BlogRequest request, BlogResponse response)
+          throws IOException
+  {
+    if (request.isUserInRole(Role.GLOBALADMIN))
+    {
+      String filter = request.getParameter("filter");
+
+      if (filter == null)
+      {
+        filter = "";
+      }
+
+      PrintWriter writer = response.getWriter();
+
+      try
+      {
+        writer.println("[");
+
+        UserDAO userDAO = BlogContext.getDAOFactory().getUserDAO();
+        List<User> users = userDAO.getAll(filter, 0, 10);
+
+        if (Util.hasContent(users))
+        {
+          Iterator<User> it = users.iterator();
+
+          while (it.hasNext())
+          {
+            User user = it.next();
+
+            writer.append("{");
+            printString(writer, "name", user.getName(), false);
+            printString(writer, "displayName", user.getDisplayName(), false);
+            printBoolean(writer, "active", user.isActive(), true);
+            writer.append("}");
+
+            if (it.hasNext())
+            {
+              writer.append(",");
+            }
+          }
+        }
+
+        writer.println("]");
+      }
+      finally
+      {
+        writer.close();
+      }
+    }
+    else
+    {
+      response.sendError(HttpServletResponse.SC_FORBIDDEN);
+    }
+  }
+
   //~--- get methods ----------------------------------------------------------
 
   /**
@@ -581,6 +748,7 @@ public class AsyncMapping extends FinalMapping
 
     try
     {
+
       // TODO replace UTF-8
       result = new SyndFeedInput().build(new InputStreamReader(in, "UTF-8"));
     }

@@ -47,12 +47,16 @@
       id: 'jqueryAutocomplete',
       maxItems : 5,
       minChars : 2,
+      formatter: defaultFormatter,
+      queryParam: "query",
+      processSelection: processSelection,
       cache: true
     };
 
     options = $.extend({},defaults, options);
 
     var $field = $(field);
+    $field.attr( "autocomplete", "off" );
     var $output = $("#" + options.id);
     var selected = null;
 
@@ -88,7 +92,8 @@
         case 13:
           if ( selected != null ){
             event.preventDefault();
-            processSelection();
+            options.processSelection($field, selected);
+            $output.hide();
           }
           break;
         // LEFT
@@ -123,16 +128,14 @@
       if ( $children.length >= index ){
         var $child = $children.eq(index);
         $child.addClass("selected");
-        selected = $child.children().eq(0).attr("href");
+        selected = $child.children().eq(0);
       } else {
         index--;
       }
     }
 
-    function processSelection(){
-      if ( selected != null ){
-        location.href = selected;
-      }
+    function processSelection(field, selection){
+      location.href = selection.attr("href");
     }
 
     function processKeyPress(){
@@ -175,7 +178,7 @@
     function processResult(result){
       $.each(result, function(index, content){
         if ( index < options.maxItems ){
-          $output.append( createOutputElement(content) );
+          $output.append( $("<li />").append( options.formatter($field, content) ) );
         }
       });
     }
@@ -186,16 +189,17 @@
       $output.empty();
     }
 
-    function createOutputElement(content){
-      return $("<li />").append($("<a />").attr("href", content.url).text(content.value) );
+    function defaultFormatter(field, content){
+      return $("<a />").attr("href", content.url).text(content.value);
     }
 
     function createQueryUrl(value){
-      var index = url.indexOf( "?query=" );
+      var param = options.queryParam;
+      var index = url.indexOf( "?" + param  + "=" );
       if ( index > 0 ){
         url = url.substring(0, index);
       }
-      url += "?query=" + value;
+      url += "?" + param + "=" + encodeURIComponent(value);
       return url;
     }
 

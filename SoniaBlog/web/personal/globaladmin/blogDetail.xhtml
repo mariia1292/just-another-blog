@@ -16,6 +16,11 @@
         <h:outputText value="#{AdminBlogBean.blog.title}" />
       </ui:define>
 
+      <ui:define name="head">
+        <script type="text/javascript" src="${facesContext.externalContext.requestContextPath}/resources/jquery/plugins/js/jquery.autocomplete.js"></script>
+        <link rel="stylesheet" type="text/css" class="user" href="${facesContext.externalContext.requestContextPath}/resources/jquery/plugins/css/autocomplete.css" />
+      </ui:define>
+
       <ui:define name="content">
 
         <h1><h:outputText value="#{AdminBlogBean.blog.title}" /></h1>
@@ -49,7 +54,7 @@
 
         <h2><h:outputText value="#{label.members}" /></h2>
 
-        <h:form>
+        <h:form id="memberForm">
 
           <h:dataTable columnClasses="middle,none" value="#{AdminBlogBean.members}" var="Member">
 
@@ -71,6 +76,28 @@
             </h:column>
 
           </h:dataTable>
+
+        </h:form>
+
+        <h2><h:outputText value="#{label.addMember}" /></h2>
+
+        <h:form id="addMemberForm">
+
+          <h:inputText id="addMember" value="#{AdminBlogBean.addMemberName}" required="true" />
+          <h:commandButton value="#{label.addMember}" action="#{AdminBlogBean.addMember}" />
+          <script type="text/javascript">
+          $("#addMemberForm\\:addMember").autocomplete("${facesContext.externalContext.requestContextPath}/async/user.json",{
+            queryParam : "filter",
+            formatter : function(field, user){
+              return $("<a />").attr("href", "javascript:return false;").attr("rel", user.name).text( user.name + " (" + user.displayName + ")" ).click(function(){
+                field.val( user.name );
+              });
+            },
+            processSelection: function(field, selection){
+              field.val( selection.attr("rel") );
+            }
+          });
+          </script>
 
         </h:form>
 

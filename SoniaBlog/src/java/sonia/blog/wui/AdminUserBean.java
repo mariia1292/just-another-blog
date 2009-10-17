@@ -35,8 +35,10 @@ package sonia.blog.wui;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import sonia.blog.api.app.BlogRequest;
 import sonia.blog.api.app.BlogSession;
 import sonia.blog.api.app.Constants;
+import sonia.blog.api.dao.BlogDAO;
 import sonia.blog.api.dao.Dao;
 import sonia.blog.api.dao.UserDAO;
 import sonia.blog.api.util.AbstractBean;
@@ -99,6 +101,39 @@ public class AdminUserBean extends AbstractBean
   }
 
   //~--- methods --------------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  public String addBlog()
+  {
+    BlogRequest request = getRequest();
+
+    if (Util.hasContent(addBlogName))
+    {
+      Blog blog = blogDAO.get(addBlogName);
+
+      if (blog != null)
+      {
+        userDAO.setRole(blog, user, Role.READER);
+        getMessageHandler().info(request, "addBlogToUserSuccess");
+        addBlogName = null;
+      }
+      else
+      {
+        getMessageHandler().warn(request, "addBlogToUserFailure");
+      }
+    }
+    else
+    {
+      getMessageHandler().warn(request, "addBlogToUserFailure");
+    }
+
+    return DETAIL;
+  }
 
   /**
    * Method description
@@ -199,8 +234,8 @@ public class AdminUserBean extends AbstractBean
       }
       else
       {
-        getMessageHandler().warn(getRequest(), null, "nameAllreadyExists", null,
-                                 user.getName());
+        getMessageHandler().warn(getRequest(), null, "nameAllreadyExists",
+                                 null, user.getName());
       }
     }
     else
@@ -237,6 +272,17 @@ public class AdminUserBean extends AbstractBean
   }
 
   //~--- get methods ----------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  public String getAddBlogName()
+  {
+    return addBlogName;
+  }
 
   /**
    * Method description
@@ -370,6 +416,17 @@ public class AdminUserBean extends AbstractBean
    * Method description
    *
    *
+   * @param addBlogName
+   */
+  public void setAddBlogName(String addBlogName)
+  {
+    this.addBlogName = addBlogName;
+  }
+
+  /**
+   * Method description
+   *
+   *
    * @param filter
    */
   public void setFilter(String filter)
@@ -462,6 +519,13 @@ public class AdminUserBean extends AbstractBean
   }
 
   //~--- fields ---------------------------------------------------------------
+
+  /** Field description */
+  private String addBlogName;
+
+  /** Field description */
+  @Dao
+  private BlogDAO blogDAO;
 
   /** Field description */
   @Service(Constants.SERVCIE_ENCRYPTION)
