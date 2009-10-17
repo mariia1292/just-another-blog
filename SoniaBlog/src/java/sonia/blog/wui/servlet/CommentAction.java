@@ -72,6 +72,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import sonia.blog.wui.BlogBean;
 
 /**
  *
@@ -258,6 +259,17 @@ public class CommentAction extends HttpServlet
             valid = false;
             messageHandler.warn(req, "url", "malformedUrl");
           }
+        }
+      }
+
+      BlogBean blogBean = BlogUtil.getSessionBean(request, BlogBean.class, BlogBean.NAME);
+      if ( blogBean != null ){
+        try
+        {
+          blogBean.setComment((Comment) comment.clone());
+        } catch (CloneNotSupportedException ex)
+        {
+          logger.log(Level.SEVERE, null, ex);
         }
       }
 
