@@ -35,6 +35,8 @@ package sonia.blog.mapping;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import org.apache.commons.lang.StringEscapeUtils;
+
 import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.app.BlogRequest;
 import sonia.blog.api.app.BlogResponse;
@@ -509,7 +511,7 @@ public class AsyncMapping extends FinalMapping
 
       if (value != null)
       {
-        writer.append(value);
+        StringEscapeUtils.escapeHtml(writer, value);
       }
 
       writer.append("\"");
@@ -579,7 +581,8 @@ public class AsyncMapping extends FinalMapping
 
     try
     {
-      result = new SyndFeedInput().build(new InputStreamReader(in));
+      // TODO replace UTF-8
+      result = new SyndFeedInput().build(new InputStreamReader(in, "UTF-8"));
     }
     catch (Exception ex)
     {

@@ -1,0 +1,9 @@
+<div id="feeds_${id}"></div>
+<script type="text/javascript">
+  $(document).ready(function(){
+    $("#feeds_${id}").feeds("${url}", {
+      <#if maxItems ??>maxItems: ${maxItems},</#if>
+      loadingImage: "${loadingImage}"
+    });
+  });
+</script>
