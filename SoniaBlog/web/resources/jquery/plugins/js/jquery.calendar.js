@@ -48,12 +48,17 @@
       monthUrlPattern : "?year={0}&month={1}",
       yearUrlPattern : "?year={0}",
       dayLabels : ["Mo","Tu","We","Th","Fr","Sa","Su"],
-      loadingImage : null
+      loadingImage : null,
+      cache: true
     };
 
     options = $.extend({},defaults, options);
 
     var $field = $(field);
+    var cache = null;
+    if ( options.cache ){
+      cache = [];
+    }
 
     monthView(null, null);
 
@@ -69,7 +74,25 @@
         month = new Date().getMonth() + 1;
       }
       postUrl += "?year=" + year + "&month=" + month;
+
+      if ( cache != null ){
+        var result = cache[postUrl];
+        if ( result != null ){
+          clearLoadingView();
+          createCalendar(result);
+        } else {
+          request( postUrl );
+        }
+      } else {
+        request( postUrl );
+      }
+    }
+
+    function request(postUrl){
       $.getJSON(postUrl, function(result){
+        if ( cache != null ){
+          cache[postUrl] = result;
+        }
         clearLoadingView();
         createCalendar(result);
       });
