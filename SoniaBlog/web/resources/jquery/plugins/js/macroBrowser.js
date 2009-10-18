@@ -141,11 +141,17 @@
       ).append(
         $form
       );
+
       appendInsertButton();
       if ( content.preview ){
         appendPreviewButton();
       }
       appendListButton();
+
+      var js = content.js;
+      if ( js != "" ){
+        eval(convertField(js));
+      }
     }
 
     function appendPreviewButton(){
@@ -189,6 +195,10 @@
             $("<td />").html( convertField( parameter.field ) )
           )
         );
+        var js = parameter.js;
+        if ( js != "" ){
+          eval(convertField(js));
+        }
       });
       $form.append(
         $("<table />").append( $tbody )

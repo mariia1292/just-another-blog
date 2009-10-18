@@ -335,13 +335,27 @@ public class MacroBrowserMapping extends FinalMapping
 
           if ((bodyWidget != null) &&!MacroWidget.class.equals(bodyWidget))
           {
-            String bodyEl = getFormElement(request, bodyWidget, co,
-                                           WIDGET_BODY, info.getWidgetParam());
+            BlogMacroWidget widget = getWidget(bodyWidget);
 
-            if (Util.hasContent(bodyEl))
+            if (widget != null)
             {
-              bodyEl = encodeField(bodyEl);
-              writer.append(", \"body\":\"").append(bodyEl).append("\"");
+              String bodyEl = widget.getFormElement(request, co, WIDGET_BODY,
+                                info.getWidgetParam());
+
+              if (Util.hasContent(bodyEl))
+              {
+                bodyEl = encodeField(bodyEl);
+                writer.append(", \"body\":\"").append(bodyEl).append("\"");
+              }
+
+              String bodyJS = widget.getJavaScript(request, co, WIDGET_BODY,
+                                info.getWidgetParam());
+
+              if (Util.hasContent(bodyJS))
+              {
+                bodyJS = encodeField(bodyJS);
+                writer.append(", \"js\":\"").append(bodyJS).append("\"");
+              }
             }
           }
 
@@ -372,16 +386,34 @@ public class MacroBrowserMapping extends FinalMapping
                                    ? param.getDescription()
                                    : "";
               String field = "";
+              String fieldJS = "";
               Class<? extends MacroWidget> paramWidgetClass = param.getWidget();
 
               if (paramWidgetClass != null)
               {
-                field = getFormElement(request, paramWidgetClass, co, pName,
-                                       param.getWidgetParam());
+                BlogMacroWidget widget = getWidget(paramWidgetClass);
 
-                if (Util.hasContent(field))
+                field = widget.getFormElement(request, co, pName,
+                                              param.getWidgetParam());
+
+                if (field != null)
                 {
                   field = encodeField(field);
+                }
+                else
+                {
+                  field = "";
+                }
+
+                fieldJS = widget.getJavaScript(request, co, name, pName);
+
+                if (fieldJS != null)
+                {
+                  fieldJS = encodeField(fieldJS);
+                }
+                else
+                {
+                  fieldJS = "";
                 }
               }
 
@@ -390,7 +422,8 @@ public class MacroBrowserMapping extends FinalMapping
               writer.append("\"label\":\"").append(label).append("\",");
               writer.append("\"description\":\"").append(description).append(
                   "\",");
-              writer.append("\"field\":\"").append(field).append("\"");
+              writer.append("\"field\":\"").append(field).append("\", ");
+              writer.append("\"js\":\"").append(fieldJS).append("\", ");
               writer.append("}");
             }
           }

@@ -62,7 +62,6 @@ public class TinyMCEProvider implements EditorProvider
    */
   public String renderEditor(BlogRequest request, String[] ids)
   {
-    LinkBuilder linkBuilder = BlogContext.getInstance().getLinkBuilder();
     StringBuffer result = new StringBuffer();
 
     result.append("<script type=\"text/javascript\" src=\"");
@@ -70,6 +69,51 @@ public class TinyMCEProvider implements EditorProvider
     result.append("/resources/tiny_mce/jquery.tinymce.js\"></script>\n");
     result.append("<script type=\"text/javascript\">\n");
     result.append("$(document).ready(function(){\n");
+    result.append(getJavaScript(request, ids, false));
+    result.append("});\n");
+    result.append("</script>\n");
+
+    return result.toString();
+  }
+
+  //~--- get methods ----------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   * @param request
+   * @param ids
+   *
+   * @return
+   */
+  public String getJavaScript(BlogRequest request, String[] ids)
+  {
+    return getJavaScript(request, ids, true);
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param request
+   * @param ids
+   * @param loadScript
+   *
+   * @return
+   */
+  public String getJavaScript(BlogRequest request, String[] ids,
+                              boolean loadScript)
+  {
+    LinkBuilder linkBuilder = BlogContext.getInstance().getLinkBuilder();
+    StringBuffer result = new StringBuffer();
+
+    if (loadScript)
+    {
+      result.append("$.getScript(\"").append(request.getContextPath());
+      result.append("/resources/tiny_mce/jquery.tinymce.js\", function(){");
+    }
+
     result.append("$(\"");
 
     for (int i = 0; i < ids.length; i++)
@@ -122,13 +166,14 @@ public class TinyMCEProvider implements EditorProvider
     result.append("theme_advanced_path_location : \"top\"\n");
     result.append("}\n");
     result.append("});\n");
-    result.append("});\n");
-    result.append("</script>\n");
+
+    if (loadScript)
+    {
+      result.append("});\n");
+    }
 
     return result.toString();
   }
-
-  //~--- get methods ----------------------------------------------------------
 
   /**
    * Method description

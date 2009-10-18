@@ -55,11 +55,15 @@ public class EditorWidget extends StringTextAreaWidget
    *
    *
    * @param request
+   * @param object
    * @param name
+   * @param param
    *
    * @return
    */
-  public String getEditor(BlogRequest request, String name)
+  @Override
+  public String getJavaScript(BlogRequest request, ContentObject object,
+                              String name, String param)
   {
     ServiceReference<EditorProvider> reference =
       BlogContext.getInstance().getServiceRegistry().get(EditorProvider.class,
@@ -74,33 +78,10 @@ public class EditorWidget extends StringTextAreaWidget
 
     if (editorProvider != null)
     {
-      result = editorProvider.renderEditor(request, new String[] { name });
+      result = editorProvider.getJavaScript(request, new String[] { name });
     }
 
     return result;
-  }
-
-  /**
-   * Method description
-   *
-   *
-   * @param request
-   * @param object
-   * @param name
-   * @param param
-   *
-   * @return
-   */
-  @Override
-  public String getFormElement(BlogRequest request, ContentObject object,
-                               String name, String param)
-  {
-    StringBuffer result = new StringBuffer();
-
-    result.append(super.getFormElement(request, object, name, param));
-    result.append(getEditor(request, name));
-
-    return result.toString();
   }
 
   //~--- fields ---------------------------------------------------------------
