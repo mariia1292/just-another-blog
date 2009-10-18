@@ -45,10 +45,9 @@ import sonia.blog.mapping.CaptchaMapping;
 //~--- JDK imports ------------------------------------------------------------
 
 import java.io.IOException;
+import java.io.Writer;
 
 import java.util.Random;
-
-import javax.faces.context.ResponseWriter;
 
 /**
  *
@@ -109,7 +108,7 @@ public class CaptchaSpamProtection implements SpamInputProtection
    *
    * @throws IOException
    */
-  public String renderInput(BlogRequest request, ResponseWriter writer)
+  public String renderInput(BlogRequest request, Writer writer)
           throws IOException
   {
     LinkBuilder linkBuilder = BlogContext.getInstance().getLinkBuilder();
@@ -124,11 +123,10 @@ public class CaptchaSpamProtection implements SpamInputProtection
     String link = linkBuilder.buildLink(request, "/captcha.jab");
 
     request.getSession().setAttribute(CaptchaMapping.SESSIONVAR, text);
-    writer.startElement("img", null);
-    writer.writeAttribute("src", link, null);
-    writer.writeAttribute("style", "width: " + WIDTH + ";height: " + HEIGHT,
-                          null);
-    writer.endElement("img");
+    writer.append("<img src=\"").append(link).append("\" style=\"");
+    writer.append("width: ").append(Integer.toString(WIDTH));
+    writer.append("; height: ").append(Integer.toString(HEIGHT));
+    writer.append("\" />");
 
     return text;
   }

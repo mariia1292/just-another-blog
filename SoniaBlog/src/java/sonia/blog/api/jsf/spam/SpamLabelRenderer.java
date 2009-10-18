@@ -46,6 +46,7 @@ import java.io.IOException;
 
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
+import javax.faces.context.ResponseWriter;
 
 /**
  *
@@ -78,20 +79,19 @@ public class SpamLabelRenderer extends BaseRenderer
           "component is not an instance of SpamComponent");
     }
 
-    SpamLabelComponent sc = (SpamLabelComponent) component;
-    SpamInputProtection method = sc.getMethod();
+    String id = component.getClientId(context);
+    ResponseWriter writer = context.getResponseWriter();
 
-    if (method == null)
-    {
-      throw new IllegalStateException("method is null");
-    }
-    else
-    {
-      BlogRequest request =
-        (BlogRequest) context.getExternalContext().getRequest();
-      String answer = method.renderInput(request, context.getResponseWriter());
-
-      context.getExternalContext().getSessionMap().put(REQUESTKEY, answer);
-    }
+    writer.startElement("span", component);
+    writer.writeAttribute("id", id, null);
+    writer.endElement("span");
+    writer.startElement("script", component);
+    writer.writeAttribute("type", "text/javascript", null);
+    writer.append("$(document).ready(function(){");
+    writer.append("$(\"#").append(id).append("\").load(\"");
+    writer.append(context.getExternalContext().getRequestContextPath());
+    writer.append("/async/spam.plain");
+    writer.append("\");});");
+    writer.endElement("script");
   }
 }

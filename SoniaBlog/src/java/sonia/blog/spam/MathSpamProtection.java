@@ -41,10 +41,9 @@ import sonia.blog.api.spam.SpamInputProtection;
 //~--- JDK imports ------------------------------------------------------------
 
 import java.io.IOException;
+import java.io.Writer;
 
 import java.util.Random;
-
-import javax.faces.context.ResponseWriter;
 
 /**
  *
@@ -73,7 +72,7 @@ public class MathSpamProtection implements SpamInputProtection
    *
    * @throws IOException
    */
-  public String renderInput(BlogRequest request, ResponseWriter writer)
+  public String renderInput(BlogRequest request, Writer writer)
           throws IOException
   {
     Random r = new Random();

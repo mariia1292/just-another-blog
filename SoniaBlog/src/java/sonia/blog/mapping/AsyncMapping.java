@@ -46,6 +46,7 @@ import sonia.blog.api.dao.PageDAO;
 import sonia.blog.api.dao.UserDAO;
 import sonia.blog.api.mapping.FinalMapping;
 import sonia.blog.api.msg.BlogMessage;
+import sonia.blog.api.spam.SpamInputProtection;
 import sonia.blog.api.util.PageNavigation;
 import sonia.blog.entity.Blog;
 import sonia.blog.entity.Page;
@@ -55,6 +56,8 @@ import sonia.blog.entity.User;
 import sonia.cache.ObjectCache;
 
 import sonia.io.TeeWriter;
+
+import sonia.plugin.service.ServiceReference;
 
 import sonia.util.Util;
 
@@ -97,6 +100,55 @@ public class AsyncMapping extends FinalMapping
   /** Field description */
   private static Logger logger = Logger.getLogger(AsyncMapping.class.getName());
 
+  //~--- get methods ----------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  @SuppressWarnings("unchecked")
+  public SpamInputProtection getSpamInputMethod()
+  {
+    SpamInputProtection method = null;
+    String configString =
+      BlogContext.getInstance().getConfiguration().getString(
+          Constants.CONFIG_SPAMMETHOD);
+    ServiceReference<SpamInputProtection> spamServiceReference =
+      BlogContext.getInstance().getServiceRegistry().get(
+          SpamInputProtection.class, Constants.SERVICE_SPAMPROTECTIONMETHOD);
+
+    if (!Util.isBlank(configString))
+    {
+      if (!configString.equalsIgnoreCase("none"))
+      {
+        List<SpamInputProtection> list = spamServiceReference.getAll();
+
+        for (SpamInputProtection sp : list)
+        {
+          if (sp.getClass().getName().equals(configString))
+          {
+            method = sp;
+          }
+        }
+
+        if (method == null)
+        {
+          logger.warning("method " + configString
+                         + " not found, using default");
+          method = list.get(0);
+        }
+      }
+    }
+    else
+    {
+      method = spamServiceReference.get();
+    }
+
+    return method;
+  }
+
   //~--- methods --------------------------------------------------------------
 
   /**
@@ -121,27 +173,59 @@ public class AsyncMapping extends FinalMapping
 
       if (Util.hasContent(provider))
       {
-        response.setContentType("application/x-javascript");
+        String type = param[1];
 
-        if (provider.equals("feed"))
+        if (Util.hasContent(type))
         {
-          feed(request, response);
+          if (type.equals("json"))
+          {
+            response.setContentType("application/x-javascript");
+          }
+          else if (type.equals("plain") || type.equals("txt"))
+          {
+            response.setContentType("text/plain");
+          }
+          else if (type.equals("xml"))
+          {
+            response.setContentType("text/xml");
+          }
+          else if (type.equals("html"))
+          {
+            response.setContentType("text/html");
+          }
+          else
+          {
+            response.sendError(HttpServletResponse.SC_NOT_FOUND);
+          }
+
+          if (provider.equals("feed"))
+          {
+            feed(request, response);
+          }
+          else if (provider.equals("navigation-options"))
+          {
+            navigationOptions(request, response);
+          }
+          else if (provider.equals("messages"))
+          {
+            messages(request, response);
+          }
+          else if (provider.equals("user"))
+          {
+            user(request, response);
+          }
+          else if (provider.equals("blog"))
+          {
+            blog(request, response);
+          }
+          else if (provider.equals("spam"))
+          {
+            spam(request, response);
+          }
         }
-        else if (provider.equals("navigation-options"))
+        else
         {
-          navigationOptions(request, response);
-        }
-        else if (provider.equals("messages"))
-        {
-          messages(request, response);
-        }
-        else if (provider.equals("user"))
-        {
-          user(request, response);
-        }
-        else if (provider.equals("blog"))
-        {
-          blog(request, response);
+          response.sendError(HttpServletResponse.SC_BAD_REQUEST);
         }
       }
       else
@@ -665,6 +749,32 @@ public class AsyncMapping extends FinalMapping
       {
         in.close();
       }
+    }
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param request
+   * @param response
+   *
+   * @throws IOException
+   */
+  private void spam(BlogRequest request, BlogResponse response)
+          throws IOException
+  {
+    PrintWriter writer = response.getWriter();
+
+    try
+    {
+      String answer = getSpamInputMethod().renderInput(request, writer);
+
+      request.getSession().setAttribute(SpamInputProtection.REQUESTKEY, answer);
+    }
+    finally
+    {
+      writer.close();
     }
   }
 

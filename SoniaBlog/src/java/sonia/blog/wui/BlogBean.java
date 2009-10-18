@@ -473,48 +473,6 @@ public class BlogBean extends AbstractBean
   /**
    * Method description
    *
-   *
-   * @return
-   */
-  @SuppressWarnings("unchecked")
-  public SpamInputProtection getSpamInputMethod()
-  {
-    SpamInputProtection method = null;
-    String configString = config.getString(Constants.CONFIG_SPAMMETHOD);
-
-    if (!Util.isBlank(configString))
-    {
-      if (!configString.equalsIgnoreCase("none"))
-      {
-        List<SpamInputProtection> list = spamServiceReference.getAll();
-
-        for (SpamInputProtection sp : list)
-        {
-          if (sp.getClass().getName().equals(configString))
-          {
-            method = sp;
-          }
-        }
-
-        if (method == null)
-        {
-          logger.warning("method " + configString
-                         + " not found, using default");
-          method = list.get(0);
-        }
-      }
-    }
-    else
-    {
-      method = spamServiceReference.get();
-    }
-
-    return method;
-  }
-
-  /**
-   * Method description
-   *
    * @return
    */
   public DataModel getTags()
@@ -754,10 +712,6 @@ public class BlogBean extends AbstractBean
 
   /** Field description */
   private DataModel pageEntries;
-
-  /** Field description */
-  @Service(Constants.SERVICE_SPAMPROTECTIONMETHOD)
-  private ServiceReference<SpamInputProtection> spamServiceReference;
 
   /** Field description */
   private DataModel tags;
