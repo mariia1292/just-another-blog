@@ -66,6 +66,20 @@ public interface BlogMacroWidget extends MacroWidget
    *
    *
    * @param request
+   * @param object
+   * @param name
+   * @param param
+   *
+   * @return
+   */
+  public String getJavaScript(BlogRequest request, ContentObject object,
+                              String name, String param);
+
+  /**
+   * Method description
+   *
+   *
+   * @param request
    * @param obejct
    * @param name
    * @param param

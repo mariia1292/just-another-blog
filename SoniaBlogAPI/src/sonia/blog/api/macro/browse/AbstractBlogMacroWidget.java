@@ -35,6 +35,9 @@ package sonia.blog.api.macro.browse;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import sonia.blog.api.app.BlogRequest;
+import sonia.blog.entity.ContentObject;
+
 import sonia.util.Util;
 
 //~--- JDK imports ------------------------------------------------------------
@@ -48,6 +51,25 @@ import java.util.Map;
  */
 public abstract class AbstractBlogMacroWidget implements BlogMacroWidget
 {
+
+  /**
+   * Method description
+   *
+   *
+   * @param request
+   * @param object
+   * @param name
+   * @param param
+   *
+   * @return
+   */
+  public String getJavaScript(BlogRequest request, ContentObject object,
+                              String name, String param)
+  {
+    return null;
+  }
+
+  //~--- methods --------------------------------------------------------------
 
   /**
    * Method description

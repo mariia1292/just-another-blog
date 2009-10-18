@@ -54,4 +54,17 @@ public interface EditorProvider
    * @return
    */
   public String renderEditor(BlogRequest request, String[] ids);
+
+  //~--- get methods ----------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   * @param request
+   * @param ids
+   *
+   * @return
+   */
+  public String getJavaScript(BlogRequest request, String[] ids);
 }
