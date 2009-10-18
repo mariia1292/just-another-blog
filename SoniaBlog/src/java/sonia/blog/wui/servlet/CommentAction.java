@@ -49,6 +49,7 @@ import sonia.blog.entity.Comment;
 import sonia.blog.entity.Entry;
 import sonia.blog.entity.User;
 import sonia.blog.util.BlogUtil;
+import sonia.blog.wui.BlogBean;
 
 import sonia.plugin.service.ServiceReference;
 import sonia.plugin.service.ServiceRegistry;
@@ -72,7 +73,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import sonia.blog.wui.BlogBean;
 
 /**
  *
@@ -262,12 +262,16 @@ public class CommentAction extends HttpServlet
         }
       }
 
-      BlogBean blogBean = BlogUtil.getSessionBean(request, BlogBean.class, BlogBean.NAME);
-      if ( blogBean != null ){
+      BlogBean blogBean = BlogUtil.getSessionBean(request, BlogBean.class,
+                            BlogBean.NAME);
+
+      if (blogBean != null)
+      {
         try
         {
           blogBean.setComment((Comment) comment.clone());
-        } catch (CloneNotSupportedException ex)
+        }
+        catch (CloneNotSupportedException ex)
         {
           logger.log(Level.SEVERE, null, ex);
         }
