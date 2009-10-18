@@ -41,8 +41,8 @@ import sonia.blog.api.app.BlogRequest;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.io.Writer;
 
-import javax.faces.context.ResponseWriter;
 
 /**
  *
@@ -50,6 +50,8 @@ import javax.faces.context.ResponseWriter;
  */
 public interface SpamInputProtection extends Serializable
 {
+
+  public static final String REQUESTKEY = "sonia.spam.answer";
 
   /**
    * Method description
@@ -63,7 +65,7 @@ public interface SpamInputProtection extends Serializable
    *
    * @throws IOException
    */
-  public String renderInput(BlogRequest request, ResponseWriter writer)
+  public String renderInput(BlogRequest request, Writer writer)
           throws IOException;
 
   //~--- get methods ----------------------------------------------------------
