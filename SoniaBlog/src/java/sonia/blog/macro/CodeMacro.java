@@ -82,6 +82,9 @@ public class CodeMacro extends AbstractBlogMacro implements WebMacro
   public static final String LANG_BASH = "bash";
 
   /** Field description */
+  public static final String LANG_COLDFUSION = "coldfusion";
+
+  /** Field description */
   public static final String LANG_CPP = "c++";
 
   /** Field description */
@@ -95,6 +98,9 @@ public class CodeMacro extends AbstractBlogMacro implements WebMacro
 
   /** Field description */
   public static final String LANG_DIFF = "diff";
+
+  /** Field description */
+  public static final String LANG_ERLANG = "erlang";
 
   /** Field description */
   public static final String LANG_GROOVY = "groovy";
@@ -140,6 +146,9 @@ public class CodeMacro extends AbstractBlogMacro implements WebMacro
 
   /** Field description */
   public static final String THEME_DJANGO = "django";
+
+  /** Field description */
+  public static final String THEME_ECLIPSE = "eclipse";
 
   /** Field description */
   public static final String THEME_EMACS = "emacs";
@@ -200,7 +209,7 @@ public class CodeMacro extends AbstractBlogMacro implements WebMacro
     displayName = "macro.code.lang.displayName",
     description = "macro.code.lang.description",
     widget = SelectWidget.class,
-    widgetParam = "options=bash|c++|c#|css|delphi|diff|groovy|*java|javaScript:js|perl|python|ruby|scala|sql|vb|xml"
+    widgetParam = "options=bash|c++|c#|coldfusion|css|delphi|diff|erlang|groovy|*java|javaScript:js|perl|python|ruby|scala|sql|vb|xml"
   )
   public void setLang(String lang)
   {
@@ -311,11 +320,19 @@ public class CodeMacro extends AbstractBlogMacro implements WebMacro
             75,
             linkBase + "resources/syntaxhighlighter/styles/shThemeRDark.css"));
     }
-    else
+    else if (theme.equalsIgnoreCase(THEME_ECLIPSE))
     {
       resources.add(
           buildStyleSheet(
             76,
+            linkBase
+            + "resources/syntaxhighlighter/styles/shThemeEclipse.css"));
+    }
+    else
+    {
+      resources.add(
+          buildStyleSheet(
+            77,
             linkBase
             + "resources/syntaxhighlighter/styles/shThemeDefault.css"));
     }
@@ -345,18 +362,26 @@ public class CodeMacro extends AbstractBlogMacro implements WebMacro
               83,
               linkBase + "resources/syntaxhighlighter/scripts/shBrushCpp.js"));
     }
-    else if (lang.equals("css"))
+    else if (lang.equals("coldfusion") || lang.equals("cf"))
     {
       resources.add(
           new ScriptResource(
               84,
+              linkBase
+              + "resources/syntaxhighlighter/scripts/shBrushColdFusion.js"));
+    }
+    else if (lang.equals("css"))
+    {
+      resources.add(
+          new ScriptResource(
+              85,
               linkBase + "resources/syntaxhighlighter/scripts/shBrushCss.js"));
     }
     else if (lang.equals("delphi") || (lang.equals("pascal")))
     {
       resources.add(
           new ScriptResource(
-              85,
+              86,
               linkBase
               + "resources/syntaxhighlighter/scripts/shBrushDelphi.js"));
     }
@@ -364,14 +389,22 @@ public class CodeMacro extends AbstractBlogMacro implements WebMacro
     {
       resources.add(
           new ScriptResource(
-              86,
+              87,
               linkBase + "resources/syntaxhighlighter/scripts/shBrushDiff.js"));
+    }
+    else if (lang.equals("erlang") || lang.equals("erl"))
+    {
+      resources.add(
+          new ScriptResource(
+              88,
+              linkBase
+              + "resources/syntaxhighlighter/scripts/shBrushErlang.js"));
     }
     else if (lang.equals("groovy"))
     {
       resources.add(
           new ScriptResource(
-              87,
+              89,
               linkBase
               + "resources/syntaxhighlighter/scripts/shBrushGroovy.js"));
     }
@@ -380,7 +413,7 @@ public class CodeMacro extends AbstractBlogMacro implements WebMacro
     {
       resources.add(
           new ScriptResource(
-              88,
+              90,
               linkBase
               + "resources/syntaxhighlighter/scripts/shBrushJScript.js"));
     }
@@ -388,28 +421,28 @@ public class CodeMacro extends AbstractBlogMacro implements WebMacro
     {
       resources.add(
           new ScriptResource(
-              89,
+              91,
               linkBase + "resources/syntaxhighlighter/scripts/shBrushJava.js"));
     }
     else if (lang.equals("perl"))
     {
       resources.add(
           new ScriptResource(
-              90,
+              92,
               linkBase + "resources/syntaxhighlighter/scripts/shBrushPerl.js"));
     }
     else if (lang.equals("php"))
     {
       resources.add(
           new ScriptResource(
-              91,
+              93,
               linkBase + "resources/syntaxhighlighter/scripts/shBrushPhp.js"));
     }
     else if (lang.equals("plain"))
     {
       resources.add(
           new ScriptResource(
-              92,
+              94,
               linkBase
               + "resources/syntaxhighlighter/scripts/shBrushPlain.js"));
     }
@@ -417,23 +450,22 @@ public class CodeMacro extends AbstractBlogMacro implements WebMacro
     {
       resources.add(
           new ScriptResource(
-              93,
+              95,
               linkBase
               + "resources/syntaxhighlighter/scripts/shBrushPython.js"));
     }
-    else if (lang.equals("ruby") || lang.equals("ror") || lang.equals("rb")
-             || (lang.equals("rails")))
+    else if (lang.equals("ruby") || lang.equals("ror") || lang.equals("rb"))
     {
       resources.add(
           new ScriptResource(
-              94,
+              96,
               linkBase + "resources/syntaxhighlighter/scripts/shBrushRuby.js"));
     }
     else if (lang.equals("scala"))
     {
       resources.add(
           new ScriptResource(
-              95,
+              97,
               linkBase
               + "resources/syntaxhighlighter/scripts/shBrushScala.js"));
     }
@@ -441,14 +473,14 @@ public class CodeMacro extends AbstractBlogMacro implements WebMacro
     {
       resources.add(
           new ScriptResource(
-              96,
+              98,
               linkBase + "resources/syntaxhighlighter/scripts/shBrushSql.js"));
     }
     else if (lang.equals("vb") || (lang.equals("vb.net")))
     {
       resources.add(
           new ScriptResource(
-              97,
+              99,
               linkBase + "resources/syntaxhighlighter/scripts/shBrushVb.js"));
     }
     else if (lang.equals("xml") || lang.equals("html") || lang.equals("xhtml")
@@ -456,21 +488,21 @@ public class CodeMacro extends AbstractBlogMacro implements WebMacro
     {
       resources.add(
           new ScriptResource(
-              98,
+              100,
               linkBase + "resources/syntaxhighlighter/scripts/shBrushXml.js"));
     }
     else if (lang.equals("actionscript3") || lang.equals("as3"))
     {
       resources.add(
           new ScriptResource(
-              99,
+              101,
               linkBase + "resources/syntaxhighlighter/scripts/shBrushAS3.js"));
     }
     else if (lang.equals("jfx") || lang.equals("javafx"))
     {
       resources.add(
           new ScriptResource(
-              100,
+              102,
               linkBase
               + "resources/syntaxhighlighter/scripts/shBrushJavaFX.js"));
     }
@@ -478,7 +510,7 @@ public class CodeMacro extends AbstractBlogMacro implements WebMacro
     {
       resources.add(
           new ScriptResource(
-              101,
+              103,
               linkBase
               + "resources/syntaxhighlighter/scripts/shBrushPowerShell.js"));
     }
