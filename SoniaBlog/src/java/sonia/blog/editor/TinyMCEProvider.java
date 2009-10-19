@@ -44,6 +44,10 @@ import sonia.blog.entity.Blog;
 
 import sonia.util.Util;
 
+//~--- JDK imports ------------------------------------------------------------
+
+import java.util.Locale;
+
 /**
  *
  * @author Sebastian Sdorra
@@ -133,6 +137,17 @@ public class TinyMCEProvider implements EditorProvider
     result.append("theme : \"advanced\",\n");
     result.append("mode : \"textareas\",\n");
     result.append("skin : \"jab\",\n");
+
+    String ls = "en";
+    Locale locale = request.getLocale();
+
+    if ((locale != null)
+        && (Locale.GERMANY.equals(locale) || Locale.GERMAN.equals(locale)))
+    {
+      ls = "de";
+    }
+
+    result.append("language: \"").append(ls).append("\",\n");
 
     /*
      * result.append("language: \"").append(request.getLocale().toString()).append(
