@@ -109,39 +109,45 @@
           )
         );
       });
-
-      $("a", $ul).prettyPhoto({
-        hideflash: true,
-        theme: options.theme
-      });
+      
+      if (!(jQuery.browser.msie && jQuery.browser.version == "7.0" )){
+        $("a", $ul).prettyPhoto({
+          hideflash: true,
+          theme: options.theme
+        });
+      }
     }
 
     function createHiddenGallery(title, size, pages){
-      var images = [];
-      var titles = [];
-      $.each( pages, function(index, page){
-        images.push( baseUrl + page.name );
-        titles.push( title + " " + page.nr + "/" + size );
-      });
+      if (!(jQuery.browser.msie && jQuery.browser.version == "7.0" )){
+        var images = [];
+        var titles = [];
+        $.each( pages, function(index, page){
+          images.push( baseUrl + page.name );
+          titles.push( title + " " + page.nr + "/" + size );
+        });
 
-      var $button = null;
-      if ( body == null || body.length <= 0 ){
-        $button = $("<a />").attr("href", "#").text(title);
+        var $button = null;
+        if ( body == null || body.length <= 0 ){
+          $button = $("<a />").attr("href", "#").text(title);
+        } else {
+          $button = $("<a />").attr("href", "#").html( body );
+        }
+        $button.prettyPhoto({
+          hideflash: true,
+          theme: options.theme
+        });
+
+        $field.append(
+          $button
+        );
+
+        $button.click(function(){
+          $.prettyPhoto.open(images,titles);
+        });
       } else {
-        $button = $("<a />").attr("href", "#").html( body );
+        $field.append( $("<p />").text( "Sorry, IE 7 is not supported" ) );
       }
-      $button.prettyPhoto({
-        hideflash: true,
-        theme: options.theme
-      });
-
-      $field.append(
-        $button
-      );
-
-      $button.click(function(){
-        $.prettyPhoto.open(images,titles);
-      });
     }
 
     function createThumbGallery(title, size, pages){
@@ -154,10 +160,12 @@
           )
         );
       });
-      $("a", $field).prettyPhoto({
-        hideflash: true,
-        theme: options.theme
-      });
+      if (!(jQuery.browser.msie && jQuery.browser.version == "7.0" )){
+        $("a", $field).prettyPhoto({
+          hideflash: true,
+          theme: options.theme
+        });
+      }
     }
   }
 
