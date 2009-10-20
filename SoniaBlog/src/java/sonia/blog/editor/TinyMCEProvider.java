@@ -148,11 +148,6 @@ public class TinyMCEProvider implements EditorProvider
     }
 
     result.append("language: \"").append(ls).append("\",\n");
-
-    /*
-     * result.append("language: \"").append(request.getLocale().toString()).append(
-     * "\",\n");
-     */
     result.append(
         "plugins : \"fullscreen,safari,emotions,imgbrowser,attachment,links,table,macro,imgresize\",\n");
     result.append(
