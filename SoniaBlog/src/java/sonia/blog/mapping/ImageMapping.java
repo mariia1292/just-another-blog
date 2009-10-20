@@ -201,7 +201,7 @@ public class ImageMapping extends AbstractAttachmentMapping
       {
         ImageHandlerJob job = new ImageHandlerJob(request.getCurrentBlog(),
                                 getFile(response, attachment), out,
-                                attachment.getId(), type, format, color, width,
+                                type, format, color, width,
                                 height, x, y);
 
         queue.processs(job);

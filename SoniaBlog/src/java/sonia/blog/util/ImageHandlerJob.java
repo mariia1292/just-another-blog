@@ -82,7 +82,6 @@ public class ImageHandlerJob implements BlogJob
    * @param blog
    * @param in
    * @param out
-   * @param id
    * @param type
    * @param format
    * @param color
@@ -91,14 +90,13 @@ public class ImageHandlerJob implements BlogJob
    * @param x
    * @param y
    */
-  public ImageHandlerJob(Blog blog, File in, File out, Long id, String type,
+  public ImageHandlerJob(Blog blog, File in, File out, String type,
                          String format, String color, int width, int height,
                          int x, int y)
   {
     this.blog = blog;
     this.in = in;
     this.out = out;
-    this.id = id;
     this.type = type;
     this.format = format;
     this.color = color;
@@ -118,41 +116,63 @@ public class ImageHandlerJob implements BlogJob
    */
   public void excecute() throws JobException
   {
-    try
+    if (!out.exists())
     {
-      ImageFileHandler imageHandler =
-        BlogContext.getInstance().getImageFileHandler();
+      try
+      {
+        ImageFileHandler imageHandler =
+          BlogContext.getInstance().getImageFileHandler();
 
-      if (Util.isBlank(type) || type.equalsIgnoreCase("relative"))
-      {
-        printRelativeImage(imageHandler);
+        if (logger.isLoggable(Level.FINEST))
+        {
+          StringBuffer msg = new StringBuffer();
+
+          msg.append("resize image ").append(in.getPath());
+          msg.append(" to file ").append(out.getPath());
+          logger.finest(msg.toString());
+        }
+
+        Thread.sleep(3l * 1000l);
+
+        if (Util.isBlank(type) || type.equalsIgnoreCase("relative"))
+        {
+          printRelativeImage(imageHandler);
+        }
+        else if (type.equalsIgnoreCase("thumb"))
+        {
+          printThumbImage(imageHandler);
+        }
+        else if (type.equalsIgnoreCase("fix"))
+        {
+          printFixImage(imageHandler);
+        }
+        else if (type.equalsIgnoreCase("crop"))
+        {
+          printCropImage(imageHandler);
+        }
       }
-      else if (type.equalsIgnoreCase("thumb"))
+      catch (Exception ex)
       {
-        printThumbImage(imageHandler);
-      }
-      else if (type.equalsIgnoreCase("fix"))
-      {
-        printFixImage(imageHandler);
-      }
-      else if (type.equalsIgnoreCase("crop"))
-      {
-        printCropImage(imageHandler);
+        logger.log(Level.SEVERE, null, ex);
+
+        if (!out.delete())
+        {
+          StringBuffer log = new StringBuffer();
+
+          log.append("could not delete broken image ").append(out.getPath());
+          logger.severe(log.toString());
+        }
+
+        throw new JobException(ex);
       }
     }
-    catch (Exception ex)
+    else if (logger.isLoggable(Level.FINE))
     {
-      logger.log(Level.SEVERE, null, ex);
+      StringBuffer msg = new StringBuffer();
 
-      if (!out.delete())
-      {
-        StringBuffer log = new StringBuffer();
-
-        log.append("could not delete broken image ").append(out.getPath());
-        logger.severe(log.toString());
-      }
-
-      throw new JobException(ex);
+      msg.append("output file ").append(out.getPath());
+      msg.append(" allready exists");
+      logger.fine(msg.toString());
     }
   }
 
@@ -285,9 +305,6 @@ public class ImageHandlerJob implements BlogJob
 
   /** Field description */
   private int height;
-
-  /** Field description */
-  private Long id;
 
   /** Field description */
   private File in;
