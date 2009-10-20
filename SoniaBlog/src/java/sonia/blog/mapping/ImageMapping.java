@@ -49,10 +49,6 @@ import sonia.config.Config;
 
 import sonia.jobqueue.JobQueue;
 
-import sonia.plugin.service.Service;
-
-import sonia.security.encryption.Encryption;
-
 import sonia.util.Util;
 
 //~--- JDK imports ------------------------------------------------------------
@@ -253,29 +249,34 @@ public class ImageMapping extends AbstractAttachmentMapping
   private String getFileName(Long id, String type, String format, String color,
                              int width, int height, int x, int y)
   {
-    String name = null;
     StringBuffer nameBuffer = new StringBuffer();
 
-    nameBuffer.append(id).append(":").append(type).append(":").append(format);
+    nameBuffer.append(id).append("_");
 
-    if (color != null)
+    if (format != null)
     {
-      nameBuffer.append(":").append(color);
-    }
-
-    nameBuffer.append(":").append(width).append(":").append(height).append(":");
-    nameBuffer.append(x).append(":").append(y);
-
-    if (encryption != null)
-    {
-      name = encryption.encrypt(nameBuffer.toString());
+      nameBuffer.append(format);
     }
     else
     {
-      name = nameBuffer.toString();
+      nameBuffer.append("-");
     }
 
-    return name;
+    nameBuffer.append("_").append(type).append("_");
+
+    if (color != null)
+    {
+      nameBuffer.append(color);
+    }
+    else
+    {
+      nameBuffer.append("-");
+    }
+
+    nameBuffer.append("_").append(width).append("_").append(height).append("_");
+    nameBuffer.append(x).append("_").append(y);
+
+    return nameBuffer.toString();
   }
 
   /**
@@ -352,10 +353,6 @@ public class ImageMapping extends AbstractAttachmentMapping
   }
 
   //~--- fields ---------------------------------------------------------------
-
-  /** Field description */
-  @Service(Constants.SERVCIE_ENCRYPTION)
-  private Encryption encryption;
 
   /** Field description */
   @Config(Constants.CONFIG_IMAGEMIMETYPE)
