@@ -200,9 +200,8 @@ public class ImageMapping extends AbstractAttachmentMapping
       else
       {
         ImageHandlerJob job = new ImageHandlerJob(request.getCurrentBlog(),
-                                getFile(response, attachment), out,
-                                type, format, color, width,
-                                height, x, y);
+                                getFile(response, attachment), out, type,
+                                format, color, width, height, x, y);
 
         queue.processs(job);
 
@@ -257,15 +256,15 @@ public class ImageMapping extends AbstractAttachmentMapping
     String name = null;
     StringBuffer nameBuffer = new StringBuffer();
 
-    nameBuffer.append(id).append(type).append(format);
+    nameBuffer.append(id).append(":").append(type).append(":").append(format);
 
     if (color != null)
     {
-      nameBuffer.append(color);
+      nameBuffer.append(":").append(color);
     }
 
-    nameBuffer.append(width).append(height).append(x);
-    nameBuffer.append(y);
+    nameBuffer.append(":").append(width).append(":").append(height).append(":");
+    nameBuffer.append(x).append(":").append(y);
 
     if (encryption != null)
     {
