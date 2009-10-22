@@ -38,6 +38,46 @@
       <name>sonia.blog.wui.LoginBean</name>
       <level>INFO</level>
     </logger>
+    <logger>
+      <name>sonia.blog.api.app.BlogRequest</name>
+      <level>INFO</level>
+    </logger>
+    <logger>
+      <name>sonia.blog.dao.jpa.JpaStrategy</name>
+      <level>INFO</level>
+    </logger>
+    <logger>
+      <name>sonia.injection.DefaultInjectionProvider</name>
+      <level>INFO</level>
+    </logger>
+    <logger>
+      <name>sonia.blog.api.util.AbstractBean</name>
+      <level>INFO</level>
+    </logger>
+    <logger>
+      <name>sonia.config.ConfigInjector</name>
+      <level>INFO</level>
+    </logger>
+    <logger>
+      <name>sonia.injection.ObjectInjector</name>
+      <level>INFO</level>
+    </logger>
+    <logger>
+      <name>sonia.blog.mapping.ImageMapping</name>
+      <level>INFO</level>
+    </logger>
+    <logger>
+      <name>sonia.blog.mapping.DefaultMappingHandler</name>
+      <level>INFO</level>
+    </logger>
+    <logger>
+      <name>sonia.plugin.service.ServiceInjector</name>
+      <level>INFO</level>
+    </logger>
+    <logger>
+      <name>sonia.macro.RegexMacroParser</name>
+      <level>INFO</level>
+    </logger>
   </loggers>
 
 </sonia-logging>
