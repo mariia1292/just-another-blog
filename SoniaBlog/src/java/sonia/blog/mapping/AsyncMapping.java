@@ -483,7 +483,7 @@ public class AsyncMapping extends FinalMapping
         pages = pageDAO.getAllRoot(request.getCurrentBlog());
       }
 
-      printChildren(response, pages, exclude);
+      printChildren(request, response, pages, exclude);
     }
   }
 
@@ -518,13 +518,15 @@ public class AsyncMapping extends FinalMapping
    * Method description
    *
    *
+   *
+   * @param request
    * @param response
    * @param pages
    * @param exclude
    *
    * @throws IOException
    */
-  private void printChildren(BlogResponse response,
+  private void printChildren(BlogRequest request, BlogResponse response,
                              List<? extends PageNavigation> pages, int exclude)
           throws IOException
   {
@@ -535,7 +537,8 @@ public class AsyncMapping extends FinalMapping
     if (pages != null)
     {
       ResourceBundle bundle =
-        ResourceBundle.getBundle("sonia.blog.resources.label");
+        ResourceBundle.getBundle("sonia.blog.resources.label",
+                                 request.getLocale());
       int size = pages.size();
       int firstPos = 1000;
 

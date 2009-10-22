@@ -50,6 +50,7 @@ import java.io.UnsupportedEncodingException;
 import java.security.Principal;
 
 import java.util.Enumeration;
+import java.util.Locale;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -96,7 +97,6 @@ public class BlogRequest extends HttpServletRequestWrapper
    * Method description
    *
    *
-   * @param success
    */
   public void finish()
   {
@@ -168,6 +168,33 @@ public class BlogRequest extends HttpServletRequestWrapper
     charsetIsSetable = false;
 
     return super.getInputStream();
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  @Override
+  public Locale getLocale()
+  {
+    if (locale == null)
+    {
+      Blog b = getCurrentBlog();
+
+      if (b != null)
+      {
+        locale = b.getLocale();
+      }
+
+      if (locale == null)
+      {
+        locale = super.getLocale();
+      }
+    }
+
+    return locale;
   }
 
   /**
@@ -505,6 +532,9 @@ public class BlogRequest extends HttpServletRequestWrapper
 
   /** Field description */
   private boolean charsetIsSetable = true;
+
+  /** Field description */
+  private Locale locale;
 
   /** Field description */
   private Mapping mapping;

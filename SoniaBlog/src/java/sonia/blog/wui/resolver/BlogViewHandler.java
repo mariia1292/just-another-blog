@@ -36,7 +36,6 @@ package sonia.blog.wui.resolver;
 //~--- non-JDK imports --------------------------------------------------------
 
 import sonia.blog.api.app.BlogRequest;
-import sonia.blog.entity.Blog;
 import sonia.blog.util.BlogUtil;
 
 //~--- JDK imports ------------------------------------------------------------
@@ -85,12 +84,7 @@ public class BlogViewHandler extends FaceletViewHandler
 
     if (request != null)
     {
-      Blog blog = request.getCurrentBlog();
-
-      if (blog != null)
-      {
-        locale = blog.getLocale();
-      }
+      locale = request.getLocale();
     }
 
     if (locale == null)
