@@ -63,7 +63,7 @@
   <service class="sonia.blog.api.app.BlogRequestListener" path="/listener/request" />
 
   <service class="javax.servlet.ServletContextListener" path="/contextListener">
-    <impl class="sonia.blog.util.ImageContextListener" />
+    <!--<impl class="sonia.blog.util.ImageContextListener" />-->
   </service>
 
   <service class="sonia.blog.api.app.InstallationListener" path="/listener/installation" />
