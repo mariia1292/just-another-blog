@@ -51,8 +51,6 @@ import sonia.blog.api.link.LinkBuilder;
 import sonia.blog.api.mapping.Mapping;
 import sonia.blog.api.mapping.MappingNavigation;
 import sonia.blog.api.navigation.NavigationProvider;
-import sonia.blog.api.spam.SpamCheck;
-import sonia.blog.api.spam.SpamInputProtection;
 import sonia.blog.api.template.Template;
 import sonia.blog.api.util.AbstractBean;
 import sonia.blog.api.util.PageNavigation;
@@ -69,8 +67,6 @@ import sonia.config.ElParamConfigMap;
 
 import sonia.plugin.service.Service;
 import sonia.plugin.service.ServiceReference;
-
-import sonia.util.Util;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -556,7 +552,7 @@ public class BlogBean extends AbstractBean
    */
   public String getVersion()
   {
-    return BlogContext.getInstance().getVersion();
+    return "r" + BlogContext.getInstance().getVersion();
   }
 
   /**

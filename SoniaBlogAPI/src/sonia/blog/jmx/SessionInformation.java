@@ -320,7 +320,7 @@ public class SessionInformation implements SessionInformationMBean
    *
    * @return
    */
-  public String getVersion()
+  public Integer getVersion()
   {
     return BlogContext.getInstance().getVersion();
   }

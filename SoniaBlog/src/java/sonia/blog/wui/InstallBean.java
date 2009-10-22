@@ -40,6 +40,7 @@ import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.app.BlogSession;
 import sonia.blog.api.app.Constants;
 import sonia.blog.api.app.InstallationListener;
+import sonia.blog.api.app.UpgradeListener;
 import sonia.blog.api.dao.DAOFactory;
 import sonia.blog.api.exception.BlogException;
 import sonia.blog.api.util.AbstractBean;
@@ -68,6 +69,7 @@ import java.io.OutputStream;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.SQLException;
 
 import java.text.MessageFormat;
 
@@ -189,6 +191,7 @@ public class InstallBean extends AbstractBean
 
       BlogConfiguration configuration = context.getConfiguration();
 
+      configuration.set(Constants.CONFIG_VERSION, context.getVersion());
       configuration.set(Constants.CONFIG_DB_PROFILE, databaseProfile);
       configuration.set(Constants.CONFIG_DB_DRIVER, databaseDriver);
       configuration.set(Constants.CONFIG_DB_URL, databaseUrl);
@@ -391,39 +394,12 @@ public class InstallBean extends AbstractBean
 
     if (isAllreadyInstalled(resourceDir))
     {
-      BlogContext context = BlogContext.getInstance();
-
-      if (listeners != null)
+      if (logger.isLoggable(Level.INFO))
       {
-        for (InstallationListener listener : listeners)
-        {
-          listener.beforeInstallation(context);
-        }
+        logger.info("start upgrade");
       }
 
-      writeBaseProperties();
-
-      try
-      {
-        context.getConfiguration().load();
-        BlogContext.getDAOFactory().init();
-        BlogUtil.configureLogger(context);
-
-        if (listeners != null)
-        {
-          for (InstallationListener listener : listeners)
-          {
-            listener.afterInstallation(context);
-          }
-        }
-
-        redirect();
-      }
-      catch (IOException ex)
-      {
-        getMessageHandler().error(getRequest(), "unknownError");
-        logger.log(Level.SEVERE, null, ex);
-      }
+      upgrade();
     }
     else if (resourceDir.isFile())
     {
@@ -767,18 +743,31 @@ public class InstallBean extends AbstractBean
   private boolean checkConnection()
   {
     boolean result = false;
+    Connection connection = null;
 
     try
     {
-      Connection connection = DriverManager.getConnection(databaseUrl,
-                                databaseUsername, databsePassword);
-
-      connection.close();
+      connection = DriverManager.getConnection(databaseUrl, databaseUsername,
+              databsePassword);
       result = true;
     }
     catch (Exception ex)
     {
       logger.log(Level.WARNING, null, ex);
+    }
+    finally
+    {
+      try
+      {
+        if ((connection != null) &&!connection.isClosed())
+        {
+          connection.close();
+        }
+      }
+      catch (SQLException ex)
+      {
+        logger.log(Level.SEVERE, null, ex);
+      }
     }
 
     return result;
@@ -842,6 +831,77 @@ public class InstallBean extends AbstractBean
     if ((cmp != null) && (cmp instanceof UIInput))
     {
       ((UIInput) cmp).setValue(databaseUsername);
+    }
+  }
+
+  /**
+   * Method description
+   *
+   */
+  private void upgrade()
+  {
+    BlogContext context = BlogContext.getInstance();
+
+    if (listeners != null)
+    {
+      for (InstallationListener listener : listeners)
+      {
+        listener.beforeInstallation(context);
+      }
+    }
+
+    writeBaseProperties();
+
+    try
+    {
+      BlogConfiguration config = context.getConfiguration();
+
+      config.load();
+
+      int oldVersion = config.getInteger(Constants.CONFIG_VERSION);
+
+      config.set(Constants.CONFIG_VERSION, context.getVersion());
+
+      DAOFactory daoFactory = BlogContext.getDAOFactory();
+
+      daoFactory.upgrade(oldVersion);
+      daoFactory.init();
+      BlogUtil.configureLogger(context);
+
+      ServiceReference<UpgradeListener> upgradeListenerReference =
+        context.getServiceRegistry().get(UpgradeListener.class,
+                                         Constants.SERVICE_UPGRADELISTENER);
+
+      if (upgradeListenerReference != null)
+      {
+        List<UpgradeListener> upgradeListeners =
+          upgradeListenerReference.getAll();
+
+        if (upgradeListeners != null)
+        {
+          for (UpgradeListener listener : upgradeListeners)
+          {
+            listener.upgrade(oldVersion);
+          }
+        }
+      }
+
+      config.store();
+
+      if (listeners != null)
+      {
+        for (InstallationListener listener : listeners)
+        {
+          listener.afterInstallation(context);
+        }
+      }
+
+      redirect();
+    }
+    catch (IOException ex)
+    {
+      getMessageHandler().error(getRequest(), "unknownError");
+      logger.log(Level.SEVERE, null, ex);
     }
   }
 

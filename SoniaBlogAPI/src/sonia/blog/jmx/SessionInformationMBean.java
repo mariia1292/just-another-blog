@@ -194,5 +194,5 @@ public interface SessionInformationMBean
    *
    * @return
    */
-  public String getVersion();
+  public Integer getVersion();
 }

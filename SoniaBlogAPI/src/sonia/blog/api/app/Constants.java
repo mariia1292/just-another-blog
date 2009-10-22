@@ -174,6 +174,9 @@ public interface Constants
   public static final String CONFIG_SSO = "auth.sso";
 
   /** Field description */
+  public static final String CONFIG_VERSION = "version";
+
+  /** Field description */
   public static final String COOKIE_NAME = "jab.login.cookie";
 
   /** Field description */
@@ -362,6 +365,7 @@ public interface Constants
   /** Field description */
   public static final String SERVICE_CACHEMANAGER = "/app/cacheManager";
 
+  /** Field description */
   public static final String SERVICE_CONFIGLISTENER = "/config/listener";
 
   /** Field description */
@@ -411,6 +415,9 @@ public interface Constants
 
   /** Field description */
   public static final String SERVICE_SSOAUTHENTICATION = "/app/sso";
+
+  /** Field description */
+  public static final String SERVICE_UPGRADELISTENER = "/app/upgrade";
 
   /** Field description */
   public static final String SERVICE_WEBRESOURCE = "/web/resource";

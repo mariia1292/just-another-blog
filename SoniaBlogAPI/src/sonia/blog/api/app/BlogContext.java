@@ -783,9 +783,9 @@ public class BlogContext
    *
    * @return
    */
-  public String getVersion()
+  public Integer getVersion()
   {
-    if (Util.isBlank(version))
+    if (version == null)
     {
       String path =
         getServletContext().getRealPath("/WEB-INF/config/version.txt");
@@ -793,13 +793,35 @@ public class BlogContext
 
       if (file.exists())
       {
+        FileInputStream fis = null;
+
         try
         {
-          version = Util.getTextFromFile(file);
+          fis = new FileInputStream(file);
+
+          byte[] b = new byte[fis.available()];
+
+          fis.read(b);
+          version = Integer.parseInt(new String(b));
         }
         catch (IOException ex)
         {
           logger.log(Level.SEVERE, null, ex);
+        }
+        catch (NumberFormatException ex)
+        {
+          logger.log(Level.SEVERE, null, ex);
+        }
+        finally
+        {
+          try
+          {
+            fis.close();
+          }
+          catch (IOException ex)
+          {
+            logger.log(Level.SEVERE, null, ex);
+          }
         }
       }
     }
@@ -975,5 +997,5 @@ public class BlogContext
   private TemplateManager templateManager;
 
   /** Field description */
-  private String version;
+  private Integer version;
 }
