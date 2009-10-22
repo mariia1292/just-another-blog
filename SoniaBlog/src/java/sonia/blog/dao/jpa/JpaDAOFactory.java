@@ -187,11 +187,19 @@ public class JpaDAOFactory extends DAOFactory
   /**
    * Method description
    *
+   *
+   * @param oldVersion
    */
   @Override
-  public void update()
+  public void upgrade(int oldVersion)
   {
-    throw new UnsupportedOperationException("Not supported yet.");
+    if (logger.isLoggable(Level.INFO))
+    {
+      StringBuffer msg = new StringBuffer();
+
+      msg.append("upgrade DAOFactory from version ").append(oldVersion);
+      logger.info(msg.toString());
+    }
   }
 
   //~--- get methods ----------------------------------------------------------

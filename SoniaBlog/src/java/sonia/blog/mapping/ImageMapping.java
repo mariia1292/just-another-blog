@@ -262,7 +262,18 @@ public class ImageMapping extends AbstractAttachmentMapping
       nameBuffer.append("-");
     }
 
-    nameBuffer.append("_").append(type).append("_");
+    nameBuffer.append("_");
+
+    if (type != null)
+    {
+      nameBuffer.append(type);
+    }
+    else
+    {
+      nameBuffer.append("-");
+    }
+
+    nameBuffer.append("_");
 
     if (color != null)
     {

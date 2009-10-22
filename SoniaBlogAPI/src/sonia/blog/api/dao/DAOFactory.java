@@ -117,7 +117,7 @@ public abstract class DAOFactory
    * Method description
    *
    */
-  public abstract void update();
+  public abstract void upgrade(int oldVersion);
 
   //~--- get methods ----------------------------------------------------------
 
