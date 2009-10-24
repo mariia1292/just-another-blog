@@ -190,7 +190,8 @@ public class TagCloudRenderer extends BaseRenderer
       writer.writeAttribute("title", tag.getTag().getName() + " - " + value,
                             null);
       writer.writeAttribute("href",
-                            linkBuilder.buildLink(request, tag.getTag()), null);
+                            linkBuilder.getRelativeLink(request, tag.getTag()),
+                            null);
       writer.writeAttribute("style",
                             "white-space: nowrap; font-size: "
                             + Math.round(size) + "%;", null);

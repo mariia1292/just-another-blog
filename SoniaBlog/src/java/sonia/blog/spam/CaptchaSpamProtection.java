@@ -120,7 +120,7 @@ public class CaptchaSpamProtection implements SpamInputProtection
     }
 
     String text = new String(buffer);
-    String link = linkBuilder.buildLink(request, "/captcha.jab");
+    String link = linkBuilder.getRelativeLink(request, "/captcha.jab");
 
     request.getSession().setAttribute(CaptchaMapping.SESSIONVAR, text);
     writer.append("<img src=\"").append(link).append("\" style=\"");

@@ -83,7 +83,7 @@ public class CommentFormRenderer extends BaseRenderer
           BlogUtil.getBlogRequest(context.getExternalContext().getRequest());
         LinkBuilder linkBuilder = BlogContext.getInstance().getLinkBuilder();
         String action = linkBuilder.getRelativeLink(request, "/create-comment");
-        String redirectUri = linkBuilder.buildLink(request, entry);
+        String redirectUri = linkBuilder.getRelativeLink(request, entry);
         String id = form.getClientId(context);
         ResponseWriter writer = context.getResponseWriter();
 

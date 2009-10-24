@@ -122,7 +122,7 @@ public class CalendarRenderer extends BaseRenderer
       StringBuffer option = new StringBuffer();
 
       option.append("\"").append(name).append("\": \"");
-      option.append(lb.buildLink(request, value)).append("\"");
+      option.append(lb.getRelativeLink(request, value)).append("\"");
       options.add(option.toString());
     }
   }
@@ -141,8 +141,9 @@ public class CalendarRenderer extends BaseRenderer
   private String buildLink(Integer day, Integer month, Integer year,
                            BlogRequest request)
   {
-    String link = BlogContext.getInstance().getLinkBuilder().buildLink(request,
-                    "/date/");
+    String link =
+      BlogContext.getInstance().getLinkBuilder().getRelativeLink(request,
+        "/date/");
 
     link += year;
 
@@ -221,7 +222,7 @@ public class CalendarRenderer extends BaseRenderer
     LinkBuilder lb = BlogContext.getInstance().getLinkBuilder();
 
     writer.write("$(\"div.calendar\").calendar(\"");
-    writer.write(lb.buildLink(request, calendar.getAjaxUrl()));
+    writer.write(lb.getRelativeLink(request, calendar.getAjaxUrl()));
     writer.write("\", {\n");
 
     List<String> options = new ArrayList<String>();

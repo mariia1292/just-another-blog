@@ -120,6 +120,8 @@ public class GlobalConfigBean extends AbstractConfigBean
     startTls = config.getBoolean(Constants.CONFIG_SMTPSTARTTLS, Boolean.FALSE);
     registerAcknowledgement =
       config.getBoolean(Constants.CONFIG_REGISTERACKNOWLEDGEMENT, false);
+    enableSSL = config.getBoolean(Constants.CONFIG_ENABLESSL, false);
+    sslPort = config.getInteger(Constants.CONFIG_SSLPORT, 8181);
   }
 
   /**
@@ -170,6 +172,8 @@ public class GlobalConfigBean extends AbstractConfigBean
     config.set(Constants.CONFIG_SMTPPORT, smtpPort);
     config.set(Constants.CONFIG_SMTPUSER, smtpUsername);
     config.set(Constants.CONFIG_SMTPSTARTTLS, startTls);
+    config.set(Constants.CONFIG_ENABLESSL, enableSSL);
+    config.set(Constants.CONFIG_SSLPORT, sslPort);
 
     if (Util.hasContent(smtpPassword))
     {
@@ -416,6 +420,17 @@ public class GlobalConfigBean extends AbstractConfigBean
    *
    * @return
    */
+  public int getSslPort()
+  {
+    return sslPort;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
   public int getSso()
   {
     return sso;
@@ -463,6 +478,17 @@ public class GlobalConfigBean extends AbstractConfigBean
   public boolean isAllowRegistration()
   {
     return allowRegistration;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  public boolean isEnableSSL()
+  {
+    return enableSSL;
   }
 
   /**
@@ -531,6 +557,17 @@ public class GlobalConfigBean extends AbstractConfigBean
   public void setDomain(String domain)
   {
     this.domain = domain;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param enableSSL
+   */
+  public void setEnableSSL(boolean enableSSL)
+  {
+    this.enableSSL = enableSSL;
   }
 
   /**
@@ -637,6 +674,17 @@ public class GlobalConfigBean extends AbstractConfigBean
    * Method description
    *
    *
+   * @param sslPort
+   */
+  public void setSslPort(int sslPort)
+  {
+    this.sslPort = sslPort;
+  }
+
+  /**
+   * Method description
+   *
+   *
    * @param sso
    */
   public void setSso(int sso)
@@ -684,6 +732,9 @@ public class GlobalConfigBean extends AbstractConfigBean
   private String domain;
 
   /** Field description */
+  private boolean enableSSL;
+
+  /** Field description */
   private int passwordMinLength;
 
   /** Field description */
@@ -709,6 +760,9 @@ public class GlobalConfigBean extends AbstractConfigBean
 
   /** Field description */
   private ServiceReference<SpamInputProtection> spamInputServcieReference;
+
+  /** Field description */
+  private int sslPort;
 
   /** Field description */
   private int sso;

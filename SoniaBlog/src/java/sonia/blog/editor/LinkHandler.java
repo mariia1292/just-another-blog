@@ -106,7 +106,7 @@ public class LinkHandler extends AttachmentHandler
                   ? attachment.getName()
                   : selection;
     LinkBuilder linkBuilder = BlogContext.getInstance().getLinkBuilder();
-    String url = linkBuilder.buildLink(request, attachment);
+    String url = linkBuilder.getRelativeLink(request, attachment);
 
     return MessageFormat.format(OUTPUT, name, url);
   }

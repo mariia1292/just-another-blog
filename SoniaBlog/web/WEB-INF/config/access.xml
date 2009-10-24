@@ -45,6 +45,27 @@
   <rule>
     <conditions>
       <not>
+        <scheme>https</scheme>
+      </not>
+      <ViewIdMatches>/personal/.*</ViewIdMatches>
+      <condition>
+        <class>sonia.blog.app.ConfigCondition</class>
+        <init-param>
+          <param-name>key</param-name>
+          <param-value>ssl.enable</param-value>
+        </init-param>
+      </condition>
+    </conditions>
+    <actions>
+      <action>
+        <class>sonia.blog.app.SSLRedirectAction</class>
+      </action>
+    </actions>
+  </rule>
+
+  <rule>
+    <conditions>
+      <not>
         <loggedIn />
       </not>
       <ViewIdMatches>/personal/.*</ViewIdMatches>
@@ -92,7 +113,7 @@
     <last />
   </rule>
 
-   <rule>
+  <rule>
     <conditions>
       <not>
         <condition>

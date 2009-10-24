@@ -253,11 +253,11 @@ public class ListMapping extends ScrollableFilterMapping
     setDisplayContent(request, entries, true);
     blogBean.setPageEntries(new ListDataModel(entries));
 
-    LinkBuilder linkBuilder = BlogContext.getInstance().getLinkBuilder();
-    String link = linkBuilder.buildLink(request, "/list/");
+    StringBuffer detailPattern = new StringBuffer("/list/");
 
+    detailPattern.append("{0,number,#}.jab");
     navigation = new SimpleMappingNavigation(prevUri, nextUri,
-            link + "{0,number,#}.jab");
+            detailPattern.toString());
 
     return buildTemplateViewId(blog, Constants.TEMPLATE_LIST);
   }

@@ -71,6 +71,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.xml.parsers.ParserConfigurationException;
+import sonia.jsf.access.def.condition.SchemeCondition;
 
 /**
  *
@@ -278,6 +279,13 @@ public class DefaultConfigReader
           if (notCondtion != null)
           {
             parent.add(notCondtion);
+          }
+        }
+        else if (childName.equals("scheme"))
+        {
+          String scheme = child.getTextContent();
+          if ( ! isBlank(scheme) ){
+            parent.add( new SchemeCondition(scheme) );
           }
         }
         else if (childName.equals("condition"))

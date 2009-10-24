@@ -31,91 +31,65 @@
 
 
 
-package sonia.blog.api.link;
+package sonia.jsf.access.def.condition;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import sonia.blog.api.app.BlogRequest;
-import sonia.blog.entity.Blog;
-import sonia.blog.entity.PermaObject;
+import sonia.jsf.access.Condition;
+
+//~--- JDK imports ------------------------------------------------------------
+
+import java.util.Map;
+
+import javax.faces.context.FacesContext;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  *
  * @author Sebastian Sdorra
  */
-public interface LinkBuilder
+public class SchemeCondition implements Condition
 {
 
   /**
-   * Method description
+   * Constructs ...
    *
    *
-   * @param blog
-   * @param link
-   *
-   * @return
+   * @param scheme
    */
-  public String buildLink(Blog blog, String link);
+  public SchemeCondition(String scheme)
+  {
+    this.scheme = scheme;
+  }
+
+  //~--- methods --------------------------------------------------------------
 
   /**
    * Method description
    *
    *
    * @param request
-   * @param link
+   * @param context
    *
    * @return
    */
-  public String buildLink(BlogRequest request, String link);
+  public boolean handleCondition(HttpServletRequest request,
+                                 FacesContext context)
+  {
+    return scheme.equals(request.getScheme());
+  }
 
   /**
    * Method description
    *
    *
-   * @param request
-   * @param object
-   *
-   * @return
+   * @param parameters
    */
-  public String buildLink(BlogRequest request, PermaObject object);
+  public void init(Map<String, String> parameters) {}
 
-  /**
-   * Method description
-   *
-   *
-   * @param request
-   */
-  public void init(BlogRequest request);
+  //~--- fields ---------------------------------------------------------------
 
-  //~--- get methods ----------------------------------------------------------
-
-  /**
-   * Method description
-   *
-   *
-   * @param request
-   * @param object
-   *
-   * @return
-   */
-  public String getRelativeLink(BlogRequest request, PermaObject object);
-
-  /**
-   * Method description
-   *
-   *
-   * @param request
-   * @param resource
-   *
-   * @return
-   */
-  public String getRelativeLink(BlogRequest request, String resource);
-
-  /**
-   * Method description
-   *
-   *
-   * @return
-   */
-  public boolean isInit();
+  /** Field description */
+  private String scheme;
 }

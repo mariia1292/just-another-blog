@@ -166,11 +166,11 @@ public class LinkRenderer extends BaseRenderer
 
       if (link.getHref() != null)
       {
-        uri = builder.buildLink(request, link.getHref());
+        uri = builder.getRelativeLink(request, link.getHref());
       }
       else if (link.getObject() != null)
       {
-        uri = builder.buildLink(request, link.getObject());
+        uri = builder.getRelativeLink(request, link.getObject());
       }
 
       writer.writeAttribute("href", uri, null);

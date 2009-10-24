@@ -67,6 +67,24 @@
 
         </h:form>
 
+        <h2><h:outputText value="#{label.sslConfig}" /></h2>
+        <h:form id="sslForm">
+          <h:panelGrid columns="3">
+
+            <h:outputLabel for="enableSSL" value="#{label.enableSSL}" />
+            <h:selectBooleanCheckbox id="enableSSL" value="#{GlobalConfigBean.enableSSL}" />
+            <h:message for="enableSSL" />
+
+            <h:outputLabel for="sslPort" value="#{label.sslPort}" />
+            <h:inputText id="sslPort" value="#{GlobalConfigBean.sslPort}" required="true" />
+            <h:message for="sslPort" />
+
+          </h:panelGrid>
+
+          <h:commandButton action="#{GlobalConfigBean.save}" value="#{label.save}" />
+
+        </h:form>
+
         <h2><h:outputText value="#{label.defaultConfig}" /></h2>
 
         <h:form id="defaultForm">

@@ -164,7 +164,7 @@ public class TinyMCEProvider implements EditorProvider
       result.append(" + new Date().getTime(),\n");
     }
 
-    String baseUrl = linkBuilder.buildLink(request, "");
+    String baseUrl = linkBuilder.getRelativeLink(request, "");
 
     result.append("convert_urls : false,\n");
     result.append("document_base_url : \"").append(baseUrl);

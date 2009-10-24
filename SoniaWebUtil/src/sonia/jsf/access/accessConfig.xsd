@@ -44,6 +44,7 @@
             <xsd:element name="isUserInRole" minOccurs="0" maxOccurs="unbounded"/>
             <xsd:element name="UriMatches" minOccurs="0" maxOccurs="unbounded"/>
             <xsd:element name="ViewIdMatches" minOccurs="0" maxOccurs="unbounded"/>
+            <xsd:element name="scheme" minOccurs="0" maxOccurs="unbounded"/>
             <xsd:element name="condition" minOccurs="0" maxOccurs="unbounded">
                 <xsd:complexType>
                     <xsd:sequence>

@@ -194,7 +194,7 @@ public class EntryBean extends AbstractEditorBean
   {
     BlogRequest request = getRequest();
     LinkBuilder linkBuilder = BlogContext.getInstance().getLinkBuilder();
-    String uri = linkBuilder.buildLink(request, "/entry-preview.jab");
+    String uri = linkBuilder.getRelativeLink(request, "/entry-preview.jab");
 
     entry.setPublishingDate(new Date());
     entry.setAuthor(request.getUser());
@@ -402,8 +402,8 @@ public class EntryBean extends AbstractEditorBean
    */
   public String getBaseUrl()
   {
-    return BlogContext.getInstance().getLinkBuilder().buildLink(getRequest(),
-            "/");
+    return BlogContext.getInstance().getLinkBuilder().getRelativeLink(
+        getRequest(), "/");
   }
 
   /**
@@ -455,7 +455,7 @@ public class EntryBean extends AbstractEditorBean
       BlogContext.getInstance().getTemplateManager().getTemplate(
           request.getCurrentBlog());
 
-    return BlogContext.getInstance().getLinkBuilder().buildLink(request,
+    return BlogContext.getInstance().getLinkBuilder().getRelativeLink(request,
             template.getContentCSS());
   }
 
@@ -575,6 +575,15 @@ public class EntryBean extends AbstractEditorBean
   public void setEntry(Entry entry)
   {
     this.entry = entry;
+  }
+
+  /**
+   * Method description
+   *
+   */
+  public void setSessionVar()
+  {
+    getRequest().getSession().setAttribute("editor", "entry");
   }
 
   /**
@@ -767,17 +776,6 @@ public class EntryBean extends AbstractEditorBean
     }
 
     return directory;
-  }
-
-  //~--- set methods ----------------------------------------------------------
-
-  /**
-   * Method description
-   *
-   */
-  public void setSessionVar()
-  {
-    getRequest().getSession().setAttribute("editor", "entry");
   }
 
   //~--- fields ---------------------------------------------------------------

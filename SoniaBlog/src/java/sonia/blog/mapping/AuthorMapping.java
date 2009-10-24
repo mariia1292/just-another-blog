@@ -35,14 +35,12 @@ package sonia.blog.mapping;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.app.BlogRequest;
 import sonia.blog.api.app.BlogResponse;
 import sonia.blog.api.app.Constants;
 import sonia.blog.api.dao.Dao;
 import sonia.blog.api.dao.EntryDAO;
 import sonia.blog.api.dao.UserDAO;
-import sonia.blog.api.link.LinkBuilder;
 import sonia.blog.api.mapping.MappingNavigation;
 import sonia.blog.api.mapping.ScrollableFilterMapping;
 import sonia.blog.entity.Blog;
@@ -272,12 +270,12 @@ public class AuthorMapping extends ScrollableFilterMapping
     setDisplayContent(request, entries, true);
     blogBean.setPageEntries(new ListDataModel(entries));
 
-    LinkBuilder linkBuilder = BlogContext.getInstance().getLinkBuilder();
-    String link = linkBuilder.buildLink(request,
-                    "/author/" + author.getId() + "/");
+    StringBuffer detailPattern = new StringBuffer("/author/");
 
+    detailPattern.append(author.getId()).append("/");
+    detailPattern.append("{0,number,#}.jab");
     navigation = new SimpleMappingNavigation(prevUri, nextUri,
-            link + "{0,number,#}.jab");
+            detailPattern.toString());
 
     return buildTemplateViewId(blog, Constants.TEMPLATE_LIST);
   }

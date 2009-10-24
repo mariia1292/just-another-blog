@@ -41,7 +41,6 @@ import sonia.blog.api.app.BlogResponse;
 import sonia.blog.api.app.Constants;
 import sonia.blog.api.dao.EntryDAO;
 import sonia.blog.api.dao.TagDAO;
-import sonia.blog.api.link.LinkBuilder;
 import sonia.blog.api.mapping.MappingNavigation;
 import sonia.blog.api.mapping.ScrollableFilterMapping;
 import sonia.blog.entity.Blog;
@@ -267,11 +266,12 @@ public class TagMapping extends ScrollableFilterMapping
     setDisplayContent(request, entries, true);
     blogBean.setPageEntries(new ListDataModel(entries));
 
-    LinkBuilder linkBuilder = BlogContext.getInstance().getLinkBuilder();
-    String link = linkBuilder.buildLink(request, "/tag/" + tag.getId() + "/");
+    StringBuffer detailPattern = new StringBuffer("/tag/");
 
+    detailPattern.append(tag.getId()).append("/");
+    detailPattern.append("{0,number,#}.jab");
     navigation = new SimpleMappingNavigation(prevUri, nextUri,
-            link + "{0,number,#}.jab");
+            detailPattern.toString());
 
     return buildTemplateViewId(blog, Constants.TEMPLATE_LIST);
   }
