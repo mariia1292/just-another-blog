@@ -31,91 +31,84 @@
 
 
 
-package sonia.blog.api.link;
+package sonia.blog.app;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import sonia.blog.api.app.BlogRequest;
-import sonia.blog.entity.Blog;
-import sonia.blog.entity.PermaObject;
+import sonia.blog.api.app.BlogContext;
+import sonia.blog.api.app.Constants;
+
+import sonia.jsf.access.Action;
+
+import sonia.util.Util;
+
+//~--- JDK imports ------------------------------------------------------------
+
+import java.io.IOException;
+
+import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import javax.faces.context.FacesContext;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  *
  * @author Sebastian Sdorra
  */
-public interface LinkBuilder
+public class SSLRedirectAction implements Action
 {
 
   /**
    * Method description
    *
    *
-   * @param blog
-   * @param link
-   *
-   * @return
-   */
-  public String buildLink(Blog blog, String link);
-
-  /**
-   * Method description
-   *
-   *
    * @param request
-   * @param link
-   *
-   * @return
+   * @param response
+   * @param context
    */
-  public String buildLink(BlogRequest request, String link);
+  public void doAction(HttpServletRequest request,
+                       HttpServletResponse response, FacesContext context)
+  {
+    StringBuffer uri = new StringBuffer("https://");
+
+    uri.append(request.getServerName()).append(":");
+
+    int port = BlogContext.getInstance().getConfiguration().getInteger(
+                   Constants.CONFIG_SSLPORT, 8181);
+
+    uri.append(port).append(request.getRequestURI());
+
+    String queryString = request.getQueryString();
+
+    if (Util.hasContent(queryString))
+    {
+      uri.append("?").append(queryString);
+    }
+
+    try
+    {
+      response.sendRedirect(uri.toString());
+    }
+    catch (IOException ex)
+    {
+      Logger.getLogger(SSLRedirectAction.class.getName()).log(Level.SEVERE,
+                       null, ex);
+    }
+  }
 
   /**
    * Method description
    *
    *
-   * @param request
-   * @param object
-   *
-   * @return
+   * @param parameters
    */
-  public String buildLink(BlogRequest request, PermaObject object);
+  public void init(Map<String, String> parameters)
+  {
 
-  /**
-   * Method description
-   *
-   *
-   * @param request
-   */
-  public void init(BlogRequest request);
-
-  //~--- get methods ----------------------------------------------------------
-
-  /**
-   * Method description
-   *
-   *
-   * @param request
-   * @param object
-   *
-   * @return
-   */
-  public String getRelativeLink(BlogRequest request, PermaObject object);
-
-  /**
-   * Method description
-   *
-   *
-   * @param request
-   * @param resource
-   *
-   * @return
-   */
-  public String getRelativeLink(BlogRequest request, String resource);
-
-  /**
-   * Method description
-   *
-   *
-   * @return
-   */
-  public boolean isInit();
+    // do nothing
+  }
 }

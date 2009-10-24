@@ -46,6 +46,8 @@ import sonia.blog.api.search.SearchEntry;
 import sonia.blog.api.search.SearchException;
 import sonia.blog.entity.Blog;
 
+import sonia.cache.Cacheable;
+
 import sonia.util.Util;
 
 //~--- JDK imports ------------------------------------------------------------
@@ -61,7 +63,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.servlet.ServletException;
-import sonia.cache.Cacheable;
 
 /**
  *
@@ -129,7 +130,7 @@ public class QuickSearchMapping extends FinalMapping
               writer.print(e.getTitle());
               writer.print("',");
               writer.print(" url : '");
-              writer.print(linkBuilder.buildLink(request, e.getData()));
+              writer.print(linkBuilder.getRelativeLink(request, e.getData()));
               writer.print("'");
 
               if (entryIt.hasNext())

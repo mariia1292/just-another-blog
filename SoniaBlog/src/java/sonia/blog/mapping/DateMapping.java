@@ -40,7 +40,6 @@ import sonia.blog.api.app.BlogRequest;
 import sonia.blog.api.app.BlogResponse;
 import sonia.blog.api.app.Constants;
 import sonia.blog.api.dao.EntryDAO;
-import sonia.blog.api.link.LinkBuilder;
 import sonia.blog.api.mapping.MappingNavigation;
 import sonia.blog.api.mapping.ScrollableFilterMapping;
 import sonia.blog.entity.Blog;
@@ -293,11 +292,12 @@ public class DateMapping extends ScrollableFilterMapping
     setDisplayContent(request, entries, true);
     blogBean.setPageEntries(new ListDataModel(entries));
 
-    LinkBuilder linkBuilder = BlogContext.getInstance().getLinkBuilder();
-    String link = linkBuilder.buildLink(request, "/date/" + datePattern + "/");
+    StringBuffer detailPattern = new StringBuffer("/date/");
 
+    detailPattern.append(datePattern).append("/");
+    detailPattern.append("{0,number,#}.jab");
     navigation = new SimpleMappingNavigation(prevUri, nextUri,
-            link + "{0,number,#}.jab");
+            detailPattern.toString());
 
     return buildTemplateViewId(blog, Constants.TEMPLATE_LIST);
   }

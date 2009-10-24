@@ -39,6 +39,7 @@ import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.app.BlogRequest;
 import sonia.blog.api.app.BlogResponse;
 import sonia.blog.api.app.Constants;
+import sonia.blog.api.app.Context;
 import sonia.blog.api.link.LinkBuilder;
 import sonia.blog.api.mapping.MappingNavigation;
 import sonia.blog.api.mapping.ScrollableFilterMapping;
@@ -69,7 +70,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.servlet.ServletException;
-import sonia.blog.api.app.Context;
 
 /**
  *
@@ -328,8 +328,6 @@ public class SearchMapping extends ScrollableFilterMapping
     detailPattern.append("&category=").append(category.getName());
     detailPattern.append("&hit={0,number,#}");
 
-    LinkBuilder linkBuilder = BlogContext.getInstance().getLinkBuilder();
-    String pattern = linkBuilder.buildLink(request, detailPattern.toString());
     SearchBean searchBean = BlogUtil.getRequestBean(request, SearchBean.class,
                               SearchBean.NAME);
 
@@ -337,7 +335,8 @@ public class SearchMapping extends ScrollableFilterMapping
     searchBean.setCategory(category);
     searchBean.setCategories(categories);
     searchBean.setPageEntries(entries);
-    navigation = new SimpleMappingNavigation(prevUri, nextUri, pattern);
+    navigation = new SimpleMappingNavigation(prevUri, nextUri,
+            detailPattern.toString());
 
     return buildTemplateViewId(request, Constants.TEMPLATE_SEARCH);
   }

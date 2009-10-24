@@ -36,8 +36,6 @@ package sonia.blog.macro;
 //~--- non-JDK imports --------------------------------------------------------
 
 import sonia.blog.api.app.BlogRequest;
-import sonia.blog.api.app.Context;
-import sonia.blog.api.link.LinkBuilder;
 import sonia.blog.api.macro.AbstractBlogMacro;
 import sonia.blog.api.macro.ScriptResource;
 import sonia.blog.api.macro.WebMacro;
@@ -169,9 +167,11 @@ public class TOCMacro extends AbstractBlogMacro implements WebMacro
   protected String doBody(BlogRequest request, String linkBase,
                           ContentObject object, String body)
   {
-    String res = linkBuilder.buildLink(request,
-                                       "/resources/jquery/plugins/js/toc.js");
-    ScriptResource tocScript = new ScriptResource(51, res);
+    StringBuffer resource = new StringBuffer();
+
+    resource.append(linkBase).append("resources/jquery/plugins/js/toc.js");
+
+    ScriptResource tocScript = new ScriptResource(51, resource.toString());
 
     resources = new ArrayList<WebResource>();
     resources.add(tocScript);
@@ -198,10 +198,6 @@ public class TOCMacro extends AbstractBlogMacro implements WebMacro
 
   /** Field description */
   private String id;
-
-  /** Field description */
-  @Context
-  private LinkBuilder linkBuilder;
 
   /** Field description */
   private Boolean orderedList = Boolean.FALSE;

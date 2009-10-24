@@ -212,7 +212,7 @@ public class SearchRenderer extends BaseRenderer
     boolean link = (searchComponent.getType() != null)
                    && searchComponent.getType().equals("link");
     LinkBuilder linkBuilder = BlogContext.getInstance().getLinkBuilder();
-    String searchUri = linkBuilder.buildLink(request, "/search.jab");
+    String searchUri = linkBuilder.getRelativeLink(request, "/search.jab");
 
     writer.startElement("form", searchComponent);
     writer.writeAttribute("action", searchUri, null);

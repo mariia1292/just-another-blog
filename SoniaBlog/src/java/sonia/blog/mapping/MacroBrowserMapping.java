@@ -475,7 +475,7 @@ public class MacroBrowserMapping extends FinalMapping
 
       LinkBuilder builder = BlogContext.getInstance().getLinkBuilder();
 
-      env.put("linkBase", builder.buildLink(request, "/"));
+      env.put("linkBase", builder.getRelativeLink(request, "/"));
 
       MacroResult result = parser.parseText(env, macroString);
       List<WebResource> resources = getResources(result);

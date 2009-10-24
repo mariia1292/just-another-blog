@@ -74,7 +74,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
-import java.util.logging.Logger;
 
 import javax.faces.context.FacesContext;
 import javax.faces.model.DataModel;
@@ -89,9 +88,6 @@ public class BlogBean extends AbstractBean
 
   /** Field description */
   public static final String NAME = "BlogBean";
-
-  /** Field description */
-  private static Logger logger = Logger.getLogger(BlogBean.class.getName());
 
   //~--- constructors ---------------------------------------------------------
 
@@ -255,7 +251,7 @@ public class BlogBean extends AbstractBean
     NavigationMenuItem random = new NavigationMenuItem();
 
     random.setLabel(bundle.getString("random"));
-    random.setExternalLink(linkBuilder.buildLink(request, "/random.jab"));
+    random.setExternalLink(linkBuilder.getRelativeLink(request, "/random.jab"));
     navigation.add(random);
 
     if (request.getUser() == null)
@@ -263,7 +259,7 @@ public class BlogBean extends AbstractBean
       NavigationMenuItem loginItem = new NavigationMenuItem();
 
       loginItem.setValue(bundle.getString("login"));
-      loginItem.setExternalLink(linkBuilder.buildLink(request, "/login.jab"));
+      loginItem.setExternalLink(linkBuilder.getRelativeLink(request, "/login.jab"));
       navigation.add(loginItem);
 
       if (config.getBoolean(Constants.CONFIG_ALLOW_REGISTRATION, Boolean.FALSE))
@@ -271,14 +267,14 @@ public class BlogBean extends AbstractBean
         NavigationMenuItem registerItem = new NavigationMenuItem();
 
         registerItem.setValue(bundle.getString("register"));
-        registerItem.setExternalLink(linkBuilder.buildLink(request,
+        registerItem.setExternalLink(linkBuilder.getRelativeLink(request,
                 "/register.jab"));
         navigation.add(registerItem);
       }
     }
     else
     {
-      String dashboardLink = linkBuilder.buildLink(request,
+      String dashboardLink = linkBuilder.getRelativeLink(request,
                                "/personal/dashboard.jab");
       NavigationMenuItem dashboardItem = new NavigationMenuItem();
 
@@ -291,7 +287,7 @@ public class BlogBean extends AbstractBean
         NavigationMenuItem createBlogItem = new NavigationMenuItem();
 
         createBlogItem.setValue(bundle.getString("createBlog"));
-        createBlogItem.setExternalLink(linkBuilder.buildLink(request,
+        createBlogItem.setExternalLink(linkBuilder.getRelativeLink(request,
                 "/blog.jab"));
         navigation.add(createBlogItem);
       }
@@ -299,7 +295,7 @@ public class BlogBean extends AbstractBean
       NavigationMenuItem logoutItem = new NavigationMenuItem();
 
       logoutItem.setValue(bundle.getString("logout"));
-      logoutItem.setExternalLink(linkBuilder.buildLink(request, "/logout"));
+      logoutItem.setExternalLink(linkBuilder.getRelativeLink(request, "/logout"));
       navigation.add(logoutItem);
     }
 
@@ -329,11 +325,11 @@ public class BlogBean extends AbstractBean
     List<NavigationMenuItem> navigation = new ArrayList<NavigationMenuItem>();
     BlogRequest request = getRequest();
     ResourceBundle bundle = getResourceBundle("label");
-    String linkBase = linkBuilder.buildLink(request, "/");
+    String linkBase = linkBuilder.getRelativeLink(request, "/");
     NavigationMenuItem overview = new NavigationMenuItem();
 
     overview.setValue(bundle.getString("overview"));
-    overview.setExternalLink(linkBuilder.buildLink(request,
+    overview.setExternalLink(linkBuilder.getRelativeLink(request,
             linkBase + "list/index.jab"));
     navigation.add(overview);
 
@@ -401,7 +397,7 @@ public class BlogBean extends AbstractBean
     {
       overviewItem = new UINavigationMenuItem();
       overviewItem.setValue(getResourceBundle("label").getString("overview"));
-      overviewItem.setExternalLink(linkBuilder.buildLink(getRequest(),
+      overviewItem.setExternalLink(linkBuilder.getRelativeLink(getRequest(),
               "/list/index.jab"));
     }
 

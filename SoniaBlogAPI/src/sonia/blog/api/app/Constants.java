@@ -110,6 +110,9 @@ public interface Constants
   public static final String CONFIG_DOMAIN = "domain";
 
   /** Field description */
+  public static final String CONFIG_ENABLESSL = "ssl.enable";
+
+  /** Field description */
   public static final String CONFIG_ENCODING = "encoding";
 
   /** Field description */
@@ -169,6 +172,9 @@ public interface Constants
 
   /** Field description */
   public static final String CONFIG_SPAMMETHOD = "spam.method";
+
+  /** Field description */
+  public static final String CONFIG_SSLPORT = "ssl.port";
 
   /** Field description */
   public static final String CONFIG_SSO = "auth.sso";

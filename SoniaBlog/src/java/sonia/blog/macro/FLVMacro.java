@@ -234,7 +234,7 @@ public class FLVMacro extends AbstractBlogMacro implements WebMacro
                               String linkBase, int width, int height)
   {
     String playerPath = linkBase + "resources/flowplayer/";
-    String attachmentLink = linkBuilder.buildLink(request, attchment);
+    String attachmentLink = linkBuilder.getRelativeLink(request, attchment);
 
     resources = new ArrayList<WebResource>();
 

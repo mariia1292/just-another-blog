@@ -100,35 +100,14 @@ public class DefaultLinkBuilder implements LinkBuilder
 
     if (!link.contains("://"))
     {
-      if (request.isSecure())
-      {
-        result.append("https://");
-      }
-      else
-      {
-        result.append("http://");
-      }
+      result.append(getServerLink(request, blog));
+    }
 
-      if (blog != null)
-      {
-        result.append(blog.getIdentifier());
-      }
-      else if (BlogContext.getInstance().isInstalled())
-      {
-        result.append(request.getCurrentBlog().getIdentifier());
-      }
-      else
-      {
-        result.append(request.getServerName());
-      }
+    String ctxPath = request.getContextPath();
 
-      result.append(":").append(request.getServerPort());
-      result.append(request.getContextPath());
-
-      if (!link.startsWith("/"))
-      {
-        result.append("/");
-      }
+    if (!link.startsWith(ctxPath))
+    {
+      result.append(ctxPath);
     }
 
     return result.append(link).toString();
@@ -149,51 +128,14 @@ public class DefaultLinkBuilder implements LinkBuilder
 
     if (object instanceof Blog)
     {
-      link.append(buildLink(request, (Blog) object, ""));
+      link.append(getServerLink(request, (Blog) object));
     }
     else
     {
-      link.append(buildLink(request, ""));
-
-      if (object instanceof ContentObject)
-      {
-        Mapping mapping = request.getMapping();
-
-        if ((mapping != null) && (mapping.getMappingNavigation() != null))
-        {
-          MappingNavigation navigation = mapping.getMappingNavigation();
-
-          if (navigation != null)
-          {
-            link = new StringBuffer(navigation.getDetailUri(object));
-          }
-        }
-        else if (object instanceof Entry)
-        {
-          link.append("list/").append(object.getId()).append(".jab");
-        }
-        else if (object instanceof Page)
-        {
-          link.append("page/").append(object.getId()).append(".jab");
-        }
-      }
-      else if (object instanceof Category)
-      {
-        link.append("category/").append(object.getId()).append("/index.jab");
-      }
-      else if (object instanceof Tag)
-      {
-        link.append("tag/").append(object.getId()).append("/index.jab");
-      }
-      else if (object instanceof Attachment)
-      {
-        link.append("attachment/").append(object.getId());
-      }
-      else if (object instanceof User)
-      {
-        link.append("author/").append(object.getId()).append("/index.jab");
-      }
+      link.append(getServerLink(request, null));
     }
+
+    link.append(getRelativeLink(request, object));
 
     return link.toString();
   }
@@ -260,8 +202,12 @@ public class DefaultLinkBuilder implements LinkBuilder
   public String getRelativeLink(BlogRequest request, String resource)
   {
     StringBuffer out = new StringBuffer();
+    String contextPath = request.getContextPath();
 
-    out.append(request.getContextPath());
+    if (!resource.startsWith(contextPath))
+    {
+      out.append(request.getContextPath());
+    }
 
     if (!resource.startsWith("/"))
     {
@@ -277,11 +223,108 @@ public class DefaultLinkBuilder implements LinkBuilder
    * Method description
    *
    *
+   * @param request
+   * @param object
+   *
+   * @return
+   */
+  public String getRelativeLink(BlogRequest request, PermaObject object)
+  {
+    StringBuffer link = new StringBuffer();
+
+    link.append(request.getContextPath());
+
+    if (object instanceof ContentObject)
+    {
+      Mapping mapping = request.getMapping();
+
+      if ((mapping != null) && (mapping.getMappingNavigation() != null))
+      {
+        MappingNavigation navigation = mapping.getMappingNavigation();
+
+        if (navigation != null)
+        {
+          link.append(navigation.getDetailUri(object));
+        }
+      }
+      else if (object instanceof Entry)
+      {
+        link.append("/list/").append(object.getId()).append(".jab");
+      }
+      else if (object instanceof Page)
+      {
+        link.append("/page/").append(object.getId()).append(".jab");
+      }
+    }
+    else if (object instanceof Category)
+    {
+      link.append("/category/").append(object.getId()).append("/index.jab");
+    }
+    else if (object instanceof Tag)
+    {
+      link.append("/tag/").append(object.getId()).append("/index.jab");
+    }
+    else if (object instanceof Attachment)
+    {
+      link.append("/attachment/").append(object.getId());
+    }
+    else if (object instanceof User)
+    {
+      link.append("/author/").append(object.getId()).append("/index.jab");
+    }
+
+    return link.toString();
+  }
+
+  /**
+   * Method description
+   *
+   *
    * @return
    */
   public boolean isInit()
   {
     return linkScheme != null;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param request
+   * @param blog
+   *
+   * @return
+   */
+  private String getServerLink(BlogRequest request, Blog blog)
+  {
+    StringBuffer result = new StringBuffer();
+
+    if (request.isSecure())
+    {
+      result.append("https://");
+    }
+    else
+    {
+      result.append("http://");
+    }
+
+    if (blog != null)
+    {
+      result.append(blog.getIdentifier());
+    }
+    else if (BlogContext.getInstance().isInstalled())
+    {
+      result.append(request.getCurrentBlog().getIdentifier());
+    }
+    else
+    {
+      result.append(request.getServerName());
+    }
+
+    result.append(":").append(request.getServerPort());
+
+    return result.toString();
   }
 
   //~--- fields ---------------------------------------------------------------
