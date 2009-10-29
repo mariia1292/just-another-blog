@@ -45,7 +45,6 @@ import sonia.blog.api.dao.BlogDAO;
 import sonia.blog.api.dao.PageDAO;
 import sonia.blog.api.dao.UserDAO;
 import sonia.blog.api.mapping.FinalMapping;
-import sonia.blog.api.mapping.MappingConfig;
 import sonia.blog.api.msg.BlogMessage;
 import sonia.blog.api.spam.SpamInputProtection;
 import sonia.blog.api.util.PageNavigation;
@@ -95,7 +94,6 @@ import javax.servlet.http.HttpSession;
  *
  * @author Sebastian Sdorra
  */
-@MappingConfig(cacheable = true)
 public class AsyncMapping extends FinalMapping
 {
 
