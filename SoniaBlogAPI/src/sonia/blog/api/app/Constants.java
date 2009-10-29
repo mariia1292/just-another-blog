@@ -77,6 +77,9 @@ public interface Constants
   public static final String CONFIG_COMMAND_TIMEOUT = "app.cmd.timeout";
 
   /** Field description */
+  public static final String CONFIG_COMPRESS = "app.compress";
+
+  /** Field description */
   public static final String CONFIG_COOKIEKEY = "app.cookieKey";
 
   /** Field description */

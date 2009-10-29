@@ -283,9 +283,7 @@ public class BlogContextFilter implements Filter
     boolean process = true;
     boolean compress = isCompressAble(request, instructions);
 
-    if ((cache != null) && (instructions != null) && instructions.isCacheable()
-        && (request.getParameter(PARAM_DONTCACHE) == null)
-        && BlogContext.getInstance().isInstalled())
+    if (isCacheable(request, instructions))
     {
       cacheKey = createCacheKey(request, compress, instructions.getCacheKeys());
 
@@ -347,12 +345,31 @@ public class BlogContextFilter implements Filter
    *
    * @return
    */
+  private boolean isCacheable(BlogRequest request,
+                              MappingInstructions instructions)
+  {
+    return (cache != null) && (instructions != null)
+           && instructions.isCacheable()
+           && (request.getParameter(PARAM_DONTCACHE) == null)
+           && BlogContext.getInstance().isInstalled();
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param request
+   * @param instructions
+   *
+   * @return
+   */
   private boolean isCompressAble(BlogRequest request,
                                  MappingInstructions instructions)
   {
     boolean result = false;
 
-    if (WebUtil.isGzipSupported(request))
+    if (configuration.getBoolean(Constants.CONFIG_COMPRESS, Boolean.TRUE)
+        && WebUtil.isGzipSupported(request))
     {
       if (instructions != null)
       {
