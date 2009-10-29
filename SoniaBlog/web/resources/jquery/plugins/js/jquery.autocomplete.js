@@ -204,26 +204,16 @@
     }
 
     function createOutputContainer(){
-      // TODO replace the 4
-      var p = findPosition(field, $field.height() +4 );
+      var p = findPosition();
       $("body").append( $("<ul />").attr("id", options.id).addClass( "autocomplete" ).css( "top",  p.top + "px").css( "left", p.left + "px" ) );
       $output = $("#" + options.id);
       $output.width( $field.width() );
     }
 
-    function findPosition( el, height ){
-      var top = height;
-      var left = 0;
-      do {
-        left += el.offsetLeft;
-        top += el.offsetTop;
-        el = el.offsetParent;
-      } while(el.tagName.toLowerCase() != 'body');
-
-      return {
-        top: top,
-        left: left
-      }
+    function findPosition(){
+      var p = $field.offset();
+      p.top += $field.outerHeight() - 1;
+      return p;
     }
 
   }
