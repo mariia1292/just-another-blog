@@ -47,7 +47,7 @@
       <not>
         <scheme>https</scheme>
       </not>
-      <ViewIdMatches>/personal/.*</ViewIdMatches>
+      <ViewIdMatches>(/personal/.*|/login.xhtml|/register.xhtml|/lostPassword.xhtml)</ViewIdMatches>
       <condition>
         <class>sonia.blog.app.ConfigCondition</class>
         <init-param>
