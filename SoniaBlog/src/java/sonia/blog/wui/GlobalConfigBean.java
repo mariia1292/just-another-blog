@@ -122,6 +122,8 @@ public class GlobalConfigBean extends AbstractConfigBean
       config.getBoolean(Constants.CONFIG_REGISTERACKNOWLEDGEMENT, false);
     enableSSL = config.getBoolean(Constants.CONFIG_ENABLESSL, false);
     sslPort = config.getInteger(Constants.CONFIG_SSLPORT, 8181);
+    gzipCompression = config.getBoolean(Constants.CONFIG_COMPRESS,
+            Boolean.TRUE);
   }
 
   /**
@@ -174,6 +176,7 @@ public class GlobalConfigBean extends AbstractConfigBean
     config.set(Constants.CONFIG_SMTPSTARTTLS, startTls);
     config.set(Constants.CONFIG_ENABLESSL, enableSSL);
     config.set(Constants.CONFIG_SSLPORT, sslPort);
+    config.set(Constants.CONFIG_COMPRESS, gzipCompression);
 
     if (Util.hasContent(smtpPassword))
     {
@@ -292,6 +295,17 @@ public class GlobalConfigBean extends AbstractConfigBean
   public String getDomain()
   {
     return domain;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  public Boolean getGzipCompression()
+  {
+    return gzipCompression;
   }
 
   /**
@@ -574,6 +588,17 @@ public class GlobalConfigBean extends AbstractConfigBean
    * Method description
    *
    *
+   * @param gzipCompression
+   */
+  public void setGzipCompression(Boolean gzipCompression)
+  {
+    this.gzipCompression = gzipCompression;
+  }
+
+  /**
+   * Method description
+   *
+   *
    * @param passwordMinLength
    */
   public void setPasswordMinLength(int passwordMinLength)
@@ -733,6 +758,9 @@ public class GlobalConfigBean extends AbstractConfigBean
 
   /** Field description */
   private boolean enableSSL;
+
+  /** Field description */
+  private Boolean gzipCompression;
 
   /** Field description */
   private int passwordMinLength;
