@@ -33,10 +33,6 @@
 
 package sonia.blog.api.mapping;
 
-//~--- non-JDK imports --------------------------------------------------------
-
-import sonia.cache.CacheManager;
-
 /**
  *
  * @author Sebastian Sdorra
@@ -55,6 +51,7 @@ public class MappingInstructions
                              String[] parameters)
   {
     this.mappingClass = mappingClass;
+    this.config = mappingClass.getAnnotation(MappingConfig.class);
     this.parameters = parameters;
   }
 
@@ -68,7 +65,14 @@ public class MappingInstructions
    */
   public String[] getCacheKeys()
   {
-    return CacheManager.getCacheKeys(mappingClass);
+    String[] keys = null;
+
+    if (config != null)
+    {
+      keys = config.cacheKeys();
+    }
+
+    return keys;
   }
 
   /**
@@ -101,10 +105,38 @@ public class MappingInstructions
    */
   public boolean isCacheable()
   {
-    return CacheManager.isCacheable(mappingClass);
+    boolean result = false;
+
+    if (config != null)
+    {
+      result = config.cacheable();
+    }
+
+    return result;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  public boolean isCompressable()
+  {
+    boolean result = false;
+
+    if (config != null)
+    {
+      result = config.compressable();
+    }
+
+    return result;
   }
 
   //~--- fields ---------------------------------------------------------------
+
+  /** Field description */
+  private MappingConfig config;
 
   /** Field description */
   private Class<? extends Mapping> mappingClass;

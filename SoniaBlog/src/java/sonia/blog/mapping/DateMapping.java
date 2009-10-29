@@ -40,14 +40,13 @@ import sonia.blog.api.app.BlogRequest;
 import sonia.blog.api.app.BlogResponse;
 import sonia.blog.api.app.Constants;
 import sonia.blog.api.dao.EntryDAO;
+import sonia.blog.api.mapping.MappingConfig;
 import sonia.blog.api.mapping.MappingNavigation;
 import sonia.blog.api.mapping.ScrollableFilterMapping;
 import sonia.blog.entity.Blog;
 import sonia.blog.entity.Entry;
 import sonia.blog.util.BlogUtil;
 import sonia.blog.wui.BlogBean;
-
-import sonia.cache.Cacheable;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -67,7 +66,11 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author Sebastian Sdorra
  */
-@Cacheable({ "user", "locale" })
+@MappingConfig(
+  cacheable = true,
+  cacheKeys = { "user", "locale" },
+  compressable = true
+)
 public class DateMapping extends ScrollableFilterMapping
 {
 

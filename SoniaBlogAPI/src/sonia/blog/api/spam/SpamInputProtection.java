@@ -43,7 +43,6 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.io.Writer;
 
-
 /**
  *
  * @author Sebastian Sdorra
@@ -51,7 +50,10 @@ import java.io.Writer;
 public interface SpamInputProtection extends Serializable
 {
 
+  /** Field description */
   public static final String REQUESTKEY = "sonia.spam.answer";
+
+  //~--- methods --------------------------------------------------------------
 
   /**
    * Method description

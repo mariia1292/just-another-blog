@@ -52,7 +52,7 @@ public class BlogMessage
   /** Field description */
   public static final int LEVEL_WARN = 1;
 
-
+  /** Field description */
   public static final String SESSION_VAR = "sonia.blog.msg.store";
 
   //~--- constructors ---------------------------------------------------------

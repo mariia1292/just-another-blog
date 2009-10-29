@@ -49,6 +49,7 @@ import sonia.blog.api.macro.WebMacro;
 import sonia.blog.api.macro.WebResource;
 import sonia.blog.api.macro.browse.BlogMacroWidget;
 import sonia.blog.api.mapping.FinalMapping;
+import sonia.blog.api.mapping.MappingConfig;
 import sonia.blog.api.template.Template;
 import sonia.blog.entity.ContentObject;
 import sonia.blog.entity.Role;
@@ -97,6 +98,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author Sebastian Sdorra
  */
+@MappingConfig(compressable = true)
 public class MacroBrowserMapping extends FinalMapping
 {
 

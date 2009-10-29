@@ -46,13 +46,12 @@ import sonia.blog.api.dao.EntryDAO;
 import sonia.blog.api.dao.TagDAO;
 import sonia.blog.api.link.LinkBuilder;
 import sonia.blog.api.mapping.FinalMapping;
+import sonia.blog.api.mapping.MappingConfig;
 import sonia.blog.entity.Blog;
 import sonia.blog.entity.Category;
 import sonia.blog.entity.Comment;
 import sonia.blog.entity.Entry;
 import sonia.blog.entity.Tag;
-
-import sonia.cache.Cacheable;
 
 import sonia.util.Util;
 
@@ -89,7 +88,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author Sebastian Sdorra
  */
-@Cacheable
+@MappingConfig(cacheable = true, compressable = true)
 public class FeedMapping extends FinalMapping
 {
 

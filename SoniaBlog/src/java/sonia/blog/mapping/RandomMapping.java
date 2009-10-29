@@ -41,6 +41,7 @@ import sonia.blog.api.app.BlogResponse;
 import sonia.blog.api.app.Constants;
 import sonia.blog.api.dao.EntryDAO;
 import sonia.blog.api.mapping.FilterMapping;
+import sonia.blog.api.mapping.MappingConfig;
 import sonia.blog.api.mapping.MappingNavigation;
 import sonia.blog.entity.Blog;
 import sonia.blog.entity.Entry;
@@ -60,6 +61,7 @@ import javax.servlet.ServletException;
  *
  * @author Sebastian Sdorra
  */
+@MappingConfig(compressable = true)
 public class RandomMapping extends FilterMapping
 {
 

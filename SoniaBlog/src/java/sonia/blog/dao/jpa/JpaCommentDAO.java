@@ -66,7 +66,8 @@ public class JpaCommentDAO extends JpaGenericDAO<Comment> implements CommentDAO
    * Constructs ...
    *
    *
-   * @param entityManagerFactory
+   *
+   * @param strategy
    */
   public JpaCommentDAO(JpaStrategy strategy)
   {
@@ -145,7 +146,6 @@ public class JpaCommentDAO extends JpaGenericDAO<Comment> implements CommentDAO
       comments = q.getResultList();
     }
     catch (NoResultException ex) {}
-
 
     return comments;
   }

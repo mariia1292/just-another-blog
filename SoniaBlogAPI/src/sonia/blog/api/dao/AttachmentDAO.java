@@ -133,7 +133,7 @@ public interface AttachmentDAO extends GenericDAO<Attachment>
    *
    *
    * @param blog
-   * @param active
+   * @param published
    *
    * @return
    */

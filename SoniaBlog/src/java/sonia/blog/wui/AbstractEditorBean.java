@@ -324,9 +324,9 @@ public abstract class AbstractEditorBean extends AbstractBean
         File rootDir = getDirectory();
         File dir = getAttachmentDirectory(rootDir);
 
-        if (!dir.exists() && ! dir.mkdirs())
+        if (!dir.exists() &&!dir.mkdirs())
         {
-          throw new BlogException( "could not create attachment directory" );
+          throw new BlogException("could not create attachment directory");
         }
 
         File file = new File(dir, "" + System.currentTimeMillis());

@@ -73,12 +73,12 @@ public class JpaBlogHitCountDAO extends JpaGenericDAO<BlogHitCount>
    * Constructs ...
    *
    *
-   * @param entityManagerFactory
+   *
+   * @param strategy
    */
   public JpaBlogHitCountDAO(JpaStrategy strategy)
   {
-    super(strategy, BlogHitCount.class,
-          Constants.LISTENER_BLOGHITCOUNT);
+    super(strategy, BlogHitCount.class, Constants.LISTENER_BLOGHITCOUNT);
   }
 
   //~--- methods --------------------------------------------------------------

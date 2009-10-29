@@ -65,7 +65,8 @@ public class JpaTagDAO extends JpaGenericDAO<Tag> implements TagDAO
    * Constructs ...
    *
    *
-   * @param entityManagerFactory
+   *
+   * @param strategy
    */
   public JpaTagDAO(JpaStrategy strategy)
   {
@@ -183,7 +184,6 @@ public class JpaTagDAO extends JpaGenericDAO<Tag> implements TagDAO
       tag = (Tag) q.getSingleResult();
     }
     catch (NoResultException ex) {}
-
 
     return tag;
   }

@@ -40,9 +40,8 @@ import sonia.blog.api.app.BlogResponse;
 import sonia.blog.api.dao.Dao;
 import sonia.blog.api.dao.EntryDAO;
 import sonia.blog.api.mapping.FinalMapping;
+import sonia.blog.api.mapping.MappingConfig;
 import sonia.blog.util.BlogUtil;
-
-import sonia.cache.Cacheable;
 
 import sonia.util.Util;
 
@@ -65,7 +64,7 @@ import javax.servlet.ServletException;
  *
  * @author Sebastian Sdorra
  */
-@Cacheable
+@MappingConfig(cacheable = true, compressable = true)
 public class CalendarMapping extends FinalMapping
 {
 

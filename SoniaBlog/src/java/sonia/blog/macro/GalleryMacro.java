@@ -46,6 +46,7 @@ import sonia.blog.api.macro.ScriptResource;
 import sonia.blog.api.macro.WebMacro;
 import sonia.blog.api.macro.WebResource;
 import sonia.blog.api.macro.browse.SelectWidget;
+import sonia.blog.api.macro.browse.StringInputWidget;
 import sonia.blog.entity.Attachment;
 import sonia.blog.entity.ContentObject;
 import sonia.blog.entity.Entry;
@@ -62,7 +63,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import sonia.blog.api.macro.browse.StringInputWidget;
 
 /**
  *

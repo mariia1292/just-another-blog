@@ -165,6 +165,7 @@ public class BlogContextFilter implements Filter
     finally
     {
       request.finish();
+      response.finish();
     }
   }
 

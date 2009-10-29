@@ -39,9 +39,8 @@ import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.app.BlogRequest;
 import sonia.blog.api.app.BlogResponse;
 import sonia.blog.api.mapping.FinalMapping;
+import sonia.blog.api.mapping.MappingConfig;
 import sonia.blog.entity.Blog;
-
-import sonia.cache.Cacheable;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -54,7 +53,7 @@ import javax.servlet.ServletException;
  *
  * @author Sebastian Sdorra
  */
-@Cacheable
+@MappingConfig(cacheable = true, compressable = true)
 public class OpenSearchMapping extends FinalMapping
 {
 

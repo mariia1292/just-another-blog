@@ -108,7 +108,7 @@ public class CommentBean extends AbstractBean
       }
       else
       {
-        getMessageHandler().error(getRequest() , "removeCommentFailure");
+        getMessageHandler().error(getRequest(), "removeCommentFailure");
       }
     }
   }
@@ -132,7 +132,7 @@ public class CommentBean extends AbstractBean
     }
     else
     {
-      getMessageHandler().error(getRequest(),"toggleSpamFailure");
+      getMessageHandler().error(getRequest(), "toggleSpamFailure");
     }
   }
 

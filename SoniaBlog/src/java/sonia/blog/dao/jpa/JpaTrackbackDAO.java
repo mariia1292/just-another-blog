@@ -67,7 +67,8 @@ public class JpaTrackbackDAO extends JpaGenericDAO<Trackback>
    * Constructs ...
    *
    *
-   * @param entityManagerFactory
+   *
+   * @param strategy
    */
   public JpaTrackbackDAO(JpaStrategy strategy)
   {
@@ -99,7 +100,6 @@ public class JpaTrackbackDAO extends JpaGenericDAO<Trackback>
    */
   public long count(Entry entry, int type, String url)
   {
-    
     Query q = strategy.getNamedQuery("Trackback.countByEntryTypeAndUrl", false);
 
     q.setParameter("entry", entry);
@@ -146,12 +146,11 @@ public class JpaTrackbackDAO extends JpaGenericDAO<Trackback>
    */
   public List<Trackback> getAll(Entry entry)
   {
-    
     Query q = strategy.getNamedQuery("Trackback.getAllByEntry", false);
 
     q.setParameter("entry", entry);
 
-    return excecuteListQuery( q);
+    return excecuteListQuery(q);
   }
 
   /**
@@ -166,14 +165,13 @@ public class JpaTrackbackDAO extends JpaGenericDAO<Trackback>
    */
   public List<Trackback> getAll(Entry entry, int start, int max)
   {
-    
     Query q = strategy.getNamedQuery("Trackback.getAllByEntry", false);
 
     q.setParameter("entry", entry);
     q.setFirstResult(start);
     q.setMaxResults(max);
 
-    return excecuteListQuery( q);
+    return excecuteListQuery(q);
   }
 
   /**

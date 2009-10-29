@@ -66,7 +66,8 @@ public class JpaCategoryDAO extends JpaGenericDAO<Category>
    * Constructs ...
    *
    *
-   * @param entityManagerFactory
+   *
+   * @param strategy
    */
   public JpaCategoryDAO(JpaStrategy strategy)
   {
@@ -200,7 +201,6 @@ public class JpaCategoryDAO extends JpaGenericDAO<Category>
       category = (Category) q.getSingleResult();
     }
     catch (NoResultException ex) {}
-
 
     return category;
   }

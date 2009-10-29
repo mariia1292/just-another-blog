@@ -31,7 +31,7 @@
 
 
 
-package sonia.cache;
+package sonia.blog.api.mapping;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -48,8 +48,9 @@ import java.lang.annotation.Target;
 @Documented
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Cacheable
+public @interface MappingConfig
 {
-  
-  String[] value() default {};
+  public boolean cacheable()    default false;
+  public String[] cacheKeys()   default {};
+  public boolean compressable() default false;
 }

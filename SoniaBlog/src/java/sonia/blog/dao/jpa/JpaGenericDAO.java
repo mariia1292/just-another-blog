@@ -332,6 +332,24 @@ public abstract class JpaGenericDAO<T> implements GenericDAO<T>
    * Method description
    *
    *
+   * @param value
+   *
+   * @return
+   */
+  protected String createFilter(String value)
+  {
+    if (!value.endsWith("%"))
+    {
+      value += "%";
+    }
+
+    return value;
+  }
+
+  /**
+   * Method description
+   *
+   *
    *
    * @param q
    *
@@ -556,28 +574,6 @@ public abstract class JpaGenericDAO<T> implements GenericDAO<T>
   {
     return true;
   }
-
-  //~--- methods --------------------------------------------------------------
-
-  /**
-   * Method description
-   *
-   *
-   * @param value
-   *
-   * @return
-   */
-  protected String createFilter(String value)
-  {
-    if (!value.endsWith("%"))
-    {
-      value += "%";
-    }
-
-    return value;
-  }
-
-  //~--- get methods ----------------------------------------------------------
 
   /**
    * Method description

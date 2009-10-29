@@ -163,6 +163,22 @@ public class MRUCache extends AbstractCache
    * @return
    */
   @Override
+  public Map<String, Object> getAdvancedInformations()
+  {
+    Map<String, Object> informations = new HashMap<String, Object>();
+
+    informations.put("max-items", maxItems);
+
+    return informations;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  @Override
   protected Map<Object, CacheObject> getCacheMap()
   {
     return cacheMap;
@@ -192,14 +208,6 @@ public class MRUCache extends AbstractCache
     }
 
     remove(etr.getKey());
-  }
-
-    @Override
-  public Map<String, Object> getAdvancedInformations()
-  {
-    Map<String,Object> informations = new HashMap<String, Object>();
-    informations.put("max-items", maxItems);
-    return informations;
   }
 
   //~--- fields ---------------------------------------------------------------

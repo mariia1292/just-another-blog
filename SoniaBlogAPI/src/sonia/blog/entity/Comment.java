@@ -55,6 +55,32 @@ public class Comment implements Serializable, PermaObject, Cloneable
    * Method description
    *
    *
+   * @return
+   *
+   * @throws CloneNotSupportedException
+   */
+  @Override
+  public Object clone() throws CloneNotSupportedException
+  {
+    Comment comment = new Comment();
+
+    comment.setAuthor(author);
+    comment.setAuthorAddress(authorAddress);
+    comment.setAuthorMail(authorMail);
+    comment.setAuthorName(authorName);
+    comment.setAuthorURL(authorURL);
+    comment.setContent(content);
+    comment.setEntry(entry);
+    comment.setId(id);
+    comment.setSpam(spam);
+
+    return comment;
+  }
+
+  /**
+   * Method description
+   *
+   *
    * @param object
    *
    * @return
@@ -366,32 +392,6 @@ public class Comment implements Serializable, PermaObject, Cloneable
   void prePersists()
   {
     creationDate = new Date();
-  }
-
-  /**
-   * Method description
-   *
-   *
-   * @return
-   *
-   * @throws CloneNotSupportedException
-   */
-  @Override
-  public Object clone() throws CloneNotSupportedException
-  {
-    Comment comment = new Comment();
-
-    comment.setAuthor(author);
-    comment.setAuthorAddress(authorAddress);
-    comment.setAuthorMail(authorMail);
-    comment.setAuthorName(authorName);
-    comment.setAuthorURL(authorURL);
-    comment.setContent(content);
-    comment.setEntry(entry);
-    comment.setId(id);
-    comment.setSpam(spam);
-
-    return comment;
   }
 
   //~--- fields ---------------------------------------------------------------
