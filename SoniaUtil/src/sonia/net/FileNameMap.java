@@ -118,7 +118,7 @@ public class FileNameMap implements java.net.FileNameMap
   public String getContentTypeFor(String fileName)
   {
     String mimeType = null;
-    int index = fileName.indexOf(".");
+    int index = fileName.lastIndexOf(".");
 
     if ((index > 0) && (index < fileName.length()))
     {

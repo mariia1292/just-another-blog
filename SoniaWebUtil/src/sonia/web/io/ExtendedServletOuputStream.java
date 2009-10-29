@@ -117,7 +117,7 @@ public class ExtendedServletOuputStream extends ServletOutputStream
       if (compressedStream != null)
       {
         compressedStream.finish();
-        response.setHeader("Content-Encoding", "gzip");
+        response.addHeader("Content-Encoding", "gzip");
       }
 
       if (cachedStream != null)

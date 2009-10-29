@@ -52,9 +52,15 @@ import sonia.cache.ObjectCache;
 
 import sonia.plugin.service.ServiceReference;
 
+import sonia.util.Util;
+
+import sonia.web.util.WebUtil;
+
 //~--- JDK imports ------------------------------------------------------------
 
 import java.io.IOException;
+
+import java.net.URLConnection;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -193,17 +199,20 @@ public class BlogContextFilter implements Filter
    *
    *
    * @param request
+   * @param compress
    * @param cacheKeys
    *
    * @return
    */
-  private String createCacheKey(BlogRequest request, String[] cacheKeys)
+  private String createCacheKey(BlogRequest request, boolean compress,
+                                String[] cacheKeys)
   {
     StringBuffer result = new StringBuffer();
 
     result.append(request.getCurrentBlog().getId()).append(":");
     result.append(request.getRequestURI()).append(":");
     result.append(request.getQueryString()).append(":");
+    result.append(Boolean.toString(compress)).append(":");
     result.append(request.getRedirect());
 
     if (cacheKeys != null)
@@ -272,12 +281,13 @@ public class BlogContextFilter implements Filter
       mappingHandler.getMappingInstructions(request);
     String cacheKey = null;
     boolean process = true;
+    boolean compress = isCompressAble(request, instructions);
 
     if ((cache != null) && (instructions != null) && instructions.isCacheable()
         && (request.getParameter(PARAM_DONTCACHE) == null)
         && BlogContext.getInstance().isInstalled())
     {
-      cacheKey = createCacheKey(request, instructions.getCacheKeys());
+      cacheKey = createCacheKey(request, compress, instructions.getCacheKeys());
 
       ResponseCacheObject cacheObject =
         (ResponseCacheObject) cache.get(cacheKey);
@@ -303,11 +313,15 @@ public class BlogContextFilter implements Filter
       }
     }
 
-    if (process
-        && ((instructions == null)
-            || mappingHandler.handleMapping(request, response, instructions)))
+    if (process)
     {
-      chain.doFilter(request, response);
+      response.setCompressionEnabled(compress);
+
+      if ((instructions == null)
+          || mappingHandler.handleMapping(request, response, instructions))
+      {
+        chain.doFilter(request, response);
+      }
     }
 
     if ((cache != null) && (cacheKey != null) && response.isCacheEnabled()
@@ -320,6 +334,48 @@ public class BlogContextFilter implements Filter
         cache.put(cacheKey, cacheObject);
       }
     }
+  }
+
+  //~--- get methods ----------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   * @param request
+   * @param instructions
+   *
+   * @return
+   */
+  private boolean isCompressAble(BlogRequest request,
+                                 MappingInstructions instructions)
+  {
+    boolean result = false;
+
+    if (WebUtil.isGzipSupported(request))
+    {
+      if (instructions != null)
+      {
+        result = instructions.isCompressable();
+      }
+      else
+      {
+        String path = request.getRequestURI();
+
+        if (Util.hasContent(path))
+        {
+          String mime = URLConnection.getFileNameMap().getContentTypeFor(path);
+
+          if (Util.hasContent(mime))
+          {
+            result = mime.startsWith("text")
+                     || "application/x-javascript".equals(mime);
+          }
+        }
+      }
+    }
+
+    return result;
   }
 
   //~--- fields ---------------------------------------------------------------
