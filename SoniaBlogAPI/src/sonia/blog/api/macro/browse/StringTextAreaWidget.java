@@ -101,6 +101,7 @@ public class StringTextAreaWidget extends StringInputWidget
     {
       formElement.append("class=\"").append(styleClass).append("\" ");
     }
+
     formElement.append("id=\"").append(name).append("\" ");
     formElement.append("name=\"").append(name).append("\"></textarea>");
 

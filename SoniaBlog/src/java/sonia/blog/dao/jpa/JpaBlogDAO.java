@@ -269,8 +269,7 @@ public class JpaBlogDAO extends JpaGenericDAO<Blog> implements BlogDAO
    */
   public List<Blog> getAll(String filter, boolean active, int start, int max)
   {
-    Query q = strategy.getNamedQuery("Blog.getAllByFilterAndActive",
-                                     false);
+    Query q = strategy.getNamedQuery("Blog.getAllByFilterAndActive", false);
 
     q.setParameter("filter", createFilter(filter));
     q.setParameter("active", active);

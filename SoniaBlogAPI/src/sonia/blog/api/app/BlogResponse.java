@@ -37,16 +37,16 @@ package sonia.blog.api.app;
 
 import sonia.blog.api.exception.BlogException;
 
-import sonia.io.TeeWriter;
-
-import sonia.web.io.TeeServletOutputStream;
+import sonia.web.io.ExtendedServletOuputStream;
 
 //~--- JDK imports ------------------------------------------------------------
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
-import java.io.StringWriter;
+
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
@@ -58,6 +58,11 @@ import javax.servlet.http.HttpServletResponseWrapper;
  */
 public class BlogResponse extends HttpServletResponseWrapper
 {
+
+  /** Field description */
+  private static Logger logger = Logger.getLogger(BlogResponse.class.getName());
+
+  //~--- constructors ---------------------------------------------------------
 
   /**
    * Constructs ...
@@ -129,6 +134,30 @@ public class BlogResponse extends HttpServletResponseWrapper
   /**
    * Method description
    *
+   */
+  public void finish()
+  {
+    try
+    {
+      if (writer != null)
+      {
+        writer.close();
+      }
+
+      if (stream != null)
+      {
+        stream.close();
+      }
+    }
+    catch (IOException ex)
+    {
+      logger.log(Level.SEVERE, null, ex);
+    }
+  }
+
+  /**
+   * Method description
+   *
    *
    * @param sc
    *
@@ -167,19 +196,26 @@ public class BlogResponse extends HttpServletResponseWrapper
    */
   public ResponseCacheObject getCachedObject()
   {
-    if (cacheEnabled && ((cacheWriter != null) || (cacheStream != null)))
+    if (cacheEnabled && (stream != null)
+        && (stream instanceof ExtendedServletOuputStream))
     {
+      ExtendedServletOuputStream extStream =
+        (ExtendedServletOuputStream) stream;
+
       try
       {
-        if (cacheStream != null)
+        if (writer != null)
         {
-          stream.flush();
-          cacheObject.setContent(cacheStream.toByteArray());
+          writer.close();
         }
-        else
+
+        extStream.close();
+
+        byte[] content = extStream.getContent();
+
+        if (content != null)
         {
-          writer.flush();
-          cacheObject.setContent(cacheWriter.toString().getBytes("UTF-8"));
+          cacheObject.setContent(content);
         }
       }
       catch (IOException ex)
@@ -202,28 +238,25 @@ public class BlogResponse extends HttpServletResponseWrapper
   @Override
   public ServletOutputStream getOutputStream() throws IOException
   {
-    ServletOutputStream result = null;
-
-    if (cacheEnabled)
+    if (writer != null)
     {
-      if (stream != null)
-      {
-        result = stream;
-      }
-      else
-      {
-        cacheStream = new ByteArrayOutputStream();
-        stream = new TeeServletOutputStream(super.getOutputStream(),
-                cacheStream);
-        result = stream;
-      }
+      throw new IllegalStateException("getWriter() has already been called!");
+    }
+
+    if (cacheEnabled || compressionEnabled)
+    {
+      stream = new ExtendedServletOuputStream(this, super.getOutputStream(),
+              cacheEnabled, compressionEnabled);
     }
     else
     {
-      result = super.getOutputStream();
+
+      // stream = super.getOutputStream();
+      stream = new ExtendedServletOuputStream(this, super.getOutputStream(),
+              false, false);
     }
 
-    return result;
+    return stream;
   }
 
   /**
@@ -248,27 +281,17 @@ public class BlogResponse extends HttpServletResponseWrapper
   @Override
   public PrintWriter getWriter() throws IOException
   {
-    PrintWriter result = null;
+    if (writer == null)
+    {
+      if (stream == null)
+      {
+        getOutputStream();
+      }
 
-    if (cacheEnabled)
-    {
-      if (writer != null)
-      {
-        result = writer;
-      }
-      else
-      {
-        cacheWriter = new StringWriter();
-        writer = new PrintWriter(new TeeWriter(super.getWriter(), cacheWriter));
-        result = writer;
-      }
-    }
-    else
-    {
-      result = super.getWriter();
+      writer = new PrintWriter(new OutputStreamWriter(stream, "UTF-8"));
     }
 
-    return result;
+    return writer;
   }
 
   /**
@@ -280,6 +303,17 @@ public class BlogResponse extends HttpServletResponseWrapper
   public boolean isCacheEnabled()
   {
     return cacheEnabled;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  public boolean isCompressionEnabled()
+  {
+    return compressionEnabled;
   }
 
   //~--- set methods ----------------------------------------------------------
@@ -302,6 +336,17 @@ public class BlogResponse extends HttpServletResponseWrapper
     {
       cacheObject = null;
     }
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param compressionEnabled
+   */
+  public void setCompressionEnabled(boolean compressionEnabled)
+  {
+    this.compressionEnabled = compressionEnabled;
   }
 
   /**
@@ -351,16 +396,13 @@ public class BlogResponse extends HttpServletResponseWrapper
   //~--- fields ---------------------------------------------------------------
 
   /** Field description */
-  private boolean cacheEnabled;
+  private boolean cacheEnabled = false;
 
   /** Field description */
   private ResponseCacheObject cacheObject;
 
   /** Field description */
-  private ByteArrayOutputStream cacheStream;
-
-  /** Field description */
-  private StringWriter cacheWriter;
+  private boolean compressionEnabled = false;
 
   /** Field description */
   private int statusCode = HttpServletResponse.SC_OK;

@@ -40,6 +40,7 @@ import sonia.jsf.base.BaseComponent;
 //~--- JDK imports ------------------------------------------------------------
 
 import javax.el.ValueExpression;
+
 import javax.faces.context.FacesContext;
 
 /**
@@ -64,6 +65,49 @@ public class MessagesComponent extends BaseComponent
   public MessagesComponent()
   {
     setRendererType(RENDERER);
+  }
+
+  //~--- methods --------------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   * @param context
+   * @param obj
+   */
+  @Override
+  public void restoreState(FacesContext context, Object obj)
+  {
+    Object[] state = (Object[]) obj;
+
+    super.restoreState(context, state[0]);
+    infoClass = (String) state[1];
+    warnClass = (String) state[2];
+    errorClass = (String) state[3];
+    fatalClass = (String) state[4];
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param context
+   *
+   * @return
+   */
+  @Override
+  public Object saveState(FacesContext context)
+  {
+    Object[] state = new Object[5];
+
+    state[0] = super.saveState(context);
+    state[1] = infoClass;
+    state[2] = warnClass;
+    state[3] = errorClass;
+    state[4] = fatalClass;
+
+    return state;
   }
 
   //~--- get methods ----------------------------------------------------------
@@ -158,47 +202,6 @@ public class MessagesComponent extends BaseComponent
     return (ve != null)
            ? (String) ve.getValue(getFacesContext().getELContext())
            : null;
-  }
-
-    /**
-   * Method description
-   *
-   *
-   * @param context
-   * @param obj
-   */
-  @Override
-  public void restoreState(FacesContext context, Object obj)
-  {
-    Object[] state = (Object[]) obj;
-
-    super.restoreState(context, state[0]);
-    infoClass = (String) state[1];
-    warnClass = (String) state[2];
-    errorClass = (String) state[3];
-    fatalClass = (String) state[4];
-  }
-
-  /**
-   * Method description
-   *
-   *
-   * @param context
-   *
-   * @return
-   */
-  @Override
-  public Object saveState(FacesContext context)
-  {
-    Object[] state = new Object[5];
-
-    state[0] = super.saveState(context);
-    state[1] = infoClass;
-    state[2] = warnClass;
-    state[3] = errorClass;
-    state[4] = fatalClass;
-
-    return state;
   }
 
   //~--- set methods ----------------------------------------------------------

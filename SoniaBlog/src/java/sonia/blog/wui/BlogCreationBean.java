@@ -107,8 +107,9 @@ public class BlogCreationBean extends AbstractBean
     }
     else
     {
-      getMessageHandler().error(getRequest(), "blogform:servername", "nameAllreadyExists",
-                                null, blog.getIdentifier());
+      getMessageHandler().error(getRequest(), "blogform:servername",
+                                "nameAllreadyExists", null,
+                                blog.getIdentifier());
       result = FAILURE;
     }
 

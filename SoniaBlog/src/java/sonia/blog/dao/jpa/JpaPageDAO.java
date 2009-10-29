@@ -73,7 +73,8 @@ public class JpaPageDAO extends JpaGenericDAO<Page> implements PageDAO
    * Constructs ...
    *
    *
-   * @param entityManagerFactory
+   *
+   * @param strategy
    */
   public JpaPageDAO(JpaStrategy strategy)
   {
@@ -132,7 +133,6 @@ public class JpaPageDAO extends JpaGenericDAO<Page> implements PageDAO
 
     try
     {
-
       List<Attachment> attachments = item.getAttachments();
 
       if (Util.hasContent(attachments))
@@ -150,7 +150,6 @@ public class JpaPageDAO extends JpaGenericDAO<Page> implements PageDAO
     }
     catch (Exception ex)
     {
-
       logger.log(Level.SEVERE, null, ex);
     }
 
@@ -177,7 +176,7 @@ public class JpaPageDAO extends JpaGenericDAO<Page> implements PageDAO
     q.setParameter("blog", blog);
     q.setParameter("published", published);
 
-    return excecuteQuery( q);
+    return excecuteQuery(q);
   }
 
   /**
@@ -221,7 +220,7 @@ public class JpaPageDAO extends JpaGenericDAO<Page> implements PageDAO
     q.setParameter("published", published);
     q.setParameter("blog", blog);
 
-    return excecuteListQuery( q);
+    return excecuteListQuery(q);
   }
 
   /**
@@ -348,7 +347,7 @@ public class JpaPageDAO extends JpaGenericDAO<Page> implements PageDAO
 
     q.setParameter("parent", parent);
 
-    return excecuteListQuery( q);
+    return excecuteListQuery(q);
   }
 
   /**
@@ -362,12 +361,13 @@ public class JpaPageDAO extends JpaGenericDAO<Page> implements PageDAO
    */
   public List<Page> getPageChildren(Page parent, boolean published)
   {
-    Query q = strategy.getNamedQuery("Page.getPageChildrenWithPublished", false);
+    Query q = strategy.getNamedQuery("Page.getPageChildrenWithPublished",
+                                     false);
 
     q.setParameter("published", published);
     q.setParameter("parent", parent);
 
-    return excecuteListQuery( q);
+    return excecuteListQuery(q);
   }
 
   /**
@@ -384,7 +384,7 @@ public class JpaPageDAO extends JpaGenericDAO<Page> implements PageDAO
 
     q.setParameter("blog", blog);
 
-    return excecuteListQuery( q);
+    return excecuteListQuery(q);
   }
 
   /**
@@ -403,7 +403,7 @@ public class JpaPageDAO extends JpaGenericDAO<Page> implements PageDAO
     q.setParameter("published", published);
     q.setParameter("blog", blog);
 
-    return excecuteListQuery( q);
+    return excecuteListQuery(q);
   }
 
   /**

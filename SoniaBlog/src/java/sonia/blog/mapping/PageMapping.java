@@ -41,12 +41,11 @@ import sonia.blog.api.app.Constants;
 import sonia.blog.api.dao.Dao;
 import sonia.blog.api.dao.PageDAO;
 import sonia.blog.api.mapping.FilterMapping;
+import sonia.blog.api.mapping.MappingConfig;
 import sonia.blog.api.mapping.MappingNavigation;
 import sonia.blog.entity.Blog;
 import sonia.blog.entity.Page;
 import sonia.blog.wui.PageBean;
-
-import sonia.cache.Cacheable;
 
 import sonia.util.Util;
 
@@ -64,7 +63,11 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author Sebastian Sdorra
  */
-@Cacheable({ "user", "locale" })
+@MappingConfig(
+  cacheable = true,
+  cacheKeys = { "user", "locale" },
+  compressable = true
+)
 public class PageMapping extends FilterMapping
 {
 

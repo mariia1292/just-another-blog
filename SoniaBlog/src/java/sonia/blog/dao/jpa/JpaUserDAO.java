@@ -70,7 +70,8 @@ public class JpaUserDAO extends JpaGenericDAO<User> implements UserDAO
    * Constructs ...
    *
    *
-   * @param entityManagerFactory
+   *
+   * @param strategy
    */
   public JpaUserDAO(JpaStrategy strategy)
   {
@@ -113,11 +114,9 @@ public class JpaUserDAO extends JpaGenericDAO<User> implements UserDAO
    */
   public long count(String filter)
   {
-    
     Query q = strategy.getNamedQuery("User.countByFilter", false);
 
     q.setParameter("filter", filter);
-
 
     return (Long) q.getSingleResult();
   }
@@ -133,13 +132,11 @@ public class JpaUserDAO extends JpaGenericDAO<User> implements UserDAO
    */
   public long count(String filter, boolean active)
   {
-    
     Query q = strategy.getNamedQuery("User.countByFilterAndActive", false);
 
     q.setParameter("filter", filter);
     q.setParameter("active", active);
 
-    
     return (Long) q.getSingleResult();
   }
 
@@ -153,7 +150,6 @@ public class JpaUserDAO extends JpaGenericDAO<User> implements UserDAO
    */
   public long count(boolean active)
   {
-    
     Query q = strategy.getNamedQuery("User.countByActive", false);
 
     q.setParameter("active", active);
@@ -172,8 +168,6 @@ public class JpaUserDAO extends JpaGenericDAO<User> implements UserDAO
   public boolean saveMember(BlogMember member)
   {
     boolean result = false;
-    
-
 
     try
     {
@@ -183,10 +177,8 @@ public class JpaUserDAO extends JpaGenericDAO<User> implements UserDAO
     }
     catch (Exception ex)
     {
-
       logger.log(Level.SEVERE, null, ex);
     }
-
 
     return result;
   }
@@ -204,7 +196,6 @@ public class JpaUserDAO extends JpaGenericDAO<User> implements UserDAO
    */
   public User get(String username, boolean active)
   {
-    
     Query q = strategy.getNamedQuery("User.getByNameAndActive", false);
 
     q.setParameter("name", username);
@@ -223,7 +214,6 @@ public class JpaUserDAO extends JpaGenericDAO<User> implements UserDAO
    */
   public User get(String username)
   {
-    
     Query q = strategy.getNamedQuery("User.getByName", false);
 
     q.setParameter("name", username);
@@ -243,7 +233,6 @@ public class JpaUserDAO extends JpaGenericDAO<User> implements UserDAO
    */
   public User get(String username, String password, boolean active)
   {
-    
     Query q = strategy.getNamedQuery("User.getByNamePasswordAndActive", false);
 
     q.setParameter("name", username);
@@ -290,7 +279,6 @@ public class JpaUserDAO extends JpaGenericDAO<User> implements UserDAO
    */
   public List<User> getAll(boolean active, int start, int max)
   {
-    
     Query q = strategy.getNamedQuery("User.getAllByActive", false);
 
     q.setParameter("active", active);
@@ -312,7 +300,6 @@ public class JpaUserDAO extends JpaGenericDAO<User> implements UserDAO
    */
   public List<User> getAll(String filter, int start, int max)
   {
-    
     Query q = strategy.getNamedQuery("User.getAllByFilter", false);
 
     q.setParameter("filter", createFilter(filter));
@@ -335,7 +322,6 @@ public class JpaUserDAO extends JpaGenericDAO<User> implements UserDAO
    */
   public List<User> getAll(String filter, boolean active, int start, int max)
   {
-    
     Query q = strategy.getNamedQuery("User.getAllByFilterAndActive", false);
 
     q.setParameter("filter", createFilter(filter));
@@ -356,7 +342,6 @@ public class JpaUserDAO extends JpaGenericDAO<User> implements UserDAO
    */
   public User getByMail(String mail)
   {
-    
     Query q = strategy.getNamedQuery("User.getByMail", false);
 
     q.setParameter("mail", mail);
@@ -375,7 +360,6 @@ public class JpaUserDAO extends JpaGenericDAO<User> implements UserDAO
    */
   public User getByNameAndCode(String username, String code)
   {
-    
     Query q = strategy.getNamedQuery("User.getByNameAndCode", false);
 
     q.setParameter("name", username);
@@ -395,7 +379,6 @@ public class JpaUserDAO extends JpaGenericDAO<User> implements UserDAO
    */
   public BlogMember getMember(Blog blog, User user)
   {
-    
     Query q = strategy.getNamedQuery("BlogMember.getByBlogAndUser", false);
 
     q.setParameter("blog", blog);
@@ -416,7 +399,6 @@ public class JpaUserDAO extends JpaGenericDAO<User> implements UserDAO
    */
   public List<BlogMember> getMembers(User user, int start, int max)
   {
-    
     Query q = strategy.getNamedQuery("BlogMember.getAllByUser", false);
 
     q.setParameter("user", user);
@@ -437,7 +419,6 @@ public class JpaUserDAO extends JpaGenericDAO<User> implements UserDAO
    */
   public Role getRole(Blog blog, User user)
   {
-    
     Query q = strategy.getNamedQuery("BlogMember.getByBlogAndUser", false);
 
     q.setParameter("blog", blog);
@@ -480,7 +461,6 @@ public class JpaUserDAO extends JpaGenericDAO<User> implements UserDAO
     }
     catch (Exception ex)
     {
-
       logger.log(Level.SEVERE, null, ex);
     }
   }
@@ -495,7 +475,6 @@ public class JpaUserDAO extends JpaGenericDAO<User> implements UserDAO
    */
   public void setRole(Blog blog, User user, Role role)
   {
-    
     Query q = strategy.getNamedQuery("BlogMember.getByBlogAndUser", false);
 
     q.setParameter("blog", blog);

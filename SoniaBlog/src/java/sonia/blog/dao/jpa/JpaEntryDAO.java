@@ -78,7 +78,8 @@ public class JpaEntryDAO extends JpaGenericDAO<Entry> implements EntryDAO
    * Constructs ...
    *
    *
-   * @param entityManagerFactory
+   *
+   * @param strategy
    */
   public JpaEntryDAO(JpaStrategy strategy)
   {
@@ -143,19 +144,19 @@ public class JpaEntryDAO extends JpaGenericDAO<Entry> implements EntryDAO
     if (session.hasRole(Role.AUTHOR))
     {
       Query q = null;
-        if (session.hasRole(Role.CONTENTMANAGER))
-        {
-          q = strategy.getNamedQuery("Entry.countByBlog", false);
-        }
-        else
-        {
-          q = strategy.getNamedQuery("Entry.countByBlogAndUser", false);
-          q.setParameter("user", session.getUser());
-        }
 
-        q.setParameter("blog", session.getBlog());
-        result = (Long) q.getSingleResult();
+      if (session.hasRole(Role.CONTENTMANAGER))
+      {
+        q = strategy.getNamedQuery("Entry.countByBlog", false);
+      }
+      else
+      {
+        q = strategy.getNamedQuery("Entry.countByBlogAndUser", false);
+        q.setParameter("user", session.getUser());
+      }
 
+      q.setParameter("blog", session.getBlog());
+      result = (Long) q.getSingleResult();
     }
 
     return result;
@@ -297,7 +298,6 @@ public class JpaEntryDAO extends JpaGenericDAO<Entry> implements EntryDAO
     }
     catch (NoResultException ex) {}
 
-
     return entries;
   }
 
@@ -437,6 +437,7 @@ public class JpaEntryDAO extends JpaGenericDAO<Entry> implements EntryDAO
           Date endDate, int start, int max)
   {
     List<Date> dates = null;
+
     try
     {
       Query q = strategy.getNamedQuery("Entry.calendar", false);
@@ -447,7 +448,6 @@ public class JpaEntryDAO extends JpaGenericDAO<Entry> implements EntryDAO
       dates = q.getResultList();
     }
     catch (NoResultException ex) {}
-
 
     return dates;
   }
@@ -515,7 +515,6 @@ public class JpaEntryDAO extends JpaGenericDAO<Entry> implements EntryDAO
 
     try
     {
-
       List<Attachment> attachments = item.getAttachments();
 
       if (Util.hasContent(attachments))
@@ -543,7 +542,6 @@ public class JpaEntryDAO extends JpaGenericDAO<Entry> implements EntryDAO
     }
     catch (Exception ex)
     {
-
       logger.log(Level.SEVERE, null, ex);
     }
 
@@ -608,7 +606,7 @@ public class JpaEntryDAO extends JpaGenericDAO<Entry> implements EntryDAO
       q.setMaxResults(max);
     }
 
-    return excecuteListQuery( q);
+    return excecuteListQuery(q);
   }
 
   /**
@@ -794,7 +792,7 @@ public class JpaEntryDAO extends JpaGenericDAO<Entry> implements EntryDAO
     q.setParameter("date", entry.getPublishingDate());
     q.setParameter("published", published);
 
-    return excecuteQuery( q);
+    return excecuteQuery(q);
   }
 
   /**

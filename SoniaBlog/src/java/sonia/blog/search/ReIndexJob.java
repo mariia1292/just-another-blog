@@ -106,9 +106,9 @@ public class ReIndexJob implements BlogJob
       File file = BlogContext.getInstance().getResourceManager().getDirectory(
                       Constants.RESOURCE_INDEX, blog);
 
-      if (!file.exists() && ! file.mkdirs())
+      if (!file.exists() &&!file.mkdirs())
       {
-        throw new JobException( "could not create index directory" );
+        throw new JobException("could not create index directory");
       }
 
       Directory directory = FSDirectory.open(file);

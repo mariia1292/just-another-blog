@@ -259,7 +259,8 @@ public class BlogBean extends AbstractBean
       NavigationMenuItem loginItem = new NavigationMenuItem();
 
       loginItem.setValue(bundle.getString("login"));
-      loginItem.setExternalLink(linkBuilder.getRelativeLink(request, "/login.jab"));
+      loginItem.setExternalLink(linkBuilder.getRelativeLink(request,
+              "/login.jab"));
       navigation.add(loginItem);
 
       if (config.getBoolean(Constants.CONFIG_ALLOW_REGISTRATION, Boolean.FALSE))
@@ -295,7 +296,8 @@ public class BlogBean extends AbstractBean
       NavigationMenuItem logoutItem = new NavigationMenuItem();
 
       logoutItem.setValue(bundle.getString("logout"));
-      logoutItem.setExternalLink(linkBuilder.getRelativeLink(request, "/logout"));
+      logoutItem.setExternalLink(linkBuilder.getRelativeLink(request,
+              "/logout"));
       navigation.add(logoutItem);
     }
 

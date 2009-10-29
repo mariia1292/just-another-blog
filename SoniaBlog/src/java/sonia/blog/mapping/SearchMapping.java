@@ -35,12 +35,11 @@ package sonia.blog.mapping;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.app.BlogRequest;
 import sonia.blog.api.app.BlogResponse;
 import sonia.blog.api.app.Constants;
 import sonia.blog.api.app.Context;
-import sonia.blog.api.link.LinkBuilder;
+import sonia.blog.api.mapping.MappingConfig;
 import sonia.blog.api.mapping.MappingNavigation;
 import sonia.blog.api.mapping.ScrollableFilterMapping;
 import sonia.blog.api.search.SearchCategory;
@@ -55,8 +54,6 @@ import sonia.blog.util.BlogUtil;
 import sonia.blog.wui.BlogBean;
 import sonia.blog.wui.PageBean;
 import sonia.blog.wui.SearchBean;
-
-import sonia.cache.Cacheable;
 
 import sonia.util.Util;
 
@@ -75,7 +72,11 @@ import javax.servlet.ServletException;
  *
  * @author Sebastian Sdorra
  */
-@Cacheable({ "user", "locale" })
+@MappingConfig(
+  cacheable = true,
+  cacheKeys = { "user", "locale" },
+  compressable = true
+)
 public class SearchMapping extends ScrollableFilterMapping
 {
 

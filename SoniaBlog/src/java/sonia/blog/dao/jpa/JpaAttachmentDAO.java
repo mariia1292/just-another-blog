@@ -72,7 +72,6 @@ public class JpaAttachmentDAO extends JpaGenericDAO<Attachment>
    *
    *
    * @param strategy
-   * @param entityManagerFactory
    */
   public JpaAttachmentDAO(JpaStrategy strategy)
   {
@@ -309,31 +308,29 @@ public class JpaAttachmentDAO extends JpaGenericDAO<Attachment>
     List<Attachment> result = new ArrayList<Attachment>();
     List<Attachment> pageResult = null;
     List<Attachment> entryResult = null;
+    Query q =
+      strategy.getNamedQuery("Attachment.entry.getAllByBlogAndPublished",
+                             false);
 
+    q.setParameter("blog", blog);
+    q.setParameter("published", published);
+    entryResult = q.getResultList();
 
-      Query q =
-        strategy.getNamedQuery("Attachment.entry.getAllByBlogAndPublished",
+    if (entryResult != null)
+    {
+      result.addAll(entryResult);
+    }
+
+    q = strategy.getNamedQuery("Attachment.page.getAllByBlogAndPublished",
                                false);
+    q.setParameter("blog", blog);
+    q.setParameter("published", published);
+    pageResult = q.getResultList();
 
-      q.setParameter("blog", blog);
-      q.setParameter("published", published);
-      entryResult = q.getResultList();
-
-      if (entryResult != null)
-      {
-        result.addAll(entryResult);
-      }
-
-      q = strategy.getNamedQuery("Attachment.page.getAllByBlogAndPublished",
-                                 false);
-      q.setParameter("blog", blog);
-      q.setParameter("published", published);
-      pageResult = q.getResultList();
-
-      if (pageResult != null)
-      {
-        result.addAll(pageResult);
-      }
+    if (pageResult != null)
+    {
+      result.addAll(pageResult);
+    }
 
     entryResult = null;
     pageResult = null;

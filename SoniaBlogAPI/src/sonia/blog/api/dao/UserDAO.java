@@ -35,6 +35,7 @@ package sonia.blog.api.dao;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import sonia.blog.api.app.BlogSession;
 import sonia.blog.entity.Blog;
 import sonia.blog.entity.BlogMember;
 import sonia.blog.entity.Role;
@@ -43,7 +44,6 @@ import sonia.blog.entity.User;
 //~--- JDK imports ------------------------------------------------------------
 
 import java.util.List;
-import sonia.blog.api.app.BlogSession;
 
 /**
  *
@@ -236,6 +236,8 @@ public interface UserDAO extends GenericDAO<User>
    * Method description
    *
    *
+   *
+   * @param session
    * @param user
    */
   public void setLastLogin(BlogSession session, User user);

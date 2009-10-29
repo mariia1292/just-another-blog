@@ -40,13 +40,12 @@ import sonia.blog.api.app.BlogResponse;
 import sonia.blog.api.app.Context;
 import sonia.blog.api.link.LinkBuilder;
 import sonia.blog.api.mapping.FinalMapping;
+import sonia.blog.api.mapping.MappingConfig;
 import sonia.blog.api.search.SearchCategory;
 import sonia.blog.api.search.SearchContext;
 import sonia.blog.api.search.SearchEntry;
 import sonia.blog.api.search.SearchException;
 import sonia.blog.entity.Blog;
-
-import sonia.cache.Cacheable;
 
 import sonia.util.Util;
 
@@ -68,7 +67,7 @@ import javax.servlet.ServletException;
  *
  * @author Sebastian Sdorra
  */
-@Cacheable
+@MappingConfig(cacheable = true, compressable = true)
 public class QuickSearchMapping extends FinalMapping
 {
 

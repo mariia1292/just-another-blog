@@ -246,7 +246,7 @@ public class RegistrationBean extends AbstractBean
     }
     catch (Exception ex)
     {
-      getMessageHandler().error(request,"unknownError");
+      getMessageHandler().error(request, "unknownError");
       logger.log(Level.SEVERE, null, ex);
     }
   }

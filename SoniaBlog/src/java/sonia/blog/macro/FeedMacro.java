@@ -88,23 +88,6 @@ public class FeedMacro extends AbstractBlogMacro implements WebMacro
    * Method description
    *
    *
-   * @param url
-   */
-  @MacroInfoParameter(
-    displayName = "macro.feed.url.displayName",
-    description = "macro.feed.url.description",
-    widget = StringInputWidget.class
-  )
-  public void setUrl(String url)
-  {
-    System.out.println( "SETURL: " + url );
-    this.url = url;
-  }
-
-  /**
-   * Method description
-   *
-   *
    * @param maxItems
    */
   @MacroInfoParameter(
@@ -115,6 +98,23 @@ public class FeedMacro extends AbstractBlogMacro implements WebMacro
   public void setMaxItems(Integer maxItems)
   {
     this.maxItems = maxItems;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param url
+   */
+  @MacroInfoParameter(
+    displayName = "macro.feed.url.displayName",
+    description = "macro.feed.url.description",
+    widget = StringInputWidget.class
+  )
+  public void setUrl(String url)
+  {
+    System.out.println("SETURL: " + url);
+    this.url = url;
   }
 
   //~--- methods --------------------------------------------------------------

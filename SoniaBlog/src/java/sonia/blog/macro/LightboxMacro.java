@@ -45,6 +45,7 @@ import sonia.blog.api.macro.WebMacro;
 import sonia.blog.api.macro.WebResource;
 import sonia.blog.api.macro.browse.SelectWidget;
 import sonia.blog.api.macro.browse.StringInputWidget;
+import sonia.blog.api.macro.browse.StringTextAreaWidget;
 import sonia.blog.entity.ContentObject;
 
 import sonia.macro.browse.MacroInfo;
@@ -58,7 +59,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import sonia.blog.api.macro.browse.StringTextAreaWidget;
 
 /**
  *
@@ -69,7 +69,7 @@ import sonia.blog.api.macro.browse.StringTextAreaWidget;
   displayName = "macro.lightbox.displayName",
   description = "macro.lightbox.description",
   resourceBundle = "sonia.blog.resources.label",
-  bodyWidget=StringTextAreaWidget.class,
+  bodyWidget = StringTextAreaWidget.class,
   widgetParam = "cols=110;rows=25"
 )
 public class LightboxMacro extends AbstractBlogMacro implements WebMacro

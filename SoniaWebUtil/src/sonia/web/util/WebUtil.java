@@ -177,6 +177,21 @@ public class WebUtil
    *
    *
    * @param request
+   *
+   * @return
+   */
+  public static boolean isGzipSupported(HttpServletRequest request)
+  {
+    String enc = request.getHeader("Accept-Encoding");
+
+    return (enc != null) && enc.contains("gzip");
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param request
    * @param file
    *
    * @return
