@@ -149,7 +149,7 @@
       appendListButton();
 
       var js = content.js;
-      if ( js != "" ){
+      if ( js != null && js != "" ){
         eval(convertField(js));
       }
     }

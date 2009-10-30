@@ -146,6 +146,7 @@ public class MacroBrowserMapping extends FinalMapping
    */
   public String getMacroString(BlogRequest request, String name)
   {
+    ContentObject co = getContentObject(request);
     StringBuffer writer = new StringBuffer();
     Class<? extends Macro> macroClass = parser.getMacro(name);
     MacroInformation info =
@@ -160,13 +161,19 @@ public class MacroBrowserMapping extends FinalMapping
     for (MacroInformationParameter param : parameters)
     {
       String paramName = param.getName();
-      String paramValue = request.getParameter(paramName);
 
-      if (Util.hasContent(paramName) && Util.hasContent(paramValue))
+      if (Util.hasContent(paramName))
       {
-        resultParamerters.add(
-            new StringBuffer(paramName).append("=").append(
-              paramValue).toString());
+        Class<? extends MacroWidget> widgetClass = param.getWidget();
+        String result = getWidgetResult(widgetClass, request, co, paramName,
+                                        param.getWidgetParam());
+
+        if (Util.hasContent(result))
+        {
+          resultParamerters.add(
+              new StringBuffer(paramName).append("=").append(
+                result).toString());
+        }
       }
     }
 
@@ -189,11 +196,13 @@ public class MacroBrowserMapping extends FinalMapping
 
     writer.append("}");
 
-    String body = request.getParameter(WIDGET_BODY);
+    Class<? extends MacroWidget> widgetClass = info.getBodyWidget();
+    String result = getWidgetResult(widgetClass, request, co, WIDGET_BODY,
+                                    info.getWidgetParam());
 
-    if (body != null)
+    if (Util.hasContent(result))
     {
-      writer.append(escape(body));
+      writer.append(escape(result));
     }
 
     writer.append("{/").append(name).append("}");
@@ -348,15 +357,19 @@ public class MacroBrowserMapping extends FinalMapping
               {
                 bodyEl = encodeField(bodyEl);
                 writer.append(", \"body\":\"").append(bodyEl).append("\"");
-              }
 
-              String bodyJS = widget.getJavaScript(request, co, WIDGET_BODY,
-                                info.getWidgetParam());
+                String bodyJS = widget.getJavaScript(request, co, WIDGET_BODY,
+                                  info.getWidgetParam());
 
-              if (Util.hasContent(bodyJS))
-              {
-                bodyJS = encodeField(bodyJS);
-                writer.append(", \"js\":\"").append(bodyJS).append("\"");
+                writer.append(", \"js\":\"");
+
+                if (Util.hasContent(bodyJS))
+                {
+                  bodyJS = encodeField(bodyJS);
+                  writer.append(bodyJS);
+                }
+
+                writer.append("\"");
               }
             }
           }
@@ -425,8 +438,7 @@ public class MacroBrowserMapping extends FinalMapping
               writer.append("\"description\":\"").append(description).append(
                   "\",");
               writer.append("\"field\":\"").append(field).append("\", ");
-              writer.append("\"js\":\"").append(fieldJS).append("\", ");
-              writer.append("}");
+              writer.append("\"js\":\"").append(fieldJS).append("\"}");
             }
           }
 
@@ -726,34 +738,6 @@ public class MacroBrowserMapping extends FinalMapping
    * Method description
    *
    *
-   *
-   * @param request
-   * @param widgetClazz
-   * @param co
-   * @param name
-   * @param parameter
-   *
-   * @return
-   */
-  private String getFormElement(BlogRequest request,
-                                Class<? extends MacroWidget> widgetClazz,
-                                ContentObject co, String name, String parameter)
-  {
-    String result = "";
-    BlogMacroWidget widget = getWidget(widgetClazz);
-
-    if (widget != null)
-    {
-      result = widget.getFormElement(request, co, name, parameter);
-    }
-
-    return result;
-  }
-
-  /**
-   * Method description
-   *
-   *
    * @param result
    *
    * @return
@@ -814,26 +798,60 @@ public class MacroBrowserMapping extends FinalMapping
    */
   private BlogMacroWidget getWidget(Class<? extends MacroWidget> clazz)
   {
-    if (logger.isLoggable(Level.FINEST))
-    {
-      StringBuffer log = new StringBuffer();
-
-      log.append("create an instance of ").append(clazz.getName());
-      logger.finest(log.toString());
-    }
-
     BlogMacroWidget widget = null;
 
-    try
+    if (!clazz.equals(MacroWidget.class))
     {
-      widget = (BlogMacroWidget) clazz.newInstance();
-    }
-    catch (Exception ex)
-    {
-      logger.log(Level.SEVERE, null, ex);
+      if (logger.isLoggable(Level.FINEST))
+      {
+        StringBuffer log = new StringBuffer();
+
+        log.append("create an instance of ").append(clazz.getName());
+        logger.finest(log.toString());
+      }
+
+      try
+      {
+        widget = (BlogMacroWidget) clazz.newInstance();
+      }
+      catch (Exception ex)
+      {
+        logger.log(Level.SEVERE, null, ex);
+      }
     }
 
     return widget;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param widgetClass
+   * @param request
+   * @param co
+   * @param paramName
+   * @param widgetParam
+   *
+   * @return
+   */
+  private String getWidgetResult(Class<? extends MacroWidget> widgetClass,
+                                 BlogRequest request, ContentObject co,
+                                 String paramName, String widgetParam)
+  {
+    String result = null;
+
+    if (widgetClass != null)
+    {
+      BlogMacroWidget widget = getWidget(widgetClass);
+
+      if (widget != null)
+      {
+        result = widget.getResult(request, co, paramName, widgetParam);
+      }
+    }
+
+    return result;
   }
 
   //~--- inner classes --------------------------------------------------------
