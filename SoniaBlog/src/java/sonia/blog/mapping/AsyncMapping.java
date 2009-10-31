@@ -61,6 +61,8 @@ import sonia.plugin.service.ServiceReference;
 
 import sonia.util.Util;
 
+import sonia.web.io.JSONWriter;
+
 //~--- JDK imports ------------------------------------------------------------
 
 import com.sun.syndication.feed.synd.SyndEntry;
@@ -260,11 +262,11 @@ public class AsyncMapping extends FinalMapping
         filter = "";
       }
 
-      PrintWriter writer = response.getWriter();
+      JSONWriter writer = new JSONWriter(response.getWriter());
 
       try
       {
-        writer.println("[");
+        writer.startArray();
 
         BlogDAO blogDAO = BlogContext.getDAOFactory().getBlogDAO();
         List<Blog> blogs = blogDAO.getAll(filter, 0, 10);
@@ -277,20 +279,15 @@ public class AsyncMapping extends FinalMapping
           {
             Blog blog = it.next();
 
-            writer.append("{");
-            printString(writer, "identifier", blog.getIdentifier(), false);
-            printString(writer, "title", blog.getTitle(), false);
-            printBoolean(writer, "active", blog.isActive(), true);
-            writer.append("}");
-
-            if (it.hasNext())
-            {
-              writer.append(",");
-            }
+            writer.startObject();
+            writer.write("identifier", blog.getIdentifier(), false);
+            writer.write("title", blog.getTitle(), false);
+            writer.write("active", blog.isActive(), true);
+            writer.endObject(!it.hasNext());
           }
         }
 
-        writer.println("]");
+        writer.endArray(true);
       }
       finally
       {
@@ -370,56 +367,48 @@ public class AsyncMapping extends FinalMapping
   private void messages(BlogRequest request, BlogResponse response)
           throws IOException
   {
-    PrintWriter writer = response.getWriter();
+    JSONWriter writer = new JSONWriter(response.getWriter());
 
-    writer.println("[");
-
-    HttpSession session = request.getSession();
-
-    if (session != null)
+    try
     {
-      List<BlogMessage> messages =
-        (List<BlogMessage>) session.getAttribute(BlogMessage.SESSION_VAR);
+      writer.startArray();
 
-      if (Util.hasContent(messages))
+      HttpSession session = request.getSession();
+
+      if (session != null)
       {
-        Iterator<BlogMessage> messageIt = messages.iterator();
+        List<BlogMessage> messages =
+          (List<BlogMessage>) session.getAttribute(BlogMessage.SESSION_VAR);
 
-        while (messageIt.hasNext())
+        if (Util.hasContent(messages))
         {
-          BlogMessage msg = messageIt.next();
-          String clientId = (msg.getClientId() != null)
-                            ? msg.getClientId()
-                            : "";
+          Iterator<BlogMessage> messageIt = messages.iterator();
 
-          writer.append("{ \"level\": ").append(
-              Integer.toString(msg.getLevel())).append(
-              ", \"clientId\": \"").append(clientId).append(
-              "\", \"summary\": \"").append(msg.getSummary()).append(
-              "\", \"detail\": \"");
-
-          if (msg.getDetail() != null)
+          while (messageIt.hasNext())
           {
-            writer.append(msg.getDetail());
+            BlogMessage msg = messageIt.next();
+            String clientId = (msg.getClientId() != null)
+                              ? msg.getClientId()
+                              : "";
+
+            writer.startObject();
+            writer.write("level", msg.getLevel(), false);
+            writer.write("clientId", clientId, false);
+            writer.write("summary", msg.getSummary(), false);
+            writer.write("detail", msg.getDetail(), true);
+            writer.endObject(!messageIt.hasNext());
           }
 
-          writer.append("\"}");
-
-          if (messageIt.hasNext())
-          {
-            writer.println(",");
-          }
-          else
-          {
-            writer.println();
-          }
+          messages.clear();
         }
-
-        messages.clear();
       }
-    }
 
-    writer.println("]");
+      writer.endArray(true);
+    }
+    finally
+    {
+      writer.close();
+    }
   }
 
   /**
