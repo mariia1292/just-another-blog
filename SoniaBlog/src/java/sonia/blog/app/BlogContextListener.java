@@ -628,9 +628,10 @@ public class BlogContextListener implements ServletContextListener
 
     ScriptResource jquery = new ScriptResource(10,
                               ctxPath + "/resources/jquery/jquery.min.js");
-    ScriptResource jqueryMsgs = new ScriptResource(20,
-                                  ctxPath
-                                  + "/resources/jquery/plugins/js/messages.js");
+    ScriptResource jqueryMsgs =
+      new ScriptResource(20,
+                         ctxPath
+                         + "/resources/jquery/plugins/js/jquery.messages.js");
 
     registry.register(WebResource.class, Constants.SERVICE_WEBRESOURCE).add(
         entryAtom).add(entryRSS).add(commentAtom).add(commentRSS).add(

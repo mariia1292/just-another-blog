@@ -169,7 +169,8 @@ public class TOCMacro extends AbstractBlogMacro implements WebMacro
   {
     StringBuffer resource = new StringBuffer();
 
-    resource.append(linkBase).append("resources/jquery/plugins/js/toc.js");
+    resource.append(linkBase).append(
+        "resources/jquery/plugins/js/jquery.toc.js");
 
     ScriptResource tocScript = new ScriptResource(51, resource.toString());
 
