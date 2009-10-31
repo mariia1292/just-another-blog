@@ -42,9 +42,7 @@ import sonia.blog.api.macro.WebMacro;
 import sonia.blog.api.macro.WebResource;
 import sonia.blog.entity.ContentObject;
 
-import sonia.macro.Macro;
 import sonia.macro.MacroParser;
-import sonia.macro.MacroResult;
 
 import sonia.util.Util;
 

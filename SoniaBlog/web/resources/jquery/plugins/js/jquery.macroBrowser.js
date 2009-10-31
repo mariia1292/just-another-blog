@@ -220,12 +220,14 @@
             value = false;
           }
         }
+        // TODO support multi value
         parameters[$this.attr("name")] = value;
       });
       return parameters;
     }
 
     function readFormParameters(){
+      // TODO use one method for reading form
       formParameters = [];
       $("form [name]").each(function(i){
         $this = $(this);
