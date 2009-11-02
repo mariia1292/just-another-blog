@@ -47,19 +47,42 @@ public interface FlickrAPI
   public static final String KEY = "cb415f129c7fd3ee11898afdaeeb97d3";
 
   /** Field description */
+  public static final String METHOD_NSIDBYEMAIL = "flickr.people.findByEmail";
+
+  /** Field description */
+  public static final String METHOD_NSIDBYUSERNAME =
+    "flickr.people.findByUsername";
+
+  /** Field description */
   public static final String METHOD_SEARCH = "flickr.photos.search";
+
+  /** Field description */
+  public static final String METHOD_USERPUBLICPHOTOS =
+    "flickr.people.getPublicPhotos";
 
   /** Field description */
   public static final String PARAM_APIKEY = "api_key";
 
   /** Field description */
+  public static final String PARAM_EMAIL = "find_email";
+
+  /** Field description */
+  public static final String PARAM_FORMAT = "format";
+
+  /** Field description */
   public static final String PARAM_METHOD = "method";
+
+  /** Field description */
+  public static final String PARAM_NSID = "user_id";
 
   /** Field description */
   public static final String PARAM_PERPAGE = "per_page";
 
   /** Field description */
   public static final String PARAM_TAGS = "tags";
+
+  /** Field description */
+  public static final String PARAM_USERNAME = "username";
 
   /*
    * 0 - Farm Id
@@ -71,23 +94,23 @@ public interface FlickrAPI
 
   /** Field description */
   public static final String PHOTO_URL =
-    "http://farm{0}.static.flickr.com/{1}/{2}_{3}_{4}.jpg";
+    "http://farm{0}.static.flickr.com/{1}/{2}_{3}{4}.jpg";
 
   /** Field description */
-  public static final char SIZE_BIG = 'b';
+  public static final String SIZE_BIG = "_b";
 
   /** Field description */
-  public static final char SIZE_MIDDLE = '-';
+  public static final String SIZE_MIDDLE = "";
 
   /** Field description */
-  public static final char SIZE_ORGINAL = 'o';
+  public static final String SIZE_ORGINAL = "_o";
 
   /** Field description */
-  public static final char SIZE_SMALL = 'm';
+  public static final String SIZE_SMALL = "_m";
 
   /** Field description */
-  public static final char SIZE_SMALLEST = 's';
+  public static final String SIZE_SMALLEST = "_s";
 
   /** Field description */
-  public static final char SIZE_THUMBNAIL = 't';
+  public static final String SIZE_THUMBNAIL = "_t";
 }
