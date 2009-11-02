@@ -35,6 +35,7 @@ package sonia.blog.webint;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import sonia.blog.api.app.BlogContext;
 import sonia.blog.webint.flickr.FlickrMacro;
 
 import sonia.macro.MacroParser;
@@ -49,6 +50,12 @@ import sonia.plugin.PluginContext;
 public class PluginActivator implements Activator
 {
 
+  /** Field description */
+  public static final String REGEX_GATEWAY =
+    "^/gateway/([a-zA-Z0-9]+)/([a-zA-Z0-9]+)$";
+
+  //~--- methods --------------------------------------------------------------
+
   /**
    * Method description
    *
@@ -59,8 +66,9 @@ public class PluginActivator implements Activator
   {
     MacroParser parser = MacroParser.getInstance();
 
-    parser.putMacro(GoogleGadgetMacro.NAME, GoogleGadgetMacro.class);
-    parser.putMacro(FlickrMacro.NAME, FlickrMacro.class);
+    parser.putMacro("flickr", FlickrMacro.class);
+    BlogContext.getInstance().getMappingHandler().add(REGEX_GATEWAY,
+            GatewayMapping.class);
   }
 
   /**
@@ -73,7 +81,7 @@ public class PluginActivator implements Activator
   {
     MacroParser parser = MacroParser.getInstance();
 
-    parser.removeMacro(GoogleGadgetMacro.NAME);
-    parser.removeMacro(FlickrMacro.NAME);
+    parser.removeMacro("flickr");
+    BlogContext.getInstance().getMappingHandler().remove(REGEX_GATEWAY);
   }
 }

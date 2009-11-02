@@ -253,6 +253,19 @@ public class JSONWriter
     }
   }
 
+  //~--- get methods ----------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  public Writer getWriter()
+  {
+    return writer;
+  }
+
   //~--- fields ---------------------------------------------------------------
 
   /** Field description */
