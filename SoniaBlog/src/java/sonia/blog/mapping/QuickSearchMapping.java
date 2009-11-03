@@ -49,10 +49,11 @@ import sonia.blog.entity.Blog;
 
 import sonia.util.Util;
 
+import sonia.web.io.JSONWriter;
+
 //~--- JDK imports ------------------------------------------------------------
 
 import java.io.IOException;
-import java.io.PrintWriter;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -93,64 +94,61 @@ public class QuickSearchMapping extends FinalMapping
                                     String[] param)
           throws IOException, ServletException
   {
-    PrintWriter writer = response.getWriter();
+    JSONWriter writer = new JSONWriter(response.getWriter());
 
-    writer.println("[");
-
-    String query = request.getParameter("query");
-
-    if (Util.hasContent(query))
+    try
     {
-      try
+      writer.startArray();
+
+      String query = request.getParameter("query");
+
+      if (Util.hasContent(query))
       {
-        Blog blog = request.getCurrentBlog();
-        Collection<SearchCategory> categories = ctx.search(blog,
-                                                  request.getLocale(), query);
-
-        if (Util.hasContent(categories))
+        try
         {
-          List<SearchEntry> entries = new ArrayList<SearchEntry>();
+          Blog blog = request.getCurrentBlog();
+          Collection<SearchCategory> categories = ctx.search(blog,
+                                                    request.getLocale(), query);
 
-          for (SearchCategory cat : categories)
+          if (Util.hasContent(categories))
           {
-            entries.addAll(cat.getEntries());
-          }
+            List<SearchEntry> entries = new ArrayList<SearchEntry>();
 
-          if (Util.hasContent(entries))
-          {
-            Iterator<SearchEntry> entryIt = entries.iterator();
-
-            while (entryIt.hasNext())
+            for (SearchCategory cat : categories)
             {
-              SearchEntry e = entryIt.next();
+              entries.addAll(cat.getEntries());
+            }
 
-              writer.print("  {");
-              writer.print(" value : '");
-              writer.print(e.getTitle());
-              writer.print("',");
-              writer.print(" url : '");
-              writer.print(linkBuilder.getRelativeLink(request, e.getData()));
-              writer.print("'");
+            if (Util.hasContent(entries))
+            {
+              Iterator<SearchEntry> entryIt = entries.iterator();
 
-              if (entryIt.hasNext())
+              while (entryIt.hasNext())
               {
-                writer.println(" },");
-              }
-              else
-              {
-                writer.println(" }");
+                SearchEntry e = entryIt.next();
+
+                writer.startObject();
+                writer.write("value", e.getTitle(), false);
+                writer.write("url",
+                             linkBuilder.getRelativeLink(request, e.getData()),
+                             true);
+                writer.endObject(!entryIt.hasNext());
               }
             }
           }
         }
+        catch (SearchException ex)
+        {
+          logger.log(Level.SEVERE, null, ex);
+        }
       }
-      catch (SearchException ex)
-      {
-        logger.log(Level.SEVERE, null, ex);
-      }
-    }
 
-    writer.println("]");
+      writer.endArray(true);
+    }
+    finally
+    {
+      writer.close();
+    }
   }
 
   //~--- fields ---------------------------------------------------------------

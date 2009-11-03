@@ -63,12 +63,15 @@ public interface PDFRenderer
    * @param blog
    * @param directory
    * @param attachment
+   * @param format
+   * @param extension
    *
    * @return
    *
    * @throws IOException
    */
   public PDFImageGallery renderPdf(Blog blog, File directory,
-                                   Attachment attachment, String format, String extension)
+                                   Attachment attachment, String format,
+                                   String extension)
           throws IOException;
 }

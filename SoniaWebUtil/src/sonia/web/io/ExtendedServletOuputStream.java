@@ -141,7 +141,6 @@ public class ExtendedServletOuputStream extends ServletOutputStream
   @Override
   public void flush() throws IOException
   {
-
     if (compressedStream != null)
     {
       compressedStream.flush();

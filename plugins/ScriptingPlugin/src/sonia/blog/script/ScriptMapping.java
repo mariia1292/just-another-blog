@@ -34,8 +34,6 @@ import javax.servlet.http.HttpServletResponse;
 public class ScriptMapping extends FinalMapping
 {
 
-  //~--- methods --------------------------------------------------------------
-
   /**
    * Method description
    *

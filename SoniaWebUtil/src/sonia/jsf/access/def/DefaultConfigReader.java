@@ -54,6 +54,7 @@ import sonia.jsf.access.def.condition.IsUserInRoleCondition;
 import sonia.jsf.access.def.condition.LoggedInCondition;
 import sonia.jsf.access.def.condition.NotCondition;
 import sonia.jsf.access.def.condition.OrCondition;
+import sonia.jsf.access.def.condition.SchemeCondition;
 import sonia.jsf.access.def.condition.UriMatchesCondition;
 import sonia.jsf.access.def.condition.ViewIdMatchesCondition;
 
@@ -71,7 +72,6 @@ import java.util.List;
 import java.util.Map;
 
 import javax.xml.parsers.ParserConfigurationException;
-import sonia.jsf.access.def.condition.SchemeCondition;
 
 /**
  *
@@ -284,8 +284,10 @@ public class DefaultConfigReader
         else if (childName.equals("scheme"))
         {
           String scheme = child.getTextContent();
-          if ( ! isBlank(scheme) ){
-            parent.add( new SchemeCondition(scheme) );
+
+          if (!isBlank(scheme))
+          {
+            parent.add(new SchemeCondition(scheme));
           }
         }
         else if (childName.equals("condition"))

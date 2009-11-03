@@ -155,5 +155,4 @@ public class PluginActivator implements Activator
 
   /** Field description */
   private ServiceReference<PDFRenderer> rendererReference;
-
 }

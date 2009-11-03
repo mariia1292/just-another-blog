@@ -327,8 +327,11 @@ public class PropertiesConfiguration extends StringBasedConfiguration
     if (!isBlank(value))
     {
       String oldValue = properties.getProperty(key);
+
       properties.setProperty(key, value);
-      if ( oldValue == null || ! value.equals( oldValue ) ){
+
+      if ((oldValue == null) ||!value.equals(oldValue))
+      {
         fireConfigChangedEvent(key);
       }
     }

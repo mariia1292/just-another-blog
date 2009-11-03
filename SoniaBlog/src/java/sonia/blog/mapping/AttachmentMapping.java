@@ -43,7 +43,6 @@ import sonia.blog.entity.Attachment;
 import sonia.blog.entity.Blog;
 import sonia.blog.entity.Role;
 
-
 //~--- JDK imports ------------------------------------------------------------
 
 import java.io.File;

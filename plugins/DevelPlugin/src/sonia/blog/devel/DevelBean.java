@@ -275,7 +275,7 @@ public class DevelBean extends AbstractBean
       catch (Exception ex)
       {
         logger.log(Level.SEVERE, null, ex);
-        getMessageHandler().error(getRequest(),ex.getMessage());
+        getMessageHandler().error(getRequest(), ex.getMessage());
       }
     }
   }
