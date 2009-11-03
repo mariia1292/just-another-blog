@@ -1,0 +1,71 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:t="http://myfaces.apache.org/tomahawk"
+      xmlns:c="http://java.sun.com/jstl/core"
+      xmlns:blog="http://jab.nitilon.org/blog/"
+      xmlns:f="http://java.sun.com/jsf/core">
+  <f:view contentType="text/html">
+    <head>
+      <blog:header comments="false" />
+      <script type="text/javascript" src="${facesContext.externalContext.requestContextPath}/resources/tiny_mce/tiny_mce_popup.js"></script>
+      <ui:insert name="head" />
+    </head>
+    <body>
+
+      <t:aliasBeansScope>
+
+        <c:choose>
+          <c:when test="#{sessionScope['editor'] == 'entry'}">
+            <t:aliasBean alias="#{EditorBean}" value="#{EntryBean}" />
+          </c:when>
+          <c:when test="#{sessionScope['editor'] == 'page'}">
+            <t:aliasBean alias="#{EditorBean}" value="#{PageAuthorBean}" />
+          </c:when>
+          <c:otherwise>
+            Wrong editor Variable #{sessionScope['editor']}
+          </c:otherwise>
+        </c:choose>
+
+        <h:messages id="messages" globalOnly="true"
+                    errorClass="warning" fatalClass="warning"
+                    warnClass="warning" infoClass="note" />
+
+        <ui:insert name="content" />
+
+        <ui:insert name="footer">
+          <hr />
+
+          <h3><h:outputText value="#{label.uploadFiles}" /></h3>
+
+          <div class="upload">
+
+            <h:form enctype="multipart/form-data">
+
+              <h:panelGrid columns="2">
+
+                <h:outputText value="#{label.description}" />
+                <h:outputText value="#{label.file}" />
+
+                <h:inputText value="#{EditorBean.uploadDescription}" />
+                <t:inputFileUpload value="#{EditorBean.uploadedFile}" />
+
+              </h:panelGrid>
+
+              <h:selectBooleanCheckbox id="unzip" value="#{EditorBean.unzipFiles}" />
+              <h:outputLabel for="unzip" value="#{label.unzipFiles}" /><br />
+              <h:commandButton value="#{label.upload}" action="#{EditorBean.upload}" />
+
+            </h:form>
+
+          </div>
+        </ui:insert>
+
+      </t:aliasBeansScope>
+
+    </body>
+  </f:view>
+</html>
+

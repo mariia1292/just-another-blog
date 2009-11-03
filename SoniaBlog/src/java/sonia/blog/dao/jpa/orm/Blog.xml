@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entity-mappings version="1.0" xmlns="http://java.sun.com/xml/ns/persistence/orm"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/persistence/orm http://java.sun.com/xml/ns/persistence/orm_1_0.xsd">
+  <persistence-unit-metadata>
+    <persistence-unit-defaults>
+      <access>FIELD</access>
+    </persistence-unit-defaults>
+  </persistence-unit-metadata>
+  <package>sonia.blog.entity</package>
+  <entity metadata-complete="true" name="Blog" class="sonia.blog.entity.Blog">
+    <table name="JAB_BLOG" />
+    <named-query name="Blog.getByIdentifier">
+      <query>
+        select b from Blog as b where b.identifier = :identifier
+      </query>
+    </named-query>
+    <named-query name="Blog.getAllByFilter">
+      <query>
+        select b from Blog as b where b.identifier like :filter
+      </query>
+    </named-query>
+    <named-query name="Blog.getAllByFilterAndActive">
+      <query>
+        select b from Blog as b where b.active = :active and b.identifier like :filter
+      </query>
+    </named-query>
+    <named-query name="Blog.getByIdentifierAndActive">
+      <query>
+        select b from Blog as b where b.active = :active and b.identifier = :identifier
+      </query>
+    </named-query>
+    <named-query name="Blog.findAll">
+      <query>
+        select b from Blog b
+      </query>
+    </named-query>
+    <named-query name="Blog.getByActive">
+      <query>
+        select b from Blog b where b.active = :active
+      </query>
+    </named-query>
+    <named-query name="Blog.count">
+      <query>
+        select count(b) from Blog b
+      </query>
+    </named-query>
+    <pre-persist method-name="prePersists" />
+    <attributes>
+      <id name="id">
+        <generated-value strategy="IDENTITY" />
+      </id>
+      <basic name="title">
+        <column nullable="false" length="250" />
+      </basic>
+      <basic name="dateFormat">
+        <column nullable="false" length="50" />
+      </basic>
+      <basic name="creationDate">
+        <column nullable="false" />
+        <temporal>TIMESTAMP</temporal>
+      </basic>
+      <basic name="identifier">
+        <column nullable="false" unique="true" />
+      </basic>
+      <basic name="template">
+        <column nullable="false" />
+      </basic>
+      <one-to-many name="parameters" fetch="LAZY" mapped-by="blog">
+        <cascade>
+          <cascade-merge />
+          <cascade-remove />
+        </cascade>
+      </one-to-many>
+      <one-to-many name="members" fetch="LAZY" mapped-by="blog">
+        <cascade>
+          <cascade-merge />
+          <cascade-remove />
+        </cascade>
+      </one-to-many>
+      <one-to-many name="categories" fetch="LAZY" mapped-by="blog">
+        <cascade>
+          <cascade-remove />
+        </cascade>
+      </one-to-many>
+      <one-to-many name="entries" fetch="LAZY" mapped-by="blog">
+        <cascade>
+          <cascade-remove />
+        </cascade>
+      </one-to-many>
+    </attributes>
+  </entity>
+</entity-mappings>

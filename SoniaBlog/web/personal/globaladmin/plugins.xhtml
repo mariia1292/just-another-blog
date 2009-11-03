@@ -1,0 +1,71 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:blog="http://jab.nitilon.org/blog/"
+      xmlns:c="http://java.sun.com/jstl/core">
+
+  <body>
+
+    <ui:composition template="../template.xhtml">
+
+      <ui:define name="title">
+        <h:outputText value="#{label.plugins}" />
+      </ui:define>
+
+      <ui:define name="content">
+
+        <h1><h:outputText value="#{label.plugins}" /></h1>
+
+        <h:form>
+
+          <h:dataTable value="#{PluginBean.plugins}" var="Plugin">
+
+            <h:column>
+              <f:facet name="header">
+                <h:outputText value="#{label.name}" />
+              </f:facet>
+              <h:outputText value="#{Plugin.displayName}" />
+            </h:column>
+
+            <h:column>
+              <f:facet name="header">
+                <h:outputText value="#{label.version}" />
+              </f:facet>
+              <h:outputText value="#{Plugin.version}" />
+            </h:column>
+
+            <h:column>
+              <f:facet name="header">
+                <h:outputText value="#{label.vendor}" />
+              </f:facet>
+              <h:outputText value="#{Plugin.vendor}" />
+            </h:column>
+
+            <h:column>
+              <f:facet name="header">
+                <h:outputText value="#{label.description}" />
+              </f:facet>
+              <h:outputText value="#{Plugin.description}" />
+            </h:column>
+
+            <h:column>
+              <f:facet name="header">
+                <h:outputText value="#{label.startStop}" />
+              </f:facet>
+              <h:commandLink value="#{label.start}" action="#{PluginBean.start}" rendered="#{Plugin.state == 2 || Plugin.state == 0}" />
+              <h:commandLink value="#{label.stop}" action="#{PluginBean.stop}" rendered="#{Plugin.state == 1}" />
+            </h:column>
+
+          </h:dataTable>
+          
+        </h:form>
+
+      </ui:define>
+
+    </ui:composition>
+
+  </body>
+</html>

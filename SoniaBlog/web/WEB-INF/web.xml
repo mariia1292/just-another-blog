@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="2.5" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
+
+  <!-- jsf parameter -->
+
+  <context-param>
+    <param-name>com.sun.faces.verifyObjects</param-name>
+    <param-value>true</param-value>
+  </context-param>
+  
+  <context-param>
+    <param-name>com.sun.faces.validateXml</param-name>
+    <param-value>true</param-value>
+  </context-param>
+
+  <context-param>
+		<param-name>com.sun.faces.enableViewStateIdRendering</param-name>
+		<param-value>false</param-value>
+	</context-param>
+
+  <context-param>
+    <param-name>javax.faces.CONFIG_FILES</param-name>
+    <param-value>
+      /WEB-INF/config/faces-core.xml,
+      /WEB-INF/config/faces-beans.xml,
+      /WEB-INF/config/faces-navigation.xml
+    </param-value>
+  </context-param>
+
+  <context-param>
+    <param-name>javax.faces.DEFAULT_SUFFIX</param-name>
+    <param-value>.xhtml</param-value>
+  </context-param>
+
+  <!-- facelets parameter -->
+
+  <context-param>
+    <param-name>facelets.DEVELOPMENT</param-name>
+    <param-value>true</param-value>
+  </context-param>
+  
+  <context-param>
+    <param-name>facelets.SKIP_COMMENTS</param-name>
+    <param-value>false</param-value>
+  </context-param>
+  
+  <context-param>
+    <param-name>facelets.LIBRARIES</param-name>
+    <param-value>/WEB-INF/config/blog.taglib.xml</param-value>
+  </context-param>
+  
+  <context-param>
+    <param-name>facelets.RESOURCE_RESOLVER</param-name>
+    <param-value>sonia.blog.wui.resolver.ResourceResolver</param-value>
+  </context-param>
+
+  <!-- blog parameter -->
+  
+  <context-param>
+    <param-name>sonia.config.AccessFile</param-name>
+    <param-value>/WEB-INF/config/access.xml</param-value>
+  </context-param>
+
+  <!-- BlogContextFilter -->
+
+  <filter>
+    <filter-name>BlogContextFilter</filter-name>
+    <filter-class>sonia.blog.app.BlogContextFilter</filter-class>
+  </filter>
+
+  <filter-mapping>
+    <filter-name>BlogContextFilter</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
+
+  <!-- MyFacesExtensionFilter -->
+
+  <filter>
+    <filter-name>MyFacesExtensionFilter</filter-name>
+    <filter-class>org.apache.myfaces.webapp.filter.ExtensionsFilter</filter-class>
+    <init-param>
+      <param-name>uploadMaxFileSize</param-name>
+      <param-value>1024m</param-value>
+    </init-param>
+  </filter>
+
+  <filter-mapping>
+    <filter-name>MyFacesExtensionFilter</filter-name>
+    <url-pattern>/faces/myFacesExtensionResource/*</url-pattern>
+  </filter-mapping>
+  
+  <filter-mapping>
+    <filter-name>MyFacesExtensionFilter</filter-name>
+    <url-pattern>*.jab</url-pattern>
+  </filter-mapping>
+
+  <!-- ServletListener -->
+
+  <listener>
+    <description>ServletContextListener</description>
+    <listener-class>sonia.blog.app.BlogContextListener</listener-class>
+  </listener>
+
+  <listener>
+    <description>HttpSessionListener</description>
+    <listener-class>sonia.blog.app.BlogSessionListener</listener-class>
+  </listener>
+
+  <!-- Faces Servlet -->
+
+  <servlet>
+    <servlet-name>Faces Servlet</servlet-name>
+    <servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
+    <load-on-startup>1</load-on-startup>
+  </servlet>
+
+    <servlet>
+        <servlet-name>CommentAction</servlet-name>
+        <servlet-class>sonia.blog.wui.servlet.CommentAction</servlet-class>
+    </servlet>
+    <servlet-mapping>
+    <servlet-name>Faces Servlet</servlet-name>
+    <url-pattern>*.jab</url-pattern>
+  </servlet-mapping>
+
+  <!-- Logout Servlet -->
+
+  <servlet>
+    <servlet-name>LogoutServlet</servlet-name>
+    <servlet-class>sonia.blog.authentication.LogoutServlet</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>LogoutServlet</servlet-name>
+    <url-pattern>/logout</url-pattern>
+  </servlet-mapping>
+
+  <!-- JSF Library config -->
+
+  <jsp-config>
+    <taglib>
+      <taglib-uri>http://jab.nitilon.org/blog/</taglib-uri>
+      <taglib-location>/WEB-INF/config/blog.tld</taglib-location>
+    </taglib>
+  </jsp-config>
+
+  <!-- core config -->
+
+    <servlet-mapping>
+        <servlet-name>CommentAction</servlet-name>
+        <url-pattern>/create-comment</url-pattern>
+    </servlet-mapping>
+    <session-config>
+    <session-timeout>
+            30
+    </session-timeout>
+  </session-config>
+
+  <welcome-file-list>
+    <welcome-file>forward.jsp</welcome-file>
+  </welcome-file-list>
+
+  <!-- security -->
+
+  <security-constraint>
+    <display-name>XHTMLConstraint</display-name>
+    <web-resource-collection>
+      <web-resource-name>XHTML-Files</web-resource-name>
+      <description>protect all xhtml files</description>
+      <url-pattern>*.xhtml</url-pattern>
+      <http-method>GET</http-method>
+      <http-method>POST</http-method>
+      <http-method>HEAD</http-method>
+      <http-method>PUT</http-method>
+      <http-method>OPTIONS</http-method>
+      <http-method>TRACE</http-method>
+      <http-method>DELETE</http-method>
+    </web-resource-collection>
+    <auth-constraint>
+      <role-name>none</role-name>
+    </auth-constraint>
+  </security-constraint>
+
+</web-app>

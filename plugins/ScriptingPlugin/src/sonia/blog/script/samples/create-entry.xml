@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+
+<!--
+    Document   : create-entry.xml
+    Created on : August 30, 2009, 2:16 PM
+    Author     : Sebastian Sdorra
+    Description:
+        Purpose of the document follows.
+-->
+
+<script>
+  <title>Create Entry</title>
+  <description>Create an Entry</description>
+  <author>Sebastian Sdorra</author>
+  <content>println( "&lt;h3&gt;Create Entry&lt;/h3&gt;" );
+
+var entry = entityFactory.createEntry();
+entry.setTitle( "Hello from Script" );
+entry.setAuthor( request.user );
+entry.setContent( "&lt;h2&gt;Hello from Script&lt;/h2&gt;" );
+entry.setBlog( currentBlog );
+
+daoFactory.entryDAO.add(session, entry);
+  </content>
+</script>

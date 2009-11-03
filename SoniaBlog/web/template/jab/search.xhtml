@@ -1,0 +1,75 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:blog="http://jab.nitilon.org/blog/"
+      xmlns:t="http://myfaces.apache.org/tomahawk">
+
+  <body>
+
+    <ui:composition template="./template.xhtml">
+
+      <ui:define name="title">
+        <h:outputText value="#{BlogBean.blog.title}" />
+      </ui:define>
+
+      <ui:define name="content">
+
+        <h1><h:outputText value="#{label.search}" /></h1>
+
+        <h:panelGroup layout="block" styleClass="entryNavigation" rendered="#{BlogBean.navigationRendered}">
+          <blog:link value="#{label.prev}" href="#{BlogBean.previousUri}" disabled="#{BlogBean.previousUri == null}" />
+          <h:outputText value=" | " />
+          <blog:link value="#{label.next}" href="#{BlogBean.nextUri}" disabled="#{BlogBean.nextUri == null}" />
+        </h:panelGroup>
+
+        <h:form>
+
+          <ui:repeat value="#{SearchBean.pageEntries}" var="Entry">
+            <h2>
+              <blog:link value="#{Entry.title}" object="#{Entry}" />
+            </h2>
+
+            <div class="content">
+              <h:outputText value="#{Entry.displayContent}" escape="false" />
+            </div>
+
+            <p>
+              <h:outputText value="#{Entry.creationDate}">
+                <f:convertDateTime pattern="#{BlogBean.blog.dateFormat}" />
+              </h:outputText>
+              <h:outputText value=", #{Entry.authorName}" />
+            </p>
+          </ui:repeat>
+
+        </h:form>
+
+      </ui:define>
+
+      <ui:define name="info">
+        <h3><h:outputText value="#{label.searchCategories}" /></h3>
+        <div id="submenu" class="vlist">
+          <ul>
+            <ui:repeat value="#{SearchBean.categories}" var="Category">
+              <li>
+                <a href="#{SearchBean.categoryLink}">#{Category.label} (#{Category.size})</a>
+              </li>
+            </ui:repeat>
+          </ul>
+        </div>
+
+        <h:form id="extraNavigationForm">
+          <h3><h:outputText value="#{label.extraNavigation}" /></h3>
+          <t:panelNavigation2 styleClass="overview" layout="list">
+            <t:navigationMenuItems value="#{BlogBean.extraNavigation}" />
+          </t:panelNavigation2>
+        </h:form>
+
+      </ui:define>
+
+    </ui:composition>
+
+  </body>
+</html>

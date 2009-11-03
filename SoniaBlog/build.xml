@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- You may freely edit this file. See commented blocks below for -->
+<!-- some examples of how to customize the build. -->
+<!-- (If you delete it and reopen the project it will be recreated.) -->
+<!-- By default, only the Clean and Build commands use this build script. -->
+<!-- Commands such as Run, Debug, and Test only use this build script if -->
+<!-- the Compile on Save feature is turned off for the project. -->
+<!-- You can turn off the Compile on Save (or Deploy on Save) setting -->
+<!-- in the project's Project Properties dialog box.-->
+<project name="SoniaBlog" default="default" basedir=".">
+  <description>Builds, tests, and runs the project SoniaBlog.</description>
+  <import file="nbproject/build-impl.xml"/>
+  <import file="nbproject/profiler-build-impl.xml"/>
+  <!--
+
+    There exist several targets which are by default empty and which can be 
+    used for execution of your tasks. These targets are usually executed 
+    before and after some main targets. They are: 
+
+      -pre-init:                 called before initialization of project properties 
+      -post-init:                called after initialization of project properties 
+      -pre-compile:              called before javac compilation 
+      -post-compile:             called after javac compilation 
+      -pre-compile-single:       called before javac compilation of single file
+      -post-compile-single:      called after javac compilation of single file
+      -pre-compile-test:         called before javac compilation of JUnit tests
+      -post-compile-test:        called after javac compilation of JUnit tests
+      -pre-compile-test-single:  called before javac compilation of single JUnit test
+      -post-compile-test-single: called after javac compilation of single JUunit test
+      -pre-dist:                 called before archive building 
+      -post-dist:                called after archive building 
+      -post-clean:               called after cleaning build products 
+      -pre-run-deploy:           called before deploying
+      -post-run-deploy:          called after deploying
+
+    Example of pluging an obfuscator after the compilation could look like 
+
+        <target name="-post-compile">
+            <obfuscate>
+                <fileset dir="${build.classes.dir}"/>
+            </obfuscate>
+        </target>
+
+    For list of available properties check the imported 
+    nbproject/build-impl.xml file. 
+
+
+    Other way how to customize the build is by overriding existing main targets.
+    The target of interest are: 
+
+      init-macrodef-javac:    defines macro for javac compilation
+      init-macrodef-junit:   defines macro for junit execution
+      init-macrodef-debug:    defines macro for class debugging
+      do-dist:                archive building
+      run:                    execution of project 
+      javadoc-build:          javadoc generation 
+
+    Example of overriding the target for project execution could look like 
+
+        <target name="run" depends="<PROJNAME>-impl.jar">
+            <exec dir="bin" executable="launcher.exe">
+                <arg file="${dist.jar}"/>
+            </exec>
+        </target>
+
+    Notice that overridden target depends on jar target and not only on 
+    compile target as regular run target does. Again, for list of available 
+    properties which you can use check the target you are overriding in 
+    nbproject/build-impl.xml file. 
+
+    -->
+  <target name="-pre-init">
+    <ant antfile="../SoniaAnt/build.xml" inheritall="false" target="jar"/>
+  </target>
+
+  <target name="init-hg-path">
+    <condition property="have-no.hg-path">
+      <not>
+        <isset property="sonia.ant.hg" />
+      </not>
+    </condition>
+  </target>
+
+  <target name="set-hg-path" depends="init-hg-path" if="have-no.hg-path">
+    <property name="sonia.ant.hg" value="hg" />
+  </target>
+
+  <target name="set-version" depends="set-hg-path">
+    <taskdef name="hgVersion" classname="sonia.ant.MercurialVersionTask" classpath="../SoniaAnt/dist/SoniaAnt.jar" />
+    <hgVersion hgpath="${sonia.ant.hg}" repositorypath="${basedir}/.." path="${basedir}/${build.web.dir}/WEB-INF/config/version.txt" />
+  </target>
+
+  <target name="-post-compile" depends="set-version,compress" />
+  
+  <target name="tomcat" depends="-post-compile">
+    
+    <property name="build.tomcat.dir" value="${build.web.dir}/../tomcat" />
+
+    <copy todir="${build.tomcat.dir}">
+      <fileset dir="${build.web.dir}" />
+    </copy>
+
+    <copyfiles files="${libs.JAVADB_DRIVER_LABEL.classpath}" todir="${build.tomcat.dir}/WEB-INF/lib"/>
+    <copyfiles files="${libs.JavaMail.classpath}" todir="${build.tomcat.dir}/WEB-INF/lib"/>
+    <copyfiles files="${libs.jsf12.classpath}" todir="${build.tomcat.dir}/WEB-INF/lib"/>
+    <copyfiles files="${libs.toplink.classpath}" todir="${build.tomcat.dir}/WEB-INF/lib"/>
+
+    <mkdir dir="${dist.dir}" />
+
+    <jar compress="${jar.compress}" jarfile="${dist.dir}/SoniaBlog.tomcat.war">
+      <fileset dir="${build.tomcat.dir}"/>
+    </jar>
+
+  </target>
+
+  <target name="changeEnvironment" depends="compile">
+    <taskdef name="chEnv" classname="sonia.ant.ChangeEnvironmentTask" classpath="../SoniaAnt/dist/SoniaAnt.jar" />
+    <chEnv path="${build.web.dir}" environment="release" />
+  </target>
+
+  <target name="init-compress">
+    <condition property="compress">
+      <or>
+        <not>
+          <isset property="sonia.compress" />
+        </not>
+        <istrue value="${sonia.compress}" />
+      </or>
+    </condition>
+  </target>
+
+  <target name="compress" if="compress" depends="init-compress">
+    <taskdef name="yuicompress" classname="sonia.ant.YuiCompressTask" classpath="${libs.YuiCompress.classpath}:../SoniaAnt/dist/SoniaAnt.jar" />
+    <yuicompress replaceSourceFiles="true">
+      <fileset dir="${build.web.dir}/">
+        <include name="resources/jquery/plugins/js/*.js" />
+        <include name="resources/jquery/plugins/css/*.css" />
+        <include name="resources/tiny_mce/plugins/attachment/editor_plugin.js" />
+        <include name="resources/tiny_mce/plugins/attachment/*/*.js" />
+        <include name="resources/tiny_mce/plugins/imgbrowser/editor_plugin.js" />
+        <include name="resources/tiny_mce/plugins/imgbrowser/*/*.js" />
+        <include name="resources/tiny_mce/plugins/links/editor_plugin.js" />
+        <include name="resources/tiny_mce/plugins/links/*/*.js" />
+        <include name="resources/tiny_mce/plugins/macro/editor_plugin.js" />
+        <include name="resources/tiny_mce/plugins/macro/*/*.js" />
+        <include name="resources/tiny_mce/plugins/imgresize/editor_plugin.js" />
+        <include name="template/jab/css/blog.css" />
+        <include name="template/jab/css/screen/*.css" />
+        <include name="template/jab/css/patches/*.css" />
+        <include name="template/admin/css/admin.css" />
+        <include name="template/admin/css/screen/*.css" />
+        <include name="template/admin/css/patches/*.css" />
+      </fileset>
+    </yuicompress>
+  </target>
+
+  <target name="removeSources">
+    <delete>
+      <fileset dir="${build.web.dir}/">
+        <include name="resources/tiny_mce/*_src.js" />
+        <include name="resources/tiny_mce/plugins/*/*_src.js" />
+      </fileset>
+    </delete>
+  </target>
+
+  <target name="movePlugins">
+    <mkdir dir="${dist.dir}/plugins" />
+    <move todir="${dist.dir}/plugins">
+      <fileset dir="${build.web.dir}/WEB-INF/lib">
+        <include name="LdapPlugin.jar" />
+        <include name="ScriptingPlugin.jar" />
+        <include name="DevelPlugin.jar" />
+        <include name="WebIntegrationPlugin.jar" />
+        <include name="JabPagePlugin.jar" />
+      </fileset>
+    </move>
+    <mkdir dir="${dist.dir}/plugins/OfficePlugin" />
+    <move todir="${dist.dir}/plugins/OfficePlugin">
+      <fileset dir="${build.web.dir}/WEB-INF/lib">
+        <include name="OfficePlugin.jar" />
+        <include name="PDFRenderer.jar" />
+      </fileset>
+    </move>
+  </target>
+
+  <target name="release" depends="changeEnvironment,removeSources,movePlugins,dist,tomcat" />
+  
+</project>

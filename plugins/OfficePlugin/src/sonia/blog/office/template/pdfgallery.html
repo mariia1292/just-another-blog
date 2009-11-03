@@ -1,0 +1,10 @@
+<div id="pdfgallery_${id}"><#if body ??>${body}</#if></div>
+<script type="text/javascript">
+  $(document).ready(function(){
+    $("#pdfgallery_${id}").pdfgallery("${url}",{
+      theme: "${theme}",
+      type: "${type}",
+      loadingImage: "${loadingImage}"
+    });
+  });
+</script>

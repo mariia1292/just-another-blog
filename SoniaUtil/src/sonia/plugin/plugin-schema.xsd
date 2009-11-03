@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            targetNamespace="http://dev.sonia.de/schema/plugin-schema"
+            elementFormDefault="qualified" xmlns:tns="http://dev.sonia.de/schema/plugin-schema">
+    <xsd:element name="plugin">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element name="name" />
+                <xsd:element name="display-name" minOccurs="0"/>
+                <xsd:element name="description" minOccurs="0"/>
+                <xsd:element name="version"/>
+                <xsd:element name="vendor"/>
+                <xsd:element name="activator" minOccurs="0"/>
+                <xsd:element name="autostart" minOccurs="0" type="xsd:boolean"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+</xsd:schema>

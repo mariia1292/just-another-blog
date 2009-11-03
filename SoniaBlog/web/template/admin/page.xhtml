@@ -1,0 +1,58 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:blog="http://jab.nitilon.org/blog/"
+      xmlns:t="http://myfaces.apache.org/tomahawk"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+  <body>
+
+    <ui:composition template="./template.xhtml">
+
+      <ui:define name="title">
+        <h:outputText value="#{PageBean.page.title}" />
+      </ui:define>
+
+      <ui:define name="content">
+
+        <h1><h:outputText value="#{PageBean.page.title}" /></h1>
+
+        <div class="content">
+          <h:outputText value="#{PageBean.page.displayContent}" escape="false" />
+        </div>
+
+        <p>
+          <h:outputText value="#{PageBean.page.creationDate}">
+            <f:convertDateTime pattern="#{BlogBean.blog.dateFormat}" />
+          </h:outputText>
+          <h:outputText value=", " />
+          <blog:link value="#{PageBean.page.authorName}" object="#{PageBean.page.author}" />
+        </p>
+
+      </ui:define>
+
+      <ui:define name="info">
+
+        <h3><h:outputText value="#{label.navigation}" /></h3>
+
+        <div id="submenu" class="vlist">
+          <t:panelNavigation2 activeItemClass="active" expandAll="true" layout="list">
+            <t:navigationMenuItems value="#{PageBean.pageNavigation}" />
+          </t:panelNavigation2>
+        </div>
+
+        <h:form id="extraNavigationForm">
+          <h3><h:outputText value="#{label.extraNavigation}" /></h3>
+          <t:panelNavigation2 styleClass="overview" layout="list">
+            <t:navigationMenuItems value="#{BlogBean.extraNavigation}" />
+          </t:panelNavigation2>
+        </h:form>
+
+      </ui:define>
+
+    </ui:composition>
+
+  </body>
+</html>

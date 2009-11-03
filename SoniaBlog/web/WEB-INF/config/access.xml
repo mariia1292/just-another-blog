@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+    Document   : access.xml
+    Created on : September 23, 2008, 1:41 PM
+    Author     : sdorra
+    Description:
+        Purpose of the document follows.
+-->
+<access-config  xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+   xmlns='http://dev.sonia.de/schema/accessConfig'
+   xsi:schemaLocation='http://dev.sonia.de/schema/accessConfig file:/Users/sdorra/Projects/jab/SoniaWebUtil/src/sonia/jsf/access/accessConfig.xsd'>
+     
+  <rule>
+    <description>if app installed</description>
+    <conditions>
+      <not>
+        <ViewIdMatches>/install/.*</ViewIdMatches>
+      </not>
+      <not>
+        <condition>
+          <class>sonia.blog.app.InstalledCondition</class>
+        </condition>
+      </not>
+    </conditions>
+    <actions>
+      <jsf-navigation>install</jsf-navigation>
+      <jsf-message>Die Anwendung muss erst installiert werden</jsf-message>
+    </actions>
+    <last />
+  </rule>
+  
+  <rule>
+    <conditions>
+      <ViewIdMatches>/install/.*</ViewIdMatches>
+      <condition>
+        <class>sonia.blog.app.InstalledCondition</class>
+      </condition>
+    </conditions>
+    <actions>
+      <redirect>/</redirect>
+    </actions>
+  </rule>
+
+  <rule>
+    <conditions>
+      <not>
+        <scheme>https</scheme>
+      </not>
+      <ViewIdMatches>(/personal/.*|/login.xhtml|/register.xhtml|/lostPassword.xhtml)</ViewIdMatches>
+      <condition>
+        <class>sonia.blog.app.ConfigCondition</class>
+        <init-param>
+          <param-name>key</param-name>
+          <param-value>ssl.enable</param-value>
+        </init-param>
+      </condition>
+    </conditions>
+    <actions>
+      <action>
+        <class>sonia.blog.app.SSLRedirectAction</class>
+      </action>
+    </actions>
+  </rule>
+
+  <rule>
+    <conditions>
+      <not>
+        <loggedIn />
+      </not>
+      <ViewIdMatches>/personal/.*</ViewIdMatches>
+    </conditions>
+    <actions>
+      <redirect>/deny.jab</redirect>
+    </actions>
+    <last />
+  </rule>
+  
+  <rule>
+    <conditions>
+      <not>
+        <or>
+          <isUserInRole>ADMIN</isUserInRole>
+          <condition>
+            <class>sonia.blog.app.GlobalAdminCondition</class>
+          </condition>
+        </or>
+      </not>
+      <ViewIdMatches>/personal/admin/.*</ViewIdMatches>
+    </conditions>
+    <actions>
+      <redirect>/deny.jab</redirect>
+    </actions>
+    <last />
+  </rule>
+
+  <rule>
+    <conditions>
+      <not>
+        <or>
+          <isUserInRole>AUTHOR</isUserInRole>
+          <isUserInRole>ADMIN</isUserInRole>
+          <condition>
+            <class>sonia.blog.app.GlobalAdminCondition</class>
+          </condition>
+        </or>
+      </not>
+      <ViewIdMatches>/personal/author/.*</ViewIdMatches>
+    </conditions>
+    <actions>
+      <redirect>/deny.jab</redirect>
+    </actions>
+    <last />
+  </rule>
+
+  <rule>
+    <conditions>
+      <not>
+        <condition>
+          <class>sonia.blog.app.GlobalAdminCondition</class>
+        </condition>
+      </not>
+      <ViewIdMatches>/personal/globaladmin/.*</ViewIdMatches>
+    </conditions>
+    <actions>
+      <redirect>/deny.jab</redirect>
+    </actions>
+    <last />
+  </rule>
+
+</access-config>

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entity-mappings version="1.0" xmlns="http://java.sun.com/xml/ns/persistence/orm"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/persistence/orm http://java.sun.com/xml/ns/persistence/orm_1_0.xsd">
+  <persistence-unit-metadata>
+    <persistence-unit-defaults>
+      <access>FIELD</access>
+    </persistence-unit-defaults>
+  </persistence-unit-metadata>
+  <package>sonia.blog.entity</package>
+  <entity metadata-complete="true" name="Category" class="sonia.blog.entity.Category">
+    <table name="JAB_CATEGORY" />
+    <named-query name="Category.findAll">
+      <query>
+        select c from Category c
+      </query>
+    </named-query>
+    <named-query name="Category.findAllByBlog">
+      <query>
+        select c from Category c where c.blog = :blog
+      </query>
+    </named-query>
+    <named-query name="Category.count">
+      <query>
+        select count(c) from Category c
+      </query>
+    </named-query>
+    <named-query name="Category.countByBlog">
+      <query>
+        select count(c) from Category c where c.blog = :blog
+      </query>
+    </named-query>
+    <named-query name="Category.getByBlogAndName">
+      <query>
+        select c from Category c where c.blog = :blog and c.name = :name
+      </query>
+    </named-query>
+    <named-query name="Category.findFirstByBlog">
+      <query>
+        select c from Category c where c.blog = :blog and c.id = ( select min(cat.id) from Category cat where cat.blog = :blog )
+      </query>
+    </named-query>
+    <pre-persist method-name="prePersists" />
+    <attributes>
+      <id name="id">
+        <generated-value strategy="IDENTITY" />
+      </id>
+      <basic name="name">
+        <column nullable="false" />
+      </basic>
+      <basic name="creationDate">
+        <column nullable="false" />
+        <temporal>TIMESTAMP</temporal>
+      </basic>
+      <many-to-one name="blog" fetch="LAZY" optional="false" />
+      <many-to-many name="entries" fetch="LAZY" mapped-by="categories" />
+    </attributes>
+  </entity>
+</entity-mappings>

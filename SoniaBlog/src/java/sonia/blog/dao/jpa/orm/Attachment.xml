@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entity-mappings version="1.0" xmlns="http://java.sun.com/xml/ns/persistence/orm"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/persistence/orm http://java.sun.com/xml/ns/persistence/orm_1_0.xsd">
+  <persistence-unit-metadata>
+    <persistence-unit-defaults>
+      <access>FIELD</access>
+    </persistence-unit-defaults>
+  </persistence-unit-metadata>
+  <package>sonia.blog.entity</package>
+  <entity metadata-complete="true" name="Attachment" class="sonia.blog.entity.Attachment">
+    <table name="JAB_ATTACHMENT" />
+    <named-query name="Attachment.findAllByEntry">
+      <query>
+        select a from Attachment a join a.entry e where e = :entry order by a.creationDate desc
+      </query>
+    </named-query>
+    <named-query name="Attachment.findAllImagesByEntry">
+      <query>
+        select a from Attachment a join a.entry e where e = :entry and a.mimeType like 'image/%'
+      </query>
+    </named-query>
+    <named-query name="Attachment.count">
+      <query>
+        select count(a) from Attachment a
+      </query>
+    </named-query>
+    <named-query name="Attachment.findAll">
+      <query>
+        select a from Attachment a
+      </query>
+    </named-query>
+    <named-query name="Attachment.countByBlog">
+      <query>
+        select count(a) from Attachment a join a.entry e join e.blog b where b = :blog
+      </query>
+    </named-query>
+    <named-query name="Attachment.getAllByPage">
+      <query>
+        select a from Attachment a where a.page = :page
+      </query>
+    </named-query>
+    <named-query name="Attachment.getAllImagesByPage">
+      <query>
+        select a from Attachment a where a.page = :page and a.mimeType like 'image/%'
+      </query>
+    </named-query>
+    <named-query name="Attachment.entry.getAllByBlogAndPublished">
+      <query>
+        select a from Attachment a join a.entry e join e.blog b
+        where b = :blog and e.published = :published
+      </query>
+    </named-query>
+    <named-query name="Attachment.page.getAllByBlogAndPublished">
+      <query>
+        select a from Attachment a join a.page p join p.blog b
+        where b = :blog and p.published = :published
+      </query>
+    </named-query>
+    <pre-persist method-name="prePersists" />
+    <attributes>
+      <id name="id">
+        <generated-value strategy="IDENTITY" />
+      </id>
+      <basic name="name">
+        <column nullable="false" />
+      </basic>
+      <basic name="mimeType">
+        <column nullable="false" />
+      </basic>
+      <basic name="filePath">
+        <column nullable="false" />
+      </basic>
+      <basic name="fileSize">
+        <column nullable="false" />
+      </basic>
+      <basic name="creationDate">
+        <column nullable="false" />
+        <temporal>TIMESTAMP</temporal>
+      </basic>
+      <many-to-one name="entry" fetch="LAZY" />
+      <many-to-one name="page" fetch="LAZY" />
+    </attributes>
+  </entity>
+</entity-mappings>

@@ -1,0 +1,180 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:blog="http://jab.nitilon.org/blog/"
+      xmlns:c="http://java.sun.com/jstl/core">
+
+  <body>
+
+    <ui:composition template="../template.xhtml">
+
+      <ui:define name="title">
+        <h:outputText value="#{label.configuration}" />
+      </ui:define>
+
+      <ui:define name="content">
+
+        <h1><h:outputText value="#{label.configuration}" /></h1>
+
+        <h2><h:outputText value="#{label.general}" /></h2>
+
+        <h:form>
+
+          <h:panelGrid columns="3">
+
+            <h:outputLabel for="allowRegistration" value="#{label.allowRegistration}" />
+            <h:selectBooleanCheckbox id="allowRegistration" value="#{GlobalConfigBean.allowRegistration}" />
+            <h:message for="allowRegistration" />
+
+            <h:outputLabel for="allowBlogCreation" value="#{label.allowBlogCreation}" />
+            <h:selectBooleanCheckbox id="allowBlogCreation" value="#{GlobalConfigBean.allowBlogCreation}" />
+            <h:message for="allowBlogCreation" />
+
+            <h:outputLabel for="passwordMinLength" value="#{label.passwordMinLength}" />
+            <h:inputText id="passwordMinLength" styleClass="short" value="#{GlobalConfigBean.passwordMinLength}" required="true" />
+            <h:message for="passwordMinLength" />
+
+            <h:outputLabel for="adminPageSize" value="#{label.adminPageSize}" />
+            <h:inputText id="adminPageSize" styleClass="short" value="#{GlobalConfigBean.adminPageSize}" required="true" />
+            <h:message for="adminPageSize" />
+
+            <h:outputLabel for="spamInputMethod" value="#{label.spamInputMethod}" />
+            <h:selectOneRadio id="spamInputMethod" value="#{GlobalConfigBean.spamInputMethod}" styleClass="list">
+              <f:selectItems value="#{GlobalConfigBean.spamInputMethodItems}" />
+            </h:selectOneRadio>
+            <h:message for="spamInputMethod" />
+
+            <h:outputLabel for="sso" value="#{label.sso}" />
+            <h:selectOneRadio id="sso" value="#{GlobalConfigBean.sso}" styleClass="list">
+              <f:selectItem itemLabel="#{label.disabled}" itemValue="0" />
+              <f:selectItem itemLabel="#{label.ssoOnePerSession}" itemValue="1" />
+              <f:selectItem itemLabel="#{label.ssoEveryRequest}" itemValue="2" />
+            </h:selectOneRadio>
+            <h:message for="sso" />
+
+            <h:outputLabel for="domain" value="#{label.domain}" />
+            <h:inputText id="domain" value="#{GlobalConfigBean.domain}">
+              <f:validator validatorId="validator.domain" />
+            </h:inputText>
+            <h:message for="domain" />
+
+            <h:outputLabel for="compression" value="#{label.enableGZIPCompression}" />
+            <h:selectBooleanCheckbox id="compression" value="#{GlobalConfigBean.gzipCompression}" />
+            <h:message for="compression" />
+
+          </h:panelGrid>
+
+          <h:commandButton action="#{GlobalConfigBean.save}" value="#{label.save}" />
+
+        </h:form>
+
+        <h2><h:outputText value="#{label.sslConfig}" /></h2>
+
+        <h:form id="sslForm">
+          
+          <h:panelGrid columns="3">
+
+            <h:outputLabel for="enableSSL" value="#{label.enableSSL}" />
+            <h:selectBooleanCheckbox id="enableSSL" value="#{GlobalConfigBean.enableSSL}" />
+            <h:message for="enableSSL" />
+
+            <h:outputLabel for="sslPort" value="#{label.sslPort}" />
+            <h:inputText id="sslPort" value="#{GlobalConfigBean.sslPort}" required="true" />
+            <h:message for="sslPort" />
+
+          </h:panelGrid>
+
+          <h:commandButton action="#{GlobalConfigBean.save}" value="#{label.save}" />
+
+        </h:form>
+
+        <h2><h:outputText value="#{label.defaultConfig}" /></h2>
+
+        <h:form id="defaultForm">
+
+          <h:panelGrid columns="3">
+
+            <h:outputLabel for="defaultBlog" value="#{label.defaultBlog}" />
+            <h:selectOneMenu id="defaultBlog" value="#{GlobalConfigBean.defaultBlog}">
+              <f:selectItems value="#{GlobalConfigBean.blogItems}" />
+            </h:selectOneMenu>
+            <h:message for="defaultBlog" />
+
+          </h:panelGrid>
+
+          <h:commandButton action="#{GlobalConfigBean.save}" value="#{label.save}" />
+
+        </h:form>
+
+
+        <h2><h:outputText value="#{label.mailConfig}" /></h2>
+
+        <h:form id="mailForm">
+
+          <h:panelGrid columns="3">
+
+            <h:outputLabel for="servername" value="#{label.smtpServer}" />
+            <h:inputText id="servername" value="#{GlobalConfigBean.smtpServer}">
+              <f:validator validatorId="validator.domain" />
+            </h:inputText>
+            <h:message for="servername" />
+
+            <h:outputLabel for="port" value="#{label.smtpPort}" />
+            <h:inputText id="port" styleClass="short" value="#{GlobalConfigBean.smtpPort}">
+              <f:validateLongRange minimum="1" maximum="99999" />
+            </h:inputText>
+            <h:message for="port" />
+
+            <h:outputLabel for="username" value="#{label.smtpUser}" />
+            <h:inputText id="username" value="#{GlobalConfigBean.smtpUsername}" />
+            <h:message for="username" />
+
+            <h:outputLabel for="password" value="#{label.smtpPassword}" />
+            <h:inputSecret id="password" value="#{GlobalConfigBean.smtpPassword}" />
+            <h:message for="password" />
+
+            <h:outputLabel for="startTls" value="#{label.startTls}" />
+            <h:selectBooleanCheckbox id="startTls" value="#{GlobalConfigBean.startTls}" />
+            <h:message for="startTls" />
+
+            <h:outputLabel for="registerAcknowledgement" value="#{label.registerAcknowledgementMail}" />
+            <h:selectBooleanCheckbox id="registerAcknowledgement" value="#{GlobalConfigBean.registerAcknowledgement}" />
+            <h:message for="registerAcknowledgement" />
+
+          </h:panelGrid>
+
+          <h:commandButton action="#{GlobalConfigBean.save}" value="#{label.save}" />
+
+        </h:form>
+
+        <h3><h:outputText value="#{label.testMail}" /></h3>
+
+        <h:form>
+
+          <h:panelGrid columns="3">
+
+            <h:outputLabel for="testMail" value="#{label.email}" />
+            <h:inputText id="testMail" value="#{GlobalConfigBean.testMail}" required="true">
+              <f:validator validatorId="validator.mail" />
+            </h:inputText>
+            <h:message for="testMail" />
+
+          </h:panelGrid>
+
+          <h:commandButton action="#{GlobalConfigBean.sendTestMail}" value="#{label.send}" />
+
+        </h:form>
+
+        <c:forEach items="#{GlobalConfigBean.configurationProviders}" var="provider">
+          <ui:include src="#{provider}" />
+        </c:forEach>
+
+      </ui:define>
+
+    </ui:composition>
+
+  </body>
+</html>

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+    Document   : caches.xml
+    Created on : July 19, 2009, 12:59 PM
+    Author     : Sebastian Sdorra
+    Description:
+        Purpose of the document follows.
+-->
+
+<caches>
+
+  <cache>
+    <name>feed.cache</name>
+    <class>sonia.cache.SimpleExpirationCache</class>
+    <parameter>
+      <param-name>expiration-time</param-name>
+      <param-value>3600000</param-value>
+    </parameter>
+  </cache>
+
+  <cache>
+    <name>mbPreview.cache</name>
+    <class>sonia.cache.SimpleExpirationCache</class>
+    <parameter>
+      <param-name>expiration-time</param-name>
+      <param-value>180000</param-value>
+    </parameter>
+  </cache>
+
+  <cache>
+    <name>mapping.cache</name>
+    <class>sonia.cache.LRUCache</class>
+    <parameter>
+      <param-name>max-items</param-name>
+      <param-value>500</param-value>
+    </parameter>
+  </cache>
+
+</caches>

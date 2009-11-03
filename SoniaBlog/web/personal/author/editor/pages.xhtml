@@ -1,0 +1,55 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:t="http://myfaces.apache.org/tomahawk">
+  <body>
+
+    <ui:composition template="./template.xhtml">
+
+      <ui:define name="head">
+        <script type="text/javascript">
+          function update( id, description )
+          {
+            window.opener.document.getElementById( "#{param['id']}" ).value = id;
+            window.opener.document.getElementById( "#{param['description']}" ).innerHTML = description;
+            window.opener.updateNavigationOptions(id, "");
+            window.close();
+          }
+        </script>
+      </ui:define>
+
+      <ui:define name="content">
+
+        <h3><h:outputText value="#{label.pages}" /></h3>
+
+        <div class="pageTree">
+
+          <h:form>
+
+            <t:tree2 id="pageTree" value="#{PageAuthorBean.navigationTreeNode}" var="node" showRootNode="false">
+
+              <f:facet name="page">
+                <h:commandLink onclick="update('#{node.identifier}','#{node.description}')">
+                  <h:outputText value="#{node.description} (#{node.page.navigationPosition})" />
+                </h:commandLink>
+              </f:facet>
+
+            </t:tree2>
+
+          </h:form>
+
+        </div>
+
+      </ui:define>
+
+      <ui:define name="footer">
+      </ui:define>
+
+    </ui:composition>
+
+  </body>
+</html>
+

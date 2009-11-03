@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entity-mappings version="1.0" xmlns="http://java.sun.com/xml/ns/persistence/orm"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/persistence/orm http://java.sun.com/xml/ns/persistence/orm_1_0.xsd">
+  <persistence-unit-metadata>
+    <persistence-unit-defaults>
+      <access>FIELD</access>
+    </persistence-unit-defaults>
+  </persistence-unit-metadata>
+  <package>sonia.blog.entity</package>
+  <entity metadata-complete="true" name="Tag" class="sonia.blog.entity.Tag">
+    <table name="JAB_TAG" />
+    <named-query name="Tag.findAll">
+      <query>
+        select t from Tag t
+      </query>
+    </named-query>
+    <named-query name="Tag.findByBlog">
+      <query>
+        select t from Tag t join t.entries e join e.blog b where b = :blog and e.published = true group by t
+      </query>
+    </named-query>
+    <named-query name="Tag.findByName">
+      <query>
+        select t from Tag t where t.name = :name
+      </query>
+    </named-query>
+    <named-query name="Tag.count">
+      <query>
+        select count(t) from Tag t
+      </query>
+    </named-query>
+    <named-query name="Tag.countByBlog">
+      <query>
+        select count(t) from Tag t join t.entries e join e.blog b where b = :blog group by t.name
+      </query>
+    </named-query>
+    <named-query name="Tag.findByBlogAndCount">
+      <query>
+        select new sonia.blog.api.util.TagWrapper(t, count(t)) from Tag t join t.entries e join e.blog b where b = :blog and e.published = true group by t
+      </query>
+    </named-query>
+    <attributes>
+      <id name="id">
+        <generated-value strategy="IDENTITY" />
+      </id>
+      <basic name="name">
+        <column nullable="false" unique="true" />
+      </basic>
+      <many-to-many name="entries" mapped-by="tags" fetch="LAZY" />
+    </attributes>
+  </entity>
+</entity-mappings>

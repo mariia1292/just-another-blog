@@ -1,0 +1,104 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:blog="http://jab.nitilon.org/blog/"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:t="http://myfaces.apache.org/tomahawk">
+
+  <body>
+
+    <ui:composition template="./template.xhtml">
+
+      <ui:define name="head">
+        <script type="text/javascript" src="${facesContext.externalContext.requestContextPath}/resources/tiny_mce/plugins/attachment/js/dialog.js"></script>
+      </ui:define>
+
+      <ui:define name="content">
+
+        <h3><h:outputText value="#{label.options}" /></h3>
+
+        <div class="options">
+
+          <input type="checkbox" id="newwindow" name="newwindow" checked="checked" />
+          <h:outputText value="#{label.optionNewWindow}" />
+
+        </div>
+
+
+        <h3><h:outputText value="#{label.attachments}" /></h3>
+
+        <div class="attachments">
+
+          <h:form id="attachmentForm">
+
+            <h:dataTable styleClass="full" value="#{EditorBean.attachments}" var="Wrapper">
+
+              <h:column>
+                <f:facet name="header">
+                  <h:outputText value="#{label.name}" />
+                </f:facet>
+                <a href="#" onclick="AttachmentDialog.insertLink('attachment/#{Wrapper.attachment.id}','#{Wrapper.attachment.name}')">
+                  <h:outputText value="#{Wrapper.attachment.name}" />
+                </a>
+              </h:column>
+
+              <h:column>
+                <f:facet name="header">
+                  <h:outputText value="#{label.mimeType}" />
+                </f:facet>
+                <h:outputText value="#{Wrapper.attachment.mimeType}" />
+              </h:column>
+
+              <h:column>
+                <f:facet name="header">
+                  <h:outputText value="#{label.description}" />
+                </f:facet>
+                <h:outputText value="#{Wrapper.attachment.description}" />
+              </h:column>
+
+              <h:column>
+                <f:facet name="header">
+                  <h:outputText value="#{label.size}" />
+                </f:facet>
+                <h:outputText value="#{Wrapper.attachment.size}" />
+              </h:column>
+
+              <h:column>
+                <f:facet name="header">
+                  <h:outputText value="#{label.creationDate}" />
+                </f:facet>
+                <blog:selectAction onchange="AttachmentDialog.insert({0})" actions="#{Wrapper.attachmentHandlers}">
+                  <f:param name="selection" value="#{param['selection']}" />
+                  <f:param name="attachment" value="#{Wrapper.attachment}" />
+                </blog:selectAction>
+              </h:column>
+
+              <h:column>
+                <f:facet name="header">
+                  <h:outputText value="#{label.edit}" />
+                </f:facet>
+                <h:commandLink value="#{label.edit}" action="#{EditorBean.editAttachment}" />
+              </h:column>
+
+              <h:column>
+                <f:facet name="header">
+                  <h:outputText value="#{label.remove}" />
+                </f:facet>
+                <h:commandLink value="#{label.remove}" actionListener="#{EditorBean.removeAttachment}" />
+              </h:column>
+
+            </h:dataTable>
+
+          </h:form>
+
+        </div>
+
+      </ui:define>
+
+    </ui:composition>
+
+  </body>
+</html>
+
