@@ -7,7 +7,7 @@
 <!-- the Compile on Save feature is turned off for the project. -->
 <!-- You can turn off the Compile on Save (or Deploy on Save) setting -->
 <!-- in the project's Project Properties dialog box.-->
-<project name="SoniaBlog" default="default" basedir=".">
+<project name="SoniaBlog" default="default" basedir="." xmlns:sonia="antlib:sonia.ant">
   <description>Builds, tests, and runs the project SoniaBlog.</description>
   <import file="nbproject/build-impl.xml"/>
   <import file="nbproject/profiler-build-impl.xml"/>
@@ -69,8 +69,10 @@
     nbproject/build-impl.xml file. 
 
     -->
-  <target name="-pre-init">
+  <target name="-post-init">
     <ant antfile="../SoniaAnt/build.xml" inheritall="false" target="jar"/>
+    <taskdef resource="sonia/ant/sonia.antlib.xml" uri="antlib:sonia.ant"
+             classpath="${libs.YuiCompress.classpath}:${libs.ClosureCompiler.classpath}:../SoniaAnt/dist/SoniaAnt.jar" />
   </target>
 
   <target name="init-hg-path">
@@ -86,11 +88,10 @@
   </target>
 
   <target name="set-version" depends="set-hg-path">
-    <taskdef name="hgVersion" classname="sonia.ant.MercurialVersionTask" classpath="../SoniaAnt/dist/SoniaAnt.jar" />
-    <hgVersion hgpath="${sonia.ant.hg}" repositorypath="${basedir}/.." path="${basedir}/${build.web.dir}/WEB-INF/config/version.txt" />
+    <sonia:hgVersion hgpath="${sonia.ant.hg}" repositorypath="${basedir}/.." path="${basedir}/${build.web.dir}/WEB-INF/config/version.txt" />
   </target>
 
-  <target name="-post-compile" depends="set-version,compress" />
+  <target name="-post-compile" depends="set-version" />
   
   <target name="tomcat" depends="-post-compile">
     
@@ -114,8 +115,7 @@
   </target>
 
   <target name="changeEnvironment" depends="compile">
-    <taskdef name="chEnv" classname="sonia.ant.ChangeEnvironmentTask" classpath="../SoniaAnt/dist/SoniaAnt.jar" />
-    <chEnv path="${build.web.dir}" environment="release" />
+    <sonia:chEnv path="${build.web.dir}" environment="release" />
   </target>
 
   <target name="init-compress">
@@ -130,11 +130,20 @@
   </target>
 
   <target name="compress" if="compress" depends="init-compress">
-    <taskdef name="yuicompress" classname="sonia.ant.YuiCompressTask" classpath="${libs.YuiCompress.classpath}:../SoniaAnt/dist/SoniaAnt.jar" />
-    <yuicompress replaceSourceFiles="true">
+    <sonia:yuicompress replaceSourceFiles="true">
+      <fileset dir="${build.web.dir}/">
+        <include name="resources/jquery/plugins/css/*.css" />
+        <include name="template/jab/css/blog.css" />
+        <include name="template/jab/css/screen/*.css" />
+        <include name="template/jab/css/patches/*.css" />
+        <include name="template/admin/css/admin.css" />
+        <include name="template/admin/css/screen/*.css" />
+        <include name="template/admin/css/patches/*.css" />
+      </fileset>
+    </sonia:yuicompress>
+    <sonia:closureCompiler replaceSourceFiles="true" closureJAR="${libs.ClosureCompiler.classpath}">
       <fileset dir="${build.web.dir}/">
         <include name="resources/jquery/plugins/js/*.js" />
-        <include name="resources/jquery/plugins/css/*.css" />
         <include name="resources/tiny_mce/plugins/attachment/editor_plugin.js" />
         <include name="resources/tiny_mce/plugins/attachment/*/*.js" />
         <include name="resources/tiny_mce/plugins/imgbrowser/editor_plugin.js" />
@@ -144,14 +153,8 @@
         <include name="resources/tiny_mce/plugins/macro/editor_plugin.js" />
         <include name="resources/tiny_mce/plugins/macro/*/*.js" />
         <include name="resources/tiny_mce/plugins/imgresize/editor_plugin.js" />
-        <include name="template/jab/css/blog.css" />
-        <include name="template/jab/css/screen/*.css" />
-        <include name="template/jab/css/patches/*.css" />
-        <include name="template/admin/css/admin.css" />
-        <include name="template/admin/css/screen/*.css" />
-        <include name="template/admin/css/patches/*.css" />
       </fileset>
-    </yuicompress>
+    </sonia:closureCompiler>
   </target>
 
   <target name="removeSources">
@@ -183,6 +186,6 @@
     </move>
   </target>
 
-  <target name="release" depends="changeEnvironment,removeSources,movePlugins,dist,tomcat" />
+  <target name="release" depends="changeEnvironment,compress,removeSources,movePlugins,dist,tomcat" />
   
 </project>
