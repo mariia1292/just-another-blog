@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+    Document   : sonia.antlib.xml
+    Created on : November 7, 2009, 3:48 PM
+    Author     : Sebastian Sdorra
+    Description:
+        Purpose of the document follows.
+-->
+
+<antlib xmlns:sonia="antlib:sonia.ant">
+
+  <taskdef name="yuicompress" classname="sonia.ant.YuiCompressTask" />
+  <taskdef name="chEnv" classname="sonia.ant.ChangeEnvironmentTask" />
+  <taskdef name="hgVersion" classname="sonia.ant.MercurialVersionTask" />
+  <taskdef name="hgChangeLog" classname="sonia.ant.MercurialChangeLogTask" />
+  <taskdef name="closureCompiler" classname="sonia.ant.ClosureCompilerTask" />
+
+</antlib>

@@ -7,9 +7,9 @@
 <!-- the Compile on Save feature is turned off for the project. -->
 <!-- You can turn off the Compile on Save (or Deploy on Save) setting -->
 <!-- in the project's Project Properties dialog box.-->
-<project name="JabPagePlugin" default="default" basedir=".">
-    <description>Builds, tests, and runs the project JabPagePlugin.</description>
-    <import file="nbproject/build-impl.xml"/>
+<project name="JabPagePlugin" default="default" basedir="." xmlns:sonia="antlib:sonia.ant">
+  <description>Builds, tests, and runs the project JabPagePlugin.</description>
+  <import file="nbproject/build-impl.xml"/>
     <!--
 
     There exist several targets which are by default empty and which can be 
@@ -71,4 +71,42 @@
     nbproject/build-impl.xml file. 
 
     -->
+
+  <target name="-pre-init">
+    <property name="soniaAnt" value="../../SoniaAnt/dist/SoniaAnt.jar" />
+  </target>
+
+  <target name="-post-init" depends="set-hg-path,build-SoniaAnt">
+    <taskdef resource="sonia/ant/sonia.antlib.xml" uri="antlib:sonia.ant"
+             classpath="${libs.YuiCompress.classpath}:${libs.ClosureCompiler.classpath}:${soniaAnt}" />
+  </target>
+
+  <target name="init-hg-path">
+    <condition property="have-no.hg-path">
+      <not>
+        <isset property="sonia.ant.hg" />
+      </not>
+    </condition>
+  </target>
+
+  <target name="set-hg-path" depends="init-hg-path" if="have-no.hg-path">
+    <property name="sonia.ant.hg" value="hg" />
+  </target>
+
+  <target name="build-SoniaAnt" depends="check-SoniaAnt" if="create.sonia-ant">
+    <ant antfile="../../SoniaAnt/build.xml" inheritall="false" target="jar"/>
+  </target>
+
+  <target name="check-SoniaAnt">
+    <condition property="create.sonia-ant">
+      <not>
+        <available file="${soniaAnt}" />
+      </not>
+    </condition>
+  </target>
+
+  <target name="-pre-jar">
+    <sonia:hgChangeLog hgPath="${sonia.ant.hg}" repositoryPath="${basedir}/../../" path="${basedir}/${build.dir}/classes/sonia/blog/home/changelog.xml" />
+  </target>
+
 </project>
