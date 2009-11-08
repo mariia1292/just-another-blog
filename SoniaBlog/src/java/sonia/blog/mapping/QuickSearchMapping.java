@@ -49,10 +49,11 @@ import sonia.blog.entity.Blog;
 
 import sonia.util.Util;
 
+import sonia.web.io.JSONWriter;
+
 //~--- JDK imports ------------------------------------------------------------
 
 import java.io.IOException;
-import java.io.PrintWriter;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -93,15 +94,15 @@ public class QuickSearchMapping extends FinalMapping
                                     String[] param)
           throws IOException, ServletException
   {
-    PrintWriter writer = response.getWriter();
+    JSONWriter writer = new JSONWriter(response.getWriter());
 
-    writer.println("[");
-
-    String query = request.getParameter("query");
-
-    if (Util.hasContent(query))
+    try
     {
-      try
+      writer.startArray();
+
+      String query = request.getParameter("query");
+
+      if (Util.hasContent(query))
       {
         Blog blog = request.getCurrentBlog();
         Collection<SearchCategory> categories = ctx.search(blog,
@@ -124,33 +125,27 @@ public class QuickSearchMapping extends FinalMapping
             {
               SearchEntry e = entryIt.next();
 
-              writer.print("  {");
-              writer.print(" value : '");
-              writer.print(e.getTitle());
-              writer.print("',");
-              writer.print(" url : '");
-              writer.print(linkBuilder.getRelativeLink(request, e.getData()));
-              writer.print("'");
-
-              if (entryIt.hasNext())
-              {
-                writer.println(" },");
-              }
-              else
-              {
-                writer.println(" }");
-              }
+              writer.startObject();
+              writer.write("value", e.getTitle(), false);
+              writer.write("url",
+                           linkBuilder.getRelativeLink(request, e.getData()),
+                           true);
+              writer.endObject(!entryIt.hasNext());
             }
           }
         }
       }
-      catch (SearchException ex)
-      {
-        logger.log(Level.SEVERE, null, ex);
-      }
-    }
 
-    writer.println("]");
+      writer.endArray(true);
+    }
+    catch (SearchException ex)
+    {
+      logger.log(Level.SEVERE, null, ex);
+    }
+    finally
+    {
+      writer.close();
+    }
   }
 
   //~--- fields ---------------------------------------------------------------
