@@ -13,6 +13,7 @@
   <taskdef name="yuicompress" classname="sonia.ant.YuiCompressTask" />
   <taskdef name="chEnv" classname="sonia.ant.ChangeEnvironmentTask" />
   <taskdef name="hgVersion" classname="sonia.ant.MercurialVersionTask" />
+  <taskdef name="hgChangeLog" classname="sonia.ant.MercurialChangeLogTask" />
   <taskdef name="closureCompiler" classname="sonia.ant.ClosureCompilerTask" />
 
 </antlib>
