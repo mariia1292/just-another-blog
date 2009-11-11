@@ -102,7 +102,8 @@
                           <h:graphicImage value="/resources/images/icons/feed/icon-14.png" />
                         </blog:link>
                         <h:outputText value=" " />
-                        <blog:link value="#{Category.name}" object="#{Category}" />
+                        <blog:link value="#{Category.name}" object="#{Category}"
+                                   title="#{empty Category.description ? Category.name : Category.description}" />
                       </h:column>
                     </h:dataTable>
 
