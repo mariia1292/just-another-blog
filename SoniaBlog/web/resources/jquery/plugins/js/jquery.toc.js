@@ -35,7 +35,7 @@
 
   $.fn.extend({
     toc: function( options ){
-      this.each( function(){
+      return this.each( function(){
         new $.Toc(this, options);
       });
     }

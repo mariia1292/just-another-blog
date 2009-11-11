@@ -34,7 +34,7 @@
 
   $.fn.extend({
     calendar: function( url, options ){
-      this.each( function(){
+      return this.each( function(){
         new $.Calendar(this, url, options);
       });
     }

@@ -34,7 +34,7 @@
 
   $.fn.extend({
     feeds: function( url, options ){
-      this.each( function(){
+      return this.each( function(){
         new $.feeds(this, url, options);
       });
     }

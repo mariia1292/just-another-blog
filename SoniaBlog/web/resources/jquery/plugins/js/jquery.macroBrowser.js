@@ -34,7 +34,7 @@
 
   $.fn.extend({
     macroBrowser: function( url, options ){
-      this.each( function(){
+      return this.each( function(){
         new $.MacroBrowser(this, url, options);
       });
     }
