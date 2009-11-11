@@ -34,7 +34,7 @@
 
   $.fn.extend({
     autocomplete: function( url, options ){
-      this.each( function(){
+      return this.each( function(){
         new $.Autocomplete(this, url, options);
       });
     }
