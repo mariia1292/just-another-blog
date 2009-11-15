@@ -31,25 +31,25 @@
 
 
 
-package sonia.blog.api.dao;
+package sonia.blog.search;
 
+//~--- non-JDK imports --------------------------------------------------------
+
+import org.apache.lucene.document.Document;
+
+import sonia.blog.api.app.BlogContext;
+import sonia.blog.entity.Page;
 import sonia.blog.entity.PermaObject;
 
 /**
  *
  * @author Sebastian Sdorra
  */
-public interface DAOListener
+public class PageIndexHandler extends ContentObjectIndexHandler<Page>
 {
 
-  /**
-   * Enum description
-   *
-   */
-  public enum Action
-  {
-    PREADD, POSTADD, PREUPDATE, POSTUPDATE, PREREMOVE, POSTREMOVE
-  }
+  /** Field description */
+  public static final String CATEGORY = "page";
 
   //~--- methods --------------------------------------------------------------
 
@@ -57,8 +57,50 @@ public interface DAOListener
    * Method description
    *
    *
-   * @param action
    * @param item
+   *
+   * @return
    */
-  public void handleEvent(Action action, PermaObject item);
+  @Override
+  protected Document[] createDocuments(Page item)
+  {
+    Document doc = null;
+
+    if (item.isPublished())
+    {
+      doc = createContentObjectDocument(item);
+    }
+
+    return (doc != null)
+           ? new Document[] { doc }
+           : null;
+  }
+
+  //~--- get methods ----------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  @Override
+  protected String getCategory()
+  {
+    return CATEGORY;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param id
+   *
+   * @return
+   */
+  @Override
+  protected PermaObject getObject(long id)
+  {
+    return BlogContext.getDAOFactory().getPageDAO().get(id);
+  }
 }

@@ -43,6 +43,7 @@ import sonia.blog.entity.Category;
 import sonia.blog.entity.Comment;
 import sonia.blog.entity.Entry;
 import sonia.blog.entity.Page;
+import sonia.blog.entity.PermaObject;
 import sonia.blog.entity.Trackback;
 
 import sonia.cache.ClearCondition;
@@ -101,7 +102,7 @@ public class CacheListener implements DAOListener, ConfigurationListener
    * @param action
    * @param item
    */
-  public void handleEvent(Action action, Object item)
+  public void handleEvent(Action action, PermaObject item)
   {
     if (firstCall)
     {

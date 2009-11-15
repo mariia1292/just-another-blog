@@ -67,6 +67,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  *
@@ -150,8 +151,8 @@ public class SearchMapping extends ScrollableFilterMapping
           {
             int hit = Integer.parseInt(hitParam);
 
-            result = handleDetailView(request, searchParam, categories,
-                                      category, hit);
+            result = handleDetailView(request, response, searchParam,
+                                      categories, category, hit);
           }
           catch (NumberFormatException ex)
           {
@@ -184,16 +185,21 @@ public class SearchMapping extends ScrollableFilterMapping
    *
    *
    * @param request
+   * @param response
    * @param searchParam
    * @param categories
    * @param category
    * @param hit
    *
    * @return
+   *
+   * @throws IOException
    */
-  private String handleDetailView(BlogRequest request, String searchParam,
+  private String handleDetailView(BlogRequest request, BlogResponse response,
+                                  String searchParam,
                                   List<SearchCategory> categories,
                                   SearchCategory category, int hit)
+          throws IOException
   {
     List<SearchEntry> entries = category.getEntries();
     String result = null;
@@ -215,52 +221,59 @@ public class SearchMapping extends ScrollableFilterMapping
     {
       ContentObject co = entry.getData();
 
-      setDisplayContent(request, co, false);
-
-      if (co instanceof Entry)
+      if ((co != null) && co.isPublished())
       {
-        BlogBean blogBean = BlogUtil.getSessionBean(request, BlogBean.class,
-                              BlogBean.NAME);
+        setDisplayContent(request, co, false);
 
-        blogBean.setEntry(co);
-        result = buildTemplateViewId(request, Constants.TEMPLATE_DETAIL);
+        if (co instanceof Entry)
+        {
+          BlogBean blogBean = BlogUtil.getSessionBean(request, BlogBean.class,
+                                BlogBean.NAME);
+
+          blogBean.setEntry(co);
+          result = buildTemplateViewId(request, Constants.TEMPLATE_DETAIL);
+        }
+        else if (co instanceof Page)
+        {
+          PageBean pageBean = new PageBean();
+
+          pageBean.setPage((Page) co);
+          request.setAttribute(PageBean.NAME, pageBean);
+          result = buildTemplateViewId(request, Constants.TEMPLATE_PAGE);
+        }
+
+        StringBuilder prefix = new StringBuilder("/search.jab");
+
+        prefix.append("?category=").append(category.getName());
+        prefix.append("&search=").append(searchParam).append("&hit=");
+
+        String previousUri = null;
+        String nextUri = null;
+
+        if (hit > 0)
+        {
+          SearchEntry pe = entries.get(hit - 1);
+
+          previousUri = new StringBuilder(prefix).append(pe.getId()).toString();
+        }
+
+        if ((hit + 1) < entries.size())
+        {
+          SearchEntry ne = entries.get(hit + 1);
+
+          nextUri = new StringBuilder(prefix).append(ne.getId()).toString();
+        }
+
+        String detailPattern =
+          new StringBuilder(prefix).append("{0,number,#}").toString();
+
+        navigation = new SimpleMappingNavigation(previousUri, nextUri,
+                detailPattern);
       }
-      else if (co instanceof Page)
+      else
       {
-        PageBean pageBean = new PageBean();
-
-        pageBean.setPage((Page) co);
-        request.setAttribute(PageBean.NAME, pageBean);
-        result = buildTemplateViewId(request, Constants.TEMPLATE_PAGE);
+        response.sendError(HttpServletResponse.SC_NOT_FOUND);
       }
-
-      StringBuilder prefix = new StringBuilder("/search.jab");
-
-      prefix.append("?category=").append(category.getName());
-      prefix.append("&search=").append(searchParam).append("&hit=");
-
-      String previousUri = null;
-      String nextUri = null;
-
-      if (hit > 0)
-      {
-        SearchEntry pe = entries.get(hit - 1);
-
-        previousUri = new StringBuilder(prefix).append(pe.getId()).toString();
-      }
-
-      if ((hit + 1) < entries.size())
-      {
-        SearchEntry ne = entries.get(hit + 1);
-
-        nextUri = new StringBuilder(prefix).append(ne.getId()).toString();
-      }
-
-      String detailPattern =
-        new StringBuilder(prefix).append("{0,number,#}").toString();
-
-      navigation = new SimpleMappingNavigation(previousUri, nextUri,
-              detailPattern);
     }
 
     return result;

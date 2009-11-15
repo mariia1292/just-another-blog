@@ -43,6 +43,7 @@ import sonia.blog.api.mapping.MappingNavigation;
 import sonia.blog.entity.Attachment;
 import sonia.blog.entity.Blog;
 import sonia.blog.entity.Category;
+import sonia.blog.entity.Comment;
 import sonia.blog.entity.ContentObject;
 import sonia.blog.entity.Entry;
 import sonia.blog.entity.Page;
@@ -271,6 +272,13 @@ public class DefaultLinkBuilder implements LinkBuilder
     else if (object instanceof User)
     {
       link.append("/author/").append(object.getId()).append("/index.jab");
+    }
+    else if (object instanceof Comment)
+    {
+      Comment c = (Comment) object;
+
+      link.append("/list/").append(c.getEntry().getId()).append(".jab#");
+      link.append(c.getId());
     }
 
     return link.toString();

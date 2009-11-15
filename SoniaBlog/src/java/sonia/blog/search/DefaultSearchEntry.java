@@ -39,10 +39,12 @@ import org.apache.lucene.document.DateTools;
 import org.apache.lucene.document.Document;
 
 import sonia.blog.api.app.BlogContext;
+import sonia.blog.api.dao.CommentDAO;
 import sonia.blog.api.dao.EntryDAO;
 import sonia.blog.api.dao.PageDAO;
 import sonia.blog.api.search.SearchEntry;
 import sonia.blog.entity.Blog;
+import sonia.blog.entity.Comment;
 import sonia.blog.entity.ContentObject;
 import sonia.blog.entity.Entry;
 import sonia.blog.entity.Page;
@@ -204,20 +206,29 @@ public class DefaultSearchEntry implements SearchEntry
       try
       {
         Class clazz = Class.forName(document.get("type"));
+        Long id = Long.parseLong(document.get("id"));
 
         if (clazz.equals(Entry.class))
         {
           EntryDAO entryDAO = BlogContext.getDAOFactory().getEntryDAO();
-          Long id = Long.parseLong(document.get("id"));
 
           data = entryDAO.get(id);
         }
         else if (clazz.equals(Page.class))
         {
           PageDAO pageDAO = BlogContext.getDAOFactory().getPageDAO();
-          Long id = Long.parseLong(document.get("id"));
 
           data = pageDAO.get(id);
+        }
+        else if (clazz.equals(Comment.class))
+        {
+          CommentDAO commentDAO = BlogContext.getDAOFactory().getCommentDAO();
+          Comment comment = commentDAO.get(id);
+
+          if (comment != null)
+          {
+            data = comment.getEntry();
+          }
         }
       }
       catch (Exception ex)

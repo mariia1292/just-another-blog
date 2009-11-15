@@ -41,7 +41,7 @@ import java.util.Date;
  *
  * @author Sebastian Sdorra
  */
-public class BlogHitCount
+public class BlogHitCount implements PermaObject
 {
 
   /**

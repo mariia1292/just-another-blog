@@ -31,47 +31,33 @@
 
 
 
-package sonia.blog.dao.jpa;
+package sonia.blog.search;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import sonia.blog.api.app.Constants;
-import sonia.blog.api.dao.TrackbackDAO;
+import org.apache.lucene.document.Document;
+
+import sonia.blog.api.app.BlogContext;
+import sonia.blog.entity.Comment;
 import sonia.blog.entity.Entry;
-import sonia.blog.entity.Trackback;
+import sonia.blog.entity.PermaObject;
+
+import sonia.util.Util;
 
 //~--- JDK imports ------------------------------------------------------------
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Logger;
-
-import javax.persistence.Query;
 
 /**
  *
  * @author Sebastian Sdorra
  */
-public class JpaTrackbackDAO extends JpaGenericDAO<Trackback>
-        implements TrackbackDAO
+public class EntryIndexHandler extends ContentObjectIndexHandler<Entry>
 {
 
   /** Field description */
-  private static Logger logger =
-    Logger.getLogger(JpaTrackbackDAO.class.getName());
-
-  //~--- constructors ---------------------------------------------------------
-
-  /**
-   * Constructs ...
-   *
-   *
-   *
-   * @param strategy
-   */
-  public JpaTrackbackDAO(JpaStrategy strategy)
-  {
-    super(strategy, Trackback.class, Constants.LISTENER_TRACKBACK);
-  }
+  public static final String CATEGORY = "entry";
 
   //~--- methods --------------------------------------------------------------
 
@@ -79,32 +65,44 @@ public class JpaTrackbackDAO extends JpaGenericDAO<Trackback>
    * Method description
    *
    *
-   * @return
-   */
-  public long count()
-  {
-    return countQuery("Trackback.count");
-  }
-
-  /**
-   * Method description
-   *
-   *
-   * @param entry
-   * @param type
-   * @param url
+   * @param item
    *
    * @return
    */
-  public long count(Entry entry, int type, String url)
+  @Override
+  @SuppressWarnings("unchecked")
+  protected Document[] createDocuments(Entry item)
   {
-    Query q = strategy.getNamedQuery("Trackback.countByEntryTypeAndUrl", false);
+    List<Document> docList = new ArrayList<Document>();
 
-    q.setParameter("entry", entry);
-    q.setParameter("type", type);
-    q.setParameter("url", url);
+    if (item.isPublished())
+    {
+      Document doc = createContentObjectDocument(item);
 
-    return (Long) q.getSingleResult();
+      docList.add(doc);
+
+      List<Comment> comments =
+        BlogContext.getDAOFactory().getCommentDAO().findAllActivesByEntry(item);
+
+      if (Util.hasContent(comments))
+      {
+        IndexHandler<Comment> commentHandler =
+          (IndexHandler<Comment>) IndexHandlerFactory.getInstance().get(
+              Comment.class);
+
+        for (Comment comment : comments)
+        {
+          Document[] docs = commentHandler.createDocuments(comment);
+
+          for (Document d : docs)
+          {
+            docList.add(d);
+          }
+        }
+      }
+    }
+
+    return docList.toArray(new Document[0]);
   }
 
   //~--- get methods ----------------------------------------------------------
@@ -115,72 +113,23 @@ public class JpaTrackbackDAO extends JpaGenericDAO<Trackback>
    *
    * @return
    */
-  public List<Trackback> getAll()
+  @Override
+  protected String getCategory()
   {
-    return findList("Trackback.getAll");
+    return CATEGORY;
   }
 
   /**
    * Method description
    *
    *
-   * @param start
-   * @param max
-   *
-   * @return
-   */
-  public List<Trackback> getAll(int start, int max)
-  {
-    return findList("Trackback.getAll", start, max);
-  }
-
-  /**
-   * Method description
-   *
-   *
-   * @param entry
-   *
-   * @return
-   */
-  public List<Trackback> getAll(Entry entry)
-  {
-    Query q = strategy.getNamedQuery("Trackback.getAllByEntry", false);
-
-    q.setParameter("entry", entry);
-
-    return excecuteListQuery(q);
-  }
-
-  /**
-   * Method description
-   *
-   *
-   * @param entry
-   * @param start
-   * @param max
-   *
-   * @return
-   */
-  public List<Trackback> getAll(Entry entry, int start, int max)
-  {
-    Query q = strategy.getNamedQuery("Trackback.getAllByEntry", false);
-
-    q.setParameter("entry", entry);
-    q.setFirstResult(start);
-    q.setMaxResults(max);
-
-    return excecuteListQuery(q);
-  }
-
-  /**
-   * Method description
-   *
+   * @param id
    *
    * @return
    */
   @Override
-  protected Logger getLogger()
+  protected PermaObject getObject(long id)
   {
-    return logger;
+    return BlogContext.getDAOFactory().getEntryDAO().get(id);
   }
 }
