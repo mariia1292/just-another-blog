@@ -52,6 +52,7 @@ import org.apache.lucene.search.highlight.TextFragment;
 import org.apache.lucene.search.highlight.TokenSources;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
+import org.apache.lucene.util.Version;
 
 import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.app.BlogSession;
@@ -144,9 +145,10 @@ public class DefaultSearchProvider implements SearchProvider
           searcher = new IndexSearcher(reader);
 
           Analyzer analyzer = SearchHelper.getAnalyzer(locale);
-          QueryParser parser = new MultiFieldQueryParser(new String[] {
-                                 "content",
-                                 "title" }, analyzer);
+          QueryParser parser =
+            new MultiFieldQueryParser(Version.LUCENE_CURRENT,
+                                      new String[] { "content",
+                  "title" }, analyzer);
           Query query = parser.parse(queryString);
 
           if (logger.isLoggable(Level.FINER))

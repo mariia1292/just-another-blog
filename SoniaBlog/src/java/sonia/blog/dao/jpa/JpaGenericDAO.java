@@ -42,6 +42,7 @@ import sonia.blog.api.dao.DAOListener.Action;
 import sonia.blog.api.dao.GenericDAO;
 import sonia.blog.api.exception.BlogSecurityException;
 import sonia.blog.entity.Blog;
+import sonia.blog.entity.PermaObject;
 
 import sonia.plugin.service.ServiceReference;
 
@@ -60,7 +61,8 @@ import javax.persistence.Query;
  *
  * @param <T>
  */
-public abstract class JpaGenericDAO<T> implements GenericDAO<T>
+public abstract class JpaGenericDAO<T extends PermaObject>
+        implements GenericDAO<T>
 {
 
   /** Field description */
@@ -505,7 +507,7 @@ public abstract class JpaGenericDAO<T> implements GenericDAO<T>
    * @param action
    * @param object
    */
-  protected void fireEvent(Action action, Object object)
+  protected void fireEvent(Action action, PermaObject object)
   {
     List<DAOListener> listeners = reference.getAll();
 

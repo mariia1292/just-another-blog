@@ -161,7 +161,7 @@ public class SearchHelper
 
     if (Locale.GERMAN.equals(locale) || Locale.GERMANY.equals(locale))
     {
-      analyzer = new GermanAnalyzer();
+      analyzer = new GermanAnalyzer(Version.LUCENE_CURRENT);
     }
     else
     {

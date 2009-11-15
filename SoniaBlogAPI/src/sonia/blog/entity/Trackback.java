@@ -35,7 +35,6 @@ package sonia.blog.entity;
 
 //~--- JDK imports ------------------------------------------------------------
 
-import java.io.Serializable;
 
 import java.util.Date;
 
@@ -43,7 +42,7 @@ import java.util.Date;
  *
  * @author Sebastian Sdorra
  */
-public class Trackback implements Serializable
+public class Trackback implements PermaObject
 {
 
   /** Field description */

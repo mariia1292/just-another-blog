@@ -35,6 +35,7 @@ package sonia.blog.search;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.store.Directory;
@@ -46,7 +47,6 @@ import sonia.blog.api.app.Constants;
 import sonia.blog.api.dao.EntryDAO;
 import sonia.blog.api.dao.PageDAO;
 import sonia.blog.entity.Blog;
-import sonia.blog.entity.ContentObject;
 import sonia.blog.entity.Entry;
 import sonia.blog.entity.Page;
 
@@ -57,9 +57,9 @@ import sonia.util.Util;
 //~--- JDK imports ------------------------------------------------------------
 
 import java.io.File;
-import java.io.IOException;
 
 import java.util.List;
+import java.util.concurrent.Semaphore;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -100,16 +100,25 @@ public class ReIndexJob implements BlogJob
   public void excecute() throws JobException
   {
     IndexWriter writer = null;
+    Semaphore lock = null;
+    File file = BlogContext.getInstance().getResourceManager().getDirectory(
+                    Constants.RESOURCE_INDEX, blog);
 
     try
     {
-      File file = BlogContext.getInstance().getResourceManager().getDirectory(
-                      Constants.RESOURCE_INDEX, blog);
-
       if (!file.exists() &&!file.mkdirs())
       {
         throw new JobException("could not create index directory");
       }
+
+      lock = IndexHandlerFactory.getInstance().getLock(file);
+
+      IndexHandler<Entry> entryHandler =
+        (IndexHandler<Entry>) IndexHandlerFactory.getInstance().get(
+            Entry.class);
+      Analyzer analyzer = entryHandler.getAnalyzer(blog);
+
+      lock.acquire();
 
       Directory directory = FSDirectory.open(file);
 
@@ -118,13 +127,54 @@ public class ReIndexJob implements BlogJob
 
       EntryDAO entryDAO = BlogContext.getDAOFactory().getEntryDAO();
       List<Entry> entries = entryDAO.findAllActivesByBlog(blog);
+      int counter = 0;
 
-      addObjects(entries, writer);
+      if (Util.hasContent(entries))
+      {
+        for (Entry e : entries)
+        {
+          Document[] docs = entryHandler.createDocuments(e);
 
+          if (docs != null)
+          {
+            for (Document doc : docs)
+            {
+              writer.addDocument(doc, analyzer);
+              counter++;
+            }
+          }
+        }
+      }
+
+      IndexHandler<Page> pageHandler =
+        (IndexHandler<Page>) IndexHandlerFactory.getInstance().get(Page.class);
       PageDAO pageDAO = BlogContext.getDAOFactory().getPageDAO();
       List<Page> pages = pageDAO.getAllByBlog(blog, true);
 
-      addObjects(pages, writer);
+      if (Util.hasContent(pages))
+      {
+        for (Page p : pages)
+        {
+          Document[] docs = pageHandler.createDocuments(p);
+
+          if (docs != null)
+          {
+            for (Document doc : docs)
+            {
+              writer.addDocument(doc, analyzer);
+              counter++;
+            }
+          }
+        }
+      }
+
+      if (logger.isLoggable(Level.FINER))
+      {
+        StringBuffer msg = new StringBuffer("added ");
+
+        msg.append(counter).append(" documents to index");
+        logger.finest(msg.toString());
+      }
     }
     catch (Exception ex)
     {
@@ -143,6 +193,19 @@ public class ReIndexJob implements BlogJob
         {
           logger.log(Level.SEVERE, null, ex);
         }
+      }
+
+      if (lock != null)
+      {
+        if (logger.isLoggable(Level.FINEST))
+        {
+          StringBuffer msg = new StringBuffer();
+
+          msg.append("release lock for ").append(file.getPath());
+          logger.finest(msg.toString());
+        }
+
+        lock.release();
       }
     }
   }
@@ -184,39 +247,6 @@ public class ReIndexJob implements BlogJob
   public String getName()
   {
     return "reindex";
-  }
-
-  //~--- methods --------------------------------------------------------------
-
-  /**
-   * Method description
-   *
-   *
-   * @param objects
-   * @param writer
-   */
-  private void addObjects(List<? extends ContentObject> objects,
-                          IndexWriter writer)
-  {
-    if (Util.hasContent(objects))
-    {
-      for (ContentObject co : objects)
-      {
-        try
-        {
-          Document doc = SearchHelper.buildDocument(co);
-
-          if (doc != null)
-          {
-            writer.addDocument(doc);
-          }
-        }
-        catch (IOException ex)
-        {
-          logger.log(Level.SEVERE, null, ex);
-        }
-      }
-    }
   }
 
   //~--- fields ---------------------------------------------------------------

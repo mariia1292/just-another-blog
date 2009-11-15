@@ -35,6 +35,7 @@
   </service>
   
   <service class="sonia.blog.api.dao.DAOListener" path="/listener/comment">
+    <impl class="sonia.blog.search.SearchIndexListener" />
     <impl class="sonia.blog.util.CacheListener" />
   </service>
 
@@ -43,14 +44,14 @@
   </service>
   
   <service class="sonia.blog.api.dao.DAOListener" path="/listener/entry">
-    <impl class="sonia.blog.search.ContentObjectIndexListener" />
+    <impl class="sonia.blog.search.SearchIndexListener" />
     <impl class="sonia.blog.util.CacheListener" />
   </service>
   
   <service class="sonia.blog.api.dao.DAOListener" path="/listener/blogHitCount" />
 
   <service class="sonia.blog.api.dao.DAOListener" path="/listener/page">
-    <impl class="sonia.blog.search.ContentObjectIndexListener" />
+    <impl class="sonia.blog.search.SearchIndexListener" />
     <impl class="sonia.blog.util.CacheListener" />
   </service>
 
