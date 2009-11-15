@@ -66,6 +66,18 @@ public interface GenericDAO<T>
    * Method description
    *
    *
+   * @param session
+   * @param item
+   * @param notifyListener
+   *
+   * @return
+   */
+  public boolean add(BlogSession session, T item, boolean notifyListener);
+
+  /**
+   * Method description
+   *
+   *
    * @return
    */
   public long count();
@@ -86,6 +98,18 @@ public interface GenericDAO<T>
    * Method description
    *
    *
+   * @param session
+   * @param item
+   * @param notifyListener
+   *
+   * @return
+   */
+  public boolean edit(BlogSession session, T item, boolean notifyListener);
+
+  /**
+   * Method description
+   *
+   *
    *
    * @param session
    * @param item
@@ -93,6 +117,18 @@ public interface GenericDAO<T>
    * @return
    */
   public boolean remove(BlogSession session, T item);
+
+  /**
+   * Method description
+   *
+   *
+   * @param session
+   * @param item
+   * @param notifyListener
+   *
+   * @return
+   */
+  public boolean remove(BlogSession session, T item, boolean notifyListener);
 
   //~--- get methods ----------------------------------------------------------
 

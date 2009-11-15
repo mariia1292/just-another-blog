@@ -107,12 +107,13 @@ public class JpaBlogDAO extends JpaGenericDAO<Blog> implements BlogDAO
    *
    * @param session
    * @param blog
+   * @param notifyListener
    *
    * @return
    */
   @Override
   @SuppressWarnings("unchecked")
-  public boolean remove(BlogSession session, Blog blog)
+  public boolean remove(BlogSession session, Blog blog, boolean notifyListener)
   {
     if (!isPrivileged(session, blog, ACTION_REMOVE))
     {
@@ -121,7 +122,10 @@ public class JpaBlogDAO extends JpaGenericDAO<Blog> implements BlogDAO
       throw new BlogSecurityException("Admin Session is required");
     }
 
-    fireEvent(Action.PREREMOVE, blog);
+    if (notifyListener)
+    {
+      fireEvent(Action.PREREMOVE, blog);
+    }
 
     boolean result = false;
 
@@ -140,7 +144,11 @@ public class JpaBlogDAO extends JpaGenericDAO<Blog> implements BlogDAO
 
       strategy.remove(blog);
       strategy.flush();
-      fireEvent(Action.POSTREMOVE, blog);
+
+      if (notifyListener)
+      {
+        fireEvent(Action.POSTREMOVE, blog);
+      }
 
       ResourceManager resManager =
         BlogContext.getInstance().getResourceManager();
