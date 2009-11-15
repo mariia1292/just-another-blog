@@ -196,28 +196,17 @@ public class EntryBean extends AbstractEditorBean
     LinkBuilder linkBuilder = BlogContext.getInstance().getLinkBuilder();
     String uri = linkBuilder.getRelativeLink(request, "/entry-preview.jab");
 
-    entry.setPublishingDate(new Date());
-    entry.setAuthor(request.getUser());
+    if (entry.getPublishingDate() == null)
+    {
+      entry.setPublishingDate(new Date());
+    }
+
+    if (entry.getAuthor() == null)
+    {
+      entry.setAuthor(request.getUser());
+    }
+
     sendRedirect(uri);
-  }
-
-  /**
-   * Method description
-   *
-   *
-   * @return
-   */
-  public String publish()
-  {
-    entry.publish();
-
-    Blog blog = getRequest().getCurrentBlog();
-    ResourceBundle bundle = getResourceBundle("message");
-    BlogJob job = new NotificationJob(bundle, blog, entry);
-
-    BlogContext.getInstance().getJobQueue().add(job);
-
-    return save();
   }
 
   /**
@@ -302,6 +291,11 @@ public class EntryBean extends AbstractEditorBean
 
         if (entryDAO.add(session, entry))
         {
+          ResourceBundle bundle = getResourceBundle("message");
+          BlogJob job = new NotificationJob(bundle, request.getCurrentBlog(),
+                                            entry);
+
+          BlogContext.getInstance().getJobQueue().add(job);
           doTrackback(request.getCurrentBlog());
           getMessageHandler().info(request, "createEntrySuccess");
         }
@@ -331,19 +325,6 @@ public class EntryBean extends AbstractEditorBean
     }
 
     return result;
-  }
-
-  /**
-   * Method description
-   *
-   *
-   * @return
-   */
-  public String saveDraft()
-  {
-    entry.setPublished(false);
-
-    return save();
   }
 
   /**

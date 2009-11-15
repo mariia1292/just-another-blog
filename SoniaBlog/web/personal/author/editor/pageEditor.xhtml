@@ -84,6 +84,10 @@
               <h:message for="content" />
             </h:panelGroup>
 
+            <h:outputLabel for="publish" value="#{label.publish}" />
+            <h:selectBooleanCheckbox id="publish" value="#{PageAuthorBean.page.published}" />
+            <h:message for="publish" />
+
           </h:panelGrid>
 
           <h2><h:outputText value="#{label.navigation}" /></h2>
@@ -116,9 +120,8 @@
             <h:message for="navigationPos" />
 
           </h:panelGrid>
-
-          <h:commandButton value="#{label.publish}" action="#{PageAuthorBean.publish}" />
-          <h:commandButton value="#{label.saveDraft}" action="#{PageAuthorBean.saveDraft}" />
+          
+          <h:commandButton value="#{label.save}" action="#{PageAuthorBean.save}" />
           <t:commandButton target="_blank" value="#{label.preview}" actionListener="#{PageAuthorBean.preview}" />
           <h:commandButton value="#{label.remove}" action="#{PageAuthorBean.remove}" rendered="#{!PageAuthorBean.new}" />
 

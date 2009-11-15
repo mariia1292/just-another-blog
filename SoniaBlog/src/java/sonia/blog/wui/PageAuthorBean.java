@@ -165,23 +165,17 @@ public class PageAuthorBean extends AbstractEditorBean
     LinkBuilder linkBuilder = BlogContext.getInstance().getLinkBuilder();
     String uri = linkBuilder.buildLink(request, "/page-preview.jab");
 
-    page.setPublishingDate(new Date());
-    page.setAuthor(request.getUser());
+    if (page.getPublishingDate() == null)
+    {
+      page.setPublishingDate(new Date());
+    }
+
+    if (page.getAuthor() == null)
+    {
+      page.setAuthor(request.getUser());
+    }
+
     sendRedirect(uri);
-  }
-
-  /**
-   * Method description
-   *
-   *
-   * @return
-   */
-  public String publish()
-  {
-    page.setPublished(true);
-    page.setPublishingDate(new Date());
-
-    return save();
   }
 
   /**
@@ -277,19 +271,6 @@ public class PageAuthorBean extends AbstractEditorBean
     }
 
     return result;
-  }
-
-  /**
-   * Method description
-   *
-   *
-   * @return
-   */
-  public String saveDraft()
-  {
-    page.setPublished(false);
-
-    return save();
   }
 
   //~--- get methods ----------------------------------------------------------
