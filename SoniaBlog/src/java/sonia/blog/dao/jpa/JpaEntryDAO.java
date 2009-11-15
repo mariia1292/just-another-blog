@@ -40,6 +40,7 @@ import sonia.blog.api.app.BlogSession;
 import sonia.blog.api.app.Constants;
 import sonia.blog.api.dao.DAOListener.Action;
 import sonia.blog.api.dao.EntryDAO;
+import sonia.blog.api.exception.BlogSecurityException;
 import sonia.blog.entity.Attachment;
 import sonia.blog.entity.Blog;
 import sonia.blog.entity.Category;
@@ -503,13 +504,24 @@ public class JpaEntryDAO extends JpaGenericDAO<Entry> implements EntryDAO
    *
    * @param session
    * @param item
+   * @param notifyListener
    *
    * @return
    */
   @Override
-  public boolean remove(BlogSession session, Entry item)
+  public boolean remove(BlogSession session, Entry item, boolean notifyListener)
   {
-    fireEvent(Action.PREREMOVE, item);
+    if (!isPrivileged(session, item, ACTION_REMOVE))
+    {
+      logUnprivilegedMessage(session, item, ACTION_REMOVE);
+
+      throw new BlogSecurityException("Author session is required");
+    }
+
+    if (notifyListener)
+    {
+      fireEvent(Action.PREREMOVE, item);
+    }
 
     boolean result = false;
 
@@ -537,7 +549,12 @@ public class JpaEntryDAO extends JpaGenericDAO<Entry> implements EntryDAO
 
       strategy.remove(item);
       strategy.flush();
-      fireEvent(Action.POSTREMOVE, item);
+
+      if (notifyListener)
+      {
+        fireEvent(Action.POSTREMOVE, item);
+      }
+
       result = true;
     }
     catch (Exception ex)

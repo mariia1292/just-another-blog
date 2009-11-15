@@ -118,7 +118,7 @@ public class JpaPageDAO extends JpaGenericDAO<Page> implements PageDAO
    * @return
    */
   @Override
-  public boolean remove(BlogSession session, Page item)
+  public boolean remove(BlogSession session, Page item, boolean notifyListener)
   {
     if (!isPrivileged(session, item, ACTION_REMOVE))
     {
@@ -127,7 +127,9 @@ public class JpaPageDAO extends JpaGenericDAO<Page> implements PageDAO
       throw new BlogSecurityException("Author session is required");
     }
 
+    if ( notifyListener ){
     fireEvent(Action.PREREMOVE, item);
+    }
 
     boolean result = false;
 
@@ -145,7 +147,9 @@ public class JpaPageDAO extends JpaGenericDAO<Page> implements PageDAO
 
       strategy.remove(item);
       strategy.flush();
+      if ( notifyListener ){
       fireEvent(Action.POSTREMOVE, item);
+      }
       result = true;
     }
     catch (Exception ex)

@@ -113,13 +113,28 @@ public abstract class JpaGenericDAO<T extends PermaObject>
    * Method description
    *
    *
-   *
    * @param session
    * @param item
    *
    * @return
    */
   public boolean add(BlogSession session, T item)
+  {
+    return add(session, item, true);
+  }
+
+  /**
+   * Method description
+   *
+   *
+   *
+   * @param session
+   * @param item
+   * @param notifyListener
+   *
+   * @return
+   */
+  public boolean add(BlogSession session, T item, boolean notifyListener)
   {
     if (!isPrivileged(session, item, ACTION_ADD))
     {
@@ -130,7 +145,10 @@ public abstract class JpaGenericDAO<T extends PermaObject>
 
     Logger logger = getLogger();
 
-    fireEvent(Action.PREADD, item);
+    if (notifyListener)
+    {
+      fireEvent(Action.PREADD, item);
+    }
 
     boolean result = true;
 
@@ -148,7 +166,10 @@ public abstract class JpaGenericDAO<T extends PermaObject>
         logger.finer(msg.toString());
       }
 
-      fireEvent(Action.POSTADD, item);
+      if (notifyListener)
+      {
+        fireEvent(Action.POSTADD, item);
+      }
     }
     catch (Exception ex)
     {
@@ -163,13 +184,28 @@ public abstract class JpaGenericDAO<T extends PermaObject>
    * Method description
    *
    *
-   *
    * @param session
    * @param item
    *
    * @return
    */
   public boolean edit(BlogSession session, T item)
+  {
+    return edit(session, item, true);
+  }
+
+  /**
+   * Method description
+   *
+   *
+   *
+   * @param session
+   * @param item
+   * @param notifyListener
+   *
+   * @return
+   */
+  public boolean edit(BlogSession session, T item, boolean notifyListener)
   {
     if (!isPrivileged(session, item, ACTION_EDIT))
     {
@@ -180,7 +216,10 @@ public abstract class JpaGenericDAO<T extends PermaObject>
 
     Logger logger = getLogger();
 
-    fireEvent(Action.PREUPDATE, item);
+    if (notifyListener)
+    {
+      fireEvent(Action.PREUPDATE, item);
+    }
 
     boolean result = true;
 
@@ -198,7 +237,10 @@ public abstract class JpaGenericDAO<T extends PermaObject>
         logger.finer(msg.toString());
       }
 
-      fireEvent(Action.POSTUPDATE, item);
+      if (notifyListener)
+      {
+        fireEvent(Action.POSTUPDATE, item);
+      }
     }
     catch (Exception ex)
     {
@@ -213,13 +255,28 @@ public abstract class JpaGenericDAO<T extends PermaObject>
    * Method description
    *
    *
-   *
    * @param session
    * @param item
    *
    * @return
    */
   public boolean remove(BlogSession session, T item)
+  {
+    return remove(session, item, true);
+  }
+
+  /**
+   * Method description
+   *
+   *
+   *
+   * @param session
+   * @param item
+   * @param notifyListener
+   *
+   * @return
+   */
+  public boolean remove(BlogSession session, T item, boolean notifyListener)
   {
     if (!isPrivileged(session, item, ACTION_REMOVE))
     {

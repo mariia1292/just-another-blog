@@ -695,7 +695,7 @@ public class EntryBean extends AbstractEditorBean
 
     if (entry.getId() != null)
     {
-      BlogContext.getDAOFactory().getEntryDAO().edit(session, entry);
+      BlogContext.getDAOFactory().getEntryDAO().edit(session, entry, false);
     }
 
     for (Tag rt : removeAbleTags)
