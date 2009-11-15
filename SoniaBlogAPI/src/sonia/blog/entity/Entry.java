@@ -629,6 +629,7 @@ public class Entry implements Serializable, ContentObject, CommentAble
   public void setPublished(boolean published)
   {
     this.published = published;
+    this.publishingDate = new Date();
   }
 
   /**

@@ -447,6 +447,7 @@ public class Page
   public void setPublished(boolean published)
   {
     this.published = published;
+    this.publishingDate = new Date();
   }
 
   /**

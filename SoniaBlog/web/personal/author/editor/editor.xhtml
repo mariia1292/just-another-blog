@@ -74,10 +74,13 @@
               </h:form>
             </h:panelGroup>
 
+            <h:outputLabel for="publish" value="#{label.publish}" />
+            <h:selectBooleanCheckbox id="publish" value="#{EntryBean.entry.published}" />
+            <h:message for="publish" />
+
           </h:panelGrid>
 
-          <h:commandButton value="#{label.publish}" action="#{EntryBean.publish}" />
-          <h:commandButton value="#{label.saveDraft}" action="#{EntryBean.saveDraft}" />
+          <h:commandButton value="#{label.save}" action="#{EntryBean.save}" />
           <t:commandButton target="_blank" value="#{label.preview}" actionListener="#{EntryBean.preview}" />
           <h:commandButton value="#{label.remove}" action="#{EntryBean.remove}" rendered="#{!EntryBean.new}" />
 

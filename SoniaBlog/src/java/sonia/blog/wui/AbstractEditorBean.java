@@ -132,14 +132,6 @@ public abstract class AbstractEditorBean extends AbstractBean
    */
   public abstract String save();
 
-  /**
-   * Method description
-   *
-   *
-   * @return
-   */
-  public abstract String saveDraft();
-
   //~--- get methods ----------------------------------------------------------
 
   /**
@@ -297,7 +289,7 @@ public abstract class AbstractEditorBean extends AbstractBean
     }
     else
     {
-      saveDraft();
+      save();
     }
 
     if (unzipFiles && uploadedFile.getName().endsWith(".zip"))
