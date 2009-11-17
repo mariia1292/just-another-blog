@@ -659,7 +659,7 @@ public class EntryBean extends AbstractEditorBean
 
         if (t == null)
         {
-          t = tagDAO.findByName(tag);
+          t = tagDAO.get(tag);
         }
 
         if (t == null)

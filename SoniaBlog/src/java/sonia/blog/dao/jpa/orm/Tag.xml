@@ -10,17 +10,17 @@
   <package>sonia.blog.entity</package>
   <entity metadata-complete="true" name="Tag" class="sonia.blog.entity.Tag">
     <table name="JAB_TAG" />
-    <named-query name="Tag.findAll">
+    <named-query name="Tag.getAll">
       <query>
         select t from Tag t
       </query>
     </named-query>
-    <named-query name="Tag.findByBlog">
+    <named-query name="Tag.getByBlog">
       <query>
         select t from Tag t join t.entries e join e.blog b where b = :blog and e.published = true group by t
       </query>
     </named-query>
-    <named-query name="Tag.findByName">
+    <named-query name="Tag.getByName">
       <query>
         select t from Tag t where t.name = :name
       </query>
@@ -35,7 +35,7 @@
         select count(t) from Tag t join t.entries e join e.blog b where b = :blog group by t.name
       </query>
     </named-query>
-    <named-query name="Tag.findByBlogAndCount">
+    <named-query name="Tag.getByBlogAndCount">
       <query>
         select new sonia.blog.api.util.TagWrapper(t, count(t)) from Tag t join t.entries e join e.blog b where b = :blog and e.published = true group by t
       </query>

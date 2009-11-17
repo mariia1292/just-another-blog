@@ -94,9 +94,9 @@ public class JpaTagDAO extends JpaGenericDAO<Tag> implements TagDAO
    *
    * @return
    */
-  public List<Tag> findAllByBlog(Blog blog)
+  public List<Tag> getAll(Blog blog)
   {
-    return findList("Tag.findAllByBlog", blog);
+    return findList("Tag.getAllByBlog", blog);
   }
 
   /**
@@ -109,9 +109,9 @@ public class JpaTagDAO extends JpaGenericDAO<Tag> implements TagDAO
    *
    * @return
    */
-  public List<Tag> findAllByBlog(Blog blog, int start, int max)
+  public List<Tag> getAll(Blog blog, int start, int max)
   {
-    return findList("Tag.findAllByBlog", blog, start, max);
+    return findList("Tag.getAllByBlog", blog, start, max);
   }
 
   /**
@@ -122,9 +122,9 @@ public class JpaTagDAO extends JpaGenericDAO<Tag> implements TagDAO
    *
    * @return
    */
-  public List<TagWrapper> findByBlogAndCount(Blog blog)
+  public List<TagWrapper> getTagCount(Blog blog)
   {
-    return findByBlogAndCount(blog, -1, -1);
+    return getTagCount(blog, -1, -1);
   }
 
   /**
@@ -138,10 +138,10 @@ public class JpaTagDAO extends JpaGenericDAO<Tag> implements TagDAO
    * @return
    */
   @SuppressWarnings("unchecked")
-  public List<TagWrapper> findByBlogAndCount(Blog blog, int start, int max)
+  public List<TagWrapper> getTagCount(Blog blog, int start, int max)
   {
     List<TagWrapper> tags = null;
-    Query q = strategy.getNamedQuery("Tag.findByBlogAndCount", false);
+    Query q = strategy.getNamedQuery("Tag.getByBlogAndCount", false);
 
     q.setParameter("blog", blog);
 
@@ -172,10 +172,10 @@ public class JpaTagDAO extends JpaGenericDAO<Tag> implements TagDAO
    *
    * @return
    */
-  public Tag findByName(String name)
+  public Tag get(String name)
   {
     Tag tag = null;
-    Query q = strategy.getNamedQuery("Tag.findByName", false);
+    Query q = strategy.getNamedQuery("Tag.getByName", false);
 
     q.setParameter("name", name);
 
@@ -198,7 +198,7 @@ public class JpaTagDAO extends JpaGenericDAO<Tag> implements TagDAO
    */
   public List<Tag> getAll()
   {
-    return findList("Tag.findAll");
+    return findList("Tag.getAll");
   }
 
   /**
@@ -212,7 +212,7 @@ public class JpaTagDAO extends JpaGenericDAO<Tag> implements TagDAO
    */
   public List<Tag> getAll(int start, int max)
   {
-    return findList("Tag.findAll", start, max);
+    return findList("Tag.getAll", start, max);
   }
 
   /**
