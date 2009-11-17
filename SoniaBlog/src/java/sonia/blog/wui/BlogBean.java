@@ -474,7 +474,7 @@ public class BlogBean extends AbstractBean
     tags = new ListDataModel();
 
     TagDAO tagDAO = BlogContext.getDAOFactory().getTagDAO();
-    List<Tag> tagList = tagDAO.findAllByBlog(getRequest().getCurrentBlog());
+    List<Tag> tagList = tagDAO.getAll(getRequest().getCurrentBlog());
 
     if ((tagList != null) &&!tagList.isEmpty())
     {

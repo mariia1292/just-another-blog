@@ -108,7 +108,7 @@ public class TagCloudRenderer extends BaseRenderer
 
       writer.writeAttribute("id", id, null);
 
-      List<TagWrapper> tags = tagDAO.findByBlogAndCount(blog);
+      List<TagWrapper> tags = tagDAO.getTagCount(blog);
 
       if ((tags != null) &&!tags.isEmpty())
       {

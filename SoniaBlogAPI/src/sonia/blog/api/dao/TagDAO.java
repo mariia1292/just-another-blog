@@ -58,7 +58,7 @@ public interface TagDAO extends GenericDAO<Tag>
    *
    * @return
    */
-  public List<Tag> findAllByBlog(Blog blog);
+  public List<Tag> getAll(Blog blog);
 
   /**
    * Method description
@@ -70,7 +70,7 @@ public interface TagDAO extends GenericDAO<Tag>
    *
    * @return
    */
-  public List<Tag> findAllByBlog(Blog blog, int start, int max);
+  public List<Tag> getAll(Blog blog, int start, int max);
 
   /**
    * Method description
@@ -80,7 +80,7 @@ public interface TagDAO extends GenericDAO<Tag>
    *
    * @return
    */
-  public List<TagWrapper> findByBlogAndCount(Blog blog);
+  public List<TagWrapper> getTagCount(Blog blog);
 
   /**
    * Method description
@@ -92,7 +92,7 @@ public interface TagDAO extends GenericDAO<Tag>
    *
    * @return
    */
-  public List<TagWrapper> findByBlogAndCount(Blog blog, int start, int max);
+  public List<TagWrapper> getTagCount(Blog blog, int start, int max);
 
   /**
    * Method description
@@ -102,5 +102,5 @@ public interface TagDAO extends GenericDAO<Tag>
    * @param name
    * @return
    */
-  public Tag findByName(String name);
+  public Tag get(String name);
 }
