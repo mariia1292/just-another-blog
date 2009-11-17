@@ -452,7 +452,7 @@ public class CalendarRenderer extends BaseRenderer
    */
   private List<Date> getEntryDates(Blog blog, Date startDate, Date endDate)
   {
-    return BlogContext.getDAOFactory().getEntryDAO().findAllCalendarDates(blog,
+    return BlogContext.getDAOFactory().getEntryDAO().getAllCalendarDates(blog,
             startDate, endDate);
   }
 

@@ -96,7 +96,7 @@ public class CalendarMapping extends FinalMapping
     int month = calendar.get(Calendar.MONTH);
     Date startDate = BlogUtil.createStartDate(year, month);
     Date endData = BlogUtil.createEndDate(year, month);
-    List<Date> events = entryDAO.findAllCalendarDates(request.getCurrentBlog(),
+    List<Date> events = entryDAO.getAllCalendarDates(request.getCurrentBlog(),
                           startDate, endData);
     Calendar today = Calendar.getInstance();
 

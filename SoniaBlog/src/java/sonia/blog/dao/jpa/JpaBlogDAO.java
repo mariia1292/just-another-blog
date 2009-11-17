@@ -226,7 +226,7 @@ public class JpaBlogDAO extends JpaGenericDAO<Blog> implements BlogDAO
    */
   public List<Blog> getAll()
   {
-    return findList("Blog.findAll");
+    return findList("Blog.getAll");
   }
 
   /**
@@ -240,7 +240,7 @@ public class JpaBlogDAO extends JpaGenericDAO<Blog> implements BlogDAO
    */
   public List<Blog> getAll(int start, int max)
   {
-    return findList("Blog.findAll", start, max);
+    return findList("Blog.getAll", start, max);
   }
 
   /**

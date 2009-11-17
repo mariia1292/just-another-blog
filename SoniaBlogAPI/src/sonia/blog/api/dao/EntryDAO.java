@@ -72,7 +72,7 @@ public interface EntryDAO extends GenericDAO<Entry>
    *
    * @return
    */
-  public long countByBlog(Blog blog);
+  public long count(Blog blog);
 
   /**
    * Method description
@@ -88,77 +88,13 @@ public interface EntryDAO extends GenericDAO<Entry>
    * Method description
    *
    *
-   * @return
-   */
-  public List<Entry> findAllActives();
-
-  /**
-   * Method description
-   *
-   *
-   * @param start
-   * @param max
-   *
-   * @return
-   */
-  public List<Entry> findAllActives(int start, int max);
-
-  /**
-   * Method description
-   *
-   *
-   * @param blog
-   *
-   * @return
-   */
-  public List<Entry> findAllActivesByBlog(Blog blog);
-
-  /**
-   * Method description
-   *
-   *
-   * @param blog
-   * @param start
-   * @param max
-   *
-   * @return
-   */
-  public List<Entry> findAllActivesByBlog(Blog blog, int start, int max);
-
-  /**
-   * Method description
-   *
-   *
-   *
-   * @param blog
-   *
-   * @return
-   */
-  public List<Entry> findAllByBlog(Blog blog);
-
-  /**
-   * Method description
-   *
-   *
-   * @param blog
-   * @param start
-   * @param max
-   *
-   * @return
-   */
-  public List<Entry> findAllByBlog(Blog blog, int start, int max);
-
-  /**
-   * Method description
-   *
-   *
    * @param blog
    * @param startDate
    * @param endDate
    *
    * @return
    */
-  public List<Entry> findAllByBlogAndDate(Blog blog, Date startDate,
+  public List<Date> getAllCalendarDates(Blog blog, Date startDate,
           Date endDate);
 
   /**
@@ -173,110 +109,156 @@ public interface EntryDAO extends GenericDAO<Entry>
    *
    * @return
    */
-  public List<Entry> findAllByBlogAndDate(Blog blog, Date startDate,
+  public List<Date> getAllCalendarDates(Blog blog, Date startDate,
           Date endDate, int start, int max);
-
-  /**
-   * Method description
-   *
-   *
-   * @param blog
-   * @param tag
-   *
-   * @return
-   */
-  public List<Entry> findAllByBlogAndTag(Blog blog, Tag tag);
-
-  /**
-   * Method description
-   *
-   *
-   * @param blog
-   * @param tag
-   * @param start
-   * @param max
-   *
-   * @return
-   */
-  public List<Entry> findAllByBlogAndTag(Blog blog, Tag tag, int start,
-          int max);
-
-  /**
-   * Method description
-   *
-   *
-   * @param category
-   *
-   * @return
-   */
-  public List<Entry> findAllByCategory(Category category);
-
-  /**
-   * Method description
-   *
-   *
-   * @param category
-   * @param start
-   * @param max
-   *
-   * @return
-   */
-  public List<Entry> findAllByCategory(Category category, int start, int max);
-
-  /**
-   * Method description
-   *
-   *
-   * @param blog
-   * @param startDate
-   * @param endDate
-   *
-   * @return
-   */
-  public List<Date> findAllCalendarDates(Blog blog, Date startDate,
-          Date endDate);
-
-  /**
-   * Method description
-   *
-   *
-   * @param blog
-   * @param startDate
-   * @param endDate
-   * @param start
-   * @param max
-   *
-   * @return
-   */
-  public List<Date> findAllCalendarDates(Blog blog, Date startDate,
-          Date endDate, int start, int max);
-
-  /**
-   * Method description
-   *
-   *
-   * @param blog
-   * @param user
-   *
-   * @return
-   */
-  public List<Entry> findAllDraftsByBlogAndUser(Blog blog, User user);
-
-  /**
-   * Method description
-   *
-   *
-   * @param blog
-   * @param user
-   * @param start
-   * @param max
-   *
-   * @return
-   */
-  public List<Entry> findAllDraftsByBlogAndUser(Blog blog, User user,
-          int start, int max);
 
   //~--- get methods ----------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   *
+   * @param active
+   * @return
+   */
+  public List<Entry> getAll(boolean active);
+
+  /**
+   * Method description
+   *
+   *
+   *
+   * @param active
+   * @param start
+   * @param max
+   *
+   * @return
+   */
+  public List<Entry> getAll(boolean active, int start, int max);
+
+  /**
+   * Method description
+   *
+   *
+   * @param blog
+   * @param active
+   *
+   * @return
+   */
+  public List<Entry> getAll(Blog blog, boolean active);
+
+  /**
+   * Method description
+   *
+   *
+   * @param blog
+   * @param active
+   * @param start
+   * @param max
+   *
+   * @return
+   */
+  public List<Entry> getAll(Blog blog, boolean active, int start, int max);
+
+  /**
+   * Method description
+   *
+   *
+   * @param blog
+   * @param startDate
+   * @param endDate
+   *
+   * @return
+   */
+  public List<Entry> getAll(Blog blog, Date startDate, Date endDate);
+
+  /**
+   * Method description
+   *
+   *
+   * @param blog
+   * @param startDate
+   * @param endDate
+   * @param start
+   * @param max
+   *
+   * @return
+   */
+  public List<Entry> getAll(Blog blog, Date startDate, Date endDate, int start,
+                            int max);
+
+  /**
+   * Method description
+   *
+   *
+   * @param blog
+   * @param tag
+   * @param active
+   *
+   * @return
+   */
+  public List<Entry> getAll(Blog blog, Tag tag, boolean active);
+
+  /**
+   * Method description
+   *
+   *
+   * @param blog
+   * @param tag
+   * @param active
+   * @param start
+   * @param max
+   *
+   * @return
+   */
+  public List<Entry> getAll(Blog blog, Tag tag, boolean active, int start,
+                            int max);
+
+  /**
+   * Method description
+   *
+   *
+   *
+   * @param blog
+   *
+   * @return
+   */
+  public List<Entry> getAll(Blog blog);
+
+  /**
+   * Method description
+   *
+   *
+   * @param blog
+   * @param start
+   * @param max
+   *
+   * @return
+   */
+  public List<Entry> getAll(Blog blog, int start, int max);
+
+  /**
+   * Method description
+   *
+   *
+   * @param category
+   *
+   * @return
+   */
+  public List<Entry> getAll(Category category);
+
+  /**
+   * Method description
+   *
+   *
+   * @param category
+   * @param start
+   * @param max
+   *
+   * @return
+   */
+  public List<Entry> getAll(Category category, int start, int max);
 
   /**
    * Method description
@@ -290,8 +272,8 @@ public interface EntryDAO extends GenericDAO<Entry>
    *
    * @return
    */
-  public List<Entry> getAllByAuthor(Blog blog, User author, Boolean published,
-                                    int start, int max);
+  public List<Entry> getAll(Blog blog, User author, Boolean published,
+                            int start, int max);
 
   /**
    *

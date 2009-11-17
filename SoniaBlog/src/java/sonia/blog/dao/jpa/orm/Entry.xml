@@ -10,7 +10,7 @@
   <package>sonia.blog.entity</package>
   <entity metadata-complete="true" name="Entry" class="sonia.blog.entity.Entry">
     <table name="JAB_ENTRY" />
-    <named-query name="Entry.findAll">
+    <named-query name="Entry.getAll">
       <query>
         select e from Entry e
       </query>
@@ -34,25 +34,25 @@
           e.author = :user
       </query>
     </named-query>
-    <named-query name="Entry.findAllActives">
+    <named-query name="Entry.getAllByActive">
       <query>
         select e from Entry e
         where
-          e.published = true
+          e.published = :active
         order by e.publishingDate desc
       </query>
     </named-query>
-    <named-query name="Entry.findAllActivesByBlog">
+    <named-query name="Entry.getAllByBlogAndActive">
       <query>
         select e from Entry e join e.blog b
         where
           b = :blog
         and
-          e.published = true
+          e.published = :active
         order by e.publishingDate desc
       </query>
     </named-query>
-    <named-query name="Entry.findAllByBlog">
+    <named-query name="Entry.getAllByBlog">
       <query>
         select e from Entry e join e.blog b
         where
@@ -60,7 +60,7 @@
         order by e.creationDate desc
       </query>
     </named-query>
-    <named-query name="Entry.findByCategory">
+    <named-query name="Entry.getByCategory">
       <query>
         select e from Entry as e 
         where
@@ -70,11 +70,11 @@
         order by e.publishingDate desc
       </query>
     </named-query>
-    <named-query name="Entry.findByBlogAndTag">
+    <named-query name="Entry.getAllByBlogAndTag">
       <query>
         select e from Entry e join e.blog b join e.tags t 
         where
-          e.published = true
+          e.published = :active
         and
           b = :blog
         and

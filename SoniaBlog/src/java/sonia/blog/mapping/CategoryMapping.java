@@ -228,7 +228,7 @@ public class CategoryMapping extends ScrollableFilterMapping
   {
     Blog blog = request.getCurrentBlog();
     EntryDAO entryDAO = BlogContext.getDAOFactory().getEntryDAO();
-    List<Entry> entries = entryDAO.findAllByCategory(category, start, max + 1);
+    List<Entry> entries = entryDAO.getAll(category, start, max + 1);
     String prevUri = null;
     String nextUri = null;
 

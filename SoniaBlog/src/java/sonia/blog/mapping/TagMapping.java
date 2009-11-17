@@ -228,7 +228,7 @@ public class TagMapping extends ScrollableFilterMapping
                                 int start, int max)
   {
     EntryDAO entryDAO = BlogContext.getDAOFactory().getEntryDAO();
-    List<Entry> entries = entryDAO.findAllByBlogAndTag(blog, tag, start,
+    List<Entry> entries = entryDAO.getAll(blog, tag, true, start,
                             max + 1);
     String prevUri = null;
     String nextUri = null;

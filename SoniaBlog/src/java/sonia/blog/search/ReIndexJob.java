@@ -127,7 +127,7 @@ public class ReIndexJob implements BlogJob
                                IndexWriter.MaxFieldLength.UNLIMITED);
 
       EntryDAO entryDAO = BlogContext.getDAOFactory().getEntryDAO();
-      List<Entry> entries = entryDAO.findAllActivesByBlog(blog);
+      List<Entry> entries = entryDAO.getAll(blog, true);
       int counter = 0;
 
       if (Util.hasContent(entries))

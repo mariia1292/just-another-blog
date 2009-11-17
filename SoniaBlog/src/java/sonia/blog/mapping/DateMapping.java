@@ -254,7 +254,7 @@ public class DateMapping extends ScrollableFilterMapping
   {
     EntryDAO entryDAO = BlogContext.getDAOFactory().getEntryDAO();
     Blog blog = request.getCurrentBlog();
-    List<Entry> entries = entryDAO.findAllByBlogAndDate(blog, startDate,
+    List<Entry> entries = entryDAO.getAll(blog, startDate,
                             endDate, start, max + 1);
     String prevUri = null;
     String nextUri = null;

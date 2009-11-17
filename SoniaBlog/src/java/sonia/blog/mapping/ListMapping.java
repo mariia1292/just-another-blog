@@ -215,7 +215,7 @@ public class ListMapping extends ScrollableFilterMapping
   {
     Blog blog = request.getCurrentBlog();
     EntryDAO entryDAO = BlogContext.getDAOFactory().getEntryDAO();
-    List<Entry> entries = entryDAO.findAllActivesByBlog(blog, start, max + 1);
+    List<Entry> entries = entryDAO.getAll(blog, true, start, max + 1);
     String prevUri = null;
     String nextUri = null;
 
