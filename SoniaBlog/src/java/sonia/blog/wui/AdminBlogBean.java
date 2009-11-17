@@ -274,69 +274,6 @@ public class AdminBlogBean extends AbstractBean
           getMessageHandler().error(null, "failureBlogDelete", null,
                                     blog.getTitle());
         }
-
-        /*
-         * EntityManager em = context.getEntityManager();
-         *
-         * em.getTransaction().begin();
-         *
-         * try
-         * {
-         * List<Category> categories = blog.getCategories();
-         *
-         * // TODO replace with CategoryDAO.remove
-         * for (Category c : categories)
-         * {
-         *   em.remove(em.merge(c));
-         * }
-         *
-         * List<BlogMember> members = blog.getMembers();
-         *
-         * // TODO replace with MemberDAO.remove
-         * for (BlogMember m : members)
-         * {
-         *   em.remove(em.merge(m));
-         * }
-         *
-         * // TODO replace with BlogDAO.remove
-         * em.remove(em.merge(blog));
-         * em.getTransaction().commit();
-         *
-         * File searchDir = resManager.getDirectory(Constants.RESOURCE_INDEX,
-         *                    blog, false);
-         *
-         * if (searchDir.exists())
-         * {
-         *   Util.delete(searchDir);
-         * }
-         *
-         * File attachmentDir =
-         *  resManager.getDirectory(Constants.RESOURCE_ATTACHMENT, blog, false);
-         *
-         * if (attachmentDir.exists())
-         * {
-         *   Util.delete(attachmentDir);
-         * }
-         *
-         * getMessageHandler().info(null, "successBlogDelete", null,
-         *                          blog.getTitle());
-         * }
-         * catch (Exception ex)
-         * {
-         * if (em.getTransaction().isActive())
-         * {
-         *   em.getTransaction().rollback();
-         * }
-         *
-         * logger.log(Level.SEVERE, null, ex);
-         * getMessageHandler().error(null, "failureBlogDelete", null,
-         *                           blog.getTitle());
-         * }
-         * finally
-         * {
-         * em.close();
-         * }
-         */
       }
       else
       {
@@ -476,7 +413,7 @@ public class AdminBlogBean extends AbstractBean
     AttachmentDAO attachmentDAO =
       BlogContext.getDAOFactory().getAttachmentDAO();
 
-    return attachmentDAO.countByBlog(blog);
+    return attachmentDAO.count(blog);
   }
 
   /**
@@ -524,7 +461,7 @@ public class AdminBlogBean extends AbstractBean
   {
     CommentDAO commentDAO = BlogContext.getDAOFactory().getCommentDAO();
 
-    return commentDAO.countByBlog(blog);
+    return commentDAO.count(blog);
   }
 
   /**

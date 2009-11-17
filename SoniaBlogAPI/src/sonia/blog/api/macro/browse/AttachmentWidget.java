@@ -80,7 +80,7 @@ public class AttachmentWidget extends SelectWidget
 
     if (object instanceof Entry)
     {
-      attachments = attachmentDAO.findAllByEntry((Entry) object);
+      attachments = attachmentDAO.getAll((Entry) object);
     }
     else if (object instanceof Page)
     {

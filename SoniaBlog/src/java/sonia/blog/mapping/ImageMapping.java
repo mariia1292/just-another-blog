@@ -226,7 +226,7 @@ public class ImageMapping extends AbstractAttachmentMapping
    */
   private Attachment getAttachment(BlogRequest request, long id)
   {
-    return BlogContext.getDAOFactory().getAttachmentDAO().findByBlogAndId(
+    return BlogContext.getDAOFactory().getAttachmentDAO().get(
         request.getCurrentBlog(), id);
   }
 

@@ -247,7 +247,7 @@ public class GalleryMacro extends AbstractBlogMacro implements WebMacro
 
     if (object instanceof Entry)
     {
-      images = attachmentDAO.findAllImagesByEntry((Entry) object);
+      images = attachmentDAO.getAllImages((Entry) object);
     }
     else if (object instanceof Page)
     {

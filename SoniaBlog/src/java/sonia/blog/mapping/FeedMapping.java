@@ -308,7 +308,7 @@ public class FeedMapping extends FinalMapping
 
       if ((entry != null) && entry.isPublished())
       {
-        comments = commentDAO.findAllActivesByEntry(entry, 0, max);
+        comments = commentDAO.getAll(entry, false, 0, max);
       }
       else
       {
@@ -319,7 +319,7 @@ public class FeedMapping extends FinalMapping
     {
       Blog blog = request.getCurrentBlog();
 
-      comments = commentDAO.findAllByBlog(blog, 0, max);
+      comments = commentDAO.getAll(blog, 0, max);
     }
 
     if ((comments != null) &&!comments.isEmpty())

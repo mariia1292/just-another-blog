@@ -118,7 +118,7 @@ public class DashboardBean extends AbstractBean
     AttachmentDAO attachmentDAO =
       BlogContext.getDAOFactory().getAttachmentDAO();
 
-    return attachmentDAO.countByBlog(b);
+    return attachmentDAO.count(b);
   }
 
   /**
@@ -144,7 +144,7 @@ public class DashboardBean extends AbstractBean
     Blog b = getRequest().getCurrentBlog();
     CommentDAO commentDAO = BlogContext.getDAOFactory().getCommentDAO();
 
-    return commentDAO.countByBlog(b);
+    return commentDAO.count(b);
   }
 
   /**
@@ -161,7 +161,7 @@ public class DashboardBean extends AbstractBean
 
       CommentDAO commentDAO = BlogContext.getDAOFactory().getCommentDAO();
       List<Comment> commentList =
-        commentDAO.findAllByBlog(getRequest().getCurrentBlog(), 0, 5);
+        commentDAO.getAll(getRequest().getCurrentBlog(), 0, 5);
 
       if ((commentList != null) &&!commentList.isEmpty())
       {
@@ -266,7 +266,7 @@ public class DashboardBean extends AbstractBean
 
   /**
    * Method description
-   * TODO: replace with TagDAO.countByBlog()
+   * TODO: replace with TagDAO.count()
    *
    * @return
    */

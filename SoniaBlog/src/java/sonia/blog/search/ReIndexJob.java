@@ -97,6 +97,7 @@ public class ReIndexJob implements BlogJob
    *
    * @throws JobException
    */
+  @SuppressWarnings("unchecked")
   public void excecute() throws JobException
   {
     IndexWriter writer = null;

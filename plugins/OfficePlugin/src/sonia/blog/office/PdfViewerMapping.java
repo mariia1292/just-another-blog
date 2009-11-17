@@ -111,7 +111,7 @@ public class PdfViewerMapping extends FinalMapping
       {
         Blog blog = request.getCurrentBlog();
         Long attachmentId = Long.parseLong(param[0]);
-        Attachment attachment = attachmentDAO.findByBlogAndId(blog,
+        Attachment attachment = attachmentDAO.get(blog,
                                   attachmentId);
 
         if (attachment != null)

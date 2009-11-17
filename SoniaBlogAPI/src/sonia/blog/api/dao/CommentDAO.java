@@ -58,7 +58,7 @@ public interface CommentDAO extends GenericDAO<Comment>
    *
    * @return
    */
-  public long countByBlog(Blog blog);
+  public long count(Blog blog);
 
   /**
    * Method description
@@ -68,7 +68,7 @@ public interface CommentDAO extends GenericDAO<Comment>
    *
    * @return
    */
-  public List<Comment> findAllActivesByEntry(Entry entry);
+  public List<Comment> getAll(Entry entry, boolean spam);
 
   /**
    * Method description
@@ -80,7 +80,7 @@ public interface CommentDAO extends GenericDAO<Comment>
    *
    * @return
    */
-  public List<Comment> findAllActivesByEntry(Entry entry, int start, int max);
+  public List<Comment> getAll(Entry entry, boolean spam, int start, int max);
 
   /**
    * Method description
@@ -90,7 +90,7 @@ public interface CommentDAO extends GenericDAO<Comment>
    *
    * @return
    */
-  public List<Comment> findAllByBlog(Blog blog);
+  public List<Comment> getAll(Blog blog);
 
   /**
    * Method description
@@ -102,5 +102,5 @@ public interface CommentDAO extends GenericDAO<Comment>
    *
    * @return
    */
-  public List<Comment> findAllByBlog(Blog blog, int start, int max);
+  public List<Comment> getAll(Blog blog, int start, int max);
 }

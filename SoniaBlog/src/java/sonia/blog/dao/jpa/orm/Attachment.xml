@@ -10,12 +10,12 @@
   <package>sonia.blog.entity</package>
   <entity metadata-complete="true" name="Attachment" class="sonia.blog.entity.Attachment">
     <table name="JAB_ATTACHMENT" />
-    <named-query name="Attachment.findAllByEntry">
+    <named-query name="Attachment.getAllByEntry">
       <query>
         select a from Attachment a join a.entry e where e = :entry order by a.creationDate desc
       </query>
     </named-query>
-    <named-query name="Attachment.findAllImagesByEntry">
+    <named-query name="Attachment.getAllImagesByEntry">
       <query>
         select a from Attachment a join a.entry e where e = :entry and a.mimeType like 'image/%'
       </query>
@@ -25,7 +25,7 @@
         select count(a) from Attachment a
       </query>
     </named-query>
-    <named-query name="Attachment.findAll">
+    <named-query name="Attachment.getAll">
       <query>
         select a from Attachment a
       </query>

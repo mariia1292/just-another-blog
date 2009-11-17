@@ -82,7 +82,7 @@ public class EntryIndexHandler extends ContentObjectIndexHandler<Entry>
       docList.add(doc);
 
       List<Comment> comments =
-        BlogContext.getDAOFactory().getCommentDAO().findAllActivesByEntry(item);
+        BlogContext.getDAOFactory().getCommentDAO().getAll(item, false);
 
       if (Util.hasContent(comments))
       {
