@@ -164,7 +164,7 @@ public class BlogBean extends AbstractBean
     {
       CommentDAO commentDAO = BlogContext.getDAOFactory().getCommentDAO();
       List<Comment> commentList =
-        commentDAO.findAllActivesByEntry((Entry) entry);
+        commentDAO.getAll((Entry) entry, false);
 
       if ((commentList != null) &&!commentList.isEmpty())
       {

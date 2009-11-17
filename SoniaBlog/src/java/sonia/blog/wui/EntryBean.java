@@ -372,7 +372,7 @@ public class EntryBean extends AbstractEditorBean
     AttachmentDAO attachmentDAO =
       BlogContext.getDAOFactory().getAttachmentDAO();
 
-    return attachmentDAO.findAllByEntry(entry);
+    return attachmentDAO.getAll(entry);
   }
 
   /**
@@ -506,7 +506,7 @@ public class EntryBean extends AbstractEditorBean
   @Override
   public List<Attachment> getThumbnailList()
   {
-    return BlogContext.getDAOFactory().getAttachmentDAO().findAllImagesByEntry(
+    return BlogContext.getDAOFactory().getAttachmentDAO().getAllImages(
         entry);
   }
 

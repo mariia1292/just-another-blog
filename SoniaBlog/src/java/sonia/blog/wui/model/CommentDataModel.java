@@ -110,7 +110,7 @@ public class CommentDataModel extends AbstractDataModel
   @Override
   protected long countData()
   {
-    return commentDAO.countByBlog(blog);
+    return commentDAO.count(blog);
   }
 
   //~--- get methods ----------------------------------------------------------
@@ -127,7 +127,7 @@ public class CommentDataModel extends AbstractDataModel
   @Override
   protected List<?> getData(int start, int max)
   {
-    return commentDAO.findAllByBlog(blog, start, max);
+    return commentDAO.getAll(blog, start, max);
   }
 
   //~--- fields ---------------------------------------------------------------

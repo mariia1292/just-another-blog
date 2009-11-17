@@ -10,19 +10,19 @@
   <package>sonia.blog.entity</package>
   <entity metadata-complete="true" name="Comment" class="sonia.blog.entity.Comment">
     <table name="JAB_COMMENT" />
-    <named-query name="Comment.findAll">
+    <named-query name="Comment.getAll">
       <query>
         select c from Comment c
       </query>
     </named-query>
-    <named-query name="Comment.findAllByBlog">
+    <named-query name="Comment.getAllByBlog">
       <query>
         select c from Comment c join c.entry e join e.blog b where b = :blog and e.published = true order by c.creationDate desc
       </query>
     </named-query>
-    <named-query name="Comment.findAllActivesByEntry">
+    <named-query name="Comment.getAllByEntryAndSpam">
       <query>
-        select c from Comment c join c.entry e where e = :entry and c.spam = false order by c.creationDate
+        select c from Comment c join c.entry e where e = :entry and c.spam = :spam order by c.creationDate
       </query>
     </named-query>
     <named-query name="Comment.count">

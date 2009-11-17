@@ -59,51 +59,9 @@ public interface AttachmentDAO extends GenericDAO<Attachment>
    *
    * @return
    */
-  public long countByBlog(Blog blog);
+  public long count(Blog blog);
 
-  /**
-   * Method description
-   *
-   *
-   * @param entry
-   *
-   * @return
-   */
-  public List<Attachment> findAllByEntry(Entry entry);
-
-  /**
-   * Method description
-   *
-   *
-   * @param entry
-   * @param start
-   * @param max
-   *
-   * @return
-   */
-  public List<Attachment> findAllByEntry(Entry entry, int start, int max);
-
-  /**
-   * Method description
-   *
-   *
-   * @param entry
-   *
-   * @return
-   */
-  public List<Attachment> findAllImagesByEntry(Entry entry);
-
-  /**
-   * Method description
-   *
-   *
-   * @param entry
-   * @param start
-   * @param max
-   *
-   * @return
-   */
-  public List<Attachment> findAllImagesByEntry(Entry entry, int start, int max);
+  //~--- get methods ----------------------------------------------------------
 
   /**
    * Method description
@@ -114,9 +72,29 @@ public interface AttachmentDAO extends GenericDAO<Attachment>
    *
    * @return
    */
-  public Attachment findByBlogAndId(Blog blog, Long id);
+  public Attachment get(Blog blog, Long id);
 
-  //~--- get methods ----------------------------------------------------------
+  /**
+   * Method description
+   *
+   *
+   * @param entry
+   *
+   * @return
+   */
+  public List<Attachment> getAll(Entry entry);
+
+  /**
+   * Method description
+   *
+   *
+   * @param entry
+   * @param start
+   * @param max
+   *
+   * @return
+   */
+  public List<Attachment> getAll(Entry entry, int start, int max);
 
   /**
    * Method description
@@ -138,6 +116,28 @@ public interface AttachmentDAO extends GenericDAO<Attachment>
    * @return
    */
   public List<Attachment> getAll(Blog blog, boolean published);
+
+  /**
+   * Method description
+   *
+   *
+   * @param entry
+   *
+   * @return
+   */
+  public List<Attachment> getAllImages(Entry entry);
+
+  /**
+   * Method description
+   *
+   *
+   * @param entry
+   * @param start
+   * @param max
+   *
+   * @return
+   */
+  public List<Attachment> getAllImages(Entry entry, int start, int max);
 
   /**
    * Method description

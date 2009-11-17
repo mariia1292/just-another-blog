@@ -171,7 +171,7 @@ public class PdfViewerMacro extends AbstractBlogMacro implements WebMacro
     if (id != null)
     {
       Attachment attachment =
-        attachmentDAO.findByBlogAndId(request.getCurrentBlog(), id);
+        attachmentDAO.get(request.getCurrentBlog(), id);
 
       if ((attachment != null)
           && attachment.getMimeType().equalsIgnoreCase(PDFMIMETYPE))

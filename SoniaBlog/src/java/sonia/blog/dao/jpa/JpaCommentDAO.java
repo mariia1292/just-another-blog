@@ -95,7 +95,7 @@ public class JpaCommentDAO extends JpaGenericDAO<Comment> implements CommentDAO
    *
    * @return
    */
-  public long countByBlog(Blog blog)
+  public long count(Blog blog)
   {
     return countQuery("Comment.countByBlog", blog);
   }
@@ -108,9 +108,9 @@ public class JpaCommentDAO extends JpaGenericDAO<Comment> implements CommentDAO
    *
    * @return
    */
-  public List<Comment> findAllActivesByEntry(Entry entry)
+  public List<Comment> getAll(Entry entry, boolean spam)
   {
-    return findAllActivesByEntry(entry, -1, -1);
+    return getAll(entry, spam, -1, -1);
   }
 
   /**
@@ -124,12 +124,13 @@ public class JpaCommentDAO extends JpaGenericDAO<Comment> implements CommentDAO
    * @return
    */
   @SuppressWarnings("unchecked")
-  public List<Comment> findAllActivesByEntry(Entry entry, int start, int max)
+  public List<Comment> getAll(Entry entry, boolean spam, int start, int max)
   {
     List<Comment> comments = null;
-    Query q = strategy.getNamedQuery("Comment.findAllActivesByEntry", false);
+    Query q = strategy.getNamedQuery("Comment.getAllByEntryAndSpam", false);
 
     q.setParameter("entry", entry);
+    q.setParameter("spam", spam);
 
     if (start > 0)
     {
@@ -158,9 +159,9 @@ public class JpaCommentDAO extends JpaGenericDAO<Comment> implements CommentDAO
    *
    * @return
    */
-  public List<Comment> findAllByBlog(Blog blog)
+  public List<Comment> getAll(Blog blog)
   {
-    return findList("Comment.findAllByBlog", blog);
+    return findList("Comment.getAllByBlog", blog);
   }
 
   /**
@@ -173,9 +174,9 @@ public class JpaCommentDAO extends JpaGenericDAO<Comment> implements CommentDAO
    *
    * @return
    */
-  public List<Comment> findAllByBlog(Blog blog, int start, int max)
+  public List<Comment> getAll(Blog blog, int start, int max)
   {
-    return findList("Comment.findAllByBlog", blog, start, max);
+    return findList("Comment.getAllByBlog", blog, start, max);
   }
 
   //~--- get methods ----------------------------------------------------------
@@ -188,7 +189,7 @@ public class JpaCommentDAO extends JpaGenericDAO<Comment> implements CommentDAO
    */
   public List<Comment> getAll()
   {
-    return findList("Comment.findAll");
+    return findList("Comment.getAll");
   }
 
   /**
@@ -202,7 +203,7 @@ public class JpaCommentDAO extends JpaGenericDAO<Comment> implements CommentDAO
    */
   public List<Comment> getAll(int start, int max)
   {
-    return findList("Comment.findAll", start, max);
+    return findList("Comment.getAll", start, max);
   }
 
   /**

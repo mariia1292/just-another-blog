@@ -99,7 +99,7 @@ public class JpaAttachmentDAO extends JpaGenericDAO<Attachment>
    *
    * @return
    */
-  public long countByBlog(Blog blog)
+  public long count(Blog blog)
   {
     return countQuery("Attachment.countByBlog", blog);
   }
@@ -112,9 +112,9 @@ public class JpaAttachmentDAO extends JpaGenericDAO<Attachment>
    *
    * @return
    */
-  public List<Attachment> findAllByEntry(Entry entry)
+  public List<Attachment> getAll(Entry entry)
   {
-    return findAllByEntry(entry, -1, -1);
+    return getAll(entry, -1, -1);
   }
 
   /**
@@ -128,10 +128,10 @@ public class JpaAttachmentDAO extends JpaGenericDAO<Attachment>
    * @return
    */
   @SuppressWarnings("unchecked")
-  public List<Attachment> findAllByEntry(Entry entry, int start, int max)
+  public List<Attachment> getAll(Entry entry, int start, int max)
   {
     List<Attachment> attachments = null;
-    Query q = strategy.getNamedQuery("Attachment.findAllByEntry", false);
+    Query q = strategy.getNamedQuery("Attachment.getAllByEntry", false);
 
     q.setParameter("entry", entry);
 
@@ -162,9 +162,9 @@ public class JpaAttachmentDAO extends JpaGenericDAO<Attachment>
    *
    * @return
    */
-  public List<Attachment> findAllImagesByEntry(Entry entry)
+  public List<Attachment> getAllImages(Entry entry)
   {
-    return findAllImagesByEntry(entry, -1, -1);
+    return getAllImages(entry, -1, -1);
   }
 
   /**
@@ -178,10 +178,10 @@ public class JpaAttachmentDAO extends JpaGenericDAO<Attachment>
    * @return
    */
   @SuppressWarnings("unchecked")
-  public List<Attachment> findAllImagesByEntry(Entry entry, int start, int max)
+  public List<Attachment> getAllImages(Entry entry, int start, int max)
   {
     List<Attachment> attachments = null;
-    Query q = strategy.getNamedQuery("Attachment.findAllImagesByEntry", false);
+    Query q = strategy.getNamedQuery("Attachment.getAllImagesByEntry", false);
 
     q.setParameter("entry", entry);
 
@@ -213,7 +213,7 @@ public class JpaAttachmentDAO extends JpaGenericDAO<Attachment>
    *
    * @return
    */
-  public Attachment findByBlogAndId(Blog blog, Long id)
+  public Attachment get(Blog blog, Long id)
   {
     Attachment attachment = get(id);
 
@@ -259,7 +259,7 @@ public class JpaAttachmentDAO extends JpaGenericDAO<Attachment>
    */
   public List<Attachment> getAll()
   {
-    return findList("Attachment.findAll");
+    return findList("Attachment.getAll");
   }
 
   /**
@@ -273,7 +273,7 @@ public class JpaAttachmentDAO extends JpaGenericDAO<Attachment>
    */
   public List<Attachment> getAll(int start, int max)
   {
-    return findList("Attachment.findAll", start, max);
+    return findList("Attachment.getAll", start, max);
   }
 
   /**
