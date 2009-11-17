@@ -473,7 +473,7 @@ public class AdminBlogBean extends AbstractBean
   {
     EntryDAO entryDAO = BlogContext.getDAOFactory().getEntryDAO();
 
-    return entryDAO.countByBlog(blog);
+    return entryDAO.count(blog);
   }
 
   /**

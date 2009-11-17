@@ -125,7 +125,7 @@ public class JpaEntryDAO extends JpaGenericDAO<Entry> implements EntryDAO
    *
    * @return
    */
-  public long countByBlog(Blog blog)
+  public long count(Blog blog)
   {
     return countQuery("Entry.countByBlog", blog);
   }
@@ -167,97 +167,16 @@ public class JpaEntryDAO extends JpaGenericDAO<Entry> implements EntryDAO
    * Method description
    *
    *
-   * @return
-   */
-  public List<Entry> findAllActives()
-  {
-    return findList("Entry.findAllActives");
-  }
-
-  /**
-   * Method description
-   *
-   *
-   * @param start
-   * @param max
-   *
-   * @return
-   */
-  public List<Entry> findAllActives(int start, int max)
-  {
-    return findList("Entry.findAllActives", start, max);
-  }
-
-  /**
-   * Method description
-   *
-   *
-   * @param blog
-   *
-   * @return
-   */
-  public List<Entry> findAllActivesByBlog(Blog blog)
-  {
-    return findList("Entry.findAllActivesByBlog", blog);
-  }
-
-  /**
-   * Method description
-   *
-   *
-   * @param blog
-   * @param start
-   * @param max
-   *
-   * @return
-   */
-  public List<Entry> findAllActivesByBlog(Blog blog, int start, int max)
-  {
-    return findList("Entry.findAllActivesByBlog", blog, start, max);
-  }
-
-  /**
-   * Method description
-   *
-   *
-   * @param blog
-   *
-   * @return
-   */
-  public List<Entry> findAllByBlog(Blog blog)
-  {
-    return findList("Entry.findAllByBlog", blog);
-  }
-
-  /**
-   * Method description
-   *
-   *
-   * @param blog
-   * @param start
-   * @param max
-   *
-   * @return
-   */
-  public List<Entry> findAllByBlog(Blog blog, int start, int max)
-  {
-    return findList("Entry.findAllByBlog", blog, start, max);
-  }
-
-  /**
-   * Method description
-   *
-   *
    * @param blog
    * @param startDate
    * @param endDate
    *
    * @return
    */
-  public List<Entry> findAllByBlogAndDate(Blog blog, Date startDate,
+  public List<Date> getAllCalendarDates(Blog blog, Date startDate,
           Date endDate)
   {
-    return findAllByBlogAndDate(blog, startDate, endDate, -1, -1);
+    return getAllCalendarDates(blog, startDate, endDate, -1, -1);
   }
 
   /**
@@ -273,168 +192,7 @@ public class JpaEntryDAO extends JpaGenericDAO<Entry> implements EntryDAO
    * @return
    */
   @SuppressWarnings("unchecked")
-  public List<Entry> findAllByBlogAndDate(Blog blog, Date startDate,
-          Date endDate, int start, int max)
-  {
-    List<Entry> entries = null;
-    Query q = strategy.getNamedQuery("Entry.findByBlogAndDate", false);
-
-    q.setParameter("blog", blog);
-    q.setParameter("start", startDate);
-    q.setParameter("end", endDate);
-
-    if (start > 0)
-    {
-      q.setFirstResult(start);
-    }
-
-    if (max > 0)
-    {
-      q.setMaxResults(max);
-    }
-
-    try
-    {
-      entries = q.getResultList();
-    }
-    catch (NoResultException ex) {}
-
-    return entries;
-  }
-
-  /**
-   * Method description
-   *
-   *
-   * @param blog
-   * @param tag
-   *
-   * @return
-   */
-  public List<Entry> findAllByBlogAndTag(Blog blog, Tag tag)
-  {
-    return findAllByBlogAndTag(blog, tag, -1, -1);
-  }
-
-  /**
-   * Method description
-   *
-   *
-   * @param blog
-   * @param tag
-   * @param start
-   * @param max
-   *
-   * @return
-   */
-  @SuppressWarnings("unchecked")
-  public List<Entry> findAllByBlogAndTag(Blog blog, Tag tag, int start, int max)
-  {
-    List<Entry> entries = null;
-    Query q = strategy.getNamedQuery("Entry.findByBlogAndTag", false);
-
-    q.setParameter("blog", blog);
-    q.setParameter("tag", tag);
-
-    if (start > 0)
-    {
-      q.setFirstResult(start);
-    }
-
-    if (max > 0)
-    {
-      q.setMaxResults(max);
-    }
-
-    try
-    {
-      entries = q.getResultList();
-    }
-    catch (NoResultException ex) {}
-
-    return entries;
-  }
-
-  /**
-   * Method description
-   *
-   *
-   * @param category
-   *
-   * @return
-   */
-  public List<Entry> findAllByCategory(Category category)
-  {
-    return findAllByCategory(category, -1, -1);
-  }
-
-  /**
-   * Method description
-   *
-   *
-   * @param category
-   * @param start
-   * @param max
-   *
-   * @return
-   */
-  @SuppressWarnings("unchecked")
-  public List<Entry> findAllByCategory(Category category, int start, int max)
-  {
-    List<Entry> entries = null;
-    Query q = strategy.getNamedQuery("Entry.findByCategory", false);
-
-    q.setParameter("category", category);
-
-    if (start > 0)
-    {
-      q.setFirstResult(start);
-    }
-
-    if (max > 0)
-    {
-      q.setMaxResults(max);
-    }
-
-    try
-    {
-      entries = q.getResultList();
-    }
-    catch (NoResultException ex) {}
-
-    return entries;
-  }
-
-  /**
-   * Method description
-   *
-   *
-   * @param blog
-   * @param startDate
-   * @param endDate
-   *
-   * @return
-   */
-  public List<Date> findAllCalendarDates(Blog blog, Date startDate,
-          Date endDate)
-  {
-    return findAllCalendarDates(blog, startDate, endDate, -1, -1);
-  }
-
-  /**
-   * Method description
-   *
-   *
-   * @param blog
-   * @param startDate
-   * @param endDate
-   * @param start
-   * @param max
-   *
-   * @return
-   */
-  @SuppressWarnings("unchecked")
-  public List<Date> findAllCalendarDates(Blog blog, Date startDate,
+  public List<Date> getAllCalendarDates(Blog blog, Date startDate,
           Date endDate, int start, int max)
   {
     List<Date> dates = null;
@@ -451,50 +209,6 @@ public class JpaEntryDAO extends JpaGenericDAO<Entry> implements EntryDAO
     catch (NoResultException ex) {}
 
     return dates;
-  }
-
-  /**
-   * Method description
-   *
-   *
-   * @param blog
-   * @param user
-   *
-   * @return
-   */
-  public List<Entry> findAllDraftsByBlogAndUser(Blog blog, User user)
-  {
-    return findAllDraftsByBlogAndUser(blog, user, -1, -1);
-  }
-
-  /**
-   * Method description
-   *
-   *
-   * @param blog
-   * @param user
-   * @param start
-   * @param max
-   *
-   * @return
-   */
-  @SuppressWarnings("unchecked")
-  public List<Entry> findAllDraftsByBlogAndUser(Blog blog, User user,
-          int start, int max)
-  {
-    List<Entry> entries = null;
-    Query q = strategy.getNamedQuery("Entry.findAllDraftsByBlogAndUser", false);
-
-    q.setParameter("blog", blog);
-    q.setParameter("user", user);
-
-    try
-    {
-      entries = q.getResultList();
-    }
-    catch (NoResultException ex) {}
-
-    return entries;
   }
 
   /**
@@ -571,11 +285,304 @@ public class JpaEntryDAO extends JpaGenericDAO<Entry> implements EntryDAO
    * Method description
    *
    *
+   * @param blog
+   * @param tag
+   * @param active
+   *
+   * @return
+   */
+  public List<Entry> getAll(Blog blog, Tag tag, boolean active)
+  {
+    return getAll(blog, tag, active, -1, -1);
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param blog
+   * @param tag
+   * @param active
+   * @param start
+   * @param max
+   *
+   * @return
+   */
+  @SuppressWarnings("unchecked")
+  public List<Entry> getAll(Blog blog, Tag tag, boolean active, int start,
+                            int max)
+  {
+    List<Entry> entries = null;
+    Query q = strategy.getNamedQuery("Entry.getAllByBlogAndTag", false);
+
+    q.setParameter("blog", blog);
+    q.setParameter("tag", tag);
+
+    if (start > 0)
+    {
+      q.setFirstResult(start);
+    }
+
+    if (max > 0)
+    {
+      q.setMaxResults(max);
+    }
+
+    try
+    {
+      entries = q.getResultList();
+    }
+    catch (NoResultException ex) {}
+
+    return entries;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param blog
+   * @param startDate
+   * @param endDate
+   *
+   * @return
+   */
+  public List<Entry> getAll(Blog blog, Date startDate, Date endDate)
+  {
+    return getAll(blog, startDate, endDate, -1, -1);
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param blog
+   * @param startDate
+   * @param endDate
+   * @param start
+   * @param max
+   *
+   * @return
+   */
+  @SuppressWarnings("unchecked")
+  public List<Entry> getAll(Blog blog, Date startDate, Date endDate, int start,
+                            int max)
+  {
+    List<Entry> entries = null;
+    Query q = strategy.getNamedQuery("Entry.findByBlogAndDate", false);
+
+    q.setParameter("blog", blog);
+    q.setParameter("start", startDate);
+    q.setParameter("end", endDate);
+
+    if (start > 0)
+    {
+      q.setFirstResult(start);
+    }
+
+    if (max > 0)
+    {
+      q.setMaxResults(max);
+    }
+
+    try
+    {
+      entries = q.getResultList();
+    }
+    catch (NoResultException ex) {}
+
+    return entries;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   *
+   * @param active
+   * @return
+   */
+  public List<Entry> getAll(boolean active)
+  {
+    return getAll(active, -1, -1);
+  }
+
+  /**
+   * Method description
+   *
+   *
+   *
+   * @param active
+   * @param start
+   * @param max
+   *
+   * @return
+   */
+  public List<Entry> getAll(boolean active, int start, int max)
+  {
+    Query q = strategy.getNamedQuery("Entry.getAllByActive", active);
+
+    q.setParameter("active", active);
+
+    if (start >= 0)
+    {
+      q.setFirstResult(start);
+    }
+
+    if (max >= 0)
+    {
+      q.setMaxResults(max);
+    }
+
+    return excecuteListQuery(q);
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param blog
+   * @param active
+   *
+   * @return
+   */
+  public List<Entry> getAll(Blog blog, boolean active)
+  {
+    return getAll(blog, active, -1, -1);
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param blog
+   * @param active
+   * @param start
+   * @param max
+   *
+   * @return
+   */
+  public List<Entry> getAll(Blog blog, boolean active, int start, int max)
+  {
+    Query q = strategy.getNamedQuery("Entry.getAllByBlogAndActive", false);
+
+    q.setParameter("blog", blog);
+    q.setParameter("active", active);
+
+    if (start >= 0)
+    {
+      q.setFirstResult(start);
+    }
+
+    if (max >= 0)
+    {
+      q.setMaxResults(max);
+    }
+
+    return excecuteListQuery(q);
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param blog
+   *
+   * @return
+   */
+  public List<Entry> getAll(Blog blog)
+  {
+    return getAll(blog, -1, -1);
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param blog
+   * @param start
+   * @param max
+   *
+   * @return
+   */
+  public List<Entry> getAll(Blog blog, int start, int max)
+  {
+    Query q = strategy.getNamedQuery("Entry.getAllByBlog", false);
+
+    q.setParameter("blog", blog);
+
+    if (start >= 0)
+    {
+      q.setFirstResult(start);
+    }
+
+    if (max >= 0)
+    {
+      q.setMaxResults(max);
+    }
+
+    return excecuteListQuery(q);
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param category
+   *
+   * @return
+   */
+  public List<Entry> getAll(Category category)
+  {
+    return getAll(category, -1, -1);
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param category
+   * @param start
+   * @param max
+   *
+   * @return
+   */
+  @SuppressWarnings("unchecked")
+  public List<Entry> getAll(Category category, int start, int max)
+  {
+    List<Entry> entries = null;
+    Query q = strategy.getNamedQuery("Entry.getByCategory", false);
+
+    q.setParameter("category", category);
+
+    if (start > 0)
+    {
+      q.setFirstResult(start);
+    }
+
+    if (max > 0)
+    {
+      q.setMaxResults(max);
+    }
+
+    try
+    {
+      entries = q.getResultList();
+    }
+    catch (NoResultException ex) {}
+
+    return entries;
+  }
+
+  /**
+   * Method description
+   *
+   *
    * @return
    */
   public List<Entry> getAll()
   {
-    return findList("Entry.findAll");
+    return findList("Entry.getAll");
   }
 
   /**
@@ -589,7 +596,7 @@ public class JpaEntryDAO extends JpaGenericDAO<Entry> implements EntryDAO
    */
   public List<Entry> getAll(int start, int max)
   {
-    return findList("Entry.findAll", start, max);
+    return findList("Entry.getAll", start, max);
   }
 
   /**
@@ -604,8 +611,8 @@ public class JpaEntryDAO extends JpaGenericDAO<Entry> implements EntryDAO
    *
    * @return
    */
-  public List<Entry> getAllByAuthor(Blog blog, User author, Boolean published,
-                                    int start, int max)
+  public List<Entry> getAll(Blog blog, User author, Boolean published,
+                            int start, int max)
   {
     Query q = strategy.getNamedQuery("Entry.getAllByAuthor", false);
 
@@ -647,7 +654,7 @@ public class JpaEntryDAO extends JpaGenericDAO<Entry> implements EntryDAO
 
       if (session.hasRole(Role.CONTENTMANAGER))
       {
-        q = strategy.getNamedQuery("Entry.findAllByBlog", false);
+        q = strategy.getNamedQuery("Entry.getAllByBlog", false);
       }
       else
       {

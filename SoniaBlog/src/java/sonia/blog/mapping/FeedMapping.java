@@ -267,7 +267,7 @@ public class FeedMapping extends FinalMapping
     if ((category != null) && category.getBlog().equals(blog))
     {
       EntryDAO entryDAO = factory.getEntryDAO();
-      List<Entry> entries = entryDAO.findAllByCategory(category, 0, max);
+      List<Entry> entries = entryDAO.getAll(category, 0, max);
 
       items = buildEntryItems(request, entries);
     }
@@ -455,7 +455,7 @@ public class FeedMapping extends FinalMapping
   {
     List<SyndEntry> items = null;
     EntryDAO entryDAO = BlogContext.getDAOFactory().getEntryDAO();
-    List<Entry> entries = entryDAO.findAllActivesByBlog(blog, 0, max);
+    List<Entry> entries = entryDAO.getAll(blog, true, 0, max);
 
     items = buildEntryItems(request, entries);
 
@@ -488,7 +488,7 @@ public class FeedMapping extends FinalMapping
     {
       Blog blog = request.getCurrentBlog();
       EntryDAO entryDAO = factory.getEntryDAO();
-      List<Entry> entries = entryDAO.findAllByBlogAndTag(blog, tag, 0, max);
+      List<Entry> entries = entryDAO.getAll(blog, tag, true, 0, max);
 
       items = buildEntryItems(request, entries);
     }

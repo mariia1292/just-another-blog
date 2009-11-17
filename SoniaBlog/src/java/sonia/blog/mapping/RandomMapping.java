@@ -99,12 +99,12 @@ public class RandomMapping extends FilterMapping
     Random random = new Random();
     Blog blog = request.getCurrentBlog();
     EntryDAO entryDAO = BlogContext.getDAOFactory().getEntryDAO();
-    Long count = entryDAO.countByBlog(blog);
+    Long count = entryDAO.count(blog);
 
     if (count > 0)
     {
       int start = random.nextInt(count.intValue());
-      List<Entry> entries = entryDAO.findAllActivesByBlog(blog, start, 1);
+      List<Entry> entries = entryDAO.getAll(blog, true, start, 1);
 
       if ((entries != null) &&!entries.isEmpty())
       {
