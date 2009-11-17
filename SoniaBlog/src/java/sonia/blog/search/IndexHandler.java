@@ -62,7 +62,7 @@ import java.io.File;
 import java.io.IOException;
 
 import java.util.Locale;
-import java.util.concurrent.Semaphore;
+import java.util.concurrent.locks.Lock;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -279,12 +279,12 @@ public abstract class IndexHandler<T extends PermaObject>
 
     Directory indexDir = null;
     IndexWriter writer = null;
-    Semaphore lock = null;
+    Lock lock = null;
 
     try
     {
       lock = IndexHandlerFactory.getInstance().getLock(directory);
-      lock.acquire();
+      lock.lock();
 
       if (logger.isLoggable(Level.FINEST))
       {
@@ -304,10 +304,6 @@ public abstract class IndexHandler<T extends PermaObject>
       }
 
       writer.commit();
-    }
-    catch (InterruptedException ex)
-    {
-      logger.log(Level.SEVERE, null, ex);
     }
     finally
     {
@@ -335,7 +331,7 @@ public abstract class IndexHandler<T extends PermaObject>
             logger.finest(msg.toString());
           }
 
-          lock.release();
+          lock.unlock();
         }
       }
     }
@@ -468,12 +464,12 @@ public abstract class IndexHandler<T extends PermaObject>
     int count = 0;
     Directory indexDir = null;
     IndexReader reader = null;
-    Semaphore lock = null;
+    Lock lock = null;
 
     try
     {
       lock = IndexHandlerFactory.getInstance().getLock(directory);
-      lock.acquire();
+      lock.lock();
 
       if (logger.isLoggable(Level.FINEST))
       {
@@ -490,10 +486,6 @@ public abstract class IndexHandler<T extends PermaObject>
       {
         count += reader.deleteDocuments(term);
       }
-    }
-    catch (InterruptedException ex)
-    {
-      logger.log(Level.SEVERE, null, ex);
     }
     finally
     {
@@ -521,7 +513,7 @@ public abstract class IndexHandler<T extends PermaObject>
             logger.finest(msg.toString());
           }
 
-          lock.release();
+          lock.unlock();
         }
       }
     }

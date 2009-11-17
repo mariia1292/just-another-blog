@@ -59,7 +59,7 @@ import sonia.util.Util;
 import java.io.File;
 
 import java.util.List;
-import java.util.concurrent.Semaphore;
+import java.util.concurrent.locks.Lock;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -100,7 +100,7 @@ public class ReIndexJob implements BlogJob
   public void excecute() throws JobException
   {
     IndexWriter writer = null;
-    Semaphore lock = null;
+    Lock lock = null;
     File file = BlogContext.getInstance().getResourceManager().getDirectory(
                     Constants.RESOURCE_INDEX, blog);
 
@@ -118,7 +118,7 @@ public class ReIndexJob implements BlogJob
             Entry.class);
       Analyzer analyzer = entryHandler.getAnalyzer(blog);
 
-      lock.acquire();
+      lock.lock();
 
       Directory directory = FSDirectory.open(file);
 
@@ -205,7 +205,7 @@ public class ReIndexJob implements BlogJob
           logger.finest(msg.toString());
         }
 
-        lock.release();
+        lock.unlock();
       }
     }
   }

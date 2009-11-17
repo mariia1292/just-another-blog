@@ -48,6 +48,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.WeakHashMap;
 import java.util.concurrent.Semaphore;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -78,7 +80,7 @@ public class IndexHandlerFactory
     put(Comment.class, new CommentIndexHandler());
     put(Entry.class, new EntryIndexHandler());
     put(Page.class, new PageIndexHandler());
-    locks = new WeakHashMap<File, Semaphore>();
+    locks = new WeakHashMap<File, Lock>();
   }
 
   //~--- get methods ----------------------------------------------------------
@@ -150,9 +152,9 @@ public class IndexHandlerFactory
    *
    * @return
    */
-  public synchronized Semaphore getLock(File file)
+  public synchronized Lock getLock(File file)
   {
-    Semaphore lock = locks.get(file);
+    Lock lock = locks.get(file);
 
     if (lock == null)
     {
@@ -164,7 +166,7 @@ public class IndexHandlerFactory
         logger.finest(msg.toString());
       }
 
-      lock = new Semaphore(1);
+      lock = new ReentrantLock();
       locks.put(file, lock);
     }
 
@@ -177,5 +179,5 @@ public class IndexHandlerFactory
   private Map<Class<? extends PermaObject>, IndexHandler<? extends PermaObject>> handlerMap;
 
   /** Field description */
-  private Map<File, Semaphore> locks;
+  private Map<File, Lock> locks;
 }
