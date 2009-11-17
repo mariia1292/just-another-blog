@@ -17,7 +17,7 @@
     </named-query>
     <named-query name="Category.findAllByBlog">
       <query>
-        select c from Category c where c.blog = :blog
+        select c from Category c where c.blog = :blog order by c.name
       </query>
     </named-query>
     <named-query name="Category.count">
