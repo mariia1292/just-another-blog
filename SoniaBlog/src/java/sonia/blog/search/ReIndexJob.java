@@ -116,7 +116,7 @@ public class ReIndexJob implements BlogJob
       IndexHandler<Entry> entryHandler =
         (IndexHandler<Entry>) IndexHandlerFactory.getInstance().get(
             Entry.class);
-      Analyzer analyzer = entryHandler.getAnalyzer(blog);
+      Analyzer analyzer = entryHandler.getAnalyzer();
 
       lock.lock();
 
