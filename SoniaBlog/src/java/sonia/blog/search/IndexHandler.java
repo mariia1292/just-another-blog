@@ -295,7 +295,7 @@ public abstract class IndexHandler<T extends PermaObject>
       }
 
       indexDir = FSDirectory.open(directory);
-      writer = new IndexWriter(indexDir, getAnalyzer(blog),
+      writer = new IndexWriter(indexDir, getAnalyzer(),
                                IndexWriter.MaxFieldLength.UNLIMITED);
 
       for (Document doc : docs)
@@ -541,32 +541,12 @@ public abstract class IndexHandler<T extends PermaObject>
    * Method description
    *
    *
-   * @param blog
    *
    * @return
    */
-  protected Analyzer getAnalyzer(Blog blog)
+  protected Analyzer getAnalyzer()
   {
-    return getAnalyzer(blog.getLocale());
-  }
-
-  /**
-   * Method description
-   *
-   *
-   * @param locale
-   *
-   * @return
-   */
-  protected Analyzer getAnalyzer(Locale locale)
-  {
-    Analyzer analyzer = null;
-
-    if (Locale.GERMAN.equals(locale) || Locale.GERMANY.equals(locale))
-    {
-      analyzer = new GermanAnalyzer(Version.LUCENE_CURRENT);
-    }
-    else
+    if (analyzer == null)
     {
       analyzer = new StandardAnalyzer(Version.LUCENE_CURRENT);
     }
@@ -601,4 +581,9 @@ public abstract class IndexHandler<T extends PermaObject>
   {
     return (T) object;
   }
+
+  //~--- fields ---------------------------------------------------------------
+
+  /** Field description */
+  private Analyzer analyzer;
 }

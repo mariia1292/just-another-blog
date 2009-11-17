@@ -45,7 +45,7 @@
   {
     var defaults = {
       id: 'jqueryAutocomplete',
-      maxItems : 5,
+      maxItems : 10,
       minChars : 2,
       formatter: defaultFormatter,
       queryParam: "query",

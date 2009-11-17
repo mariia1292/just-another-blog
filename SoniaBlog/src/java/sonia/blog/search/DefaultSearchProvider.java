@@ -89,6 +89,9 @@ public class DefaultSearchProvider implements SearchProvider
 {
 
   /** Field description */
+  private static final int MAX_RESULTS = 2000;
+
+  /** Field description */
   private static Logger logger =
     Logger.getLogger(DefaultSearchProvider.class.getName());
 
@@ -161,7 +164,7 @@ public class DefaultSearchProvider implements SearchProvider
             logger.finer(msg.toString());
           }
 
-          TopDocs topDocs = searcher.search(query, blog.getEntriesPerPage());
+          TopDocs topDocs = searcher.search(query, MAX_RESULTS);
           SimpleHTMLFormatter htmlFormatter = new SimpleHTMLFormatter();
           Highlighter highlighter = new Highlighter(htmlFormatter,
                                       new QueryScorer(query));
