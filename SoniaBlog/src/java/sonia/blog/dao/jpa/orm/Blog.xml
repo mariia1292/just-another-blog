@@ -30,7 +30,7 @@
         select b from Blog as b where b.active = :active and b.identifier = :identifier
       </query>
     </named-query>
-    <named-query name="Blog.findAll">
+    <named-query name="Blog.getAll">
       <query>
         select b from Blog b
       </query>

@@ -506,8 +506,7 @@ public class EntryBean extends AbstractEditorBean
   @Override
   public List<Attachment> getThumbnailList()
   {
-    return BlogContext.getDAOFactory().getAttachmentDAO().getAllImages(
-        entry);
+    return BlogContext.getDAOFactory().getAttachmentDAO().getAllImages(entry);
   }
 
   /**

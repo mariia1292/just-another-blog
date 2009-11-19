@@ -46,7 +46,6 @@ import sonia.blog.entity.Page;
 import sonia.blog.entity.PermaObject;
 import sonia.blog.entity.Trackback;
 
-import sonia.cache.ClearCondition;
 import sonia.cache.ObjectCache;
 
 import sonia.config.ConfigurationListener;
@@ -206,51 +205,6 @@ public class CacheListener implements DAOListener, ConfigurationListener
 
     return id;
   }
-
-  //~--- inner classes --------------------------------------------------------
-
-  /**
-   * Class description
-   *
-   *
-   * @version        Enter version here..., 09/09/13
-   * @author         Enter your name here...
-   */
-  private static class BlogClearCondition implements ClearCondition
-  {
-
-    /**
-     * Constructs ...
-     *
-     *
-     * @param id
-     */
-    public BlogClearCondition(Long id)
-    {
-      this.id = id.toString();
-    }
-
-    //~--- methods ------------------------------------------------------------
-
-    /**
-     * Method description
-     *
-     *
-     * @param key
-     *
-     * @return
-     */
-    public boolean matches(Object key)
-    {
-      return key.toString().startsWith(id + ":");
-    }
-
-    //~--- fields -------------------------------------------------------------
-
-    /** Field description */
-    private String id;
-  }
-
 
   //~--- fields ---------------------------------------------------------------
 

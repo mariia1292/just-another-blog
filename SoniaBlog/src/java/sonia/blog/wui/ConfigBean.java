@@ -43,11 +43,16 @@ import sonia.blog.api.dao.Dao;
 import sonia.blog.api.util.AbstractBean;
 import sonia.blog.entity.Blog;
 import sonia.blog.macro.CodeMacro;
+import sonia.blog.util.BlogClearCondition;
 import sonia.blog.util.BlogUtil;
+
+import sonia.cache.ObjectCache;
 
 import sonia.plugin.service.Service;
 
 //~--- JDK imports ------------------------------------------------------------
+
+import java.io.File;
 
 import java.util.List;
 
@@ -71,6 +76,55 @@ public class ConfigBean extends AbstractBean
   }
 
   //~--- methods --------------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  public String clearCache()
+  {
+    ObjectCache cache =
+      BlogContext.getInstance().getCacheManager().get(Constants.CACHE_MAPPING);
+
+    if (cache != null)
+    {
+      cache.clear(new BlogClearCondition(getBlog()));
+    }
+
+    getMessageHandler().info(getRequest(), "clearCache");
+
+    return SUCCESS;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  public String clearImageCache()
+  {
+    File imageDirectory =
+      BlogContext.getInstance().getResourceManager().getDirectory(
+          Constants.RESOURCE_IMAGE, blog);
+
+    if (imageDirectory.exists())
+    {
+      for (File file : imageDirectory.listFiles())
+      {
+        if (file.exists() && file.isFile())
+        {
+          file.delete();
+        }
+      }
+    }
+
+    getMessageHandler().info(getRequest(), "clearImageCache");
+
+    return SUCCESS;
+  }
 
   /**
    * Method description

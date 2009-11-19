@@ -4,7 +4,8 @@
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:f="http://java.sun.com/jsf/core"
-      xmlns:c="http://java.sun.com/jstl/core">
+      xmlns:c="http://java.sun.com/jstl/core"
+      xmlns:t="http://myfaces.apache.org/tomahawk">
 
   <body>
 
@@ -129,9 +130,13 @@
 
         <h:form>
 
-          <h2><h:outputText value="#{label.search}" /></h2>
+          <h2><h:outputText value="#{label.actions}" /></h2>
 
-          <h:commandButton value="#{label.reIndex}" action="#{ConfigBean.reIndex}" />
+          <t:panelNavigation2 layout="list">
+            <t:commandNavigation2 value="#{label.reIndexSearch}" action="#{ConfigBean.reIndex}" />
+            <t:commandNavigation2 value="#{label.clearImageCache}" action="#{ConfigBean.clearImageCache}" />
+            <t:commandNavigation2 value="#{label.clearCache}" action="#{ConfigBean.clearCache}" />
+          </t:panelNavigation2>
 
         </h:form>
 
