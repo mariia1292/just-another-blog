@@ -22,7 +22,7 @@
           b = :blog
         and
           e.author = :user
-        order by e.creationDate desc
+        order by e.publishingDate desc
       </query>
     </named-query>
     <named-query name="Entry.countByBlogAndUser">
@@ -57,7 +57,7 @@
         select e from Entry e join e.blog b
         where
           b = :blog
-        order by e.creationDate desc
+        order by e.publishingDate desc
       </query>
     </named-query>
     <named-query name="Entry.getByCategory">
@@ -151,7 +151,7 @@
           e.published = false
         and
           e.author = :user
-        order by e.creationDate desc
+        order by e.publishingDate desc
       </query>
     </named-query>
     <named-query name="Entry.countByBlog">
