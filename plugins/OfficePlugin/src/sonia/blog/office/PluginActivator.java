@@ -40,7 +40,6 @@ import sonia.blog.api.app.Constants;
 import sonia.blog.api.app.Context;
 import sonia.blog.api.editor.AttachmentHandler;
 import sonia.blog.api.mapping.MappingHandler;
-import sonia.blog.api.search.SearchProvider;
 
 import sonia.macro.MacroParser;
 
@@ -98,7 +97,7 @@ public class PluginActivator implements Activator
    */
   public void stop(PluginContext context)
   {
-    parser.removeMacro(PdfViewerMacro.NAME);
+    parser.removeMacroFactory(PdfViewerMacro.NAME);
     mappingHandler.remove(PdfViewerMapping.REGEX);
 
     if ((handler != null) && (handlerReference != null))

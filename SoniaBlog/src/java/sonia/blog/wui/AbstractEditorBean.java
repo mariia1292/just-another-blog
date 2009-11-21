@@ -50,10 +50,9 @@ import sonia.blog.entity.Blog;
 import sonia.blog.entity.ContentObject;
 import sonia.blog.util.AttachmentWrapper;
 
-import sonia.macro.Macro;
+import sonia.macro.MacroFactory;
 import sonia.macro.MacroParser;
 import sonia.macro.browse.MacroInformation;
-import sonia.macro.browse.MacroInformationProvider;
 
 import sonia.plugin.service.ServiceReference;
 
@@ -498,12 +497,11 @@ public abstract class AbstractEditorBean extends AbstractBean
     if (Util.hasContent(name))
     {
       MacroParser parser = BlogContext.getInstance().getMacroParser();
-      Class<? extends Macro> macro = parser.getMacro(name);
+      MacroFactory factory = parser.getMacroFactory(name);
 
-      if (macro != null)
+      if (factory != null)
       {
-        info = parser.getInformationProvider().getInformation(macro,
-                getLocale());
+        info = factory.getInformation(getLocale());
       }
     }
 
@@ -524,25 +522,20 @@ public abstract class AbstractEditorBean extends AbstractBean
     {
       List<MacroInformation> informations = new ArrayList<MacroInformation>();
       MacroParser parser = BlogContext.getInstance().getMacroParser();
-      MacroInformationProvider provider = parser.getInformationProvider();
+      Iterator<MacroFactory> macroIterator = parser.getMacroFactories();
 
-      if (provider != null)
+      while (macroIterator.hasNext())
       {
-        Iterator<Class<? extends Macro>> macroIterator = parser.getMacros();
+        MacroFactory factory = macroIterator.next();
+        MacroInformation info = factory.getInformation(locale);
 
-        while (macroIterator.hasNext())
+        if (info != null)
         {
-          Class<? extends Macro> macro = macroIterator.next();
-          MacroInformation info = provider.getInformation(macro, locale);
-
-          if (info != null)
-          {
-            informations.add(info);
-          }
+          informations.add(info);
         }
-
-        macroInformations = new ListDataModel(informations);
       }
+
+      macroInformations = new ListDataModel(informations);
     }
 
     return macroInformations;

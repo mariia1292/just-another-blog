@@ -43,8 +43,8 @@ public class PluginActivator implements Activator
    */
   public void stop(PluginContext context)
   {
-    macroParser.removeMacro(PluginsMacro.NAME);
-    macroParser.removeMacro(MacrosMacro.NAME);
+    macroParser.removeMacroFactory(PluginsMacro.NAME);
+    macroParser.removeMacroFactory(MacrosMacro.NAME);
   }
 
   //~--- fields ---------------------------------------------------------------

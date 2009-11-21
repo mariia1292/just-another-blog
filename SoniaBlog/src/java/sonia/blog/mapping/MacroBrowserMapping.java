@@ -61,11 +61,11 @@ import sonia.cache.Cache;
 import sonia.cache.ObjectCache;
 
 import sonia.macro.Macro;
+import sonia.macro.MacroFactory;
 import sonia.macro.MacroParser;
 import sonia.macro.MacroResult;
 import sonia.macro.browse.MacroInformation;
 import sonia.macro.browse.MacroInformationParameter;
-import sonia.macro.browse.MacroInformationProvider;
 import sonia.macro.browse.MacroWidget;
 
 import sonia.plugin.service.Service;
@@ -148,10 +148,8 @@ public class MacroBrowserMapping extends FinalMapping
   {
     ContentObject co = getContentObject(request);
     StringBuffer writer = new StringBuffer();
-    Class<? extends Macro> macroClass = parser.getMacro(name);
     MacroInformation info =
-      parser.getInformationProvider().getInformation(macroClass,
-        request.getLocale());
+      parser.getMacroFactory(name).getInformation(request.getLocale());
 
     writer.append("{").append(name);
 
@@ -326,13 +324,11 @@ public class MacroBrowserMapping extends FinalMapping
 
     if (Util.hasContent(name))
     {
-      Class<? extends Macro> macroClass = parser.getMacro(name);
+      MacroFactory factory = parser.getMacroFactory(name);
 
-      if (macroClass != null)
+      if (factory != null)
       {
-        MacroInformationProvider provider = parser.getInformationProvider();
-        MacroInformation info = provider.getInformation(macroClass,
-                                  request.getLocale());
+        MacroInformation info = factory.getInformation(request.getLocale());
 
         if (info != null)
         {
@@ -553,8 +549,7 @@ public class MacroBrowserMapping extends FinalMapping
   {
     response.setContentType("application/x-javascript");
 
-    MacroInformationProvider provider = parser.getInformationProvider();
-    Iterator<Class<? extends Macro>> macroIt = parser.getMacros();
+    Iterator<MacroFactory> macroIt = parser.getMacroFactories();
 
     writer.println("[");
 
@@ -563,9 +558,8 @@ public class MacroBrowserMapping extends FinalMapping
 
     while (macroIt.hasNext())
     {
-      Class<? extends Macro> macroClass = macroIt.next();
-      MacroInformation info = provider.getInformation(macroClass,
-                                request.getLocale());
+      MacroFactory factory = macroIt.next();
+      MacroInformation info = factory.getInformation(request.getLocale());
 
       if (info != null)
       {
