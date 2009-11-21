@@ -39,14 +39,8 @@ import sonia.util.Util;
 
 //~--- JDK imports ------------------------------------------------------------
 
-import java.lang.reflect.Method;
-
-import java.math.BigInteger;
-
 import java.util.HashMap;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -60,10 +54,6 @@ public class RegexMacroParser extends MacroParser
   /** Field description */
   private static final String REGEX =
     "\\{([a-zA-Z0-9]*)([:;=/\\-_\\.,\\ a-zA-Z0-9]*)\\b[^\\}]*\\}(.*?)\\{/\\1\\}";
-
-  /** Field description */
-  private static Logger logger =
-    Logger.getLogger(RegexMacroParser.class.getName());
 
   //~--- methods --------------------------------------------------------------
 
@@ -90,18 +80,24 @@ public class RegexMacroParser extends MacroParser
 
       if (!Util.isBlank(name))
       {
-        Macro macro = buildMacro(name);
+        MacroFactory macroFactory = macroFactories.get(name);
 
-        if (macro != null)
+        if (macroFactory != null)
         {
-          result.addMacro(macro);
-
+          Map<String, String> parameters = new HashMap<String, String>();
           String paramString = m.group(2);
 
           if (!Util.isBlank(paramString))
           {
-            injectParameter(macro, paramString);
+            addParameters(parameters, paramString);
           }
+
+          Macro macro = macroFactory.createMacro(parameters);
+          if ( injectionProvider != null ){
+            injectionProvider.inject(macro);
+          }
+
+          result.addMacro(macro);
 
           String body = m.group(3);
           String replacement = macro.doBody(environment, body);
@@ -125,143 +121,11 @@ public class RegexMacroParser extends MacroParser
    * Method description
    *
    *
-   * @param type
-   * @param value
    *
-   * @return
-   */
-  protected Object convertValue(Class<?> type, String value)
-  {
-    Object result = null;
-
-    try
-    {
-      if (type.isAssignableFrom(String.class))
-      {
-        result = value;
-      }
-      else if (type.isAssignableFrom(Short.class))
-      {
-        result = Short.parseShort(value);
-      }
-      else if (type.isAssignableFrom(Integer.class))
-      {
-        result = Integer.parseInt(value);
-      }
-      else if (type.isAssignableFrom(Long.class))
-      {
-        result = Long.parseLong(value);
-      }
-      else if (type.isAssignableFrom(BigInteger.class))
-      {
-        result = new BigInteger(value);
-      }
-      else if (type.isAssignableFrom(Float.class))
-      {
-        result = Float.parseFloat(value);
-      }
-      else if (type.isAssignableFrom(Double.class))
-      {
-        result = Double.parseDouble(value);
-      }
-      else if (type.isAssignableFrom(Boolean.class))
-      {
-        result = Boolean.parseBoolean(value);
-      }
-      else
-      {
-        ParameterConverter conv = getConverter(type);
-
-        if (conv != null)
-        {
-          result = conv.convert(value);
-        }
-      }
-    }
-    catch (NumberFormatException ex)
-    {
-      logger.log(Level.FINER, null, ex);
-    }
-    catch (ConvertException ex)
-    {
-      logger.log(Level.FINER, null, ex);
-    }
-
-    return result;
-  }
-
-  /**
-   * Method description
-   *
-   *
-   * @param name
-   *
-   * @return
-   */
-  private Macro buildMacro(String name)
-  {
-    Macro macro = null;
-    Class<? extends Macro> clazz = getMacro(name);
-
-    if (clazz != null)
-    {
-      try
-      {
-        macro = clazz.newInstance();
-
-        if (injectionProvider != null)
-        {
-          injectionProvider.inject(macro);
-        }
-      }
-      catch (Exception ex)
-      {
-        logger.log(Level.SEVERE, null, ex);
-      }
-    }
-
-    return macro;
-  }
-
-  /**
-   * Method description
-   *
-   *
-   * @param clazz
-   * @param key
-   *
-   * @return
-   */
-  private Method findSetter(Class<? extends Macro> clazz, String key)
-  {
-    Method method = null;
-    String name = "set" + key.toUpperCase().charAt(0) + key.substring(1);
-    Method[] methods = clazz.getMethods();
-
-    if (methods != null)
-    {
-      for (Method m : methods)
-      {
-        if (m.getName().equals(name))
-        {
-          method = m;
-
-          break;
-        }
-      }
-    }
-
-    return method;
-  }
-
-  /**
-   * Method description
-   *
-   *
-   * @param macro
+   * @param paramMap
    * @param paramString
    */
-  private void injectParameter(Macro macro, String paramString)
+  private void addParameters(Map<String, String> paramMap, String paramString)
   {
     if (paramString.startsWith(":"))
     {
@@ -279,65 +143,8 @@ public class RegexMacroParser extends MacroParser
         String key = param.substring(0, index);
         String value = param.substring(index + 1, param.length());
 
-        injectParameter(macro, key, value);
+        paramMap.put(key, value);
       }
-    }
-  }
-
-  /**
-   * Method description
-   *
-   *
-   * @param macro
-   * @param key
-   * @param value
-   */
-  private void injectParameter(Macro macro, String key, String value)
-  {
-    Method method = findSetter(macro.getClass(), key);
-
-    if (method != null)
-    {
-      Class<?>[] paramTypes = method.getParameterTypes();
-
-      if ((paramTypes != null) && (paramTypes.length == 1))
-      {
-        Class<?> paramType = paramTypes[0];
-        Object injectValue = convertValue(paramType, value);
-
-        if (injectValue != null)
-        {
-          try
-          {
-            if (logger.isLoggable(Level.FINER))
-            {
-              StringBuffer msg = new StringBuffer();
-
-              msg.append("invoke method ").append(method.getName());
-              msg.append(" with parameter ").append(injectValue);
-              logger.finer(msg.toString());
-            }
-
-            method.invoke(macro, injectValue);
-          }
-          catch (Exception ex)
-          {
-            logger.log(Level.SEVERE, null, ex);
-          }
-        }
-        else
-        {
-          StringBuffer log = new StringBuffer();
-
-          log.append("type ").append(paramType.getName());
-          log.append(" is not supported");
-          logger.fine(log.toString());
-        }
-      }
-    }
-    else
-    {
-      logger.fine("could not find a setter for parameter " + key);
     }
   }
 }

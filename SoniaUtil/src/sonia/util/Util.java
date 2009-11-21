@@ -47,6 +47,8 @@ import java.io.Reader;
 import java.io.StringReader;
 import java.io.StringWriter;
 
+import java.math.BigInteger;
+
 import java.net.URL;
 import java.net.URLConnection;
 
@@ -56,6 +58,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -86,6 +89,62 @@ public class Util
   private static Logger logger = Logger.getLogger(Util.class.getName());
 
   //~--- methods --------------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   * @param type
+   * @param value
+   *
+   * @return
+   */
+  public static Object convertString(Class<?> type, String value)
+  {
+    Object result = null;
+
+    try
+    {
+      if (type.isAssignableFrom(String.class))
+      {
+        result = value;
+      }
+      else if (type.isAssignableFrom(Short.class))
+      {
+        result = Short.parseShort(value);
+      }
+      else if (type.isAssignableFrom(Integer.class))
+      {
+        result = Integer.parseInt(value);
+      }
+      else if (type.isAssignableFrom(Long.class))
+      {
+        result = Long.parseLong(value);
+      }
+      else if (type.isAssignableFrom(BigInteger.class))
+      {
+        result = new BigInteger(value);
+      }
+      else if (type.isAssignableFrom(Float.class))
+      {
+        result = Float.parseFloat(value);
+      }
+      else if (type.isAssignableFrom(Double.class))
+      {
+        result = Double.parseDouble(value);
+      }
+      else if (type.isAssignableFrom(Boolean.class))
+      {
+        result = Boolean.parseBoolean(value);
+      }
+    }
+    catch (NumberFormatException ex)
+    {
+      logger.log(Level.FINER, null, ex);
+    }
+
+    return result;
+  }
 
   /**
    * Method description
@@ -616,6 +675,19 @@ public class Util
    * Method description
    *
    *
+   * @param map
+   *
+   * @return
+   */
+  public static boolean hasContent(Map<?, ?> map)
+  {
+    return (map != null) &&!map.isEmpty();
+  }
+
+  /**
+   * Method description
+   *
+   *
    * @param value
    *
    * @return
@@ -636,6 +708,19 @@ public class Util
   public static boolean isEmpty(Collection<?> collection)
   {
     return (collection == null) || collection.isEmpty();
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param map
+   *
+   * @return
+   */
+  public static boolean isEmpty(Map<?, ?> map)
+  {
+    return (map == null) || map.isEmpty();
   }
 
   //~--- methods --------------------------------------------------------------

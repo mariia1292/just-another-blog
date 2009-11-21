@@ -31,57 +31,24 @@
 
 
 
-package sonia.blog.webint;
+package sonia.macro;
 
-//~--- non-JDK imports --------------------------------------------------------
+//~--- JDK imports ------------------------------------------------------------
 
-import sonia.blog.api.app.BlogContext;
-import sonia.blog.webint.flickr.FlickrMacro;
-
-import sonia.macro.MacroParser;
-
-import sonia.plugin.Activator;
-import sonia.plugin.PluginContext;
+import java.util.Map;
 
 /**
  *
  * @author Sebastian Sdorra
  */
-public class PluginActivator implements Activator
+public interface InitableMacro extends Macro
 {
 
-  /** Field description */
-  public static final String REGEX_GATEWAY =
-    "^/gateway/([a-zA-Z0-9]+)/([a-zA-Z0-9]+)$";
-
-  //~--- methods --------------------------------------------------------------
-
   /**
    * Method description
    *
    *
-   * @param context
+   * @param parameter
    */
-  public void start(PluginContext context)
-  {
-    MacroParser parser = MacroParser.getInstance();
-
-    parser.putMacro("flickr", FlickrMacro.class);
-    BlogContext.getInstance().getMappingHandler().add(REGEX_GATEWAY,
-            GatewayMapping.class);
-  }
-
-  /**
-   * Method description
-   *
-   *
-   * @param context
-   */
-  public void stop(PluginContext context)
-  {
-    MacroParser parser = MacroParser.getInstance();
-
-    parser.removeMacroFactory("flickr");
-    BlogContext.getInstance().getMappingHandler().remove(REGEX_GATEWAY);
-  }
+  public void init(Map<String, String> parameter);
 }

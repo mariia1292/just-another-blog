@@ -14,10 +14,9 @@ import sonia.blog.api.app.Context;
 import sonia.blog.api.macro.AbstractBlogMacro;
 import sonia.blog.entity.ContentObject;
 
-import sonia.macro.Macro;
+import sonia.macro.MacroFactory;
 import sonia.macro.MacroParser;
 import sonia.macro.browse.MacroInformation;
-import sonia.macro.browse.MacroInformationProvider;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -107,13 +106,12 @@ public class MacrosMacro extends AbstractBlogMacro
   {
     List<MacroInformation> macros = new ArrayList<MacroInformation>();
     Locale locale = request.getLocale();
-    MacroInformationProvider provider = macroParser.getInformationProvider();
-    Iterator<Class<? extends Macro>> it = macroParser.getMacros();
+    Iterator<MacroFactory> it = macroParser.getMacroFactories();
 
     while (it.hasNext())
     {
-      Class<? extends Macro> clazz = it.next();
-      MacroInformation info = provider.getInformation(clazz, locale);
+      MacroFactory factory = it.next();
+      MacroInformation info = factory.getInformation(locale);
 
       if (info != null)
       {

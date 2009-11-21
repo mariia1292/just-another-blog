@@ -37,8 +37,6 @@ package sonia.macro;
 
 import sonia.injection.InjectionProvider;
 
-import sonia.macro.browse.MacroInformationProvider;
-
 import sonia.util.ServiceLocator;
 
 //~--- JDK imports ------------------------------------------------------------
@@ -140,39 +138,24 @@ public abstract class MacroParser
    * Method description
    *
    *
-   * @param key
-   * @param value
-   *
-   * @return
-   */
-  public ParameterConverter putConverter(Class<?> key, ParameterConverter value)
-  {
-    return converter.put(key, value);
-  }
-
-  /**
-   * Method description
-   *
-   *
    * @param name
    * @param macro
    */
   public void putMacro(String name, Class<? extends Macro> macro)
   {
-    macros.put(name, macro);
+    macroFactories.put(name, new ClassMacroFactory(macro));
   }
 
   /**
    * Method description
    *
    *
-   * @param key
-   *
-   * @return
+   * @param name
+   * @param factory
    */
-  public ParameterConverter removeConverter(Class<?> key)
+  public void putMacroFactory(String name, MacroFactory factory)
   {
-    return converter.remove(key);
+    macroFactories.put(name, factory);
   }
 
   /**
@@ -181,36 +164,12 @@ public abstract class MacroParser
    *
    * @param name
    */
-  public void removeMacro(String name)
+  public void removeMacroFactory(String name)
   {
-    macros.remove(name);
+    macroFactories.remove(name);
   }
 
   //~--- get methods ----------------------------------------------------------
-
-  /**
-   * Method description
-   *
-   *
-   * @param key
-   *
-   * @return
-   */
-  public ParameterConverter getConverter(Class<?> key)
-  {
-    return converter.get(key);
-  }
-
-  /**
-   * Method description
-   *
-   *
-   * @return
-   */
-  public MacroInformationProvider getInformationProvider()
-  {
-    return MacroInformationProvider.getInstance();
-  }
 
   /**
    * Method description
@@ -227,24 +186,24 @@ public abstract class MacroParser
    * Method description
    *
    *
-   * @param name
-   *
    * @return
    */
-  public Class<? extends Macro> getMacro(String name)
+  public Iterator<MacroFactory> getMacroFactories()
   {
-    return macros.get(name);
+    return macroFactories.values().iterator();
   }
 
   /**
    * Method description
    *
    *
+   * @param name
+   *
    * @return
    */
-  public Iterator<Class<? extends Macro>> getMacros()
+  public MacroFactory getMacroFactory(String name)
   {
-    return macros.values().iterator();
+    return macroFactories.get(name);
   }
 
   //~--- set methods ----------------------------------------------------------
@@ -263,13 +222,9 @@ public abstract class MacroParser
   //~--- fields ---------------------------------------------------------------
 
   /** Field description */
-  protected Map<Class<?>, ParameterConverter> converter =
-    new HashMap<Class<?>, ParameterConverter>();
-
-  /** Field description */
   protected InjectionProvider injectionProvider;
 
   /** Field description */
-  protected Map<String, Class<? extends Macro>> macros =
-    new HashMap<String, Class<? extends Macro>>();
+  protected Map<String, MacroFactory> macroFactories = new HashMap<String,
+                                                         MacroFactory>();
 }

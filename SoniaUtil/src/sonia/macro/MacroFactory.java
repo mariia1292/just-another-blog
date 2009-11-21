@@ -33,22 +33,35 @@
 
 package sonia.macro;
 
+//~--- non-JDK imports --------------------------------------------------------
+
+import java.util.Locale;
+import java.util.Map;
+import sonia.injection.InjectionProvider;
+import sonia.macro.browse.MacroInformation;
+
 /**
  *
  * @author Sebastian Sdorra
  */
-public interface ParameterConverter
+public interface MacroFactory
 {
 
   /**
    * Method description
    *
    *
-   * @param value
+   * @return
+   */
+  public Macro createMacro(Map<String,String> parameters);
+
+  //~--- get methods ----------------------------------------------------------
+
+  /**
+   * Method description
+   *
    *
    * @return
-   *
-   * @throws ConvertException
    */
-  public Object convert(String value) throws ConvertException;
+  public MacroInformation getInformation(Locale locale);
 }
