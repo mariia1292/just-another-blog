@@ -41,7 +41,7 @@ import java.util.Map;
  *
  * @author Sebastian Sdorra
  */
-public interface InitableMacro extends Macro
+public interface Initable
 {
 
   /**

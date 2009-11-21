@@ -150,9 +150,9 @@ public class ClassMacroFactory implements MacroFactory
    */
   private void applyParameters(Macro macro, Map<String, String> parameters)
   {
-    if (macro instanceof InitableMacro)
+    if (macro instanceof Initable)
     {
-      ((InitableMacro) macro).init(parameters);
+      ((Initable) macro).init(parameters);
     }
     else
     {
