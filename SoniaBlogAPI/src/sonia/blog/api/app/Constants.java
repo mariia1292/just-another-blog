@@ -220,6 +220,9 @@ public interface Constants
   /** Field description */
   public static final String DEFAULT_RESIZE_IMAGE = "internal";
 
+  /** Field description */
+  public static final String ENCODING = "UTF-8";
+
   // Listeners
 
   /** Field description */
