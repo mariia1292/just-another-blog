@@ -143,7 +143,7 @@ public abstract class MacroParser
    */
   public void putMacro(String name, Class<? extends Macro> macro)
   {
-    macroFactories.put(name, new ClassMacroFactory(macro));
+    putMacroFactory(name, new ClassMacroFactory(macro));
   }
 
   /**
@@ -155,6 +155,11 @@ public abstract class MacroParser
    */
   public void putMacroFactory(String name, MacroFactory factory)
   {
+    if (macroFactories.containsKey(name))
+    {
+      throw new MacroException("macro allready registered");
+    }
+
     macroFactories.put(name, factory);
   }
 
