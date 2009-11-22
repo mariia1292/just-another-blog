@@ -359,7 +359,7 @@ public class BlogUtil
       writer =
         new BufferedWriter(new OutputStreamWriter(conn.getOutputStream()));
 
-      String title = URLEncoder.encode(entry.getTitle(), "UTF-8");
+      String title = URLEncoder.encode(entry.getTitle(), Constants.ENCODING);
 
       writer.write("title=");
       writer.write(title);
@@ -380,7 +380,7 @@ public class BlogUtil
       writer.write("&excerpt=");
       writer.write(content);
 
-      String blogName = URLEncoder.encode(blog.getTitle(), "UTF-8");
+      String blogName = URLEncoder.encode(blog.getTitle(), Constants.ENCODING);
 
       writer.write("&blog_name=");
       writer.write(blogName);
@@ -497,7 +497,7 @@ public class BlogUtil
       content = content.substring(0, 255);
     }
 
-    content = URLEncoder.encode(content, "UTF-8");
+    content = URLEncoder.encode(content, Constants.ENCODING);
 
     return content;
   }

@@ -117,6 +117,9 @@ public class BlogContextFilter implements Filter
     BlogRequest request = new BlogRequest((HttpServletRequest) req);
     BlogResponse response = new BlogResponse((HttpServletResponse) resp);
 
+    // fix content encoding
+    request.setCharacterEncoding(Constants.ENCODING);
+
     try
     {
       for (BlogRequestListener listener : listenerReference.getAll())
