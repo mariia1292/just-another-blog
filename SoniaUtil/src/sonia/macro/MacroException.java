@@ -37,29 +37,27 @@ package sonia.macro;
  *
  * @author Sebastian Sdorra
  */
-public class ConvertException extends Exception
+public class MacroException extends RuntimeException
 {
 
-  /** Field description */
-  private static final long serialVersionUID = -3640543228967330257L;
-
-  //~--- constructors ---------------------------------------------------------
-
   /**
    * Constructs ...
    *
    */
-  public ConvertException() {}
-
-  /**
-   * Constructs ...
-   *
-   *
-   * @param msg
-   */
-  public ConvertException(String msg)
+  public MacroException()
   {
-    super(msg);
+    super();
+  }
+
+  /**
+   * Constructs ...
+   *
+   *
+   * @param message
+   */
+  public MacroException(String message)
+  {
+    super(message);
   }
 
   /**
@@ -68,7 +66,7 @@ public class ConvertException extends Exception
    *
    * @param throwable
    */
-  public ConvertException(Throwable throwable)
+  public MacroException(Throwable throwable)
   {
     super(throwable);
   }
@@ -77,11 +75,11 @@ public class ConvertException extends Exception
    * Constructs ...
    *
    *
-   * @param msg
+   * @param message
    * @param throwable
    */
-  public ConvertException(String msg, Throwable throwable)
+  public MacroException(String message, Throwable throwable)
   {
-    super(msg, throwable);
+    super(message, throwable);
   }
 }
