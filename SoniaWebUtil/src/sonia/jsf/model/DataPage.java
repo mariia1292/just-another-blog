@@ -31,78 +31,79 @@
 
 
 
-package sonia.blog.wui.model;
-
-//~--- non-JDK imports --------------------------------------------------------
-
-import sonia.blog.api.app.BlogContext;
-import sonia.blog.api.app.BlogSession;
-import sonia.blog.api.dao.EntryDAO;
-import sonia.blog.entity.Entry;
-
-import sonia.jsf.model.DataPage;
-import sonia.jsf.model.PagedListDataModel;
+package sonia.jsf.model;
 
 //~--- JDK imports ------------------------------------------------------------
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
  *
  * @author Sebastian Sdorra
+ *
+ * @param <T>
  */
-public class EntryDataModel extends PagedListDataModel<Entry>
+public class DataPage<T>
 {
 
   /**
    * Constructs ...
    *
    *
-   * @param session
-   * @param pageSize
+   * @param datasetSize
+   * @param startRow
+   * @param data
    */
-  public EntryDataModel(BlogSession session, int pageSize)
+  public DataPage(int datasetSize, int startRow, List<T> data)
   {
-    super(pageSize);
-    this.session = session;
-    this.entryDAO = BlogContext.getDAOFactory().getEntryDAO();
+    this.datasetSize = datasetSize;
+    this.startRow = startRow;
+    this.data = data;
   }
 
-  //~--- methods --------------------------------------------------------------
+  //~--- get methods ----------------------------------------------------------
 
   /**
    * Method description
    *
    *
-   * @param startRow
-   * @param pageSize
+   * @return
+   */
+  public List<T> getData()
+  {
+    return data;
+  }
+
+  /**
+   * Method description
+   *
    *
    * @return
    */
-  @Override
-  public DataPage<Entry> fetchPage(int startRow, int pageSize)
+  public int getDatasetSize()
   {
-    List<Entry> list = null;
-    long size = entryDAO.countModifyAbleEntries(session);
+    return datasetSize;
+  }
 
-    if (size > startRow)
-    {
-      list = entryDAO.getAllModifyAbleEntries(session, startRow, pageSize);
-    }
-    else
-    {
-      list = new ArrayList<Entry>();
-    }
-
-    return new DataPage<Entry>((int) size, startRow, list);
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  public int getStartRow()
+  {
+    return startRow;
   }
 
   //~--- fields ---------------------------------------------------------------
 
   /** Field description */
-  private EntryDAO entryDAO;
+  private List<T> data;
 
   /** Field description */
-  private BlogSession session;
+  private int datasetSize;
+
+  /** Field description */
+  private int startRow;
 }

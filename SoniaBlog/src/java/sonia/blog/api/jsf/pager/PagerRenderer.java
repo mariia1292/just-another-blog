@@ -130,12 +130,11 @@ public class PagerRenderer extends BaseRenderer
           first = (page - 1) * pageSize;
         }
 
-        if (first + pageSize > itemCount)
+        if (first > itemCount)
         {
           first = itemCount - pageSize;
         }
-
-        if (first < 0)
+        else if (first < 0)
         {
           first = 0;
         }
