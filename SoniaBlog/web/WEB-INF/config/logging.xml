@@ -78,6 +78,10 @@
       <name>sonia.macro.RegexMacroParser</name>
       <level>INFO</level>
     </logger>
+    <logger>
+      <name>sonia.macro.ClassMacroFactory</name>
+      <level>INFO</level>
+    </logger>
   </loggers>
 
 </sonia-logging>

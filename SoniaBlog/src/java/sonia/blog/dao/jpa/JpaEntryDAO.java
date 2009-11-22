@@ -317,6 +317,7 @@ public class JpaEntryDAO extends JpaGenericDAO<Entry> implements EntryDAO
 
     q.setParameter("blog", blog);
     q.setParameter("tag", tag);
+    q.setParameter("active", active);
 
     if (start > 0)
     {
