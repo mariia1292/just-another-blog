@@ -35,6 +35,8 @@ package sonia.web.io;
 
 //~--- JDK imports ------------------------------------------------------------
 
+import java.io.Closeable;
+import java.io.Flushable;
 import java.io.IOException;
 import java.io.Writer;
 
@@ -42,7 +44,7 @@ import java.io.Writer;
  *
  * @author Sebastian Sdorra
  */
-public class JSONWriter
+public class JSONWriter implements Closeable, Flushable
 {
 
   /**
@@ -88,9 +90,11 @@ public class JSONWriter
    *
    * @param last
    *
+   *
+   * @return
    * @throws IOException
    */
-  public void endArray(boolean last) throws IOException
+  public JSONWriter endArray(boolean last) throws IOException
   {
     writer.append("]");
 
@@ -103,6 +107,8 @@ public class JSONWriter
     {
       newLine();
     }
+
+    return this;
   }
 
   /**
@@ -111,9 +117,11 @@ public class JSONWriter
    *
    * @param last
    *
+   *
+   * @return
    * @throws IOException
    */
-  public void endObject(boolean last) throws IOException
+  public JSONWriter endObject(boolean last) throws IOException
   {
     writer.append("}");
 
@@ -126,6 +134,8 @@ public class JSONWriter
     {
       newLine();
     }
+
+    return this;
   }
 
   /**
@@ -134,31 +144,54 @@ public class JSONWriter
    *
    * @throws IOException
    */
-  public void newLine() throws IOException
+  public void flush() throws IOException
+  {
+    writer.flush();
+  }
+
+  /**
+   * Method description
+   *
+   *
+   *
+   * @return
+   * @throws IOException
+   */
+  public JSONWriter newLine() throws IOException
   {
     writer.append("\n");
+
+    return this;
   }
 
   /**
    * Method description
    *
    *
+   *
+   * @return
    * @throws IOException
    */
-  public void startArray() throws IOException
+  public JSONWriter startArray() throws IOException
   {
     writer.append("[");
+
+    return this;
   }
 
   /**
    * Method description
    *
    *
+   *
+   * @return
    * @throws IOException
    */
-  public void startObject() throws IOException
+  public JSONWriter startObject() throws IOException
   {
     writer.append("{");
+
+    return this;
   }
 
   /**
@@ -169,9 +202,12 @@ public class JSONWriter
    * @param value
    * @param last
    *
+   *
+   * @return
    * @throws IOException
    */
-  public void write(String key, String value, boolean last) throws IOException
+  public JSONWriter write(String key, String value, boolean last)
+          throws IOException
   {
     writer.append("\"").append(key).append("\": ");
 
@@ -188,6 +224,8 @@ public class JSONWriter
     {
       writer.append(",");
     }
+
+    return this;
   }
 
   /**
@@ -198,9 +236,12 @@ public class JSONWriter
    * @param value
    * @param last
    *
+   *
+   * @return
    * @throws IOException
    */
-  public void write(String key, int value, boolean last) throws IOException
+  public JSONWriter write(String key, int value, boolean last)
+          throws IOException
   {
     writer.append("\"").append(key).append("\": ");
     writer.append(Integer.toString(value));
@@ -209,6 +250,8 @@ public class JSONWriter
     {
       writer.append(",");
     }
+
+    return this;
   }
 
   /**
@@ -219,9 +262,12 @@ public class JSONWriter
    * @param value
    * @param last
    *
+   *
+   * @return
    * @throws IOException
    */
-  public void write(String key, long value, boolean last) throws IOException
+  public JSONWriter write(String key, long value, boolean last)
+          throws IOException
   {
     writer.append("\"").append(key).append("\": ");
     writer.append(Long.toString(value));
@@ -230,6 +276,8 @@ public class JSONWriter
     {
       writer.append(",");
     }
+
+    return this;
   }
 
   /**
@@ -240,9 +288,12 @@ public class JSONWriter
    * @param value
    * @param last
    *
+   *
+   * @return
    * @throws IOException
    */
-  public void write(String key, boolean value, boolean last) throws IOException
+  public JSONWriter write(String key, boolean value, boolean last)
+          throws IOException
   {
     writer.append("\"").append(key).append("\": ");
     writer.append(Boolean.toString(value));
@@ -251,6 +302,8 @@ public class JSONWriter
     {
       writer.append(",");
     }
+
+    return this;
   }
 
   //~--- get methods ----------------------------------------------------------
