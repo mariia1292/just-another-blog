@@ -29,6 +29,10 @@
 
           <h:form>
 
+            <h:commandLink onclick="update('','')">
+              <h:outputText value="#{label.topLevel}" />
+            </h:commandLink>
+
             <t:tree2 id="pageTree" value="#{PageAuthorBean.navigationTreeNode}" var="node" showRootNode="false">
 
               <f:facet name="page">

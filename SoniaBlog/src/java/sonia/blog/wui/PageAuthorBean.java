@@ -126,6 +126,14 @@ public class PageAuthorBean extends AbstractEditorBean
               String idString = (String) param.getValue();
 
               page = pageDAO.get(Long.parseLong(idString));
+
+              if (page != null)
+              {
+                parentId = (page.getParent() != null)
+                           ? page.getParent().getId()
+                           : null;
+              }
+
               setSessionVar();
             }
             catch (NumberFormatException ex)
@@ -148,6 +156,7 @@ public class PageAuthorBean extends AbstractEditorBean
   {
     page = new Page();
     setSessionVar();
+    parentId = null;
 
     return PAGEEDITOR;
   }
@@ -240,6 +249,10 @@ public class PageAuthorBean extends AbstractEditorBean
       Page parent = pageDAO.get(parentId);
 
       page.setParent(parent);
+    }
+    else
+    {
+      page.setParent(null);
     }
 
     String result = SUCCESS;
