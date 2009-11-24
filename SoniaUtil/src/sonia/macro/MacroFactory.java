@@ -37,7 +37,6 @@ package sonia.macro;
 
 import java.util.Locale;
 import java.util.Map;
-import sonia.injection.InjectionProvider;
 import sonia.macro.browse.MacroInformation;
 
 /**

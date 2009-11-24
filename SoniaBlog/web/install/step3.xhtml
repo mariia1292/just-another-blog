@@ -13,6 +13,19 @@
         <h:outputText value="#{label.installation2}" />
       </ui:define>
 
+      <ui:define name="head">
+        <script type="text/javascript">
+          function checkServername(){
+            var result = true;
+            var name = document.getElementById("form:servername").value;
+            if ( "localhost" == name || "127.0.0.1" == name  ){
+              result = confirm( "#{label.localhostConfirm}" );
+            }
+            return result;
+          }
+        </script>
+      </ui:define>
+
       <ui:define name="content">
 
         <h:form id="form">
@@ -67,7 +80,7 @@
 
           </h:panelGrid>
 
-          <h:commandButton value="#{label.install}" action="#{InstallBean.install}" />
+          <h:commandButton onclick="return checkServername();" value="#{label.install}" action="#{InstallBean.install}" />
 
         </h:form>
 
