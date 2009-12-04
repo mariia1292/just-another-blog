@@ -36,7 +36,6 @@ package sonia.blog.search;
 //~--- non-JDK imports --------------------------------------------------------
 
 import org.apache.lucene.analysis.Analyzer;
-import org.apache.lucene.analysis.de.GermanAnalyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.DateTools;
 import org.apache.lucene.document.Document;
@@ -157,18 +156,7 @@ public class SearchHelper
    */
   public static Analyzer getAnalyzer(Locale locale)
   {
-    Analyzer analyzer = null;
-
-    if (Locale.GERMAN.equals(locale) || Locale.GERMANY.equals(locale))
-    {
-      analyzer = new GermanAnalyzer(Version.LUCENE_CURRENT);
-    }
-    else
-    {
-      analyzer = new StandardAnalyzer(Version.LUCENE_CURRENT);
-    }
-
-    return analyzer;
+    return new StandardAnalyzer(Version.LUCENE_CURRENT);
   }
 
   /**
