@@ -42,6 +42,8 @@ import sonia.util.Util;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -53,6 +55,9 @@ public class LRUCache extends AbstractCache
 
   /** Field description */
   public static final String PARAMETER_MAXITEMS = "max-items";
+
+  /** Field description */
+  private static Logger logger = Logger.getLogger(LRUCache.class.getName());
 
   //~--- constructors ---------------------------------------------------------
 
@@ -119,6 +124,14 @@ public class LRUCache extends AbstractCache
   {
     while (maxItems <= cacheMap.size())
     {
+      if (logger.isLoggable(Level.WARNING))
+      {
+        StringBuffer msg = new StringBuffer();
+
+        msg.append("LRUCache exeeds max items value of ").append(maxItems);
+        logger.warning(msg.toString());
+      }
+
       removeLastEntry();
     }
 
@@ -207,6 +220,13 @@ public class LRUCache extends AbstractCache
         lastCo = entry;
       }
     }
+
+    if ( logger.isLoggable(Level.FINEST) ){
+      StringBuffer msg = new StringBuffer();
+      msg.append( "remove lru entry with key " ).append( lastCo.getKey() );
+      logger.finest(msg.toString());
+    }
+
 
     remove(lastCo.getKey());
   }

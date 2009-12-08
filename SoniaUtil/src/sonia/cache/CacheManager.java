@@ -211,6 +211,23 @@ public class CacheManager
     }
   }
 
+  /**
+   * Method description
+   *
+   */
+  public void resetAll()
+  {
+    if (!caches.isEmpty())
+    {
+      Collection<ObjectCache> cacheValues = caches.values();
+
+      for (ObjectCache cache : cacheValues)
+      {
+        cache.reset();
+      }
+    }
+  }
+
   //~--- get methods ----------------------------------------------------------
 
   /**
@@ -224,6 +241,17 @@ public class CacheManager
   public ObjectCache get(String name)
   {
     return caches.get(name);
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  public Map<String, ObjectCache> getCaches()
+  {
+    return caches;
   }
 
   //~--- set methods ----------------------------------------------------------
