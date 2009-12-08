@@ -65,10 +65,14 @@
 
   <rule>
     <conditions>
+      <or>
+        <ViewIdMatches>/personal/.*</ViewIdMatches>
+        <ViewIdMatches>/view/reader/.*</ViewIdMatches>
+      </or>
       <not>
         <loggedIn />
       </not>
-      <ViewIdMatches>/personal/.*</ViewIdMatches>
+
     </conditions>
     <actions>
       <redirect>/deny.jab</redirect>
@@ -78,6 +82,10 @@
   
   <rule>
     <conditions>
+      <or>
+        <ViewIdMatches>/personal/admin/.*</ViewIdMatches>
+        <ViewIdMatches>/view/admin/.*</ViewIdMatches>
+      </or>
       <not>
         <or>
           <isUserInRole>ADMIN</isUserInRole>
@@ -86,7 +94,6 @@
           </condition>
         </or>
       </not>
-      <ViewIdMatches>/personal/admin/.*</ViewIdMatches>
     </conditions>
     <actions>
       <redirect>/deny.jab</redirect>
@@ -96,6 +103,10 @@
 
   <rule>
     <conditions>
+      <or>
+        <ViewIdMatches>/personal/author/.*</ViewIdMatches>
+        <ViewIdMatches>/view/author/.*</ViewIdMatches>
+      </or>
       <not>
         <or>
           <isUserInRole>AUTHOR</isUserInRole>
@@ -105,7 +116,6 @@
           </condition>
         </or>
       </not>
-      <ViewIdMatches>/personal/author/.*</ViewIdMatches>
     </conditions>
     <actions>
       <redirect>/deny.jab</redirect>
@@ -115,12 +125,15 @@
 
   <rule>
     <conditions>
+      <or>
+        <ViewIdMatches>/personal/globaladmin/.*</ViewIdMatches>
+        <ViewIdMatches>/view/globaladmin/.*</ViewIdMatches>
+      </or>
       <not>
         <condition>
           <class>sonia.blog.app.GlobalAdminCondition</class>
         </condition>
       </not>
-      <ViewIdMatches>/personal/globaladmin/.*</ViewIdMatches>
     </conditions>
     <actions>
       <redirect>/deny.jab</redirect>
