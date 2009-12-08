@@ -13,7 +13,7 @@
    xsi:schemaLocation='http://dev.sonia.de/schema/plugin-schema file:/Users/sdorra/Projects/jab/SoniaUtil/src/sonia/plugin/plugin-schema.xsd'>
   <name>sonia.devel</name>
   <display-name>Devel-Plugin</display-name>
-  <description>adds SampleData to the Database</description>
+  <description>add a page for monitoring the cache</description>
   <version>0.0.1</version>
   <vendor>Sebastian Sdorra</vendor>
   <activator>sonia.blog.devel.PluginActivator</activator>

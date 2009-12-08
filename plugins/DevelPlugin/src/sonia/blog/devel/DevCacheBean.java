@@ -35,53 +35,39 @@ package sonia.blog.devel;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import org.w3c.dom.Document;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
+import sonia.blog.api.app.Context;
+import sonia.blog.api.util.AbstractBean;
 
-import org.xml.sax.SAXException;
+import sonia.cache.CacheManager;
+import sonia.cache.ObjectCache;
 
-import sonia.util.XmlUtil;
+import sonia.util.Util;
 
 //~--- JDK imports ------------------------------------------------------------
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-
-import java.text.NumberFormat;
-
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
-import javax.xml.parsers.ParserConfigurationException;
+import javax.faces.event.ActionEvent;
+import javax.faces.model.DataModel;
+import javax.faces.model.ListDataModel;
 
 /**
  *
  * @author Sebastian Sdorra
  */
-public class RequestStatistic
+public class DevCacheBean extends AbstractBean
 {
 
   /**
    * Constructs ...
    *
-   *
-   * @param file
-   *
-   * @throws IOException
-   * @throws ParserConfigurationException
-   * @throws SAXException
    */
-  public RequestStatistic(File file)
-          throws IOException, SAXException, ParserConfigurationException
+  public DevCacheBean()
   {
-    Document doc = XmlUtil.buildDocument(new FileInputStream(file));
-
-    buildInformationList(doc);
+    super();
   }
 
   //~--- methods --------------------------------------------------------------
@@ -90,78 +76,91 @@ public class RequestStatistic
    * Method description
    *
    *
+   * @param event
+   */
+  public void clear(ActionEvent event)
+  {
+    CacheModelEntry entry = (CacheModelEntry) model.getRowData();
+
+    if (entry != null)
+    {
+      entry.getCache().clear();
+    }
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param event
+   */
+  public void clearAll(ActionEvent event)
+  {
+    cacheManger.clearAll();
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param event
+   */
+  public void reset(ActionEvent event)
+  {
+    CacheModelEntry entry = (CacheModelEntry) model.getRowData();
+
+    if (entry != null)
+    {
+      entry.getCache().reset();
+    }
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param event
+   */
+  public void resetAll(ActionEvent event)
+  {
+    cacheManger.resetAll();
+  }
+
+  //~--- get methods ----------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
    * @return
    */
-  @Override
-  public String toString()
+  public DataModel getCaches()
   {
-    StringBuffer result = new StringBuffer();
-    List<RequestStatisticInformation> valueList =
-      new ArrayList<RequestStatisticInformation>(statisticMap.values());
+    model = new ListDataModel();
 
-    Collections.sort(valueList);
+    Map<String, ObjectCache> caches = cacheManger.getCaches();
 
-    for (RequestStatisticInformation info : valueList)
+    if (Util.hasContent(caches))
     {
-      NumberFormat nf = NumberFormat.getInstance();
+      List<CacheModelEntry> entries = new ArrayList<CacheModelEntry>();
 
-      result.append(info.getRequestUri() + " : "
-                    + nf.format(info.getAverageLoadTime()) + "\n");
-    }
-
-    return result.toString();
-  }
-
-  /**
-   * Method description
-   *
-   *
-   * @param info
-   */
-  private void addToMap(RequestInformation info)
-  {
-    String requestUri = info.getRequestUri();
-    RequestStatisticInformation statisticInfo = statisticMap.get(requestUri);
-
-    if (statisticInfo == null)
-    {
-      statisticInfo = new RequestStatisticInformation(requestUri);
-      statisticMap.put(requestUri, statisticInfo);
-    }
-
-    statisticInfo.add(info.getRequestTime());
-  }
-
-  /**
-   * Method description
-   *
-   *
-   * @param doc
-   */
-  private void buildInformationList(Document doc)
-  {
-    statisticMap = new HashMap<String, RequestStatisticInformation>();
-
-    NodeList children = doc.getElementsByTagName("request");
-
-    if (children != null)
-    {
-      for (int i = 0; i < children.getLength(); i++)
+      for (Entry<String, ObjectCache> entry : caches.entrySet())
       {
-        Node child = children.item(i);
-
-        if (child.getNodeName().equals("request"))
-        {
-          RequestInformation info = new RequestInformation(child);
-
-          addToMap(info);
-        }
+        entries.add(new CacheModelEntry(entry.getKey(), entry.getValue()));
       }
+
+      model.setWrappedData(entries);
     }
+
+    return model;
   }
 
   //~--- fields ---------------------------------------------------------------
 
   /** Field description */
-  private Map<String, RequestStatisticInformation> statisticMap;
+  @Context
+  private CacheManager cacheManger;
+
+  /** Field description */
+  private DataModel model;
 }

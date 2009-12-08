@@ -7,24 +7,24 @@
     xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_1_2.xsd">
 
   <managed-bean>
-    <managed-bean-name>DevelBean</managed-bean-name>
-    <managed-bean-class>sonia.blog.devel.DevelBean</managed-bean-class>
-    <managed-bean-scope>session</managed-bean-scope>
+    <managed-bean-name>DevCacheBean</managed-bean-name>
+    <managed-bean-class>sonia.blog.devel.DevCacheBean</managed-bean-class>
+    <managed-bean-scope>request</managed-bean-scope>
   </managed-bean>
 
   <navigation-rule>
     <from-view-id>/personal/*</from-view-id>
     <navigation-case>
-      <from-outcome>devel</from-outcome>
-      <to-view-id>/view/devel/devel.xhtml</to-view-id>
+      <from-outcome>devCaches</from-outcome>
+      <to-view-id>/view/globaladmin/devel/caches.xhtml</to-view-id>
     </navigation-case>
   </navigation-rule>
 
-  <navigation-rule>
-    <from-view-id>/view/devel/devel.xhtml</from-view-id>
+    <navigation-rule>
+    <from-view-id>/view/*</from-view-id>
     <navigation-case>
-      <from-outcome>statistic</from-outcome>
-      <to-view-id>/view/devel/perfStatistic.xhtml</to-view-id>
+      <from-outcome>devCaches</from-outcome>
+      <to-view-id>/view/globaladmin/devel/caches.xhtml</to-view-id>
     </navigation-case>
   </navigation-rule>
     
