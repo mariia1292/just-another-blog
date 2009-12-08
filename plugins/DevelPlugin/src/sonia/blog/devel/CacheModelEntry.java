@@ -33,122 +33,28 @@
 
 package sonia.blog.devel;
 
+//~--- non-JDK imports --------------------------------------------------------
+
+import sonia.cache.ObjectCache;
+
 /**
  *
  * @author Sebastian Sdorra
  */
-public class RequestStatisticInformation
-        implements Comparable<RequestStatisticInformation>
+public class CacheModelEntry
 {
 
   /**
    * Constructs ...
    *
    *
-   * @param requestUri
+   * @param name
+   * @param cache
    */
-  public RequestStatisticInformation(String requestUri)
+  public CacheModelEntry(String name, ObjectCache cache)
   {
-    this.requestUri = requestUri;
-  }
-
-  //~--- methods --------------------------------------------------------------
-
-  /**
-   * Method description
-   *
-   *
-   * @param loadTime
-   */
-  public void add(long loadTime)
-  {
-    this.hits++;
-    this.loadTime += loadTime;
-  }
-
-  /**
-   * Method description
-   *
-   *
-   * @param o
-   *
-   * @return
-   */
-  public int compareTo(RequestStatisticInformation o)
-  {
-    int result = 1;
-
-    if (o != null)
-    {
-      double r = getAverageLoadTime() - o.getAverageLoadTime();
-
-      result = (int) Math.round(r);
-    }
-
-    return result;
-  }
-
-  /**
-   * Method description
-   *
-   *
-   * @param obj
-   *
-   * @return
-   */
-  @Override
-  public boolean equals(Object obj)
-  {
-    if (obj == null)
-    {
-      return false;
-    }
-
-    if (getClass() != obj.getClass())
-    {
-      return false;
-    }
-
-    final RequestStatisticInformation other = (RequestStatisticInformation) obj;
-
-    if (this.hits != other.hits)
-    {
-      return false;
-    }
-
-    if (this.loadTime != other.loadTime)
-    {
-      return false;
-    }
-
-    if ((this.requestUri == null)
-        ? (other.requestUri != null)
-        : !this.requestUri.equals(other.requestUri))
-    {
-      return false;
-    }
-
-    return true;
-  }
-
-  /**
-   * Method description
-   *
-   *
-   * @return
-   */
-  @Override
-  public int hashCode()
-  {
-    int hash = 5;
-
-    hash = 83 * hash + this.hits;
-    hash = 83 * hash + (int) (this.loadTime ^ (this.loadTime >>> 32));
-    hash = 83 * hash + ((this.requestUri != null)
-                        ? this.requestUri.hashCode()
-                        : 0);
-
-    return hash;
+    this.name = name;
+    this.cache = cache;
   }
 
   //~--- get methods ----------------------------------------------------------
@@ -159,9 +65,9 @@ public class RequestStatisticInformation
    *
    * @return
    */
-  public double getAverageLoadTime()
+  public ObjectCache getCache()
   {
-    return loadTime / hits;
+    return cache;
   }
 
   /**
@@ -170,9 +76,9 @@ public class RequestStatisticInformation
    *
    * @return
    */
-  public int getHits()
+  public String getName()
   {
-    return hits;
+    return name;
   }
 
   /**
@@ -181,19 +87,27 @@ public class RequestStatisticInformation
    *
    * @return
    */
-  public String getRequestUri()
+  public int getSize()
   {
-    return requestUri;
+    return cache.size();
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  public String getType()
+  {
+    return cache.getClass().getName();
   }
 
   //~--- fields ---------------------------------------------------------------
 
   /** Field description */
-  private int hits = 0;
+  private ObjectCache cache;
 
   /** Field description */
-  private long loadTime = 0l;
-
-  /** Field description */
-  private String requestUri;
+  private String name;
 }

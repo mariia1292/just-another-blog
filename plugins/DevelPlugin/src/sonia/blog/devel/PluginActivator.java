@@ -35,12 +35,14 @@ package sonia.blog.devel;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import org.apache.myfaces.custom.navmenu.NavigationMenuItem;
-
-import sonia.blog.api.app.BlogContext;
-import sonia.blog.api.app.BlogRequest;
 import sonia.blog.api.app.Constants;
 import sonia.blog.api.navigation.NavigationProvider;
+import sonia.blog.entity.Role;
+
+import sonia.jsf.access.Action;
+import sonia.jsf.access.Condition;
+import sonia.jsf.access.def.Rule;
+import sonia.jsf.access.def.action.RedirectAction;
 
 import sonia.plugin.Activator;
 import sonia.plugin.PluginContext;
@@ -48,9 +50,13 @@ import sonia.plugin.service.ServiceReference;
 
 //~--- JDK imports ------------------------------------------------------------
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.faces.context.FacesContext;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  *
@@ -67,13 +73,11 @@ public class PluginActivator implements Activator
    */
   public void start(PluginContext context)
   {
-    if (reference == null)
-    {
-      reference = getServiceReference(context);
-    }
-
-    navigationProvider = new GlobalAdminNavigationProvider();
-    reference.add(navigationProvider);
+    reference = context.getServiceRegistry().get(NavigationProvider.class,
+            Constants.NAVIGATION_GLOBALADMIN);
+    provider = new DevNavigationProvider();
+    reference.add(provider);
+    this.accessRule = createAccessRule();
   }
 
   /**
@@ -84,18 +88,11 @@ public class PluginActivator implements Activator
    */
   public void stop(PluginContext context)
   {
-    if (reference == null)
-    {
-      reference = getServiceReference(context);
-    }
-
-    if (navigationProvider != null)
-    {
-      reference.remove(navigationProvider);
-    }
+    reference.remove(provider);
+    provider = null;
+    reference = null;
+    accessRule = null;
   }
-
-  //~--- get methods ----------------------------------------------------------
 
   /**
    * Method description
@@ -103,64 +100,39 @@ public class PluginActivator implements Activator
    *
    * @return
    */
-  public boolean isDatabaseEmbedded()
+  private Rule createAccessRule()
   {
-    return BlogContext.getInstance().getConfiguration().getBoolean(
-        Constants.CONFIG_DB_EMBEDDED, Boolean.FALSE);
-  }
+    Rule rule = new Rule();
 
-  /**
-   * Method description
-   *
-   *
-   * @param context
-   *
-   * @return
-   */
-  private ServiceReference<NavigationProvider> getServiceReference(
-          PluginContext context)
-  {
-    return context.getServiceRegistry().get(NavigationProvider.class,
-            Constants.NAVIGATION_GLOBALADMIN);
-  }
-
-  //~--- inner classes --------------------------------------------------------
-
-  /**
-   * Class description
-   *
-   *
-   * @version    Enter version here..., 09/01/17
-   * @author     Enter your name here...
-   */
-  private static class GlobalAdminNavigationProvider
-          implements NavigationProvider
-  {
-
-    /**
-     * Method description
-     *
-     *
-     * @param facesContext
-     * @param request
-     * @param items
-     */
-    public void handleNavigation(FacesContext facesContext,
-                                 BlogRequest request,
-                                 List<NavigationMenuItem> items)
+    rule.setCondition(new Condition()
     {
-      if (request.getUser().isGlobalAdmin())
+      public boolean handleCondition(HttpServletRequest request,
+                                     FacesContext context)
       {
-        items.add(new NavigationMenuItem("Development", "devel"));
+        return !request.isUserInRole(Role.GLOBALADMIN.name());
       }
-    }
-  }
+      public void init(Map<String, String> parameters)
+      {
 
+        // do nothing
+      }
+    });
+
+    List<Action> actions = new ArrayList<Action>();
+
+    actions.add(new RedirectAction("/deny.jab"));
+    rule.setActions(actions);
+
+    return rule;
+  }
 
   //~--- fields ---------------------------------------------------------------
 
   /** Field description */
-  private NavigationProvider navigationProvider;
+  private Rule accessRule;
+
+  /** Field description */
+  private NavigationProvider provider;
 
   /** Field description */
   private ServiceReference<NavigationProvider> reference;

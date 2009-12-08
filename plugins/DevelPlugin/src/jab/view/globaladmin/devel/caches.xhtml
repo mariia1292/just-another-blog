@@ -1,0 +1,100 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:blog="http://jab.nitilon.org/blog/">
+
+  <body>
+
+    <ui:composition template="/personal/template.xhtml">
+
+      <ui:define name="title">
+        <h:outputText value="Caches" />
+      </ui:define>
+
+      <ui:define name="content">
+
+        <h1><h:outputText value="Caches" /></h1>
+
+        <h:form id="cacheForm">
+
+          <h:dataTable id="cachesTable" styleClass="full" value="#{DevCacheBean.caches}" var="Cache">
+
+            <h:column>
+              <f:facet name="header">
+                <h:outputText value="Name" />
+              </f:facet>
+              <h:outputText value="#{Cache.name}" />
+            </h:column>
+
+            <h:column>
+              <f:facet name="header">
+                <h:outputText value="Type" />
+              </f:facet>
+              <h:outputText value="#{Cache.type}" />
+            </h:column>
+
+            <h:column>
+              <f:facet name="header">
+                <h:outputText value="Size" />
+              </f:facet>
+              <h:outputText value="#{Cache.size}" />
+            </h:column>
+
+            <h:column>
+              <f:facet name="header">
+                <h:outputText value="Hits" />
+              </f:facet>
+              <h:outputText value="#{Cache.cache.hits}" />
+            </h:column>
+
+            <h:column>
+              <f:facet name="header">
+                <h:outputText value="Missed" />
+              </f:facet>
+              <h:outputText value="#{Cache.cache.missed}" />
+            </h:column>
+
+            <h:column>
+              <f:facet name="header">
+                <h:outputText value="HitRatio" />
+              </f:facet>
+              <h:outputText value="#{Cache.cache.hitRatio}">
+                <f:convertNumber pattern="###.##" />
+              </h:outputText>
+            </h:column>
+
+            <h:column>
+              <f:facet name="header">
+                <h:outputText value="Clear" />
+              </f:facet>
+              <h:commandLink value="clear" actionListener="#{DevCacheBean.clear}" />
+            </h:column>
+
+            <h:column>
+              <f:facet name="header">
+                <h:outputText value="Reset" />
+              </f:facet>
+              <h:commandLink value="reset" actionListener="#{DevCacheBean.reset}" />
+            </h:column>
+
+          </h:dataTable>
+
+          <h2>Aktionen</h2>
+
+          <ul>
+            <li><h:commandLink value="clear all" actionListener="#{DevCacheBean.clearAll}" /></li>
+            <li><h:commandLink value="reset all" actionListener="#{DevCacheBean.resetAll}" /></li>
+          </ul>
+
+        </h:form>
+
+      </ui:define>
+
+    </ui:composition>
+
+
+  </body>
+</html>
