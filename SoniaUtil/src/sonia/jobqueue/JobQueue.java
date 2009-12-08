@@ -62,7 +62,9 @@ public class JobQueue<T extends Job>
    */
   public JobQueue()
   {
-    this(Runtime.getRuntime().availableProcessors() * 2);
+    this((Runtime.getRuntime().availableProcessors() * 2 > 8)
+         ? 8
+         : Runtime.getRuntime().availableProcessors());
   }
 
   /**
