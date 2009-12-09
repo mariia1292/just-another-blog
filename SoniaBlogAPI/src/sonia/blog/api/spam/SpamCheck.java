@@ -37,6 +37,7 @@ package sonia.blog.api.spam;
 
 import sonia.blog.api.app.BlogRequest;
 import sonia.blog.entity.Comment;
+import sonia.blog.entity.Trackback;
 
 /**
  *
@@ -55,4 +56,15 @@ public interface SpamCheck
    * @return
    */
   public boolean isSpam(BlogRequest request, Comment comment);
+
+  /**
+   * Method description
+   *
+   *
+   * @param request
+   * @param trackback
+   *
+   * @return
+   */
+  public boolean isSpam(BlogRequest request, Trackback trackback);
 }
