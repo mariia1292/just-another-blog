@@ -38,6 +38,7 @@ package sonia.blog.spam;
 import sonia.blog.api.app.BlogRequest;
 import sonia.blog.api.spam.SpamCheck;
 import sonia.blog.entity.Comment;
+import sonia.blog.entity.Trackback;
 
 import sonia.util.Util;
 
@@ -87,6 +88,34 @@ public class BlacklistSpamCheck implements SpamCheck
     }
 
     String url = comment.getAuthorURL();
+
+    if (Util.hasContent(url))
+    {
+      result = isSpam(url);
+    }
+
+    return result;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param request
+   * @param trackback
+   *
+   * @return
+   */
+  public boolean isSpam(BlogRequest request, Trackback trackback)
+  {
+    boolean result = false;
+
+    if (blacklist == null)
+    {
+      loadBlacklist(request);
+    }
+
+    String url = trackback.getUrl();
 
     if (Util.hasContent(url))
     {

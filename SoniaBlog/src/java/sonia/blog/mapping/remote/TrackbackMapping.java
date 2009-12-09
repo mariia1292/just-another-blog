@@ -38,12 +38,17 @@ package sonia.blog.mapping.remote;
 import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.app.BlogRequest;
 import sonia.blog.api.app.BlogResponse;
+import sonia.blog.api.app.Constants;
 import sonia.blog.api.dao.Dao;
 import sonia.blog.api.dao.EntryDAO;
 import sonia.blog.api.dao.TrackbackDAO;
 import sonia.blog.api.mapping.FinalMapping;
+import sonia.blog.api.spam.SpamCheck;
 import sonia.blog.entity.Entry;
 import sonia.blog.entity.Trackback;
+
+import sonia.plugin.service.Service;
+import sonia.plugin.service.ServiceReference;
 
 import sonia.util.Util;
 
@@ -52,6 +57,7 @@ import sonia.util.Util;
 import java.io.IOException;
 import java.io.PrintWriter;
 
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -162,12 +168,29 @@ public class TrackbackMapping extends FinalMapping
 
               trackback.setEntry(entry);
 
-              if (trackbackDAO.add(
-                      BlogContext.getInstance().getSystemBlogSession(),
-                      trackback))
+              if (isSpam(request, trackback))
               {
-                writeResponse(writer, CODE_OK, MSG_OK);
-                response.setStatus(HttpServletResponse.SC_OK);
+                if (trackbackDAO.add(
+                        BlogContext.getInstance().getSystemBlogSession(),
+                        trackback))
+                {
+                  writeResponse(writer, CODE_OK, MSG_OK);
+                  response.setStatus(HttpServletResponse.SC_OK);
+                }
+                else
+                {
+                  if (logger.isLoggable(Level.WARNING))
+                  {
+                    StringBuffer msg = new StringBuffer();
+
+                    msg.append("blog spam trackback from ").append(
+                        request.getRemoteAddr()).append(" with url ").append(
+                        trackback.getUrl());
+                    logger.warning(msg.toString());
+                  }
+
+                  writeResponse(writer, CODE_ERROR, MSG_ERROR);
+                }
               }
               else
               {
@@ -226,11 +249,52 @@ public class TrackbackMapping extends FinalMapping
     }
   }
 
+  //~--- get methods ----------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   *
+   * @param request
+   * @param trackback
+   *
+   * @return
+   */
+  private boolean isSpam(BlogRequest request, Trackback trackback)
+  {
+    boolean result = false;
+
+    if (spamCheckReference != null)
+    {
+      List<SpamCheck> list = spamCheckReference.getAll();
+
+      if (Util.hasContent(list))
+      {
+        for (SpamCheck check : list)
+        {
+          if (check.isSpam(request, trackback))
+          {
+            result = true;
+
+            break;
+          }
+        }
+      }
+    }
+
+    return result;
+  }
+
   //~--- fields ---------------------------------------------------------------
 
   /** Field description */
   @Dao
   private EntryDAO entryDAO;
+
+  /** Field description */
+  @Service(Constants.SERVICE_SPAMCHECK)
+  private ServiceReference<SpamCheck> spamCheckReference;
 
   /** Field description */
   @Dao
