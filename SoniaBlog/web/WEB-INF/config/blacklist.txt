@@ -14,6 +14,28 @@
 #   You can find out more about MT-Blacklist at
 #   http://www.jayallen.org/projects/mt-blacklist
 #
+# jab new
+forums.hyperic.com
+carepages.com
+21publish.com
+www.google.com/search
+edublogs.org
+blockstar.com
+weebly.com
+dyskutuj.com
+pbase.com
+iblog365.com
+theinsider.com
+wetpaint.com
+page.tl
+blogs.ie
+auburn.edu
+profile.typepad.com
+bigblogworld.com
+webgarden.com
+aliplay.us
+database-empire.com
+# orginal list
 ([\w\-_.]+\.)?(l(so|os)tr)\.[a-z]{2,}     # Catchall regex for lsotr.xxx and lostr.xxx with or without a subdomain
 (blow)[\w\-_.]*job[\w\-_.]*\.[a-z]{2,}     # This stops a whole slew of domain name variations relating to -- well -- you know...
 (buy)[\w\-_.]*online[\w\-_.]*\.[a-z]{2,}     # Catchall regexp for many spam sites
