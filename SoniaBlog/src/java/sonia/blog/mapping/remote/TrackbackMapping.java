@@ -168,7 +168,7 @@ public class TrackbackMapping extends FinalMapping
 
               trackback.setEntry(entry);
 
-              if (isSpam(request, trackback))
+              if (!isSpam(request, trackback))
               {
                 if (trackbackDAO.add(
                         BlogContext.getInstance().getSystemBlogSession(),
