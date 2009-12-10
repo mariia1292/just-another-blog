@@ -184,7 +184,7 @@ public class TrackbackMapping extends FinalMapping
                     StringBuffer msg = new StringBuffer();
 
                     msg.append("blog spam trackback from ").append(
-                        request.getRemoteAddr()).append(" with url ").append(
+                        request.getLocalAddr()).append(" with url ").append(
                         trackback.getUrl());
                     logger.warning(msg.toString());
                   }
