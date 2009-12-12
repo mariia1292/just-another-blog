@@ -196,6 +196,12 @@
       <type>java.lang.Object</type>
     </attribute>
     <attribute>
+      <name>absolute</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.Object</type>
+    </attribute>
+    <attribute>
       <name>role</name>
       <required>false</required>
       <rtexprvalue>true</rtexprvalue>
