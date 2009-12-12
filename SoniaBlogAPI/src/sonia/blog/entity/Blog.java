@@ -473,6 +473,17 @@ public class Blog implements Serializable, PermaObject, Comparable<Blog>
    *
    * @return
    */
+  public boolean isAllowTrackbacks()
+  {
+    return allowTrackbacks;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
   public boolean isSendAutoPing()
   {
     return sendAutoPing;
@@ -522,6 +533,17 @@ public class Blog implements Serializable, PermaObject, Comparable<Blog>
   public void setAllowMacros(boolean allowMacros)
   {
     this.allowMacros = allowMacros;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param allowTrackback
+   */
+  public void setAllowTrackbacks(boolean allowTrackbacks)
+  {
+    this.allowTrackbacks = allowTrackbacks;
   }
 
   /**
@@ -814,6 +836,9 @@ public class Blog implements Serializable, PermaObject, Comparable<Blog>
 
   /** Field description */
   private boolean sendAutoPing = false;
+
+  /** Field description */
+  private boolean allowTrackbacks = true;
 
   /** Field description */
   private boolean allowMacros = true;

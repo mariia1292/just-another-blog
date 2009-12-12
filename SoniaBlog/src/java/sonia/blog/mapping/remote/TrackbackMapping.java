@@ -120,102 +120,109 @@ public class TrackbackMapping extends FinalMapping
                                     String[] param)
           throws IOException, ServletException
   {
-    response.setContentType("text/xml");
-
-    PrintWriter writer = response.getWriter();
-
-    writer.println("<?xml version=\"1.0\" encoding=\"utf-8\"?>");
-    writer.println("<response>");
-
-    if (request.getMethod().equalsIgnoreCase(METHOD_POST))
+    if (request.getCurrentBlog().isAllowTrackbacks())
     {
-      if ((param != null) && (param.length == 1))
+      response.setContentType("text/xml");
+
+      PrintWriter writer = response.getWriter();
+
+      writer.println("<?xml version=\"1.0\" encoding=\"utf-8\"?>");
+      writer.println("<response>");
+
+      if (request.getMethod().equalsIgnoreCase(METHOD_POST))
       {
-        try
+        if ((param != null) && (param.length == 1))
         {
-          Long entryId = Long.parseLong(param[0]);
-          Entry entry = entryDAO.get(entryId);
-
-          if (entry != null)
+          try
           {
-            Comment trackback = null;
-            String url = request.getParameter("url");
+            Long entryId = Long.parseLong(param[0]);
+            Entry entry = entryDAO.get(entryId);
 
-            if (Util.hasContent(url))
+            if (entry != null)
             {
-              trackback = new Comment(Comment.Type.TRACKBACK_RECEIVE);
-              trackback.setAuthorURL(url);
+              Comment trackback = null;
+              String url = request.getParameter("url");
 
-              StringBuffer content = new StringBuffer("[Trackback]");
-              String title = request.getParameter("title");
-
-              if (Util.hasContent(title))
+              if (Util.hasContent(url))
               {
-                content.append(": ").append(title);
-              }
+                trackback = new Comment(Comment.Type.TRACKBACK_RECEIVE);
+                trackback.setAuthorURL(url);
 
-              String blogname = request.getParameter("blog_name");
+                StringBuffer content = new StringBuffer("[Trackback]");
+                String title = request.getParameter("title");
 
-              if (Util.hasContent(blogname))
-              {
-                trackback.setAuthorName(blogname);
-              }
+                if (Util.hasContent(title))
+                {
+                  content.append(": ").append(title);
+                }
 
-              trackback.setAuthorURL(url);
-              trackback.setContent(content.toString());
-              trackback.setEntry(entry);
-              trackback.setSpam(isSpam(request, trackback));
+                String blogname = request.getParameter("blog_name");
 
-              if (commentDAO.add(
-                      BlogContext.getInstance().getSystemBlogSession(),
-                      trackback))
-              {
-                writeResponse(writer, CODE_OK, MSG_OK);
-                response.setStatus(HttpServletResponse.SC_OK);
+                if (Util.hasContent(blogname))
+                {
+                  trackback.setAuthorName(blogname);
+                }
+
+                trackback.setAuthorURL(url);
+                trackback.setContent(content.toString());
+                trackback.setEntry(entry);
+                trackback.setSpam(isSpam(request, trackback));
+
+                if (commentDAO.add(
+                        BlogContext.getInstance().getSystemBlogSession(),
+                        trackback))
+                {
+                  writeResponse(writer, CODE_OK, MSG_OK);
+                  response.setStatus(HttpServletResponse.SC_OK);
+                }
+                else
+                {
+                  if (logger.isLoggable(Level.WARNING))
+                  {
+                    StringBuffer msg = new StringBuffer();
+
+                    msg.append("blog spam trackback from ").append(
+                        request.getLocalAddr()).append(" with url ").append(
+                        trackback.getAuthorURL());
+                    logger.warning(msg.toString());
+                  }
+
+                  writeResponse(writer, CODE_ERROR, MSG_ERROR);
+                }
               }
               else
               {
-                if (logger.isLoggable(Level.WARNING))
-                {
-                  StringBuffer msg = new StringBuffer();
-
-                  msg.append("blog spam trackback from ").append(
-                      request.getLocalAddr()).append(" with url ").append(
-                      trackback.getAuthorURL());
-                  logger.warning(msg.toString());
-                }
-
-                writeResponse(writer, CODE_ERROR, MSG_ERROR);
+                writeResponse(writer, CODE_NOURL, MSG_NOURL);
               }
             }
             else
             {
-              writeResponse(writer, CODE_NOURL, MSG_NOURL);
+              response.sendError(HttpServletResponse.SC_NOT_FOUND);
             }
           }
-          else
+          catch (NumberFormatException ex)
           {
-            response.sendError(HttpServletResponse.SC_NOT_FOUND);
+            logger.log(Level.SEVERE, null, ex);
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST);
           }
         }
-        catch (NumberFormatException ex)
+        else
         {
-          logger.log(Level.SEVERE, null, ex);
           response.sendError(HttpServletResponse.SC_BAD_REQUEST);
         }
       }
       else
       {
-        response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+        writeResponse(writer, CODE_NOPOST, MSG_NOPOST);
       }
+
+      writer.println("</response>");
+      writer.close();
     }
     else
     {
-      writeResponse(writer, CODE_NOPOST, MSG_NOPOST);
+      response.sendError(HttpServletResponse.SC_NOT_FOUND);
     }
-
-    writer.println("</response>");
-    writer.close();
   }
 
   /**
