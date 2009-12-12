@@ -62,6 +62,7 @@ public class LinkTag extends BaseTag
     title = null;
     target = null;
     disabled = null;
+    absolute = null;
     super.release();
   }
 
@@ -92,6 +93,17 @@ public class LinkTag extends BaseTag
   }
 
   //~--- set methods ----------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   * @param absolute
+   */
+  public void setAbsolute(ValueExpression absolute)
+  {
+    this.absolute = absolute;
+  }
 
   /**
    * Method description
@@ -198,10 +210,18 @@ public class LinkTag extends BaseTag
       component.setValueExpression("disabled", disabled);
     }
 
+    if (absolute != null)
+    {
+      component.setValueExpression("absolute", absolute);
+    }
+
     super.setProperties(component);
   }
 
   //~--- fields ---------------------------------------------------------------
+
+  /** Field description */
+  private ValueExpression absolute;
 
   /** Field description */
   private ValueExpression disabled;

@@ -90,6 +90,7 @@ public class LinkComponent extends BaseComponent
     target = (String) state[4];
     object = (PermaObject) state[5];
     disabled = (Boolean) state[6];
+    absolute = (Boolean) state[7];
   }
 
   /**
@@ -103,7 +104,7 @@ public class LinkComponent extends BaseComponent
   @Override
   public Object saveState(FacesContext context)
   {
-    Object[] state = new Object[7];
+    Object[] state = new Object[8];
 
     state[0] = super.saveState(context);
     state[1] = value;
@@ -112,11 +113,32 @@ public class LinkComponent extends BaseComponent
     state[4] = target;
     state[5] = object;
     state[6] = disabled;
+    state[7] = absolute;
 
     return state;
   }
 
   //~--- get methods ----------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  public Boolean getAbsolute()
+  {
+    if (absolute != null)
+    {
+      return absolute;
+    }
+
+    ValueExpression ve = getValueExpression("absolute");
+
+    return (ve != null)
+           ? (Boolean) ve.getValue(getFacesContext().getELContext())
+           : Boolean.FALSE;
+  }
 
   /**
    * Method description
@@ -256,6 +278,17 @@ public class LinkComponent extends BaseComponent
    * Method description
    *
    *
+   * @param absolute
+   */
+  public void setAbsolute(Boolean absolute)
+  {
+    this.absolute = absolute;
+  }
+
+  /**
+   * Method description
+   *
+   *
    * @param disabled
    */
   public void setDisabled(Boolean disabled)
@@ -320,6 +353,9 @@ public class LinkComponent extends BaseComponent
   }
 
   //~--- fields ---------------------------------------------------------------
+
+  /** Field description */
+  private Boolean absolute;
 
   /** Field description */
   private Boolean disabled;
