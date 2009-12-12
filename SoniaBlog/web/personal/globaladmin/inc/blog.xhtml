@@ -75,6 +75,10 @@
           <h:selectBooleanCheckbox id="allowHtmlComments" value="#{AdminBlogBean.blog.allowHtmlComments}" />
           <h:message for="allowHtmlComments" />
 
+          <h:outputLabel for="allowTrackbacks" value="#{label.allowTackbacks}" />
+          <h:selectBooleanCheckbox id="allowTrackbacks" value="#{AdminBlogBean.blog.allowTrackbacks}" />
+          <h:message for="allowTrackbacks" />
+
           <h:outputLabel for="autoPing" value="#{label.sendAutoPing}" />
           <h:selectBooleanCheckbox id="autoPing" value="#{AdminBlogBean.blog.sendAutoPing}" />
           <h:message for="autoPing" />

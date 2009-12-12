@@ -75,7 +75,7 @@ public class TrackBackRenderer extends BaseRenderer
     TrackBackComponent tbc = (TrackBackComponent) component;
     ContentObject co = tbc.getObject();
 
-    if (co.getId() != null)
+    if (co.getBlog().isAllowTrackbacks() && co.getId() != null)
     {
       BlogContext ctx = BlogContext.getInstance();
       LinkBuilder builder = ctx.getLinkBuilder();
