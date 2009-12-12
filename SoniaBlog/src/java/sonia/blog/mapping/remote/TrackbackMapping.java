@@ -163,6 +163,7 @@ public class TrackbackMapping extends FinalMapping
                   trackback.setAuthorName(blogname);
                 }
 
+                trackback.setAuthorAddress( request.getRemoteAddr() );
                 trackback.setAuthorURL(url);
                 trackback.setContent(content.toString());
                 trackback.setEntry(entry);
@@ -182,7 +183,7 @@ public class TrackbackMapping extends FinalMapping
                     StringBuffer msg = new StringBuffer();
 
                     msg.append("blog spam trackback from ").append(
-                        request.getLocalAddr()).append(" with url ").append(
+                        request.getRemoteAddr()).append(" with url ").append(
                         trackback.getAuthorURL());
                     logger.warning(msg.toString());
                   }
