@@ -12,7 +12,6 @@
     <mapping-file>/sonia/blog/dao/jpa/orm/User.xml</mapping-file>
     <mapping-file>/sonia/blog/dao/jpa/orm/BlogHitCount.xml</mapping-file>
     <mapping-file>/sonia/blog/dao/jpa/orm/Page.xml</mapping-file>
-    <mapping-file>/sonia/blog/dao/jpa/orm/Trackback.xml</mapping-file>
     <mapping-file>/sonia/blog/dao/jpa/orm/BlogParameter.xml</mapping-file>
     <exclude-unlisted-classes>true</exclude-unlisted-classes>
     <properties>
@@ -30,7 +29,6 @@
     <mapping-file>/sonia/blog/dao/jpa/orm/User.xml</mapping-file>
     <mapping-file>/sonia/blog/dao/jpa/orm/BlogHitCount.xml</mapping-file>
     <mapping-file>/sonia/blog/dao/jpa/orm/Page.xml</mapping-file>
-    <mapping-file>/sonia/blog/dao/jpa/orm/Trackback.xml</mapping-file>
     <mapping-file>/sonia/blog/dao/jpa/orm/BlogParameter.xml</mapping-file>
     <exclude-unlisted-classes>true</exclude-unlisted-classes>
     <properties>

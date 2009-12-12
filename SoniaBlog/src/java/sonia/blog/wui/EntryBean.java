@@ -55,7 +55,7 @@ import sonia.blog.entity.ContentObject;
 import sonia.blog.entity.Entry;
 import sonia.blog.entity.Tag;
 import sonia.blog.entity.User;
-import sonia.blog.util.BlogUtil;
+import sonia.blog.util.AutoTrackbackJob;
 import sonia.blog.util.NotificationJob;
 import sonia.blog.util.TrackbackJob;
 import sonia.blog.wui.model.EntryDataModel;
@@ -296,7 +296,7 @@ public class EntryBean extends AbstractEditorBean
                                             entry);
 
           BlogContext.getInstance().getJobQueue().add(job);
-          doTrackback(request.getCurrentBlog());
+          doTrackback(request);
           getMessageHandler().info(request, "createEntrySuccess");
         }
         else
@@ -309,7 +309,7 @@ public class EntryBean extends AbstractEditorBean
       {
         if (entryDAO.edit(session, entry))
         {
-          doTrackback(request.getCurrentBlog());
+          doTrackback(request);
           getMessageHandler().info(request, "updateEntrySuccess");
         }
         else
@@ -337,7 +337,10 @@ public class EntryBean extends AbstractEditorBean
   {
     try
     {
-      BlogUtil.sendTrackbackPing(entry, new URL(trackbackURL));
+      BlogRequest request = getRequest();
+
+      BlogContext.getInstance().getJobQueue().add(new TrackbackJob(request,
+              entry, new URL(trackbackURL)));
       getMessageHandler().info(getRequest(), "sendTrackBackSuccess");
     }
     catch (Exception ex)
@@ -707,16 +710,15 @@ public class EntryBean extends AbstractEditorBean
    * Method description
    *
    *
-   * @param blog
+   *
+   * @param request
    */
-  private void doTrackback(Blog blog)
+  private void doTrackback(BlogRequest request)
   {
-    if (entry.isPublished() && blog.isSendAutoPing())
+    if (entry.isPublished() && request.getCurrentBlog().isSendAutoPing())
     {
-      ResourceBundle bundle = getResourceBundle("message");
-
-      BlogContext.getInstance().getJobQueue().add(new TrackbackJob(entry,
-              bundle));
+      BlogContext.getInstance().getJobQueue().add(new AutoTrackbackJob(request,
+              entry));
     }
   }
 

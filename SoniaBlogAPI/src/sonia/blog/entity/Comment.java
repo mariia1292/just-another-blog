@@ -49,6 +49,40 @@ public class Comment implements Serializable, PermaObject, Cloneable
   /** Field description */
   private static final long serialVersionUID = 4507923974114945766L;
 
+  //~--- constant enums -------------------------------------------------------
+
+  /**
+   * Enum description
+   *
+   */
+  public enum Type { COMMENT, TRACKBACK_SEND, TRACKBACK_RECEIVE }
+
+  //~--- constructors ---------------------------------------------------------
+
+  /**
+   * Constructs ...
+   *
+   */
+  public Comment()
+  {
+    this.type = Type.COMMENT;
+  }
+
+  /**
+   * Constructs ...
+   *
+   *
+   * @param type
+   */
+  public Comment(Type type)
+  {
+    this.type = type;
+  }
+
+  public boolean isTrackbackComment(){
+    return type == Type.TRACKBACK_SEND || type == Type.TRACKBACK_RECEIVE;
+  }
+
   //~--- methods --------------------------------------------------------------
 
   /**
@@ -276,6 +310,17 @@ public class Comment implements Serializable, PermaObject, Cloneable
    *
    * @return
    */
+  public Type getType()
+  {
+    return type;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
   public boolean isSpam()
   {
     return spam;
@@ -383,6 +428,17 @@ public class Comment implements Serializable, PermaObject, Cloneable
     this.spam = spam;
   }
 
+  /**
+   * Method description
+   *
+   *
+   * @param type
+   */
+  public void setType(Type type)
+  {
+    this.type = type;
+  }
+
   //~--- methods --------------------------------------------------------------
 
   /**
@@ -425,4 +481,7 @@ public class Comment implements Serializable, PermaObject, Cloneable
 
   /** Field description */
   private boolean spam = false;
+
+  /** Field description */
+  private Type type;
 }

@@ -428,12 +428,6 @@
           <cascade-remove />
         </cascade>
       </one-to-many>
-      <one-to-many name="trackbacks" mapped-by="entry">
-        <cascade>
-          <cascade-merge />
-          <cascade-remove />
-        </cascade>
-      </one-to-many>
       <many-to-many name="categories" fetch="LAZY">
         <order-by>name</order-by>
         <cascade>

@@ -35,12 +35,6 @@ package sonia.blog.util;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import org.w3c.dom.Document;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-
-import org.xml.sax.SAXException;
-
 import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.app.BlogRequest;
 import sonia.blog.api.app.BlogResponse;
@@ -50,7 +44,6 @@ import sonia.blog.api.macro.WebMacro;
 import sonia.blog.api.macro.WebResource;
 import sonia.blog.api.util.AbstractBean;
 import sonia.blog.entity.Attachment;
-import sonia.blog.entity.Blog;
 import sonia.blog.entity.ContentObject;
 import sonia.blog.entity.Entry;
 import sonia.blog.entity.Page;
@@ -61,19 +54,11 @@ import sonia.macro.Macro;
 import sonia.macro.MacroResult;
 
 import sonia.util.Util;
-import sonia.util.XmlUtil;
 
 //~--- JDK imports ------------------------------------------------------------
 
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.io.UnsupportedEncodingException;
-
-import java.net.URL;
-import java.net.URLConnection;
-import java.net.URLEncoder;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -93,8 +78,6 @@ import javax.faces.model.SelectItem;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-
-import javax.xml.parsers.ParserConfigurationException;
 
 /**
  *
@@ -323,79 +306,6 @@ public class BlogUtil
     return cal.getTime();
   }
 
-  /**
-   * Method description
-   *
-   *
-   * @param entry
-   * @param url
-   *
-   * @return
-   *
-   * @throws IOException
-   * @throws ParserConfigurationException
-   * @throws SAXException
-   */
-  public static boolean sendTrackbackPing(Entry entry, URL url)
-          throws IOException, SAXException, ParserConfigurationException
-  {
-    if (logger.isLoggable(Level.INFO))
-    {
-      StringBuffer log = new StringBuffer();
-
-      log.append("send ping to ").append(url);
-      logger.info(log.toString());
-    }
-
-    Blog blog = entry.getBlog();
-    URLConnection conn = url.openConnection();
-
-    conn.setDoOutput(true);
-
-    BufferedWriter writer = null;
-
-    try
-    {
-      writer =
-        new BufferedWriter(new OutputStreamWriter(conn.getOutputStream()));
-
-      String title = URLEncoder.encode(entry.getTitle(), Constants.ENCODING);
-
-      writer.write("title=");
-      writer.write(title);
-
-      StringBuffer link = new StringBuffer();
-
-      link.append("/list/").append(entry.getId()).append(".jab");
-
-      String urlString =
-        BlogContext.getInstance().getLinkBuilder().buildLink(blog,
-          link.toString());
-
-      writer.write("&url=");
-      writer.write(urlString);
-
-      String content = getContent(entry);
-
-      writer.write("&excerpt=");
-      writer.write(content);
-
-      String blogName = URLEncoder.encode(blog.getTitle(), Constants.ENCODING);
-
-      writer.write("&blog_name=");
-      writer.write(blogName);
-    }
-    finally
-    {
-      if (writer != null)
-      {
-        writer.close();
-      }
-    }
-
-    return checkResponse(conn);
-  }
-
   //~--- get methods ----------------------------------------------------------
 
   /**
@@ -468,38 +378,6 @@ public class BlogUtil
     }
 
     return response;
-  }
-
-  /**
-   * Method description
-   *
-   *
-   * @param entry
-   *
-   * @return
-   *
-   * @throws UnsupportedEncodingException
-   */
-  public static String getContent(Entry entry)
-          throws UnsupportedEncodingException
-  {
-    String content = entry.getTeaser();
-
-    if (Util.isBlank(content))
-    {
-      content = entry.getContent();
-    }
-
-    content = Util.extractHTMLText(content);
-
-    if (content.length() > 255)
-    {
-      content = content.substring(0, 255);
-    }
-
-    content = URLEncoder.encode(content, Constants.ENCODING);
-
-    return content;
   }
 
   /**
@@ -659,48 +537,5 @@ public class BlogUtil
     }
 
     return items;
-  }
-
-  //~--- methods --------------------------------------------------------------
-
-  /**
-   * Method description
-   *
-   *
-   * @param conn
-   *
-   * @return
-   *
-   * @throws IOException
-   * @throws ParserConfigurationException
-   * @throws SAXException
-   */
-  private static boolean checkResponse(URLConnection conn)
-          throws IOException, SAXException, ParserConfigurationException
-  {
-    boolean result = false;
-    Document doc = XmlUtil.buildDocument(conn.getInputStream());
-    NodeList list = doc.getElementsByTagName("error");
-
-    if (XmlUtil.hasContent(list))
-    {
-      Node node = list.item(0);
-      String errorCode = node.getTextContent();
-
-      if (errorCode.trim().equals("0"))
-      {
-        result = true;
-      }
-      else
-      {
-        StringBuffer log = new StringBuffer();
-
-        log.append("trackback ").append(conn.getURL());
-        log.append(" returned errorcode ").append(errorCode);
-        logger.warning(log.toString());
-      }
-    }
-
-    return result;
   }
 }

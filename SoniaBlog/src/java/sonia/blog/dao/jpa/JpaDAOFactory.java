@@ -48,7 +48,6 @@ import sonia.blog.api.dao.DAOFactory;
 import sonia.blog.api.dao.EntryDAO;
 import sonia.blog.api.dao.PageDAO;
 import sonia.blog.api.dao.TagDAO;
-import sonia.blog.api.dao.TrackbackDAO;
 import sonia.blog.api.dao.UserDAO;
 import sonia.blog.dao.jpa.profile.DatabaseProfile;
 
@@ -359,23 +358,6 @@ public class JpaDAOFactory extends DAOFactory
    * @return
    */
   @Override
-  public TrackbackDAO getTrackbackDAO()
-  {
-    if (trackbackDAO == null)
-    {
-      trackbackDAO = new JpaTrackbackDAO(strategy);
-    }
-
-    return trackbackDAO;
-  }
-
-  /**
-   * Method description
-   *
-   *
-   * @return
-   */
-  @Override
   public UserDAO getUserDAO()
   {
     if (userDAO == null)
@@ -574,9 +556,6 @@ public class JpaDAOFactory extends DAOFactory
 
   /** Field description */
   private TagDAO tagDAO;
-
-  /** Field description */
-  private TrackbackDAO trackbackDAO;
 
   /** Field description */
   private UserDAO userDAO;

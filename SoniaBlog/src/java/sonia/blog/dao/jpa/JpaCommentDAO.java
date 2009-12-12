@@ -39,6 +39,7 @@ import sonia.blog.api.app.Constants;
 import sonia.blog.api.dao.CommentDAO;
 import sonia.blog.entity.Blog;
 import sonia.blog.entity.Comment;
+import sonia.blog.entity.Comment.Type;
 import sonia.blog.entity.Entry;
 
 //~--- JDK imports ------------------------------------------------------------
@@ -104,7 +105,29 @@ public class JpaCommentDAO extends JpaGenericDAO<Comment> implements CommentDAO
    * Method description
    *
    *
+   * @param blog
+   * @param type
+   *
+   * @return
+   */
+  public long count(Blog blog, Type type)
+  {
+    Query q = strategy.getNamedQuery("Comment.countByBlogAndType", false);
+
+    q.setParameter("blog", blog);
+    q.setParameter("type", type);
+
+    return (Long) q.getSingleResult();
+  }
+
+  //~--- get methods ----------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
    * @param entry
+   * @param spam
    *
    * @return
    */
@@ -118,6 +141,7 @@ public class JpaCommentDAO extends JpaGenericDAO<Comment> implements CommentDAO
    *
    *
    * @param entry
+   * @param spam
    * @param start
    * @param max
    *
@@ -179,8 +203,6 @@ public class JpaCommentDAO extends JpaGenericDAO<Comment> implements CommentDAO
     return findList("Comment.getAllByBlog", blog, start, max);
   }
 
-  //~--- get methods ----------------------------------------------------------
-
   /**
    * Method description
    *
@@ -210,11 +232,75 @@ public class JpaCommentDAO extends JpaGenericDAO<Comment> implements CommentDAO
    * Method description
    *
    *
+   * @param entry
+   * @param type
+   * @param start
+   * @param max
+   *
+   * @return
+   */
+  @SuppressWarnings("unchecked")
+  public List<Comment> getAll(Entry entry, Type type, int start, int max)
+  {
+    Query q = strategy.getNamedQuery("Comment.getAllByEntryAndType", false);
+
+    q.setParameter("entry", entry);
+    q.setParameter("type", type);
+
+    if (start > 0)
+    {
+      q.setFirstResult(start);
+    }
+
+    if (max > 0)
+    {
+      q.setMaxResults(max);
+    }
+
+    List<Comment> result = null;
+
+    try
+    {
+      result = q.getResultList();
+    }
+    catch (NoResultException ex) {}
+
+    return result;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param entry
+   * @param type
+   *
+   * @return
+   */
+  public List<Comment> getAll(Entry entry, Type type)
+  {
+    return getAll(entry, type, -1, -1);
+  }
+
+  /**
+   * Method description
+   *
+   *
    * @return
    */
   @Override
   protected Logger getLogger()
   {
     return logger;
+  }
+
+  public long count(Entry entry, Type type)
+  {
+        Query q = strategy.getNamedQuery("Comment.countByEntryAndType", false);
+
+    q.setParameter("entry", entry);
+    q.setParameter("type", type);
+
+    return (Long) q.getSingleResult();
   }
 }

@@ -39,13 +39,13 @@ import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.app.BlogRequest;
 import sonia.blog.api.app.BlogResponse;
 import sonia.blog.api.app.Constants;
+import sonia.blog.api.dao.CommentDAO;
 import sonia.blog.api.dao.Dao;
 import sonia.blog.api.dao.EntryDAO;
-import sonia.blog.api.dao.TrackbackDAO;
 import sonia.blog.api.mapping.FinalMapping;
 import sonia.blog.api.spam.SpamCheck;
+import sonia.blog.entity.Comment;
 import sonia.blog.entity.Entry;
-import sonia.blog.entity.Trackback;
 
 import sonia.plugin.service.Service;
 import sonia.plugin.service.ServiceReference;
@@ -138,62 +138,53 @@ public class TrackbackMapping extends FinalMapping
 
           if (entry != null)
           {
-            Trackback trackback = null;
+            Comment trackback = null;
             String url = request.getParameter("url");
 
-            if (!Util.isBlank(url))
+            if (Util.hasContent(url))
             {
-              trackback = new Trackback(Trackback.TYPE_RECEIVE, url);
+              trackback = new Comment(Comment.Type.TRACKBACK_RECEIVE);
+              trackback.setAuthorURL(url);
 
+              StringBuffer content = new StringBuffer("[Trackback]");
               String title = request.getParameter("title");
 
-              if (!Util.isBlank(title))
+              if (Util.hasContent(title))
               {
-                trackback.setTitle(title);
-              }
-
-              String excerpt = request.getParameter("excerpt");
-
-              if (!Util.isBlank(excerpt))
-              {
-                trackback.setExcerpt(excerpt);
+                content.append(": ").append(title);
               }
 
               String blogname = request.getParameter("blog_name");
 
-              if (!Util.isBlank(blogname))
+              if (Util.hasContent(blogname))
               {
-                trackback.setBlogname(blogname);
+                trackback.setAuthorName(blogname);
               }
 
+              trackback.setAuthorURL(url);
+              trackback.setContent(content.toString());
               trackback.setEntry(entry);
+              trackback.setSpam(isSpam(request, trackback));
 
-              if (!isSpam(request, trackback))
+              if (commentDAO.add(
+                      BlogContext.getInstance().getSystemBlogSession(),
+                      trackback))
               {
-                if (trackbackDAO.add(
-                        BlogContext.getInstance().getSystemBlogSession(),
-                        trackback))
-                {
-                  writeResponse(writer, CODE_OK, MSG_OK);
-                  response.setStatus(HttpServletResponse.SC_OK);
-                }
-                else
-                {
-                  if (logger.isLoggable(Level.WARNING))
-                  {
-                    StringBuffer msg = new StringBuffer();
-
-                    msg.append("blog spam trackback from ").append(
-                        request.getLocalAddr()).append(" with url ").append(
-                        trackback.getUrl());
-                    logger.warning(msg.toString());
-                  }
-
-                  writeResponse(writer, CODE_ERROR, MSG_ERROR);
-                }
+                writeResponse(writer, CODE_OK, MSG_OK);
+                response.setStatus(HttpServletResponse.SC_OK);
               }
               else
               {
+                if (logger.isLoggable(Level.WARNING))
+                {
+                  StringBuffer msg = new StringBuffer();
+
+                  msg.append("blog spam trackback from ").append(
+                      request.getLocalAddr()).append(" with url ").append(
+                      trackback.getAuthorURL());
+                  logger.warning(msg.toString());
+                }
+
                 writeResponse(writer, CODE_ERROR, MSG_ERROR);
               }
             }
@@ -257,11 +248,11 @@ public class TrackbackMapping extends FinalMapping
    *
    *
    * @param request
-   * @param trackback
+   * @param comment
    *
    * @return
    */
-  private boolean isSpam(BlogRequest request, Trackback trackback)
+  private boolean isSpam(BlogRequest request, Comment comment)
   {
     boolean result = false;
 
@@ -273,7 +264,7 @@ public class TrackbackMapping extends FinalMapping
       {
         for (SpamCheck check : list)
         {
-          if (check.isSpam(request, trackback))
+          if (check.isSpam(request, comment))
           {
             result = true;
 
@@ -290,13 +281,13 @@ public class TrackbackMapping extends FinalMapping
 
   /** Field description */
   @Dao
+  private CommentDAO commentDAO;
+
+  /** Field description */
+  @Dao
   private EntryDAO entryDAO;
 
   /** Field description */
   @Service(Constants.SERVICE_SPAMCHECK)
   private ServiceReference<SpamCheck> spamCheckReference;
-
-  /** Field description */
-  @Dao
-  private TrackbackDAO trackbackDAO;
 }

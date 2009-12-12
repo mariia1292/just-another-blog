@@ -38,10 +38,6 @@
     <impl class="sonia.blog.search.SearchIndexListener" />
     <impl class="sonia.blog.util.CacheListener" />
   </service>
-
-  <service class="sonia.blog.api.dao.DAOListener" path="/listener/trackback">
-    <impl class="sonia.blog.util.CacheListener" />
-  </service>
   
   <service class="sonia.blog.api.dao.DAOListener" path="/listener/entry">
     <impl class="sonia.blog.search.SearchIndexListener" />

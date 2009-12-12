@@ -41,7 +41,7 @@
           <h:outputText id="address" value="#{CommentBean.comment.authorAddress}" />
           
           <h:outputLabel for="commentContent" value="#{label.content}" />
-          <h:outputText id="commentContent" value="#{CommentBean.comment.content}" />
+          <h:outputText id="commentContent" value="#{CommentBean.comment.content}" escape="false" />
           
         </h:panelGrid>
         

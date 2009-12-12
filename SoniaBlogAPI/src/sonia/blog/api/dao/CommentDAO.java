@@ -64,7 +64,32 @@ public interface CommentDAO extends GenericDAO<Comment>
    * Method description
    *
    *
+   * @param blog
+   * @param type
+   *
+   * @return
+   */
+  public long count(Blog blog, Comment.Type type);
+
+  /**
+   * Method description
+   *
+   *
    * @param entry
+   * @param type
+   *
+   * @return
+   */
+  public long count(Entry entry, Comment.Type type);
+
+  //~--- get methods ----------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   * @param entry
+   * @param spam
    *
    * @return
    */
@@ -75,6 +100,7 @@ public interface CommentDAO extends GenericDAO<Comment>
    *
    *
    * @param entry
+   * @param spam
    * @param start
    * @param max
    *
@@ -91,6 +117,31 @@ public interface CommentDAO extends GenericDAO<Comment>
    * @return
    */
   public List<Comment> getAll(Blog blog);
+
+  /**
+   * Method description
+   *
+   *
+   * @param entry
+   * @param type
+   * @param start
+   * @param max
+   *
+   * @return
+   */
+  public List<Comment> getAll(Entry entry, Comment.Type type, int start,
+                              int max);
+
+  /**
+   * Method description
+   *
+   *
+   * @param entry
+   * @param type
+   *
+   * @return
+   */
+  public List<Comment> getAll(Entry entry, Comment.Type type);
 
   /**
    * Method description
