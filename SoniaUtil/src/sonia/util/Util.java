@@ -466,8 +466,23 @@ public class Util
    */
   public static String getContent(URL url) throws IOException
   {
+    return getContent(url.openConnection());
+  }
+
+  /**
+   * Method description
+   *
+   *
+   *
+   * @param conn
+   *
+   * @return
+   *
+   * @throws IOException
+   */
+  public static String getContent(URLConnection conn) throws IOException
+  {
     StringBuffer result = null;
-    URLConnection conn = url.openConnection();
     String type = conn.getContentType();
 
     if ((type != null) && type.toLowerCase().startsWith("text"))

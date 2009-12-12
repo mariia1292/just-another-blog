@@ -18,7 +18,6 @@ import sonia.blog.entity.Comment;
 import sonia.blog.entity.Entry;
 import sonia.blog.entity.Page;
 import sonia.blog.entity.Role;
-import sonia.blog.entity.Trackback;
 import sonia.blog.entity.User;
 
 /**
@@ -114,17 +113,6 @@ public class EntityFactory
   public Page createPage()
   {
     return new Page();
-  }
-
-  /**
-   * Method description
-   *
-   *
-   * @return
-   */
-  public Trackback createTrackback()
-  {
-    return new Trackback();
   }
 
   /**

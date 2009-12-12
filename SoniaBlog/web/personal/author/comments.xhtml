@@ -41,7 +41,7 @@
                 <h:outputText value="#{label.comment}" />
               </f:facet>
               <h:outputText value="#{Comment.authorName}: " />
-              <h:outputText value="#{Comment.content}" />
+              <h:outputText value="#{Comment.content}" escape="false" />
             </h:column>
             
             <h:column>

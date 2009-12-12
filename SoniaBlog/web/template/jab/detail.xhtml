@@ -53,26 +53,6 @@
 
         </h:panelGrid>
 
-        <h3><h:outputText value="#{label.trackbacks}" /></h3>
-
-        <h:dataTable id="trackbackTable" value="#{BlogBean.trackbacks}" var="Trackback">
-
-          <h:column>
-
-            <h:outputLink value="#{Trackback.url}" target="_blank">
-              <h:outputText value="#{label.send}" rendered="#{Trackback.type == 0}" />
-              <h:outputText value="#{label.receive}" rendered="#{Trackback.type == 1}" />
-            </h:outputLink>
-
-            <h:outputText value=": #{Trackback.excerpt}" escape="false" /><br />
-
-            <h:outputText value="#{Trackback.date}">
-              <f:convertDateTime pattern="#{BlogBean.blog.dateFormat}" />
-            </h:outputText>
-          </h:column>
-
-        </h:dataTable>
-
         <t:div styleClass="comments" rendered="#{BlogBean.showComments}">
 
           <a name="comments"></a>
@@ -98,7 +78,7 @@
               <h:outputLink rel="nofollow" target="_blank" value="#{Comment.authorURL}" rendered="#{Comment.authorURL != null}">
                 <h:outputText value="#{Comment.authorName}" />
               </h:outputLink>
-              <h:outputText value=": #{Comment.content}" escape="#{!BlogBean.blog.allowHtmlComments}" />
+              <h:outputText value=": #{Comment.content}" escape="#{Comment.trackbackComment ? false : ! BlogBean.blog.allowHtmlComments}" />
               <br />
 
               <h:outputText value="#{Comment.creationDate}">

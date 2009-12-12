@@ -44,7 +44,6 @@ import sonia.blog.entity.Comment;
 import sonia.blog.entity.Entry;
 import sonia.blog.entity.Page;
 import sonia.blog.entity.PermaObject;
-import sonia.blog.entity.Trackback;
 
 import sonia.cache.ObjectCache;
 
@@ -197,10 +196,6 @@ public class CacheListener implements DAOListener, ConfigurationListener
     else if (item instanceof Category)
     {
       id = ((Category) item).getBlog().getId();
-    }
-    else if (item instanceof Trackback)
-    {
-      id = ((Trackback) item).getEntry().getId();
     }
 
     return id;

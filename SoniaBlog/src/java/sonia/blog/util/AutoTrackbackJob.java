@@ -35,41 +35,60 @@ package sonia.blog.util;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.app.BlogJob;
 import sonia.blog.api.app.BlogRequest;
 import sonia.blog.entity.Blog;
+import sonia.blog.entity.Comment.Type;
 import sonia.blog.entity.Entry;
 
 import sonia.jobqueue.JobException;
 
+import sonia.util.Util;
+
 //~--- JDK imports ------------------------------------------------------------
 
-import java.io.IOException;
-
+import java.net.MalformedURLException;
 import java.net.URL;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  *
- * @author sdorra
+ * @author Sebastian Sdorra
  */
-public class TrackbackJob implements BlogJob
+public class AutoTrackbackJob implements BlogJob
 {
+
+  /** Field description */
+  private static final Pattern INTERNAL_PATTERN =
+    Pattern.compile("(?m)(?i)<a.*href=[\"'](http[^\"']*)[\"'].*>.*</a>");
+
+  /** Field description */
+  private static final long serialVersionUID = -3051850801915999862L;
+
+  /** Field description */
+  private static Logger logger =
+    Logger.getLogger(AutoTrackbackJob.class.getName());
+
+  //~--- constructors ---------------------------------------------------------
 
   /**
    * Constructs ...
    *
    *
+   *
    * @param request
    * @param entry
-   * @param url
    */
-  public TrackbackJob(BlogRequest request, Entry entry, URL url)
+  public AutoTrackbackJob(BlogRequest request, Entry entry)
   {
     this.entry = entry;
-    this.url = url;
     this.sender = new TrackbackSender(request, entry);
   }
 
@@ -83,13 +102,34 @@ public class TrackbackJob implements BlogJob
    */
   public void excecute() throws JobException
   {
-    try
+    if (BlogContext.getDAOFactory().getCommentDAO().count(entry,
+            Type.TRACKBACK_SEND) == 0)
     {
-      sender.sendPing(url);
+      String content = entry.getContent();
+
+      if (Util.hasContent(content))
+      {
+        List<URL> urls = buildUrls(content);
+
+        for (URL url : urls)
+        {
+          try
+          {
+            sender.sendPing(url);
+          }
+          catch (Exception ex)
+          {
+            throw new JobException(ex);
+          }
+        }
+      }
     }
-    catch (IOException ex)
+    else if (logger.isLoggable(Level.FINE))
     {
-      throw new JobException(ex);
+      StringBuffer msg = new StringBuffer("trackback for entry ");
+
+      msg.append(entry.getId()).append(" allready send");
+      logger.fine(msg.toString());
     }
   }
 
@@ -114,9 +154,7 @@ public class TrackbackJob implements BlogJob
    */
   public String getDescription()
   {
-    StringBuffer des = new StringBuffer("send a trackback to");
-
-    return des.append(url).toString();
+    return "auto trackback job for " + entry.getId();
   }
 
   /**
@@ -127,7 +165,42 @@ public class TrackbackJob implements BlogJob
    */
   public String getName()
   {
-    return TrackbackJob.class.getName();
+    return AutoTrackbackJob.class.getName();
+  }
+
+  //~--- methods --------------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   * @param content
+   *
+   * @return
+   */
+  private List<URL> buildUrls(String content)
+  {
+    List<URL> urls = new ArrayList<URL>();
+    Matcher m = INTERNAL_PATTERN.matcher(content);
+
+    while (m.find())
+    {
+      String href = m.group(1);
+
+      try
+      {
+        if (Util.hasContent(href))
+        {
+          urls.add(new URL(href));
+        }
+      }
+      catch (MalformedURLException ex)
+      {
+        logger.log(Level.FINEST, null, ex);
+      }
+    }
+
+    return urls;
   }
 
   //~--- fields ---------------------------------------------------------------
@@ -137,7 +210,4 @@ public class TrackbackJob implements BlogJob
 
   /** Field description */
   private TrackbackSender sender;
-
-  /** Field description */
-  private URL url;
 }
