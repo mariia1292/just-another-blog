@@ -104,7 +104,7 @@ public class TrackbackSender
   public TrackbackSender(BlogRequest request, Entry entry)
   {
     this.session = request.getBlogSession();
-    this.address = request.getLocalAddr();
+    this.address = request.getRemoteAddr();
     this.locale = request.getLocale();
     this.entry = entry;
   }
