@@ -196,7 +196,7 @@ public class DefaultMailService implements MailService
       StringBuffer log = new StringBuffer();
 
       log.append("try to send message: \n");
-      log.append("\tto: ").append(from).append("\n");
+      log.append("\tto: ").append(to).append("\n");
       log.append("\tfrom: ").append(from).append("\n");
       log.append("\tsubject: ").append(subject).append("\n");
       log.append("\tcontent: ").append(text).append("\n");
