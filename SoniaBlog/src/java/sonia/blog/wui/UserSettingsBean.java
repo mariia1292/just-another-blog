@@ -43,6 +43,7 @@ import sonia.blog.api.dao.UserDAO;
 import sonia.blog.api.util.AbstractBean;
 import sonia.blog.entity.Blog;
 import sonia.blog.entity.BlogMember;
+import sonia.blog.entity.Role;
 import sonia.blog.entity.User;
 
 import sonia.plugin.service.ServiceReference;
@@ -166,6 +167,15 @@ public class UserSettingsBean extends AbstractBean
       User u = getUser();
 
       member = userDAO.getMember(b, u);
+
+      if (member == null)
+      {
+        Role r = u.isGlobalAdmin()
+                 ? Role.ADMIN
+                 : Role.READER;
+
+        userDAO.setRole(b, u, r);
+      }
     }
 
     return member;
