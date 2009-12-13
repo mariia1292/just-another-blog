@@ -109,13 +109,22 @@ public class JpaDAOFactory extends DAOFactory
   {
     BlogContext ctx = BlogContext.getInstance();
     String serverInfo = ctx.getServletContext().getServerInfo();
+
+    if (logger.isLoggable(Level.INFO))
+    {
+      StringBuffer msg = new StringBuffer();
+
+      msg.append("laod pu for ").append(serverInfo);
+      logger.info(msg.toString());
+    }
+
     BlogConfiguration config = ctx.getConfiguration();
     String pu = "SoniaBlog-oracle-PU";
     Map<String, String> parameters = new HashMap<String, String>();
     File tmpDir =
       ctx.getResourceManager().getDirectory(Constants.RESOURCE_TEMP, true);
 
-    if (serverInfo.equals("GlassFish/v3"))
+    if (serverInfo.contains("GlassFish") && serverInfo.contains("v3"))
     {
       logger.info("load EclispeLink PersistenceProvider");
       pu = "SoniaBlog-eclipse-PU";
