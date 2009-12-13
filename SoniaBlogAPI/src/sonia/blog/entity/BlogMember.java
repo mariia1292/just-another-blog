@@ -196,9 +196,20 @@ public class BlogMember implements Serializable
    *
    * @return
    */
-  public boolean isNotify()
+  public boolean isCommentNotify()
   {
-    return notify;
+    return commentNotify;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  public boolean isEntryNotify()
+  {
+    return entryNotify;
   }
 
   //~--- set methods ----------------------------------------------------------
@@ -218,22 +229,33 @@ public class BlogMember implements Serializable
    * Method description
    *
    *
-   * @param id
+   * @param commentNotify
    */
-  public void setId(Long id)
+  public void setCommentNotify(boolean commentNotify)
   {
-    this.id = id;
+    this.commentNotify = commentNotify;
   }
 
   /**
    * Method description
    *
    *
-   * @param notify
+   * @param entryNotify
    */
-  public void setNotify(boolean notify)
+  public void setEntryNotify(boolean entryNotify)
   {
-    this.notify = notify;
+    this.entryNotify = entryNotify;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param id
+   */
+  public void setId(Long id)
+  {
+    this.id = id;
   }
 
   /**
@@ -275,10 +297,13 @@ public class BlogMember implements Serializable
   private Blog blog;
 
   /** Field description */
-  private Long id;
+  private boolean entryNotify = false;
 
   /** Field description */
-  private boolean notify = false;
+  private boolean commentNotify = false;
+
+  /** Field description */
+  private Long id;
 
   /** Field description */
   private Date registrationDate;

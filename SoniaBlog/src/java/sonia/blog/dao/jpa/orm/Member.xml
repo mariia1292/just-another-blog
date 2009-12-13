@@ -22,7 +22,12 @@
     </named-query>
     <named-query name="BlogMember.getAllByBlogActiveAndNotify">
       <query>
-      select m from BlogMember as m where m.blog = :blog and m.notify = :notify and m.user.active = :active
+      select m from BlogMember as m where m.blog = :blog and m.entryNotify = :notify and m.user.active = :active
+      </query>
+    </named-query>
+    <named-query name="BlogMember.getAllByBlogActiveAndCommentNotify">
+      <query>
+        select m from BlogMember as m where m.blog = :blog and m.commentNotify = :notify and m.user.active = :active
       </query>
     </named-query>
     <named-query name="BlogMember.getAllByBlog">

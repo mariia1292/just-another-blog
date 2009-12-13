@@ -56,7 +56,6 @@ import sonia.blog.entity.Entry;
 import sonia.blog.entity.Tag;
 import sonia.blog.entity.User;
 import sonia.blog.util.AutoTrackbackJob;
-import sonia.blog.util.NotificationJob;
 import sonia.blog.util.TrackbackJob;
 import sonia.blog.wui.model.EntryDataModel;
 
@@ -290,12 +289,7 @@ public class EntryBean extends AbstractEditorBean
         entry.setAuthor(author);
 
         if (entryDAO.add(session, entry))
-        {
-          ResourceBundle bundle = getResourceBundle("message");
-          BlogJob job = new NotificationJob(bundle, request.getCurrentBlog(),
-                                            entry);
-
-          BlogContext.getInstance().getJobQueue().add(job);
+        { 
           doTrackback(request);
           getMessageHandler().info(request, "createEntrySuccess");
         }

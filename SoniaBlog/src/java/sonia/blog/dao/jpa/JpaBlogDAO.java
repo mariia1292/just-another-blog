@@ -313,6 +313,53 @@ public class JpaBlogDAO extends JpaGenericDAO<Blog> implements BlogDAO
    *
    *
    * @param blog
+   * @param active
+   * @param notify
+   *
+   * @return
+   */
+  public List<BlogMember> getCommentNotifyMembers(Blog blog, boolean active,
+          boolean notify)
+  {
+    Query q =
+      strategy.getNamedQuery("BlogMember.getAllByBlogActiveAndCommentNotify",
+                             false);
+
+    q.setParameter("blog", blog);
+    q.setParameter("active", active);
+    q.setParameter("notify", notify);
+
+    return excecuteListQuery(BlogMember.class, q);
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param blog
+   * @param active
+   * @param notify
+   *
+   * @return
+   */
+  public List<BlogMember> getEntryNotifyMembers(Blog blog, boolean active,
+          boolean notify)
+  {
+    Query q = strategy.getNamedQuery("BlogMember.getAllByBlogActiveAndNotify",
+                                     false);
+
+    q.setParameter("blog", blog);
+    q.setParameter("active", active);
+    q.setParameter("notify", notify);
+
+    return excecuteListQuery(BlogMember.class, q);
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param blog
    * @param start
    * @param max
    *
@@ -350,28 +397,6 @@ public class JpaBlogDAO extends JpaGenericDAO<Blog> implements BlogDAO
     q.setParameter("active", active);
     q.setFirstResult(start);
     q.setMaxResults(max);
-
-    return excecuteListQuery(BlogMember.class, q);
-  }
-
-  /**
-   * Method description
-   *
-   *
-   * @param blog
-   * @param active
-   * @param notify
-   *
-   * @return
-   */
-  public List<BlogMember> getMembers(Blog blog, boolean active, boolean notify)
-  {
-    Query q = strategy.getNamedQuery("BlogMember.getAllByBlogActiveAndNotify",
-                                     false);
-
-    q.setParameter("blog", blog);
-    q.setParameter("active", active);
-    q.setParameter("notify", notify);
 
     return excecuteListQuery(BlogMember.class, q);
   }

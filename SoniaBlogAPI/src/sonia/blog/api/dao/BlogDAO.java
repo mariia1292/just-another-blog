@@ -117,11 +117,25 @@ public interface BlogDAO extends GenericDAO<Blog>
    *
    * @param blog
    * @param active
-   * @param notify
+   * @param commentNotify
    *
    * @return
    */
-  public List<BlogMember> getMembers(Blog blog, boolean active, boolean notify);
+  public List<BlogMember> getCommentNotifyMembers(Blog blog, boolean active,
+          boolean commentNotify);
+
+  /**
+   * Method description
+   *
+   *
+   * @param blog
+   * @param active
+   * @param entryNotify
+   *
+   * @return
+   */
+  public List<BlogMember> getEntryNotifyMembers(Blog blog, boolean active,
+          boolean entryNotify);
 
   /**
    * Method description

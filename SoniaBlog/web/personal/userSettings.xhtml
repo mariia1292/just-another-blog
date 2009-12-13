@@ -74,9 +74,13 @@
 
           <h:panelGrid columns="3">
 
-            <h:outputLabel for="notify" value="#{label.notifyMe}" />
-            <h:selectBooleanCheckbox id="notify" value="#{UserSettingsBean.member.notify}" />
-            <h:message for="notify" />
+            <h:outputLabel for="entryNotify" value="#{label.entryNotifyMe}" />
+            <h:selectBooleanCheckbox id="entryNotify" value="#{UserSettingsBean.member.entryNotify}" />
+            <h:message for="entryNotify" />
+
+            <h:outputLabel for="commentNotify" value="#{label.commentNotifyMe}" rendered="#{PersonalBean.author}" />
+            <h:selectBooleanCheckbox id="commentNotify" value="#{UserSettingsBean.member.commentNotify}" rendered="#{PersonalBean.author}" />
+            <h:message for="commentNotify" rendered="#{PersonalBean.author}" />
 
           </h:panelGrid>
 
