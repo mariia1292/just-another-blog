@@ -35,6 +35,8 @@ bigblogworld.com
 webgarden.com
 aliplay.us
 database-empire.com
+vidilife.com
+mograph.net
 # orginal list
 ([\w\-_.]+\.)?(l(so|os)tr)\.[a-z]{2,}     # Catchall regex for lsotr.xxx and lostr.xxx with or without a subdomain
 (blow)[\w\-_.]*job[\w\-_.]*\.[a-z]{2,}     # This stops a whole slew of domain name variations relating to -- well -- you know...
