@@ -36,7 +36,6 @@ package sonia.blog.wui;
 //~--- non-JDK imports --------------------------------------------------------
 
 import sonia.blog.api.app.BlogContext;
-import sonia.blog.api.app.BlogJob;
 import sonia.blog.api.app.BlogRequest;
 import sonia.blog.api.app.BlogSession;
 import sonia.blog.api.app.Constants;
@@ -75,7 +74,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
-import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -278,12 +276,14 @@ public class EntryBean extends AbstractEditorBean
           entry.setTitle("NewEntry " + getDateString(request, new Date()));
         }
 
+        // TODO check if needed
         if (entry.getCategories() == null)
         {
           CategoryDAO categoryDAO = DAOFactory.getInstance().getCategoryDAO();
           Category cat = categoryDAO.getFirst(getRequest().getCurrentBlog());
-
-          entry.addCateogory(cat);
+          if ( cat != null ){
+            entry.addCateogory(cat);
+          }
         }
 
         entry.setAuthor(author);

@@ -109,6 +109,7 @@ public class ConfigBean extends AbstractBean
     File imageDirectory =
       BlogContext.getInstance().getResourceManager().getDirectory(
           Constants.RESOURCE_IMAGE, blog);
+    boolean success = true;
 
     if (imageDirectory.exists())
     {
@@ -116,12 +117,22 @@ public class ConfigBean extends AbstractBean
       {
         if (file.exists() && file.isFile())
         {
-          file.delete();
+          if (!file.delete())
+          {
+            success = false;
+          }
         }
       }
     }
 
-    getMessageHandler().info(getRequest(), "clearImageCache");
+    if (success)
+    {
+      getMessageHandler().info(getRequest(), "successClearImageCache");
+    }
+    else
+    {
+      getMessageHandler().info(getRequest(), "failureClearImageCache");
+    }
 
     return SUCCESS;
   }

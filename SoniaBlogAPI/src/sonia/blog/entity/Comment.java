@@ -79,10 +79,6 @@ public class Comment implements Serializable, PermaObject, Cloneable
     this.type = type;
   }
 
-  public boolean isTrackbackComment(){
-    return type == Type.TRACKBACK_SEND || type == Type.TRACKBACK_RECEIVE;
-  }
-
   //~--- methods --------------------------------------------------------------
 
   /**
@@ -94,19 +90,11 @@ public class Comment implements Serializable, PermaObject, Cloneable
    * @throws CloneNotSupportedException
    */
   @Override
-  public Object clone() throws CloneNotSupportedException
+  public Comment clone() throws CloneNotSupportedException
   {
-    Comment comment = new Comment();
+    Comment comment = (Comment) super.clone();
 
-    comment.setAuthor(author);
-    comment.setAuthorAddress(authorAddress);
-    comment.setAuthorMail(authorMail);
-    comment.setAuthorName(authorName);
-    comment.setAuthorURL(authorURL);
-    comment.setContent(content);
-    comment.setEntry(entry);
-    comment.setId(id);
-    comment.setSpam(spam);
+    comment.setId(null);
 
     return comment;
   }
@@ -324,6 +312,17 @@ public class Comment implements Serializable, PermaObject, Cloneable
   public boolean isSpam()
   {
     return spam;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  public boolean isTrackbackComment()
+  {
+    return (type == Type.TRACKBACK_SEND) || (type == Type.TRACKBACK_RECEIVE);
   }
 
   //~--- set methods ----------------------------------------------------------
