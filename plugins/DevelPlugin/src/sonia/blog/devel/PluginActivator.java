@@ -77,7 +77,6 @@ public class PluginActivator implements Activator
             Constants.NAVIGATION_GLOBALADMIN);
     provider = new DevNavigationProvider();
     reference.add(provider);
-    this.accessRule = createAccessRule();
   }
 
   /**
@@ -91,45 +90,9 @@ public class PluginActivator implements Activator
     reference.remove(provider);
     provider = null;
     reference = null;
-    accessRule = null;
-  }
-
-  /**
-   * Method description
-   *
-   *
-   * @return
-   */
-  private Rule createAccessRule()
-  {
-    Rule rule = new Rule();
-
-    rule.setCondition(new Condition()
-    {
-      public boolean handleCondition(HttpServletRequest request,
-                                     FacesContext context)
-      {
-        return !request.isUserInRole(Role.GLOBALADMIN.name());
-      }
-      public void init(Map<String, String> parameters)
-      {
-
-        // do nothing
-      }
-    });
-
-    List<Action> actions = new ArrayList<Action>();
-
-    actions.add(new RedirectAction("/deny.jab"));
-    rule.setActions(actions);
-
-    return rule;
   }
 
   //~--- fields ---------------------------------------------------------------
-
-  /** Field description */
-  private Rule accessRule;
 
   /** Field description */
   private NavigationProvider provider;

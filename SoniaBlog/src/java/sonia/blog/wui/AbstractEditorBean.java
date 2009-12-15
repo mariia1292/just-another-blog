@@ -282,88 +282,91 @@ public abstract class AbstractEditorBean extends AbstractBean
   {
     String result = UPLOAD_SUCCESS;
 
-    if (isPublished() &&!isNew())
+    if (uploadedFile != null)
     {
-      save();
-    }
-    else
-    {
-      save();
-    }
-
-    if (unzipFiles && uploadedFile.getName().endsWith(".zip"))
-    {
-      result = unzip();
-    }
-    else
-    {
-      Attachment attachment = new Attachment();
-
-      attachment.setMimeType(uploadedFile.getContentType());
-      attachment.setSize(uploadedFile.getSize());
-      attachment.setName(getUploadedFilename());
-      attachment.setDescription(uploadDescription);
-      setRelation(attachment);
-
-      InputStream in = null;
-      OutputStream out = null;
-
-      try
+      if (isNew())
       {
-        in = uploadedFile.getInputStream();
-
-        File rootDir = getDirectory();
-        File dir = getAttachmentDirectory(rootDir);
-
-        if (!dir.exists() &&!dir.mkdirs())
-        {
-          throw new BlogException("could not create attachment directory");
-        }
-
-        File file = new File(dir, "" + System.currentTimeMillis());
-
-        out = new FileOutputStream(file);
-        Util.copy(in, out);
-
-        String path = file.getAbsolutePath().substring(
-                          resourceDirectory.getAbsolutePath().length());
-
-        attachment.setFilePath(path);
-
-        if (!BlogContext.getDAOFactory().getAttachmentDAO().add(
-                getBlogSession(), attachment))
-        {
-          result = UPLOAD_FAILURE;
-        }
-        else
-        {
-          uploadDescription = null;
-        }
+        save();
       }
-      catch (Exception ex)
+
+      if (unzipFiles && uploadedFile.getName().endsWith(".zip"))
       {
-        logger.log(Level.SEVERE, null, ex);
-        result = UPLOAD_FAILURE;
+        result = unzip();
       }
-      finally
+      else
       {
+        Attachment attachment = new Attachment();
+
+        attachment.setMimeType(uploadedFile.getContentType());
+        attachment.setSize(uploadedFile.getSize());
+        attachment.setName(getUploadedFilename());
+        attachment.setDescription(uploadDescription);
+        setRelation(attachment);
+
+        InputStream in = null;
+        OutputStream out = null;
+
         try
         {
-          if (in != null)
+          in = uploadedFile.getInputStream();
+
+          File rootDir = getDirectory();
+          File dir = getAttachmentDirectory(rootDir);
+
+          if (!dir.exists() &&!dir.mkdirs())
           {
-            in.close();
+            throw new BlogException("could not create attachment directory");
           }
 
-          if (out != null)
+          File file = new File(dir, "" + System.currentTimeMillis());
+
+          out = new FileOutputStream(file);
+          Util.copy(in, out);
+
+          String path = file.getAbsolutePath().substring(
+                            resourceDirectory.getAbsolutePath().length());
+
+          attachment.setFilePath(path);
+
+          if (!BlogContext.getDAOFactory().getAttachmentDAO().add(
+                  getBlogSession(), attachment))
           {
-            out.close();
+            result = UPLOAD_FAILURE;
+          }
+          else
+          {
+            uploadDescription = null;
           }
         }
-        catch (IOException ex)
+        catch (Exception ex)
         {
           logger.log(Level.SEVERE, null, ex);
+          result = UPLOAD_FAILURE;
+        }
+        finally
+        {
+          try
+          {
+            if (in != null)
+            {
+              in.close();
+            }
+
+            if (out != null)
+            {
+              out.close();
+            }
+          }
+          catch (IOException ex)
+          {
+            logger.log(Level.SEVERE, null, ex);
+          }
         }
       }
+    }
+    else
+    {
+      getMessageHandler().warn(getRequest(), "noFileToUpload");
     }
 
     return result;
