@@ -47,21 +47,21 @@
             <version>1.0-SNAPSHOT</version>
             <configuration>
               <classpath>
-                <param>${basedir}/../libraries/rhino-17R2.jar</param>
-                <param>${basedir}/../libraries/closure-compiler.jar</param>
+                <param>${basedir}/../../libraries/rhino-17R2.jar</param>
+                <param>${basedir}/../../libraries/closure-compiler.jar</param>
               </classpath>
-              <jsBasePath>${project.build.sourceDirectory}</jsBasePath>
+              <jsBasePath>${project.build.outputDirectory}</jsBasePath>
               <jsIncludes>
                 <param>/jab/resource/script/*.js</param>
               </jsIncludes>
-              <yuiBasePath>${project.build.sourceDirectory}</yuiBasePath>
+              <yuiBasePath>${project.build.outputDirectory}</yuiBasePath>
               <yuiIncludes>
                 <param>/jab/resource/script/*.css</param>
               </yuiIncludes>
             </configuration>
             <executions>
               <execution>
-                <phase>compile</phase>
+                <phase>process-resources</phase>
                 <goals>
                   <goal>jscompress</goal>
                   <goal>yuicompress</goal>
