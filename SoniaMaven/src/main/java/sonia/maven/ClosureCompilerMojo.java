@@ -15,8 +15,10 @@ import org.apache.maven.plugin.MojoFailureException;
 
 //~--- JDK imports ------------------------------------------------------------
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
 
 import java.util.List;
 
@@ -49,9 +51,16 @@ public class ClosureCompilerMojo extends AbstractMojo
     }
     catch (Exception ex)
     {
-      getLog().error(ex);
+      if (ex instanceof MojoFailureException)
+      {
+        throw(MojoFailureException) ex;
+      }
+      else
+      {
+        getLog().error(ex);
 
-      throw new MojoFailureException(ex.getMessage());
+        throw new MojoFailureException(ex.getMessage());
+      }
     }
   }
 
@@ -65,9 +74,10 @@ public class ClosureCompilerMojo extends AbstractMojo
    *
    * @throws IOException
    * @throws InterruptedException
+   * @throws MojoFailureException
    */
   private void compress(String genClasspath, File file)
-          throws IOException, InterruptedException
+          throws IOException, InterruptedException, MojoFailureException
   {
     getLog().info("compress file " + file.getPath());
 
@@ -85,8 +95,35 @@ public class ClosureCompilerMojo extends AbstractMojo
     cmd.append(file.getAbsolutePath());
 
     Process p = Runtime.getRuntime().exec(cmd.toString());
+    int status = p.waitFor();
 
-    p.waitFor();
+    if (status != 0)
+    {
+      BufferedReader reader = null;
+
+      try
+      {
+        reader = new BufferedReader(new InputStreamReader(p.getErrorStream()));
+
+        String line = reader.readLine();
+
+        while (line != null)
+        {
+          getLog().warn(line);
+          line = reader.readLine();
+        }
+      }
+      finally
+      {
+        if (reader != null)
+        {
+          reader.close();
+        }
+      }
+
+      throw new MojoFailureException("closure returns with error " + status);
+    }
+
     temp.delete();
   }
 
