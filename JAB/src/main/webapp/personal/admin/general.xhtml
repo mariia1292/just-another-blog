@@ -106,7 +106,7 @@
 
         <h2><h:outputText value="#{label.syntaxHighlighterConfig}" /></h2>
 
-        <h:form>
+        <h:form id="codeThemeForm">
 
           <h:panelGrid columns="3">
 
@@ -132,7 +132,7 @@
           <ui:include src="#{provider}" />
         </c:forEach>
 
-        <h:form>
+        <h:form id="actionForm">
 
           <h2><h:outputText value="#{label.actions}" /></h2>
 

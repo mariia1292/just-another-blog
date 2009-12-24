@@ -3,10 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:f="http://java.sun.com/jsf/core"
-      xmlns:blog="http://jab.nitilon.org/blog/"
-      xmlns:c="http://java.sun.com/jstl/core"
-      xmlns:t="http://myfaces.apache.org/tomahawk">
+      xmlns:f="http://java.sun.com/jsf/core">
 
   <body>
 
@@ -23,6 +20,10 @@
             <f:validator validatorId="validator.domain" />
           </h:inputText>
           <h:message for="servername" />
+
+          <h:outputLabel for="active" value="#{label.active}" />
+          <h:selectBooleanCheckbox id="active" value="#{AdminBlogBean.blog.active}" />
+          <h:message for="active" />
 
           <h:outputLabel for="email" value="#{label.email}" />
           <h:inputText id="email" value="#{AdminBlogBean.blog.email}" required="true">
