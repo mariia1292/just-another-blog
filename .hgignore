@@ -1,9 +1,6 @@
 # netbeans temp & private files
-/?build/
-/?dist/
-/?private/
-.*-private.properties$
-
+/?target/
+profiles.xml
 # MacOS X Files
 \.DS_Store$
 \._\.DS_Store$
