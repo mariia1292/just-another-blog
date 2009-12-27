@@ -17,10 +17,44 @@
   <version>1.0Beta3</version>
   <name>JAB SoniaBlog</name>
   <url>http://www.just-another-blog.org</url>
+  
   <scm>
     <connection>scm:hg:https://hg.kenai.com/hg/jab~source-code</connection>
     <url>http://kenai.com/projects/jab/sources/source-code/show</url>
   </scm>
+
+  <developers>
+    <developer>
+      <id>s.sdorra</id>
+      <email>s.sdorra@gmail.com</email>
+      <name>Sebastian Sdorra</name>
+      <timezone>+1</timezone>
+    </developer>
+  </developers>
+
+  <mailingLists>
+    <mailingList>
+      <name>Commits</name>
+      <post>commits@jab.kenai.com</post>
+    </mailingList>
+    <mailingList>
+      <name>Dev</name>
+      <post>dev@jab.kenai.com</post>
+    </mailingList>
+    <mailingList>
+      <name>issues</name>
+      <post>issues@jab.kenai.com</post>
+    </mailingList>
+    <mailingList>
+      <name>users</name>
+      <post>users@jab.kenai.com</post>
+    </mailingList>
+  </mailingLists>
+
+  <issueManagement>
+    <system>Jira</system>
+    <url>http://kenai.com/jira/browse/JAB</url>
+  </issueManagement>
 
   <build>
     <plugins>
@@ -68,7 +102,7 @@
     <module>SoniaWebUtil</module>
     <module>JAB-API</module>
     <module>plugins</module>
-    <module>JAB</module>
+    <module>JAB-WebApp</module>
   </modules>
 
   <properties>
