@@ -16,8 +16,13 @@
   <packaging>pom</packaging>
   <version>1.0Beta3</version>
   <name>JAB SoniaBlog</name>
+  <description>Jab (Just Another Blog) is a Java EE weblog with focus on
+    performance, robustness, comfort and extensibility.
+    The jab is build on top off modern Java technologies
+    such as JPA, JSF, Facelets, Lucene and Java DB.
+  It is licensed under the BSD license.</description>
   <url>http://www.just-another-blog.org</url>
-  
+
   <scm>
     <connection>scm:hg:https://hg.kenai.com/hg/jab~source-code</connection>
     <url>http://kenai.com/projects/jab/sources/source-code/show</url>
@@ -56,6 +61,21 @@
     <url>http://kenai.com/jira/browse/JAB</url>
   </issueManagement>
 
+  <distributionManagement>
+    <site>
+      <id>jab.website</id>
+      <name>JAB Kenai Website</name>
+      <url>dav:https://kenai.com/website/jab</url>
+    </site>
+  </distributionManagement>
+
+  <licenses>
+    <license>
+      <name>BSD</name>
+      <url>http://www.opensource.org/licenses/bsd-license.php</url>
+    </license>
+  </licenses>
+
   <build>
     <plugins>
       <plugin>
@@ -93,8 +113,52 @@
       <version>4.7</version>
       <scope>test</scope>
     </dependency>
-    
+
   </dependencies>
+
+  <dependencyManagement>
+    <dependencies>
+
+      <dependency>
+        <groupId>org.apache.myfaces.tomahawk</groupId>
+        <artifactId>tomahawk12</artifactId>
+        <version>1.1.9</version>
+        <exclusions>
+          <exclusion>
+            <artifactId>batik-awt-util</artifactId>
+            <groupId>batik</groupId>
+          </exclusion>
+          <exclusion>
+            <artifactId>jstl</artifactId>
+            <groupId>javax.servlet</groupId>
+          </exclusion>
+          <exclusion>
+            <artifactId>itext</artifactId>
+            <groupId>com.lowagie</groupId>
+          </exclusion>
+        </exclusions>
+      </dependency>
+
+      <dependency>
+        <groupId>sonia.util</groupId>
+        <artifactId>SoniaUtil</artifactId>
+        <version>1.0</version>
+      </dependency>
+
+      <dependency>
+        <groupId>sonia.util</groupId>
+        <artifactId>SoniaWebUtil</artifactId>
+        <version>1.0</version>
+      </dependency>
+
+      <dependency>
+        <groupId>sonia.blog</groupId>
+        <artifactId>jab-api</artifactId>
+        <version>1.0Beta3</version>
+      </dependency>
+
+    </dependencies>
+  </dependencyManagement>
 
   <modules>
     <module>SoniaMaven</module>
