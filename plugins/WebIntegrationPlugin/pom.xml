@@ -2,14 +2,26 @@
 <project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <modelVersion>4.0.0</modelVersion>
+
   <parent>
-    <artifactId>JAB-Plugins</artifactId>
+    <artifactId>plugins</artifactId>
     <groupId>sonia.blog</groupId>
     <version>1.0Beta3</version>
     <relativePath>../pom.xml</relativePath>
   </parent>
+
   <groupId>sonia.blog</groupId>
   <artifactId>WebIntegrationPlugin</artifactId>
   <version>1.0-SNAPSHOT</version>
   <name>WebIntegrationPlugin</name>
+  <url>http://www.just-another-blog.org</url>
+
+  <distributionManagement>
+    <site>
+      <id>jab.website</id>
+      <name>JAB Kenai Website</name>
+      <url>dav:https://kenai.com/website/jab/plguins/WebIntegrationPlugin</url>
+    </site>
+  </distributionManagement>
+
 </project>
