@@ -48,6 +48,7 @@ import java.io.IOException;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
+import sonia.blog.util.BlogUtil;
 
 /**
  *
@@ -208,7 +209,7 @@ public class SearchRenderer extends BaseRenderer
           throws IOException
   {
     BlogRequest request =
-      (BlogRequest) context.getExternalContext().getRequest();
+      BlogUtil.getBlogRequest(context.getExternalContext().getRequest());
     boolean link = (searchComponent.getType() != null)
                    && searchComponent.getType().equals("link");
     LinkBuilder linkBuilder = BlogContext.getInstance().getLinkBuilder();

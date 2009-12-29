@@ -277,7 +277,7 @@ public class CalendarRenderer extends BaseRenderer
     int firstDay = cal.get(Calendar.DAY_OF_WEEK);
     int daysOfMonth = cal.getActualMaximum(Calendar.DAY_OF_MONTH);
     BlogRequest request =
-      (BlogRequest) context.getExternalContext().getRequest();
+      BlogUtil.getBlogRequest(context.getExternalContext().getRequest());
     Blog blog = request.getCurrentBlog();
     Date startDate = BlogUtil.createStartDate(year, month - 1);
     Date endDate = BlogUtil.createEndDate(year, month - 1);

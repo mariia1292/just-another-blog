@@ -56,6 +56,7 @@ import java.util.List;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
+import sonia.blog.util.BlogUtil;
 
 /**
  *
@@ -87,7 +88,7 @@ public class TagCloudRenderer extends BaseRenderer
     if (isRendered(context, cmp))
     {
       BlogRequest request =
-        (BlogRequest) context.getExternalContext().getRequest();
+        BlogUtil.getBlogRequest( context.getExternalContext().getRequest());
       Blog blog = request.getCurrentBlog();
       TagDAO tagDAO = BlogContext.getDAOFactory().getTagDAO();
       ResponseWriter writer = context.getResponseWriter();

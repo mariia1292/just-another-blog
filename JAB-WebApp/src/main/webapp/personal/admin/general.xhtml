@@ -136,10 +136,8 @@
 
           <h2><h:outputText value="#{label.actions}" /></h2>
 
-          <t:panelNavigation2 layout="list">
-            <t:commandNavigation2 value="#{label.reIndexSearch}" action="#{ConfigBean.reIndex}" />
-            <t:commandNavigation2 value="#{label.clearImageCache}" action="#{ConfigBean.clearImageCache}" />
-            <t:commandNavigation2 value="#{label.clearCache}" action="#{ConfigBean.clearCache}" />
+          <t:panelNavigation2 id="actionlist" layout="list">
+            <t:navigationMenuItems value="#{ConfigBean.actions}" />
           </t:panelNavigation2>
 
         </h:form>

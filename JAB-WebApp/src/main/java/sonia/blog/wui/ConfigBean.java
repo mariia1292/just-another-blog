@@ -35,11 +35,14 @@ package sonia.blog.wui;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import org.apache.myfaces.custom.navmenu.NavigationMenuItem;
+
 import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.app.BlogSession;
 import sonia.blog.api.app.Constants;
 import sonia.blog.api.dao.BlogDAO;
 import sonia.blog.api.dao.Dao;
+import sonia.blog.api.search.SearchContext;
 import sonia.blog.api.util.AbstractBean;
 import sonia.blog.entity.Blog;
 import sonia.blog.macro.CodeMacro;
@@ -54,7 +57,9 @@ import sonia.plugin.service.Service;
 
 import java.io.File;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.ResourceBundle;
 
 import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
@@ -192,6 +197,32 @@ public class ConfigBean extends AbstractBean
   }
 
   //~--- get methods ----------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  public List<NavigationMenuItem> getActions()
+  {
+    List<NavigationMenuItem> actions = new ArrayList<NavigationMenuItem>();
+    ResourceBundle label = getResourceBundle("label");
+    SearchContext context = BlogContext.getInstance().getSearchContext();
+
+    if (context != null)
+    {
+      actions.add(new NavigationMenuItem(label.getString("reIndexSearch"),
+                                         "#{ConfigBean.reIndex}"));
+    }
+
+    actions.add(new NavigationMenuItem(label.getString("clearImageCache"),
+                                       "#{ConfigBean.clearImageCache}"));
+    actions.add(new NavigationMenuItem(label.getString("clearCache"),
+                                       "#{ConfigBean.clearCache}"));
+
+    return actions;
+  }
 
   /**
    * Method description

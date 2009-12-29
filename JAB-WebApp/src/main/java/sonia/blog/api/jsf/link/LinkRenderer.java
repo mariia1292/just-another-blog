@@ -38,6 +38,7 @@ package sonia.blog.api.jsf.link;
 import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.app.BlogRequest;
 import sonia.blog.api.link.LinkBuilder;
+import sonia.blog.util.BlogUtil;
 
 import sonia.jsf.base.BaseRenderer;
 
@@ -160,7 +161,7 @@ public class LinkRenderer extends BaseRenderer
       }
 
       BlogRequest request =
-        (BlogRequest) context.getExternalContext().getRequest();
+        BlogUtil.getBlogRequest(context.getExternalContext().getRequest());
       String uri = "#";
       LinkBuilder builder = BlogContext.getInstance().getLinkBuilder();
 

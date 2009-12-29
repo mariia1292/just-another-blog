@@ -124,34 +124,39 @@ public class JpaDAOFactory extends DAOFactory
     File tmpDir =
       ctx.getResourceManager().getDirectory(Constants.RESOURCE_TEMP, true);
 
-    if (serverInfo.contains("GlassFish") && serverInfo.contains("v3"))
+    try
     {
+      Class.forName("org.eclipse.persistence.jpa.PersistenceProvider");
       logger.info("load EclispeLink PersistenceProvider");
       pu = "SoniaBlog-eclipse-PU";
-      parameters.put("eclipselink.jdbc.driver",
-                     config.getString(Constants.CONFIG_DB_DRIVER));
-      parameters.put("eclipselink.jdbc.url",
-                     config.getString(Constants.CONFIG_DB_URL));
-      parameters.put("eclipselink.jdbc.user",
-                     config.getString(Constants.CONFIG_DB_USERNAME));
-      parameters.put("eclipselink.jdbc.password",
-                     config.getSecureString(Constants.CONFIG_DB_PASSWORD));
-      parameters.put("eclipselink.application-location",
-                     tmpDir.getAbsolutePath());
     }
-    else
+    catch (ClassNotFoundException ex)
     {
       logger.info("load Toplink PersistenceProvider");
-      parameters.put("toplink.jdbc.driver",
-                     config.getString(Constants.CONFIG_DB_DRIVER));
-      parameters.put("toplink.jdbc.url",
-                     config.getString(Constants.CONFIG_DB_URL));
-      parameters.put("toplink.jdbc.user",
-                     config.getString(Constants.CONFIG_DB_USERNAME));
-      parameters.put("toplink.jdbc.password",
-                     config.getSecureString(Constants.CONFIG_DB_PASSWORD));
-      parameters.put("toplink.application-location", tmpDir.getAbsolutePath());
     }
+
+    // eclipselink
+    parameters.put("eclipselink.jdbc.driver",
+                   config.getString(Constants.CONFIG_DB_DRIVER));
+    parameters.put("eclipselink.jdbc.url",
+                   config.getString(Constants.CONFIG_DB_URL));
+    parameters.put("eclipselink.jdbc.user",
+                   config.getString(Constants.CONFIG_DB_USERNAME));
+    parameters.put("eclipselink.jdbc.password",
+                   config.getSecureString(Constants.CONFIG_DB_PASSWORD));
+    parameters.put("eclipselink.application-location",
+                   tmpDir.getAbsolutePath());
+
+    // toplink
+    parameters.put("toplink.jdbc.driver",
+                   config.getString(Constants.CONFIG_DB_DRIVER));
+    parameters.put("toplink.jdbc.url",
+                   config.getString(Constants.CONFIG_DB_URL));
+    parameters.put("toplink.jdbc.user",
+                   config.getString(Constants.CONFIG_DB_USERNAME));
+    parameters.put("toplink.jdbc.password",
+                   config.getSecureString(Constants.CONFIG_DB_PASSWORD));
+    parameters.put("toplink.application-location", tmpDir.getAbsolutePath());
 
     EntityManagerFactory emf = Persistence.createEntityManagerFactory(pu,
                                  parameters);
