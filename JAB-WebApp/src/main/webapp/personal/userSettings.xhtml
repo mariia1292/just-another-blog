@@ -95,7 +95,7 @@
           <table>
             <tr>
               <td>
-                <h:graphicImage value="/avatar/#{UserSettingsBean.user.avatar}" rendered="#{UserSettingsBean.user.avatar != null}" />
+                <h:graphicImage alt="avatar" value="/avatar/#{UserSettingsBean.user.avatar}" rendered="#{UserSettingsBean.user.avatar != null}" />
               </td>
               <td>
                 <t:inputFileUpload value="#{AvatarBean.avatarUploadFile}" />

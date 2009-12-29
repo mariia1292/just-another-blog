@@ -62,9 +62,9 @@
 
             <h:column>
 
-              <h:graphicImage value="/avatar/#{Comment.author.avatar}"
+              <h:graphicImage value="/avatar/#{Comment.author.avatar}" alt="avatar"
                               rendered="#{Comment.author != null &amp;&amp; Comment.author.avatar != null}" />
-              <h:graphicImage value="/avatar/unknown.gif"
+              <h:graphicImage value="/avatar/unknown.gif" alt="avatar"
                               rendered="#{Comment.author == null || Comment.author.avatar == null}" />
 
             </h:column>

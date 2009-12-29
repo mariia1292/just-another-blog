@@ -82,6 +82,10 @@
       <name>sonia.macro.ClassMacroFactory</name>
       <level>INFO</level>
     </logger>
+    <logger>
+      <name>org.apache.myfaces</name>
+      <level>WARNING</level>
+    </logger>
   </loggers>
 
 </sonia-logging>

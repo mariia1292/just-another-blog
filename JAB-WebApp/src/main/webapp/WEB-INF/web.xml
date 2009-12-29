@@ -5,18 +5,18 @@
 
   <context-param>
     <param-name>com.sun.faces.verifyObjects</param-name>
-    <param-value>true</param-value>
-  </context-param>
-  
-  <context-param>
-    <param-name>com.sun.faces.validateXml</param-name>
-    <param-value>true</param-value>
+    <param-value>false</param-value>
   </context-param>
 
   <context-param>
-		<param-name>com.sun.faces.enableViewStateIdRendering</param-name>
-		<param-value>false</param-value>
-	</context-param>
+    <param-name>com.sun.faces.validateXml</param-name>
+    <param-value>false</param-value>
+  </context-param>
+
+  <context-param>
+    <param-name>com.sun.faces.enableViewStateIdRendering</param-name>
+    <param-value>false</param-value>
+  </context-param>
 
   <context-param>
     <param-name>javax.faces.CONFIG_FILES</param-name>
@@ -36,26 +36,26 @@
 
   <context-param>
     <param-name>facelets.DEVELOPMENT</param-name>
-    <param-value>true</param-value>
+    <param-value>false</param-value>
   </context-param>
-  
+
   <context-param>
     <param-name>facelets.SKIP_COMMENTS</param-name>
     <param-value>false</param-value>
   </context-param>
-  
+
   <context-param>
     <param-name>facelets.LIBRARIES</param-name>
     <param-value>/WEB-INF/config/blog.taglib.xml</param-value>
   </context-param>
-  
+
   <context-param>
     <param-name>facelets.RESOURCE_RESOLVER</param-name>
     <param-value>sonia.blog.wui.resolver.ResourceResolver</param-value>
   </context-param>
 
   <!-- blog parameter -->
-  
+
   <context-param>
     <param-name>sonia.config.AccessFile</param-name>
     <param-value>/WEB-INF/config/access.xml</param-value>
@@ -88,7 +88,7 @@
     <filter-name>MyFacesExtensionFilter</filter-name>
     <url-pattern>/faces/myFacesExtensionResource/*</url-pattern>
   </filter-mapping>
-  
+
   <filter-mapping>
     <filter-name>MyFacesExtensionFilter</filter-name>
     <url-pattern>*.jab</url-pattern>
@@ -114,13 +114,21 @@
     <load-on-startup>1</load-on-startup>
   </servlet>
 
-    <servlet>
-        <servlet-name>CommentAction</servlet-name>
-        <servlet-class>sonia.blog.wui.servlet.CommentAction</servlet-class>
-    </servlet>
-    <servlet-mapping>
+  <servlet-mapping>
     <servlet-name>Faces Servlet</servlet-name>
     <url-pattern>*.jab</url-pattern>
+  </servlet-mapping>
+
+  <!-- Comment Servlet -->
+
+  <servlet>
+    <servlet-name>CommentAction</servlet-name>
+    <servlet-class>sonia.blog.wui.servlet.CommentAction</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>CommentAction</servlet-name>
+    <url-pattern>/create-comment</url-pattern>
   </servlet-mapping>
 
   <!-- Logout Servlet -->
@@ -146,13 +154,9 @@
 
   <!-- core config -->
 
-    <servlet-mapping>
-        <servlet-name>CommentAction</servlet-name>
-        <url-pattern>/create-comment</url-pattern>
-    </servlet-mapping>
-    <session-config>
+  <session-config>
     <session-timeout>
-            30
+      30
     </session-timeout>
   </session-config>
 
