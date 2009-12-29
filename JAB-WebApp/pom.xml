@@ -111,6 +111,7 @@
   </build>
 
   <profiles>
+
     <profile>
       <id>devel</id>
       <dependencies>
@@ -146,6 +147,7 @@
         </dependency>
       </dependencies>
     </profile>
+
     <profile>
       <id>release</id>
       <activation>
@@ -153,7 +155,7 @@
       </activation>
       <build>
         <plugins>
-          <!-- ??? for compression ??? -->
+
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-war-plugin</artifactId>
@@ -168,12 +170,14 @@
               </execution>
             </executions>
           </plugin>
-          <!--/ ??? for compression ??? -->
+
           <plugin>
             <groupId>sonia.maven</groupId>
             <artifactId>SoniaMaven</artifactId>
             <version>1.0-SNAPSHOT</version>
             <configuration>
+              <environmentBasePath>${project.build.directory}/${project.build.finalName}</environmentBasePath>
+              <environment>release</environment>
               <path>${project.build.directory}/${project.build.finalName}/WEB-INF/config/version.txt</path>
               <classpath>
                 <param>${basedir}/../libraries/rhino-17R2.jar</param>
@@ -207,15 +211,18 @@
               <execution>
                 <phase>prepare-package</phase>
                 <goals>
+                  <goal>changeenv</goal>
                   <goal>jscompress</goal>
                   <goal>yuicompress</goal>
                 </goals>
               </execution>
             </executions>
           </plugin>
+
         </plugins>
       </build>
     </profile>
+    
   </profiles>
 
   <distributionManagement>
