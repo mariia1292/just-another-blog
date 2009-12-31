@@ -68,6 +68,14 @@ public interface MappingHandler
    * Method description
    *
    *
+   * @param mapping
+   */
+  public void add(Class<? extends Mapping> mapping);
+
+  /**
+   * Method description
+   *
+   *
    *
    * @param regex
    *

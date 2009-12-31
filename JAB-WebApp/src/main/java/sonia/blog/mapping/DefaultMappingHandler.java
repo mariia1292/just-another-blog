@@ -44,7 +44,9 @@ import org.xml.sax.SAXException;
 import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.app.BlogRequest;
 import sonia.blog.api.app.BlogResponse;
+import sonia.blog.api.exception.BlogException;
 import sonia.blog.api.mapping.Mapping;
+import sonia.blog.api.mapping.MappingConfig;
 import sonia.blog.api.mapping.MappingHandler;
 import sonia.blog.api.mapping.MappingInstructions;
 
@@ -104,6 +106,27 @@ public class DefaultMappingHandler implements MappingHandler
   public void add(String regex, Class<? extends Mapping> mapping)
   {
     mappingMap.put(regex, mapping);
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param mapping
+   */
+  public void add(Class<? extends Mapping> mapping)
+  {
+    MappingConfig config = mapping.getAnnotation(MappingConfig.class);
+
+    if ((config != null) && (config.regex() != null)
+        && (config.regex().length() > 0))
+    {
+      add(config.regex(), mapping);
+    }
+    else
+    {
+      throw new BlogException("regex is required");
+    }
   }
 
   /**
@@ -357,7 +380,10 @@ public class DefaultMappingHandler implements MappingHandler
         {
           if (logger.isLoggable(Level.FINER))
           {
-            logger.finer("add mapping " + regex + " - " + clazz.getName());
+            StringBuffer msg = new StringBuffer("add mapping ");
+
+            msg.append(regex).append(" - ").append(clazz.getName());
+            logger.finer(msg.toString());
           }
 
           mappingMap.put(regex, clazz);
