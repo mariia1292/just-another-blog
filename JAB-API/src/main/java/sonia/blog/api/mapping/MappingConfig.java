@@ -53,4 +53,5 @@ public @interface MappingConfig
   public boolean cacheable()    default false;
   public String[] cacheKeys()   default {};
   public boolean compressable() default false;
+  public String regex()         default "";
 }
