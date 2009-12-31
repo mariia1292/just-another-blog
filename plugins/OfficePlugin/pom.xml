@@ -34,6 +34,44 @@
 
   </dependencies>
 
+  <profiles>
+    <profile>
+      <id>release</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>sonia.maven</groupId>
+            <artifactId>SoniaMaven</artifactId>
+            <version>1.0-SNAPSHOT</version>
+            <configuration>
+              <classpath>
+                <param>${basedir}/../../libraries/rhino-17R2.jar</param>
+                <param>${basedir}/../../libraries/closure-compiler.jar</param>
+              </classpath>
+              <jsBasePath>${project.build.outputDirectory}</jsBasePath>
+              <jsIncludes>
+                <param>/jab/resource/script/*.js</param>
+              </jsIncludes>
+              <yuiBasePath>${project.build.outputDirectory}</yuiBasePath>
+              <yuiIncludes>
+                <param>/jab/resource/script/*.css</param>
+              </yuiIncludes>
+            </configuration>
+            <executions>
+              <execution>
+                <phase>process-resources</phase>
+                <goals>
+                  <goal>jscompress</goal>
+                  <goal>yuicompress</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
+
 
 </project>
 
