@@ -46,6 +46,7 @@ import org.xml.sax.SAXException;
 import sonia.blog.api.app.BlogRequest;
 import sonia.blog.api.app.BlogResponse;
 import sonia.blog.api.mapping.FinalMapping;
+import sonia.blog.api.mapping.MappingConfig;
 import sonia.blog.webint.flickr.FlickrAPI;
 
 import sonia.util.Util;
@@ -71,6 +72,7 @@ import javax.xml.parsers.ParserConfigurationException;
  *
  * @author Sebastian Sdorra
  */
+@MappingConfig(regex = "^/gateway/([a-zA-Z0-9]+)/([a-zA-Z0-9]+)$")
 public class GatewayMapping extends FinalMapping implements FlickrAPI
 {
 

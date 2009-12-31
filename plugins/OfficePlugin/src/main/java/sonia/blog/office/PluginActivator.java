@@ -67,7 +67,7 @@ public class PluginActivator implements Activator
     BlogContext ctx = BlogContext.getInstance();
 
     mappingHandler = ctx.getMappingHandler();
-    mappingHandler.add(PdfViewerMapping.REGEX, PdfViewerMapping.class);
+    mappingHandler.add(PdfViewerMapping.class);
     parser = MacroParser.getInstance();
     parser.putMacro(PdfViewerMacro.NAME, PdfViewerMacro.class);
 
@@ -98,7 +98,7 @@ public class PluginActivator implements Activator
   public void stop(PluginContext context)
   {
     parser.removeMacroFactory(PdfViewerMacro.NAME);
-    mappingHandler.remove(PdfViewerMapping.REGEX);
+    mappingHandler.remove(PdfViewerMapping.class);
 
     if ((handler != null) && (handlerReference != null))
     {

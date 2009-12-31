@@ -240,6 +240,27 @@ public class DefaultMappingHandler implements MappingHandler
     mappingMap.remove(regex);
   }
 
+  /**
+   * Method description
+   *
+   *
+   * @param mapping
+   */
+  public void remove(Class<? extends Mapping> mapping)
+  {
+    MappingConfig config = mapping.getAnnotation(MappingConfig.class);
+
+    if ((config != null) && (config.regex() != null)
+        && (config.regex().length() > 0))
+    {
+      remove(config.regex());
+    }
+    else
+    {
+      throw new BlogException("regex is required");
+    }
+  }
+
   //~--- get methods ----------------------------------------------------------
 
   /**
