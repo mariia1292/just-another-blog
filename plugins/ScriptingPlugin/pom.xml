@@ -2,7 +2,7 @@
 <project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <modelVersion>4.0.0</modelVersion>
-  
+
   <parent>
     <artifactId>plugins</artifactId>
     <groupId>sonia.blog</groupId>
@@ -16,7 +16,7 @@
   <name>ScriptingPlugin</name>
   <url>http://www.just-another-blog.org</url>
 
-    <distributionManagement>
+  <distributionManagement>
     <site>
       <id>jab.website</id>
       <name>JAB Kenai Website</name>
@@ -27,12 +27,6 @@
   <profiles>
     <profile>
       <id>release</id>
-      <activation>
-        <property>
-          <name>sonia.release</name>
-          <value>true</value>
-        </property>
-      </activation>
       <build>
         <plugins>
           <plugin>
