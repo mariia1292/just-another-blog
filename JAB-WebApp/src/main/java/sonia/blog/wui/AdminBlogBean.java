@@ -265,13 +265,13 @@ public class AdminBlogBean extends AbstractBean
       {
         if (blogDAO.remove(getBlogSession(), blog))
         {
-          getMessageHandler().info(null, "successBlogDelete", null,
+          getMessageHandler().info(getRequest(), null, "successBlogDelete", null,
                                    blog.getTitle());
         }
         else
         {
           result = FAILURE;
-          getMessageHandler().error(null, "failureBlogDelete", null,
+          getMessageHandler().error(getRequest(), null, "failureBlogDelete", null,
                                     blog.getTitle());
         }
       }

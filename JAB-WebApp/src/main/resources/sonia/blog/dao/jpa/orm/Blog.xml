@@ -88,6 +88,11 @@
           <cascade-remove />
         </cascade>
       </one-to-many>
+      <one-to-many name="pages" fetch="LAZY" mapped-by="blog">
+        <cascade>
+          <cascade-remove />
+        </cascade>
+      </one-to-many>
     </attributes>
   </entity>
 </entity-mappings>
