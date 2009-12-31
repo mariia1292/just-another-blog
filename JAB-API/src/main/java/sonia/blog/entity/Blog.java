@@ -336,6 +336,17 @@ public class Blog implements Serializable, PermaObject, Comparable<Blog>
    *
    * @return
    */
+  public List<Page> getPages()
+  {
+    return pages;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
   public List<BlogParameter> getParameters()
   {
     if (parameters == null)
@@ -539,7 +550,8 @@ public class Blog implements Serializable, PermaObject, Comparable<Blog>
    * Method description
    *
    *
-   * @param allowTrackback
+   *
+   * @param allowTrackbacks
    */
   public void setAllowTrackbacks(boolean allowTrackbacks)
   {
@@ -690,6 +702,17 @@ public class Blog implements Serializable, PermaObject, Comparable<Blog>
    * Method description
    *
    *
+   * @param pages
+   */
+  public void setPages(List<Page> pages)
+  {
+    this.pages = pages;
+  }
+
+  /**
+   * Method description
+   *
+   *
    * @param parameters
    */
   public void setParameters(List<BlogParameter> parameters)
@@ -830,6 +853,9 @@ public class Blog implements Serializable, PermaObject, Comparable<Blog>
 
   /** Field description */
   private List<BlogMember> members;
+
+  /** Field description */
+  private List<Page> pages;
 
   /** Field description */
   private List<BlogParameter> parameters;
