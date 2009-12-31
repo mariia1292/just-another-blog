@@ -12,6 +12,7 @@ package sonia.blog.script;
 import sonia.blog.api.app.BlogRequest;
 import sonia.blog.api.app.BlogResponse;
 import sonia.blog.api.mapping.FinalMapping;
+import sonia.blog.api.mapping.MappingConfig;
 import sonia.blog.entity.Role;
 
 import sonia.util.Util;
@@ -31,6 +32,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author Sebastian Sdorra
  */
+@MappingConfig(regex = "^/script.json$")
 public class ScriptMapping extends FinalMapping
 {
 

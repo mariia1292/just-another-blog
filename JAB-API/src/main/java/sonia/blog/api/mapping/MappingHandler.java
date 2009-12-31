@@ -114,6 +114,14 @@ public interface MappingHandler
    * Method description
    *
    *
+   * @param mapping
+   */
+  public void remove(Class<? extends Mapping> mapping);
+
+  /**
+   * Method description
+   *
+   *
    *
    * @param regex
    */

@@ -50,12 +50,6 @@ import sonia.plugin.PluginContext;
 public class PluginActivator implements Activator
 {
 
-  /** Field description */
-  public static final String REGEX_GATEWAY =
-    "^/gateway/([a-zA-Z0-9]+)/([a-zA-Z0-9]+)$";
-
-  //~--- methods --------------------------------------------------------------
-
   /**
    * Method description
    *
@@ -67,8 +61,7 @@ public class PluginActivator implements Activator
     MacroParser parser = MacroParser.getInstance();
 
     parser.putMacro("flickr", FlickrMacro.class);
-    BlogContext.getInstance().getMappingHandler().add(REGEX_GATEWAY,
-            GatewayMapping.class);
+    BlogContext.getInstance().getMappingHandler().add(GatewayMapping.class);
   }
 
   /**
@@ -82,6 +75,6 @@ public class PluginActivator implements Activator
     MacroParser parser = MacroParser.getInstance();
 
     parser.removeMacroFactory("flickr");
-    BlogContext.getInstance().getMappingHandler().remove(REGEX_GATEWAY);
+    BlogContext.getInstance().getMappingHandler().remove(GatewayMapping.class);
   }
 }

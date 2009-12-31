@@ -41,9 +41,6 @@ public class PluginActivator implements Activator, InstallationListener
 {
 
   /** Field description */
-  private static final String MAPPING_REGEX = "^/script.json$";
-
-  /** Field description */
   private static Logger logger =
     Logger.getLogger(PluginActivator.class.getName());
 
@@ -105,7 +102,7 @@ public class PluginActivator implements Activator, InstallationListener
    */
   public void stop(PluginContext context)
   {
-    mappingHandler.remove(MAPPING_REGEX);
+    mappingHandler.remove(ScriptMapping.class);
 
     if (navigationProvider != null)
     {
@@ -169,7 +166,7 @@ public class PluginActivator implements Activator, InstallationListener
     }
 
     // register mapping
-    mappingHandler.add(MAPPING_REGEX, ScriptMapping.class);
+    mappingHandler.add(ScriptMapping.class);
 
     // register navigation entry
     navigationProvider = new ScriptNavigationProvider();

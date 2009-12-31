@@ -72,16 +72,15 @@ import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
+import sonia.blog.api.mapping.MappingConfig;
 
 /**
  *
  * @author Sebastian Sdorra
  */
+@MappingConfig(regex="^/macros/pdfviewer/([0-9]+)/(.*)$")
 public class PdfViewerMapping extends FinalMapping
 {
-
-  /** Field description */
-  public static final String REGEX = "^/macros/pdfviewer/([0-9]+)/(.*)$";
 
   /** Field description */
   private static Logger logger =
