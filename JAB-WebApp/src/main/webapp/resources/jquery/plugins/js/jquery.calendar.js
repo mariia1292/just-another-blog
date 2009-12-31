@@ -100,6 +100,7 @@
 
     function createCalendar(calendar){
       var today = calendar.today;
+      var todayIsSet = false;
       var events = calendar.events.split(",");
       var counter = 0;
       var $table = $("<table />");
@@ -131,8 +132,9 @@
             }
           }
 
-          if ( today == counter ){
+          if ( today == counter && ! todayIsSet ){
             $td.addClass("today");
+            todayIsSet = true;
           }
 
           $tr.append($td);
