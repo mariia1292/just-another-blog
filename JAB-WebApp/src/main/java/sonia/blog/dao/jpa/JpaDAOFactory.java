@@ -49,6 +49,7 @@ import sonia.blog.api.dao.EntryDAO;
 import sonia.blog.api.dao.PageDAO;
 import sonia.blog.api.dao.TagDAO;
 import sonia.blog.api.dao.UserDAO;
+import sonia.blog.api.exception.BlogException;
 import sonia.blog.dao.jpa.profile.DatabaseProfile;
 
 import sonia.plugin.service.ServiceReference;
@@ -119,21 +120,10 @@ public class JpaDAOFactory extends DAOFactory
     }
 
     BlogConfiguration config = ctx.getConfiguration();
-    String pu = "SoniaBlog-oracle-PU";
+    String pu = getPU();
     Map<String, String> parameters = new HashMap<String, String>();
     File tmpDir =
       ctx.getResourceManager().getDirectory(Constants.RESOURCE_TEMP, true);
-
-    try
-    {
-      Class.forName("org.eclipse.persistence.jpa.PersistenceProvider");
-      logger.info("load EclispeLink PersistenceProvider");
-      pu = "SoniaBlog-eclipse-PU";
-    }
-    catch (ClassNotFoundException ex)
-    {
-      logger.info("load Toplink PersistenceProvider");
-    }
 
     // eclipselink
     parameters.put("eclipselink.jdbc.driver",
@@ -157,6 +147,35 @@ public class JpaDAOFactory extends DAOFactory
     parameters.put("toplink.jdbc.password",
                    config.getSecureString(Constants.CONFIG_DB_PASSWORD));
     parameters.put("toplink.application-location", tmpDir.getAbsolutePath());
+
+    // hibernate
+    parameters.put("hibernate.connection.driver_class",
+                   config.getString(Constants.CONFIG_DB_DRIVER));
+    parameters.put("hibernate.connection.url",
+                   config.getString(Constants.CONFIG_DB_URL));
+    parameters.put("hibernate.connection.username",
+                   config.getString(Constants.CONFIG_DB_USERNAME));
+    parameters.put("hibernate.connection.password",
+                   config.getSecureString(Constants.CONFIG_DB_PASSWORD));
+
+    // openjpa
+    parameters.put("openjpa.ConnectionDriverName",
+                   config.getString(Constants.CONFIG_DB_DRIVER));
+    parameters.put("openjpa.ConnectionURL",
+                   config.getString(Constants.CONFIG_DB_URL));
+    parameters.put("openjpa.ConnectionUserName",
+                   config.getString(Constants.CONFIG_DB_USERNAME));
+    parameters.put("openjpa.ConnectionPassword",
+                   config.getSecureString(Constants.CONFIG_DB_PASSWORD));
+
+    for (String key : config.keySet())
+    {
+      if (key.startsWith("eclipselink.") || key.startsWith("toplink.")
+          || key.startsWith("hibernate.") || key.startsWith("openjpa."))
+      {
+        parameters.put(key, config.getString(key));
+      }
+    }
 
     EntityManagerFactory emf = Persistence.createEntityManagerFactory(pu,
                                  parameters);
@@ -453,6 +472,66 @@ public class JpaDAOFactory extends DAOFactory
     }
 
     return profiles;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  private String getPU()
+  {
+    String pu = null;
+
+    try
+    {
+      Class.forName("org.eclipse.persistence.jpa.PersistenceProvider");
+      logger.info("load EclispeLink PersistenceProvider");
+      pu = "SoniaBlog-eclipse-PU";
+    }
+    catch (ClassNotFoundException ex) {}
+
+    if (pu == null)
+    {
+      try
+      {
+        Class.forName("oracle.toplink.essentials.PersistenceProvider");
+        logger.info("load Toplink PersistenceProvider");
+        pu = "SoniaBlog-toplink-PU";
+      }
+      catch (ClassNotFoundException ex) {}
+    }
+
+    if (pu == null)
+    {
+      try
+      {
+        Class.forName("org.apache.openjpa.persistence.PersistenceProviderImpl");
+        logger.info("load OpenJPA PersistenceProvider");
+        pu = "SoniaBlog-openjpa-PU";
+      }
+      catch (ClassNotFoundException ex) {}
+    }
+
+    if (pu == null)
+    {
+      try
+      {
+        Class.forName("org.hibernate.ejb.HibernatePersistence");
+        logger.info("load Hibernate PersistenceProvider");
+        pu = "SoniaBlog-hibernate-PU";
+      }
+      catch (ClassNotFoundException ex) {}
+    }
+
+    if (pu == null)
+    {
+      throw new BlogException(
+          "no PersistenceProvider found, check your classpath");
+    }
+
+    return pu;
   }
 
   /**
