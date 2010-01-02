@@ -34,4 +34,39 @@
     <properties>
     </properties>
   </persistence-unit>
+  <persistence-unit name="SoniaBlog-openjpa-PU" transaction-type="RESOURCE_LOCAL">
+    <provider>org.apache.openjpa.persistence.PersistenceProviderImpl</provider>
+    <mapping-file>/sonia/blog/dao/jpa/orm/Attachment.xml</mapping-file>
+    <mapping-file>/sonia/blog/dao/jpa/orm/Blog.xml</mapping-file>
+    <mapping-file>/sonia/blog/dao/jpa/orm/Category.xml</mapping-file>
+    <mapping-file>/sonia/blog/dao/jpa/orm/Comment.xml</mapping-file>
+    <mapping-file>/sonia/blog/dao/jpa/orm/Entry.xml</mapping-file>
+    <mapping-file>/sonia/blog/dao/jpa/orm/Member.xml</mapping-file>
+    <mapping-file>/sonia/blog/dao/jpa/orm/Tag.xml</mapping-file>
+    <mapping-file>/sonia/blog/dao/jpa/orm/User.xml</mapping-file>
+    <mapping-file>/sonia/blog/dao/jpa/orm/BlogHitCount.xml</mapping-file>
+    <mapping-file>/sonia/blog/dao/jpa/orm/Page.xml</mapping-file>
+    <mapping-file>/sonia/blog/dao/jpa/orm/BlogParameter.xml</mapping-file>
+    <exclude-unlisted-classes>true</exclude-unlisted-classes>
+    <properties>
+    </properties>
+  </persistence-unit>
+  <persistence-unit name="SoniaBlog-hibernate-PU" transaction-type="RESOURCE_LOCAL">
+    <provider>org.hibernate.ejb.HibernatePersistence</provider>
+    <non-jta-data-source />
+    <mapping-file>/sonia/blog/dao/jpa/orm/Attachment.xml</mapping-file>
+    <mapping-file>/sonia/blog/dao/jpa/orm/Blog.xml</mapping-file>
+    <mapping-file>/sonia/blog/dao/jpa/orm/Category.xml</mapping-file>
+    <mapping-file>/sonia/blog/dao/jpa/orm/Comment.xml</mapping-file>
+    <mapping-file>/sonia/blog/dao/jpa/orm/Entry.xml</mapping-file>
+    <mapping-file>/sonia/blog/dao/jpa/orm/Member.xml</mapping-file>
+    <mapping-file>/sonia/blog/dao/jpa/orm/Tag.xml</mapping-file>
+    <mapping-file>/sonia/blog/dao/jpa/orm/User.xml</mapping-file>
+    <mapping-file>/sonia/blog/dao/jpa/orm/BlogHitCount.xml</mapping-file>
+    <mapping-file>/sonia/blog/dao/jpa/orm/Page.xml</mapping-file>
+    <mapping-file>/sonia/blog/dao/jpa/orm/BlogParameter.xml</mapping-file>
+    <exclude-unlisted-classes>true</exclude-unlisted-classes>
+    <properties>
+    </properties>
+  </persistence-unit>
 </persistence>
