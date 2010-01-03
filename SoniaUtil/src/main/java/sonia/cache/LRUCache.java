@@ -221,12 +221,13 @@ public class LRUCache extends AbstractCache
       }
     }
 
-    if ( logger.isLoggable(Level.FINEST) ){
+    if (logger.isLoggable(Level.FINEST))
+    {
       StringBuffer msg = new StringBuffer();
-      msg.append( "remove lru entry with key " ).append( lastCo.getKey() );
+
+      msg.append("remove lru entry with key ").append(lastCo.getKey());
       logger.finest(msg.toString());
     }
-
 
     remove(lastCo.getKey());
   }

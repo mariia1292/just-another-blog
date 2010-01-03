@@ -35,9 +35,12 @@ package sonia.macro;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import sonia.macro.browse.MacroInformation;
+
+//~--- JDK imports ------------------------------------------------------------
+
 import java.util.Locale;
 import java.util.Map;
-import sonia.macro.browse.MacroInformation;
 
 /**
  *
@@ -50,9 +53,11 @@ public interface MacroFactory
    * Method description
    *
    *
+   *
+   * @param parameters
    * @return
    */
-  public Macro createMacro(Map<String,String> parameters);
+  public Macro createMacro(Map<String, String> parameters);
 
   //~--- get methods ----------------------------------------------------------
 
@@ -60,6 +65,8 @@ public interface MacroFactory
    * Method description
    *
    *
+   *
+   * @param locale
    * @return
    */
   public MacroInformation getInformation(Locale locale);

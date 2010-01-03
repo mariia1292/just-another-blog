@@ -93,7 +93,9 @@ public class RegexMacroParser extends MacroParser
           }
 
           Macro macro = macroFactory.createMacro(parameters);
-          if ( injectionProvider != null ){
+
+          if (injectionProvider != null)
+          {
             injectionProvider.inject(macro);
           }
 
