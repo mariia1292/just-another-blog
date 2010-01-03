@@ -121,7 +121,7 @@ public class JpaDAOFactory extends DAOFactory
 
     BlogConfiguration config = ctx.getConfiguration();
     String pu = getPU();
-    Map<String, String> parameters = new HashMap<String, String>();
+    Map<String, Object> parameters = new HashMap<String, Object>();
     File tmpDir =
       ctx.getResourceManager().getDirectory(Constants.RESOURCE_TEMP, true);
 
