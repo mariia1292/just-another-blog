@@ -39,7 +39,10 @@ import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.app.BlogRequest;
 import sonia.blog.api.app.BlogResponse;
 import sonia.blog.api.app.BlogSession;
+import sonia.blog.api.authentication.RequireRole;
+import sonia.blog.api.exception.BlogSecurityException;
 import sonia.blog.api.msg.BlogMessageHandler;
+import sonia.blog.entity.Role;
 
 import sonia.jsf.util.FacesMessageHandler;
 
@@ -113,6 +116,7 @@ public class AbstractBean
     }
 
     BlogContext.getInstance().getInjectionProvider().inject(this);
+    checkAccess();
   }
 
   //~--- get methods ----------------------------------------------------------
@@ -320,6 +324,41 @@ public class AbstractBean
   protected int getType()
   {
     return TYPE_BACKEND;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param role
+   *
+   * @return
+   */
+  protected boolean hasRole(String role)
+  {
+    return FacesContext.getCurrentInstance().getExternalContext().isUserInRole(
+        role);
+  }
+
+  //~--- methods --------------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   */
+  private void checkAccess()
+  {
+    RequireRole rr = getClass().getAnnotation(RequireRole.class);
+
+    if (rr != null)
+    {
+      Role role = rr.value();
+
+      if (!hasRole(role.name()))
+      {
+        throw new BlogSecurityException(role.name() + " is required");
+      }
+    }
   }
 
   //~--- fields ---------------------------------------------------------------

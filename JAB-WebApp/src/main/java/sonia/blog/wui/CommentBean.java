@@ -37,10 +37,12 @@ package sonia.blog.wui;
 
 import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.app.Constants;
+import sonia.blog.api.authentication.RequireRole;
 import sonia.blog.api.dao.CommentDAO;
 import sonia.blog.api.util.AbstractBean;
 import sonia.blog.entity.Blog;
 import sonia.blog.entity.Comment;
+import sonia.blog.entity.Role;
 import sonia.blog.wui.model.CommentDataModel;
 
 import sonia.config.Config;
@@ -56,6 +58,7 @@ import javax.faces.model.DataModel;
  *
  * @author Sebastian Sdorra
  */
+@RequireRole(Role.AUTHOR)
 public class CommentBean extends AbstractBean
 {
 

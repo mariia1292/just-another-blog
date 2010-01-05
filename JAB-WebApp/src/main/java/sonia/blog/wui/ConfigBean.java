@@ -40,11 +40,13 @@ import org.apache.myfaces.custom.navmenu.NavigationMenuItem;
 import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.app.BlogSession;
 import sonia.blog.api.app.Constants;
+import sonia.blog.api.authentication.RequireRole;
 import sonia.blog.api.dao.BlogDAO;
 import sonia.blog.api.dao.Dao;
 import sonia.blog.api.search.SearchContext;
 import sonia.blog.api.util.AbstractBean;
 import sonia.blog.entity.Blog;
+import sonia.blog.entity.Role;
 import sonia.blog.macro.CodeMacro;
 import sonia.blog.util.BlogClearCondition;
 import sonia.blog.util.BlogUtil;
@@ -68,6 +70,7 @@ import javax.faces.model.SelectItem;
  *
  * @author Sebastian Sdorra
  */
+@RequireRole(Role.ADMIN)
 public class ConfigBean extends AbstractBean
 {
 

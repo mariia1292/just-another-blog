@@ -68,9 +68,9 @@ public class App
 
     wac.setContextPath(contextPath);
     wac.setBaseResource(new ResourceCollection(new String[] {
-      "/tmp/jab/webapp" }));
+      "/tmp/jetty/webapps" }));
     wac.setResourceAlias("/WEB-INF/classes/", "/classes/");
-    wac.setTempDirectory(new File("/tmp/jab/temp"));
+    wac.setTempDirectory(new File("/tmp/jetty/temp"));
     server.setHandler(wac);
     server.setStopAtShutdown(true);
     server.start();

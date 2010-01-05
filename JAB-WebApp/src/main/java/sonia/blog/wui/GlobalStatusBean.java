@@ -37,7 +37,9 @@ package sonia.blog.wui;
 
 import sonia.blog.api.app.Constants;
 import sonia.blog.api.app.Context;
+import sonia.blog.api.authentication.RequireRole;
 import sonia.blog.api.util.AbstractBean;
+import sonia.blog.entity.Role;
 import sonia.blog.jmx.SessionInformation;
 
 import sonia.plugin.service.Service;
@@ -50,6 +52,7 @@ import java.util.List;
  *
  * @author Sebastian Sdorra
  */
+@RequireRole(Role.GLOBALADMIN)
 public class GlobalStatusBean extends AbstractBean
 {
 

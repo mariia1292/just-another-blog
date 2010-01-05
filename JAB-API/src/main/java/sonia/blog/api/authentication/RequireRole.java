@@ -31,7 +31,11 @@
 
 
 
-package sonia.cli;
+package sonia.blog.api.authentication;
+
+//~--- non-JDK imports --------------------------------------------------------
+
+import sonia.blog.entity.Role;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -46,12 +50,9 @@ import java.lang.annotation.Target;
  * @author Sebastian Sdorra
  */
 @Documented
-@Target(ElementType.FIELD)
+@Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Argument
+public @interface RequireRole
 {
-  String value();
-  String longName()    default "";
-  String description() default "";
-  boolean required()   default false;
+  Role value();
 }

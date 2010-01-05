@@ -38,6 +38,7 @@ package sonia.blog.wui;
 import sonia.blog.api.app.BlogConfiguration;
 import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.app.Constants;
+import sonia.blog.api.authentication.RequireRole;
 import sonia.blog.api.dao.Dao;
 import sonia.blog.api.dao.UserDAO;
 import sonia.blog.api.util.AbstractBean;
@@ -54,6 +55,7 @@ import sonia.security.encryption.Encryption;
  *
  * @author Sebastian Sdorra
  */
+@RequireRole(Role.READER)
 public class UserSettingsBean extends AbstractBean
 {
 

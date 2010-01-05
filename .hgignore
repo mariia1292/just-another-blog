@@ -11,3 +11,4 @@ Desktop DF$
 \.orig$
 ~$
 \.bak$
+.*\.NavData$

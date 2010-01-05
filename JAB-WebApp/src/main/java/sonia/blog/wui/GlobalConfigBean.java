@@ -39,10 +39,12 @@ import sonia.blog.api.app.BlogConfiguration;
 import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.app.Constants;
 import sonia.blog.api.app.MailService;
+import sonia.blog.api.authentication.RequireRole;
 import sonia.blog.api.dao.BlogDAO;
 import sonia.blog.api.spam.SpamInputProtection;
 import sonia.blog.api.util.AbstractConfigBean;
 import sonia.blog.entity.Blog;
+import sonia.blog.entity.Role;
 
 import sonia.plugin.service.ServiceReference;
 
@@ -60,6 +62,7 @@ import javax.faces.model.SelectItem;
  *
  * @author Sebastian Sdorra
  */
+@RequireRole(Role.GLOBALADMIN)
 public class GlobalConfigBean extends AbstractConfigBean
 {
 

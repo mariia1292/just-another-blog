@@ -36,7 +36,9 @@ package sonia.blog.wui;
 //~--- non-JDK imports --------------------------------------------------------
 
 import sonia.blog.api.app.BlogContext;
+import sonia.blog.api.authentication.RequireRole;
 import sonia.blog.api.util.AbstractBean;
+import sonia.blog.entity.Role;
 
 import sonia.plugin.Plugin;
 import sonia.plugin.PluginContext;
@@ -52,6 +54,7 @@ import javax.faces.model.ListDataModel;
  *
  * @author Sebastian Sdorra
  */
+@RequireRole(Role.GLOBALADMIN)
 public class PluginBean extends AbstractBean
 {
 

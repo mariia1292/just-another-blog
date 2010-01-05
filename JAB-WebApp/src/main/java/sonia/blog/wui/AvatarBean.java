@@ -41,9 +41,11 @@ import sonia.blog.api.app.BlogSession;
 import sonia.blog.api.app.Constants;
 import sonia.blog.api.app.Context;
 import sonia.blog.api.app.ResourceManager;
+import sonia.blog.api.authentication.RequireRole;
 import sonia.blog.api.dao.Dao;
 import sonia.blog.api.dao.UserDAO;
 import sonia.blog.api.util.AbstractBean;
+import sonia.blog.entity.Role;
 import sonia.blog.entity.User;
 
 import sonia.config.Config;
@@ -69,6 +71,7 @@ import java.util.logging.Logger;
  *
  * @author Sebastian Sdorra
  */
+@RequireRole(Role.AUTHOR)
 public class AvatarBean extends AbstractBean
 {
 

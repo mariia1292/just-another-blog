@@ -37,11 +37,13 @@ package sonia.blog.wui;
 
 import sonia.blog.api.app.BlogRequest;
 import sonia.blog.api.app.BlogSession;
+import sonia.blog.api.authentication.RequireRole;
 import sonia.blog.api.dao.CategoryDAO;
 import sonia.blog.api.dao.Dao;
 import sonia.blog.api.dao.EntryDAO;
 import sonia.blog.api.util.AbstractBean;
 import sonia.blog.entity.Category;
+import sonia.blog.entity.Role;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -55,6 +57,7 @@ import javax.faces.model.ListDataModel;
  *
  * @author Sebastian Sdorra
  */
+@RequireRole(Role.AUTHOR)
 public class CategoryBean extends AbstractBean
 {
 
@@ -72,7 +75,7 @@ public class CategoryBean extends AbstractBean
    */
   public CategoryBean()
   {
-    init();
+    super();
     category = new Category();
   }
 
