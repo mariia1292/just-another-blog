@@ -36,10 +36,12 @@ package sonia.blog.wui;
 //~--- non-JDK imports --------------------------------------------------------
 
 import sonia.blog.api.app.BlogContext;
+import sonia.blog.api.authentication.RequireRole;
 import sonia.blog.api.dao.BlogDAO;
 import sonia.blog.api.template.Template;
 import sonia.blog.api.util.AbstractBean;
 import sonia.blog.entity.Blog;
+import sonia.blog.entity.Role;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -52,6 +54,7 @@ import javax.faces.model.ListDataModel;
  *
  * @author Sebastian Sdorra
  */
+@RequireRole(Role.ADMIN)
 public class TemplateBean extends AbstractBean
 {
 

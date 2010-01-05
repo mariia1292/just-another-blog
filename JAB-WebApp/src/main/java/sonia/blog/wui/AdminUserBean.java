@@ -38,6 +38,7 @@ package sonia.blog.wui;
 import sonia.blog.api.app.BlogRequest;
 import sonia.blog.api.app.BlogSession;
 import sonia.blog.api.app.Constants;
+import sonia.blog.api.authentication.RequireRole;
 import sonia.blog.api.dao.BlogDAO;
 import sonia.blog.api.dao.Dao;
 import sonia.blog.api.dao.UserDAO;
@@ -73,6 +74,7 @@ import javax.faces.model.SelectItem;
  *
  * @author Sebastian Sdorra
  */
+@RequireRole(Role.GLOBALADMIN)
 public class AdminUserBean extends AbstractBean
 {
 
@@ -97,7 +99,7 @@ public class AdminUserBean extends AbstractBean
    */
   public AdminUserBean()
   {
-    init();
+    super();
   }
 
   //~--- methods --------------------------------------------------------------

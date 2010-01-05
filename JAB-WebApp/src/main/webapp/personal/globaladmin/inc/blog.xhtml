@@ -40,7 +40,7 @@
           <h:message for="description" />
 
           <h:outputLabel for="startPage" value="#{label.startPage}" />
-          <h:inputText id="startPage" value="#{ConfigBean.blog.startPage}">
+          <h:inputText id="startPage" value="#{AdminBlogBean.blog.startPage}">
             <f:validateLength maximum="255" />
             <f:validator validatorId="validator.url" />
           </h:inputText>

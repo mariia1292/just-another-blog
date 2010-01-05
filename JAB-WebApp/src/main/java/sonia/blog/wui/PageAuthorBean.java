@@ -41,6 +41,7 @@ import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.app.BlogRequest;
 import sonia.blog.api.app.BlogSession;
 import sonia.blog.api.app.Constants;
+import sonia.blog.api.authentication.RequireRole;
 import sonia.blog.api.dao.AttachmentDAO;
 import sonia.blog.api.dao.Dao;
 import sonia.blog.api.dao.PageDAO;
@@ -49,6 +50,7 @@ import sonia.blog.entity.Attachment;
 import sonia.blog.entity.Blog;
 import sonia.blog.entity.ContentObject;
 import sonia.blog.entity.Page;
+import sonia.blog.entity.Role;
 import sonia.blog.wui.model.PageNavigationFilter;
 import sonia.blog.wui.model.PageNavigationTreeNode;
 import sonia.blog.wui.model.PageTreeNode;
@@ -73,6 +75,7 @@ import javax.faces.event.ActionEvent;
  *
  * @author Sebastian Sdorra
  */
+@RequireRole(Role.AUTHOR)
 public class PageAuthorBean extends AbstractEditorBean
 {
 

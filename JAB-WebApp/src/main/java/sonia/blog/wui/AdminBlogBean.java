@@ -40,6 +40,7 @@ import org.apache.myfaces.custom.navmenu.NavigationMenuItem;
 import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.app.BlogRequest;
 import sonia.blog.api.app.Constants;
+import sonia.blog.api.authentication.RequireRole;
 import sonia.blog.api.dao.AttachmentDAO;
 import sonia.blog.api.dao.BlogDAO;
 import sonia.blog.api.dao.CategoryDAO;
@@ -84,6 +85,7 @@ import javax.faces.model.SelectItem;
  *
  * @author Sebastian Sdorra
  */
+@RequireRole(Role.ADMIN)
 public class AdminBlogBean extends AbstractBean
 {
 
@@ -265,14 +267,14 @@ public class AdminBlogBean extends AbstractBean
       {
         if (blogDAO.remove(getBlogSession(), blog))
         {
-          getMessageHandler().info(getRequest(), null, "successBlogDelete", null,
-                                   blog.getTitle());
+          getMessageHandler().info(getRequest(), null, "successBlogDelete",
+                                   null, blog.getTitle());
         }
         else
         {
           result = FAILURE;
-          getMessageHandler().error(getRequest(), null, "failureBlogDelete", null,
-                                    blog.getTitle());
+          getMessageHandler().error(getRequest(), null, "failureBlogDelete",
+                                    null, blog.getTitle());
         }
       }
       else

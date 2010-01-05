@@ -38,6 +38,7 @@ package sonia.blog.wui;
 import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.app.BlogRequest;
 import sonia.blog.api.app.Constants;
+import sonia.blog.api.authentication.RequireRole;
 import sonia.blog.api.dao.AttachmentDAO;
 import sonia.blog.api.dao.CategoryDAO;
 import sonia.blog.api.dao.CommentDAO;
@@ -47,6 +48,7 @@ import sonia.blog.api.util.AbstractBean;
 import sonia.blog.entity.Blog;
 import sonia.blog.entity.Comment;
 import sonia.blog.entity.Entry;
+import sonia.blog.entity.Role;
 import sonia.blog.entity.User;
 
 import sonia.config.Config;
@@ -65,6 +67,7 @@ import javax.faces.model.ListDataModel;
  *
  * @author Sebastian Sdorra
  */
+@RequireRole(Role.READER)
 public class DashboardBean extends AbstractBean
 {
 

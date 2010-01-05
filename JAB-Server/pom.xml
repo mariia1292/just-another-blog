@@ -1,75 +1,45 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-<modelVersion>4.0.0</modelVersion>
+  <modelVersion>4.0.0</modelVersion>
 
-<parent>
-  <artifactId>JAB</artifactId>
+  <parent>
+    <artifactId>JAB</artifactId>
+    <groupId>sonia.blog</groupId>
+    <version>1.0Beta3</version>
+  </parent>
+
   <groupId>sonia.blog</groupId>
+  <artifactId>JAB-Server</artifactId>
   <version>1.0Beta3</version>
-</parent>
+  <name>JAB-Server</name>
+  <url>http://www.just-another-blog.org</url>
 
-<groupId>sonia.blog</groupId>
-<artifactId>JAB-Server</artifactId>
-<version>1.0Beta3</version>
-<name>JAB-Server</name>
-<url>http://www.just-another-blog.org</url>
-
-<dependencies>
-<dependency>
-  <groupId>org.eclipse.jetty.aggregate</groupId>
-  <artifactId>jetty-webapp</artifactId>
-  <version>7.0.1.v20091125</version>
-</dependency>
-<dependency>
-  <groupId>org.eclipse.jetty.aggregate</groupId>
-  <artifactId>jetty-servlet</artifactId>
-  <version>7.0.1.v20091125</version>
-</dependency>
-<dependency>
-  <groupId>org.eclipse.jetty.aggregate</groupId>
-  <artifactId>jetty-server</artifactId>
-  <version>7.0.1.v20091125</version>
-</dependency>
-<!--<dependency>
-      <groupId>org.mortbay.jetty</groupId>
-      <artifactId>jetty</artifactId>
-      <version>6.1.22</version>
+  <dependencies>
+    <dependency>
+      <groupId>org.eclipse.jetty.aggregate</groupId>
+      <artifactId>jetty-webapp</artifactId>
+      <version>7.0.1.v20091125</version>
+    </dependency>
+    <dependency>
+      <groupId>org.eclipse.jetty.aggregate</groupId>
+      <artifactId>jetty-servlet</artifactId>
+      <version>7.0.1.v20091125</version>
+    </dependency>
+    <dependency>
+      <groupId>org.eclipse.jetty.aggregate</groupId>
+      <artifactId>jetty-server</artifactId>
+      <version>7.0.1.v20091125</version>
     </dependency>
     <dependency>
       <groupId>org.mortbay.jetty</groupId>
-      <artifactId>jetty-util</artifactId>
-      <version>6.1.22</version>
-    </dependency>-->
-<dependency>
-  <groupId>org.mortbay.jetty</groupId>
-  <artifactId>jsp-2.1-glassfish</artifactId>
-  <version>2.1.v20091210</version>
-</dependency>
-<!-- <dependency>
-<groupId>org.codehaus.cargo</groupId>
-<artifactId>cargo-core-api-container</artifactId>
-<version>1.0</version>
-</dependency>
-<dependency>
-<groupId>org.codehaus.cargo</groupId>
-<artifactId>cargo-core-api-generic</artifactId>
-<version>1.0</version>
-</dependency>
-<dependency>
-<groupId>org.codehaus.cargo</groupId>
-<artifactId>cargo-core-container-jetty</artifactId>
-<version>1.0</version>
-</dependency>-->
-<dependency>
-<groupId>sonia.util</groupId>
-<artifactId>SoniaUtil</artifactId>
-</dependency>
-</dependencies>
+      <artifactId>jsp-2.1-glassfish</artifactId>
+      <version>2.1.v20091210</version>
+    </dependency>
+    <dependency>
+      <groupId>sonia.util</groupId>
+      <artifactId>SoniaUtil</artifactId>
+    </dependency>
+  </dependencies>
 
 </project>
-
-
-
-
-

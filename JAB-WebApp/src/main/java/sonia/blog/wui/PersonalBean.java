@@ -40,6 +40,7 @@ import org.apache.myfaces.custom.navmenu.NavigationMenuItem;
 import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.app.BlogRequest;
 import sonia.blog.api.app.Constants;
+import sonia.blog.api.authentication.RequireRole;
 import sonia.blog.api.navigation.NavigationProvider;
 import sonia.blog.api.util.AbstractBean;
 import sonia.blog.entity.Role;
@@ -59,6 +60,7 @@ import javax.faces.context.FacesContext;
  *
  * @author Sebastian Sdorra
  */
+@RequireRole(Role.READER)
 public class PersonalBean extends AbstractBean
 {
 

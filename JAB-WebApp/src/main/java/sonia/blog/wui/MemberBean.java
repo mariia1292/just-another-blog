@@ -36,6 +36,7 @@ package sonia.blog.wui;
 //~--- non-JDK imports --------------------------------------------------------
 
 import sonia.blog.api.app.BlogContext;
+import sonia.blog.api.authentication.RequireRole;
 import sonia.blog.api.dao.BlogDAO;
 import sonia.blog.api.dao.UserDAO;
 import sonia.blog.api.util.AbstractBean;
@@ -60,6 +61,7 @@ import javax.faces.model.SelectItem;
  *
  * @author Sebastian Sdorra
  */
+@RequireRole(Role.ADMIN)
 public class MemberBean extends AbstractBean
 {
 
