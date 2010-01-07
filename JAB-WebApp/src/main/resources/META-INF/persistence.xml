@@ -53,7 +53,6 @@
   </persistence-unit>
   <persistence-unit name="SoniaBlog-hibernate-PU" transaction-type="RESOURCE_LOCAL">
     <provider>org.hibernate.ejb.HibernatePersistence</provider>
-    <non-jta-data-source />
     <mapping-file>/sonia/blog/dao/jpa/orm/Attachment.xml</mapping-file>
     <mapping-file>/sonia/blog/dao/jpa/orm/Blog.xml</mapping-file>
     <mapping-file>/sonia/blog/dao/jpa/orm/Category.xml</mapping-file>

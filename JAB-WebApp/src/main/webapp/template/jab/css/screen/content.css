@@ -301,5 +301,12 @@
     padding: 0.5em;
   }
   .tabs .inactive { display: none; }
+
+  /** fix fancybox  **/
+  #fancybox-left, #fancybox-right {
+    background-color: transparent;
+  }
+
+
 }
 

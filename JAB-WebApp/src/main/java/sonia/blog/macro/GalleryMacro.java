@@ -39,13 +39,9 @@ import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.app.BlogRequest;
 import sonia.blog.api.dao.AttachmentDAO;
 import sonia.blog.api.dao.Dao;
-import sonia.blog.api.link.LinkBuilder;
 import sonia.blog.api.macro.AbstractBlogMacro;
-import sonia.blog.api.macro.LinkResource;
-import sonia.blog.api.macro.ScriptResource;
 import sonia.blog.api.macro.WebMacro;
 import sonia.blog.api.macro.WebResource;
-import sonia.blog.api.macro.browse.SelectWidget;
 import sonia.blog.api.macro.browse.StringInputWidget;
 import sonia.blog.entity.Attachment;
 import sonia.blog.entity.ContentObject;
@@ -91,7 +87,7 @@ public class GalleryMacro extends AbstractBlogMacro implements WebMacro
    */
   public List<WebResource> getResources()
   {
-    return resources;
+    return BlogContext.getInstance().getWebResources().getFancybox();
   }
 
   //~--- set methods ----------------------------------------------------------
@@ -160,23 +156,6 @@ public class GalleryMacro extends AbstractBlogMacro implements WebMacro
     this.include = include;
   }
 
-  /**
-   * Method description
-   *
-   *
-   * @param theme
-   */
-  @MacroInfoParameter(
-    displayName = "macro.gallery.theme.displayName",
-    description = "macro.gallery.theme.description",
-    widget = SelectWidget.class,
-    widgetParam = "options=light_rounded|dark_rounded|light_square|dark_square;nullable=true"
-  )
-  public void setTheme(String theme)
-  {
-    this.theme = theme;
-  }
-
   //~--- methods --------------------------------------------------------------
 
   /**
@@ -200,30 +179,11 @@ public class GalleryMacro extends AbstractBlogMacro implements WebMacro
 
     if (Util.hasContent(images))
     {
-      LinkBuilder linkBuilder = BlogContext.getInstance().getLinkBuilder();
-      String res = linkBuilder.getRelativeLink(request, "/resources/");
-      String lRes = res + "prettyPhoto/";
-
-      resources = new ArrayList<WebResource>();
-
-      ScriptResource jqueryPrettyPhoto = new ScriptResource(21,
-                                           lRes + "js/jquery.prettyPhoto.js");
-
-      resources.add(jqueryPrettyPhoto);
-
-      LinkResource prettyPhotoCSS = new LinkResource(22);
-
-      prettyPhotoCSS.setRel(LinkResource.REL_STYLESHEET);
-      prettyPhotoCSS.setType(LinkResource.TYPE_STYLESHEET);
-      prettyPhotoCSS.setHref(lRes + "css/prettyPhoto.css");
-      resources.add(prettyPhotoCSS);
-
       long time = System.nanoTime();
       Map<String, Object> parameters = new HashMap<String, Object>();
 
       parameters.put("linkBase", request.getContextPath());
       parameters.put("id", String.valueOf(time));
-      parameters.put("theme", theme);
       parameters.put("images", images);
       result = parseTemplate(parameters, TEMPLATE);
     }
@@ -337,10 +297,4 @@ public class GalleryMacro extends AbstractBlogMacro implements WebMacro
 
   /** Field description */
   private String include;
-
-  /** Field description */
-  private List<WebResource> resources;
-
-  /** Field description */
-  private String theme = "dark_square";
 }

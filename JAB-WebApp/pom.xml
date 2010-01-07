@@ -45,6 +45,12 @@
     <dependency>
       <groupId>org.apache.myfaces.tomahawk</groupId>
       <artifactId>tomahawk12</artifactId>
+      <exclusions>
+        <exclusion>
+          <artifactId>commons-digester</artifactId>
+          <groupId>commons-digester</groupId>
+        </exclusion>
+      </exclusions>
     </dependency>
 
     <dependency>
@@ -75,6 +81,47 @@
           <groupId>xml-apis</groupId>
         </exclusion>
       </exclusions>
+    </dependency>
+
+    <dependency>
+      <groupId>org.apache.myfaces.core</groupId>
+      <artifactId>myfaces-api</artifactId>
+      <version>${myfaces.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.apache.myfaces.core</groupId>
+      <artifactId>myfaces-impl</artifactId>
+      <version>${myfaces.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.eclipse.persistence</groupId>
+      <artifactId>eclipselink</artifactId>
+      <version>1.2.0</version>
+    </dependency>
+    
+    <dependency>
+      <groupId>javax.mail</groupId>
+      <artifactId>mail</artifactId>
+      <version>1.4.3</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.apache.derby</groupId>
+      <artifactId>derby</artifactId>
+      <version>${derby.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.derby</groupId>
+      <artifactId>derbyclient</artifactId>
+      <version>${derby.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>javax.persistence</groupId>
+      <artifactId>persistence-api</artifactId>
+      <version>1.0</version>
     </dependency>
 
     <dependency>
@@ -189,6 +236,7 @@
               <jsBasePath>${project.build.directory}/${project.build.finalName}</jsBasePath>
               <jsIncludes>
                 <param>/resources/jquery/plugins/js/*.js</param>
+                <param>/resources/fancybox/*.js</param>
                 <param>/resources/tiny_mce/plugins/attachment/editor_plugin.js</param>
                 <param>/resources/tiny_mce/plugins/attachment/*/*.js</param>
                 <param>/resources/tiny_mce/plugins/imgbrowser/editor_plugin.js</param>
@@ -202,6 +250,7 @@
               <yuiBasePath>${project.build.directory}/${project.build.finalName}</yuiBasePath>
               <yuiIncludes>
                 <param>/resources/jquery/plugins/css/*.css</param>
+                <param>/resources/fancybox/*.css</param>
                 <param>/template/jab/css/blog.css</param>
                 <param>/template/jab/css/screen/*.css</param>
                 <param>/template/jab/css/patches/*.css</param>
@@ -226,58 +275,6 @@
       </build>
     </profile>
 
-    <profile>
-      <id>tomcat</id>
-      <dependencies>
-        <dependency>
-          <groupId>org.apache.myfaces.core</groupId>
-          <artifactId>myfaces-api</artifactId>
-          <version>1.2.8</version>
-        </dependency>
-        <dependency>
-          <groupId>org.apache.myfaces.core</groupId>
-          <artifactId>myfaces-impl</artifactId>
-          <version>1.2.8</version>
-        </dependency>
-        <dependency>
-          <groupId>org.apache.myfaces.tomahawk</groupId>
-          <artifactId>tomahawk12</artifactId>
-          <!-- remove digester 1.6, myfaces comes with 1.8 -->
-          <exclusions>
-            <exclusion>
-              <artifactId>commons-digester</artifactId>
-              <groupId>commons-digester</groupId>
-            </exclusion>
-          </exclusions>
-        </dependency>
-        <dependency>
-          <groupId>javax.mail</groupId>
-          <artifactId>mail</artifactId>
-          <version>1.4.3</version>
-        </dependency>
-        <dependency>
-          <groupId>org.apache.derby</groupId>
-          <artifactId>derby</artifactId>
-          <version>10.5.3.0_1</version>
-        </dependency>
-        <dependency>
-          <groupId>org.apache.derby</groupId>
-          <artifactId>derbyclient</artifactId>
-          <version>10.5.3.0_1</version>
-        </dependency>
-        <dependency>
-          <groupId>org.eclipse.persistence</groupId>
-          <artifactId>eclipselink</artifactId>
-          <version>1.2.0</version>
-        </dependency>
-        <dependency>
-          <groupId>javax.persistence</groupId>
-          <artifactId>persistence-api</artifactId>
-          <version>1.0</version>
-        </dependency>
-      </dependencies>
-    </profile>
-
   </profiles>
 
   <distributionManagement>
@@ -287,5 +284,10 @@
       <url>dav:https://kenai.com/website/jab/JAB-WebApp</url>
     </site>
   </distributionManagement>
+
+  <properties>
+    <myfaces.version>1.2.8</myfaces.version>
+    <derby.version>10.5.3.0_1</derby.version>
+  </properties>
 
 </project>

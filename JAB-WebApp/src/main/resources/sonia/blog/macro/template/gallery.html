@@ -1,17 +1,16 @@
 <div id="gallery_${id}">
   <#list images as image>
-    <a title="${image.name}" rel="prettyPhoto[group_${id}]" href="${linkBase}/image/${image.id}">
-      <img border="0" alt="${image.name}" src="${linkBase}/image/${image.id}?type=thumb" />
+    <a title="${image.name}" rel="fancybox_${id}" href="${linkBase}/image/${image.id}.${image.extension}">
+      <img border="0" alt="${image.name}" src="${linkBase}/image/${image.id}.${image.extension}?type=thumb" />
     </a>
   </#list>
 </div>
 <script type="text/javascript">
   $(document).ready(function(){
-    if (!(jQuery.browser.msie && jQuery.browser.version == "7.0" )){
-      $("div#gallery_${id} a").prettyPhoto({
-        hideflash: true,
-        theme: "${theme}"
-      });
-    }
+    $("#gallery_${id} a").fancybox({
+      type: "image",
+      overlayShow: true,
+      overlayOpacity: 0.5
+    });
   });
 </script>

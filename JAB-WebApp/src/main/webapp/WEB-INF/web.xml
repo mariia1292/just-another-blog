@@ -18,6 +18,12 @@
     <param-value>false</param-value>
   </context-param>
 
+  <!-- jboss 5x myfaces http://community.jboss.org/wiki/JBoss5AndMyFaces -->
+  <context-param>
+     <param-name>org.jboss.jbossfaces.WAR_BUNDLES_JSF_IMPL</param-name>
+     <param-value>true</param-value>
+  </context-param>
+
   <context-param>
     <param-name>javax.faces.CONFIG_FILES</param-name>
     <param-value>
@@ -106,6 +112,11 @@
     <listener-class>sonia.blog.app.BlogSessionListener</listener-class>
   </listener>
 
+  <listener>
+    <description>ServletContextListener</description>
+    <listener-class>org.apache.myfaces.webapp.StartupServletContextListener</listener-class>
+  </listener>
+
   <!-- Faces Servlet -->
 
   <servlet>
@@ -142,7 +153,7 @@
     <servlet-name>LogoutServlet</servlet-name>
     <url-pattern>/logout</url-pattern>
   </servlet-mapping>
-
+  
   <!-- JSF Library config -->
 
   <jsp-config>
