@@ -31,7 +31,7 @@
   </mapping>
 
   <mapping>
-    <regex>^/image/([0-9)]*)$</regex>
+    <regex>^/image/([0-9)]*)(?:\.(?:jpg|gif|png|bmp|jpeg))?$</regex>
     <class>sonia.blog.mapping.ImageMapping</class>
   </mapping>
 

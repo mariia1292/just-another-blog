@@ -37,13 +37,9 @@ package sonia.blog.macro;
 
 import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.app.BlogRequest;
-import sonia.blog.api.link.LinkBuilder;
 import sonia.blog.api.macro.AbstractBlogMacro;
-import sonia.blog.api.macro.LinkResource;
-import sonia.blog.api.macro.ScriptResource;
 import sonia.blog.api.macro.WebMacro;
 import sonia.blog.api.macro.WebResource;
-import sonia.blog.api.macro.browse.SelectWidget;
 import sonia.blog.api.macro.browse.StringInputWidget;
 import sonia.blog.api.macro.browse.StringTextAreaWidget;
 import sonia.blog.entity.ContentObject;
@@ -55,7 +51,6 @@ import sonia.util.Util;
 
 //~--- JDK imports ------------------------------------------------------------
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -89,27 +84,10 @@ public class LightboxMacro extends AbstractBlogMacro implements WebMacro
    */
   public List<WebResource> getResources()
   {
-    return resources;
+    return BlogContext.getInstance().getWebResources().getFancybox();
   }
 
   //~--- set methods ----------------------------------------------------------
-
-  /**
-   * Method description
-   *
-   *
-   * @param theme
-   */
-  @MacroInfoParameter(
-    displayName = "macro.lightbox.theme.displayName",
-    description = "macro.lightbox.theme.description",
-    widget = SelectWidget.class,
-    widgetParam = "options=light_rounded|dark_rounded|light_square|dark_square;nullable=true"
-  )
-  public void setTheme(String theme)
-  {
-    this.theme = theme;
-  }
 
   /**
    * Method description
@@ -144,26 +122,6 @@ public class LightboxMacro extends AbstractBlogMacro implements WebMacro
   protected String doBody(BlogRequest request, String linkBase,
                           ContentObject object, String body)
   {
-    resources = new ArrayList<WebResource>();
-
-    LinkBuilder linkBuilder = BlogContext.getInstance().getLinkBuilder();
-    String res = linkBuilder.getRelativeLink(request, "/resources/");
-    String lRes = res + "prettyPhoto/";
-
-    resources = new ArrayList<WebResource>();
-
-    ScriptResource jqueryPrettyPhoto = new ScriptResource(21,
-                                         lRes + "js/jquery.prettyPhoto.js");
-
-    resources.add(jqueryPrettyPhoto);
-
-    LinkResource prettyPhotoCSS = new LinkResource(22);
-
-    prettyPhotoCSS.setRel(LinkResource.REL_STYLESHEET);
-    prettyPhotoCSS.setType(LinkResource.TYPE_STYLESHEET);
-    prettyPhotoCSS.setHref(lRes + "css/prettyPhoto.css");
-    resources.add(prettyPhotoCSS);
-
     if (Util.isBlank(title))
     {
       title = object.getTitle();
@@ -173,19 +131,12 @@ public class LightboxMacro extends AbstractBlogMacro implements WebMacro
 
     env.put("id", object.getId().toString());
     env.put("title", title);
-    env.put("theme", theme);
     env.put("body", body);
 
     return parseTemplate(env, TEMPLATE);
   }
 
   //~--- fields ---------------------------------------------------------------
-
-  /** Field description */
-  private List<WebResource> resources;
-
-  /** Field description */
-  private String theme = "dark_square";
 
   /** Field description */
   private String title;

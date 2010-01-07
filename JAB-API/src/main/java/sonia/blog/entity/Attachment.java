@@ -33,6 +33,10 @@
 
 package sonia.blog.entity;
 
+//~--- non-JDK imports --------------------------------------------------------
+
+import sonia.util.Util;
+
 //~--- JDK imports ------------------------------------------------------------
 
 import java.io.Serializable;
@@ -143,6 +147,17 @@ public class Attachment implements Serializable, PermaObject, FileObject
   public Entry getEntry()
   {
     return entry;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  public String getExtension()
+  {
+    return Util.getExtension(name);
   }
 
   /**

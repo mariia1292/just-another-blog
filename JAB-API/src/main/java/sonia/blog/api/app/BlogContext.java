@@ -39,6 +39,7 @@ import sonia.blog.api.authentication.SSOCallbackHandler;
 import sonia.blog.api.dao.DAOFactory;
 import sonia.blog.api.exception.BlogException;
 import sonia.blog.api.link.LinkBuilder;
+import sonia.blog.api.macro.DefaultWebResources;
 import sonia.blog.api.macro.TemplateParser;
 import sonia.blog.api.mapping.MappingHandler;
 import sonia.blog.api.search.SearchContext;
@@ -242,6 +243,15 @@ public class BlogContext
         }
       }
     }
+  }
+
+  /**
+   * Method description
+   *
+   */
+  public void init()
+  {
+    webResources = new DefaultWebResources(servletContext.getContextPath());
   }
 
   /**
@@ -835,6 +845,17 @@ public class BlogContext
    *
    * @return
    */
+  public DefaultWebResources getWebResources()
+  {
+    return webResources;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
   public boolean isInstalled()
   {
     if (!installed)
@@ -998,4 +1019,7 @@ public class BlogContext
 
   /** Field description */
   private Integer version;
+
+  /** Field description */
+  private DefaultWebResources webResources;
 }

@@ -205,6 +205,8 @@ public class BlogContextListener implements ServletContextListener
       context.getPluginContext().searchClasspath(
           buildClasspath(event.getServletContext()));
 
+      context.init();
+
       List<ServletContextListener> listeners = getPluginListeners(context);
 
       if (listeners != null)

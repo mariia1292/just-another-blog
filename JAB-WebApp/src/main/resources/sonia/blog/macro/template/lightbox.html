@@ -7,13 +7,12 @@
       var img = $(item);
       img.attr( "alt", "${title}" );
       var src = img.attr("src").replace("?type=thumb", "");
-      img.wrap("<a href=\"" + src + "\" rel=\"prettyPhoto[lightbox_${id}]\" />");
+      img.wrap("<a href=\"" + src + "\" rel=\"fancybox[lightbox_${id}]\" />");
     });
-    if (!(jQuery.browser.msie && jQuery.browser.version == "7.0" )){
-      $("div#lightbox_${id} a").prettyPhoto({
-        hideflash: true,
-        theme: "${theme}"
-      });
-    }
+    $("div#lightbox_${id} a").fancybox({
+      type: "image",
+      overlayShow: true,
+      overlayOpacity: 0.5
+    });
   });
 </script>

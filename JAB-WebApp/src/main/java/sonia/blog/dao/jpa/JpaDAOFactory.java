@@ -484,11 +484,12 @@ public class JpaDAOFactory extends DAOFactory
   {
     String pu = null;
 
+    // first toplink for glassfish v2.x
     try
     {
-      Class.forName("org.eclipse.persistence.jpa.PersistenceProvider");
-      logger.info("load EclispeLink PersistenceProvider");
-      pu = "SoniaBlog-eclipse-PU";
+      Class.forName("oracle.toplink.essentials.PersistenceProvider");
+      logger.info("load Toplink PersistenceProvider");
+      pu = "SoniaBlog-toplink-PU";
     }
     catch (ClassNotFoundException ex) {}
 
@@ -496,9 +497,9 @@ public class JpaDAOFactory extends DAOFactory
     {
       try
       {
-        Class.forName("oracle.toplink.essentials.PersistenceProvider");
-        logger.info("load Toplink PersistenceProvider");
-        pu = "SoniaBlog-toplink-PU";
+        Class.forName("org.eclipse.persistence.jpa.PersistenceProvider");
+        logger.info("load EclispeLink PersistenceProvider");
+        pu = "SoniaBlog-eclipse-PU";
       }
       catch (ClassNotFoundException ex) {}
     }
