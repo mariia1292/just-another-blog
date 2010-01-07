@@ -164,7 +164,15 @@ public class BlogContextFilter implements Filter
         }
       }
 
-      handleRequest(request, response, chain);
+      // glassfish v3 jsp workaround
+      if (isFirstPage(request))
+      {
+        chain.doFilter(request, resp);
+      }
+      else
+      {
+        handleRequest(request, response, chain);
+      }
 
       for (BlogRequestListener listener : listenerReference.getAll())
       {
@@ -396,6 +404,25 @@ public class BlogContextFilter implements Filter
     }
 
     return result;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param request
+   *
+   * @return
+   */
+  private boolean isFirstPage(BlogRequest request)
+  {
+    String uri = request.getRequestURI();
+    String contextPath = request.getContextPath();
+
+    return ((uri.length() == 0) || uri.equals("/")
+            || uri.equals("/forward.jsp") || uri.equals(contextPath)
+            || uri.equals(contextPath + "/")
+            || uri.equals(contextPath + "/forward.jsp"));
   }
 
   //~--- fields ---------------------------------------------------------------
