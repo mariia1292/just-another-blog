@@ -49,7 +49,6 @@
       perPage: 25,
       method: "user",
       id: "flickr-" + new Date().getTime(),
-      theme: "dark_square",
       loadingImage: null
     };
 
@@ -70,18 +69,17 @@
         clearLoadScreen();
         $.each( data, function(index, image){
           $field.append(
-            $("<a />").attr("href",image.picture).attr("title",image.title).attr("rel", "prettyPhoto["+options.id+"]").css("margin", "2px").append(
+            $("<a />").attr("href",image.picture).attr("title",image.title).attr("rel", "flickr["+options.id+"]").css("margin", "2px").append(
               $("<img />").attr("src",image.thumbnail ).attr("alt",image.title)
             )
           );
         });
 
-        if (!(jQuery.browser.msie && jQuery.browser.version == "7.0" )){
-          $("a", $field).prettyPhoto({
-            hideflash: true,
-            theme: "dark_square"
-          });
-        }
+        $("a", $field).fancybox({
+          type: "image",
+          overlayShow: true,
+          overlayOpacity: 0.5
+        });
         
       });
     }

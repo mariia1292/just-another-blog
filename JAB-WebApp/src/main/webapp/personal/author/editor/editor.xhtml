@@ -63,7 +63,7 @@
 
             <h:outputLabel for="trackback" value="#{label.trackback}" rendered="#{EntryBean.published}" />
             <h:panelGroup rendered="#{EntryBean.published}">
-              <h:form>
+              <h:form id="trackbackForm">
                 <h:inputText id="trackback" value="#{EntryBean.trackbackURL}">
                   <f:validator validatorId="validator.url" />
                 </h:inputText>
@@ -78,9 +78,9 @@
 
           </h:panelGrid>
 
-          <h:commandButton value="#{label.save}" action="#{EntryBean.save}" />
-          <t:commandButton target="_blank" value="#{label.preview}" actionListener="#{EntryBean.preview}" />
-          <h:commandButton value="#{label.remove}" action="#{EntryBean.remove}" rendered="#{!EntryBean.new}" />
+          <h:commandButton id="submit" value="#{label.save}" action="#{EntryBean.save}" />
+          <t:commandButton id="preview" target="_blank" value="#{label.preview}" actionListener="#{EntryBean.preview}" />
+          <h:commandButton id="remove" value="#{label.remove}" action="#{EntryBean.remove}" rendered="#{!EntryBean.new}" />
 
         </h:form>
 
