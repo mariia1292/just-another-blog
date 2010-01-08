@@ -38,15 +38,19 @@
         new $.pdfgallery(this, url, options);
       });
     }
-
   });
 
   $.pdfgallery = function(field, url, options){
     var defaults = {
       id: "pdfgallery-" + new Date().getTime(),
       type: "thumb",
-      loadingImage: null,
-      theme: "dark_square"
+      loadingImage: null
+    };
+
+    var fancyboxOptions = {
+      type: "image",
+      overlayShow: true,
+      overlayOpacity: 0.5
     };
 
     options = $.extend({},defaults, options);
@@ -71,8 +75,8 @@
         $field.append(
           $("<div />").addClass("load").append(
             $("<img />").attr("src", options.loadingImage)
-          )
-        );
+            )
+          );
       }
     }
 
@@ -105,49 +109,36 @@
         var name = title + " " + page.nr + "/" + size;
         $ul.append(
           $("<li />").append(
-            $("<a />").attr("href", baseUrl + page.name).attr("title", name).attr("rel", "prettyPhoto[group_" + options.id + "]").text( name )
-          )
-        );
+            $("<a />").attr("href", baseUrl + page.name).attr("title", name).attr("rel", "pdfgallery[group_" + options.id + "]").text( name )
+            )
+          );
       });
-      
-      if (!(jQuery.browser.msie && jQuery.browser.version == "7.0" )){
-        $("a", $ul).prettyPhoto({
-          hideflash: true,
-          theme: options.theme
-        });
-      }
+      $("a", $ul).fancybox(fancyboxOptions);
     }
 
     function createHiddenGallery(title, size, pages){
-      if (!(jQuery.browser.msie && jQuery.browser.version == "7.0" )){
-        var images = [];
-        var titles = [];
-        $.each( pages, function(index, page){
-          images.push( baseUrl + page.name );
-          titles.push( title + " " + page.nr + "/" + size );
+      var images = [];
+      $.each( pages, function(index, page){
+        images.push( {
+          title: title + " " + page.nr + "/" + size,
+          href: baseUrl + page.name
         });
+      });
 
-        var $button = null;
-        if ( body == null || body.length <= 0 ){
-          $button = $("<a />").attr("href", "#").text(title);
-        } else {
-          $button = $("<a />").attr("href", "#").html( body );
-        }
-        $button.prettyPhoto({
-          hideflash: true,
-          theme: options.theme
-        });
+      var $button = null;
+      if ( body == null || body.length <= 0 ){
+        $button = $("<a />").attr("href", "#").text(title);
+      } else {
+        $button = $("<a />").attr("href", "#").html( body );
+      }
 
-        $field.append(
-          $button
+      $field.append(
+        $button
         );
 
-        $button.click(function(){
-          $.prettyPhoto.open(images,titles);
-        });
-      } else {
-        $field.append( $("<p />").text( "Sorry, IE 7 is not supported" ) );
-      }
+      $button.click(function(){
+        $.fancybox( images, fancyboxOptions);
+      });
     }
 
     function createThumbGallery(title, size, pages){
@@ -155,18 +146,13 @@
         var name =  title + " " + page.nr + "/" + size;
         var pageUrl = baseUrl + page.name;
         $field.append(
-          $("<a />").attr("href", pageUrl).attr("title", name).attr("rel", "prettyPhoto[group_" + options.id + "]").append(
+          $("<a />").attr("href", pageUrl).attr("title", name).attr("rel", "pdfgallery[group_" + options.id + "]").append(
             $("<img />").attr("border", "0").attr("src", pageUrl + "?thumb").attr("alt", name)
-          )
-        );
+            )
+          );
       });
-      if (!(jQuery.browser.msie && jQuery.browser.version == "7.0" )){
-        $("a", $field).prettyPhoto({
-          hideflash: true,
-          theme: options.theme
-        });
-      }
+      $("a", $field).fancybox(fancyboxOptions);
     }
   }
 
-  })(jQuery);
+})(jQuery);

@@ -65,6 +65,7 @@ public class DefaultWebResources
             202, LinkResource.TYPE_STYLESHEET,
             contextPath + "/resources/fancybox/fancybox.css",
             LinkResource.REL_STYLESHEET, null, "user", false));
+    loadingImage = contextPath + "resources/jquery/plugins/img/loading.gif";
   }
 
   //~--- get methods ----------------------------------------------------------
@@ -80,8 +81,22 @@ public class DefaultWebResources
     return fancybox;
   }
 
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  public String getLoadingImage()
+  {
+    return loadingImage;
+  }
+
   //~--- fields ---------------------------------------------------------------
 
   /** Field description */
   private List<WebResource> fancybox;
+
+  /** Field description */
+  private String loadingImage;
 }

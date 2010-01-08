@@ -36,8 +36,9 @@ package sonia.blog.webint.flickr;
 //~--- non-JDK imports --------------------------------------------------------
 
 import sonia.blog.api.app.BlogRequest;
+import sonia.blog.api.app.Context;
 import sonia.blog.api.macro.AbstractBlogMacro;
-import sonia.blog.api.macro.LinkResource;
+import sonia.blog.api.macro.DefaultWebResources;
 import sonia.blog.api.macro.ScriptResource;
 import sonia.blog.api.macro.WebMacro;
 import sonia.blog.api.macro.WebResource;
@@ -108,37 +109,24 @@ public class FlickrMacro extends AbstractBlogMacro implements WebMacro
     StringBuffer path = new StringBuffer(linkBase);
 
     path.append("resource/script/jquery.flickr.js");
-    resources.add(new ScriptResource(201, path.toString()));
-
-    ScriptResource jqueryPrettyPhoto =
-      new ScriptResource(21,
-                         linkBase
-                         + "resources/prettyPhoto/js/jquery.prettyPhoto.js");
-
-    resources.add(jqueryPrettyPhoto);
-
-    LinkResource prettyPhotoCSS = new LinkResource(22);
-
-    prettyPhotoCSS.setRel(LinkResource.REL_STYLESHEET);
-    prettyPhotoCSS.setType(LinkResource.TYPE_STYLESHEET);
-    prettyPhotoCSS.setHref(linkBase
-                           + "resources/prettyPhoto/css/prettyPhoto.css");
-    resources.add(prettyPhotoCSS);
+    resources.add(new ScriptResource(701, path.toString()));
+    resources.addAll(defaultResources.getFancybox());
 
     Map<String, Object> env = new HashMap<String, Object>();
 
     env.put("username", username);
     env.put("url",
             new StringBuffer(linkBase).append("gateway/flickr").toString());
-    env.put(
-        "loadingImage",
-        new StringBuffer(linkBase).append(
-          "resources/jquery/plugins/img/loading.gif").toString());
+    env.put("loadingImage", defaultResources.getLoadingImage());
 
     return parseTemplate(env, TEMPLATE);
   }
 
   //~--- fields ---------------------------------------------------------------
+
+  /** Field description */
+  @Context
+  private DefaultWebResources defaultResources;
 
   /** Field description */
   private List<WebResource> resources;

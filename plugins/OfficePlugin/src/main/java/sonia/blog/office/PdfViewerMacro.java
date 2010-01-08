@@ -58,6 +58,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import sonia.blog.api.app.Context;
+import sonia.blog.api.macro.DefaultWebResources;
 
 /**
  *
@@ -113,23 +115,6 @@ public class PdfViewerMacro extends AbstractBlogMacro implements WebMacro
   public void setId(Long id)
   {
     this.id = id;
-  }
-
-  /**
-   * Method description
-   *
-   *
-   * @param theme
-   */
-  @MacroInfoParameter(
-    displayName = "macro.pdfviewer.theme.displayName",
-    description = "macro.pdfviewer.theme.description",
-    widget = SelectWidget.class,
-    widgetParam = "options=light_rounded|dark_rounded|light_square|dark_square;nullable=true"
-  )
-  public void setTheme(String theme)
-  {
-    this.theme = theme;
   }
 
   /**
@@ -206,32 +191,20 @@ public class PdfViewerMacro extends AbstractBlogMacro implements WebMacro
                               Long galleryId, String body)
   {
     resources = new ArrayList<WebResource>();
-    resources.add(
-        new ScriptResource(
-            21, linkBase + "resources/prettyPhoto/js/jquery.prettyPhoto.js"));
-
-    LinkResource prettyPhotoCSS = new LinkResource(22);
-
-    prettyPhotoCSS.setRel(LinkResource.REL_STYLESHEET);
-    prettyPhotoCSS.setType(LinkResource.TYPE_STYLESHEET);
-    prettyPhotoCSS.setHref(linkBase
-                           + "resources/prettyPhoto/css/prettyPhoto.css");
-    resources.add(prettyPhotoCSS);
-    resources.add(new ScriptResource(23,
+    resources.addAll( defaultResources.getFancybox() );
+    resources.add(new ScriptResource(600,
                                      linkBase
                                      + "resource/script/jquery.pdfgallery.js"));
 
     Map<String, Object> parameter = new HashMap<String, Object>();
 
     parameter.put("id", galleryId.toString());
-    parameter.put("theme", theme);
 
     StringBuffer url = new StringBuffer(linkBase).append("macros/pdfviewer/");
 
     url.append(attachment.getId()).append("/index.json");
     parameter.put("url", url.toString());
-    parameter.put("loadingImage",
-                  linkBase + "resources/jquery/plugins/img/loading.gif");
+    parameter.put("loadingImage", defaultResources.getLoadingImage());
     parameter.put("body", body);
     parameter.put("type", type);
 
@@ -239,6 +212,9 @@ public class PdfViewerMacro extends AbstractBlogMacro implements WebMacro
   }
 
   //~--- fields ---------------------------------------------------------------
+
+  @Context
+  private DefaultWebResources defaultResources;
 
   /** Field description */
   @Dao
@@ -249,9 +225,6 @@ public class PdfViewerMacro extends AbstractBlogMacro implements WebMacro
 
   /** Field description */
   private List<WebResource> resources;
-
-  /** Field description */
-  private String theme = "dark_square";
 
   /** Field description */
   private String type = "hidden";
