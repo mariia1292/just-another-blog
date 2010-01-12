@@ -2,10 +2,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://java.sun.com/jsf/facelets"
-      xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:f="http://java.sun.com/jsf/core"
-      xmlns:blog="http://jab.nitilon.org/blog/"
-      xmlns:t="http://myfaces.apache.org/tomahawk">
+      xmlns:h="http://java.sun.com/jsf/html">
 
   <body>
 
@@ -15,7 +12,7 @@
         <script type="text/javascript" src="${facesContext.externalContext.requestContextPath}/resources/jquery/jquery.min.js"></script>
         <script type="text/javascript" src="${facesContext.externalContext.requestContextPath}/resources/jcrop/js/jquery.jcrop.min.js"></script>
         <link type="text/css" rel="stylesheet" href="${facesContext.externalContext.requestContextPath}/resources/jcrop/css/jquery.jcrop.css" />
-        <script language="Javascript">
+        <script type="text/javascript">
         jQuery(function(){
           jQuery('#avatar').Jcrop({
             setSelect: [ 0, 0, 50, 50 ],

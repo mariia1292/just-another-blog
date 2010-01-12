@@ -3,9 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:f="http://java.sun.com/jsf/core"
-      xmlns:c="http://java.sun.com/jstl/core"
-      xmlns:t="http://myfaces.apache.org/tomahawk">
+      xmlns:f="http://java.sun.com/jsf/core">
 
   <body>
 
@@ -79,7 +77,7 @@
           </h:panelGrid>
 
           <h:commandButton id="submit" value="#{label.save}" action="#{EntryBean.save}" />
-          <t:commandButton id="preview" target="_blank" value="#{label.preview}" actionListener="#{EntryBean.preview}" />
+          <h:commandButton id="preview" value="#{label.preview}" actionListener="#{EntryBean.preview}" />
           <h:commandButton id="remove" value="#{label.remove}" action="#{EntryBean.remove}" rendered="#{!EntryBean.new}" />
 
         </h:form>

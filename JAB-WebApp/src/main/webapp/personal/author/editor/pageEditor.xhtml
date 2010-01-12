@@ -3,10 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:f="http://java.sun.com/jsf/core"
-      xmlns:blog="http://jab.nitilon.org/blog/"
-      xmlns:t="http://myfaces.apache.org/tomahawk"
-      xmlns:c="http://java.sun.com/jstl/core">
+      xmlns:c="http://java.sun.com/jsp/jstl/core">
 
   <body>
 
@@ -19,6 +16,7 @@
       <ui:define name="head">
         <h:outputText value="#{PageAuthorBean.editor}" escape="false" />
         <script type="text/javascript">
+          //<![CDATA[
           function popup(){
             window.open(
               '${facesContext.externalContext.requestContextPath}/personal/author/editor/pages.jab?id=editorForm:navigationParent&amp;description=navigationParentLabel',
@@ -55,10 +53,11 @@
             $("#editorForm\\:navigationPos").val(value);
           }
           $(document).ready(function(){
-            updateNavigationOptions("<h:outputText value="#{PageAuthorBean.page.parent.id}" rendered="#{!PageAuthorBean.new &amp;&amp; PageAuthorBean.page.parent != null}" />"
-              , "<h:outputText value="#{PageAuthorBean.page.navigationPosition}" rendered="#{!PageAuthorBean.new}" />"
+            updateNavigationOptions("#{!PageAuthorBean.new && PageAuthorBean.page.parent != null ? PageAuthorBean.page.parent.id : ""}"
+              , "#{!PageAuthorBean.new ? PageAuthorBean.page.navigationPosition : ""}"
             );
           });
+          //]]>
         </script>
       </ui:define>
 
@@ -122,7 +121,7 @@
           </h:panelGrid>
           
           <h:commandButton value="#{label.save}" action="#{PageAuthorBean.save}" />
-          <t:commandButton target="_blank" value="#{label.preview}" actionListener="#{PageAuthorBean.preview}" />
+          <h:commandButton value="#{label.preview}" actionListener="#{PageAuthorBean.preview}" />
           <h:commandButton value="#{label.remove}" action="#{PageAuthorBean.remove}" rendered="#{!PageAuthorBean.new}" />
 
         </h:form>
