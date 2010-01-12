@@ -214,6 +214,8 @@
   .middle { vertical-align: middle; }
   .nowrap { white-space: nowrap; }
 
+  .pointer { cursor: pointer; }
+
   /**
   * Miscellaneous | Sonstiges
   *

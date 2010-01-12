@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:c="http://java.sun.com/jsp/jstl/core">
+      xmlns:c="http://java.sun.com/jstl/core">
 
   <body>
 
@@ -21,11 +21,11 @@
 
         <c:forEach items="#{DashboardBean.widgets}" var="Widget" varStatus="Status">
 
-          <div class="#{Status.index % 2 == 0 ? 'widget-left' : 'widget-right' }">
-            <div class="widget-content">
-              <ui:include src="#{Widget}" />
+            <div class="#{Status.index % 2 == 0 ? 'widget-left' : 'widget-right' }">
+              <div class="widget-content">
+                <ui:include src="#{Widget}" />
+              </div>
             </div>
-          </div>
 
         </c:forEach>
 
