@@ -79,8 +79,8 @@
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
         <configuration>
-          <source>1.5</source>
-          <target>1.5</target>
+          <source>${project.build.sourceLevel}</source>
+          <target>${project.build.sourceLevel}</target>
           <encoding>${project.build.sourceEncoding}</encoding>
         </configuration>
       </plugin>
@@ -88,8 +88,8 @@
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
         <configuration>
-          <source>1.5</source>
-          <target>1.5</target>
+          <source>${project.build.sourceLevel}</source>
+          <target>${project.build.sourceLevel}</target>
         </configuration>
       </plugin>
     </plugins>
@@ -137,6 +137,10 @@
             <artifactId>xml-apis</artifactId>
             <groupId>xml-apis</groupId>
           </exclusion>
+          <exclusion>
+            <artifactId>oro</artifactId>
+            <groupId>oro</groupId>
+          </exclusion>
         </exclusions>
       </dependency>
 
@@ -172,6 +176,7 @@
   </modules>
 
   <properties>
+    <project.build.sourceLevel>1.5</project.build.sourceLevel>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <netbeans.hint.license>JAB-BSD</netbeans.hint.license>
   </properties>

@@ -84,10 +84,11 @@
           <h:inputText id="addMember" value="#{AdminBlogBean.addMemberName}" required="true" />
           <h:commandButton value="#{label.addMember}" action="#{AdminBlogBean.addMember}" />
           <script type="text/javascript">
+          //<![CDATA[
           $("#addMemberForm\\:addMember").autocomplete("${facesContext.externalContext.requestContextPath}/async/user.json",{
             queryParam : "filter",
             formatter : function(field, user){
-              return $("<a />").attr("href", "javascript:return false;").attr("rel", user.name).text( user.name + " (" + user.displayName + ")" ).click(function(){
+              return $("<a />").addClass("pointer").attr("rel", user.name).text(user.name + " (" + user.displayName + ")").click(function(){
                 field.val( user.name );
               });
             },
@@ -95,6 +96,7 @@
               field.val( selection.attr("rel") );
             }
           });
+          //]]>
           </script>
 
         </h:form>
