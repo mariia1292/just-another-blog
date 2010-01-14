@@ -274,8 +274,9 @@ public class EntryBean extends AbstractEditorBean
       {
         User author = session.getUser();
 
-        if (entry.getBlog() == null){
-          entry.setBlog( request.getCurrentBlog() );
+        if (entry.getBlog() == null)
+        {
+          entry.setBlog(request.getCurrentBlog());
         }
 
         if (entry.getTitle() == null)

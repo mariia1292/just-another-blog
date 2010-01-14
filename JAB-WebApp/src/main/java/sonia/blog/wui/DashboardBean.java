@@ -43,6 +43,7 @@ import sonia.blog.api.dao.AttachmentDAO;
 import sonia.blog.api.dao.CategoryDAO;
 import sonia.blog.api.dao.CommentDAO;
 import sonia.blog.api.dao.EntryDAO;
+import sonia.blog.api.dao.PageDAO;
 import sonia.blog.api.dao.UserDAO;
 import sonia.blog.api.util.AbstractBean;
 import sonia.blog.entity.Blog;
@@ -68,7 +69,7 @@ import javax.faces.model.ListDataModel;
  * @author Sebastian Sdorra
  */
 @RequireRole(Role.READER)
-public class DashboardBean extends AbstractBean
+public class DashboardBean extends AbstractInformationBean
 {
 
   /**
@@ -77,7 +78,7 @@ public class DashboardBean extends AbstractBean
    */
   public DashboardBean()
   {
-    init();
+    super();
   }
 
   //~--- methods --------------------------------------------------------------
@@ -113,41 +114,13 @@ public class DashboardBean extends AbstractBean
   /**
    * Method description
    *
-   * @return
-   */
-  public long getAttachmentCount()
-  {
-    Blog b = getRequest().getCurrentBlog();
-    AttachmentDAO attachmentDAO =
-      BlogContext.getDAOFactory().getAttachmentDAO();
-
-    return attachmentDAO.count(b);
-  }
-
-  /**
-   * Method description
    *
    * @return
    */
-  public long getCategoryCount()
+  @Override
+  public Blog getBlog()
   {
-    Blog b = getRequest().getCurrentBlog();
-    CategoryDAO categegoryDAO = BlogContext.getDAOFactory().getCategoryDAO();
-
-    return categegoryDAO.count(b);
-  }
-
-  /**
-   * Method description
-   *
-   * @return
-   */
-  public long getCommentCount()
-  {
-    Blog b = getRequest().getCurrentBlog();
-    CommentDAO commentDAO = BlogContext.getDAOFactory().getCommentDAO();
-
-    return commentDAO.count(b);
+    return getRequest().getCurrentBlog();
   }
 
   /**
@@ -222,32 +195,6 @@ public class DashboardBean extends AbstractBean
     }
 
     return bean;
-  }
-
-  /**
-   * Method description
-   *
-   * @return
-   */
-  public long getEntryCount()
-  {
-    Blog b = getRequest().getCurrentBlog();
-    EntryDAO entryDAO = BlogContext.getDAOFactory().getEntryDAO();
-
-    return entryDAO.count(b);
-  }
-
-  /**
-   * Method description
-   *
-   * @return
-   */
-  public long getMemberCount()
-  {
-    Blog b = getRequest().getCurrentBlog();
-    UserDAO userDAO = BlogContext.getDAOFactory().getUserDAO();
-
-    return userDAO.count(b);
   }
 
   /**

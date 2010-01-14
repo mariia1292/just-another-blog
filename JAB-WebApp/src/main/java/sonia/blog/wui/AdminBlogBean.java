@@ -41,17 +41,12 @@ import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.app.BlogRequest;
 import sonia.blog.api.app.Constants;
 import sonia.blog.api.authentication.RequireRole;
-import sonia.blog.api.dao.AttachmentDAO;
 import sonia.blog.api.dao.BlogDAO;
-import sonia.blog.api.dao.CategoryDAO;
-import sonia.blog.api.dao.CommentDAO;
 import sonia.blog.api.dao.Dao;
-import sonia.blog.api.dao.EntryDAO;
 import sonia.blog.api.dao.UserDAO;
 import sonia.blog.api.navigation.NavigationProvider;
 import sonia.blog.api.search.SearchContext;
 import sonia.blog.api.template.Template;
-import sonia.blog.api.util.AbstractBean;
 import sonia.blog.entity.Blog;
 import sonia.blog.entity.BlogMember;
 import sonia.blog.entity.Role;
@@ -86,7 +81,7 @@ import javax.faces.model.SelectItem;
  * @author Sebastian Sdorra
  */
 @RequireRole(Role.ADMIN)
-public class AdminBlogBean extends AbstractBean
+public class AdminBlogBean extends AbstractInformationBean
 {
 
   /** Field description */
@@ -408,19 +403,6 @@ public class AdminBlogBean extends AbstractBean
   /**
    * Method description
    *
-   * @return
-   */
-  public long getAttachmentCount()
-  {
-    AttachmentDAO attachmentDAO =
-      BlogContext.getDAOFactory().getAttachmentDAO();
-
-    return attachmentDAO.count(blog);
-  }
-
-  /**
-   * Method description
-   *
    *
    * @return
    */
@@ -445,58 +427,12 @@ public class AdminBlogBean extends AbstractBean
   /**
    * Method description
    *
-   * @return
-   */
-  public long getCategoryCount()
-  {
-    CategoryDAO categegoryDAO = BlogContext.getDAOFactory().getCategoryDAO();
-
-    return categegoryDAO.count(blog);
-  }
-
-  /**
-   * Method description
-   *
-   * @return
-   */
-  public long getCommentCount()
-  {
-    CommentDAO commentDAO = BlogContext.getDAOFactory().getCommentDAO();
-
-    return commentDAO.count(blog);
-  }
-
-  /**
-   * Method description
-   *
-   * @return
-   */
-  public long getEntryCount()
-  {
-    EntryDAO entryDAO = BlogContext.getDAOFactory().getEntryDAO();
-
-    return entryDAO.count(blog);
-  }
-
-  /**
-   * Method description
-   *
    *
    * @return
    */
   public SelectItem[] getLocaleItems()
   {
     return BlogUtil.getLocaleItems(FacesContext.getCurrentInstance());
-  }
-
-  /**
-   * Method description
-   *
-   * @return
-   */
-  public long getMemberCount()
-  {
-    return userDAO.count(blog);
   }
 
   /**
