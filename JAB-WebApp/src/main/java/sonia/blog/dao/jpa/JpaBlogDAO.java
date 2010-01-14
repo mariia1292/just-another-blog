@@ -463,10 +463,31 @@ public class JpaBlogDAO extends JpaGenericDAO<Blog> implements BlogDAO
   public void setParameter(BlogSession session, Blog blog, String name,
                            String value)
   {
+    setParameter(session, blog, name, value, true);
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param session
+   * @param blog
+   * @param name
+   * @param value
+   * @param notifyListener
+   */
+  public void setParameter(BlogSession session, Blog blog, String name,
+                           String value, boolean notifyListener)
+  {
     if (!(session.hasRole(Role.GLOBALADMIN)
           || (session.hasRole(Role.ADMIN) && session.getBlog().equals(blog))))
     {
       throw new BlogSecurityException("AdminSession is required");
+    }
+
+    if (notifyListener)
+    {
+      fireEvent(Action.PREUPDATE, blog);
     }
 
     Query q = strategy.getNamedQuery("BlogParameter.getByBlogAndName", false);
@@ -496,6 +517,11 @@ public class JpaBlogDAO extends JpaGenericDAO<Blog> implements BlogDAO
       }
 
       strategy.flush();
+
+      if (notifyListener)
+      {
+        fireEvent(Action.POSTUPDATE, blog);
+      }
     }
     catch (Exception ex)
     {
