@@ -104,7 +104,7 @@ public class JpaPageDAO extends JpaGenericDAO<Page> implements PageDAO
    */
   public long count(Blog blog)
   {
-    return countQuery("Page.count", blog);
+    return countQuery("Page.countByBlog", blog);
   }
 
   /**
