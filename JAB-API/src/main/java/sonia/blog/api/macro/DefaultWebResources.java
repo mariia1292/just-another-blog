@@ -45,6 +45,20 @@ import java.util.List;
 public class DefaultWebResources
 {
 
+  /** Field description */
+  public static final String JABICON_128 = "128.gif";
+
+  /** Field description */
+  public static final String JABICON_16 = "16.gif";
+
+  /** Field description */
+  public static final String JABICON_32 = "32.gif";
+
+  /** Field description */
+  public static final String JABICON_64 = "64.gif";
+
+  //~--- constructors ---------------------------------------------------------
+
   /**
    * Constructs ...
    *
@@ -65,7 +79,9 @@ public class DefaultWebResources
             202, LinkResource.TYPE_STYLESHEET,
             contextPath + "/resources/fancybox/fancybox.css",
             LinkResource.REL_STYLESHEET, null, "user", false));
-    loadingImage = contextPath + "resources/jquery/plugins/img/loading.gif";
+    loadingImage = contextPath + "/resources/jquery/plugins/img/loading.gif";
+    favicon = contextPath + "/resources/images/favicon.ico";
+    jabIcon = contextPath + "/resources/images/icons/jab/icon-";
   }
 
   //~--- get methods ----------------------------------------------------------
@@ -87,6 +103,30 @@ public class DefaultWebResources
    *
    * @return
    */
+  public String getFavicon()
+  {
+    return favicon;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param size
+   *
+   * @return
+   */
+  public String getJabIcon(String size)
+  {
+    return jabIcon + size;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
   public String getLoadingImage()
   {
     return loadingImage;
@@ -96,6 +136,12 @@ public class DefaultWebResources
 
   /** Field description */
   private List<WebResource> fancybox;
+
+  /** Field description */
+  private String favicon;
+
+  /** Field description */
+  private String jabIcon;
 
   /** Field description */
   private String loadingImage;
