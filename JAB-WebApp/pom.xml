@@ -132,6 +132,12 @@
 
     <profile>
       <id>devel</id>
+      <activation>
+        <property>
+          <name>sonia.blog.plugins</name>
+          <value>true</value>
+        </property>
+      </activation>
       <dependencies>
         <dependency>
           <groupId>sonia.blog</groupId>

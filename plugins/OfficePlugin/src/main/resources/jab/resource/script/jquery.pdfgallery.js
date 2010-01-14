@@ -44,13 +44,13 @@
     var defaults = {
       id: "pdfgallery-" + new Date().getTime(),
       type: "thumb",
-      loadingImage: null
-    };
-
-    var fancyboxOptions = {
-      type: "image",
-      overlayShow: true,
-      overlayOpacity: 0.5
+      loadingImage: null,
+      fancybox: {
+        type: "image",
+        overlayShow: true,
+        overlayOpacity: 0.5,
+        padding: 0
+      }
     };
 
     options = $.extend({},defaults, options);
@@ -113,7 +113,7 @@
             )
           );
       });
-      $("a", $ul).fancybox(fancyboxOptions);
+      $("a", $ul).fancybox(options.fancybox);
     }
 
     function createHiddenGallery(title, size, pages){
@@ -137,7 +137,7 @@
         );
 
       $button.click(function(){
-        $.fancybox( images, fancyboxOptions);
+        $.fancybox( images, options.fancybox);
       });
     }
 
@@ -151,7 +151,7 @@
             )
           );
       });
-      $("a", $field).fancybox(fancyboxOptions);
+      $("a", $field).fancybox(options.fancybox);
     }
   }
 

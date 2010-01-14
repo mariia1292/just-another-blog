@@ -1,6 +1,7 @@
 # netbeans temp & private files
 /?target/
 profiles.xml
+nbactions.*\.xml
 # MacOS X Files
 \.DS_Store$
 \._\.DS_Store$
