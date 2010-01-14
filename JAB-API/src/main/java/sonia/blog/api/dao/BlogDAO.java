@@ -197,4 +197,17 @@ public interface BlogDAO extends GenericDAO<Blog>
    */
   public void setParameter(BlogSession session, Blog blog, String name,
                            String value);
+
+  /**
+   * Method description
+   *
+   *
+   * @param session
+   * @param blog
+   * @param name
+   * @param value
+   * @param notifyListener
+   */
+  public void setParameter(BlogSession session, Blog blog, String name,
+                           String value, boolean notifyListener);
 }
