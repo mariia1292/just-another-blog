@@ -38,6 +38,9 @@ package sonia.blog.mapping;
 import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.app.BlogRequest;
 import sonia.blog.api.app.BlogResponse;
+import sonia.blog.api.app.Context;
+import sonia.blog.api.link.LinkBuilder;
+import sonia.blog.api.macro.DefaultWebResources;
 import sonia.blog.api.mapping.FinalMapping;
 import sonia.blog.api.mapping.MappingConfig;
 import sonia.blog.entity.Blog;
@@ -79,8 +82,7 @@ public class OpenSearchMapping extends FinalMapping
           throws IOException, ServletException
   {
     Blog blog = request.getCurrentBlog();
-    String link = BlogContext.getInstance().getLinkBuilder().buildLink(request,
-                    blog);
+    String link = linkBuilder.buildLink(request, blog);
 
     response.setContentType(MIMETYPE);
 
@@ -98,20 +100,24 @@ public class OpenSearchMapping extends FinalMapping
       writer.println("\t<Description>" + blog.getDescription()
                      + "</Description>");
       writer.println("\t<Url type=\"text/html\" template=\"" + link
-                     + "search.jab?search={searchTerms}\" />");
+                     + "/search.jab?search={searchTerms}\" />");
       writer.println("\t<Query role=\"example\" searchTerms=\"jab\" />");
       writer.println("\t<InputEncoding>UTF-8</InputEncoding>");
-      writer.println("\t<Image width=\"16\" height=\"16\">");
-      writer.println("\t\t" + link + "resources/images/icons/jab/icon-16.gif");
+      writer.println("\t<Image width=\"16\" height=\"16\">\t\t");
+      writer.println(linkBuilder.buildLink(request,
+              resources.getJabIcon(DefaultWebResources.JABICON_16)));
       writer.println("\t</Image>");
-      writer.println("\t<Image width=\"32\" height=\"32\">");
-      writer.println("\t\t" + link + "resources/images/icons/jab/icon-32.gif");
+      writer.println("\t<Image width=\"32\" height=\"32\">\t\t");
+      writer.println(linkBuilder.buildLink(request,
+              resources.getJabIcon(DefaultWebResources.JABICON_32)));
       writer.println("\t</Image>");
-      writer.println("\t<Image width=\"64\" height=\"64\">");
-      writer.println("\t\t" + link + "resources/images/icons/jab/icon-64.gif");
+      writer.println("\t<Image width=\"64\" height=\"64\">\t\t");
+      writer.println(linkBuilder.buildLink(request,
+              resources.getJabIcon(DefaultWebResources.JABICON_64)));
       writer.println("\t</Image>");
-      writer.println("\t<Image width=\"128\" height=\"128\">");
-      writer.println("\t\t" + link + "resources/images/icons/jab/icon-128.gif");
+      writer.println("\t<Image width=\"128\" height=\"128\">\t\t");
+      writer.println(linkBuilder.buildLink(request,
+              resources.getJabIcon(DefaultWebResources.JABICON_128)));
       writer.println("\t</Image>");
       writer.println("\t<moz:SearchForm>" + link + "</moz:SearchForm>");
       writer.println("</OpenSearchDescription>");
@@ -124,4 +130,14 @@ public class OpenSearchMapping extends FinalMapping
       }
     }
   }
+
+  //~--- fields ---------------------------------------------------------------
+
+  /** Field description */
+  @Context
+  private LinkBuilder linkBuilder;
+
+  /** Field description */
+  @Context
+  private DefaultWebResources resources;
 }
