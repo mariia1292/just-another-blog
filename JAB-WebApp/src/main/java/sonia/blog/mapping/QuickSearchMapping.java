@@ -98,6 +98,7 @@ public class QuickSearchMapping extends FinalMapping
 
     try
     {
+      response.setContentType("application/x-javascript");
       writer.startArray();
 
       String query = request.getParameter("query");

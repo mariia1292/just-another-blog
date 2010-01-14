@@ -100,6 +100,8 @@ public class CalendarMapping extends FinalMapping
                           startDate, endData);
     Calendar today = Calendar.getInstance();
 
+    response.setContentType("application/x-javascript");
+
     try
     {
       writer = response.getWriter();

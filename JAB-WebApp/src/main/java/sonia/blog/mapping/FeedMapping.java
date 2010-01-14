@@ -139,10 +139,12 @@ public class FeedMapping extends FinalMapping
       if (TYPE_ATOM.equals(type))
       {
         wireFeed = new Feed("atom_1.0");
+        response.setContentType("application/atom+xml; charset=utf-8");
       }
       else if (TYPE_RSS.equals(type))
       {
         wireFeed = new Channel("rss_2.0");
+        response.setContentType("application/rss+xml; charset=utf-8");
       }
 
       if (wireFeed != null)
