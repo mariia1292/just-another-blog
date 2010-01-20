@@ -716,6 +716,19 @@ public class Util
    * Method description
    *
    *
+   * @param value
+   *
+   * @return
+   */
+  public static boolean isEmpty(String value)
+  {
+    return (value == null) || (value.length() == 0);
+  }
+
+  /**
+   * Method description
+   *
+   *
    * @param collection
    *
    * @return
@@ -736,6 +749,45 @@ public class Util
   public static boolean isEmpty(Map<?, ?> map)
   {
     return (map == null) || map.isEmpty();
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param value
+   *
+   * @return
+   */
+  public static boolean isNotEmpty(String value)
+  {
+    return (value != null) && (value.length() > 0);
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param collection
+   *
+   * @return
+   */
+  public static boolean isNotEmpty(Collection<?> collection)
+  {
+    return (collection != null) &&!collection.isEmpty();
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param map
+   *
+   * @return
+   */
+  public static boolean isNotEmpty(Map<?, ?> map)
+  {
+    return (map != null) &&!map.isEmpty();
   }
 
   //~--- methods --------------------------------------------------------------
