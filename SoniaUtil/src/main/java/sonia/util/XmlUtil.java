@@ -47,6 +47,7 @@ import org.xml.sax.SAXParseException;
 //~--- JDK imports ------------------------------------------------------------
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -108,6 +109,40 @@ public class XmlUtil
     DocumentBuilder builder = factory.newDocumentBuilder();
 
     return builder.parse(in);
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param file
+   *
+   * @return
+   *
+   * @throws IOException
+   * @throws ParserConfigurationException
+   * @throws SAXException
+   */
+  public static Document buildDocument(File file)
+          throws IOException, SAXException, ParserConfigurationException
+  {
+    Document doc = null;
+    FileInputStream fis = null;
+
+    try
+    {
+      fis = new FileInputStream(file);
+      doc = buildDocument(fis);
+    }
+    finally
+    {
+      if (fis != null)
+      {
+        fis.close();
+      }
+    }
+
+    return doc;
   }
 
   /**
