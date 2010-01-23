@@ -5,7 +5,7 @@
 
 
 
-package sonia.blog.script;
+package sonia.blog.scripting;
 
 //~--- non-JDK imports --------------------------------------------------------
 

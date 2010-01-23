@@ -16,15 +16,16 @@
   <name>ScriptingPlugin</name>
   <url>http://www.just-another-blog.org</url>
 
-  <distributionManagement>
-    <site>
-      <id>jab.website</id>
-      <name>JAB Kenai Website</name>
-      <url>dav:https://kenai.com/website/jab/plugins/ScriptingPlugin</url>
-    </site>
-  </distributionManagement>
+  <dependencies>
+    <dependency>
+      <groupId>org.freemarker</groupId>
+      <artifactId>freemarker</artifactId>
+      <version>2.3.16</version>
+    </dependency>
+  </dependencies>
 
   <profiles>
+
     <profile>
       <id>release</id>
       <build>
@@ -60,6 +61,24 @@
         </plugins>
       </build>
     </profile>
+
+    <profile>
+      <id>groovy</id>
+      <activation>
+        <property>
+          <name>sonia.blog.scripting.groovy</name>
+          <value>true</value>
+        </property>
+      </activation>
+      <dependencies>
+        <dependency>
+          <groupId>org.codehaus.groovy</groupId>
+          <artifactId>groovy-all</artifactId>
+          <version>1.7.0</version>
+        </dependency>
+      </dependencies>
+    </profile>
+
   </profiles>
 
 </project>

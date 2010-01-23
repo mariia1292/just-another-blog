@@ -16,5 +16,5 @@
   <description>adds an ScriptEngine to the JAB</description>
   <version>0.0.1</version>
   <vendor>Sebastian Sdorra</vendor>
-  <activator>sonia.blog.script.PluginActivator</activator>
+  <activator>sonia.blog.scripting.PluginActivator</activator>
 </plugin>

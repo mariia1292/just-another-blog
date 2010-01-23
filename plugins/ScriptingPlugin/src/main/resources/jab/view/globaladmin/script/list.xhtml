@@ -1,0 +1,126 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:blog="http://jab.nitilon.org/blog/">
+
+  <body>
+
+    <ui:composition template="/personal/template.xhtml">
+
+      <ui:define name="title">
+        <h:outputText value="Scripting" />
+      </ui:define>
+
+      <ui:define name="content">
+
+        <h1>Scripting</h1>
+
+        <h:form>
+
+          <h2>AdminScripts</h2>
+
+          <h:dataTable value="#{ScriptingBean.adminController.model}" var="Script">
+
+            <h:column>
+              <f:facet name="header">
+                <h:outputText value="Name" />
+              </f:facet>
+              <h:commandLink value="#{Script.name}" action="#{ScriptingBean.adminController.select}" />
+            </h:column>
+
+            <h:column>
+              <f:facet name="header">
+                <h:outputText value="Description" />
+              </f:facet>
+              <h:outputText value="#{Script.description}" />
+            </h:column>
+
+            <h:column>
+              <f:facet name="header">
+                <h:outputText value="CreationDate" />
+              </f:facet>
+              <h:outputText value="#{Script.creationDate}">
+                <f:convertDateTime pattern="#{BlogBean.blog.dateFormat}" />
+              </h:outputText>
+            </h:column>
+
+            <h:column>
+              <f:facet name="header">
+                <h:outputText value="LastModified" />
+              </f:facet>
+              <h:outputText value="#{Script.lastModified}">
+                <f:convertDateTime pattern="#{BlogBean.blog.dateFormat}" />
+              </h:outputText>
+            </h:column>
+
+            <h:column>
+              <f:facet name="header">
+                <h:outputText value="remove" />
+              </f:facet>
+              <h:commandLink value="remove" action="#{ScriptingBean.adminController.remove}" />
+            </h:column>
+
+          </h:dataTable>
+
+          <h:commandLink action="#{ScriptingBean.adminController.create}" value="Create" />
+
+          <h2>MacroScripts</h2>
+
+          <h:dataTable value="#{ScriptingBean.macroController.model}" var="Script">
+
+            <h:column>
+              <f:facet name="header">
+                <h:outputText value="Name" />
+              </f:facet>
+              <h:commandLink value="#{Script.name}" action="#{ScriptingBean.macroController.select}" />
+            </h:column>
+
+            <h:column>
+              <f:facet name="header">
+                <h:outputText value="Description" />
+              </f:facet>
+              <h:outputText value="#{Script.description}" />
+            </h:column>
+
+            <h:column>
+              <f:facet name="header">
+                <h:outputText value="CreationDate" />
+              </f:facet>
+              <h:outputText value="#{Script.creationDate}">
+                <f:convertDateTime pattern="#{BlogBean.blog.dateFormat}" />
+              </h:outputText>
+            </h:column>
+
+            <h:column>
+              <f:facet name="header">
+                <h:outputText value="LastModified" />
+              </f:facet>
+              <h:outputText value="#{Script.lastModified}">
+                <f:convertDateTime pattern="#{BlogBean.blog.dateFormat}" />
+              </h:outputText>
+            </h:column>
+
+             <h:column>
+              <f:facet name="header">
+                <h:outputText value="remove" />
+              </f:facet>
+              <h:commandLink value="remove" action="#{ScriptingBean.macroController.remove}" />
+            </h:column>
+
+
+          </h:dataTable>
+
+          <h:commandLink action="#{ScriptingBean.macroController.create}" value="Create" />
+
+        </h:form>
+
+      </ui:define>
+
+    </ui:composition>
+
+
+  </body>
+</html>
