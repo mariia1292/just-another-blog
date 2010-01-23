@@ -2,17 +2,66 @@
 
 <!-- =========== FULL CONFIGURATION FILE ================================== -->
 <faces-config version="1.2" 
-    xmlns="http://java.sun.com/xml/ns/javaee" 
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-    xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_1_2.xsd">
+              xmlns="http://java.sun.com/xml/ns/javaee"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_1_2.xsd">
 
   <navigation-rule>
     <from-view-id>/personal/*</from-view-id>
     <navigation-case>
       <from-outcome>script</from-outcome>
-      <to-view-id>/view/script/script.xhtml</to-view-id>
+      <to-view-id>/view/globaladmin/script/list.xhtml</to-view-id>
     </navigation-case>
   </navigation-rule>
 
+  <navigation-rule>
+    <from-view-id>/view/*</from-view-id>
+    <navigation-case>
+      <from-outcome>script</from-outcome>
+      <to-view-id>/view/globaladmin/script/list.xhtml</to-view-id>
+    </navigation-case>
+  </navigation-rule>
 
+  <navigation-rule>
+    <from-view-id>/view/globaladmin/script/list.xhtml</from-view-id>
+    <navigation-case>
+      <from-outcome>macro-detail</from-outcome>
+      <to-view-id>/view/globaladmin/script/detailMacro.xhtml</to-view-id>
+    </navigation-case>
+    <navigation-case>
+      <from-outcome>admin-detail</from-outcome>
+      <to-view-id>/view/globaladmin/script/detailAdmin.xhtml</to-view-id>
+    </navigation-case>
+  </navigation-rule>
+
+  <navigation-rule>
+    <from-view-id>/view/globaladmin/script/detailMacro.xhtml</from-view-id>
+    <navigation-case>
+      <from-outcome>success</from-outcome>
+      <to-view-id>/view/globaladmin/script/list.xhtml</to-view-id>
+    </navigation-case>
+    <navigation-case>
+      <from-outcome>invoke</from-outcome>
+      <to-view-id>/view/globaladmin/script/invokeMacro.xhtml</to-view-id>
+    </navigation-case>
+  </navigation-rule>
+
+  <navigation-rule>
+    <from-view-id>/view/globaladmin/script/detailAdmin.xhtml</from-view-id>
+    <navigation-case>
+      <from-outcome>success</from-outcome>
+      <to-view-id>/view/globaladmin/script/list.xhtml</to-view-id>
+    </navigation-case>
+    <navigation-case>
+      <from-outcome>invoke</from-outcome>
+      <to-view-id>/view/globaladmin/script/invokeAdmin.xhtml</to-view-id>
+    </navigation-case>
+  </navigation-rule>
+
+  <managed-bean>
+    <managed-bean-name>ScriptingBean</managed-bean-name>
+    <managed-bean-class>sonia.blog.scripting.wui.ScriptingBean</managed-bean-class>
+    <managed-bean-scope>session</managed-bean-scope>
+  </managed-bean>
+  
 </faces-config>
