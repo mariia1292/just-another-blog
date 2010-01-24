@@ -35,16 +35,16 @@ package sonia.blog.scripting;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import java.io.StringWriter;
-import java.util.HashMap;
-import java.util.Map;
-import javax.script.ScriptEngine;
 import org.junit.Test;
+
+import static org.junit.Assert.*;
 
 //~--- JDK imports ------------------------------------------------------------
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
 
-
+import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 
@@ -52,7 +52,7 @@ import javax.script.ScriptException;
  *
  * @author Sebastian Sdorra
  */
-public class SCTest
+public class FreemarkerScriptEngineTest
 {
 
   /**
@@ -62,34 +62,26 @@ public class SCTest
    * @throws ScriptException
    */
   @Test
-  public void scriptTest() throws ScriptException
+  public void scriptTemplateTest() throws ScriptException
   {
     ScriptEngineManager manager = new ScriptEngineManager();
-    ScriptEngine engine = manager.getEngineByName("Groovy");
+    ScriptEngine engine = manager.getEngineByName("ECMAScript");
+    FreemarkerScriptEngine templateEngine = new FreemarkerScriptEngine();
+    ScriptTemplate template = templateEngine.createTemplate("<p>${name}</p>");
 
-    Map<String,String> parameter = new HashMap<String, String>();
-    parameter.put("name", "What");
+    engine.put("template", template);
 
-    FreemarkerScriptTemplate template = new FreemarkerScriptTemplate( "<h3>say ${name}</h3>" );
+    StringWriter stringWriter = new StringWriter();
+    PrintWriter writer = new PrintWriter(stringWriter);
 
-    engine.put("scTemplate", template);
-    engine.put("parameter", parameter);
+    engine.getContext().setWriter(writer);
 
     StringBuffer script = new StringBuffer();
-    script.append("def name = parameter.get('name');\n");
-    script.append("if ( name == null ){\n");
-    script.append("  name = 'Wooooo';\n");
-    script.append("}\n");
-    script.append("scTemplate.put('name', name);\n");
-    script.append("println scTemplate.render();");
 
-    System.out.println(script.toString());
-
-
-    StringWriter writer = new StringWriter();
-    engine.getContext().setWriter(writer);
-    engine.eval( script.toString() );
-    System.out.println(writer);
-    
+    script.append("template.put( 'name', 'JUnit' );");
+    script.append("print(template.render());");
+    engine.eval(script.toString());
+    writer.flush();
+    assertEquals("<p>JUnit</p>", stringWriter.toString());
   }
 }

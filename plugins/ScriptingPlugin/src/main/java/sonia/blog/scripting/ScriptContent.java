@@ -33,6 +33,10 @@
 
 package sonia.blog.scripting;
 
+//~--- non-JDK imports --------------------------------------------------------
+
+import sonia.util.Util;
+
 /**
  *
  * @author Sebastian Sdorra
@@ -81,6 +85,17 @@ public class ScriptContent
   public String getLanguage()
   {
     return language;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  public boolean isValid()
+  {
+    return Util.isNotEmpty(language) && Util.isNotEmpty(content);
   }
 
   //~--- set methods ----------------------------------------------------------

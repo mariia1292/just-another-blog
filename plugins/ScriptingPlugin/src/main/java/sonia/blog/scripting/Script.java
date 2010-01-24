@@ -526,14 +526,7 @@ public class Script
       }
     }
 
-    ScriptContent scriptContent = null;
-
-    if (Util.isNotEmpty(language) && Util.isNotEmpty(content))
-    {
-      scriptContent = new ScriptContent(language, content);
-    }
-
-    return scriptContent;
+    return new ScriptContent(language, content);
   }
 
   /**
@@ -565,13 +558,6 @@ public class Script
     languageEl.setTextContent(language);
     parent.appendChild(languageEl);
 
-    String scriptContent = content.getContent();
-
-    if (Util.isEmpty(scriptContent))
-    {
-      throw new IllegalArgumentException("content is empty");
-    }
-
     StringBuffer nameBuffer = new StringBuffer(filename);
 
     nameBuffer.append(".jsc");
@@ -583,18 +569,23 @@ public class Script
       throw new BlogException("could not delete file " + file.getPath());
     }
 
-    FileOutputStream fos = null;
+    String scriptContent = content.getContent();
 
-    try
+    if (Util.isNotEmpty(scriptContent))
     {
-      fos = new FileOutputStream(file);
-      fos.write(scriptContent.getBytes());
-    }
-    finally
-    {
-      if (fos != null)
+      FileOutputStream fos = null;
+
+      try
       {
-        fos.close();
+        fos = new FileOutputStream(file);
+        fos.write(scriptContent.getBytes());
+      }
+      finally
+      {
+        if (fos != null)
+        {
+          fos.close();
+        }
       }
     }
   }
