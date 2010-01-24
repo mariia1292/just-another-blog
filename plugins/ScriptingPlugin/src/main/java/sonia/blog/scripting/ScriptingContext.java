@@ -49,6 +49,7 @@ import sonia.util.Util;
 //~--- JDK imports ------------------------------------------------------------
 
 import java.io.File;
+import java.io.PrintWriter;
 import java.io.StringWriter;
 
 import java.util.ArrayList;
@@ -231,18 +232,21 @@ public class ScriptingContext
 
     ScriptContent templateContent = script.getTemplateContent();
 
-    if (templateContent != null)
+    if (templateContent.isValid())
     {
-      List<ScriptTemplateEngine> engines = getTemplateEngines();
-
-      for (ScriptTemplateEngine e : engines)
+      if (templateContent != null)
       {
-        if (e.getName().equals(templateContent.getLanguage()))
-        {
-          engine.put("template",
-                     e.createTemplate(templateContent.getContent()));
+        List<ScriptTemplateEngine> engines = getTemplateEngines();
 
-          break;
+        for (ScriptTemplateEngine e : engines)
+        {
+          if (e.getName().equals(templateContent.getLanguage()))
+          {
+            engine.put("template",
+                       e.createTemplate(templateContent.getContent()));
+
+            break;
+          }
         }
       }
     }
@@ -255,18 +259,28 @@ public class ScriptingContext
       engine.setContext(ctx);
     }
 
-    StringWriter writer = new StringWriter();
+    // fix ECMAScript print
+    StringWriter stringWriter = new StringWriter();
+    PrintWriter writer = new PrintWriter(stringWriter);
 
     ctx.setWriter(writer);
 
     try
     {
       engine.eval(scriptContent.getContent(), ctx);
-      result = writer.toString();
+      writer.flush();
+      result = stringWriter.toString();
     }
     catch (ScriptException ex)
     {
       throw new ScriptingException(ex);
+    }
+    finally
+    {
+      if (writer != null)
+      {
+        writer.close();
+      }
     }
 
     return result;
