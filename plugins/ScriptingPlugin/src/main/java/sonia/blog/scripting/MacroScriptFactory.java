@@ -149,7 +149,12 @@ public class MacroScriptFactory implements MacroFactory
         parameters = new HashMap<String, String>();
       }
 
-      parameters.put("body", body);
+      Map<String, Object> env = new HashMap<String, Object>();
+
+      env.put("body", body);
+      env.put("object", environment.get("object"));
+      env.put("linkBase", environment.get("linkBase"));
+      env.put("parameter", parameters);
 
       String result = null;
 
@@ -158,7 +163,7 @@ public class MacroScriptFactory implements MacroFactory
         result = ScriptingContext.getInstance().invoke(
           (BlogRequest) environment.get("request"),
           (BlogResponse) environment.get("response"), MacroScript.class, name,
-          parameters);
+          env);
       }
       catch (ScriptingException ex)
       {
