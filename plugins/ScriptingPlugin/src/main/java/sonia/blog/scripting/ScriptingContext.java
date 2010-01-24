@@ -56,7 +56,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Logger;
 
 import javax.script.ScriptContext;
 import javax.script.ScriptEngine;
@@ -78,10 +77,6 @@ public class ScriptingContext
   /** Field description */
   private static ScriptingContext instance;
 
-  /** Field description */
-  private static Logger logger =
-    Logger.getLogger(ScriptingContext.class.getName());
-
   //~--- constructors ---------------------------------------------------------
 
   /**
@@ -92,6 +87,12 @@ public class ScriptingContext
   {
     repository =
       BlogContext.getInstance().getResourceManager().getDirectory("script");
+    syntaxMap = new HashMap<String, String>();
+    syntaxMap.put("ecmascript", "js");
+    syntaxMap.put("groovy", "java");
+    syntaxMap.put("jruby", "ruby");
+    syntaxMap.put("python", "python");
+    syntaxMap.put("freemarker", "html");
   }
 
   /**
@@ -300,6 +301,20 @@ public class ScriptingContext
    * Method description
    *
    *
+   * @param language
+   * @param syntax
+   *
+   * @return
+   */
+  public String putSyntax(String language, String syntax)
+  {
+    return syntaxMap.put(language.toLowerCase(), syntax);
+  }
+
+  /**
+   * Method description
+   *
+   *
    * @param session
    * @param script
    *
@@ -467,6 +482,19 @@ public class ScriptingContext
    * Method description
    *
    *
+   * @param language
+   *
+   * @return
+   */
+  public String getSyntax(String language)
+  {
+    return syntaxMap.get(language.toLowerCase());
+  }
+
+  /**
+   * Method description
+   *
+   *
    * @return
    */
   public List<String> getTemplateLanguages()
@@ -611,6 +639,9 @@ public class ScriptingContext
 
   /** Field description */
   private List<String> scriptLanguages;
+
+  /** Field description */
+  private Map<String, String> syntaxMap;
 
   /** Field description */
   private boolean testMode = false;

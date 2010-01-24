@@ -117,6 +117,9 @@ public class PluginActivator implements Activator, InstallationListener
   public void stop(PluginContext context)
   {
     BlogContext ctx = BlogContext.getInstance();
+
+    ctx.getMappingHandler().remove(ScriptingMapping.class);
+
     ScriptingContext sCtx = ScriptingContext.getInstance();
     List<String> macroNames = sCtx.getScriptNames(MacroScript.class);
 
@@ -162,6 +165,9 @@ public class PluginActivator implements Activator, InstallationListener
     templateEngineReference.add(freemarkerEngine);
 
     BlogContext ctx = BlogContext.getInstance();
+
+    ctx.getMappingHandler().add(ScriptingMapping.class);
+
     ScriptingContext sCtx = ScriptingContext.getInstance();
     List<String> macroNames = sCtx.getScriptNames(MacroScript.class);
 
