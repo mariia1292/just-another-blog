@@ -53,6 +53,7 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
@@ -172,7 +173,7 @@ public class ScriptingContext
    *
    * @param request
    * @param response
-   * @param parameter
+   * @param environment
    * @param type
    * @param name
    *
@@ -182,7 +183,7 @@ public class ScriptingContext
    */
   public String invoke(BlogRequest request, BlogResponse response,
                        Class<? extends Script> type, String name,
-                       Map<String, ? extends Object> parameter)
+                       Map<String, Object> environment)
           throws ScriptingException
   {
     if (request == null)
@@ -216,6 +217,16 @@ public class ScriptingContext
     ScriptEngineManager manager = new ScriptEngineManager();
     ScriptEngine engine = manager.getEngineByName(scriptContent.getLanguage());
 
+    for (Map.Entry<String, Object> entry : environment.entrySet())
+    {
+      engine.put(entry.getKey(), entry.getValue());
+    }
+
+    if (!environment.containsKey("parameter"))
+    {
+      engine.put("parameter", new HashMap<String, String>());
+    }
+
     engine.put("request", request);
 
     if (response != null)
@@ -228,7 +239,6 @@ public class ScriptingContext
     engine.put("entityFactory", new EntityFactory());
     engine.put("session", session);
     engine.put("currentBlog", request.getCurrentBlog());
-    engine.put("parameter", parameter);
 
     ScriptContent templateContent = script.getTemplateContent();
 
