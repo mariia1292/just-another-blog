@@ -14,11 +14,39 @@
         <h:outputText value="Scripting" />
       </ui:define>
 
+      <ui:define name="head">
+        <script language="javascript" type="text/javascript" src="${facesContext.externalContext.requestContextPath}/resource/edit_area/edit_area_full.js"></script>
+        <script language="javascript" type="text/javascript">
+          function highlight(id,lang){
+            $.get("${facesContext.externalContext.requestContextPath}/script/syntax?lang=" + lang, function(data){
+              if ( data != "" ){
+                editAreaLoader.init({
+                  id : id,
+                  syntax: data,
+                  start_highlight: true
+                });
+              }
+            });
+          }
+          $(document).ready(function(){
+            highlight("scriptForm:scriptContent", $("#scriptForm\\:scriptLanguage").val());
+            highlight("scriptForm:templateScript", $("#scriptForm\\:scriptLanguage").val());
+
+            $("#scriptForm\\:scriptLanguage").change(function(){
+              highlight("scriptForm:scriptContent", $(this).val());
+            });
+            $("#scriptForm\\:templateLanguage").change(function(){
+              highlight("scriptForm:templateScript", $(this).val());
+            });
+          });
+        </script>
+      </ui:define>
+
       <ui:define name="content">
 
         <h1>Scripting</h1>
 
-        <h:form>
+        <h:form id="scriptForm">
 
           <h:panelGrid columns="3" styleClass="editor" columnClasses="e1,e2,none">
 
