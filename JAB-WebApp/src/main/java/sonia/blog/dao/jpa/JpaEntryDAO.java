@@ -38,26 +38,19 @@ package sonia.blog.dao.jpa;
 import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.app.BlogSession;
 import sonia.blog.api.app.Constants;
-import sonia.blog.api.dao.DAOListener.Action;
 import sonia.blog.api.dao.EntryDAO;
-import sonia.blog.api.exception.BlogSecurityException;
-import sonia.blog.entity.Attachment;
 import sonia.blog.entity.Blog;
 import sonia.blog.entity.Category;
-import sonia.blog.entity.Comment;
 import sonia.blog.entity.Entry;
 import sonia.blog.entity.Role;
 import sonia.blog.entity.Tag;
 import sonia.blog.entity.User;
-
-import sonia.util.Util;
 
 //~--- JDK imports ------------------------------------------------------------
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.persistence.NoResultException;
@@ -158,122 +151,6 @@ public class JpaEntryDAO extends JpaGenericDAO<Entry> implements EntryDAO
 
       q.setParameter("blog", session.getBlog());
       result = (Long) q.getSingleResult();
-    }
-
-    return result;
-  }
-
-  /**
-   * Method description
-   *
-   *
-   * @param blog
-   * @param startDate
-   * @param endDate
-   *
-   * @return
-   */
-  public List<Date> getAllCalendarDates(Blog blog, Date startDate,
-          Date endDate)
-  {
-    return getAllCalendarDates(blog, startDate, endDate, -1, -1);
-  }
-
-  /**
-   * Method description
-   *
-   *
-   * @param blog
-   * @param startDate
-   * @param endDate
-   * @param start
-   * @param max
-   *
-   * @return
-   */
-  @SuppressWarnings("unchecked")
-  public List<Date> getAllCalendarDates(Blog blog, Date startDate,
-          Date endDate, int start, int max)
-  {
-    List<Date> dates = null;
-
-    try
-    {
-      Query q = strategy.getNamedQuery("Entry.calendar", false);
-
-      q.setParameter("blog", blog);
-      q.setParameter("start", startDate);
-      q.setParameter("end", endDate);
-      dates = q.getResultList();
-    }
-    catch (NoResultException ex) {}
-
-    return dates;
-  }
-
-  /**
-   * Method description
-   *
-   *
-   *
-   * @param session
-   * @param item
-   * @param notifyListener
-   *
-   * @return
-   */
-  @Override
-  public boolean remove(BlogSession session, Entry item, boolean notifyListener)
-  {
-    if (!isPrivileged(session, item, ACTION_REMOVE))
-    {
-      logUnprivilegedMessage(session, item, ACTION_REMOVE);
-
-      throw new BlogSecurityException("Author session is required");
-    }
-
-    if (notifyListener)
-    {
-      fireEvent(Action.PREREMOVE, item);
-    }
-
-    boolean result = false;
-
-    try
-    {
-      List<Attachment> attachments = item.getAttachments();
-
-      if (Util.hasContent(attachments))
-      {
-        for (Attachment a : attachments)
-        {
-          strategy.remove(a);
-        }
-      }
-
-      List<Comment> comments = item.getComments();
-
-      if (Util.hasContent(comments))
-      {
-        for (Comment c : comments)
-        {
-          strategy.remove(c);
-        }
-      }
-
-      strategy.remove(item);
-      strategy.flush();
-
-      if (notifyListener)
-      {
-        fireEvent(Action.POSTREMOVE, item);
-      }
-
-      result = true;
-    }
-    catch (Exception ex)
-    {
-      logger.log(Level.SEVERE, null, ex);
     }
 
     return result;
@@ -632,6 +509,53 @@ public class JpaEntryDAO extends JpaGenericDAO<Entry> implements EntryDAO
     }
 
     return excecuteListQuery(q);
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param blog
+   * @param startDate
+   * @param endDate
+   *
+   * @return
+   */
+  public List<Date> getAllCalendarDates(Blog blog, Date startDate, Date endDate)
+  {
+    return getAllCalendarDates(blog, startDate, endDate, -1, -1);
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param blog
+   * @param startDate
+   * @param endDate
+   * @param start
+   * @param max
+   *
+   * @return
+   */
+  @SuppressWarnings("unchecked")
+  public List<Date> getAllCalendarDates(Blog blog, Date startDate,
+          Date endDate, int start, int max)
+  {
+    List<Date> dates = null;
+
+    try
+    {
+      Query q = strategy.getNamedQuery("Entry.calendar", false);
+
+      q.setParameter("blog", blog);
+      q.setParameter("start", startDate);
+      q.setParameter("end", endDate);
+      dates = q.getResultList();
+    }
+    catch (NoResultException ex) {}
+
+    return dates;
   }
 
   /**
