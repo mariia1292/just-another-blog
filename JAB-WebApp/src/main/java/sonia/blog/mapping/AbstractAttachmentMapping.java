@@ -154,6 +154,14 @@ public abstract class AbstractAttachmentMapping extends FinalMapping
 
     try
     {
+      if (getLogger().isLoggable(Level.FINEST))
+      {
+        StringBuffer msg = new StringBuffer("print file ");
+
+        msg.append(file.getAbsolutePath());
+        getLogger().finest(msg.toString());
+      }
+
       out = response.getOutputStream();
       in = new FileInputStream(file);
       Util.copy(in, out);

@@ -320,6 +320,14 @@ public abstract class AbstractEditorBean extends AbstractBean
 
           File file = new File(dir, "" + System.currentTimeMillis());
 
+          if (logger.isLoggable(Level.FINE))
+          {
+            StringBuffer log = new StringBuffer("create new attachment ");
+
+            log.append(file.getAbsolutePath()).append( " at " ).append( getClass().getName() );
+            logger.fine(log.toString());
+          }
+
           out = new FileOutputStream(file);
           Util.copy(in, out);
 
