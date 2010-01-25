@@ -58,6 +58,11 @@ import javax.servlet.http.HttpServletResponse;
 public class ScriptingMapping extends FinalMapping
 {
 
+  /** Field description */
+  public static final String DEFAULT_SYNTAX = "java";
+
+  //~--- methods --------------------------------------------------------------
+
   /**
    * Method description
    *
@@ -107,22 +112,24 @@ public class ScriptingMapping extends FinalMapping
     {
       String syntax = ScriptingContext.getInstance().getSyntax(lang);
 
-      if (Util.isNotEmpty(syntax))
+      if (Util.isEmpty(syntax))
       {
-        response.setContentType("text/plain");
+        syntax = DEFAULT_SYNTAX;
+      }
 
-        PrintWriter writer = response.getWriter();
+      response.setContentType("text/plain");
 
-        try
+      PrintWriter writer = response.getWriter();
+
+      try
+      {
+        writer.print(syntax);
+      }
+      finally
+      {
+        if (writer != null)
         {
-          writer.print(syntax);
-        }
-        finally
-        {
-          if (writer != null)
-          {
-            writer.close();
-          }
+          writer.close();
         }
       }
     }
