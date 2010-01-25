@@ -23,14 +23,15 @@
                 editAreaLoader.init({
                   id : id,
                   syntax: data,
-                  start_highlight: true
+                  start_highlight: true,
+                  replace_tab_by_spaces: 2
                 });
               }
             });
           }
           $(document).ready(function(){
             highlight("scriptForm:scriptContent", $("#scriptForm\\:scriptLanguage").val());
-            highlight("scriptForm:templateScript", $("#scriptForm\\:scriptLanguage").val());
+            highlight("scriptForm:templateScript", $("#scriptForm\\:templateLanguage").val());
 
             $("#scriptForm\\:scriptLanguage").change(function(){
               highlight("scriptForm:scriptContent", $(this).val());

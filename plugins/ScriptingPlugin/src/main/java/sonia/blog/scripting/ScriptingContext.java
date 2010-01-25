@@ -89,7 +89,7 @@ public class ScriptingContext
       BlogContext.getInstance().getResourceManager().getDirectory("script");
     syntaxMap = new HashMap<String, String>();
     syntaxMap.put("ecmascript", "js");
-    syntaxMap.put("groovy", "java");
+    syntaxMap.put("groovy", "groovy");
     syntaxMap.put("jruby", "ruby");
     syntaxMap.put("python", "python");
     syntaxMap.put("freemarker", "html");
