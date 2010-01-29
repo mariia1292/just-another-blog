@@ -86,6 +86,32 @@ public class JpaTagDAO extends JpaGenericDAO<Tag> implements TagDAO
     return countQuery("Tag.count");
   }
 
+  //~--- get methods ----------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   * @param name
+   *
+   * @return
+   */
+  public Tag get(String name)
+  {
+    Tag tag = null;
+    Query q = strategy.getNamedQuery("Tag.getByName", false);
+
+    q.setParameter("name", name);
+
+    try
+    {
+      tag = (Tag) q.getSingleResult();
+    }
+    catch (NoResultException ex) {}
+
+    return tag;
+  }
+
   /**
    * Method description
    *
@@ -112,6 +138,31 @@ public class JpaTagDAO extends JpaGenericDAO<Tag> implements TagDAO
   public List<Tag> getAll(Blog blog, int start, int max)
   {
     return findList("Tag.getAllByBlog", blog, start, max);
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  public List<Tag> getAll()
+  {
+    return findList("Tag.getAll");
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param start
+   * @param max
+   *
+   * @return
+   */
+  public List<Tag> getAll(int start, int max)
+  {
+    return findList("Tag.getAll", start, max);
   }
 
   /**
@@ -168,51 +219,32 @@ public class JpaTagDAO extends JpaGenericDAO<Tag> implements TagDAO
    * Method description
    *
    *
-   * @param name
-   *
-   * @return
-   */
-  public Tag get(String name)
-  {
-    Tag tag = null;
-    Query q = strategy.getNamedQuery("Tag.getByName", false);
-
-    q.setParameter("name", name);
-
-    try
-    {
-      tag = (Tag) q.getSingleResult();
-    }
-    catch (NoResultException ex) {}
-
-    return tag;
-  }
-
-  //~--- get methods ----------------------------------------------------------
-
-  /**
-   * Method description
-   *
-   *
-   * @return
-   */
-  public List<Tag> getAll()
-  {
-    return findList("Tag.getAll");
-  }
-
-  /**
-   * Method description
-   *
-   *
+   * @param blog
+   * @param filter
    * @param start
    * @param max
    *
    * @return
    */
-  public List<Tag> getAll(int start, int max)
+  @SuppressWarnings("unchecked")
+  public List<String> getTagNames(Blog blog, String filter, int start, int max)
   {
-    return findList("Tag.getAll", start, max);
+    Query q = strategy.getNamedQuery("Tag.getNamesByBlogAndFilter", false);
+
+    q.setParameter("blog", blog);
+    q.setParameter("filter", filter + "%");
+
+    if (start > 0)
+    {
+      q.setFirstResult(start);
+    }
+
+    if (max > 0)
+    {
+      q.setMaxResults(max);
+    }
+
+    return q.getResultList();
   }
 
   /**

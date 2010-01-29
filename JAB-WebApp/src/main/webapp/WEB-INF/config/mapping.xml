@@ -46,7 +46,7 @@
   </mapping>
 
   <mapping>
-    <regex>^/opensearch\.xml$</regex>
+    <regex>^/opensearch/(descriptor\.xml|search\.xml|suggestion\.json)$</regex>
     <class>sonia.blog.mapping.OpenSearchMapping</class>
   </mapping>
 

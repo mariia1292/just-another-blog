@@ -40,6 +40,13 @@
         select new sonia.blog.api.util.TagWrapper(t, count(t)) from Tag t join t.entries e join e.blog b where b = :blog and e.published = true group by t
       </query>
     </named-query>
+    <named-query name="Tag.getNamesByBlogAndFilter">
+      <query>
+        select t.name from Tag t join t.entries e join e.blog b
+        where b = :blog and e.published = true and t.name like :filter
+        group by t.name
+      </query>
+    </named-query>
     <attributes>
       <id name="id">
         <generated-value strategy="IDENTITY" />
