@@ -39,18 +39,28 @@ import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.app.BlogRequest;
 import sonia.blog.api.app.BlogResponse;
 import sonia.blog.api.app.Context;
+import sonia.blog.api.dao.TagDAO;
 import sonia.blog.api.link.LinkBuilder;
 import sonia.blog.api.macro.DefaultWebResources;
 import sonia.blog.api.mapping.FinalMapping;
 import sonia.blog.api.mapping.MappingConfig;
+import sonia.blog.api.search.SearchCategory;
+import sonia.blog.api.search.SearchContext;
 import sonia.blog.entity.Blog;
+
+import sonia.util.Util;
 
 //~--- JDK imports ------------------------------------------------------------
 
 import java.io.IOException;
 import java.io.PrintWriter;
 
+import java.util.Iterator;
+import java.util.List;
+import java.util.logging.Logger;
+
 import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  *
@@ -61,7 +71,24 @@ public class OpenSearchMapping extends FinalMapping
 {
 
   /** Field description */
-  private static final String MIMETYPE = "text/xml";
+  private static final String MIMETYPE_DESCRIPTOR = "text/xml";
+
+  /** Field description */
+  private static final String MIMETYPE_SUGGESTION =
+    "application/x-suggestions+json";
+
+  /** Field description */
+  private static final String PARAMETER_DESCRIPTOR = "descriptor.xml";
+
+  /** Field description */
+  private static final String PARAMETER_SEARCH = "search.xml";
+
+  /** Field description */
+  private static final String PARAMETER_SUGGESTION = "suggestion.json";
+
+  /** Field description */
+  private static Logger logger =
+    Logger.getLogger(OpenSearchMapping.class.getName());
 
   //~--- methods --------------------------------------------------------------
 
@@ -81,10 +108,48 @@ public class OpenSearchMapping extends FinalMapping
                                     String[] param)
           throws IOException, ServletException
   {
+    if ((param != null) && (param.length == 1))
+    {
+      if (PARAMETER_DESCRIPTOR.equals(param[0]))
+      {
+        printDescriptor(request, response);
+      }
+      else if (PARAMETER_SUGGESTION.equals(param[0]))
+      {
+        printSuggestion(request, response);
+      }
+      else if (PARAMETER_SEARCH.equals(param[0]))
+      {
+        printSearch(request, response);
+      }
+      else
+      {
+        response.sendError(HttpServletResponse.SC_NOT_FOUND);
+      }
+    }
+    else
+    {
+      response.sendError(HttpServletResponse.SC_NOT_FOUND);
+    }
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param request
+   * @param response
+   *
+   * @throws IOException
+   * @throws ServletException
+   */
+  protected void printDescriptor(BlogRequest request, BlogResponse response)
+          throws IOException, ServletException
+  {
     Blog blog = request.getCurrentBlog();
     String link = linkBuilder.buildLink(request, blog);
 
-    response.setContentType(MIMETYPE);
+    response.setContentType(MIMETYPE_DESCRIPTOR);
 
     PrintWriter writer = null;
 
@@ -99,8 +164,18 @@ public class OpenSearchMapping extends FinalMapping
       writer.println("\t<ShortName>JAB - " + blog.getTitle() + "</ShortName>");
       writer.println("\t<Description>" + blog.getDescription()
                      + "</Description>");
+
+      // suggestion url
+      writer.append("\t<Url type=\"").append(MIMETYPE_SUGGESTION);
+      writer.append("\" template=\"").append(link).append("/opensearch/");
+      writer.append(PARAMETER_SUGGESTION).append("?search={searchTerms}\" />");
+
+      // html search url
       writer.println("\t<Url type=\"text/html\" template=\"" + link
                      + "/search.jab?search={searchTerms}\" />");
+
+      // todo add rss & atom entries
+
       writer.println("\t<Query role=\"example\" searchTerms=\"jab\" />");
       writer.println("\t<InputEncoding>UTF-8</InputEncoding>");
       writer.println("\t<Image width=\"16\" height=\"16\">\t\t");
@@ -128,6 +203,115 @@ public class OpenSearchMapping extends FinalMapping
       {
         writer.close();
       }
+    }
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param request
+   * @param response
+   *
+   * @throws IOException
+   * @throws ServletException
+   */
+  private void printSearch(BlogRequest request, BlogResponse response)
+          throws IOException, ServletException
+  {
+    String type = request.getParameter("type");
+    String query = request.getParameter("search");
+
+    if (Util.isNotEmpty(type) && Util.isNotEmpty(query))
+    {
+      SearchContext searchCtx = BlogContext.getInstance().getSearchContext();
+
+      if (searchCtx != null)
+      {
+        List<SearchCategory> categoryList =
+          searchCtx.search(request.getCurrentBlog(), request.getLocale(),
+                           query);
+
+        if (Util.isNotEmpty(categoryList))
+        {
+
+          // todo create entries
+        }
+
+        // implement rss & atom opensearch ouput
+        response.sendError(HttpServletResponse.SC_NOT_IMPLEMENTED);
+      }
+      else
+      {
+        response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+      }
+    }
+    else
+    {
+      response.sendError(HttpServletResponse.SC_NOT_FOUND);
+    }
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param request
+   * @param response
+   *
+   * @throws IOException
+   * @throws ServletException
+   */
+  private void printSuggestion(BlogRequest request, BlogResponse response)
+          throws IOException, ServletException
+  {
+    String query = request.getParameter("search");
+
+    if (Util.isNotEmpty(query))
+    {
+      response.setContentType(MIMETYPE_SUGGESTION);
+
+      PrintWriter writer = null;
+
+      try
+      {
+        writer = response.getWriter();
+        writer.append("[\"").append(query).append("\", [");
+
+        TagDAO tagDAO = BlogContext.getDAOFactory().getTagDAO();
+        List<String> tags = tagDAO.getTagNames(request.getCurrentBlog(), query,
+                              0, 10);
+
+        if (Util.isNotEmpty(tags))
+        {
+          Iterator<String> tagIt = tags.iterator();
+
+          while (tagIt.hasNext())
+          {
+            String tag = tagIt.next();
+
+            writer.append("\"").append(tag).append("\"");
+
+            if (tagIt.hasNext())
+            {
+              writer.append(", ");
+            }
+          }
+        }
+
+        writer.append("]]");
+      }
+      finally
+      {
+        if (writer != null)
+        {
+          writer.close();
+        }
+      }
+    }
+    else
+    {
+      response.sendError(HttpServletResponse.SC_NOT_FOUND);
     }
   }
 

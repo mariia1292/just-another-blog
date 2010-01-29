@@ -626,7 +626,7 @@ public class BlogContextListener implements ServletContextListener
     opensearch.setRel(LinkResource.REL_OPENSEARCH);
     opensearch.setType(LinkResource.TYPE_OPENSEARCH);
     opensearch.setTitle("JAB - {2}");
-    opensearch.setHref(ctxPath + "/opensearch.xml");
+    opensearch.setHref(ctxPath + "/opensearch/descriptor.xml");
 
     ScriptResource jquery = new ScriptResource(10,
                               ctxPath + "/resources/jquery/jquery.min.js");

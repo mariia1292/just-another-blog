@@ -54,6 +54,16 @@ public interface TagDAO extends GenericDAO<Tag>
    * Method description
    *
    *
+   *
+   * @param name
+   * @return
+   */
+  public Tag get(String name);
+
+  /**
+   * Method description
+   *
+   *
    * @param blog
    *
    * @return
@@ -98,9 +108,12 @@ public interface TagDAO extends GenericDAO<Tag>
    * Method description
    *
    *
+   * @param blog
+   * @param filter
+   * @param start
+   * @param max
    *
-   * @param name
    * @return
    */
-  public Tag get(String name);
+  public List<String> getTagNames(Blog blog, String filter, int start, int max);
 }
