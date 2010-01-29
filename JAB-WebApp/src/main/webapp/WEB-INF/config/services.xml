@@ -44,6 +44,7 @@
     <impl class="sonia.blog.search.SearchIndexListener" />
     <impl class="sonia.blog.util.CacheListener" />
     <impl class="sonia.blog.notify.NotificationListener" />
+    <impl class="sonia.blog.util.CleanFileSystemListener" />
   </service>
   
   <service class="sonia.blog.api.dao.DAOListener" path="/listener/blogHitCount" />
@@ -51,6 +52,7 @@
   <service class="sonia.blog.api.dao.DAOListener" path="/listener/page">
     <impl class="sonia.blog.search.SearchIndexListener" />
     <impl class="sonia.blog.util.CacheListener" />
+    <impl class="sonia.blog.util.CleanFileSystemListener" />
   </service>
 
   <service class="sonia.blog.api.dao.DAOListener" path="/listener/tag" />
