@@ -231,8 +231,11 @@ public class JpaTagDAO extends JpaGenericDAO<Tag> implements TagDAO
   {
     Query q = strategy.getNamedQuery("Tag.getNamesByBlogAndFilter", false);
 
+    StringBuffer filterBuffer = new StringBuffer( "%" );
+    filterBuffer.append( filter.toLowerCase() ).append("%");
+
     q.setParameter("blog", blog);
-    q.setParameter("filter", filter + "%");
+    q.setParameter("filter", filterBuffer.toString());
 
     if (start > 0)
     {
