@@ -37,22 +37,16 @@ package sonia.blog.dao.jpa;
 
 import sonia.blog.api.app.BlogSession;
 import sonia.blog.api.app.Constants;
-import sonia.blog.api.dao.DAOListener.Action;
 import sonia.blog.api.dao.PageDAO;
-import sonia.blog.api.exception.BlogSecurityException;
 import sonia.blog.api.util.BasicPageNavigation;
 import sonia.blog.api.util.PageNavigation;
-import sonia.blog.entity.Attachment;
 import sonia.blog.entity.Blog;
 import sonia.blog.entity.Page;
 import sonia.blog.entity.Role;
 
-import sonia.util.Util;
-
 //~--- JDK imports ------------------------------------------------------------
 
 import java.util.List;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.persistence.Query;
@@ -105,59 +99,6 @@ public class JpaPageDAO extends JpaGenericDAO<Page> implements PageDAO
   public long count(Blog blog)
   {
     return countQuery("Page.countByBlog", blog);
-  }
-
-  /**
-   * Method description
-   *
-   *
-   *
-   * @param session
-   * @param item
-   *
-   * @return
-   */
-  @Override
-  public boolean remove(BlogSession session, Page item, boolean notifyListener)
-  {
-    if (!isPrivileged(session, item, ACTION_REMOVE))
-    {
-      logUnprivilegedMessage(session, item, ACTION_REMOVE);
-
-      throw new BlogSecurityException("Author session is required");
-    }
-
-    if ( notifyListener ){
-    fireEvent(Action.PREREMOVE, item);
-    }
-
-    boolean result = false;
-
-    try
-    {
-      List<Attachment> attachments = item.getAttachments();
-
-      if (Util.hasContent(attachments))
-      {
-        for (Attachment a : attachments)
-        {
-          strategy.remove(a);
-        }
-      }
-
-      strategy.remove(item);
-      strategy.flush();
-      if ( notifyListener ){
-      fireEvent(Action.POSTREMOVE, item);
-      }
-      result = true;
-    }
-    catch (Exception ex)
-    {
-      logger.log(Level.SEVERE, null, ex);
-    }
-
-    return result;
   }
 
   //~--- get methods ----------------------------------------------------------
