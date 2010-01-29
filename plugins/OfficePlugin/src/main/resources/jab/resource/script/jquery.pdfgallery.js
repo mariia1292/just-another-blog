@@ -127,9 +127,9 @@
 
       var $button = null;
       if ( body == null || body.length <= 0 ){
-        $button = $("<a />").attr("href", "#").text(title);
+        $button = $("<a />").css("cursor", "pointer").text(title);
       } else {
-        $button = $("<a />").attr("href", "#").html( body );
+        $button = $("<a />").css("cursor", "pointer").html( body );
       }
 
       $field.append(
