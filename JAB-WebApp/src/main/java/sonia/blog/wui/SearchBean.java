@@ -78,7 +78,10 @@ public class SearchBean extends AbstractBean
    */
   public DataModel getCategories()
   {
-    categoryModel = new ListDataModel(categories);
+    if (categories != null)
+    {
+      categoryModel = new ListDataModel(categories);
+    }
 
     return categoryModel;
   }
@@ -126,7 +129,9 @@ public class SearchBean extends AbstractBean
    */
   public DataModel getPageEntries()
   {
-    return new ListDataModel(pageEntries);
+    return (pageEntries != null)
+           ? new ListDataModel(pageEntries)
+           : null;
   }
 
   /**

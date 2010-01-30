@@ -46,6 +46,7 @@ import sonia.blog.api.mapping.FinalMapping;
 import sonia.blog.api.mapping.MappingConfig;
 import sonia.blog.api.search.SearchCategory;
 import sonia.blog.api.search.SearchContext;
+import sonia.blog.api.search.SearchEntry;
 import sonia.blog.entity.Blog;
 
 import sonia.util.Util;
@@ -78,13 +79,16 @@ import java.util.logging.Logger;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletResponse;
-import sonia.blog.api.search.SearchEntry;
 
 /**
  *
  * @author Sebastian Sdorra
  */
-@MappingConfig(cacheable = true, compressable = true)
+@MappingConfig(
+  cacheable = true,
+  compressable = true,
+  cacheKeys = { "locale" }
+)
 public class OpenSearchMapping extends FinalMapping
 {
 
@@ -190,18 +194,17 @@ public class OpenSearchMapping extends FinalMapping
 
       // atom search url
       writer.append("\t<Url type=\"application/atom+xml\" template=\"");
-      writer.append( link ).append("/opensearch/").append( PARAMETER_SEARCH );
-      writer.append( "?type=atom&search={searchTerms}\" />\n" );
+      writer.append(link).append("/opensearch/").append(PARAMETER_SEARCH);
+      writer.append("?type=atom&search={searchTerms}\" />\n");
 
       // rss search url
       writer.append("\t<Url type=\"application/rss+xml\" template=\"");
-      writer.append( link ).append("/opensearch/").append( PARAMETER_SEARCH );
-      writer.append( "?type=rss&search={searchTerms}\" />\n" );
+      writer.append(link).append("/opensearch/").append(PARAMETER_SEARCH);
+      writer.append("?type=rss&search={searchTerms}\" />\n");
 
       // html search url
-      writer.append("\t<Url type=\"text/html\" template=\"").append( link );
+      writer.append("\t<Url type=\"text/html\" template=\"").append(link);
       writer.append("/search.jab?search={searchTerms}\" />\n");
-
       writer.println("\t<Query role=\"example\" searchTerms=\"jab\" />");
       writer.println("\t<InputEncoding>UTF-8</InputEncoding>");
       writer.println("\t<Image width=\"16\" height=\"16\">\t\t");
@@ -229,6 +232,47 @@ public class OpenSearchMapping extends FinalMapping
       {
         writer.close();
       }
+    }
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param request
+   * @param linkBuilder
+   * @param entries
+   * @param category
+   */
+  private void addEntries(BlogRequest request, LinkBuilder linkBuilder,
+                          List<SyndEntry> entries, SearchCategory category)
+  {
+    SyndCategory syndCategory = new SyndCategoryImpl();
+
+    syndCategory.setName(category.getLabel());
+
+    List<SyndCategory> categories = new ArrayList<SyndCategory>();
+
+    categories.add(syndCategory);
+
+    for (SearchEntry entry : category.getEntries())
+    {
+      SyndEntry syndEntry = new SyndEntryImpl();
+
+      syndEntry.setCategories(categories);
+      syndEntry.setAuthor(entry.getAuthorName());
+
+      SyndContent content = new SyndContentImpl();
+
+      content.setType("text/html");
+      content.setValue(entry.getContent());
+      syndEntry.setTitle(entry.getTitle());
+      syndEntry.setPublishedDate(entry.getCreationDate());
+
+      String entryLink = linkBuilder.buildLink(request, entry.getData());
+
+      syndEntry.setLink(entryLink);
+      entries.add(syndEntry);
     }
   }
 
@@ -286,9 +330,7 @@ public class OpenSearchMapping extends FinalMapping
     osm.addQuery(osQuery);
 
     Blog blog = request.getCurrentBlog();
-
     String blogLink = linkBuilder.buildLink(request, blog);
-
     StringBuffer linkBuffer = new StringBuffer();
 
     linkBuffer.append(blogLink);
@@ -301,20 +343,20 @@ public class OpenSearchMapping extends FinalMapping
     osm.setLink(link);
     mods.add(osm);
     feed.setModules(mods);
-
-
     feed.setTitle(blog.getTitle());
     feed.setDescription(blog.getDescription());
     feed.setPublishedDate(blog.getCreationDate());
     feed.setLink(blogLink);
 
-    if ( Util.isNotEmpty(categories) )
+    if (Util.isNotEmpty(categories))
     {
       List<SyndEntry> entries = new ArrayList<SyndEntry>();
-      for ( SearchCategory category : categories )
+
+      for (SearchCategory category : categories)
       {
         addEntries(request, linkBuilder, entries, category);
       }
+
       feed.setEntries(entries);
     }
 
@@ -338,31 +380,6 @@ public class OpenSearchMapping extends FinalMapping
       {
         writer.close();
       }
-    }
-  }
-
-  private void addEntries( BlogRequest request, LinkBuilder linkBuilder, List<SyndEntry> entries, SearchCategory category ){
-
-    SyndCategory syndCategory = new SyndCategoryImpl();
-    syndCategory.setName( category.getLabel() );
-
-    List<SyndCategory> categories = new ArrayList<SyndCategory>();
-    categories.add(syndCategory);
-
-    for ( SearchEntry entry : category.getEntries() )
-    {
-      SyndEntry syndEntry = new SyndEntryImpl();
-      syndEntry.setCategories(categories);
-      syndEntry.setAuthor( entry.getAuthorName() );
-      SyndContent content = new SyndContentImpl();
-      content.setType("text/html");
-      content.setValue( entry.getContent() );
-      syndEntry.setTitle( entry.getTitle() );
-
-      syndEntry.setPublishedDate( entry.getCreationDate() );
-      String entryLink = linkBuilder.buildLink(request, entry.getData());
-      syndEntry.setLink(entryLink);
-      entries.add(syndEntry);
     }
   }
 
@@ -393,7 +410,6 @@ public class OpenSearchMapping extends FinalMapping
                            query);
 
         printOpenSearchFeed(request, response, categoryList, type, query);
-        
         response.sendError(HttpServletResponse.SC_NOT_IMPLEMENTED);
       }
       else
