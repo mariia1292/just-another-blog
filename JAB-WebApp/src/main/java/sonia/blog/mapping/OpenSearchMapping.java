@@ -52,15 +52,33 @@ import sonia.util.Util;
 
 //~--- JDK imports ------------------------------------------------------------
 
+import com.sun.syndication.feed.atom.Link;
+import com.sun.syndication.feed.module.opensearch.OpenSearchModule;
+import com.sun.syndication.feed.module.opensearch.entity.OSQuery;
+import com.sun.syndication.feed.module.opensearch.impl.OpenSearchModuleImpl;
+import com.sun.syndication.feed.synd.SyndCategory;
+import com.sun.syndication.feed.synd.SyndCategoryImpl;
+import com.sun.syndication.feed.synd.SyndContent;
+import com.sun.syndication.feed.synd.SyndContentImpl;
+import com.sun.syndication.feed.synd.SyndEntry;
+import com.sun.syndication.feed.synd.SyndEntryImpl;
+import com.sun.syndication.feed.synd.SyndFeed;
+import com.sun.syndication.feed.synd.SyndFeedImpl;
+import com.sun.syndication.io.FeedException;
+import com.sun.syndication.io.SyndFeedOutput;
+
 import java.io.IOException;
 import java.io.PrintWriter;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletResponse;
+import sonia.blog.api.search.SearchEntry;
 
 /**
  *
@@ -170,11 +188,19 @@ public class OpenSearchMapping extends FinalMapping
       writer.append("\" template=\"").append(link).append("/opensearch/");
       writer.append(PARAMETER_SUGGESTION).append("?search={searchTerms}\" />");
 
-      // html search url
-      writer.println("\t<Url type=\"text/html\" template=\"" + link
-                     + "/search.jab?search={searchTerms}\" />");
+      // atom search url
+      writer.append("\t<Url type=\"application/atom+xml\" template=\"");
+      writer.append( link ).append("/opensearch/").append( PARAMETER_SEARCH );
+      writer.append( "?type=atom&search={searchTerms}\" />\n" );
 
-      // todo add rss & atom entries
+      // rss search url
+      writer.append("\t<Url type=\"application/rss+xml\" template=\"");
+      writer.append( link ).append("/opensearch/").append( PARAMETER_SEARCH );
+      writer.append( "?type=rss&search={searchTerms}\" />\n" );
+
+      // html search url
+      writer.append("\t<Url type=\"text/html\" template=\"").append( link );
+      writer.append("/search.jab?search={searchTerms}\" />\n");
 
       writer.println("\t<Query role=\"example\" searchTerms=\"jab\" />");
       writer.println("\t<InputEncoding>UTF-8</InputEncoding>");
@@ -212,6 +238,140 @@ public class OpenSearchMapping extends FinalMapping
    *
    * @param request
    * @param response
+   * @param categories
+   * @param type
+   * @param query
+   *
+   * @throws IOException
+   */
+  @SuppressWarnings("unchecked")
+  private void printOpenSearchFeed(BlogRequest request, BlogResponse response,
+                                   List<SearchCategory> categories,
+                                   String type, String query)
+          throws IOException
+  {
+    if ("rss".equals(type))
+    {
+      type = "rss_2.0";
+    }
+    else if ("atom".equals(type))
+    {
+      type = "atom_1.0";
+    }
+    else
+    {
+      throw new IllegalArgumentException("unknown type " + type);
+    }
+
+    SyndFeed feed = new SyndFeedImpl();
+
+    feed.setFeedType(type);
+
+    List mods = feed.getModules();
+
+    if (mods == null)
+    {
+      mods = new ArrayList();
+    }
+
+    OpenSearchModule osm = new OpenSearchModuleImpl();
+
+    osm.setStartIndex(1);
+
+    OSQuery osQuery = new OSQuery();
+
+    osQuery.setRole("superset");
+    osQuery.setSearchTerms(query);
+    osQuery.setStartPage(1);
+    osm.addQuery(osQuery);
+
+    Blog blog = request.getCurrentBlog();
+
+    String blogLink = linkBuilder.buildLink(request, blog);
+
+    StringBuffer linkBuffer = new StringBuffer();
+
+    linkBuffer.append(blogLink);
+    linkBuffer.append("/opensearch/").append(PARAMETER_DESCRIPTOR);
+
+    Link link = new Link();
+
+    link.setHref(linkBuffer.toString());
+    link.setType(PARAMETER_DESCRIPTOR);
+    osm.setLink(link);
+    mods.add(osm);
+    feed.setModules(mods);
+
+
+    feed.setTitle(blog.getTitle());
+    feed.setDescription(blog.getDescription());
+    feed.setPublishedDate(blog.getCreationDate());
+    feed.setLink(blogLink);
+
+    if ( Util.isNotEmpty(categories) )
+    {
+      List<SyndEntry> entries = new ArrayList<SyndEntry>();
+      for ( SearchCategory category : categories )
+      {
+        addEntries(request, linkBuilder, entries, category);
+      }
+      feed.setEntries(entries);
+    }
+
+    PrintWriter writer = null;
+
+    try
+    {
+      writer = response.getWriter();
+
+      SyndFeedOutput output = new SyndFeedOutput();
+
+      output.output(feed, writer);
+    }
+    catch (FeedException ex)
+    {
+      logger.log(Level.SEVERE, null, ex);
+    }
+    finally
+    {
+      if (writer != null)
+      {
+        writer.close();
+      }
+    }
+  }
+
+  private void addEntries( BlogRequest request, LinkBuilder linkBuilder, List<SyndEntry> entries, SearchCategory category ){
+
+    SyndCategory syndCategory = new SyndCategoryImpl();
+    syndCategory.setName( category.getLabel() );
+
+    List<SyndCategory> categories = new ArrayList<SyndCategory>();
+    categories.add(syndCategory);
+
+    for ( SearchEntry entry : category.getEntries() )
+    {
+      SyndEntry syndEntry = new SyndEntryImpl();
+      syndEntry.setCategories(categories);
+      syndEntry.setAuthor( entry.getAuthorName() );
+      SyndContent content = new SyndContentImpl();
+      content.setType("text/html");
+      content.setValue( entry.getContent() );
+      syndEntry.setTitle( entry.getTitle() );
+
+      syndEntry.setPublishedDate( entry.getCreationDate() );
+      String entryLink = linkBuilder.buildLink(request, entry.getData());
+      syndEntry.setLink(entryLink);
+      entries.add(syndEntry);
+    }
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param request
+   * @param response
    *
    * @throws IOException
    * @throws ServletException
@@ -232,13 +392,8 @@ public class OpenSearchMapping extends FinalMapping
           searchCtx.search(request.getCurrentBlog(), request.getLocale(),
                            query);
 
-        if (Util.isNotEmpty(categoryList))
-        {
-
-          // todo create entries
-        }
-
-        // implement rss & atom opensearch ouput
+        printOpenSearchFeed(request, response, categoryList, type, query);
+        
         response.sendError(HttpServletResponse.SC_NOT_IMPLEMENTED);
       }
       else
