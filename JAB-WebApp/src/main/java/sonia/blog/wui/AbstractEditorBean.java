@@ -74,6 +74,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
+import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.zip.ZipEntry;
@@ -318,7 +319,7 @@ public abstract class AbstractEditorBean extends AbstractBean
             throw new BlogException("could not create attachment directory");
           }
 
-          File file = new File(dir, "" + System.currentTimeMillis());
+          File file = new File(dir, UUID.randomUUID().toString());
 
           if (logger.isLoggable(Level.FINE))
           {
@@ -699,7 +700,7 @@ public abstract class AbstractEditorBean extends AbstractBean
           {
             try
             {
-              File file = new File(dir, "" + System.currentTimeMillis());
+              File file = new File(dir, UUID.randomUUID().toString());
 
               Util.copy(zis, new FileOutputStream(file));
 

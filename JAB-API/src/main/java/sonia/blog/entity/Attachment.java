@@ -157,7 +157,14 @@ public class Attachment implements Serializable, PermaObject, FileObject
    */
   public String getExtension()
   {
-    return Util.getExtension(name);
+    String extension = Util.getExtension(name);
+
+    if (extension != null)
+    {
+      extension = extension.toLowerCase();
+    }
+
+    return extension;
   }
 
   /**
