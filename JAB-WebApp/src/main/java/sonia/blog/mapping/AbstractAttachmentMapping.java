@@ -71,7 +71,7 @@ public abstract class AbstractAttachmentMapping extends FinalMapping
    *
    * @return
    */
-  protected abstract Logger getLogger();
+  private static Logger logger = Logger.getLogger( AbstractAttachmentMapping.class.getName() );
 
   //~--- methods --------------------------------------------------------------
 
@@ -101,9 +101,9 @@ public abstract class AbstractAttachmentMapping extends FinalMapping
     }
     else
     {
-      if (getLogger().isLoggable(Level.FINE))
+      if (logger.isLoggable(Level.FINE))
       {
-        getLogger().fine("send status 304, not modified");
+        logger.fine("send status 304, not modified");
       }
 
       response.setStatus(HttpServletResponse.SC_NOT_MODIFIED);
@@ -154,12 +154,12 @@ public abstract class AbstractAttachmentMapping extends FinalMapping
 
     try
     {
-      if (getLogger().isLoggable(Level.FINEST))
+      if (logger.isLoggable(Level.FINEST))
       {
         StringBuffer msg = new StringBuffer("print file ");
 
         msg.append(file.getAbsolutePath());
-        getLogger().finest(msg.toString());
+        logger.finest(msg.toString());
       }
 
       out = response.getOutputStream();
@@ -168,7 +168,7 @@ public abstract class AbstractAttachmentMapping extends FinalMapping
     }
     catch (IOException ex)
     {
-      getLogger().log(Level.SEVERE, null, ex);
+      logger.log(Level.SEVERE, null, ex);
     }
     finally
     {
@@ -186,7 +186,7 @@ public abstract class AbstractAttachmentMapping extends FinalMapping
       }
       catch (IOException e)
       {
-        getLogger().log(Level.SEVERE, null, e);
+        logger.log(Level.SEVERE, null, e);
       }
     }
   }

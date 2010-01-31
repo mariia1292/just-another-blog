@@ -122,22 +122,6 @@ public class ImageMapping extends AbstractAttachmentMapping
     }
   }
 
-  //~--- get methods ----------------------------------------------------------
-
-  /**
-   * Method description
-   *
-   *
-   * @return
-   */
-  @Override
-  protected Logger getLogger()
-  {
-    return logger;
-  }
-
-  //~--- methods --------------------------------------------------------------
-
   /**
    * Method description
    *
