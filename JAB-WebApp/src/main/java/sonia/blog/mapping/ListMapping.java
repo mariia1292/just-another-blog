@@ -125,6 +125,9 @@ public class ListMapping extends ScrollableFilterMapping
       }
       catch (NumberFormatException ex)
       {
+        if ( logger.isLoggable(Level.WARNING) ){
+          logger.log( Level.WARNING, null, ex );
+        }
         response.sendError(HttpServletResponse.SC_BAD_REQUEST);
       }
     }

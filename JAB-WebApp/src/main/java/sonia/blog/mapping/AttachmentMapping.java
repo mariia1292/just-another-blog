@@ -130,18 +130,4 @@ public class AttachmentMapping extends AbstractAttachmentMapping
       response.sendError(HttpServletResponse.SC_NOT_FOUND);
     }
   }
-
-  //~--- get methods ----------------------------------------------------------
-
-  /**
-   * Method description
-   *
-   *
-   * @return
-   */
-  @Override
-  protected Logger getLogger()
-  {
-    return logger;
-  }
 }
