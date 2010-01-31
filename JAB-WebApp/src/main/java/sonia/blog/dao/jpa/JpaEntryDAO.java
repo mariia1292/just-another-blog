@@ -894,18 +894,6 @@ public class JpaEntryDAO extends JpaGenericDAO<Entry> implements EntryDAO
    * Method description
    *
    *
-   * @return
-   */
-  @Override
-  protected Logger getLogger()
-  {
-    return logger;
-  }
-
-  /**
-   * Method description
-   *
-   *
    * @param session
    * @param item
    * @param action

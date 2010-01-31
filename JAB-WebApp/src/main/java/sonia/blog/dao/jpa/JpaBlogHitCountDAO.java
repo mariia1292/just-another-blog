@@ -271,18 +271,6 @@ public class JpaBlogHitCountDAO extends JpaGenericDAO<BlogHitCount>
     return result;
   }
 
-  /**
-   * Method description
-   *
-   *
-   * @return
-   */
-  @Override
-  protected Logger getLogger()
-  {
-    return logger;
-  }
-
   //~--- methods --------------------------------------------------------------
 
   /**

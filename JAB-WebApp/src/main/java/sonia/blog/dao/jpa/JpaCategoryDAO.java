@@ -204,16 +204,4 @@ public class JpaCategoryDAO extends JpaGenericDAO<Category>
 
     return category;
   }
-
-  /**
-   * Method description
-   *
-   *
-   * @return
-   */
-  @Override
-  protected Logger getLogger()
-  {
-    return logger;
-  }
 }

@@ -381,16 +381,4 @@ public class JpaAttachmentDAO extends JpaGenericDAO<Attachment>
 
     return excecuteListQuery(q);
   }
-
-  /**
-   * Method description
-   *
-   *
-   * @return
-   */
-  @Override
-  protected Logger getLogger()
-  {
-    return logger;
-  }
 }

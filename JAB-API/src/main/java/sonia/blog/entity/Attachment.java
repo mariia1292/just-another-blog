@@ -111,7 +111,7 @@ public class Attachment implements Serializable, PermaObject, FileObject
   @Override
   public String toString()
   {
-    return "sonia.blop.entity.Attachment[id=" + id + "]";
+    return "sonia.blog.entity.Attachment[id=" + id + "]";
   }
 
   //~--- get methods ----------------------------------------------------------
