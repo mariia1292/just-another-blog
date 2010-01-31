@@ -64,6 +64,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -450,11 +451,10 @@ public class AvatarBean extends AbstractBean
    */
   private File getAvatarFile()
   {
-    StringBuffer nameBuffer = new StringBuffer();
-
-    nameBuffer.append(System.nanoTime()).append(".").append(imageExtension);
-
     File avatarDir = resManager.getDirectory(Constants.RESOURCE_AVATAR, true);
+    StringBuffer nameBuffer = new StringBuffer(UUID.randomUUID().toString());
+
+    nameBuffer.append(".").append(imageExtension);
 
     return new File(avatarDir, nameBuffer.toString());
   }
