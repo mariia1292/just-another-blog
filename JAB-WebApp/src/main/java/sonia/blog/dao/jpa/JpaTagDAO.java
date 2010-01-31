@@ -230,10 +230,9 @@ public class JpaTagDAO extends JpaGenericDAO<Tag> implements TagDAO
   public List<String> getTagNames(Blog blog, String filter, int start, int max)
   {
     Query q = strategy.getNamedQuery("Tag.getNamesByBlogAndFilter", false);
+    StringBuffer filterBuffer = new StringBuffer("%");
 
-    StringBuffer filterBuffer = new StringBuffer( "%" );
-    filterBuffer.append( filter.toLowerCase() ).append("%");
-
+    filterBuffer.append(filter.toLowerCase()).append("%");
     q.setParameter("blog", blog);
     q.setParameter("filter", filterBuffer.toString());
 
@@ -248,17 +247,5 @@ public class JpaTagDAO extends JpaGenericDAO<Tag> implements TagDAO
     }
 
     return q.getResultList();
-  }
-
-  /**
-   * Method description
-   *
-   *
-   * @return
-   */
-  @Override
-  protected Logger getLogger()
-  {
-    return logger;
   }
 }

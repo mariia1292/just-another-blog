@@ -355,18 +355,6 @@ public class JpaPageDAO extends JpaGenericDAO<Page> implements PageDAO
    * Method description
    *
    *
-   * @return
-   */
-  @Override
-  protected Logger getLogger()
-  {
-    return logger;
-  }
-
-  /**
-   * Method description
-   *
-   *
    * @param session
    * @param item
    * @param action

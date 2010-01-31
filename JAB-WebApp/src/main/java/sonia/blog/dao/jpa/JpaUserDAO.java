@@ -508,18 +508,4 @@ public class JpaUserDAO extends JpaGenericDAO<User> implements UserDAO
       logger.log(Level.SEVERE, null, ex);
     }
   }
-
-  //~--- get methods ----------------------------------------------------------
-
-  /**
-   * Method description
-   *
-   *
-   * @return
-   */
-  @Override
-  protected Logger getLogger()
-  {
-    return logger;
-  }
 }

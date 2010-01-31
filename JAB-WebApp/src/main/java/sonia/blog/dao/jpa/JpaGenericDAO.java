@@ -74,6 +74,10 @@ public abstract class JpaGenericDAO<T extends PermaObject>
   /** Field description */
   public static final int ACTION_REMOVE = 2;
 
+  /** Field description */
+  private static Logger logger =
+    Logger.getLogger(JpaGenericDAO.class.getName());
+
   //~--- constructors ---------------------------------------------------------
 
   /**
@@ -96,16 +100,6 @@ public abstract class JpaGenericDAO<T extends PermaObject>
     reference = context.getServiceRegistry().get(DAOListener.class,
             servicePath);
   }
-
-  //~--- get methods ----------------------------------------------------------
-
-  /**
-   * Method description
-   *
-   *
-   * @return
-   */
-  protected abstract Logger getLogger();
 
   //~--- methods --------------------------------------------------------------
 
@@ -142,8 +136,6 @@ public abstract class JpaGenericDAO<T extends PermaObject>
 
       throw new BlogSecurityException("Author session is required");
     }
-
-    Logger logger = getLogger();
 
     if (notifyListener)
     {
@@ -214,8 +206,6 @@ public abstract class JpaGenericDAO<T extends PermaObject>
       throw new BlogSecurityException("Author session is required");
     }
 
-    Logger logger = getLogger();
-
     if (notifyListener)
     {
       fireEvent(Action.PREUPDATE, item);
@@ -284,8 +274,6 @@ public abstract class JpaGenericDAO<T extends PermaObject>
 
       throw new BlogSecurityException("Author session is required");
     }
-
-    Logger logger = getLogger();
 
     fireEvent(Action.PREREMOVE, item);
 
@@ -614,7 +602,7 @@ public abstract class JpaGenericDAO<T extends PermaObject>
     }
 
     msg.append(" ").append(item);
-    getLogger().severe(msg.toString());
+    logger.severe(msg.toString());
   }
 
   //~--- get methods ----------------------------------------------------------

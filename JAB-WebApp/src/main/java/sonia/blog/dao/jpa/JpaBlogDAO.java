@@ -528,18 +528,4 @@ public class JpaBlogDAO extends JpaGenericDAO<Blog> implements BlogDAO
       logger.log(Level.SEVERE, null, ex);
     }
   }
-
-  //~--- get methods ----------------------------------------------------------
-
-  /**
-   * Method description
-   *
-   *
-   * @return
-   */
-  @Override
-  protected Logger getLogger()
-  {
-    return logger;
-  }
 }
