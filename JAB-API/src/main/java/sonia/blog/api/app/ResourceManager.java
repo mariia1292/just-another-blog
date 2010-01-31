@@ -42,6 +42,8 @@ import sonia.blog.entity.FileObject;
 
 import java.io.File;
 
+import java.util.UUID;
+
 /**
  *
  * @author Sebastian Sdorra
@@ -171,10 +173,10 @@ public class ResourceManager
   public File getTempFile(String prefix, String suffix)
   {
     File tempDirectory = getDirectory(Constants.RESOURCE_TEMP, true);
-    String time = new StringBuffer(prefix).append(System.nanoTime()).append(
-                      suffix).toString();
+    String name = new StringBuffer(prefix).append(
+                      UUID.randomUUID().toString()).append(suffix).toString();
 
-    return new File(tempDirectory, time);
+    return new File(tempDirectory, name);
   }
 
   //~--- fields ---------------------------------------------------------------
