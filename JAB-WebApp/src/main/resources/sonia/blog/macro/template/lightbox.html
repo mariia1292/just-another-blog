@@ -3,10 +3,10 @@
 </div>
 <script type="text/javascript">
   $(document).ready(function(){
-    $("div#lightbox_${id} img").each(function(index,item){
-      var img = $(item);
+    $("div#lightbox_${id} img").each(function(){
+      var img = $(this);
       img.attr( "alt", "${title}" );
-      var src = img.attr("src").replace("?type=thumb", "");
+      var src = img.attr("src").replace(new RegExp("\\?.*$"), "");
       img.wrap("<a href=\"" + src + "\" rel=\"fancybox[lightbox_${id}]\" />");
     });
     $("div#lightbox_${id} a").fancybox({

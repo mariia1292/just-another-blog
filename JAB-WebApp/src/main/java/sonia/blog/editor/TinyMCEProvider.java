@@ -170,8 +170,8 @@ public class TinyMCEProvider implements EditorProvider
     result.append("document_base_url : \"").append(baseUrl);
     result.append("\",\n");
     result.append("imageHandlerPattern : \"").append(baseUrl);
-    result.append("image/\",\n");
-    result.append("fullscreen_new_window : true,\n");
+    result.append("/image/\",\n");
+    result.append("fullscreen_new_window : false,\n");
     result.append("fullscreen_settings : {\n");
     result.append("theme_advanced_path_location : \"top\"\n");
     result.append("}\n");

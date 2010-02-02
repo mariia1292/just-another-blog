@@ -77,7 +77,8 @@
     {
       src += "?type=fix&width=" + width + "&height=" + height;
     }
-    ed.dom.setAttrib( el, "mce_src", src );
+    console.debug( src );
+    ed.dom.setAttrib( el, "_mce_src", src );
   }
 
   // Register plugin
