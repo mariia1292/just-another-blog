@@ -51,6 +51,8 @@ import sonia.jobqueue.JobQueue;
 
 import sonia.util.Util;
 
+import sonia.web.util.WebUtil;
+
 //~--- JDK imports ------------------------------------------------------------
 
 import java.io.File;
@@ -74,6 +76,21 @@ public class ImageMapping extends AbstractAttachmentMapping
     Logger.getLogger(ImageMapping.class.getName());
 
   //~--- methods --------------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   * @param request
+   * @param response
+   * @param file
+   */
+  @Override
+  protected void addAdditionalHeaderds(BlogRequest request,
+          BlogResponse response, File file)
+  {
+    WebUtil.addStaticCacheControls(response);
+  }
 
   /**
    * Method description

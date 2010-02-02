@@ -62,7 +62,13 @@ public class WebUtil
 {
 
   /** Field description */
+  private static final String HEADER_CACHECONTROL = "Cache-Control";
+
+  /** Field description */
   private static final String HEADER_ETAG = "Etag";
+
+  /** Field description */
+  private static final String HEADER_EXPIRES = "Expires";
 
   /** Field description */
   private static final String HEADER_IFMS = "If-Modified-Since";
@@ -75,11 +81,10 @@ public class WebUtil
     "EEE, dd MMM yyyy HH:mm:ss zzz";
 
   /** Field description */
+  private static final long TIME_MONTH = 60 * 60 * 24 * 30;
+
+  /** Field description */
   private static Logger logger = Logger.getLogger(WebUtil.class.getName());
-
-  //~--- static initializers --------------------------------------------------
-
-  static {}
 
   //~--- methods --------------------------------------------------------------
 
@@ -93,6 +98,24 @@ public class WebUtil
   public static void addETagHeader(HttpServletResponse response, File file)
   {
     response.addHeader(HEADER_ETAG, getETag(file));
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param response
+   */
+  public static void addStaticCacheControls(HttpServletResponse response)
+  {
+    long time = new Date().getTime();
+
+    response.addDateHeader(HEADER_EXPIRES, time + (TIME_MONTH * 1000));
+
+    StringBuffer cc = new StringBuffer("max-age=").append(TIME_MONTH);
+
+    cc.append(", public");
+    response.addHeader(HEADER_CACHECONTROL, cc.toString());
   }
 
   /**
