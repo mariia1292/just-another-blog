@@ -60,7 +60,7 @@ public class BlogResponse extends HttpServletResponseWrapper
 {
 
   /** Field description */
-  private static Logger logger = Logger.getLogger(BlogResponse.class.getName());
+  private static final Logger logger = Logger.getLogger(BlogResponse.class.getName());
 
   //~--- constructors ---------------------------------------------------------
 

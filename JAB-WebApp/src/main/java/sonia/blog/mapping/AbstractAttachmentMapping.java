@@ -71,7 +71,8 @@ public abstract class AbstractAttachmentMapping extends FinalMapping
    *
    * @return
    */
-  private static Logger logger = Logger.getLogger( AbstractAttachmentMapping.class.getName() );
+  private static final Logger logger =
+    Logger.getLogger(AbstractAttachmentMapping.class.getName());
 
   //~--- methods --------------------------------------------------------------
 
@@ -103,7 +104,10 @@ public abstract class AbstractAttachmentMapping extends FinalMapping
     {
       if (logger.isLoggable(Level.FINE))
       {
-        logger.fine("send status 304, not modified");
+        StringBuffer log = new StringBuffer("send status 304, not modified");
+
+        log.append(" for file ").append(file.getPath());
+        logger.fine(log.toString());
       }
 
       response.setStatus(HttpServletResponse.SC_NOT_MODIFIED);

@@ -57,6 +57,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
 import java.util.Date;
@@ -81,10 +82,6 @@ public class Script
 
   /** Field description */
   public static final String FILE_TEMPLATE = "template";
-
-  /** Field description */
-  private static SimpleDateFormat dateFormat =
-    new SimpleDateFormat("yyyy-MM-dd HH:mm");
 
   /** Field description */
   private static Logger logger = Logger.getLogger(Script.class.getName());
@@ -415,7 +412,7 @@ public class Script
 
     try
     {
-      result = dateFormat.format(value);
+      result = getDateFormat().format(value);
     }
     catch (Exception ex)
     {
@@ -439,7 +436,7 @@ public class Script
 
     try
     {
-      result = dateFormat.parse(value);
+      result = getDateFormat().parse(value);
     }
     catch (Exception ex)
     {
@@ -588,6 +585,19 @@ public class Script
         }
       }
     }
+  }
+
+  //~--- get methods ----------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  private DateFormat getDateFormat()
+  {
+    return new SimpleDateFormat("yyyy-MM-dd HH:mm");
   }
 
   //~--- fields ---------------------------------------------------------------

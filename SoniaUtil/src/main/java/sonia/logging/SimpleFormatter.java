@@ -35,6 +35,7 @@ package sonia.logging;
 
 //~--- JDK imports ------------------------------------------------------------
 
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
 import java.util.Date;
@@ -47,10 +48,6 @@ import java.util.logging.LogRecord;
  */
 public class SimpleFormatter extends Formatter
 {
-
-  /** Field description */
-  private static SimpleDateFormat dateFormat =
-    new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
   /** Field description */
   private static String LINESEPERATOR = System.getProperty("line.separator");
@@ -71,30 +68,27 @@ public class SimpleFormatter extends Formatter
     StringBuffer result = new StringBuffer();
     Date date = new Date(record.getMillis());
 
-    if (dateFormat != null)
+    result.append(getDateFormat().format(date));
+    result.append(" ").append(record.getLevel().getName()).append(" ");
+    result.append("[").append(record.getLoggerName()).append("]");
+    result.append(" ");
+
+    String message = record.getMessage();
+    Throwable thrown = record.getThrown();
+
+    if ((message != null) && (thrown == null))
     {
-      result.append(dateFormat.format(date));
-      result.append(" ").append(record.getLevel().getName()).append(" ");
-      result.append("[").append(record.getLoggerName()).append("]");
-      result.append(" ");
-
-      String message = record.getMessage();
-      Throwable thrown = record.getThrown();
-
-      if ((message != null) && (thrown == null))
-      {
-        result.append(message).append(LINESEPERATOR);
-      }
-      else if ((message != null) && (thrown != null))
-      {
-        result.append(message).append(LINESEPERATOR);
-        buildThrown(result, record, thrown);
-      }
-      else if ((message == null) && (thrown != null))
-      {
-        result.append(thrown.getMessage()).append(LINESEPERATOR);
-        buildThrown(result, record, thrown);
-      }
+      result.append(message).append(LINESEPERATOR);
+    }
+    else if ((message != null) && (thrown != null))
+    {
+      result.append(message).append(LINESEPERATOR);
+      buildThrown(result, record, thrown);
+    }
+    else if ((message == null) && (thrown != null))
+    {
+      result.append(thrown.getMessage()).append(LINESEPERATOR);
+      buildThrown(result, record, thrown);
     }
 
     return result.toString();
@@ -131,5 +125,18 @@ public class SimpleFormatter extends Formatter
     }
 
     return result.toString();
+  }
+
+  //~--- get methods ----------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  private DateFormat getDateFormat()
+  {
+    return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
   }
 }

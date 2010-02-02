@@ -41,6 +41,7 @@ import sonia.util.Util;
 
 import java.io.File;
 
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
@@ -70,18 +71,15 @@ public class WebUtil
   private static final String HEADER_INM = "If-None-Match";
 
   /** Field description */
-  private static final SimpleDateFormat HTTP_DATE_FORMAT =
-    new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss zzz", Locale.ENGLISH);
+  private static final String HTTP_DATE_FORMAT =
+    "EEE, dd MMM yyyy HH:mm:ss zzz";
 
   /** Field description */
   private static Logger logger = Logger.getLogger(WebUtil.class.getName());
 
   //~--- static initializers --------------------------------------------------
 
-  static
-  {
-    HTTP_DATE_FORMAT.setTimeZone(TimeZone.getTimeZone("GMT"));
-  }
+  static {}
 
   //~--- methods --------------------------------------------------------------
 
@@ -107,7 +105,7 @@ public class WebUtil
    */
   public static String formatHttpDate(Date date)
   {
-    return HTTP_DATE_FORMAT.format(date);
+    return getHttpDateFormat().format(date);
   }
 
   /**
@@ -122,7 +120,7 @@ public class WebUtil
    */
   public static Date parseHttpDate(String dateString) throws ParseException
   {
-    return HTTP_DATE_FORMAT.parse(dateString);
+    return getHttpDateFormat().parse(dateString);
   }
 
   //~--- get methods ----------------------------------------------------------
@@ -139,6 +137,22 @@ public class WebUtil
   {
     return new StringBuffer("W/\"").append(file.length()).append(
         file.lastModified()).append("\"").toString();
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  public static DateFormat getHttpDateFormat()
+  {
+    SimpleDateFormat dateFormat = new SimpleDateFormat(HTTP_DATE_FORMAT,
+                                    Locale.ENGLISH);
+
+    dateFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
+
+    return dateFormat;
   }
 
   /**
@@ -165,6 +179,15 @@ public class WebUtil
         if (logger.isLoggable(Level.WARNING))
         {
           logger.log(Level.WARNING, null, ex);
+        }
+      }
+      catch (NumberFormatException ex)
+      {
+        logger.warning(dateString);
+
+        if (logger.isLoggable(Level.WARNING))
+        {
+          logger.log(Level.WARNING, dateString, ex);
         }
       }
     }
