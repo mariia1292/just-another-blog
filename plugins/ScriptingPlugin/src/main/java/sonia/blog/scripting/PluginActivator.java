@@ -116,38 +116,41 @@ public class PluginActivator implements Activator, InstallationListener
    */
   public void stop(PluginContext context)
   {
-    BlogContext ctx = BlogContext.getInstance();
-
-    ctx.getMappingHandler().remove(ScriptingMapping.class);
-
-    ScriptingContext sCtx = ScriptingContext.getInstance();
-    List<String> macroNames = sCtx.getScriptNames(MacroScript.class);
-
-    if (Util.isNotEmpty(macroNames))
+    if (BlogContext.getInstance().isInstalled())
     {
-      MacroParser parser = ctx.getMacroParser();
+      BlogContext ctx = BlogContext.getInstance();
 
-      for (String m : macroNames)
+      ctx.getMappingHandler().remove(ScriptingMapping.class);
+
+      ScriptingContext sCtx = ScriptingContext.getInstance();
+      List<String> macroNames = sCtx.getScriptNames(MacroScript.class);
+
+      if (Util.isNotEmpty(macroNames))
       {
-        parser.removeMacroFactory(m);
+        MacroParser parser = ctx.getMacroParser();
+
+        for (String m : macroNames)
+        {
+          parser.removeMacroFactory(m);
+        }
       }
-    }
 
-    if (navigationProvider != null)
-    {
-      navigationProviderReference.remove(navigationProvider);
-      navigationProvider = null;
-    }
+      if (navigationProvider != null)
+      {
+        navigationProviderReference.remove(navigationProvider);
+        navigationProvider = null;
+      }
 
-    if (freemarkerEngine != null)
-    {
-      templateEngineReference.remove(freemarkerEngine);
-      freemarkerEngine = null;
-    }
+      if (freemarkerEngine != null)
+      {
+        templateEngineReference.remove(freemarkerEngine);
+        freemarkerEngine = null;
+      }
 
-    context.getServiceRegistry().unregister(ScriptTemplateEngine.class,
-            ScriptingContext.SERVICE_TEMPLATEENGINE);
-    templateEngineReference = null;
+      context.getServiceRegistry().unregister(ScriptTemplateEngine.class,
+              ScriptingContext.SERVICE_TEMPLATEENGINE);
+      templateEngineReference = null;
+    }
   }
 
   /**

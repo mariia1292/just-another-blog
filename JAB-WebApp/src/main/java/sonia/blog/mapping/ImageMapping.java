@@ -70,7 +70,8 @@ public class ImageMapping extends AbstractAttachmentMapping
 {
 
   /** Field description */
-  private static Logger logger = Logger.getLogger(ImageMapping.class.getName());
+  private static final Logger logger =
+    Logger.getLogger(ImageMapping.class.getName());
 
   //~--- methods --------------------------------------------------------------
 
@@ -108,12 +109,16 @@ public class ImageMapping extends AbstractAttachmentMapping
       }
       catch (NumberFormatException ex)
       {
+        StringBuffer msg = new StringBuffer();
+
+        msg.append(param[0]).append(" is not a number");
+
         if (logger.isLoggable(Level.FINEST))
         {
-          logger.log(Level.FINEST, null, ex);
+          logger.log(Level.FINEST, msg.toString(), ex);
         }
 
-        response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+        response.sendError(HttpServletResponse.SC_BAD_REQUEST, msg.toString());
       }
     }
     else
