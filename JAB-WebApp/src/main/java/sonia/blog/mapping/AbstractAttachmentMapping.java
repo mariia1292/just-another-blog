@@ -83,6 +83,18 @@ public abstract class AbstractAttachmentMapping extends FinalMapping
    *
    * @param request
    * @param response
+   * @param file
+   */
+  protected void addAdditionalHeaderds(BlogRequest request,
+          BlogResponse response, File file) {}
+
+  /**
+   * Method description
+   *
+   *
+   *
+   * @param request
+   * @param response
    * @param name
    * @param mimeType
    * @param file
@@ -95,6 +107,7 @@ public abstract class AbstractAttachmentMapping extends FinalMapping
     response.setHeader("Content-Disposition", "filename=\"" + name + "\";");
     response.setDateHeader("Last-Modified", file.lastModified());
     WebUtil.addETagHeader(response, file);
+    addAdditionalHeaderds(request, response, file);
 
     if (WebUtil.isModified(request, file))
     {
