@@ -74,8 +74,10 @@
             </h:panelGroup>
 
             <h:outputLabel for="publish" value="#{label.publish}" />
-            <h:selectBooleanCheckbox id="publish" value="#{EntryBean.entry.published}" />
-            <h:message for="publish" />
+            <h:panelGroup>
+              <h:selectBooleanCheckbox id="publish" value="#{EntryBean.entry.published}" />
+              <h:message for="publish" />
+            </h:panelGroup>
 
           </h:panelGrid>
 
