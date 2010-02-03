@@ -196,6 +196,11 @@ public class Category implements Serializable, PermaObject
   public void setBlog(Blog blog)
   {
     this.blog = blog;
+
+    if ((blog.getCategories() != null) &&!blog.getCategories().contains(this))
+    {
+      blog.getCategories().add(this);
+    }
   }
 
   /**
