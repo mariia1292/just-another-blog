@@ -5,7 +5,7 @@
   <parent>
     <artifactId>plugins</artifactId>
     <groupId>sonia.blog</groupId>
-    <version>1.0Beta3</version>
+    <version>1.0Beta4</version>
     <relativePath>../pom.xml</relativePath>
   </parent>
   <groupId>sonia.blog</groupId>

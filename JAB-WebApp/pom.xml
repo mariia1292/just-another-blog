@@ -5,14 +5,14 @@
   <parent>
     <groupId>sonia.blog</groupId>
     <artifactId>JAB</artifactId>
-    <version>1.0Beta3</version>
+    <version>1.0Beta4</version>
     <relativePath>../pom.xml</relativePath>
   </parent>
 
   <groupId>sonia.blog</groupId>
   <artifactId>JAB-WebApp</artifactId>
   <packaging>war</packaging>
-  <version>1.0Beta3</version>
+  <version>1.0Beta4</version>
   <name>JAB JEE5 Webapp</name>
   <url>http://www.just-another-blog.org</url>
 

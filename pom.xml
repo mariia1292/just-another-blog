@@ -11,7 +11,7 @@
   <groupId>sonia.blog</groupId>
   <artifactId>JAB</artifactId>
   <packaging>pom</packaging>
-  <version>1.0Beta3</version>
+  <version>1.0Beta4</version>
   <name>JAB SoniaBlog</name>
   <description>Jab (Just Another Blog) is a Java EE weblog with focus on
     performance, robustness, comfort and extensibility.
@@ -170,7 +170,7 @@
       <dependency>
         <groupId>sonia.blog</groupId>
         <artifactId>jab-api</artifactId>
-        <version>1.0Beta3</version>
+        <version>1.0Beta4</version>
       </dependency>
 
     </dependencies>
