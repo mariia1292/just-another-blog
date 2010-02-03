@@ -6,12 +6,12 @@
   <parent>
     <artifactId>JAB</artifactId>
     <groupId>sonia.blog</groupId>
-    <version>1.0Beta3</version>
+    <version>1.0Beta4</version>
   </parent>
 
   <groupId>sonia.blog</groupId>
   <artifactId>JAB-Server</artifactId>
-  <version>1.0Beta3</version>
+  <version>1.0Beta4</version>
   <name>JAB-Server</name>
   <url>http://www.just-another-blog.org</url>
 

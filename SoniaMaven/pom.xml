@@ -5,7 +5,7 @@
   <parent>
     <groupId>sonia.blog</groupId>
     <artifactId>JAB</artifactId>
-    <version>1.0Beta3</version>
+    <version>1.0Beta4</version>
     <relativePath>../pom.xml</relativePath>
   </parent>
 
