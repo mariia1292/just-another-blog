@@ -72,7 +72,7 @@ import java.util.logging.Logger;
  *
  * @author Sebastian Sdorra
  */
-@RequireRole(Role.AUTHOR)
+@RequireRole(Role.READER)
 public class AvatarBean extends AbstractBean
 {
 
