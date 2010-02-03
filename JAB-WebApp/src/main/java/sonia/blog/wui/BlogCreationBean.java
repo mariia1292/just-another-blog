@@ -80,7 +80,7 @@ public class BlogCreationBean extends AbstractBean
   {
     super();
     this.blog = new Blog();
-    this.blog.setTemplate("jab");
+    this.blog.setTemplate("/template/jab");
     this.domain = BlogContext.getInstance().getConfiguration().getString(
       Constants.CONFIG_DOMAIN, "");
   }
