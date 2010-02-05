@@ -35,6 +35,9 @@ package sonia.blog.mapping;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+
 import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.app.BlogRequest;
 import sonia.blog.api.app.BlogResponse;
@@ -50,6 +53,7 @@ import sonia.blog.api.search.SearchEntry;
 import sonia.blog.entity.Blog;
 
 import sonia.util.Util;
+import sonia.util.XmlUtil;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -69,6 +73,7 @@ import com.sun.syndication.io.FeedException;
 import com.sun.syndication.io.SyndFeedOutput;
 
 import java.io.IOException;
+import java.io.OutputStream;
 import java.io.PrintWriter;
 
 import java.util.ArrayList;
@@ -173,64 +178,140 @@ public class OpenSearchMapping extends FinalMapping
 
     response.setContentType(MIMETYPE_DESCRIPTOR);
 
-    PrintWriter writer = null;
+    OutputStream out = null;
 
     try
     {
-      writer = response.getWriter();
-      writer.println("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
-      writer.print("<OpenSearchDescription ");
-      writer.print("xmlns=\"http://a9.com/-/spec/opensearch/1.1/\" ");
-      writer.print("xmlns:moz=\"http://www.mozilla.org/2006/browser/search/\"");
-      writer.println(">");
-      writer.println("\t<ShortName>JAB - " + blog.getTitle() + "</ShortName>");
-      writer.println("\t<Description>" + blog.getDescription()
-                     + "</Description>");
+      Document doc = XmlUtil.createDocument();
+      Element rootEl =
+        doc.createElementNS("http://a9.com/-/spec/opensearch/1.1/",
+                            "OpenSearchDescription");
+
+      rootEl.setAttribute("xmlns:moz",
+                          "http://www.mozilla.org/2006/browser/search/");
+      doc.appendChild(rootEl);
+
+      Element shortnameEl = doc.createElement("ShortName");
+
+      shortnameEl.setTextContent("JAB  - " + blog.getTitle());
+      rootEl.appendChild(shortnameEl);
+
+      if (Util.isNotEmpty(blog.getDescription()))
+      {
+        Element descriptionEl = doc.createElement("Description");
+
+        descriptionEl.setTextContent(blog.getDescription());
+        rootEl.appendChild(descriptionEl);
+      }
 
       // suggestion url
-      writer.append("\t<Url type=\"").append(MIMETYPE_SUGGESTION);
-      writer.append("\" template=\"").append(link).append("/opensearch/");
-      writer.append(PARAMETER_SUGGESTION).append("?search={searchTerms}\" />");
+      Element suggestionEl = doc.createElement("Url");
+
+      suggestionEl.setAttribute("type", MIMETYPE_SUGGESTION);
+
+      StringBuffer buffer = new StringBuffer(link);
+
+      buffer.append("/opensearch/").append(PARAMETER_SUGGESTION);
+      buffer.append("?search={searchTerms}");
+      suggestionEl.setAttribute("template", buffer.toString());
+      rootEl.appendChild(suggestionEl);
 
       // atom search url
-      writer.append("\t<Url type=\"application/atom+xml\" template=\"");
-      writer.append(link).append("/opensearch/").append(PARAMETER_SEARCH);
-      writer.append("?type=atom&search={searchTerms}\" />\n");
+      Element atomEl = doc.createElement("Url");
+
+      atomEl.setAttribute("type", "application/atom+xml");
+      buffer = new StringBuffer(link);
+      buffer.append("/opensearch/").append(PARAMETER_SEARCH);
+      buffer.append("?type=atom&search={searchTerms}");
+      atomEl.setAttribute("template", buffer.toString());
+      rootEl.appendChild(atomEl);
 
       // rss search url
-      writer.append("\t<Url type=\"application/rss+xml\" template=\"");
-      writer.append(link).append("/opensearch/").append(PARAMETER_SEARCH);
-      writer.append("?type=rss&search={searchTerms}\" />\n");
+      Element rssEl = doc.createElement("Url");
+
+      rssEl.setAttribute("type", "application/rss+xml");
+      buffer = new StringBuffer(link);
+      buffer.append("/opensearch/").append(PARAMETER_SEARCH);
+      buffer.append("?type=rss&search={searchTerms}");
+      rssEl.setAttribute("template", buffer.toString());
+      rootEl.appendChild(rssEl);
 
       // html search url
-      writer.append("\t<Url type=\"text/html\" template=\"").append(link);
-      writer.append("/search.jab?search={searchTerms}\" />\n");
-      writer.println("\t<Query role=\"example\" searchTerms=\"jab\" />");
-      writer.println("\t<InputEncoding>UTF-8</InputEncoding>");
-      writer.println("\t<Image width=\"16\" height=\"16\">\t\t");
-      writer.println(linkBuilder.buildLink(request,
+      Element htmlEl = doc.createElement("Url");
+
+      htmlEl.setAttribute("type", "text/html");
+      buffer = new StringBuffer(link);
+      buffer.append("/search.jab?search={searchTerms}");
+      htmlEl.setAttribute("template", buffer.toString());
+      rootEl.appendChild(htmlEl);
+
+      Element queryEl = doc.createElement("Query");
+
+      queryEl.setAttribute("role", "example");
+      queryEl.setAttribute("searchTerms", "jab");
+      rootEl.appendChild(queryEl);
+
+      Element inputEncodingEl = doc.createElement("InputEncoding");
+
+      inputEncodingEl.setTextContent("UTF-8");
+      rootEl.appendChild(inputEncodingEl);
+
+      // image 16x16
+      Element image16El = doc.createElement("Image");
+
+      image16El.setAttribute("width", "16");
+      image16El.setAttribute("height", "16");
+      image16El.setTextContent(linkBuilder.buildLink(request,
               resources.getJabIcon(DefaultWebResources.JABICON_16)));
-      writer.println("\t</Image>");
-      writer.println("\t<Image width=\"32\" height=\"32\">\t\t");
-      writer.println(linkBuilder.buildLink(request,
+      rootEl.appendChild(image16El);
+
+      // image 32x32
+      Element image32El = doc.createElement("Image");
+
+      image32El.setAttribute("width", "32");
+      image32El.setAttribute("height", "32");
+      image32El.setTextContent(linkBuilder.buildLink(request,
               resources.getJabIcon(DefaultWebResources.JABICON_32)));
-      writer.println("\t</Image>");
-      writer.println("\t<Image width=\"64\" height=\"64\">\t\t");
-      writer.println(linkBuilder.buildLink(request,
+      rootEl.appendChild(image32El);
+
+      // image 64x64
+      Element image64El = doc.createElement("Image");
+
+      image64El.setAttribute("width", "64");
+      image64El.setAttribute("height", "64");
+      image64El.setTextContent(linkBuilder.buildLink(request,
               resources.getJabIcon(DefaultWebResources.JABICON_64)));
-      writer.println("\t</Image>");
-      writer.println("\t<Image width=\"128\" height=\"128\">\t\t");
-      writer.println(linkBuilder.buildLink(request,
+      rootEl.appendChild(image64El);
+
+      // image 128x128
+      Element image128El = doc.createElement("Image");
+
+      image128El.setAttribute("width", "128");
+      image128El.setAttribute("height", "128");
+      image128El.setTextContent(linkBuilder.buildLink(request,
               resources.getJabIcon(DefaultWebResources.JABICON_128)));
-      writer.println("\t</Image>");
-      writer.println("\t<moz:SearchForm>" + link + "</moz:SearchForm>");
-      writer.println("</OpenSearchDescription>");
+      rootEl.appendChild(image128El);
+
+      // mozilla search from
+      Element searchFormEl = doc.createElement("moz:SearchForm");
+
+      searchFormEl.setTextContent(link);
+      rootEl.appendChild(searchFormEl);
+
+      out = response.getOutputStream();
+
+      XmlUtil.writeDocument(doc, out, false);
+    }
+    catch (Exception ex)
+    {
+      logger.log(Level.SEVERE, null, ex);
+      response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
     }
     finally
     {
-      if (writer != null)
+      if (out != null)
       {
-        writer.close();
+        out.close();
       }
     }
   }
