@@ -25,6 +25,7 @@
       <handler>console</handler>
       <level>FINEST</level>
       <useParentHandlers>false</useParentHandlers>
+      <removeOldHandlers>true</removeOldHandlers>
     </logger>
     <logger>
       <name>sonia.blog.wui.DashboardBean</name>
