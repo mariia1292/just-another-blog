@@ -49,7 +49,8 @@
 
           <ui:repeat value="#{EditorBean.thumbnails}" var="Thumbnail">
 
-            <a style="margin: 3px;" href="#" onclick="ImageDialog.insert('image/#{Thumbnail.id}.#{Thumbnail.extension}')">
+            <a style="margin: 3px;" href="#"
+               onclick="ImageDialog.insert('${facesContext.externalContext.requestContextPath}/image/#{Thumbnail.id}.#{Thumbnail.extension}')">
               <h:graphicImage value="/image/#{Thumbnail.id}.#{Thumbnail.extension}?type=thumb" alt="thumbnail" />
             </a>
           </ui:repeat>

@@ -5,8 +5,6 @@ var ImageDialog = {
   },
 
   insert : function(url) {
-    url = tinyMCEPopup.editor.documentBaseURI.toAbsolute(url);
-
     var r = document.getElementsByName("size:type");
     for ( i in r )
     {

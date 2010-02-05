@@ -77,7 +77,6 @@
     {
       src += "?type=fix&width=" + width + "&height=" + height;
     }
-    console.debug( src );
     ed.dom.setAttrib( el, "_mce_src", src );
   }
 
