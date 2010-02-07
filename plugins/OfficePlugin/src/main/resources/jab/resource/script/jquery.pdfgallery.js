@@ -48,7 +48,8 @@
       fancybox: {
         type: "image",
         overlayShow: true,
-        overlayOpacity: 0.5,
+        overlayOpacity: 0.7,
+        overlayColor: '#000',
         padding: 0
       }
     };
