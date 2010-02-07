@@ -227,6 +227,8 @@
               <yuiIncludes>
                 <param>/resources/jquery/plugins/css/*.css</param>
                 <param>/resources/fancybox/*.css</param>
+                <param>/resources/yaml/*/*.css</param>
+                <param>/resources/syntaxhighlighter/styles/*.css</param>
                 <param>/template/jab/css/blog.css</param>
                 <param>/template/jab/css/screen/*.css</param>
                 <param>/template/jab/css/patches/*.css</param>
