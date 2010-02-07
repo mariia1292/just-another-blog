@@ -68,16 +68,16 @@ public class DefaultWebResources
   public DefaultWebResources(String contextPath)
   {
     fancybox = new ArrayList<WebResource>();
-    fancybox.add(new ScriptResource(200,
-                                    contextPath
-                                    + "/resources/fancybox/fancybox.js"));
     fancybox.add(
         new ScriptResource(
-            201, contextPath + "/resources/fancybox/jquery.mousewheel.js"));
+            200, contextPath + "/resources/fancybox/jquery.fancybox.min.js"));
+    fancybox.add(
+        new ScriptResource(
+            201, contextPath + "/resources/fancybox/jquery.mousewheel.min.js"));
     fancybox.add(
         new LinkResource(
             202, LinkResource.TYPE_STYLESHEET,
-            contextPath + "/resources/fancybox/fancybox.css",
+            contextPath + "/resources/fancybox/jquery.fancybox.css",
             LinkResource.REL_STYLESHEET, null, "user", false));
     loadingImage = contextPath + "/resources/jquery/plugins/img/loading.gif";
     favicon = contextPath + "/resources/images/favicon.ico";
