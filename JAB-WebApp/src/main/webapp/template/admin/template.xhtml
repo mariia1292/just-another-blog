@@ -100,7 +100,7 @@
                     <h:dataTable styleClass="overview" value="#{BlogBean.categories}" var="Category">
                       <h:column>
                         <blog:link href="/feed/atom/category/#{Category.id}.xml" target="_blank">
-                          <h:graphicImage alt="feedicon" value="/resources/images/icons/feed/icon-14.png" />
+                          <h:graphicImage style="width: 14px; height: 14px" alt="feedicon" value="/resources/images/icons/feed/icon-14.png" />
                         </blog:link>
                         <h:outputText value=" " />
                         <blog:link value="#{Category.name}" object="#{Category}"
