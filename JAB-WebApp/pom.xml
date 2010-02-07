@@ -213,7 +213,6 @@
               <jsBasePath>${project.build.directory}/${project.build.finalName}</jsBasePath>
               <jsIncludes>
                 <param>/resources/jquery/plugins/js/*.js</param>
-                <param>/resources/fancybox/*.js</param>
                 <param>/resources/tiny_mce/plugins/attachment/editor_plugin.js</param>
                 <param>/resources/tiny_mce/plugins/attachment/*/*.js</param>
                 <param>/resources/tiny_mce/plugins/imgbrowser/editor_plugin.js</param>

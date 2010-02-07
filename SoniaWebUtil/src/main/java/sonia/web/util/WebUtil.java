@@ -62,6 +62,12 @@ public class WebUtil
 {
 
   /** Field description */
+  public static final long TIME_MONTH = 60 * 60 * 24 * 30;
+
+  /** Field description */
+  public static final long TIME_YEAR = 60 * 60 * 24 * 365;
+
+  /** Field description */
   private static final String HEADER_CACHECONTROL = "Cache-Control";
 
   /** Field description */
@@ -79,9 +85,6 @@ public class WebUtil
   /** Field description */
   private static final String HTTP_DATE_FORMAT =
     "EEE, dd MMM yyyy HH:mm:ss zzz";
-
-  /** Field description */
-  private static final long TIME_MONTH = 60 * 60 * 24 * 30;
 
   /** Field description */
   private static Logger logger = Logger.getLogger(WebUtil.class.getName());
@@ -105,16 +108,18 @@ public class WebUtil
    *
    *
    * @param response
+   * @param seconds
    */
-  public static void addStaticCacheControls(HttpServletResponse response)
+  public static void addStaticCacheControls(HttpServletResponse response,
+          long seconds)
   {
     long time = new Date().getTime();
 
-    response.addDateHeader(HEADER_EXPIRES, time + (TIME_MONTH * 1000));
+    response.addDateHeader(HEADER_EXPIRES, time + (seconds * 1000));
 
-    StringBuffer cc = new StringBuffer("max-age=").append(TIME_MONTH);
+    StringBuffer cc = new StringBuffer("max-age=").append(seconds);
 
-    cc.append(", public");
+    cc.append(", private");
     response.addHeader(HEADER_CACHECONTROL, cc.toString());
   }
 

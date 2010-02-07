@@ -210,6 +210,26 @@ public class BlogContextFilter implements Filter
    *
    *
    * @param request
+   * @param response
+   */
+  private void applyCacheControls(BlogRequest request, BlogResponse response)
+  {
+    String uri = request.getRequestURI();
+    String contextPath = request.getContextPath();
+
+    if ((uri.startsWith(contextPath + "/resource")
+         || uri.startsWith(contextPath + "/template/")) &&!uri.endsWith(
+           ".jab") || uri.endsWith(".jsp"))
+    {
+      WebUtil.addStaticCacheControls(response, WebUtil.TIME_MONTH);
+    }
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param request
    * @param compress
    * @param cacheKeys
    *
@@ -293,6 +313,8 @@ public class BlogContextFilter implements Filter
     String cacheKey = null;
     boolean process = true;
     boolean compress = isCompressAble(request, instructions);
+
+    applyCacheControls(request, response);
 
     if (isCacheable(request, instructions))
     {
