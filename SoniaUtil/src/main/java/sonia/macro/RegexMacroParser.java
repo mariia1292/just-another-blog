@@ -114,6 +114,7 @@ public class RegexMacroParser extends MacroParser
       text = text.replace(entry.getKey(), entry.getValue());
     }
 
+    text = text.replaceAll("\\\\\\{", "{").replaceAll("\\\\\\}", "}");
     result.setText(text);
 
     return result;

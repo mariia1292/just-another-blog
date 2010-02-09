@@ -33,6 +33,7 @@ public class PluginActivator implements Activator
   {
     macroParser.putMacro(PluginsMacro.NAME, PluginsMacro.class);
     macroParser.putMacro(MacrosMacro.NAME, MacrosMacro.class);
+    macroParser.putMacro(MacroInfoMacro.NAME, MacroInfoMacro.class);
   }
 
   /**
@@ -45,6 +46,7 @@ public class PluginActivator implements Activator
   {
     macroParser.removeMacroFactory(PluginsMacro.NAME);
     macroParser.removeMacroFactory(MacrosMacro.NAME);
+    macroParser.removeMacroFactory(MacroInfoMacro.NAME);
   }
 
   //~--- fields ---------------------------------------------------------------

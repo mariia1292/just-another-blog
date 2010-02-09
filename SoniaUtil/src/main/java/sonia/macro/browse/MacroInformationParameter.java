@@ -121,6 +121,17 @@ public class MacroInformationParameter
    *
    * @return
    */
+  public String getPresetValue()
+  {
+    return presetValue;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
   public Class<? extends MacroWidget> getWidget()
   {
     return widget;
@@ -176,6 +187,17 @@ public class MacroInformationParameter
    * Method description
    *
    *
+   * @param presetValue
+   */
+  public void setPresetValue(String presetValue)
+  {
+    this.presetValue = presetValue;
+  }
+
+  /**
+   * Method description
+   *
+   *
    * @param widget
    */
   public void setWidget(Class<? extends MacroWidget> widget)
@@ -204,6 +226,9 @@ public class MacroInformationParameter
 
   /** Field description */
   private String name;
+
+  /** Field description */
+  private String presetValue = "";
 
   /** Field description */
   private Class<? extends MacroWidget> widget;
