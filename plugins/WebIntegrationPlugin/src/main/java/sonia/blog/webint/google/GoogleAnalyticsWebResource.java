@@ -31,88 +31,109 @@
 
 
 
-package sonia.blog.webint;
+package sonia.blog.webint.google;
 
 //~--- non-JDK imports --------------------------------------------------------
 
 import sonia.blog.api.app.BlogContext;
-import sonia.blog.api.app.Constants;
+import sonia.blog.api.app.BlogRequest;
+import sonia.blog.api.exception.BlogException;
 import sonia.blog.api.macro.WebResource;
-import sonia.blog.webint.flickr.FlickrMacro;
-import sonia.blog.webint.google.GoogleAnalyticsWebResource;
 
-import sonia.macro.MacroParser;
+import sonia.util.Util;
 
-import sonia.plugin.Activator;
-import sonia.plugin.PluginContext;
-import sonia.plugin.service.Service;
-import sonia.plugin.service.ServiceReference;
+//~--- JDK imports ------------------------------------------------------------
+
+import java.io.IOException;
+import java.io.InputStream;
+
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
  * @author Sebastian Sdorra
  */
-public class PluginActivator implements Activator
+public class GoogleAnalyticsWebResource extends WebResource
 {
 
+  /** Field description */
+  public static final String PARAMETER = "sonia.webint.googleanalytics.code";
+
+  /** Field description */
+  public static final String REGEX = "\\$\\{code\\}";
+
+  /** Field description */
+  public static final String TEMPLATE =
+    "/sonia/blog/webint/google-analytics.html";
+
+  //~--- constructors ---------------------------------------------------------
+
   /**
-   * Method description
+   * Constructs ...
    *
    *
-   * @param context
+   * @param index
    */
-  public void start(PluginContext context)
+  public GoogleAnalyticsWebResource(int index)
   {
-    MacroParser parser = MacroParser.getInstance();
+    super(index);
 
-    parser.putMacro("flickr", FlickrMacro.class);
-    BlogContext.getInstance().getMappingHandler().add(GatewayMapping.class);
+    InputStream in =
+      GoogleAnalyticsWebResource.class.getResourceAsStream(TEMPLATE);
 
-    if (providerReference != null)
+    try
     {
-      providerReference.add("/view/admin/webint/config.xhtml");
+      template = Util.getContent(in);
     }
-
-    if (webResourceReference != null)
+    catch (IOException ex)
     {
-      webResourceReference.add(gaResource);
+      throw new BlogException(ex);
+    }
+    finally
+    {
+      if (in != null)
+      {
+        try
+        {
+          in.close();
+        }
+        catch (IOException ex)
+        {
+          Logger.getLogger(GoogleAnalyticsWebResource.class.getName()).log(
+              Level.SEVERE, null, ex);
+        }
+      }
     }
   }
 
+  //~--- methods --------------------------------------------------------------
+
   /**
    * Method description
    *
    *
-   * @param context
+   * @param request
+   *
+   * @return
    */
-  public void stop(PluginContext context)
+  @Override
+  public String toHTML(BlogRequest request)
   {
-    MacroParser parser = MacroParser.getInstance();
+    String result = "";
+    String code = BlogContext.getDAOFactory().getBlogDAO().getParameter(
+                      request.getCurrentBlog(), PARAMETER);
 
-    parser.removeMacroFactory("flickr");
-    BlogContext.getInstance().getMappingHandler().remove(GatewayMapping.class);
-
-    if (providerReference != null)
+    if (Util.isNotEmpty(code))
     {
-      providerReference.remove("/view/admin/webint/config.xhtml");
+      result = template.replaceFirst(REGEX, code);
     }
 
-    if (webResourceReference != null)
-    {
-      webResourceReference.add(gaResource);
-    }
+    return result;
   }
 
   //~--- fields ---------------------------------------------------------------
 
   /** Field description */
-  private WebResource gaResource = new GoogleAnalyticsWebResource(2500);
-
-  /** Field description */
-  @Service(Constants.SERVICE_BLOGCONFIGPROVIDER)
-  private ServiceReference<String> providerReference;
-
-  /** Field description */
-  @Service(Constants.SERVICE_WEBRESOURCE)
-  private ServiceReference<WebResource> webResourceReference;
+  private String template;
 }

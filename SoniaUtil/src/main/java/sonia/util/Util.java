@@ -530,6 +530,31 @@ public class Util
    * Method description
    *
    *
+   * @param in
+   *
+   * @return
+   *
+   * @throws IOException
+   */
+  public static String getContent(InputStream in) throws IOException
+  {
+    StringBuffer buffer = new StringBuffer();
+    BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+    String line = reader.readLine();
+
+    while (line != null)
+    {
+      buffer.append(line).append("\n");
+      line = reader.readLine();
+    }
+
+    return buffer.toString();
+  }
+
+  /**
+   * Method description
+   *
+   *
    * @param filename
    *
    * @return
