@@ -35,6 +35,8 @@ package sonia.blog.api.macro;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import sonia.blog.api.app.BlogRequest;
+
 import sonia.util.Util;
 
 /**
@@ -216,9 +218,11 @@ public class LinkResource extends WebResource
    * Method description
    *
    *
+   *
+   * @param request
    * @return
    */
-  public String toHTML()
+  public String toHTML(BlogRequest request)
   {
     StringBuffer buffer = new StringBuffer();
 
@@ -268,7 +272,7 @@ public class LinkResource extends WebResource
   @Override
   public String toString()
   {
-    return toHTML();
+    return toHTML(null);
   }
 
   //~--- get methods ----------------------------------------------------------

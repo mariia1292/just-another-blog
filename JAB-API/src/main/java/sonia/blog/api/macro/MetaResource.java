@@ -33,6 +33,10 @@
 
 package sonia.blog.api.macro;
 
+//~--- non-JDK imports --------------------------------------------------------
+
+import sonia.blog.api.app.BlogRequest;
+
 /**
  *
  * @author Sebastian Sdorra
@@ -61,10 +65,12 @@ public class MetaResource extends WebResource
    * Method description
    *
    *
+   *
+   * @param request
    * @return
    */
   @Override
-  public String toHTML()
+  public String toHTML(BlogRequest request)
   {
     StringBuffer buffer = new StringBuffer();
 
