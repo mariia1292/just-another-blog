@@ -35,6 +35,8 @@ package sonia.cache;
 
 //~--- JDK imports ------------------------------------------------------------
 
+import java.lang.ref.SoftReference;
+
 import java.util.Collection;
 import java.util.Map.Entry;
 import java.util.TimerTask;
@@ -84,15 +86,26 @@ public class ExpirationTimerTask extends TimerTask
 
     if (!cache.isEmpty())
     {
-      Collection<Entry<Object, CacheObject>> entries = cache.getEntries();
+      Collection<Entry<Object, SoftReference<CacheObject>>> entries =
+        cache.getEntries();
 
-      for (Entry<Object, CacheObject> entry : entries)
+      for (Entry<Object, SoftReference<CacheObject>> entry : entries)
       {
-        long time = System.currentTimeMillis();
+        SoftReference<CacheObject> reference = entry.getValue();
 
-        if (time - entry.getValue().getTime() > expirationTime)
+        if (reference != null)
         {
-          cache.remove(entry.getKey());
+          CacheObject value = reference.get();
+
+          if (value != null)
+          {
+            long time = System.currentTimeMillis();
+
+            if (time - value.getTime() > expirationTime)
+            {
+              cache.remove(entry.getKey());
+            }
+          }
         }
       }
     }

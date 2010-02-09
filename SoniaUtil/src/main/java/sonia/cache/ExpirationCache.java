@@ -35,6 +35,8 @@ package sonia.cache;
 
 //~--- JDK imports ------------------------------------------------------------
 
+import java.lang.ref.SoftReference;
+
 import java.util.Collection;
 import java.util.Map;
 
@@ -52,5 +54,5 @@ public interface ExpirationCache extends ObjectCache
    *
    * @return
    */
-  Collection<Map.Entry<Object, CacheObject>> getEntries();
+  Collection<Map.Entry<Object, SoftReference<CacheObject>>> getEntries();
 }

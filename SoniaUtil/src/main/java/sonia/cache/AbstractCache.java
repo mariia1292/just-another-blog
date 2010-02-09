@@ -35,6 +35,8 @@ package sonia.cache;
 
 //~--- JDK imports ------------------------------------------------------------
 
+import java.lang.ref.SoftReference;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -67,7 +69,7 @@ public abstract class AbstractCache implements ObjectCache
    *
    * @return
    */
-  protected abstract Map<Object, CacheObject> getCacheMap();
+  protected abstract Map<Object, SoftReference<CacheObject>> getCacheMap();
 
   //~--- methods --------------------------------------------------------------
 
@@ -77,7 +79,7 @@ public abstract class AbstractCache implements ObjectCache
    */
   public void clear()
   {
-    Map<Object, CacheObject> cacheMap = getCacheMap();
+    Map<Object, SoftReference<CacheObject>> cacheMap = getCacheMap();
 
     synchronized (cacheMap)
     {
@@ -93,7 +95,7 @@ public abstract class AbstractCache implements ObjectCache
    */
   public void clear(ClearCondition condition)
   {
-    Map<Object, CacheObject> cacheMap = getCacheMap();
+    Map<Object, SoftReference<CacheObject>> cacheMap = getCacheMap();
 
     synchronized (cacheMap)
     {
@@ -138,13 +140,21 @@ public abstract class AbstractCache implements ObjectCache
   public Object remove(Object key)
   {
     Object result = null;
-    Map<Object, CacheObject> cacheMap = getCacheMap();
+    Map<Object, SoftReference<CacheObject>> cacheMap = getCacheMap();
 
     synchronized (cacheMap)
     {
-      CacheObject co = cacheMap.remove(key);
+      SoftReference<CacheObject> reference = cacheMap.remove(key);
 
-      result = co.getObject();
+      if (reference != null)
+      {
+        CacheObject co = reference.get();
+
+        if (co != null)
+        {
+          result = co.getObject();
+        }
+      }
     }
 
     return result;
@@ -156,7 +166,7 @@ public abstract class AbstractCache implements ObjectCache
    */
   public void reset()
   {
-    Map<Object, CacheObject> cacheMap = getCacheMap();
+    Map<Object, SoftReference<CacheObject>> cacheMap = getCacheMap();
 
     synchronized (cacheMap)
     {
