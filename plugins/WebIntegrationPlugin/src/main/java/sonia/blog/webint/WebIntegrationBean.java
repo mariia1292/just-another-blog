@@ -35,84 +35,88 @@ package sonia.blog.webint;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import sonia.blog.api.app.BlogContext;
-import sonia.blog.api.app.Constants;
-import sonia.blog.api.macro.WebResource;
-import sonia.blog.webint.flickr.FlickrMacro;
+import sonia.blog.api.app.BlogSession;
+import sonia.blog.api.dao.BlogDAO;
+import sonia.blog.api.dao.Dao;
+import sonia.blog.api.util.AbstractBean;
+import sonia.blog.entity.Blog;
 import sonia.blog.webint.google.GoogleAnalyticsWebResource;
-
-import sonia.macro.MacroParser;
-
-import sonia.plugin.Activator;
-import sonia.plugin.PluginContext;
-import sonia.plugin.service.Service;
-import sonia.plugin.service.ServiceReference;
 
 /**
  *
  * @author Sebastian Sdorra
  */
-public class PluginActivator implements Activator
+public class WebIntegrationBean extends AbstractBean
 {
 
   /**
-   * Method description
+   * Constructs ...
    *
-   *
-   * @param context
    */
-  public void start(PluginContext context)
+  public WebIntegrationBean()
   {
-    MacroParser parser = MacroParser.getInstance();
-
-    parser.putMacro("flickr", FlickrMacro.class);
-    BlogContext.getInstance().getMappingHandler().add(GatewayMapping.class);
-
-    if (providerReference != null)
-    {
-      providerReference.add("/view/admin/webint/config.xhtml");
-    }
-
-    if (webResourceReference != null)
-    {
-      webResourceReference.add(gaResource);
-    }
+    super();
   }
+
+  //~--- methods --------------------------------------------------------------
 
   /**
    * Method description
    *
    *
-   * @param context
+   * @return
    */
-  public void stop(PluginContext context)
+  public String save()
   {
-    MacroParser parser = MacroParser.getInstance();
+    BlogSession session = getBlogSession();
 
-    parser.removeMacroFactory("flickr");
-    BlogContext.getInstance().getMappingHandler().remove(GatewayMapping.class);
+    blogDAO.setParameter(session, session.getBlog(),
+                         GoogleAnalyticsWebResource.PARAMETER, code);
 
-    if (providerReference != null)
+    getMessageHandler().info(getRequest(), "successStoreConfig");
+
+    return SUCCESS;
+  }
+
+  //~--- get methods ----------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  public String getCode()
+  {
+    if (code == null)
     {
-      providerReference.remove("/view/admin/webint/config.xhtml");
+      Blog blog = getRequest().getCurrentBlog();
+
+      code = blogDAO.getParameter(blog, GoogleAnalyticsWebResource.PARAMETER);
     }
 
-    if (webResourceReference != null)
-    {
-      webResourceReference.add(gaResource);
-    }
+    return code;
+  }
+
+  //~--- set methods ----------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   * @param code
+   */
+  public void setCode(String code)
+  {
+    this.code = code;
   }
 
   //~--- fields ---------------------------------------------------------------
 
   /** Field description */
-  private WebResource gaResource = new GoogleAnalyticsWebResource(2500);
+  @Dao
+  private BlogDAO blogDAO;
 
   /** Field description */
-  @Service(Constants.SERVICE_BLOGCONFIGPROVIDER)
-  private ServiceReference<String> providerReference;
-
-  /** Field description */
-  @Service(Constants.SERVICE_WEBRESOURCE)
-  private ServiceReference<WebResource> webResourceReference;
+  private String code;
 }
