@@ -49,8 +49,6 @@ import sonia.util.Util;
 
 import java.io.IOException;
 
-import java.text.MessageFormat;
-
 import java.util.List;
 
 import javax.faces.component.UIComponent;
@@ -101,12 +99,7 @@ public class HeaderRenderer extends BaseRenderer
       {
         for (WebResource resource : resources)
         {
-          String html = resource.toHTML();
-
-          writer.write(MessageFormat.format(html, blog.getId(),
-                                            blog.getIdentifier(),
-                                            blog.getTitle(),
-                                            blog.getDescription()));
+          writer.write(resource.toHTML(request));
           writer.write("\n");
         }
       }

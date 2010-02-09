@@ -33,6 +33,10 @@
 
 package sonia.blog.api.macro;
 
+//~--- non-JDK imports --------------------------------------------------------
+
+import sonia.blog.api.app.BlogRequest;
+
 /**
  *
  * @author Sebastian Sdorra
@@ -54,15 +58,14 @@ public abstract class WebResource implements Comparable<WebResource>
   //~--- methods --------------------------------------------------------------
 
   /**
-   * Allowed Patterns:
-   * {1} - id of the current blog
-   * {2} - identifier of the current blog
-   * {3} - title of the current blog
-   * {4} - description of the current blog
+   * Method description
+   *
+   *
+   * @param request
    *
    * @return
    */
-  public abstract String toHTML();
+  public abstract String toHTML(BlogRequest request);
 
   /**
    * Method description

@@ -508,7 +508,7 @@ public class MacroBrowserMapping extends FinalMapping
 
       for (WebResource resource : Util.unique(resources))
       {
-        cacheValue.append(resource.toHTML());
+        cacheValue.append(resource.toHTML(request));
       }
 
       cacheValue.append("</head><body>");
