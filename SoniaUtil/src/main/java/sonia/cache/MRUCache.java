@@ -39,6 +39,8 @@ import sonia.util.Util;
 
 //~--- JDK imports ------------------------------------------------------------
 
+import java.lang.ref.SoftReference;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -72,7 +74,7 @@ public class MRUCache extends AbstractCache
   {
     super(name);
     this.maxItems = maxItems;
-    this.cacheMap = new HashMap<Object, CacheObject>(maxItems);
+    this.cacheMap = new HashMap<Object, SoftReference<CacheObject>>(maxItems);
   }
 
   /**
@@ -106,7 +108,7 @@ public class MRUCache extends AbstractCache
       throw new IllegalArgumentException(msg.toString());
     }
 
-    this.cacheMap = new HashMap<Object, CacheObject>(maxItems);
+    this.cacheMap = new HashMap<Object, SoftReference<CacheObject>>(maxItems);
   }
 
   //~--- methods --------------------------------------------------------------
@@ -135,7 +137,7 @@ public class MRUCache extends AbstractCache
       removeEntry();
     }
 
-    cacheMap.put(key, new CacheObject(value));
+    cacheMap.put(key, new SoftReference<CacheObject>(new CacheObject(value)));
 
     return value;
   }
@@ -153,15 +155,21 @@ public class MRUCache extends AbstractCache
   public Object get(Object key)
   {
     Object value = null;
-    CacheObject co = cacheMap.get(key);
+    SoftReference<CacheObject> reference = cacheMap.get(key);
 
-    if (co != null)
+    if (reference != null)
     {
-      value = co.getObject();
-      co.update();
-      hits++;
+      CacheObject co = reference.get();
+
+      if (co != null)
+      {
+        value = co.getObject();
+        co.update();
+        hits++;
+      }
     }
-    else
+
+    if (value == null)
     {
       missed++;
     }
@@ -192,7 +200,7 @@ public class MRUCache extends AbstractCache
    * @return
    */
   @Override
-  protected Map<Object, CacheObject> getCacheMap()
+  protected Map<Object, SoftReference<CacheObject>> getCacheMap()
   {
     return cacheMap;
   }
@@ -205,18 +213,26 @@ public class MRUCache extends AbstractCache
    */
   private void removeEntry()
   {
-    Set<Map.Entry<Object, CacheObject>> entries = cacheMap.entrySet();
-    Map.Entry<Object, CacheObject> etr = null;
+    Set<Map.Entry<Object, SoftReference<CacheObject>>> entries =
+      cacheMap.entrySet();
+    Object etrKey = null;
+    CacheObject etrValue = null;
 
-    for (Map.Entry<Object, CacheObject> entry : entries)
+    for (Map.Entry<Object, SoftReference<CacheObject>> entry : entries)
     {
-      CacheObject value = entry.getValue();
+      SoftReference<CacheObject> reference = entry.getValue();
 
-      if ((etr == null) || (value.getHits() < etr.getValue().getHits())
-          || ((value.getHits() == etr.getValue().getHits())
-              && (value.getLastAccess() < etr.getValue().getLastAccess())))
+      if (reference != null)
       {
-        etr = entry;
+        CacheObject value = reference.get();
+
+        if ((etrValue == null) || (value.getHits() < etrValue.getHits())
+            || ((value.getHits() == etrValue.getHits())
+                && (value.getLastAccess() < etrValue.getLastAccess())))
+        {
+          etrKey = entry.getKey();
+          etrValue = value;
+        }
       }
     }
 
@@ -224,17 +240,17 @@ public class MRUCache extends AbstractCache
     {
       StringBuffer msg = new StringBuffer();
 
-      msg.append("remove lru entry with key ").append(etr.getKey());
+      msg.append("remove lru entry with key ").append(etrKey);
       logger.finest(msg.toString());
     }
 
-    remove(etr.getKey());
+    remove(etrKey);
   }
 
   //~--- fields ---------------------------------------------------------------
 
   /** Field description */
-  private Map<Object, CacheObject> cacheMap;
+  private Map<Object, SoftReference<CacheObject>> cacheMap;
 
   /** Field description */
   private int maxItems;

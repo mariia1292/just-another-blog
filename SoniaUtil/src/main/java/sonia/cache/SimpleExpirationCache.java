@@ -39,6 +39,8 @@ import sonia.util.Util;
 
 //~--- JDK imports ------------------------------------------------------------
 
+import java.lang.ref.SoftReference;
+
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -76,7 +78,7 @@ public class SimpleExpirationCache extends AbstractCache
           throws NumberFormatException, IllegalArgumentException
   {
     super(name);
-    cacheMap = new HashMap<Object, CacheObject>();
+    cacheMap = new HashMap<Object, SoftReference<CacheObject>>();
 
     String timeParam = parameter.get(PARAMETER_EXPIRATIONTIME);
 
@@ -120,7 +122,7 @@ public class SimpleExpirationCache extends AbstractCache
   {
     super(name);
     this.expirationTime = expirationTime;
-    this.cacheMap = new HashMap<Object, CacheObject>();
+    this.cacheMap = new HashMap<Object, SoftReference<CacheObject>>();
 
     if (intervalCheck)
     {
@@ -143,7 +145,7 @@ public class SimpleExpirationCache extends AbstractCache
   {
     synchronized (cacheMap)
     {
-      cacheMap.put(key, new CacheObject(value));
+      cacheMap.put(key, new SoftReference<CacheObject>(new CacheObject(value)));
     }
 
     return value;
@@ -162,24 +164,29 @@ public class SimpleExpirationCache extends AbstractCache
   public Object get(Object key)
   {
     Object result = null;
-    CacheObject co = cacheMap.get(key);
+    SoftReference<CacheObject> reference = cacheMap.get(key);
 
-    if (co != null)
+    if (reference != null)
     {
-      long time = System.currentTimeMillis();
+      CacheObject co = reference.get();
 
-      if (time - co.getTime() > expirationTime)
+      if (co != null)
       {
-        remove(key);
-      }
-      else
-      {
-        co.update();
-        result = co.getObject();
+        long time = System.currentTimeMillis();
+
+        if (time - co.getTime() > expirationTime)
+        {
+          remove(key);
+        }
+        else
+        {
+          co.update();
+          result = co.getObject();
+        }
       }
     }
 
-    if (co != null)
+    if (result != null)
     {
       hits++;
     }
@@ -214,7 +221,7 @@ public class SimpleExpirationCache extends AbstractCache
    *
    * @return
    */
-  public Map<Object, CacheObject> getCacheMap()
+  public Map<Object, SoftReference<CacheObject>> getCacheMap()
   {
     return cacheMap;
   }
@@ -225,7 +232,7 @@ public class SimpleExpirationCache extends AbstractCache
    *
    * @return
    */
-  public Collection<Entry<Object, CacheObject>> getEntries()
+  public Collection<Entry<Object, SoftReference<CacheObject>>> getEntries()
   {
     return cacheMap.entrySet();
   }
@@ -249,7 +256,7 @@ public class SimpleExpirationCache extends AbstractCache
   //~--- fields ---------------------------------------------------------------
 
   /** Field description */
-  private final Map<Object, CacheObject> cacheMap;
+  private final Map<Object, SoftReference<CacheObject>> cacheMap;
 
   /** Field description */
   private long expirationTime;
