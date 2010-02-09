@@ -507,10 +507,17 @@ public class JpaBlogDAO extends JpaGenericDAO<Blog> implements BlogDAO
     {
       if (param != null)
       {
-        param.setValue(value);
-        strategy.edit(param);
+        if (Util.isNotEmpty(value))
+        {
+          param.setValue(value);
+          strategy.edit(param);
+        }
+        else
+        {
+          strategy.remove(param);
+        }
       }
-      else
+      else if (Util.isNotEmpty(value))
       {
         param = new BlogParameter(blog, name, value);
         strategy.store(param);
