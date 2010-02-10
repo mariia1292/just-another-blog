@@ -1,9 +1,24 @@
-<a id="flowplayer_${attachment.id}" href="${attachmentLink}" style="display: block; width: ${width}px; height: ${height}px"></a>
-<script type="text/javascript">
-  flowplayer("flowplayer_${attachment.id}", "${playerPath}flowplayer.swf",{
-    clip: {
-      autoPlay: ${autoPlay},
-      autoBuffering: ${autoBuffering}
-    }
-  });
-</script>
+<#if body ??>
+  <span id="flowplayer_${attachment.id}">${body}</span>
+  <script type="text/javascript">
+    $(document).ready(function(){
+      $("#flowplayer_${attachment.id}").fancyplayer({
+        id: "flowplayer_${attachment.id}_content",
+        width: ${width},
+        height: ${height},
+        player: "${playerPath}flowplayer.swf",
+        video: "${attachmentLink}"
+      });
+    });
+  </script>
+<#else>
+  <a id="flowplayer_${attachment.id}" href="${attachmentLink}" style="display: block; width: ${width}px; height: ${height}px"></a>
+  <script type="text/javascript">
+    $f("flowplayer_${attachment.id}", "${playerPath}flowplayer.swf",{
+      clip: {
+        autoPlay: ${autoPlay},
+        autoBuffering: ${autoBuffering}
+      }
+    });
+  </script>
+</#if>

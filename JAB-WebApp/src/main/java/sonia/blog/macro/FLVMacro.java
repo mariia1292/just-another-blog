@@ -35,6 +35,7 @@ package sonia.blog.macro;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.app.BlogRequest;
 import sonia.blog.api.app.Context;
 import sonia.blog.api.dao.AttachmentDAO;
@@ -54,12 +55,15 @@ import sonia.blog.entity.ContentObject;
 import sonia.macro.browse.MacroInfo;
 import sonia.macro.browse.MacroInfoParameter;
 
+import sonia.util.Util;
+
 //~--- JDK imports ------------------------------------------------------------
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import sonia.blog.api.macro.browse.StringTextAreaWidget;
 
 /**
  *
@@ -69,7 +73,9 @@ import java.util.Map;
   name = "flvviewer",
   displayName = "macro.flv.displayName",
   description = "macro.flv.description",
-  resourceBundle = "sonia.blog.resources.label"
+  resourceBundle = "sonia.blog.resources.label",
+  bodyWidget= StringTextAreaWidget.class,
+  widgetParam = "cols=110;rows=20"
 )
 public class FLVMacro extends AbstractBlogMacro implements WebMacro
 {
@@ -203,7 +209,8 @@ public class FLVMacro extends AbstractBlogMacro implements WebMacro
 
       if ((attchment != null) && attchment.isBlog(blog))
       {
-        result = renderPlayer(request, attchment, linkBase, width, height);
+        result = renderPlayer(request, attchment, linkBase, body, width,
+                              height);
       }
       else
       {
@@ -225,25 +232,41 @@ public class FLVMacro extends AbstractBlogMacro implements WebMacro
    * @param request
    * @param attchment
    * @param linkBase
+   * @param body
    * @param width
    * @param height
    *
    * @return
    */
   private String renderPlayer(BlogRequest request, Attachment attchment,
-                              String linkBase, int width, int height)
+                              String linkBase, String body, int width,
+                              int height)
   {
     String playerPath = linkBase + "resources/flowplayer/";
     String attachmentLink = linkBuilder.getRelativeLink(request, attchment);
 
     resources = new ArrayList<WebResource>();
 
-    ScriptResource sr = new ScriptResource(10,
+    ScriptResource flowplayer = new ScriptResource(10,
                           playerPath + "flowplayer.min.js");
 
-    resources.add(sr);
+    resources.add(flowplayer);
 
     Map<String, Object> params = new HashMap<String, Object>();
+
+    if (Util.isNotEmpty(body))
+    {
+      resources.addAll(
+          BlogContext.getInstance().getWebResources().getFancybox());
+
+      StringBuffer fp = new StringBuffer( linkBase );
+      fp.append( "resources/jquery/plugins/js/jquery.fancyplayer.js" );
+
+      ScriptResource fancyplayer = new ScriptResource(110, fp.toString());
+      resources.add(fancyplayer);
+
+      params.put("body", body);
+    }
 
     params.put("attachment", attchment);
     params.put("playerPath", playerPath);
