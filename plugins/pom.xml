@@ -64,6 +64,7 @@
     <module>ScriptingPlugin</module>
     <module>WebIntegrationPlugin</module>
     <module>OfficePlugin</module>
+    <module>TrackbackValidationPlugin</module>
   </modules>
 
 </project>
