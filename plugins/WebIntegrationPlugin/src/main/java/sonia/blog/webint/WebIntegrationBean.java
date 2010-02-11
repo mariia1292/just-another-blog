@@ -36,16 +36,19 @@ package sonia.blog.webint;
 //~--- non-JDK imports --------------------------------------------------------
 
 import sonia.blog.api.app.BlogSession;
+import sonia.blog.api.authentication.RequireRole;
 import sonia.blog.api.dao.BlogDAO;
 import sonia.blog.api.dao.Dao;
 import sonia.blog.api.util.AbstractBean;
 import sonia.blog.entity.Blog;
+import sonia.blog.entity.Role;
 import sonia.blog.webint.google.GoogleAnalyticsWebResource;
 
 /**
  *
  * @author Sebastian Sdorra
  */
+@RequireRole(Role.ADMIN)
 public class WebIntegrationBean extends AbstractBean
 {
 
@@ -72,7 +75,6 @@ public class WebIntegrationBean extends AbstractBean
 
     blogDAO.setParameter(session, session.getBlog(),
                          GoogleAnalyticsWebResource.PARAMETER, code);
-
     getMessageHandler().info(getRequest(), "successStoreConfig");
 
     return SUCCESS;

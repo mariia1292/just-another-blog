@@ -36,12 +36,15 @@ package sonia.blog.ldap;
 //~--- non-JDK imports --------------------------------------------------------
 
 import sonia.blog.api.app.BlogConfiguration;
+import sonia.blog.api.authentication.RequireRole;
 import sonia.blog.api.util.AbstractConfigBean;
+import sonia.blog.entity.Role;
 
 /**
  *
  * @author Sebastian Sdorra
  */
+@RequireRole(Role.GLOBALADMIN)
 public class LdapConfigBean extends AbstractConfigBean
 {
 
