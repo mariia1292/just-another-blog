@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+    Document   : plugin.xml.xml
+    Created on : February 11, 2010, 7:09 PM
+    Author     : sdorra
+    Description:
+        Purpose of the document follows.
+-->
+<plugin  xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+   xmlns='http://dev.sonia.de/schema/plugin-schema'
+   xsi:schemaLocation='http://dev.sonia.de/schema/plugin-schema file:/Users/sdorra/Projects/libraries/SoniaUtil/src/sonia/plugin/plugin-schema.xsd'>
+  <name>sonia.trackbackvalidation</name>
+  <display-name>TrackbackValidation-Plugin</display-name>
+  <description>Validate trackbacks with a reverse lookup</description>
+  <version>0.0.1</version>
+  <vendor>Sebastian Sdorra</vendor>
+  <activator>sonia.blog.tbv.PluginActivator</activator>
+</plugin>
