@@ -35,17 +35,18 @@ package sonia.blog.dao.jpa;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import sonia.blog.api.app.BlogSession;
 import sonia.blog.api.app.Constants;
 import sonia.blog.api.dao.CommentDAO;
 import sonia.blog.entity.Blog;
 import sonia.blog.entity.Comment;
 import sonia.blog.entity.Comment.Type;
 import sonia.blog.entity.Entry;
+import sonia.blog.entity.Role;
 
 //~--- JDK imports ------------------------------------------------------------
 
 import java.util.List;
-import java.util.logging.Logger;
 
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
@@ -56,12 +57,6 @@ import javax.persistence.Query;
  */
 public class JpaCommentDAO extends JpaGenericDAO<Comment> implements CommentDAO
 {
-
-  /** Field description */
-  private static Logger logger =
-    Logger.getLogger(JpaCommentDAO.class.getName());
-
-  //~--- constructors ---------------------------------------------------------
 
   /**
    * Constructs ...
@@ -299,5 +294,21 @@ public class JpaCommentDAO extends JpaGenericDAO<Comment> implements CommentDAO
   public List<Comment> getAll(Entry entry, Type type)
   {
     return getAll(entry, type, -1, -1);
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param session
+   * @param item
+   * @param action
+   *
+   * @return
+   */
+  @Override
+  protected boolean isPrivileged(BlogSession session, Comment item, int action)
+  {
+    return (action == ACTION_ADD) || session.hasRole(Role.AUTHOR);
   }
 }
