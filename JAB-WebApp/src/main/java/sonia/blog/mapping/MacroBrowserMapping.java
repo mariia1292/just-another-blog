@@ -772,7 +772,7 @@ public class MacroBrowserMapping extends FinalMapping
     List<WebResource> result = null;
     ServiceReference<WebResource> reference =
       BlogContext.getInstance().getServiceRegistry().get(WebResource.class,
-        Constants.SERVICE_WEBRESOURCE);
+        Constants.SERVICE_HEADRESOURCES);
 
     if (reference != null)
     {

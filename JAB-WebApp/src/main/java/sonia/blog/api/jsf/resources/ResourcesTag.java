@@ -31,7 +31,7 @@
 
 
 
-package sonia.blog.api.jsf.header;
+package sonia.blog.api.jsf.resources;
 
 //~--- non-JDK imports --------------------------------------------------------
 
@@ -47,8 +47,22 @@ import javax.faces.component.UIComponent;
  *
  * @author Sebastian Sdorra
  */
-public class HeaderTag extends BaseTag
+public class ResourcesTag extends BaseTag
 {
+
+  /**
+   * Method description
+   *
+   */
+  @Override
+  public void release()
+  {
+    super.release();
+    service = null;
+    includeMappingResources = null;
+  }
+
+  //~--- get methods ----------------------------------------------------------
 
   /**
    * Method description
@@ -59,7 +73,7 @@ public class HeaderTag extends BaseTag
   @Override
   public String getComponentType()
   {
-    return HeaderComponent.FAMILY;
+    return ResourcesComponent.FAMILY;
   }
 
   /**
@@ -71,7 +85,7 @@ public class HeaderTag extends BaseTag
   @Override
   public String getRendererType()
   {
-    return HeaderComponent.RENDERER;
+    return ResourcesComponent.RENDERER;
   }
 
   //~--- set methods ----------------------------------------------------------
@@ -80,11 +94,23 @@ public class HeaderTag extends BaseTag
    * Method description
    *
    *
-   * @param comments
+   * @param includeMappingResources
    */
-  public void setComments(ValueExpression comments)
+  public void setIncludeMappingResources(
+          ValueExpression includeMappingResources)
   {
-    this.comments = comments;
+    this.includeMappingResources = includeMappingResources;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param service
+   */
+  public void setService(ValueExpression service)
+  {
+    this.service = service;
   }
 
   /**
@@ -98,14 +124,23 @@ public class HeaderTag extends BaseTag
   {
     super.setProperties(component);
 
-    if (comments != null)
+    if (service != null)
     {
-      component.setValueExpression("comments", comments);
+      component.setValueExpression("service", service);
+    }
+
+    if (includeMappingResources != null)
+    {
+      component.setValueExpression("includeMappingResources",
+                                   includeMappingResources);
     }
   }
 
   //~--- fields ---------------------------------------------------------------
 
   /** Field description */
-  private ValueExpression comments;
+  private ValueExpression includeMappingResources;
+
+  /** Field description */
+  private ValueExpression service;
 }

@@ -635,7 +635,7 @@ public class BlogContextListener implements ServletContextListener
                          ctxPath
                          + "/resources/jquery/plugins/js/jquery.messages.js");
 
-    registry.register(WebResource.class, Constants.SERVICE_WEBRESOURCE).add(
+    registry.register(WebResource.class, Constants.SERVICE_HEADRESOURCES).add(
         entryAtom).add(entryRSS).add(commentAtom).add(commentRSS).add(
         opensearch).add(jquery).add(jqueryMsgs);
   }

@@ -85,11 +85,11 @@
   </application>
 
   <component>
-    <display-name>header</display-name>
-    <component-type>sonia.blog.header</component-type>
-    <component-class>sonia.blog.api.jsf.header.HeaderComponent</component-class>
+    <display-name>resources</display-name>
+    <component-type>sonia.blog.resources</component-type>
+    <component-class>sonia.blog.api.jsf.resources.ResourcesComponent</component-class>
     <component-extension>
-      <renderer-type>sonia.blog.header.renderer</renderer-type>
+      <renderer-type>sonia.blog.resources.renderer</renderer-type>
     </component-extension>
   </component>
 
@@ -203,9 +203,9 @@
 
   <render-kit>
     <renderer>
-      <component-family>sonia.blog.header</component-family>
-      <renderer-type>sonia.blog.header.renderer</renderer-type>
-      <renderer-class>sonia.blog.api.jsf.header.HeaderRenderer</renderer-class>
+      <component-family>sonia.blog.resources</component-family>
+      <renderer-type>sonia.blog.resources.renderer</renderer-type>
+      <renderer-class>sonia.blog.api.jsf.resources.ResourcesRenderer</renderer-class>
     </renderer>
     <renderer>
       <component-family>sonia.blog.calendar</component-family>
