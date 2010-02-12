@@ -137,4 +137,6 @@
     <impl class="sonia.blog.util.CacheListener" />
   </service>
 
+  <service class="sonia.blog.api.macro.WebResource" path="/web/resources/foot" />
+
 </services>

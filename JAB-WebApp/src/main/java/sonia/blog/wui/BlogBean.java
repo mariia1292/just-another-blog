@@ -319,6 +319,28 @@ public class BlogBean extends AbstractBean
    *
    * @return
    */
+  public String getFootResourcesService()
+  {
+    return Constants.SERVICE_FOOTRESOURCES;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  public String getHeadResourcesService()
+  {
+    return Constants.SERVICE_HEADRESOURCES;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
   public List<NavigationMenuItem> getMainNavigation()
   {
     List<NavigationMenuItem> navigation = new ArrayList<NavigationMenuItem>();

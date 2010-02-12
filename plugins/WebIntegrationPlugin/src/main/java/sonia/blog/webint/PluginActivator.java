@@ -113,6 +113,6 @@ public class PluginActivator implements Activator
   private ServiceReference<String> providerReference;
 
   /** Field description */
-  @Service(Constants.SERVICE_WEBRESOURCE)
+  @Service(Constants.SERVICE_FOOTRESOURCES)
   private ServiceReference<WebResource> webResourceReference;
 }

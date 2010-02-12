@@ -534,7 +534,7 @@
     </attribute>
   </tag>
   <tag>
-    <name>header</name>
+    <name>resources</name>
     <tag-class>sonia.blog.api.jsf.header.HeaderTag</tag-class>
     <body-content>empty</body-content>
     <attribute>
@@ -544,10 +544,28 @@
       <type>java.lang.Object</type>
     </attribute>
     <attribute>
-      <name>comments</name>
+      <name>service</name>
       <required>false</required>
       <rtexprvalue>true</rtexprvalue>
       <type>java.lang.object</type>
+    </attribute>
+    <attribute>
+      <name>includeMappingResources</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.object</type>
+    </attribute>
+    <attribute>
+      <name>role</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.Object</type>
+    </attribute>
+    <attribute>
+      <name>rendered</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.Object</type>
     </attribute>
   </tag>
   <tag>

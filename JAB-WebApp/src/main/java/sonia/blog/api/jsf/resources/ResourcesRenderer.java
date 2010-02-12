@@ -31,14 +31,13 @@
 
 
 
-package sonia.blog.api.jsf.header;
+package sonia.blog.api.jsf.resources;
 
 //~--- non-JDK imports --------------------------------------------------------
 
 import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.app.BlogRequest;
 import sonia.blog.api.macro.WebResource;
-import sonia.blog.entity.Blog;
 import sonia.blog.util.BlogUtil;
 
 import sonia.jsf.base.BaseRenderer;
@@ -59,7 +58,7 @@ import javax.faces.context.ResponseWriter;
  *
  * @author Sebastian Sdorra
  */
-public class HeaderRenderer extends BaseRenderer
+public class ResourcesRenderer extends BaseRenderer
 {
 
   /**
@@ -75,25 +74,19 @@ public class HeaderRenderer extends BaseRenderer
   public void encodeBegin(FacesContext context, UIComponent component)
           throws IOException
   {
-    if (!(component instanceof HeaderComponent))
+    if (!(component instanceof ResourcesComponent))
     {
       throw new IllegalArgumentException();
     }
 
-    if (BlogContext.getInstance().isInstalled())
+    ResourcesComponent resComp = (ResourcesComponent) component;
+
+    if (BlogContext.getInstance().isInstalled() && isRendered(context, resComp))
     {
-      HeaderComponent header = (HeaderComponent) component;
       ResponseWriter writer = context.getResponseWriter();
-
-      if (header.getComments())
-      {
-        writer.writeComment("start header");
-      }
-
-      List<WebResource> resources = header.getResources(context);
+      List<WebResource> resources = resComp.getResources(context);
       BlogRequest request =
         BlogUtil.getBlogRequest(context.getExternalContext().getRequest());
-      Blog blog = request.getCurrentBlog();
 
       if (Util.hasContent(resources))
       {
@@ -102,11 +95,6 @@ public class HeaderRenderer extends BaseRenderer
           writer.write(resource.toHTML(request));
           writer.write("\n");
         }
-      }
-
-      if (header.getComments())
-      {
-        writer.writeComment("end header");
       }
     }
   }

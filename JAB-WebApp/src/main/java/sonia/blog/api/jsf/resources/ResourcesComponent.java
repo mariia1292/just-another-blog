@@ -31,13 +31,12 @@
 
 
 
-package sonia.blog.api.jsf.header;
+package sonia.blog.api.jsf.resources;
 
 //~--- non-JDK imports --------------------------------------------------------
 
 import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.app.BlogRequest;
-import sonia.blog.api.app.Constants;
 import sonia.blog.api.macro.WebResource;
 import sonia.blog.api.mapping.FilterMapping;
 import sonia.blog.api.mapping.Mapping;
@@ -62,14 +61,14 @@ import javax.faces.context.FacesContext;
  *
  * @author Sebastian Sdorra
  */
-public class HeaderComponent extends BaseComponent
+public class ResourcesComponent extends BaseComponent
 {
 
   /** Field description */
-  public static final String FAMILY = "sonia.blog.header";
+  public static final String FAMILY = "sonia.blog.resources";
 
   /** Field description */
-  public static final String RENDERER = "sonia.blog.header.renderer";
+  public static final String RENDERER = "sonia.blog.resources.renderer";
 
   //~--- constructors ---------------------------------------------------------
 
@@ -77,7 +76,7 @@ public class HeaderComponent extends BaseComponent
    * Constructs ...
    *
    */
-  public HeaderComponent()
+  public ResourcesComponent()
   {
     setRendererType(RENDERER);
   }
@@ -97,7 +96,8 @@ public class HeaderComponent extends BaseComponent
     Object[] state = (Object[]) obj;
 
     super.restoreState(context, state[0]);
-    comments = (Boolean) state[1];
+    includeMappingResources = (Boolean) state[1];
+    service = (String) state[2];
   }
 
   /**
@@ -111,35 +111,16 @@ public class HeaderComponent extends BaseComponent
   @Override
   public Object saveState(FacesContext context)
   {
-    Object[] state = new Object[2];
+    Object[] state = new Object[3];
 
     state[0] = super.saveState(context);
-    state[1] = comments;
+    state[1] = includeMappingResources;
+    state[2] = service;
 
     return state;
   }
 
   //~--- get methods ----------------------------------------------------------
-
-  /**
-   * Method description
-   *
-   *
-   * @return
-   */
-  public Boolean getComments()
-  {
-    if (comments != null)
-    {
-      return comments;
-    }
-
-    ValueExpression ve = getValueExpression("comments");
-
-    return (ve != null)
-           ? (Boolean) ve.getValue(getFacesContext().getELContext())
-           : Boolean.TRUE;
-  }
 
   /**
    * Method description
@@ -157,26 +138,90 @@ public class HeaderComponent extends BaseComponent
    * Method description
    *
    *
+   * @return
+   */
+  public Boolean getIncludeMappingResources()
+  {
+    if (includeMappingResources != null)
+    {
+      return includeMappingResources;
+    }
+
+    ValueExpression ve = getValueExpression("includeMappingResources");
+
+    return (ve != null)
+           ? (Boolean) ve.getValue(getFacesContext().getELContext())
+           : Boolean.FALSE;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  @Override
+  public String getRendererType()
+  {
+    return RENDERER;
+  }
+
+  /**
+   * Method description
+   *
+   *
    * @param context
    *
    * @return
    */
   public List<WebResource> getResources(FacesContext context)
   {
-    List<WebResource> resources = getMappingResources(context);
+    List<WebResource> resources = null;
+
+    if (getIncludeMappingResources())
+    {
+      resources = getMappingResources(context);
+    }
+
+    if (Util.isNotEmpty(getService()))
+    {
+      if (resources != null)
+      {
+        resources.addAll(getServiceResources());
+      }
+      else
+      {
+        resources = getServiceResources();
+      }
+    }
 
     if (resources != null)
     {
-      resources.addAll(getServiceResources());
+      Collections.sort(resources);
+      resources = Util.unique(resources);
     }
-    else
+
+    return resources;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  public String getService()
+  {
+    if (service != null)
     {
-      resources = getServiceResources();
+      return service;
     }
 
-    Collections.sort(resources);
+    ValueExpression ve = getValueExpression("service");
 
-    return Util.unique(resources);
+    return (ve != null)
+           ? (String) ve.getValue(getFacesContext().getELContext())
+           : null;
   }
 
   //~--- set methods ----------------------------------------------------------
@@ -185,11 +230,22 @@ public class HeaderComponent extends BaseComponent
    * Method description
    *
    *
-   * @param comments
+   * @param includeMacroResources
    */
-  public void setComments(Boolean comments)
+  public void setIncludeMappingResources(Boolean includeMacroResources)
   {
-    this.comments = comments;
+    this.includeMappingResources = includeMacroResources;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param service
+   */
+  public void setService(String service)
+  {
+    this.service = service;
   }
 
   //~--- get methods ----------------------------------------------------------
@@ -228,7 +284,7 @@ public class HeaderComponent extends BaseComponent
     List<WebResource> result = null;
     ServiceReference<WebResource> reference =
       BlogContext.getInstance().getServiceRegistry().get(WebResource.class,
-        Constants.SERVICE_WEBRESOURCE);
+        getService());
 
     if (reference != null)
     {
@@ -241,5 +297,8 @@ public class HeaderComponent extends BaseComponent
   //~--- fields ---------------------------------------------------------------
 
   /** Field description */
-  private Boolean comments;
+  private Boolean includeMappingResources;
+
+  /** Field description */
+  private String service;
 }

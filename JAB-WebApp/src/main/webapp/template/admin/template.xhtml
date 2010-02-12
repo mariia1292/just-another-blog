@@ -21,7 +21,8 @@
       <link rel="shortcut icon" type="image/vnd.microsoft.icon" href="${facesContext.externalContext.requestContextPath}/resources/images/favicon.ico" />
       <link rel="icon" type="image/gif" href="${facesContext.externalContext.requestContextPath}/resources/images/icons/jab/icon-16.gif" />
 
-      <blog:header comments="false" />
+      <blog:resources service="#{BlogBean.headResourcesService}"
+                      includeMappingResources="true" />
       <ui:insert name="head" />
     </head>
     <body>
@@ -154,6 +155,9 @@
         </div>
 
       </div>
+
+      <blog:resources service="#{BlogBean.footResourcesService}" />
+
     </body>
 
   </f:view>

@@ -393,6 +393,12 @@ public interface Constants
   public static final String SERVICE_EDITORPROVIDER = "/app/editor";
 
   /** Field description */
+  public static final String SERVICE_FOOTRESOURCES = "/web/resources/foot";
+
+  /** Field description */
+  public static final String SERVICE_HEADRESOURCES = "/web/resources/head";
+
+  /** Field description */
   public static final String SERVICE_INJECTIONPROVIDER =
     "/app/injectionProvider";
 
@@ -430,9 +436,6 @@ public interface Constants
 
   /** Field description */
   public static final String SERVICE_UPGRADELISTENER = "/app/upgrade";
-
-  /** Field description */
-  public static final String SERVICE_WEBRESOURCE = "/web/resource";
 
   /** Field description */
   public static final TimeZone DEFAULT_TIMEZONE =

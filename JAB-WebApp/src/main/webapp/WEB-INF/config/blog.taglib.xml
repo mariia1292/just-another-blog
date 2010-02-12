@@ -6,10 +6,10 @@
     <namespace>http://jab.nitilon.org/blog/</namespace>
 
     <tag>
-        <tag-name>header</tag-name>
+        <tag-name>resources</tag-name>
         <component>
-            <component-type>sonia.blog.header</component-type>
-            <renderer-type>sonia.blog.header.renderer</renderer-type>
+            <component-type>sonia.blog.resources</component-type>
+            <renderer-type>sonia.blog.resources.renderer</renderer-type>
         </component>
     </tag>
     
