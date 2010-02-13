@@ -224,7 +224,9 @@ public class GalleryMacro extends AbstractBlogMacro implements WebMacro
 
         for (Attachment image : images)
         {
-          if (include.matches(image.getName()))
+          String name = image.getName();
+
+          if ((name != null) && name.matches(include))
           {
             includeList.add(image);
           }
@@ -240,7 +242,9 @@ public class GalleryMacro extends AbstractBlogMacro implements WebMacro
 
         for (Attachment image : images)
         {
-          if (descriptionInclude.matches(image.getDescription()))
+          String description = image.getDescription();
+
+          if ((description != null) && description.matches(descriptionInclude))
           {
             includeList.add(image);
           }
@@ -258,7 +262,9 @@ public class GalleryMacro extends AbstractBlogMacro implements WebMacro
       {
         for (Attachment image : images)
         {
-          if (exclude.matches(image.getName()))
+          String name = image.getName();
+
+          if (name.matches(exclude))
           {
             removeList.add(image);
           }
@@ -269,11 +275,18 @@ public class GalleryMacro extends AbstractBlogMacro implements WebMacro
       {
         for (Attachment image : images)
         {
-          if (descriptionExclude.matches(image.getName()))
+          String description = image.getName();
+
+          if ((description != null) && description.matches(descriptionExclude))
           {
             removeList.add(image);
           }
         }
+      }
+
+      if (Util.hasContent(removeList))
+      {
+        images.removeAll(removeList);
       }
     }
 

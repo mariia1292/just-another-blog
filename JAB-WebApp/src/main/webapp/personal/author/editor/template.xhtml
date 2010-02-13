@@ -9,7 +9,7 @@
       xmlns:f="http://java.sun.com/jsf/core">
   <f:view contentType="text/html">
     <head>
-      <blog:header comments="false" />
+      <blog:resources service="#{BlogBean.headResourcesService}" />
       <script type="text/javascript" src="${facesContext.externalContext.requestContextPath}/resources/tiny_mce/tiny_mce_popup.js"></script>
       <ui:insert name="head" />
     </head>
