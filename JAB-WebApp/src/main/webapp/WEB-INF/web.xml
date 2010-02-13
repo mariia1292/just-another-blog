@@ -79,6 +79,18 @@
     <url-pattern>/*</url-pattern>
   </filter-mapping>
 
+  <!-- EditorPluginFilter -->
+
+  <filter>
+    <filter-name>EditorPluginFilter</filter-name>
+    <filter-class>sonia.blog.editor.EditorPluginFilter</filter-class>
+  </filter>
+  
+  <filter-mapping>
+    <filter-name>EditorPluginFilter</filter-name>
+    <url-pattern>/resources/tiny_mce/plugins/*</url-pattern>
+  </filter-mapping>
+
   <!-- MyFacesExtensionFilter -->
 
   <filter>

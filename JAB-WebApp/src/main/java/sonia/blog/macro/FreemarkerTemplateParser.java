@@ -48,6 +48,7 @@ import sonia.blog.api.macro.TemplateParser;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.io.Writer;
 
 import java.util.Map;
 import java.util.logging.Level;
@@ -93,19 +94,44 @@ public class FreemarkerTemplateParser implements TemplateParser
   public String parseTemplate(Map<String, Object> parameter, String path)
           throws IOException
   {
+    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+
+    parseTemplate(new OutputStreamWriter(baos), parameter, path);
+
+    return baos.toString();
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param writer
+   * @param parameter
+   * @param path
+   *
+   * @throws IOException
+   */
+  public void parseTemplate(Writer writer, Map<String, Object> parameter,
+                            String path)
+          throws IOException
+  {
     if (path.startsWith("/"))
     {
       path = path.substring(1);
     }
 
-    Template template = config.getTemplate(path);
-    ByteArrayOutputStream baos = new ByteArrayOutputStream();
-    OutputStreamWriter writer = null;
-
     try
     {
-      writer = new OutputStreamWriter(baos);
-      template.process(parameter, writer);
+      Template template = config.getTemplate(path);
+
+      if (template != null)
+      {
+        template.process(parameter, writer);
+      }
+      else
+      {
+        writer.write("-- template not found --");
+      }
     }
     catch (TemplateException ex)
     {
@@ -115,13 +141,8 @@ public class FreemarkerTemplateParser implements TemplateParser
     }
     finally
     {
-      if (writer != null)
-      {
-        writer.close();
-      }
+      writer.close();
     }
-
-    return baos.toString();
   }
 
   //~--- fields ---------------------------------------------------------------

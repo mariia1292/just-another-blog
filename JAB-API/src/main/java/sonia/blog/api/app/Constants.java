@@ -390,6 +390,9 @@ public interface Constants
   public static final String SERVICE_DBPROFILE = "/db/profile";
 
   /** Field description */
+  public static final String SERVICE_EDITORPLUGIN = "/editor/plugin";
+
+  /** Field description */
   public static final String SERVICE_EDITORPROVIDER = "/app/editor";
 
   /** Field description */
