@@ -37,15 +37,20 @@ package sonia.blog.editor;
 
 import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.app.BlogRequest;
+import sonia.blog.api.app.Constants;
+import sonia.blog.api.editor.EditorPlugin;
 import sonia.blog.api.editor.EditorProvider;
 import sonia.blog.api.link.LinkBuilder;
 import sonia.blog.api.template.Template;
 import sonia.blog.entity.Blog;
 
+import sonia.plugin.service.ServiceReference;
+
 import sonia.util.Util;
 
 //~--- JDK imports ------------------------------------------------------------
 
+import java.util.List;
 import java.util.Locale;
 
 /**
@@ -149,9 +154,13 @@ public class TinyMCEProvider implements EditorProvider
 
     result.append("language: \"").append(ls).append("\",\n");
     result.append(
-        "plugins : \"fullscreen,safari,emotions,imgbrowser,attachment,links,table,macro,imgresize\",\n");
+        "plugins : \"fullscreen,safari,emotions,imgbrowser,attachment,links,table,macro,imgresize");
+    appendPlugins(result);
+    result.append("\",\n");
     result.append(
-        "theme_advanced_buttons3_add : \"|,table,emotions,fullscreen,|,imgbrowser,attachment,links,macro\",\n");
+        "theme_advanced_buttons3_add : \"|,table,emotions,fullscreen,|,imgbrowser,attachment,links,macro");
+    appendPlugins(result);
+    result.append("\",\n");
     result.append("theme_advanced_toolbar_location : \"top\",\n");
     result.append("theme_advanced_toolbar_align : \"left\",\n");
 
@@ -185,6 +194,29 @@ public class TinyMCEProvider implements EditorProvider
     return result.toString();
   }
 
+  //~--- methods --------------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   * @param result
+   */
+  private void appendPlugins(StringBuffer result)
+  {
+    List<EditorPlugin> plugins = getEditorPlugins();
+
+    if (plugins != null)
+    {
+      for (EditorPlugin plugin : plugins)
+      {
+        result.append(",").append(plugin.getName());
+      }
+    }
+  }
+
+  //~--- get methods ----------------------------------------------------------
+
   /**
    * Method description
    *
@@ -205,5 +237,26 @@ public class TinyMCEProvider implements EditorProvider
     }
 
     return contentCSS;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  private List<EditorPlugin> getEditorPlugins()
+  {
+    List<EditorPlugin> plugins = null;
+    ServiceReference<EditorPlugin> reference =
+      BlogContext.getInstance().getServiceRegistry().get(EditorPlugin.class,
+        Constants.SERVICE_EDITORPLUGIN);
+
+    if (reference != null)
+    {
+      plugins = reference.getAll();
+    }
+
+    return plugins;
   }
 }

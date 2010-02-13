@@ -139,4 +139,6 @@
 
   <service class="sonia.blog.api.macro.WebResource" path="/web/resources/foot" />
 
+  <service class="sonia.blog.api.editor.EditorPlugin" path="/editor/plugin" />
+
 </services>
