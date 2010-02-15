@@ -158,6 +158,18 @@ public abstract class AbstractEditorBean extends AbstractBean
    */
   public abstract boolean isPublished();
 
+  //~--- set methods ----------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   * @param object
+   */
+  public abstract void setObject(ContentObject object);
+
+  //~--- get methods ----------------------------------------------------------
+
   /**
    * Method description
    *
@@ -325,7 +337,8 @@ public abstract class AbstractEditorBean extends AbstractBean
           {
             StringBuffer log = new StringBuffer("create new attachment ");
 
-            log.append(file.getAbsolutePath()).append( " at " ).append( getClass().getName() );
+            log.append(file.getAbsolutePath()).append(" at ").append(
+                getClass().getName());
             logger.fine(log.toString());
           }
 

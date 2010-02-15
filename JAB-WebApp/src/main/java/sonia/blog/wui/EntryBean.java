@@ -567,6 +567,18 @@ public class EntryBean extends AbstractEditorBean
   /**
    * Method description
    *
+   *
+   * @param object
+   */
+  @Override
+  public void setObject(ContentObject object)
+  {
+    entry = (Entry) object;
+  }
+
+  /**
+   * Method description
+   *
    */
   public void setSessionVar()
   {

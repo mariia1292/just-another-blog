@@ -180,6 +180,11 @@
           <artifactId>TrackbackValidationPlugin</artifactId>
           <version>1.0-SNAPSHOT</version>
         </dependency>
+        <dependency>
+          <groupId>sonia.blog</groupId>
+          <artifactId>MultiUploadPlugin</artifactId>
+          <version>1.0-SNAPSHOT</version>
+        </dependency>
       </dependencies>
     </profile>
 
