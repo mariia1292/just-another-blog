@@ -141,4 +141,8 @@
 
   <service class="sonia.blog.api.editor.EditorPlugin" path="/editor/plugin" />
 
+  <service class="sonia.blog.api.editor.EditorUtil" path="/editor/util">
+    <impl class="sonia.blog.editor.DefaultEditorUtil" />
+  </service>
+
 </services>

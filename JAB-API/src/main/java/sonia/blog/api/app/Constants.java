@@ -396,6 +396,9 @@ public interface Constants
   public static final String SERVICE_EDITORPROVIDER = "/app/editor";
 
   /** Field description */
+  public static final String SERVICE_EDITORUTIL = "/editor/util";
+
+  /** Field description */
   public static final String SERVICE_FOOTRESOURCES = "/web/resources/foot";
 
   /** Field description */

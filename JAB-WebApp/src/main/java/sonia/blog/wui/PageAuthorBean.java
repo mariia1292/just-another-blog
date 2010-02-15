@@ -394,6 +394,18 @@ public class PageAuthorBean extends AbstractEditorBean
    * Method description
    *
    *
+   * @param object
+   */
+  @Override
+  public void setObject(ContentObject object)
+  {
+    page = (Page) object;
+  }
+
+  /**
+   * Method description
+   *
+   *
    * @param page
    */
   public void setPage(Page page)
