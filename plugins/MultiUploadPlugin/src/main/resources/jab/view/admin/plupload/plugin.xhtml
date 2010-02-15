@@ -1,0 +1,53 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+
+  <body>
+
+    <ui:composition template="/personal/author/editor/template.xhtml">
+
+      <ui:define name="head">
+        <link rel="stylesheet" href="${facesContext.externalContext.requestContextPath}/resource/plupload/css/plupload.queue.css" type="text/css" media="screen" />
+        <script type="text/javascript" src="${facesContext.externalContext.requestContextPath}/resource/plupload/js/gears_init.js"></script>
+        <script type="text/javascript" src="http://bp.yahooapis.com/2.4.21/browserplus-min.js"></script>
+        <script type="text/javascript" src="${facesContext.externalContext.requestContextPath}/resource/plupload/js/plupload.full.min.js"></script>
+        <script type="text/javascript" src="${facesContext.externalContext.requestContextPath}/resource/plupload/js/jquery.plupload.queue.min.js"></script>
+        <script type="text/javascript">
+          //<![CDATA[
+          $(document).ready(function(){
+            $("#uploader").pluploadQueue({
+              // General settings
+              runtimes : 'gears,browserplus,html5,flash,silverlight',
+              url : '${facesContext.externalContext.requestContextPath}/editor/upload',
+              //max_file_size : '10mb',
+              //unique_names : true,
+              flash_swf_url : '${facesContext.externalContext.requestContextPath}/resource/plupload/js/plupload.flash.swf',
+              silverlight_xap_url : '${facesContext.externalContext.requestContextPath}/resource/plupload/js/plupload.silverlight.xap'
+            });
+          });
+        //]]>
+        </script>
+      </ui:define>
+
+      <ui:define name="content">
+
+        <h1>Fileupload</h1>
+
+        <div id="uploader">
+          <p>You browser doesn't have Flash, Silverlight, Gears, BrowserPlus or HTML5 support.</p>
+        </div>
+        <a href="${facesContext.externalContext.requestContextPath}/personal/author/editor/attachments.jab">Attachments</a>
+        &nbsp;|&nbsp;
+        <a href="${facesContext.externalContext.requestContextPath}/personal/author/editor/images.jab">Images</a>
+
+      </ui:define>
+
+      <ui:define name="footer">
+      </ui:define>
+
+    </ui:composition>
+
+  </body>
+</html>
+
