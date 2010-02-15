@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+    Document   : plugin.xml
+    Created on : September 23, 2008, 11:11 AM
+    Author     : sdorra
+    Description:
+        Purpose of the document follows.
+-->
+
+<plugin  xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+   xmlns='http://dev.sonia.de/schema/plugin-schema'
+   xsi:schemaLocation='http://dev.sonia.de/schema/plugin-schema file:/Users/sdorra/Projects/libraries/SoniaUtil/src/sonia/plugin/plugin-schema.xsd'>
+  <name>sonia.multiupload</name>
+  <display-name>MultiUpload-Plugin</display-name>
+  <description>added support for Plupload</description>
+  <version>0.0.1</version>
+  <vendor>Sebastian Sdorra</vendor>
+  <activator>sonia.blog.upload.PluginActivator</activator>
+</plugin>

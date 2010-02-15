@@ -65,6 +65,7 @@
     <module>WebIntegrationPlugin</module>
     <module>OfficePlugin</module>
     <module>TrackbackValidationPlugin</module>
+    <module>MultiUploadPlugin</module>
   </modules>
 
 </project>
