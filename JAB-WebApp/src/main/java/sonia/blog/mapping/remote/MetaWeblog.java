@@ -47,6 +47,7 @@ import sonia.blog.entity.Entry;
 
 //~--- JDK imports ------------------------------------------------------------
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -119,8 +120,7 @@ public class MetaWeblog extends Blogger
     logger.info("metaWeblog.getCategories");
 
     LoginContext ctx = login(username, password);
-    Map<String, Map<String, String>> result = new HashMap<String,
-                                                Map<String, String>>();
+    List<Map<String, Object>> result = new ArrayList<Map<String, Object>>();
     Blog blog = findBlog(blogId);
     CategoryDAO categoryDAO = BlogContext.getDAOFactory().getCategoryDAO();
     LinkBuilder linkBuilder = BlogContext.getInstance().getLinkBuilder();
@@ -130,20 +130,22 @@ public class MetaWeblog extends Blogger
     {
 
       // TODO: replace with real links
-      Map<String, String> properties = new HashMap<String, String>();
+      Map<String, Object> properties = new HashMap<String, Object>();
       String link = linkBuilder.buildLink(blog,
                       "/category/" + category.getId() + "/index.jab");
       String rssLink = linkBuilder.buildLink(blog,
-                         "/feed/category/" + category.getId() + ".rss2");
+                         "/feed/rss2/category/" + category.getId() + ".xml");
 
       properties.put("htmlUrl", link);
       properties.put("rssUrl", rssLink);
-      result.put(category.getName(), properties);
+      properties.put("categoryId", category.getId().toString());
+      properties.put("categoryName", category.getName());
+      result.add(properties);
     }
 
     logout(ctx);
 
-    return result;
+    return result.toArray();
   }
 
   /**
@@ -208,7 +210,7 @@ public class MetaWeblog extends Blogger
     LoginContext ctx = login(username, password);
     Blog blog = findBlog(blogId);
     EntryDAO entryDAO = BlogContext.getDAOFactory().getEntryDAO();
-    List<Entry> entries = entryDAO.getAll(blog, true,  0, max);
+    List<Entry> entries = entryDAO.getAll(blog, true, 0, max);
 
     for (Entry entry : entries)
     {
@@ -239,13 +241,14 @@ public class MetaWeblog extends Blogger
     String link = linkBuilder.buildLink(blog,
                     "/list/" + entry.getId() + ".jab");
 
-    // TODO replace with real Link
     result.put("postid", entry.getId().toString());
     result.put("title", entry.getTitle());
     result.put("link", link);
     result.put("description", entry.getContent());
     result.put("userid", entry.getAuthorName());
     result.put("author", entry.getAuthor().getEmail());
+    result.put("publish", entry.isPublished());
+    result.put("dateCreated", entry.getCreationDate());
 
     List<Category> categoryList = entry.getCategories();
 
