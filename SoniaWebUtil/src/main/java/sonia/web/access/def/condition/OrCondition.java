@@ -31,20 +31,18 @@
 
 
 
-package sonia.jsf.access.def.condition;
+package sonia.web.access.def.condition;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import sonia.jsf.access.Condition;
-import sonia.jsf.access.def.condition.ContainerCondition;
+import sonia.web.access.Condition;
+import sonia.web.access.def.condition.ContainerCondition;
 
 //~--- JDK imports ------------------------------------------------------------
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
-import javax.faces.context.FacesContext;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -82,18 +80,16 @@ public class OrCondition implements ContainerCondition
    *
    *
    * @param request
-   * @param context
    *
    * @return
    */
-  public boolean handleCondition(HttpServletRequest request,
-                                 FacesContext context)
+  public boolean handleCondition(HttpServletRequest request)
   {
     boolean result = false;
 
     for (Condition condition : conditions)
     {
-      if (condition.handleCondition(request, context))
+      if (condition.handleCondition(request))
       {
         result = true;
 

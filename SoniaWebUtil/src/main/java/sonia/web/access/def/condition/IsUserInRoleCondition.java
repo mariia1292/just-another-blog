@@ -31,24 +31,65 @@
 
 
 
-package sonia.jsf.access.def.condition;
+package sonia.web.access.def.condition;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import sonia.jsf.access.*;
+import sonia.web.access.Condition;
+
+//~--- JDK imports ------------------------------------------------------------
+
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  *
  * @author Sebastian Sdorra
  */
-public interface ContainerCondition extends Condition
+public class IsUserInRoleCondition implements Condition
 {
+
+  /**
+   * Constructs ...
+   *
+   *
+   * @param rolename
+   */
+  public IsUserInRoleCondition(String rolename)
+  {
+    this.rolename = rolename;
+  }
+
+  //~--- methods --------------------------------------------------------------
 
   /**
    * Method description
    *
    *
-   * @param condition
+   * @param request
+   *
+   * @return
    */
-  public void add(Condition condition);
+  public boolean handleCondition(HttpServletRequest request)
+  {
+    return request.isUserInRole(rolename);
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param parameters
+   */
+  public void init(Map<String, String> parameters)
+  {
+
+    // do nothing
+  }
+
+  //~--- fields ---------------------------------------------------------------
+
+  /** Field description */
+  private String rolename;
 }

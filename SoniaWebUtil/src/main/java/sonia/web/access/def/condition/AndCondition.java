@@ -31,43 +31,35 @@
 
 
 
-package sonia.blog.app;
+package sonia.web.access.def.condition;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import sonia.blog.api.app.BlogContext;
-
-import sonia.jsf.access.AccessHandler;
+import sonia.web.access.Condition;
 
 //~--- JDK imports ------------------------------------------------------------
 
-import java.io.FileInputStream;
-import java.io.IOException;
-
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
-import javax.faces.context.FacesContext;
-import javax.faces.event.PhaseEvent;
-import javax.faces.event.PhaseId;
-import javax.faces.event.PhaseListener;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 /**
  *
  * @author Sebastian Sdorra
  */
-public class AccessPhaseListener implements PhaseListener
+public class AndCondition implements ContainerCondition
 {
 
-  /** Field description */
-  private static final long serialVersionUID = -6955858435833487366L;
-
-  /** Field description */
-  private static Logger logger =
-    Logger.getLogger(AccessPhaseListener.class.getName());
+  /**
+   * Constructs ...
+   *
+   */
+  public AndCondition()
+  {
+    this.conditions = new ArrayList<Condition>();
+  }
 
   //~--- methods --------------------------------------------------------------
 
@@ -75,84 +67,52 @@ public class AccessPhaseListener implements PhaseListener
    * Method description
    *
    *
-   * @param event
+   * @param condition
    */
-  public void afterPhase(PhaseEvent event)
+  public void add(Condition condition)
   {
-    if (accessHandler == null)
-    {
-      System.out.println("ERROR");
-    }
-    else
-    {
-      FacesContext context = event.getFacesContext();
-      HttpServletRequest request =
-        (HttpServletRequest) context.getExternalContext().getRequest();
-      HttpServletResponse response =
-        (HttpServletResponse) context.getExternalContext().getResponse();
-
-      accessHandler.handleAccess(request, response, context);
-    }
+    conditions.add(condition);
   }
 
   /**
    * Method description
    *
    *
-   * @param event
-   */
-  public void beforePhase(PhaseEvent event)
-  {
-    if (accessHandler == null)
-    {
-      accessHandler = AccessHandler.getInstance();
-
-      String path = BlogContext.getInstance().getServletContext().getRealPath(
-                        "/WEB-INF/config/access.xml");
-      FileInputStream fis = null;
-
-      try
-      {
-        fis = new FileInputStream(path);
-        accessHandler.readConfig(fis);
-      }
-      catch (IOException ex)
-      {
-        accessHandler = null;
-        logger.log(Level.SEVERE, null, ex);
-      }
-      finally
-      {
-        if (fis != null)
-        {
-          try
-          {
-            fis.close();
-          }
-          catch (IOException ex)
-          {
-            logger.log(Level.SEVERE, null, ex);
-          }
-        }
-      }
-    }
-  }
-
-  //~--- get methods ----------------------------------------------------------
-
-  /**
-   * Method description
-   *
+   * @param request
    *
    * @return
    */
-  public PhaseId getPhaseId()
+  public boolean handleCondition(HttpServletRequest request)
   {
-    return PhaseId.RENDER_RESPONSE;
+    boolean result = true;
+
+    for (Condition condition : conditions)
+    {
+      if (!condition.handleCondition(request))
+      {
+        result = false;
+
+        break;
+      }
+    }
+
+    return result;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param parameters
+   */
+  public void init(Map<String, String> parameters)
+  {
+
+    // do nothing
   }
 
   //~--- fields ---------------------------------------------------------------
 
   /** Field description */
-  private AccessHandler accessHandler;
+  private List<Condition> conditions;
 }

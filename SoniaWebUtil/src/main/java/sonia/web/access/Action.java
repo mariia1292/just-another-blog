@@ -31,18 +31,11 @@
 
 
 
-package sonia.jsf.access.def.action;
-
-//~--- non-JDK imports --------------------------------------------------------
-
-import sonia.jsf.access.Action;
+package sonia.web.access;
 
 //~--- JDK imports ------------------------------------------------------------
 
 import java.util.Map;
-
-import javax.faces.application.FacesMessage;
-import javax.faces.context.FacesContext;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -51,21 +44,8 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author Sebastian Sdorra
  */
-public class MessageAction implements Action
+public interface Action
 {
-
-  /**
-   * Constructs ...
-   *
-   *
-   * @param message
-   */
-  public MessageAction(String message)
-  {
-    this.message = message;
-  }
-
-  //~--- methods --------------------------------------------------------------
 
   /**
    * Method description
@@ -73,13 +53,11 @@ public class MessageAction implements Action
    *
    * @param request
    * @param response
-   * @param context
+   *
+   * @return
    */
-  public void doAction(HttpServletRequest request,
-                       HttpServletResponse response, FacesContext context)
-  {
-    context.addMessage(null, new FacesMessage(message));
-  }
+  public boolean doAction(HttpServletRequest request,
+                          HttpServletResponse response);
 
   /**
    * Method description
@@ -87,14 +65,5 @@ public class MessageAction implements Action
    *
    * @param parameters
    */
-  public void init(Map<String, String> parameters)
-  {
-
-    // do nothing
-  }
-
-  //~--- fields ---------------------------------------------------------------
-
-  /** Field description */
-  private String message;
+  public void init(Map<String, String> parameters);
 }

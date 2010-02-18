@@ -38,7 +38,7 @@ package sonia.blog.app;
 import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.app.Constants;
 
-import sonia.jsf.access.Action;
+import sonia.web.access.Action;
 
 import sonia.util.Util;
 
@@ -49,8 +49,6 @@ import java.io.IOException;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import javax.faces.context.FacesContext;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -68,10 +66,8 @@ public class SSLRedirectAction implements Action
    *
    * @param request
    * @param response
-   * @param context
    */
-  public void doAction(HttpServletRequest request,
-                       HttpServletResponse response, FacesContext context)
+  public boolean doAction(HttpServletRequest request, HttpServletResponse response)
   {
     StringBuffer uri = new StringBuffer("https://");
 
@@ -98,6 +94,8 @@ public class SSLRedirectAction implements Action
       Logger.getLogger(SSLRedirectAction.class.getName()).log(Level.SEVERE,
                        null, ex);
     }
+
+    return false;
   }
 
   /**

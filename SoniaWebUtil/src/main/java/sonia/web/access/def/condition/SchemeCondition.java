@@ -31,19 +31,15 @@
 
 
 
-package sonia.jsf.access.def.condition;
+package sonia.web.access.def.condition;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import sonia.jsf.access.Condition;
+import sonia.web.access.Condition;
 
 //~--- JDK imports ------------------------------------------------------------
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
-
-import javax.faces.context.FacesContext;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -51,16 +47,18 @@ import javax.servlet.http.HttpServletRequest;
  *
  * @author Sebastian Sdorra
  */
-public class AndCondition implements ContainerCondition
+public class SchemeCondition implements Condition
 {
 
   /**
    * Constructs ...
    *
+   *
+   * @param scheme
    */
-  public AndCondition()
+  public SchemeCondition(String scheme)
   {
-    this.conditions = new ArrayList<Condition>();
+    this.scheme = scheme;
   }
 
   //~--- methods --------------------------------------------------------------
@@ -69,38 +67,13 @@ public class AndCondition implements ContainerCondition
    * Method description
    *
    *
-   * @param condition
-   */
-  public void add(Condition condition)
-  {
-    conditions.add(condition);
-  }
-
-  /**
-   * Method description
-   *
-   *
    * @param request
-   * @param context
    *
    * @return
    */
-  public boolean handleCondition(HttpServletRequest request,
-                                 FacesContext context)
+  public boolean handleCondition(HttpServletRequest request)
   {
-    boolean result = true;
-
-    for (Condition condition : conditions)
-    {
-      if (!condition.handleCondition(request, context))
-      {
-        result = false;
-
-        break;
-      }
-    }
-
-    return result;
+    return scheme.equals(request.getScheme());
   }
 
   /**
@@ -109,14 +82,10 @@ public class AndCondition implements ContainerCondition
    *
    * @param parameters
    */
-  public void init(Map<String, String> parameters)
-  {
-
-    // do nothing
-  }
+  public void init(Map<String, String> parameters) {}
 
   //~--- fields ---------------------------------------------------------------
 
   /** Field description */
-  private List<Condition> conditions;
+  private String scheme;
 }

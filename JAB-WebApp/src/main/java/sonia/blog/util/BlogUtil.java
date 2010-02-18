@@ -95,6 +95,26 @@ public class BlogUtil
    * Method description
    *
    *
+   * @param request
+   *
+   * @return
+   */
+  public static boolean isFirstPage(BlogRequest request)
+  {
+    String uri = request.getRequestURI();
+    String contextPath = request.getContextPath();
+
+    return ((uri.length() == 0) || uri.equals("/")
+            || uri.equals("/forward.jsp") || uri.equals(contextPath)
+            || uri.equals(contextPath + "/")
+            || uri.equals(contextPath + "/forward.jsp"));
+  }
+
+
+  /**
+   * Method description
+   *
+   *
    * @param resources
    * @param result
    */

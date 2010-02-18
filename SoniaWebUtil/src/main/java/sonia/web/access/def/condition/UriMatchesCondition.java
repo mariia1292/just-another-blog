@@ -31,51 +31,34 @@
 
 
 
-package sonia.jsf.access;
+package sonia.web.access.def.condition;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import sonia.jsf.access.def.DefaultAccessHandler;
-
-import sonia.util.ServiceLocator;
+import sonia.web.access.Condition;
 
 //~--- JDK imports ------------------------------------------------------------
 
-import java.io.IOException;
-import java.io.InputStream;
-
-import javax.faces.context.FacesContext;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 /**
  *
  * @author Sebastian Sdorra
  */
-public abstract class AccessHandler
+public class UriMatchesCondition implements Condition
 {
 
-  /** Field description */
-  private static AccessHandler instance;
-
-  //~--- get methods ----------------------------------------------------------
-
   /**
-   * Method description
+   * Constructs ...
    *
    *
-   * @return
+   * @param regex
    */
-  public static AccessHandler getInstance()
+  public UriMatchesCondition(String regex)
   {
-    if (instance == null)
-    {
-      instance = ServiceLocator.locateService(AccessHandler.class,
-              new DefaultAccessHandler());
-    }
-
-    return instance;
+    this.regex = regex;
   }
 
   //~--- methods --------------------------------------------------------------
@@ -85,20 +68,31 @@ public abstract class AccessHandler
    *
    *
    * @param request
-   * @param response
-   * @param context
+   *
+   * @return
    */
-  public abstract void handleAccess(HttpServletRequest request,
-                                    HttpServletResponse response,
-                                    FacesContext context);
+  public boolean handleCondition(HttpServletRequest request)
+  {
+    String uri =
+      request.getRequestURI().substring(request.getContextPath().length());
+
+    return uri.matches(regex);
+  }
 
   /**
    * Method description
    *
    *
-   * @param in
-   *
-   * @throws IOException
+   * @param parameters
    */
-  public abstract void readConfig(InputStream in) throws IOException;
+  public void init(Map<String, String> parameters)
+  {
+
+    // do nothing
+  }
+
+  //~--- fields ---------------------------------------------------------------
+
+  /** Field description */
+  private String regex;
 }

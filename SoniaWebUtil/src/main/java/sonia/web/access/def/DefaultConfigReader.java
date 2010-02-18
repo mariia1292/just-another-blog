@@ -31,7 +31,7 @@
 
 
 
-package sonia.jsf.access.def;
+package sonia.web.access.def;
 
 //~--- non-JDK imports --------------------------------------------------------
 
@@ -41,25 +41,22 @@ import org.w3c.dom.NodeList;
 
 import org.xml.sax.SAXException;
 
-import sonia.jsf.access.Action;
-import sonia.jsf.access.Condition;
-import sonia.jsf.access.def.action.ForwardAction;
-import sonia.jsf.access.def.action.MessageAction;
-import sonia.jsf.access.def.action.NavigationAction;
-import sonia.jsf.access.def.action.RedirectAction;
-import sonia.jsf.access.def.condition.AndCondition;
-import sonia.jsf.access.def.condition.ContainerCondition;
-import sonia.jsf.access.def.condition.IsUserCondition;
-import sonia.jsf.access.def.condition.IsUserInRoleCondition;
-import sonia.jsf.access.def.condition.LoggedInCondition;
-import sonia.jsf.access.def.condition.NotCondition;
-import sonia.jsf.access.def.condition.OrCondition;
-import sonia.jsf.access.def.condition.SchemeCondition;
-import sonia.jsf.access.def.condition.UriMatchesCondition;
-import sonia.jsf.access.def.condition.ViewIdMatchesCondition;
-
 import sonia.util.Util;
 import sonia.util.XmlUtil;
+
+import sonia.web.access.Action;
+import sonia.web.access.Condition;
+import sonia.web.access.def.action.ForwardAction;
+import sonia.web.access.def.action.RedirectAction;
+import sonia.web.access.def.condition.AndCondition;
+import sonia.web.access.def.condition.ContainerCondition;
+import sonia.web.access.def.condition.IsUserCondition;
+import sonia.web.access.def.condition.IsUserInRoleCondition;
+import sonia.web.access.def.condition.LoggedInCondition;
+import sonia.web.access.def.condition.NotCondition;
+import sonia.web.access.def.condition.OrCondition;
+import sonia.web.access.def.condition.SchemeCondition;
+import sonia.web.access.def.condition.UriMatchesCondition;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -162,24 +159,6 @@ public class DefaultConfigReader
           actionList.add(new ForwardAction(target));
         }
       }
-      else if (childName.equals("jsf-navigation"))
-      {
-        String target = child.getTextContent();
-
-        if (!isBlank(target))
-        {
-          actionList.add(new NavigationAction(target));
-        }
-      }
-      else if (childName.equals("jsf-message"))
-      {
-        String message = child.getTextContent();
-
-        if (!isBlank(message))
-        {
-          actionList.add(new MessageAction(message));
-        }
-      }
       else if (childName.equals("action"))
       {
         Action action = buildCustomAction(child);
@@ -230,15 +209,6 @@ public class DefaultConfigReader
           if (!isBlank(roleName))
           {
             parent.add(new IsUserInRoleCondition(roleName));
-          }
-        }
-        else if (childName.equals("ViewIdMatches"))
-        {
-          String regex = child.getTextContent();
-
-          if (!isBlank(regex))
-          {
-            parent.add(new ViewIdMatchesCondition(regex));
           }
         }
         else if (childName.equals("uriMatches"))

@@ -8,14 +8,14 @@
         Purpose of the document follows.
 -->
 <access-config  xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
-   xmlns='http://dev.sonia.de/schema/accessConfig'
-   xsi:schemaLocation='http://dev.sonia.de/schema/accessConfig file:/Users/sdorra/Projects/jab/SoniaWebUtil/src/sonia/jsf/access/accessConfig.xsd'>
-     
+                xmlns='http://dev.sonia.de/schema/accessConfig'
+                xsi:schemaLocation='http://dev.sonia.de/schema/accessConfig file:///Users/sdorra/Projects/jab/SoniaWebUtil/src/main/resources/sonia/jsf/access/accessConfig.xsd'>
+
   <rule>
     <description>if app installed</description>
     <conditions>
       <not>
-        <ViewIdMatches>/install/.*</ViewIdMatches>
+        <uriMatches>/install/.*</uriMatches>
       </not>
       <not>
         <condition>
@@ -24,15 +24,14 @@
       </not>
     </conditions>
     <actions>
-      <jsf-navigation>install</jsf-navigation>
-      <jsf-message>Die Anwendung muss erst installiert werden</jsf-message>
+      <redirect>/deny.jab</redirect>
     </actions>
     <last />
   </rule>
-  
+
   <rule>
     <conditions>
-      <ViewIdMatches>/install/.*</ViewIdMatches>
+      <uriMatches>/install/.*</uriMatches>
       <condition>
         <class>sonia.blog.app.InstalledCondition</class>
       </condition>
@@ -47,7 +46,7 @@
       <not>
         <scheme>https</scheme>
       </not>
-      <ViewIdMatches>(/personal/.*|/login.xhtml|/register.xhtml|/lostPassword.xhtml)</ViewIdMatches>
+      <uriMatches>(/personal/.*|/login.jab|/register.jab|/lostPassword.jab)</uriMatches>
       <condition>
         <class>sonia.blog.app.ConfigCondition</class>
         <init-param>
@@ -66,25 +65,24 @@
   <rule>
     <conditions>
       <or>
-        <ViewIdMatches>/personal/.*</ViewIdMatches>
-        <ViewIdMatches>/view/reader/.*</ViewIdMatches>
+        <uriMatches>/personal/.*</uriMatches>
+        <uriMatches>/view/reader/.*</uriMatches>
       </or>
       <not>
         <loggedIn />
       </not>
-
     </conditions>
     <actions>
       <redirect>/deny.jab</redirect>
     </actions>
     <last />
   </rule>
-  
+
   <rule>
     <conditions>
       <or>
-        <ViewIdMatches>/personal/admin/.*</ViewIdMatches>
-        <ViewIdMatches>/view/admin/.*</ViewIdMatches>
+        <uriMatches>/personal/admin/.*</uriMatches>
+        <uriMatches>/view/admin/.*</uriMatches>
       </or>
       <not>
         <or>
@@ -104,8 +102,8 @@
   <rule>
     <conditions>
       <or>
-        <ViewIdMatches>/personal/author/.*</ViewIdMatches>
-        <ViewIdMatches>/view/author/.*</ViewIdMatches>
+        <uriMatches>/personal/author/.*</uriMatches>
+        <uriMatches>/view/author/.*</uriMatches>
       </or>
       <not>
         <or>
@@ -126,8 +124,8 @@
   <rule>
     <conditions>
       <or>
-        <ViewIdMatches>/personal/globaladmin/.*</ViewIdMatches>
-        <ViewIdMatches>/view/globaladmin/.*</ViewIdMatches>
+        <uriMatches>/personal/globaladmin/.*</uriMatches>
+        <uriMatches>/view/globaladmin/.*</uriMatches>
       </or>
       <not>
         <condition>

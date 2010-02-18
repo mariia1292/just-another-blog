@@ -58,9 +58,6 @@
 
   <lifecycle>
     <phase-listener>
-      sonia.blog.app.AccessPhaseListener
-    </phase-listener>
-    <phase-listener>
       sonia.blog.app.BlogContextPhaseListener
     </phase-listener>
   </lifecycle>
