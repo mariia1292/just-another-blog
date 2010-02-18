@@ -24,7 +24,7 @@
       </not>
     </conditions>
     <actions>
-      <redirect>/deny.jab</redirect>
+      <redirect>/install/step1.jab</redirect>
     </actions>
     <last />
   </rule>
@@ -137,6 +137,15 @@
       <redirect>/deny.jab</redirect>
     </actions>
     <last />
+  </rule>
+
+  <rule>
+    <conditions>
+      <uriMatches>.*\.xhtml</uriMatches>
+    </conditions>
+    <actions>
+      <redirect>/deny.jab</redirect>
+    </actions>
   </rule>
 
 </access-config>
