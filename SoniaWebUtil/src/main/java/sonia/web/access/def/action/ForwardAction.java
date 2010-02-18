@@ -31,36 +31,47 @@
 
 
 
-package sonia.jsf.access.def.condition;
+package sonia.web.access.def.action;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import sonia.jsf.access.Condition;
+import sonia.web.access.Action;
 
 //~--- JDK imports ------------------------------------------------------------
 
+import java.io.IOException;
+
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-import javax.faces.context.FacesContext;
-
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  *
  * @author Sebastian Sdorra
  */
-public class IsUserInRoleCondition implements Condition
+public class ForwardAction implements Action
 {
+
+  /** Field description */
+  private static Logger logger =
+    Logger.getLogger(RedirectAction.class.getName());
+
+  //~--- constructors ---------------------------------------------------------
 
   /**
    * Constructs ...
    *
    *
-   * @param rolename
+   * @param target
    */
-  public IsUserInRoleCondition(String rolename)
+  public ForwardAction(String target)
   {
-    this.rolename = rolename;
+    this.target = target;
   }
 
   //~--- methods --------------------------------------------------------------
@@ -70,14 +81,37 @@ public class IsUserInRoleCondition implements Condition
    *
    *
    * @param request
-   * @param context
+   * @param response
    *
    * @return
    */
-  public boolean handleCondition(HttpServletRequest request,
-                                 FacesContext context)
+  public boolean doAction(HttpServletRequest request,
+                          HttpServletResponse response)
   {
-    return request.isUserInRole(rolename);
+    if (logger.isLoggable(Level.FINE))
+    {
+      StringBuffer log = new StringBuffer();
+
+      log.append("forward to ").append(target);
+      logger.fine(log.toString());
+    }
+
+    RequestDispatcher dispatcher = request.getRequestDispatcher(target);
+
+    try
+    {
+      dispatcher.forward(request, response);
+    }
+    catch (IOException ex)
+    {
+      logger.log(Level.SEVERE, null, ex);
+    }
+    catch (ServletException ex)
+    {
+      logger.log(Level.SEVERE, null, ex);
+    }
+
+    return true;
   }
 
   /**
@@ -95,5 +129,5 @@ public class IsUserInRoleCondition implements Condition
   //~--- fields ---------------------------------------------------------------
 
   /** Field description */
-  private String rolename;
+  private String target;
 }

@@ -37,13 +37,12 @@ package sonia.blog.app;
 
 import sonia.blog.entity.User;
 
-import sonia.jsf.access.Condition;
+import sonia.web.access.Condition;
 
 //~--- JDK imports ------------------------------------------------------------
 
 import java.util.Map;
 
-import javax.faces.context.FacesContext;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -63,8 +62,7 @@ public class GlobalAdminCondition implements Condition
    *
    * @return
    */
-  public boolean handleCondition(HttpServletRequest request,
-                                 FacesContext context)
+  public boolean handleCondition(HttpServletRequest request)
   {
     boolean result = false;
     User user = (User) request.getUserPrincipal();

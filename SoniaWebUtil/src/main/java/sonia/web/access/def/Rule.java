@@ -31,95 +31,108 @@
 
 
 
-package sonia.jsf.access.def;
+package sonia.web.access.def;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import sonia.jsf.access.AccessHandler;
-import sonia.jsf.access.Action;
+import sonia.web.access.Action;
+import sonia.web.access.Condition;
 
 //~--- JDK imports ------------------------------------------------------------
 
-import java.io.IOException;
-import java.io.InputStream;
-
-import java.util.ArrayList;
 import java.util.List;
-
-import javax.faces.context.FacesContext;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 /**
  *
  * @author Sebastian Sdorra
  */
-public class DefaultAccessHandler extends AccessHandler
+public class Rule
 {
+
+  /**
+   * Constructs ...
+   *
+   */
+  public Rule() {}
+
+  //~--- get methods ----------------------------------------------------------
 
   /**
    * Method description
    *
    *
-   * @param request
-   * @param response
-   * @param context
+   * @return
    */
-  @Override
-  public void handleAccess(HttpServletRequest request,
-                           HttpServletResponse response, FacesContext context)
+  public List<Action> getActions()
   {
-    if (rules != null)
-    {
-      for (Rule rule : rules)
-      {
-        if (rule.getCondition().handleCondition(request, context))
-        {
-          List<Action> actions = rule.getActions();
-
-          if (actions != null)
-          {
-            for (Action action : actions)
-            {
-              action.doAction(request, response, context);
-            }
-          }
-
-          if (rule.isLast())
-          {
-            return;
-          }
-        }
-      }
-    }
+    return actions;
   }
 
   /**
    * Method description
    *
    *
-   * @param in
-   *
-   * @throws IOException
+   * @return
    */
-  @Override
-  public synchronized void readConfig(InputStream in) throws IOException
+  public Condition getCondition()
   {
-    DefaultConfigReader reader = new DefaultConfigReader();
+    return condition;
+  }
 
-    try
-    {
-      rules = reader.readConfig(in);
-    }
-    catch (Exception ex)
-    {
-      ex.printStackTrace(System.err);
-    }
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  public boolean isLast()
+  {
+    return last;
+  }
+
+  //~--- set methods ----------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   * @param actions
+   */
+  public void setActions(List<Action> actions)
+  {
+    this.actions = actions;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param condition
+   */
+  public void setCondition(Condition condition)
+  {
+    this.condition = condition;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param last
+   */
+  public void setLast(boolean last)
+  {
+    this.last = last;
   }
 
   //~--- fields ---------------------------------------------------------------
 
   /** Field description */
-  private List<Rule> rules = new ArrayList<Rule>();
+  private List<Action> actions;
+
+  /** Field description */
+  private Condition condition;
+
+  /** Field description */
+  private boolean last;
 }

@@ -31,86 +31,70 @@
 
 
 
-package sonia.jsf.access.def.action;
+package sonia.blog.app;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import sonia.jsf.access.Action;
+import sonia.blog.api.app.BlogRequest;
+import sonia.blog.api.app.BlogResponse;
+import sonia.blog.util.BlogUtil;
+
+import sonia.web.access.AccessFilter;
 
 //~--- JDK imports ------------------------------------------------------------
 
-import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.io.IOException;
 
-import javax.faces.context.FacesContext;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import javax.servlet.FilterChain;
+import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
 
 /**
  *
  * @author Sebastian Sdorra
  */
-public class NavigationAction implements Action
+public class BlogAccessFilter extends AccessFilter
 {
 
-  /** Field description */
-  private static Logger logger =
-    Logger.getLogger(NavigationAction.class.getName());
-
-  //~--- constructors ---------------------------------------------------------
-
-  /**
-   * Constructs ...
-   *
-   *
-   * @param target
-   */
-  public NavigationAction(String target)
-  {
-    this.target = target;
-  }
-
-  //~--- methods --------------------------------------------------------------
-
   /**
    * Method description
    *
    *
-   * @param request
-   * @param response
-   * @param context
+   * @param req
+   * @param resp
+   * @param chain
+   *
+   * @throws IOException
+   * @throws ServletException
    */
-  public void doAction(HttpServletRequest request,
-                       HttpServletResponse response, FacesContext context)
+  @Override
+  public void doFilter(ServletRequest req, ServletResponse resp,
+                       FilterChain chain)
+          throws IOException, ServletException
   {
-    if (logger.isLoggable(Level.FINE))
-    {
-      StringBuffer log = new StringBuffer();
+    BlogRequest request = BlogUtil.getBlogRequest(req);
 
-      log.append("navigate to ").append(target);
-      logger.fine(log.toString());
+    // glassfish v3 jsp workaround
+    if (BlogUtil.isFirstPage(request)) {
+      chain.doFilter(request, resp);
     }
+    else
+    {
+      BlogResponse response = BlogUtil.getBlogResponse(resp);
 
-    context.getApplication().getNavigationHandler().handleNavigation(context,
-            null, target);
+      if ((request != null) && (response != null))
+      {
+        if (checkAccess(request, response))
+        {
+          chain.doFilter(request, response);
+        }
+      }
+      else
+      {
+        throw new IllegalArgumentException(
+            "could not create BlogRequest or BlogResponse");
+      }
+    }
   }
-
-  /**
-   * Method description
-   *
-   *
-   * @param parameters
-   */
-  public void init(Map<String, String> parameters)
-  {
-
-    // do nothing
-  }
-
-  //~--- fields ---------------------------------------------------------------
-
-  /** Field description */
-  private String target;
 }

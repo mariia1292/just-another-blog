@@ -31,29 +31,31 @@
 
 
 
-package sonia.jsf.access.def;
+package sonia.web.access;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import sonia.jsf.access.Action;
-import sonia.jsf.access.Condition;
+import sonia.util.ServiceLocator;
+
+import sonia.web.access.def.DefaultAccessHandler;
 
 //~--- JDK imports ------------------------------------------------------------
 
-import java.util.List;
+import java.io.IOException;
+import java.io.InputStream;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  *
  * @author Sebastian Sdorra
  */
-public class Rule
+public abstract class AccessHandler
 {
 
-  /**
-   * Constructs ...
-   *
-   */
-  public Rule() {}
+  /** Field description */
+  private static AccessHandler instance;
 
   //~--- get methods ----------------------------------------------------------
 
@@ -63,76 +65,38 @@ public class Rule
    *
    * @return
    */
-  public List<Action> getActions()
+  public static AccessHandler getInstance()
   {
-    return actions;
+    if (instance == null)
+    {
+      instance = ServiceLocator.locateService(AccessHandler.class,
+              new DefaultAccessHandler());
+    }
+
+    return instance;
   }
+
+  //~--- methods --------------------------------------------------------------
 
   /**
    * Method description
    *
+   *
+   * @param request
+   * @param response
    *
    * @return
    */
-  public Condition getCondition()
-  {
-    return condition;
-  }
+  public abstract boolean handleAccess(HttpServletRequest request,
+          HttpServletResponse response);
 
   /**
    * Method description
    *
    *
-   * @return
+   * @param in
+   *
+   * @throws IOException
    */
-  public boolean isLast()
-  {
-    return last;
-  }
-
-  //~--- set methods ----------------------------------------------------------
-
-  /**
-   * Method description
-   *
-   *
-   * @param actions
-   */
-  public void setActions(List<Action> actions)
-  {
-    this.actions = actions;
-  }
-
-  /**
-   * Method description
-   *
-   *
-   * @param condition
-   */
-  public void setCondition(Condition condition)
-  {
-    this.condition = condition;
-  }
-
-  /**
-   * Method description
-   *
-   *
-   * @param last
-   */
-  public void setLast(boolean last)
-  {
-    this.last = last;
-  }
-
-  //~--- fields ---------------------------------------------------------------
-
-  /** Field description */
-  private List<Action> actions;
-
-  /** Field description */
-  private Condition condition;
-
-  /** Field description */
-  private boolean last;
+  public abstract void readConfig(InputStream in) throws IOException;
 }

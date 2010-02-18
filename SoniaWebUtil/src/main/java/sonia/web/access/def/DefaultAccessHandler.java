@@ -31,41 +31,101 @@
 
 
 
-package sonia.jsf.access.def.condition;
+package sonia.web.access.def;
+
+//~--- non-JDK imports --------------------------------------------------------
+
+import sonia.web.access.AccessHandler;
+import sonia.web.access.Action;
 
 //~--- JDK imports ------------------------------------------------------------
 
-import javax.faces.context.FacesContext;
+import java.io.IOException;
+import java.io.InputStream;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  *
  * @author Sebastian Sdorra
  */
-public class NotCondition extends AndCondition
+public class DefaultAccessHandler extends AccessHandler
 {
-
-  /**
-   * Constructs ...
-   *
-   */
-  public NotCondition() {}
-
-  //~--- methods --------------------------------------------------------------
 
   /**
    * Method description
    *
    *
    * @param request
-   * @param context
+   * @param response
    *
    * @return
    */
-  public boolean handleCondition(HttpServletRequest request,
-                                 FacesContext context)
+  @Override
+  public boolean handleAccess(HttpServletRequest request,
+                              HttpServletResponse response)
   {
-    return !super.handleCondition(request, context);
+    boolean result = true;
+
+    if (rules != null)
+    {
+      for (Rule rule : rules)
+      {
+        if (rule.getCondition().handleCondition(request))
+        {
+          List<Action> actions = rule.getActions();
+
+          if (actions != null)
+          {
+            for (Action action : actions)
+            {
+              if (!action.doAction(request, response))
+              {
+                result = false;
+              }
+            }
+          }
+
+          if (rule.isLast())
+          {
+            break;
+          }
+        }
+      }
+    }
+
+    return result;
   }
+
+  /**
+   * Method description
+   *
+   *
+   * @param in
+   *
+   * @throws IOException
+   */
+  @Override
+  public synchronized void readConfig(InputStream in) throws IOException
+  {
+    DefaultConfigReader reader = new DefaultConfigReader();
+
+    try
+    {
+      rules = reader.readConfig(in);
+    }
+    catch (Exception ex)
+    {
+      ex.printStackTrace(System.err);
+    }
+  }
+
+  //~--- fields ---------------------------------------------------------------
+
+  /** Field description */
+  private List<Rule> rules = new ArrayList<Rule>();
 }

@@ -15,8 +15,6 @@
                                     <xsd:sequence>
                                         <xsd:element name="redirect" minOccurs="0"/>
                                         <xsd:element name="forward" minOccurs="0"/>
-                                        <xsd:element name="jsf-navigation" minOccurs="0"/>
-                                        <xsd:element name="jsf-message" minOccurs="0" maxOccurs="unbounded"/>
                                         <xsd:element name="action" minOccurs="0" maxOccurs="unbounded">
                                             <xsd:complexType>
                                                 <xsd:sequence>
@@ -42,8 +40,7 @@
             <xsd:element name="not" minOccurs="0" maxOccurs="unbounded" type="tns:condition"/>
             <xsd:element name="isUser" minOccurs="0" maxOccurs="unbounded"/>
             <xsd:element name="isUserInRole" minOccurs="0" maxOccurs="unbounded"/>
-            <xsd:element name="UriMatches" minOccurs="0" maxOccurs="unbounded"/>
-            <xsd:element name="ViewIdMatches" minOccurs="0" maxOccurs="unbounded"/>
+            <xsd:element name="uriMatches" minOccurs="0" maxOccurs="unbounded"/>
             <xsd:element name="scheme" minOccurs="0" maxOccurs="unbounded"/>
             <xsd:element name="condition" minOccurs="0" maxOccurs="unbounded">
                 <xsd:complexType>

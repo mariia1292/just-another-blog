@@ -31,48 +31,24 @@
 
 
 
-package sonia.jsf.access.def.action;
-
-//~--- non-JDK imports --------------------------------------------------------
-
-import sonia.jsf.access.Action;
+package sonia.web.access.def.condition;
 
 //~--- JDK imports ------------------------------------------------------------
 
-import java.io.IOException;
-
-import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
-import javax.faces.context.FacesContext;
-
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 /**
  *
  * @author Sebastian Sdorra
  */
-public class RedirectAction implements Action
+public class NotCondition extends AndCondition
 {
-
-  /** Field description */
-  private static Logger logger =
-    Logger.getLogger(NavigationAction.class.getName());
-
-  //~--- constructors ---------------------------------------------------------
 
   /**
    * Constructs ...
    *
-   *
-   * @param target
    */
-  public RedirectAction(String target)
-  {
-    this.target = target;
-  }
+  public NotCondition() {}
 
   //~--- methods --------------------------------------------------------------
 
@@ -81,55 +57,11 @@ public class RedirectAction implements Action
    *
    *
    * @param request
-   * @param response
-   * @param context
-   */
-  public void doAction(HttpServletRequest request,
-                       HttpServletResponse response, FacesContext context)
-  {
-    String redirect = null;
-
-    if (target.startsWith("/"))
-    {
-      redirect = request.getContextPath() + target;
-    }
-    else
-    {
-      redirect = target;
-    }
-
-    if (logger.isLoggable(Level.FINE))
-    {
-      StringBuffer log = new StringBuffer();
-
-      log.append("redirect to ").append(redirect);
-      logger.fine(log.toString());
-    }
-
-    try
-    {
-      response.sendRedirect(redirect);
-    }
-    catch (IOException ex)
-    {
-      ex.printStackTrace(System.err);
-    }
-  }
-
-  /**
-   * Method description
    *
-   *
-   * @param parameters
+   * @return
    */
-  public void init(Map<String, String> parameters)
+  public boolean handleCondition(HttpServletRequest request)
   {
-
-    // do nothing
+    return !super.handleCondition(request);
   }
-
-  //~--- fields ---------------------------------------------------------------
-
-  /** Field description */
-  private String target;
 }

@@ -31,17 +31,11 @@
 
 
 
-package sonia.jsf.access.def.condition;
-
-//~--- non-JDK imports --------------------------------------------------------
-
-import sonia.jsf.access.Condition;
+package sonia.web.access;
 
 //~--- JDK imports ------------------------------------------------------------
 
 import java.util.Map;
-
-import javax.faces.context.FacesContext;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -49,36 +43,18 @@ import javax.servlet.http.HttpServletRequest;
  *
  * @author Sebastian Sdorra
  */
-public class UriMatchesCondition implements Condition
+public interface Condition
 {
-
-  /**
-   * Constructs ...
-   *
-   *
-   * @param regex
-   */
-  public UriMatchesCondition(String regex)
-  {
-    this.regex = regex;
-  }
-
-  //~--- methods --------------------------------------------------------------
 
   /**
    * Method description
    *
    *
    * @param request
-   * @param context
    *
    * @return
    */
-  public boolean handleCondition(HttpServletRequest request,
-                                 FacesContext context)
-  {
-    return request.getRequestURI().matches(regex);
-  }
+  public boolean handleCondition(HttpServletRequest request);
 
   /**
    * Method description
@@ -86,14 +62,5 @@ public class UriMatchesCondition implements Condition
    *
    * @param parameters
    */
-  public void init(Map<String, String> parameters)
-  {
-
-    // do nothing
-  }
-
-  //~--- fields ---------------------------------------------------------------
-
-  /** Field description */
-  private String regex;
+  public void init(Map<String, String> parameters);
 }

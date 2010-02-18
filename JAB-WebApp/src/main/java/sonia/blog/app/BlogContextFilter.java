@@ -73,6 +73,7 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import sonia.blog.util.BlogUtil;
 
 /**
  *
@@ -114,8 +115,8 @@ public class BlogContextFilter implements Filter
                        FilterChain chain)
           throws IOException, ServletException
   {
-    BlogRequest request = new BlogRequest((HttpServletRequest) req);
-    BlogResponse response = new BlogResponse((HttpServletResponse) resp);
+    BlogRequest request = BlogUtil.getBlogRequest(req);
+    BlogResponse response = BlogUtil.getBlogResponse(resp);
 
     // fix content encoding
     request.setCharacterEncoding(Constants.ENCODING);
@@ -165,7 +166,7 @@ public class BlogContextFilter implements Filter
       }
 
       // glassfish v3 jsp workaround
-      if (isFirstPage(request))
+      if (BlogUtil.isFirstPage(request))
       {
         chain.doFilter(request, resp);
       }
@@ -426,25 +427,6 @@ public class BlogContextFilter implements Filter
     }
 
     return result;
-  }
-
-  /**
-   * Method description
-   *
-   *
-   * @param request
-   *
-   * @return
-   */
-  private boolean isFirstPage(BlogRequest request)
-  {
-    String uri = request.getRequestURI();
-    String contextPath = request.getContextPath();
-
-    return ((uri.length() == 0) || uri.equals("/")
-            || uri.equals("/forward.jsp") || uri.equals(contextPath)
-            || uri.equals(contextPath + "/")
-            || uri.equals(contextPath + "/forward.jsp"));
   }
 
   //~--- fields ---------------------------------------------------------------

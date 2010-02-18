@@ -31,51 +31,24 @@
 
 
 
-package sonia.jsf.access.def.condition;
+package sonia.web.access.def.condition;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import sonia.jsf.access.Condition;
-
-//~--- JDK imports ------------------------------------------------------------
-
-import java.util.Map;
-
-import javax.faces.context.FacesContext;
-
-import javax.servlet.http.HttpServletRequest;
+import sonia.web.access.*;
 
 /**
  *
  * @author Sebastian Sdorra
  */
-public class LoggedInCondition implements Condition
+public interface ContainerCondition extends Condition
 {
 
   /**
    * Method description
    *
    *
-   * @param request
-   * @param context
-   *
-   * @return
+   * @param condition
    */
-  public boolean handleCondition(HttpServletRequest request,
-                                 FacesContext context)
-  {
-    return request.getUserPrincipal() != null;
-  }
-
-  /**
-   * Method description
-   *
-   *
-   * @param parameters
-   */
-  public void init(Map<String, String> parameters)
-  {
-
-    // do nothing
-  }
+  public void add(Condition condition);
 }

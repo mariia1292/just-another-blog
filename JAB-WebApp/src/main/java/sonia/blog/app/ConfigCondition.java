@@ -37,7 +37,7 @@ package sonia.blog.app;
 
 import sonia.blog.api.app.BlogContext;
 
-import sonia.jsf.access.Condition;
+import sonia.web.access.Condition;
 
 import sonia.util.Util;
 
@@ -45,7 +45,6 @@ import sonia.util.Util;
 
 import java.util.Map;
 
-import javax.faces.context.FacesContext;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -65,8 +64,7 @@ public class ConfigCondition implements Condition
    *
    * @return
    */
-  public boolean handleCondition(HttpServletRequest request,
-                                 FacesContext context)
+  public boolean handleCondition(HttpServletRequest request)
   {
     boolean result = false;
 

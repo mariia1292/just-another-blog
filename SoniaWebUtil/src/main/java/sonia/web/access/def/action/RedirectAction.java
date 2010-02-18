@@ -31,34 +31,91 @@
 
 
 
-package sonia.jsf.access;
+package sonia.web.access.def.action;
+
+//~--- non-JDK imports --------------------------------------------------------
+
+import sonia.web.access.Action;
 
 //~--- JDK imports ------------------------------------------------------------
 
-import java.util.Map;
+import java.io.IOException;
 
-import javax.faces.context.FacesContext;
+import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  *
  * @author Sebastian Sdorra
  */
-public interface Condition
+public class RedirectAction implements Action
 {
+
+  /** Field description */
+  private static Logger logger =
+    Logger.getLogger(RedirectAction.class.getName());
+
+  //~--- constructors ---------------------------------------------------------
+
+  /**
+   * Constructs ...
+   *
+   *
+   * @param target
+   */
+  public RedirectAction(String target)
+  {
+    this.target = target;
+  }
+
+  //~--- methods --------------------------------------------------------------
 
   /**
    * Method description
    *
    *
    * @param request
-   * @param context
+   * @param response
    *
    * @return
    */
-  public boolean handleCondition(HttpServletRequest request,
-                                 FacesContext context);
+  public boolean doAction(HttpServletRequest request,
+                          HttpServletResponse response)
+  {
+    String redirect = null;
+
+    if (target.startsWith("/"))
+    {
+      redirect = request.getContextPath() + target;
+    }
+    else
+    {
+      redirect = target;
+    }
+
+    if (logger.isLoggable(Level.FINE))
+    {
+      StringBuffer log = new StringBuffer();
+
+      log.append("redirect to ").append(redirect);
+      logger.fine(log.toString());
+    }
+
+    try
+    {
+      response.sendRedirect(redirect);
+    }
+    catch (IOException ex)
+    {
+      logger.log(Level.SEVERE, null, ex);
+    }
+
+    return false;
+  }
 
   /**
    * Method description
@@ -66,5 +123,14 @@ public interface Condition
    *
    * @param parameters
    */
-  public void init(Map<String, String> parameters);
+  public void init(Map<String, String> parameters)
+  {
+
+    // do nothing
+  }
+
+  //~--- fields ---------------------------------------------------------------
+
+  /** Field description */
+  private String target;
 }

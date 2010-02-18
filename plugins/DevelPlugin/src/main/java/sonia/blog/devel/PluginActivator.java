@@ -37,26 +37,10 @@ package sonia.blog.devel;
 
 import sonia.blog.api.app.Constants;
 import sonia.blog.api.navigation.NavigationProvider;
-import sonia.blog.entity.Role;
-
-import sonia.jsf.access.Action;
-import sonia.jsf.access.Condition;
-import sonia.jsf.access.def.Rule;
-import sonia.jsf.access.def.action.RedirectAction;
 
 import sonia.plugin.Activator;
 import sonia.plugin.PluginContext;
 import sonia.plugin.service.ServiceReference;
-
-//~--- JDK imports ------------------------------------------------------------
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
-import javax.faces.context.FacesContext;
-
-import javax.servlet.http.HttpServletRequest;
 
 /**
  *
