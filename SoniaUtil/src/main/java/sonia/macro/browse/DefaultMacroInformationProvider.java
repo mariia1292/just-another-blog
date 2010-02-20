@@ -182,6 +182,7 @@ public class DefaultMacroInformationProvider extends MacroInformationProvider
         String description = getString(bundle, param.description());
         MacroInformationParameter infoParam =
           new MacroInformationParameter(name, label, description);
+        infoParam.setPresetValue( param.defaultValue() );
         Class<? extends MacroWidget> widget = param.widget();
 
         if (widget != null)

@@ -9,12 +9,18 @@
         <ui:composition template="./template.xhtml">
             
             <ui:define name="title">
-              <h:outputText value="#{label.notFound}" />
+              <h:outputText value="#{ErrorBean.message}" />
             </ui:define>
 
             <ui:define name="content">
-              <h1><h:outputText value="#{label.notFound}" /></h1>
-              <h:outputText value="#{message.notFound}" />
+              <h1><h:outputText value="#{ErrorBean.message}" /></h1>
+              <p><h:outputText value="#{ErrorBean.description}" /></p>
+
+              <h:inputTextarea value="#{ErrorBean.stacktrace}"
+                               rendered="#{ErrorBean.globalAdmin and ! empty ErrorBean.stacktrace}"
+                               rows="40" cols="80"
+                               styleClass="error" readonly="true" />
+
             </ui:define>
 
         </ui:composition>

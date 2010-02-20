@@ -73,7 +73,7 @@
       </not>
     </conditions>
     <actions>
-      <redirect>/deny.jab</redirect>
+      <redirect>/error/403.jab</redirect>
     </actions>
     <last />
   </rule>
@@ -94,7 +94,7 @@
       </not>
     </conditions>
     <actions>
-      <redirect>/deny.jab</redirect>
+      <redirect>/error/403.jab</redirect>
     </actions>
     <last />
   </rule>
@@ -116,7 +116,7 @@
       </not>
     </conditions>
     <actions>
-      <redirect>/deny.jab</redirect>
+      <redirect>/error/403.jab</redirect>
     </actions>
     <last />
   </rule>
@@ -134,7 +134,7 @@
       </not>
     </conditions>
     <actions>
-      <redirect>/deny.jab</redirect>
+      <redirect>/error/403.jab</redirect>
     </actions>
     <last />
   </rule>
@@ -144,7 +144,7 @@
       <uriMatches>.*\.xhtml</uriMatches>
     </conditions>
     <actions>
-      <redirect>/deny.jab</redirect>
+      <redirect>/error/403.jab</redirect>
     </actions>
   </rule>
 

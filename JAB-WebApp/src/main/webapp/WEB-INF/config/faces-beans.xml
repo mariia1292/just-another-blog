@@ -150,4 +150,10 @@
     <managed-bean-scope>request</managed-bean-scope>
   </managed-bean>
 
+  <managed-bean>
+    <managed-bean-name>ErrorBean</managed-bean-name>
+    <managed-bean-class>sonia.blog.wui.ErrorBean</managed-bean-class>
+    <managed-bean-scope>request</managed-bean-scope>
+  </managed-bean>
+
 </faces-config>

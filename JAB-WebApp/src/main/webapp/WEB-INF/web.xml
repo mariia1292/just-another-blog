@@ -178,6 +178,50 @@
     <url-pattern>/logout</url-pattern>
   </servlet-mapping>
   
+  <!-- Error Servlet -->
+  
+  <servlet>
+    <servlet-name>ErrorServlet</servlet-name>
+    <servlet-class>sonia.blog.wui.servlet.ErrorServlet</servlet-class>
+  </servlet>
+  
+  <servlet-mapping>
+    <servlet-name>ErrorServlet</servlet-name>
+    <url-pattern>/error</url-pattern>
+  </servlet-mapping>
+
+  <!-- Error pages -->
+
+  <error-page>
+    <exception-type>java.lang.Throwable</exception-type>
+    <location>/error</location>
+  </error-page>
+
+  <error-page>
+    <error-code>500</error-code>
+    <location>/error</location>
+  </error-page>
+
+  <error-page>
+    <error-code>404</error-code>
+    <location>/error</location>
+  </error-page>
+
+  <error-page>
+    <error-code>403</error-code>
+    <location>/error</location>
+  </error-page>
+
+  <error-page>
+    <error-code>402</error-code>
+    <location>/error</location>
+  </error-page>
+
+  <error-page>
+    <error-code>401</error-code>
+    <location>/error</location>
+  </error-page>
+
   <!-- JSF Library config -->
 
   <jsp-config>
