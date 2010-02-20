@@ -208,6 +208,7 @@ public class CodeMacro extends AbstractBlogMacro implements WebMacro
   @MacroInfoParameter(
     displayName = "macro.code.lang.displayName",
     description = "macro.code.lang.description",
+    defaultValue= "java",
     widget = SelectWidget.class,
     widgetParam = "options=bash|c++|c#|coldfusion|css|delphi|diff|erlang|groovy|*java|javaScript:js|perl|python|ruby|scala|sql|vb|xml"
   )
@@ -225,6 +226,7 @@ public class CodeMacro extends AbstractBlogMacro implements WebMacro
   @MacroInfoParameter(
     displayName = "macro.code.tabSize.displayName",
     description = "macro.code.tabSize.description",
+    defaultValue = "2",
     widget = StringInputWidget.class,
     widgetParam = "regex=[0-9]+"
   )
@@ -242,6 +244,7 @@ public class CodeMacro extends AbstractBlogMacro implements WebMacro
   @MacroInfoParameter(
     displayName = "macro.code.toolbar.displayName",
     description = "macro.code.toolbar.description",
+    defaultValue = "true",
     widget = CheckboxWidget.class,
     widgetParam = "checked=true"
   )

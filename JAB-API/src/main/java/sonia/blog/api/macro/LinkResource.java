@@ -36,8 +36,13 @@ package sonia.blog.api.macro;
 //~--- non-JDK imports --------------------------------------------------------
 
 import sonia.blog.api.app.BlogRequest;
+import sonia.blog.entity.Blog;
 
 import sonia.util.Util;
+
+//~--- JDK imports ------------------------------------------------------------
+
+import java.text.MessageFormat;
 
 /**
  *
@@ -215,8 +220,11 @@ public class LinkResource extends WebResource
   }
 
   /**
-   * Method description
-   *
+   * Allowed Patterns:
+   * {0} - id of the current blog
+   * {1} - identifier of the current blog
+   * {2} - title of the current blog
+   * {3} - description of the current blog
    *
    *
    * @param request
@@ -260,7 +268,11 @@ public class LinkResource extends WebResource
       buffer.append("<![endif]-->\n");
     }
 
-    return buffer.toString();
+    Blog blog = request.getCurrentBlog();
+
+    return MessageFormat.format(buffer.toString(), blog.getId(),
+                                blog.getIdentifier(), blog.getTitle(),
+                                blog.getDescription());
   }
 
   /**

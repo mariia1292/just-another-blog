@@ -130,5 +130,9 @@
     <class>sonia.blog.mapping.QuickSearchMapping</class>
   </mapping>
 
+  <mapping>
+    <regex>^/error/([0-9]+).jab$</regex>
+    <class>sonia.blog.mapping.ErrorMapping</class>
+  </mapping>
 
 </mappings>
