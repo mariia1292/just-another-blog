@@ -1,5 +1,6 @@
 # netbeans temp & private files
 /?target/
+derby.log
 profiles.xml
 nbactions.*\.xml
 # MacOS X Files
