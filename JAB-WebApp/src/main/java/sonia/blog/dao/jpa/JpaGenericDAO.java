@@ -554,13 +554,16 @@ public abstract class JpaGenericDAO<T extends PermaObject>
    */
   protected void fireEvent(Action action, PermaObject object)
   {
-    List<DAOListener> listeners = reference.getAll();
-
-    if ((listeners != null) &&!listeners.isEmpty())
+    if (reference != null)
     {
-      for (DAOListener listener : listeners)
+      List<DAOListener> listeners = reference.getAll();
+
+      if ((listeners != null) &&!listeners.isEmpty())
       {
-        listener.handleEvent(action, object);
+        for (DAOListener listener : listeners)
+        {
+          listener.handleEvent(action, object);
+        }
       }
     }
   }

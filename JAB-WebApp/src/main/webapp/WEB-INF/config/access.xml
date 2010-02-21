@@ -22,6 +22,7 @@
           <class>sonia.blog.app.InstalledCondition</class>
         </condition>
       </not>
+      <uriMatches>.*\.jab</uriMatches>
     </conditions>
     <actions>
       <redirect>/install/step1.jab</redirect>

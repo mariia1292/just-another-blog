@@ -109,15 +109,6 @@ public class JpaDAOFactory extends DAOFactory
   public void init()
   {
     BlogContext ctx = BlogContext.getInstance();
-    String serverInfo = ctx.getServletContext().getServerInfo();
-
-    if (logger.isLoggable(Level.INFO))
-    {
-      StringBuffer msg = new StringBuffer();
-
-      msg.append("laod pu for ").append(serverInfo);
-      logger.info(msg.toString());
-    }
 
     BlogConfiguration config = ctx.getConfiguration();
     String pu = getPU();
