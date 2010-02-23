@@ -59,6 +59,7 @@ import sonia.util.Util;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -90,26 +91,6 @@ public class BlogUtil
   private static Logger logger = Logger.getLogger(BlogUtil.class.getName());
 
   //~--- methods --------------------------------------------------------------
-
-  /**
-   * Method description
-   *
-   *
-   * @param request
-   *
-   * @return
-   */
-  public static boolean isFirstPage(BlogRequest request)
-  {
-    String uri = request.getRequestURI();
-    String contextPath = request.getContextPath();
-
-    return ((uri.length() == 0) || uri.equals("/")
-            || uri.equals("/forward.jsp") || uri.equals(contextPath)
-            || uri.equals(contextPath + "/")
-            || uri.equals(contextPath + "/forward.jsp"));
-  }
-
 
   /**
    * Method description
@@ -151,11 +132,10 @@ public class BlogUtil
   {
     if (context.isInstalled())
     {
-      File logFile = new File(
-                         context.getServletContext().getRealPath(
-                           "/WEB-INF/config/logging.xml"));
+      InputStream logStream =
+        BlogUtil.class.getResourceAsStream("/logging.xml");
 
-      if (logFile.exists())
+      if (logStream != null)
       {
         try
         {
@@ -165,11 +145,25 @@ public class BlogUtil
           LogManager logManager = LogManager.getInstance();
 
           logManager.putVar("logdir", logDir.getPath());
-          logManager.readConfiguration(logFile);
+          logManager.readConfiguration(logStream);
         }
         catch (IOException ex)
         {
           logger.log(Level.SEVERE, null, ex);
+        }
+        finally
+        {
+          if (logStream != null)
+          {
+            try
+            {
+              logStream.close();
+            }
+            catch (IOException ex)
+            {
+              logger.log(Level.SEVERE, null, ex);
+            }
+          }
         }
       }
       else
@@ -557,5 +551,24 @@ public class BlogUtil
     }
 
     return items;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param request
+   *
+   * @return
+   */
+  public static boolean isFirstPage(BlogRequest request)
+  {
+    String uri = request.getRequestURI();
+    String contextPath = request.getContextPath();
+
+    return ((uri.length() == 0) || uri.equals("/")
+            || uri.equals("/forward.jsp") || uri.equals(contextPath)
+            || uri.equals(contextPath + "/")
+            || uri.equals(contextPath + "/forward.jsp"));
   }
 }
