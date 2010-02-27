@@ -298,6 +298,11 @@ public class EntryBean extends AbstractEditorBean
 
         entry.setAuthor(author);
 
+        if (entry.isPublished())
+        {
+          entry.setPublishingDate(new Date());
+        }
+
         if (entryDAO.add(session, entry))
         {
           doTrackback(request);
@@ -311,6 +316,12 @@ public class EntryBean extends AbstractEditorBean
       }
       else
       {
+        if (entry.isPublished()
+            && ((entry.getPublishingDate() == null) ||!smallChanges))
+        {
+          entry.setPublishingDate(new Date());
+        }
+
         if (entryDAO.edit(session, entry))
         {
           doTrackback(request);
@@ -551,6 +562,17 @@ public class EntryBean extends AbstractEditorBean
     return entry.isPublished();
   }
 
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  public boolean isSmallChanges()
+  {
+    return smallChanges;
+  }
+
   //~--- set methods ----------------------------------------------------------
 
   /**
@@ -583,6 +605,17 @@ public class EntryBean extends AbstractEditorBean
   public void setSessionVar()
   {
     getRequest().getSession().setAttribute("editor", "entry");
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param smallChanges
+   */
+  public void setSmallChanges(boolean smallChanges)
+  {
+    this.smallChanges = smallChanges;
   }
 
   /**
@@ -790,6 +823,9 @@ public class EntryBean extends AbstractEditorBean
   /** Field description */
   @Config(Constants.CONFIG_ADMIN_PAGESIZE)
   private Integer pageSize = Integer.valueOf(20);
+
+  /** Field description */
+  private boolean smallChanges = false;
 
   /** Field description */
   private String tagString;

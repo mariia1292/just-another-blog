@@ -62,7 +62,7 @@
               <h:message for="teaser" />
             </h:panelGroup>
 
-            <h:outputLabel for="trackback" value="#{label.trackback}" rendered="#{EntryBean.published}" />
+            <h:outputLabel for="trackbackForm:trackback" value="#{label.trackback}" rendered="#{EntryBean.published}" />
             <h:panelGroup rendered="#{EntryBean.published}">
               <h:form id="trackbackForm">
                 <h:inputText id="trackback" value="#{EntryBean.trackbackURL}">
@@ -77,6 +77,12 @@
             <h:panelGroup>
               <h:selectBooleanCheckbox id="publish" value="#{EntryBean.entry.published}" />
               <h:message for="publish" />
+            </h:panelGroup>
+
+            <h:outputLabel for="smallChanges" value="#{label.smallChanges}" rendered="#{!EntryBean.new}" />
+            <h:panelGroup rendered="#{!EntryBean.new}">
+              <h:selectBooleanCheckbox id="smallChanges" value="#{EntryBean.smallChanges}" />
+              <h:message for="smallChanges" />
             </h:panelGroup>
 
           </h:panelGrid>

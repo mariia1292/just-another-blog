@@ -47,6 +47,15 @@
 
             <h:column>
               <f:facet name="header">
+                <h:outputText value="#{label.lastUpdate}" />
+              </f:facet>
+              <h:outputText value="#{Entry.lastUpdate}">
+                <f:convertDateTime pattern="#{BlogBean.blog.dateFormat}" />
+              </h:outputText>
+            </h:column>
+
+            <h:column>
+              <f:facet name="header">
                 <h:outputText value="#{label.published}" />
               </f:facet>
               <h:selectBooleanCheckbox value="#{Entry.published}" disabled="true" onclick="return false;" />
