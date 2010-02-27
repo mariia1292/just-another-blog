@@ -324,6 +324,7 @@ public class EntryBean extends AbstractEditorBean
 
         if (entryDAO.edit(session, entry))
         {
+          smallChanges = true;
           doTrackback(request);
           getMessageHandler().info(request, "updateEntrySuccess");
         }
