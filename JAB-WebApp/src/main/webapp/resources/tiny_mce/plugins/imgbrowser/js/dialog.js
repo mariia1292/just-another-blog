@@ -5,6 +5,7 @@ var ImageDialog = {
   },
 
   insert : function(url) {
+    url = tinyMCEPopup.editor.documentBaseURI.toAbsolute(url);
     var r = document.getElementsByName("size:type");
     for ( i in r )
     {
@@ -16,6 +17,7 @@ var ImageDialog = {
 
     var content = "<img src=\"" + url + "\" />";
     tinyMCEPopup.editor.execCommand('mceInsertContent', false, content);
+    document.getElementById("size").submit();
     tinyMCEPopup.close();
   },
 
