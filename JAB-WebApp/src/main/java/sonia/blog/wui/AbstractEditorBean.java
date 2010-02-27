@@ -844,7 +844,7 @@ public abstract class AbstractEditorBean extends AbstractBean
   private EditorProvider editorProvider;
 
   /** Field description */
-  private String imageSize = "";
+  private String imageSize = "thumb";
 
   /** Field description */
   private DataModel macroInformations;
