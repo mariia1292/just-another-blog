@@ -47,9 +47,9 @@
 
             <h:column>
               <f:facet name="header">
-                <h:outputText value="#{label.lastUpdate}" />
+                <h:outputText value="#{label.publishingDate}" />
               </f:facet>
-              <h:outputText value="#{Entry.lastUpdate}">
+              <h:outputText value="#{Entry.publishingDate}">
                 <f:convertDateTime pattern="#{BlogBean.blog.dateFormat}" />
               </h:outputText>
             </h:column>
