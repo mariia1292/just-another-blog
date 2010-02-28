@@ -214,10 +214,6 @@ public class InstallBean extends AbstractBean
 
       ResourceBundle message = getResourceBundle("message");
       ResourceBundle label = getResourceBundle("label");
-      Category category = new Category();
-
-      category.setName(label.getString("defaultCategory"));
-      category.setBlog(blog);
 
       if (logger.isLoggable(Level.FINE))
       {
@@ -237,6 +233,11 @@ public class InstallBean extends AbstractBean
         if (daoFactory.getBlogDAO().add(session, blog))
         {
           daoFactory.getUserDAO().setRole(blog, admin, Role.ADMIN);
+
+          Category category = new Category();
+
+          category.setName(label.getString("defaultCategory"));
+          category.setBlog(blog);
 
           if (daoFactory.getCategoryDAO().add(session, category))
           {
