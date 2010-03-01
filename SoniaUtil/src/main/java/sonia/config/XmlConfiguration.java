@@ -282,7 +282,10 @@ public class XmlConfiguration extends StringBasedConfiguration
 
     if ((values != null) && (values.length > 0))
     {
-      result = cipher.decode(values[0]);
+      if ( Util.isNotEmpty( values[0] ) )
+      {
+        result = cipher.decode(values[0]);
+      }
     }
 
     return result;

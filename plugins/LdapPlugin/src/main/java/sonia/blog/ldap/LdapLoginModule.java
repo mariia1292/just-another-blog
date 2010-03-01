@@ -54,6 +54,7 @@ import java.security.Principal;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Hashtable;
+import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -213,7 +214,7 @@ public class LdapLoginModule extends LoginModule
     u.setActive(Boolean.TRUE);
     u.setSelfManaged(false);
     u.setEmail(lu.getMail());
-    u.setPassword("ldap");
+    u.setPassword("{ldap} " + UUID.randomUUID().toString());
     u.setDisplayName(lu.getDisplayName());
     u.setLastLogin(new Date());
 
@@ -266,6 +267,13 @@ public class LdapLoginModule extends LoginModule
    */
   private boolean login(String dn, char[] password) throws NamingException
   {
+    if (logger.isLoggable(Level.FINE))
+    {
+      StringBuffer log = new StringBuffer("try ldap login with dn ");
+
+      logger.fine(log.append(dn).toString());
+    }
+
     boolean result = false;
     Hashtable<String, String> env = buildEnvironment(dn, new String(password));
     DirContext ctx = null;
