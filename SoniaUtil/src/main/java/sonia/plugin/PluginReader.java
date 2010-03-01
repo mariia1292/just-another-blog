@@ -46,14 +46,14 @@ import sonia.util.XmlUtil;
 
 //~--- JDK imports ------------------------------------------------------------
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-import java.util.StringTokenizer;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipFile;
+import java.net.URL;
+
+import java.util.Enumeration;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.xml.parsers.ParserConfigurationException;
 
@@ -66,6 +66,9 @@ public class PluginReader
 
   /** Field description */
   private static final String PLUGIN_SCHEMA = "/sonia/plugin/plugin-schema.xsd";
+
+  /** Field description */
+  private static Logger logger = Logger.getLogger(PluginReader.class.getName());
 
   //~--- constructors ---------------------------------------------------------
 
@@ -86,69 +89,45 @@ public class PluginReader
    * Method description
    *
    *
-   * @param classpath
    *
    * @throws IOException
    */
-  public void readClasspath(String classpath) throws IOException
+  public void readClasspath() throws IOException
   {
-    StringTokenizer tokenizer = new StringTokenizer(classpath, ":");
+    ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+    Enumeration<URL> resources =
+      classLoader.getResources("META-INF/plugin.xml");
 
-    while (tokenizer.hasMoreElements())
+    while (resources.hasMoreElements())
     {
-      String part = tokenizer.nextToken();
+      URL url = resources.nextElement();
+      String path = url.toExternalForm();
+
+      if (logger.isLoggable(Level.FINE))
+      {
+        StringBuffer msg = new StringBuffer();
+
+        msg.append("try to read plugin: ").append(path);
+        logger.fine(msg.toString());
+      }
+
       InputStream in = null;
 
-      if (part.endsWith(".jar") || part.endsWith(".zip"))
+      try
       {
-        File f = new File(part);
+        in = url.openStream();
 
-        if (f.exists())
+        Plugin plugin = readPlugin(in);
+
+        if (plugin != null)
         {
-          ZipFile file = new ZipFile(part);
-          ZipEntry entry = file.getEntry("META-INF/plugin.xml");
-
-          if (entry != null)
-          {
-            in = file.getInputStream(entry);
-          }
+          plugin.setPath(path);
+          context.register(plugin);
         }
       }
-      else
+      catch (IOException ex)
       {
-        String path = part;
-
-        if (!path.endsWith("/"))
-        {
-          path += "/";
-        }
-
-        path += "META-INF/plugin.xml";
-
-        File file = new File(path);
-
-        if (file.exists())
-        {
-          in = new FileInputStream(file);
-        }
-      }
-
-      if (in != null)
-      {
-        try
-        {
-          Plugin plugin = readPlugin(in);
-
-          if (plugin != null)
-          {
-            plugin.setPath(part);
-            context.register(plugin);
-          }
-        }
-        catch (IOException ex)
-        {
-          ex.printStackTrace();
-        }
+        logger.log(Level.SEVERE, null, ex);
       }
     }
   }
