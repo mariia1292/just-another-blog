@@ -74,6 +74,7 @@ public class JpaStrategy
   public void close()
   {
     entityManagerFactory.close();
+    store = null;
   }
 
   /**

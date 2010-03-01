@@ -76,7 +76,6 @@ import sonia.plugin.service.ServiceRegistry;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FilenameFilter;
 import java.io.IOException;
 
 import java.lang.management.ManagementFactory;
@@ -202,8 +201,7 @@ public class BlogContextListener implements ServletContextListener
 
       initInjectionProvider(context);
       initMacros(event.getServletContext());
-      context.getPluginContext().searchClasspath(
-          buildClasspath(event.getServletContext()));
+      context.getPluginContext().searchClasspath();
 
       context.init();
 
@@ -223,55 +221,6 @@ public class BlogContextListener implements ServletContextListener
 
       throw new RuntimeException(ex);
     }
-  }
-
-  /**
-   * Method description
-   *
-   *
-   * @param context
-   *
-   * @return
-   */
-  private String buildClasspath(ServletContext context)
-  {
-    StringBuffer classpathBuffer = new StringBuffer();
-    File libFile = new File(context.getRealPath("/WEB-INF/lib"));
-
-    if (libFile.isDirectory())
-    {
-      File[] children = libFile.listFiles(new FilenameFilter()
-      {
-        public boolean accept(File file, String name)
-        {
-          return name.endsWith(".jar") || name.endsWith(".zip");
-        }
-      });
-
-      if ((children != null) && (children.length > 0))
-      {
-        for (File child : children)
-        {
-          classpathBuffer.append(child.getPath()).append(":");
-        }
-      }
-    }
-
-    File classFile = new File(context.getRealPath("/WEB-INF/classes"));
-
-    if (classFile.isDirectory())
-    {
-      classpathBuffer.append(classFile.getPath());
-    }
-
-    String classpath = classpathBuffer.toString();
-
-    if (classpath.endsWith(":"))
-    {
-      classpath = classpath.substring(0, classpath.length());
-    }
-
-    return classpath;
   }
 
   /**

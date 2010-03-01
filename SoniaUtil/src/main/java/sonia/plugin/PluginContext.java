@@ -123,11 +123,11 @@ public class PluginContext
    *
    * @throws IOException
    */
-  public void searchClasspath(String classpath) throws IOException
+  public void searchClasspath() throws IOException
   {
     PluginReader reader = new PluginReader(this);
 
-    reader.readClasspath(classpath);
+    reader.readClasspath();
   }
 
   /**
