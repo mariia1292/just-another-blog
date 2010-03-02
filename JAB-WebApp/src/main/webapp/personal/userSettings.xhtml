@@ -4,7 +4,8 @@
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:f="http://java.sun.com/jsf/core"
-      xmlns:t="http://myfaces.apache.org/tomahawk">
+      xmlns:t="http://myfaces.apache.org/tomahawk"
+      xmlns:c="http://java.sun.com/jstl/core">
 
   <body>
 
@@ -18,55 +19,59 @@
 
         <h1><h:outputText value="#{label.userSettings}" /></h1>
 
-        <h2><h:outputText value="#{label.generalUserSettings}" /></h2>
+        <c:if test="#{UserSettingsBean.user.selfManaged}">
 
-        <h:form id="nameForm">
+          <h2><h:outputText value="#{label.generalUserSettings}" /></h2>
 
-          <h:panelGrid columns="3">
+          <h:form id="nameForm">
 
-            <h:outputLabel for="diplayName" value="#{label.displayName}" />
-            <h:inputText id="diplayName" value="#{UserSettingsBean.user.displayName}" required="true" />
-            <h:message for="diplayName" />
+            <h:panelGrid columns="3">
 
-            <h:outputLabel for="homePage" value="#{label.homePage}" />
-            <h:inputText id="homePage" value="#{UserSettingsBean.user.homePage}">
-              <f:validator validatorId="validator.url" />
-            </h:inputText>
-            <h:message for="homePage" />
+              <h:outputLabel for="diplayName" value="#{label.displayName}" />
+              <h:inputText id="diplayName" value="#{UserSettingsBean.user.displayName}" required="true" />
+              <h:message for="diplayName" />
 
-          </h:panelGrid>
+              <h:outputLabel for="homePage" value="#{label.homePage}" />
+              <h:inputText id="homePage" value="#{UserSettingsBean.user.homePage}">
+                <f:validator validatorId="validator.url" />
+              </h:inputText>
+              <h:message for="homePage" />
 
-          <h:commandButton value="#{label.save}" action="#{UserSettingsBean.updateDisplayName}" />
+            </h:panelGrid>
 
-        </h:form>
+            <h:commandButton value="#{label.save}" action="#{UserSettingsBean.updateDisplayName}" />
 
-        <h2><h:outputText value="#{label.changePassword}" /></h2>
+          </h:form>
 
-        <h:form id="passwordForm">
+          <h2><h:outputText value="#{label.changePassword}" /></h2>
 
-          <h:panelGrid columns="3">
+          <h:form id="passwordForm">
 
-            <h:outputLabel for="passwordOld" value="#{label.oldPassword}" />
-            <h:inputSecret id="passwordOld" value="#{UserSettingsBean.passwordOld}" required="true" />
-            <h:message for="passwordOld" />
+            <h:panelGrid columns="3">
 
-            <h:outputLabel for="password" value="#{label.password}" />
-            <h:inputSecret id="password" value="#{UserSettingsBean.user.password}" required="true">
-              <f:validateLength minimum="#{UserSettingsBean.passwordMinLength}" />
-            </h:inputSecret>
-            <h:message for="password" />
+              <h:outputLabel for="passwordOld" value="#{label.oldPassword}" />
+              <h:inputSecret id="passwordOld" value="#{UserSettingsBean.passwordOld}" required="true" />
+              <h:message for="passwordOld" />
 
-            <h:outputLabel for="passwordRetry" value="#{label.passwordRepeat}" />
-            <h:inputSecret id="passwordRetry" value="#{UserSettingsBean.passwordRetry}" required="true">
-              <f:validateLength minimum="#{UserSettingsBean.passwordMinLength}" />
-            </h:inputSecret>
-            <h:message for="passwordRetry" />
+              <h:outputLabel for="password" value="#{label.password}" />
+              <h:inputSecret id="password" value="#{UserSettingsBean.user.password}" required="true">
+                <f:validateLength minimum="#{UserSettingsBean.passwordMinLength}" />
+              </h:inputSecret>
+              <h:message for="password" />
 
-          </h:panelGrid>
+              <h:outputLabel for="passwordRetry" value="#{label.passwordRepeat}" />
+              <h:inputSecret id="passwordRetry" value="#{UserSettingsBean.passwordRetry}" required="true">
+                <f:validateLength minimum="#{UserSettingsBean.passwordMinLength}" />
+              </h:inputSecret>
+              <h:message for="passwordRetry" />
 
-          <h:commandButton value="#{label.save}" action="#{UserSettingsBean.updatePassword}" />
+            </h:panelGrid>
 
-        </h:form>
+            <h:commandButton value="#{label.save}" action="#{UserSettingsBean.updatePassword}" />
+
+          </h:form>
+
+        </c:if>
 
         <h2><h:outputText value="#{label.notification}" /></h2>
 
