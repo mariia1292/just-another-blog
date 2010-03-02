@@ -76,7 +76,7 @@ public class MemberBean extends AbstractBean
    */
   public MemberBean()
   {
-    super();
+    init();
   }
 
   //~--- methods --------------------------------------------------------------

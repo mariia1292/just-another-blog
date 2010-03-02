@@ -130,7 +130,7 @@ public class InstallBean extends AbstractBean
    */
   public InstallBean()
   {
-    super();
+    init();
   }
 
   //~--- methods --------------------------------------------------------------

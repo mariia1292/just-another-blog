@@ -78,7 +78,7 @@ public class BlogCreationBean extends AbstractBean
    */
   public BlogCreationBean()
   {
-    super();
+    init();
     this.blog = new Blog();
     this.blog.setTemplate("/template/jab");
     this.domain = BlogContext.getInstance().getConfiguration().getString(

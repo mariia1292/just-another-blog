@@ -65,7 +65,7 @@ public class UserSettingsBean extends AbstractBean
    */
   public UserSettingsBean()
   {
-    super();
+    init();
 
     BlogConfiguration config = BlogContext.getInstance().getConfiguration();
 

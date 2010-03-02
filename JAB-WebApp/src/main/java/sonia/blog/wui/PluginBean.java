@@ -58,18 +58,13 @@ import javax.faces.model.ListDataModel;
 public class PluginBean extends AbstractBean
 {
 
-  /** Field description */
-  private static Logger logger = Logger.getLogger(PluginBean.class.getName());
-
-  //~--- constructors ---------------------------------------------------------
-
   /**
    * Constructs ...
    *
    */
   public PluginBean()
   {
-    super();
+    init();
     context = BlogContext.getInstance().getPluginContext();
   }
 

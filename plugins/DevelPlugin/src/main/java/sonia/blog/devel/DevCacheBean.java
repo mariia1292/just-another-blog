@@ -67,7 +67,7 @@ public class DevCacheBean extends AbstractBean
    */
   public DevCacheBean()
   {
-    super();
+    init();
   }
 
   //~--- methods --------------------------------------------------------------

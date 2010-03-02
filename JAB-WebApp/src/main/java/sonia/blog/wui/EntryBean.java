@@ -112,7 +112,7 @@ public class EntryBean extends AbstractEditorBean
    */
   public EntryBean()
   {
-    super();
+    init();
     entry = new Entry();
   }
 

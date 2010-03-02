@@ -62,7 +62,7 @@ public class GlobalStatusBean extends AbstractBean
    */
   public GlobalStatusBean()
   {
-    super();
+    init();
   }
 
   //~--- get methods ----------------------------------------------------------

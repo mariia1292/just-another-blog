@@ -95,7 +95,7 @@ public class BlogBean extends AbstractBean
    */
   public BlogBean()
   {
-    super();
+    init();
   }
 
   //~--- get methods ----------------------------------------------------------

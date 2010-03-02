@@ -58,7 +58,7 @@ public class WebIntegrationBean extends AbstractBean
    */
   public WebIntegrationBean()
   {
-    super();
+    init();
   }
 
   //~--- methods --------------------------------------------------------------

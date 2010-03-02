@@ -70,7 +70,7 @@ public class PersonalBean extends AbstractBean
    */
   public PersonalBean()
   {
-    super();
+    init();
   }
 
   //~--- get methods ----------------------------------------------------------

@@ -97,7 +97,7 @@ public class PageAuthorBean extends AbstractEditorBean
    */
   public PageAuthorBean()
   {
-    super();
+    init();
     page = new Page();
   }
 

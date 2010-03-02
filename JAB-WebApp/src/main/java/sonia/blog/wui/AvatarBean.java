@@ -90,7 +90,7 @@ public class AvatarBean extends AbstractBean
    */
   public AvatarBean()
   {
-    super();
+    init();
   }
 
   //~--- methods --------------------------------------------------------------

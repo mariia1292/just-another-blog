@@ -85,6 +85,17 @@ public class LdapConfigBean extends AbstractConfigBean
   /** Field description */
   public static final String CONFIG_LDAP_USER = "ldap.bind.user";
 
+  //~--- constructors ---------------------------------------------------------
+
+  /**
+   * Constructs ...
+   *
+   */
+  public LdapConfigBean()
+  {
+    init();
+  }
+
   //~--- methods --------------------------------------------------------------
 
   /**

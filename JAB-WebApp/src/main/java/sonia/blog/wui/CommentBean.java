@@ -73,7 +73,7 @@ public class CommentBean extends AbstractBean
    */
   public CommentBean()
   {
-    super();
+    init();
   }
 
   //~--- methods --------------------------------------------------------------
