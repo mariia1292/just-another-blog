@@ -57,7 +57,7 @@ public class ErrorBean extends AbstractBean
    */
   public ErrorBean()
   {
-    super();
+    init();
   }
 
   //~--- get methods ----------------------------------------------------------

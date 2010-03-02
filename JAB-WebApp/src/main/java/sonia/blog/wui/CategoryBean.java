@@ -75,7 +75,7 @@ public class CategoryBean extends AbstractBean
    */
   public CategoryBean()
   {
-    super();
+    init();
     category = new Category();
   }
 

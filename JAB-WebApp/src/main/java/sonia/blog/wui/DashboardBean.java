@@ -39,13 +39,8 @@ import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.app.BlogRequest;
 import sonia.blog.api.app.Constants;
 import sonia.blog.api.authentication.RequireRole;
-import sonia.blog.api.dao.AttachmentDAO;
-import sonia.blog.api.dao.CategoryDAO;
 import sonia.blog.api.dao.CommentDAO;
 import sonia.blog.api.dao.EntryDAO;
-import sonia.blog.api.dao.PageDAO;
-import sonia.blog.api.dao.UserDAO;
-import sonia.blog.api.util.AbstractBean;
 import sonia.blog.entity.Blog;
 import sonia.blog.entity.Comment;
 import sonia.blog.entity.Entry;
@@ -78,7 +73,7 @@ public class DashboardBean extends AbstractInformationBean
    */
   public DashboardBean()
   {
-    super();
+    init();
   }
 
   //~--- methods --------------------------------------------------------------
@@ -211,17 +206,6 @@ public class DashboardBean extends AbstractInformationBean
     url.append(rssUrl);
 
     return url.toString();
-  }
-
-  /**
-   * Method description
-   * TODO: replace with TagDAO.count()
-   *
-   * @return
-   */
-  public long getTagCount()
-  {
-    return 0;
   }
 
   /**

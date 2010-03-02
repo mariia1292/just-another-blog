@@ -62,7 +62,7 @@ public class ScriptingBean extends AbstractBean
    */
   public ScriptingBean()
   {
-    super();
+    init();
     this.context = ScriptingContext.getInstance();
   }
 

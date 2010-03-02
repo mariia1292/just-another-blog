@@ -105,7 +105,7 @@ public class AdminBlogBean extends AbstractInformationBean
    */
   public AdminBlogBean()
   {
-    super();
+    init();
   }
 
   //~--- methods --------------------------------------------------------------

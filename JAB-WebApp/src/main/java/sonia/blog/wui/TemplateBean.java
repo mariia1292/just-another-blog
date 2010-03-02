@@ -64,7 +64,7 @@ public class TemplateBean extends AbstractBean
    */
   public TemplateBean()
   {
-    super();
+    init();
   }
 
   //~--- methods --------------------------------------------------------------

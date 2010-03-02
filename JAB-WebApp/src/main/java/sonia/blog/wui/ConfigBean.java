@@ -80,7 +80,7 @@ public class ConfigBean extends AbstractBean
    */
   public ConfigBean()
   {
-    super();
+    init();
   }
 
   //~--- methods --------------------------------------------------------------

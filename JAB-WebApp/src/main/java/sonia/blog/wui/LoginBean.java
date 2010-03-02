@@ -83,7 +83,7 @@ public class LoginBean extends AbstractBean
    */
   public LoginBean()
   {
-    super();
+    init();
   }
 
   //~--- methods --------------------------------------------------------------

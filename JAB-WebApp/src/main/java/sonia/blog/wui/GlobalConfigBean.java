@@ -78,7 +78,7 @@ public class GlobalConfigBean extends AbstractConfigBean
    */
   public GlobalConfigBean()
   {
-    super();
+    init();
 
     BlogContext context = BlogContext.getInstance();
 

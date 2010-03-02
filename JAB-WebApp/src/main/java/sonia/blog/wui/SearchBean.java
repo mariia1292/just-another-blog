@@ -65,7 +65,7 @@ public class SearchBean extends AbstractBean
    */
   public SearchBean()
   {
-    super();
+    init();
   }
 
   //~--- get methods ----------------------------------------------------------

@@ -71,7 +71,7 @@ public class PageBean extends AbstractBean
    */
   public PageBean()
   {
-    super();
+    init();
   }
 
   //~--- get methods ----------------------------------------------------------
