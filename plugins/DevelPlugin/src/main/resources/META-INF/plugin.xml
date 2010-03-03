@@ -14,7 +14,7 @@
   <name>sonia.devel</name>
   <display-name>Devel-Plugin</display-name>
   <description>add a page for monitoring the cache</description>
-  <version>0.0.1</version>
+  <version>${pom.version}</version>
   <vendor>Sebastian Sdorra</vendor>
   <activator>sonia.blog.devel.PluginActivator</activator>
   <autostart>true</autostart>

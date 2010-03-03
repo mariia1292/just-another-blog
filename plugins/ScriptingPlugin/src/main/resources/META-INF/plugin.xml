@@ -14,7 +14,7 @@
   <name>sonia.script</name>
   <display-name>Scripting-Plugin</display-name>
   <description>adds an ScriptEngine to the JAB</description>
-  <version>0.0.1</version>
+  <version>${pom.version}</version>
   <vendor>Sebastian Sdorra</vendor>
   <activator>sonia.blog.scripting.PluginActivator</activator>
 </plugin>

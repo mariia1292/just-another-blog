@@ -14,7 +14,7 @@
   <name>sonia.office</name>
   <display-name>Office-Plugin</display-name>
   <description>Shows PDF-Content as a Lightbox-Gallery</description>
-  <version>0.0.1</version>
+  <version>${pom.version}</version>
   <vendor>Sebastian Sdorra</vendor>
   <activator>sonia.blog.office.PluginActivator</activator>
 </plugin>
