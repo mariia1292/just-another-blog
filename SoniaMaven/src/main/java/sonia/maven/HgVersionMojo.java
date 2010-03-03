@@ -12,6 +12,7 @@ package sonia.maven;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
+import org.apache.maven.project.MavenProject;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -54,7 +55,15 @@ public class HgVersionMojo extends AbstractMojo
 
     if ((version != null) && (version.length() > 0))
     {
-      writeVersionFile(version);
+      if ((propertyName != null) && (propertyName.length() > 0))
+      {
+        project.getProperties().put(propertyName, version);
+      }
+
+      if ((path != null) && (path.length() > 0))
+      {
+        writeVersionFile(version);
+      }
     }
   }
 
@@ -98,13 +107,10 @@ public class HgVersionMojo extends AbstractMojo
 
     try
     {
-      if (path == null)
-      {
-        path = new File("version.txt");
-      }
-
       File parent = path.getParentFile();
-      if ( ! parent.exists() ){
+
+      if (!parent.exists())
+      {
         parent.mkdirs();
       }
 
@@ -210,6 +216,14 @@ public class HgVersionMojo extends AbstractMojo
   //~--- fields ---------------------------------------------------------------
 
   /**
+   * The maven project.
+   *
+   * @parameter expression="${project}"
+   * @readonly
+   */
+  private MavenProject project;
+
+  /**
    * The path to the mercurial binary
    *
    * @parameter expression="${hg.path}" default-value="hg"
@@ -229,6 +243,13 @@ public class HgVersionMojo extends AbstractMojo
    * @parameter
    */
   private String prefix;
+
+  /**
+   * The prefix of the output
+   *
+   * @parameter default-value="sonia.maven.revision"
+   */
+  private String propertyName;
 
   /**
    * The path to the mercurial repository
