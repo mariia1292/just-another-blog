@@ -32,7 +32,9 @@
   </distributionManagement>
 
   <build>
+
     <resources>
+
       <resource>
         <directory>src/main/resources</directory>
         <filtering>true</filtering>
@@ -40,6 +42,7 @@
           <include>META-INF/plugin.xml</include>
         </includes>
       </resource>
+
       <resource>
         <directory>src/main/resources</directory>
         <filtering>false</filtering>
@@ -47,7 +50,26 @@
           <exclude>META-INF/plugin.xml</exclude>
         </excludes>
       </resource>
+
     </resources>
+
+    <plugins>
+      
+      <plugin>
+        <groupId>sonia.maven</groupId>
+        <artifactId>SoniaMaven</artifactId>
+        <executions>
+          <execution>
+            <phase>validate</phase>
+            <goals>
+              <goal>hgversion</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+
+    </plugins>
+
   </build>
 
   <dependencies>
@@ -63,7 +85,7 @@
       <groupId>sonia.util</groupId>
       <artifactId>SoniaUtil</artifactId>
     </dependency>
-    
+
     <dependency>
       <groupId>sonia.util</groupId>
       <artifactId>SoniaWebUtil</artifactId>
