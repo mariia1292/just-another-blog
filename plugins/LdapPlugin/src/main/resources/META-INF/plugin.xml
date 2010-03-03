@@ -14,7 +14,7 @@
   <name>sonia.ldap</name>
   <display-name>Ldap-Plugin</display-name>
   <description>adds an Ldap-Authenticator</description>
-  <version>0.0.1</version>
+  <version>${pom.version}</version>
   <vendor>Sebastian Sdorra</vendor>
   <activator>sonia.blog.ldap.PluginActivator</activator>
 </plugin>

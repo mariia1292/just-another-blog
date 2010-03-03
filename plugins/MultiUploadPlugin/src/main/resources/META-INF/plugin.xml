@@ -14,7 +14,7 @@
   <name>sonia.multiupload</name>
   <display-name>MultiUpload-Plugin</display-name>
   <description>added support for Plupload</description>
-  <version>0.0.1</version>
+  <version>${pom.version}</version>
   <vendor>Sebastian Sdorra</vendor>
   <activator>sonia.blog.upload.PluginActivator</activator>
 </plugin>

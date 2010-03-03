@@ -14,7 +14,7 @@
   <name>sonia.webint</name>
   <display-name>WebIntegration-Plugin</display-name>
   <description>Support for some famous WebSites</description>
-  <version>0.0.1</version>
+  <version>${pom.version}</version>
   <vendor>Sebastian Sdorra</vendor>
   <activator>sonia.blog.webint.PluginActivator</activator>
 </plugin>

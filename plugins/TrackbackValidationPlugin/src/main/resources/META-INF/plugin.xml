@@ -13,7 +13,7 @@
   <name>sonia.trackbackvalidation</name>
   <display-name>TrackbackValidation-Plugin</display-name>
   <description>Validate trackbacks with a reverse lookup</description>
-  <version>0.0.1</version>
+  <version>${pom.version}</version>
   <vendor>Sebastian Sdorra</vendor>
   <activator>sonia.blog.tbv.PluginActivator</activator>
 </plugin>
