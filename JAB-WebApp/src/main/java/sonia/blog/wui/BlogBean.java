@@ -41,6 +41,7 @@ import org.apache.myfaces.custom.navmenu.UINavigationMenuItem;
 import sonia.blog.api.app.BlogConfiguration;
 import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.app.BlogRequest;
+import sonia.blog.api.app.BlogVersion;
 import sonia.blog.api.app.Constants;
 import sonia.blog.api.app.Context;
 import sonia.blog.api.dao.CategoryDAO;
@@ -109,6 +110,17 @@ public class BlogBean extends AbstractBean
   public Blog getBlog()
   {
     return getRequest().getCurrentBlog();
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  public BlogVersion getBlogVersion()
+  {
+    return BlogContext.getInstance().getBlogVersion();
   }
 
   /**
@@ -535,17 +547,6 @@ public class BlogBean extends AbstractBean
     }
 
     return result;
-  }
-
-  /**
-   * Method description
-   *
-   *
-   * @return
-   */
-  public String getVersion()
-  {
-    return "r" + BlogContext.getInstance().getVersion();
   }
 
   /**
