@@ -367,6 +367,29 @@ public class BlogContext
    *
    * @return
    */
+  public BlogVersion getBlogVersion()
+  {
+    if (blogVersion == null)
+    {
+      String path =
+        getServletContext().getRealPath("/WEB-INF/config/version.xml");
+      File file = new File(path);
+
+      if (file.exists())
+      {
+        blogVersion = new BlogVersion(file);
+      }
+    }
+
+    return blogVersion;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
   public CacheManager getCacheManager()
   {
     return cacheManager;
@@ -795,48 +818,15 @@ public class BlogContext
    */
   public Integer getVersion()
   {
-    if (version == null)
+    Integer result = null;
+    BlogVersion version = getBlogVersion();
+
+    if (version != null)
     {
-      String path =
-        getServletContext().getRealPath("/WEB-INF/config/version.txt");
-      File file = new File(path);
-
-      if (file.exists())
-      {
-        FileInputStream fis = null;
-
-        try
-        {
-          fis = new FileInputStream(file);
-
-          byte[] b = new byte[fis.available()];
-
-          fis.read(b);
-          version = Integer.parseInt(new String(b));
-        }
-        catch (IOException ex)
-        {
-          logger.log(Level.SEVERE, null, ex);
-        }
-        catch (NumberFormatException ex)
-        {
-          logger.log(Level.SEVERE, null, ex);
-        }
-        finally
-        {
-          try
-          {
-            fis.close();
-          }
-          catch (IOException ex)
-          {
-            logger.log(Level.SEVERE, null, ex);
-          }
-        }
-      }
+      result = getBlogVersion().getRevision();
     }
 
-    return version;
+    return result;
   }
 
   /**
@@ -958,6 +948,9 @@ public class BlogContext
   //~--- fields ---------------------------------------------------------------
 
   /** Field description */
+  private BlogVersion blogVersion;
+
+  /** Field description */
   private CacheManager cacheManager;
 
   /** Field description */
@@ -1016,9 +1009,6 @@ public class BlogContext
 
   /** Field description */
   private TemplateManager templateManager;
-
-  /** Field description */
-  private Integer version;
 
   /** Field description */
   private DefaultWebResources webResources;

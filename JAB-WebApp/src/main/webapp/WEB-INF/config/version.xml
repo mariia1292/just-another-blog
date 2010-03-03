@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+    Document   : version.xml
+    Created on : March 3, 2010, 5:50 PM
+    Author     : sdorra
+    Description:
+        Purpose of the document follows.
+-->
+
+<blog-version>
+
+  <display-version>${pom.version}</display-version>
+  <revision>${sonia.maven.revision}</revision>
+  <build-date>${sonia.maven.date}</build-date>
+
+</blog-version>
