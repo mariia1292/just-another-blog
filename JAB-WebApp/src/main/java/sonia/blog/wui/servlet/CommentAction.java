@@ -35,20 +35,18 @@ package sonia.blog.wui.servlet;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import sonia.blog.api.app.BlogConfiguration;
 import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.app.BlogRequest;
 import sonia.blog.api.app.BlogResponse;
 import sonia.blog.api.app.Constants;
 import sonia.blog.api.dao.CommentDAO;
-import sonia.blog.api.jsf.spam.SpamLabelRenderer;
 import sonia.blog.api.msg.BlogMessageHandler;
 import sonia.blog.api.spam.SpamCheck;
-import sonia.blog.api.spam.SpamInputProtection;
 import sonia.blog.entity.Comment;
 import sonia.blog.entity.Entry;
 import sonia.blog.entity.User;
 import sonia.blog.util.BlogUtil;
+import sonia.blog.util.SpamProtectionUtil;
 import sonia.blog.wui.BlogBean;
 
 import sonia.plugin.service.ServiceReference;
@@ -72,7 +70,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 /**
  *
@@ -118,15 +115,10 @@ public class CommentAction extends HttpServlet
   public void init() throws ServletException
   {
     BlogContext context = BlogContext.getInstance();
-
-    config = context.getConfiguration();
-
     ServiceRegistry registry = context.getServiceRegistry();
 
     spamCheckReference = registry.get(SpamCheck.class,
                                       Constants.SERVICE_SPAMCHECK);
-    spamServiceReference = registry.get(SpamInputProtection.class,
-            Constants.SERVICE_SPAMPROTECTIONMETHOD);
     commentDAO = BlogContext.getDAOFactory().getCommentDAO();
     messageHandler = getMessageHandler();
   }
@@ -289,7 +281,8 @@ public class CommentAction extends HttpServlet
         messageHandler.warn(req, "commentContent", "contentIsRequired");
       }
 
-      if (!isSpamQuestionAnsweredCorrect(request))
+      if (!SpamProtectionUtil.isSpamQuestionAnsweredCorrect(request,
+              PARAMETER_SPAM))
       {
         valid = false;
         messageHandler.warn(req, "spam", "spamInputFailure");
@@ -369,104 +362,14 @@ public class CommentAction extends HttpServlet
         ResourceBundle.getBundle("/sonia/blog/resources/message"));
   }
 
-  /**
-   * Method description
-   *
-   *
-   * @return
-   */
-  @SuppressWarnings("unchecked")
-  private SpamInputProtection getSpamInputMethod()
-  {
-    SpamInputProtection method = null;
-    String configString = config.getString(Constants.CONFIG_SPAMMETHOD);
-
-    if (!Util.isBlank(configString))
-    {
-      if (!configString.equalsIgnoreCase("none"))
-      {
-        List<SpamInputProtection> list = spamServiceReference.getAll();
-
-        for (SpamInputProtection sp : list)
-        {
-          if (sp.getClass().getName().equals(configString))
-          {
-            method = sp;
-          }
-        }
-
-        if (method == null)
-        {
-          StringBuffer log = new StringBuffer();
-
-          log.append("method ").append(configString);
-          log.append(" not found, using default");
-          logger.warning(log.toString());
-          method = list.get(0);
-        }
-      }
-    }
-    else
-    {
-      method = spamServiceReference.get();
-    }
-
-    return method;
-  }
-
-  /**
-   * Method description
-   *
-   *
-   * @param request
-   *
-   * @return
-   */
-  private boolean isSpamQuestionAnsweredCorrect(BlogRequest request)
-  {
-    boolean result = true;
-    SpamInputProtection sip = getSpamInputMethod();
-
-    if (sip != null)
-    {
-      result = false;
-
-      String spamAnswer = request.getParameter(PARAMETER_SPAM);
-
-      if (Util.hasContent(spamAnswer))
-      {
-        HttpSession session = request.getSession(true);
-
-        if (session != null)
-        {
-          String rightAnswer =
-            (String) session.getAttribute(SpamLabelRenderer.REQUESTKEY);
-
-          if (spamAnswer.equals(rightAnswer))
-          {
-            result = true;
-          }
-        }
-      }
-    }
-
-    return result;
-  }
-
   //~--- fields ---------------------------------------------------------------
 
   /** Field description */
   private CommentDAO commentDAO;
 
   /** Field description */
-  private BlogConfiguration config;
-
-  /** Field description */
   private MessageHandler messageHandler;
 
   /** Field description */
   private ServiceReference<SpamCheck> spamCheckReference;
-
-  /** Field description */
-  private ServiceReference<SpamInputProtection> spamServiceReference;
 }

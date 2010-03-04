@@ -169,6 +169,20 @@ public class BlogCreationBean extends AbstractBean
     this.domain = domain;
   }
 
+  //~--- get methods ----------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  @Override
+  protected int getType()
+  {
+    return TYPE_FRONTEND;
+  }
+
   //~--- methods --------------------------------------------------------------
 
   /**

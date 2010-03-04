@@ -48,6 +48,7 @@ import sonia.blog.api.util.AbstractBean;
 import sonia.blog.entity.Blog;
 import sonia.blog.entity.Role;
 import sonia.blog.entity.User;
+import sonia.blog.util.SpamProtectionUtil;
 
 import sonia.config.Config;
 
@@ -66,6 +67,9 @@ import java.util.logging.Logger;
  */
 public class RegistrationBean extends AbstractBean
 {
+
+  /** Field description */
+  private static final String PARAMETER_SPAM = "regform:spam";
 
   /** Field description */
   private static Logger logger =
@@ -94,22 +98,32 @@ public class RegistrationBean extends AbstractBean
   public String save()
   {
     String result = SUCCESS;
+    BlogRequest request = getRequest();
 
-    if (registrationEnabled)
+    if (SpamProtectionUtil.isSpamQuestionAnsweredCorrect(request,
+            PARAMETER_SPAM))
     {
-      user.setPassword(encryptPassword(passwordRepeat));
-      result = createUser();
-
-      if (sendAcknowledgeMail)
+      if (registrationEnabled)
       {
-        sendMail();
-      }
+        user.setPassword(encryptPassword(passwordRepeat));
+        result = createUser();
 
-      redirect();
+        if (sendAcknowledgeMail)
+        {
+          sendMail();
+        }
+
+        redirect();
+      }
+      else
+      {
+        getMessageHandler().error(request, "registrationDisabled");
+        result = FAILURE;
+      }
     }
     else
     {
-      getMessageHandler().error(getRequest(), "registrationDisabled");
+      getMessageHandler().warn(request, "spam", "spamInputFailure");
       result = FAILURE;
     }
 
@@ -164,6 +178,20 @@ public class RegistrationBean extends AbstractBean
     this.user = user;
   }
 
+  //~--- get methods ----------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  @Override
+  protected int getType()
+  {
+    return TYPE_FRONTEND;
+  }
+
   //~--- methods --------------------------------------------------------------
 
   /**
@@ -176,8 +204,8 @@ public class RegistrationBean extends AbstractBean
   {
     String result = SUCCESS;
     BlogSession session = BlogContext.getInstance().getSystemBlogSession();
-
     BlogRequest request = getRequest();
+
     if (userDAO.add(session, user))
     {
       Blog blog = getRequest().getCurrentBlog();
@@ -185,7 +213,6 @@ public class RegistrationBean extends AbstractBean
 
       try
       {
-        
         userDAO.setRole(session, blog, user, role);
         getMessageHandler().info(request, "registrationSuccess");
       }
