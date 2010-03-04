@@ -35,9 +35,6 @@ package sonia.blog.api.jsf.spam;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import sonia.blog.api.app.BlogRequest;
-import sonia.blog.api.spam.SpamInputProtection;
-
 import sonia.jsf.base.BaseRenderer;
 
 //~--- JDK imports ------------------------------------------------------------
@@ -88,7 +85,8 @@ public class SpamLabelRenderer extends BaseRenderer
     writer.startElement("script", component);
     writer.writeAttribute("type", "text/javascript", null);
     writer.append("$(document).ready(function(){");
-    writer.append("$(\"#").append(id).append("\").load(\"");
+    writer.append("$(\"#").append(id.replaceAll(":", "\\\\\\\\:"));
+    writer.append("\").load(\"");
     writer.append(context.getExternalContext().getRequestContextPath());
     writer.append("/async/spam.plain");
     writer.append("\");});");

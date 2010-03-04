@@ -3,7 +3,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:f="http://java.sun.com/jsf/core">
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:blog="http://jab.nitilon.org/blog/">
 
   <body>
 
@@ -12,7 +13,7 @@
       <ui:define name="title">
         <h:outputText value="#{label.registration}" />
       </ui:define>
-      
+
       <ui:define name="content">
 
         <h1><h:outputText value="#{label.registration}" /></h1>
@@ -47,6 +48,10 @@
               <f:attribute name="passwordId" value="regform:password" />
             </h:inputSecret>
             <h:message for="passwordRepeat" />
+
+            <blog:spamLabel method="#{BlogBean.spamInputMethod}" />
+            <h:inputText id="spam" />
+            <blog:message for="spam" />
 
           </h:panelGrid>
 
