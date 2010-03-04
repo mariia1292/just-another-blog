@@ -35,30 +35,26 @@ package sonia.blog.api.dao;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import sonia.blog.api.app.BlogSession;
-import sonia.blog.api.app.FakeBlogContext;
 import sonia.blog.entity.Blog;
-import sonia.blog.entity.User;
-
-import static org.mockito.Mockito.*;
-
-//~--- JDK imports ------------------------------------------------------------
-
-import java.util.logging.ConsoleHandler;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
-import javax.security.auth.login.LoginContext;
 
 /**
  *
  * @author Sebastian Sdorra
  */
-public class DAOTestHelper
+public class BlogDAOTest extends GenericDAOTestBase<Blog>
 {
 
-  /** Field description */
-  public static DAOFactory daoFactory;
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  @Override
+  public BlogDAO getDAO()
+  {
+    return DAOTestHelper.getDAOFactory().getBlogDAO();
+  }
 
   //~--- methods --------------------------------------------------------------
 
@@ -66,59 +62,33 @@ public class DAOTestHelper
    * Method description
    *
    *
+   * @param id
+   *
    * @return
    */
-  public static BlogSession createGlobalAdminSession()
+  @Override
+  protected Blog createExampleItem(int id)
   {
-    LoginContext ctx = mock(LoginContext.class);
     Blog blog = new Blog();
 
-    blog.setActive(true);
-    blog.setIdentifier("adminblog");
-    blog.setTitle("Admin Blog");
+    blog.setTemplate("/jab");
+    blog.setIdentifier("blog" + id + ".example.com");
+    blog.setEmail("blog" + id + "@example.com");
+    blog.setTitle("The Test Blog");
+    blog.setDescription("The Test Blog Description");
 
-    User user = new User();
-
-    user.setName("globaladmin");
-    user.setDisplayName("Global Admin");
-    user.setPassword("admin");
-    user.setEmail("global@admin.de");
-    user.setGlobalAdmin(true);
-
-    return new BlogSession(ctx, user, blog);
+    return blog;
   }
 
   /**
    * Method description
    *
-   */
-  public static void initLogger()
-  {
-    Logger logger = Logger.getLogger("sonia");
-    ConsoleHandler h = new ConsoleHandler();
-
-    h.setLevel(Level.FINEST);
-    logger.addHandler(h);
-    logger.setLevel(Level.FINEST);
-  }
-
-  //~--- get methods ----------------------------------------------------------
-
-  /**
-   * Method description
    *
-   *
-   * @return
+   * @param item
    */
-  public static DAOFactory getDAOFactory()
+  @Override
+  protected void edit(Blog item)
   {
-    if (daoFactory == null)
-    {
-      daoFactory = FakeBlogContext.getDAOFactory();
-      daoFactory.init();
-      daoFactory.install();
-    }
-
-    return daoFactory;
+    item.setStartPage("http://www.example.com");
   }
 }
