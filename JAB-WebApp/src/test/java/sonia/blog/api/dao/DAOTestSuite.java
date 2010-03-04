@@ -35,46 +35,13 @@ package sonia.blog.api.dao;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import org.junit.BeforeClass;
-import org.junit.Test;
-
-import static org.junit.Assert.*;
+import org.junit.runner.RunWith;
+import org.junit.runners.Suite;
 
 /**
  *
  * @author Sebastian Sdorra
  */
-public class DAOFactoryTest
-{
-
-  /**
-   * Method description
-   *
-   */
-  @BeforeClass
-  public static void initLogger()
-  {
-    DAOTestHelper.initLogger();
-  }
-
-  /**
-   * Method description
-   *
-   */
-  @Test
-  public void testGetter()
-  {
-    DAOFactory daoFactory = DAOTestHelper.getDAOFactory();
-
-    assertNotNull(daoFactory.getAttachmentDAO());
-    assertNotNull(daoFactory.getBlogDAO());
-    assertNotNull(daoFactory.getBlogHitCountDAO());
-    assertNotNull(daoFactory.getCategoryDAO());
-    assertNotNull(daoFactory.getCommentDAO());
-    assertNotNull(daoFactory.getConnection());
-    assertNotNull(daoFactory.getEntryDAO());
-    assertNotNull(daoFactory.getPageDAO());
-    assertNotNull(daoFactory.getTagDAO());
-    assertNotNull(daoFactory.getUserDAO());
-  }
-}
+@RunWith(Suite.class)
+@Suite.SuiteClasses({ DAOFactoryTest.class, UserDAOTest.class })
+public class DAOTestSuite {}
