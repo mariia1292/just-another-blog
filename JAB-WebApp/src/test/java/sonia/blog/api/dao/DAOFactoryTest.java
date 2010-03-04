@@ -35,7 +35,6 @@ package sonia.blog.api.dao;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
@@ -46,16 +45,6 @@ import static org.junit.Assert.*;
  */
 public class DAOFactoryTest
 {
-
-  /**
-   * Method description
-   *
-   */
-  @BeforeClass
-  public static void initLogger()
-  {
-    DAOTestHelper.initLogger();
-  }
 
   /**
    * Method description
