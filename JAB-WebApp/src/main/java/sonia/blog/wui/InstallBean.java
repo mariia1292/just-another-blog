@@ -232,7 +232,7 @@ public class InstallBean extends AbstractBean
       {
         if (daoFactory.getBlogDAO().add(session, blog))
         {
-          daoFactory.getUserDAO().setRole(blog, admin, Role.ADMIN);
+          daoFactory.getUserDAO().setRole(session, blog, admin, Role.ADMIN);
 
           Category category = new Category();
 

@@ -36,6 +36,7 @@ package sonia.blog.api.app;
 //~--- non-JDK imports --------------------------------------------------------
 
 import sonia.blog.api.dao.UserDAO;
+import sonia.blog.api.exception.BlogSecurityException;
 import sonia.blog.entity.Blog;
 import sonia.blog.entity.Role;
 import sonia.blog.entity.User;
@@ -86,6 +87,21 @@ public final class BlogSession implements Serializable
    */
   public BlogSession(LoginContext loginContext, User user, Blog blog)
   {
+    if ((user == null) || (user.getId() == null))
+    {
+      throw new BlogSecurityException("valid user is required");
+    }
+
+    if ((blog == null) || (blog.getId() == null))
+    {
+      throw new BlogSecurityException("valid blog is required");
+    }
+
+    if (!checkLoginContext(loginContext, user))
+    {
+      throw new BlogSecurityException("valid loginContext is required");
+    }
+
     this.loginContext = loginContext;
     this.user = user;
     this.blog = blog;
@@ -202,6 +218,21 @@ public final class BlogSession implements Serializable
   /**
    * Method description
    *
+   *
+   * @param loginContext
+   * @param user
+   *
+   * @return
+   */
+  private boolean checkLoginContext(LoginContext loginContext, User user)
+  {
+    return (loginContext != null)
+           && loginContext.getSubject().getPrincipals().contains(user);
+  }
+
+  /**
+   * Method description
+   *
    */
   private void init()
   {
@@ -218,9 +249,8 @@ public final class BlogSession implements Serializable
       if (role == null)
       {
         role = getDefaultRole();
-
-        // TODO: use SystemBlogSession
-        userDAO.setRole(blog, user, role);
+        userDAO.setRole(BlogContext.getInstance().getSystemBlogSession(), blog,
+                        user, role);
       }
     }
   }

@@ -48,6 +48,7 @@ import java.util.logging.ConsoleHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.security.auth.Subject;
 import javax.security.auth.login.LoginContext;
 
 /**
@@ -70,20 +71,29 @@ public class DAOTestHelper
    */
   public static BlogSession createGlobalAdminSession()
   {
-    LoginContext ctx = mock(LoginContext.class);
     Blog blog = new Blog();
 
+    blog.setId(123l);
     blog.setActive(true);
     blog.setIdentifier("adminblog");
     blog.setTitle("Admin Blog");
 
     User user = new User();
 
+    user.setId(123l);
     user.setName("globaladmin");
     user.setDisplayName("Global Admin");
     user.setPassword("admin");
     user.setEmail("global@admin.de");
     user.setGlobalAdmin(true);
+
+    Subject subject = new Subject();
+
+    subject.getPrincipals().add(user);
+
+    LoginContext ctx = mock(LoginContext.class);
+
+    when(ctx.getSubject()).thenReturn(subject);
 
     return new BlogSession(ctx, user, blog);
   }

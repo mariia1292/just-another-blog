@@ -218,7 +218,7 @@ public class BlogCreationBean extends AbstractBean
 
           try
           {
-            userDAO.setRole(blog, user, Role.ADMIN);
+            userDAO.setRole(session, blog, user, Role.ADMIN);
             result = SUCCESS;
           }
           catch ( /* TODO replace with DAOException */Exception ex)

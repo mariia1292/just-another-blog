@@ -56,6 +56,7 @@ import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.DataModel;
 import javax.faces.model.ListDataModel;
 import javax.faces.model.SelectItem;
+import sonia.blog.api.app.BlogRequest;
 
 /**
  *
@@ -98,17 +99,19 @@ public class MemberBean extends AbstractBean
       Blog blog = member.getBlog();
       Role role = (Role) event.getNewValue();
 
+      BlogRequest request = getRequest();
       try
       {
+        
         UserDAO userDAO = BlogContext.getDAOFactory().getUserDAO();
 
-        userDAO.setRole(blog, user, role);
-        getMessageHandler().info(getRequest(), "changeRoleSuccess");
+        userDAO.setRole(request.getBlogSession(), blog, user, role);
+        getMessageHandler().info(request, "changeRoleSuccess");
       }
       catch (Exception ex)
       {
         logger.log(Level.SEVERE, null, ex);
-        getMessageHandler().error(getRequest(), "changeRoleFailure");
+        getMessageHandler().error(request, "changeRoleFailure");
       }
     }
   }

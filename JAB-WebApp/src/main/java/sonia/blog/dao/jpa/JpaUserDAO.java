@@ -35,6 +35,7 @@ package sonia.blog.dao.jpa;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.app.BlogSession;
 import sonia.blog.api.app.Constants;
 import sonia.blog.api.dao.UserDAO;
@@ -469,43 +470,53 @@ public class JpaUserDAO extends JpaGenericDAO<User> implements UserDAO
    * Method description
    *
    *
+   *
+   * @param session
    * @param blog
    * @param user
    * @param role
    */
-  public void setRole(Blog blog, User user, Role role)
+  public void setRole(BlogSession session, Blog blog, User user, Role role)
   {
-    Query q = strategy.getNamedQuery("BlogMember.getByBlogAndUser", false);
-
-    q.setParameter("blog", blog);
-    q.setParameter("user", user);
-
-    BlogMember member = null;
-
-    try
+    if ((session == BlogContext.getInstance().getSystemBlogSession())
+        || session.hasRole(Role.ADMIN))
     {
-      member = (BlogMember) q.getSingleResult();
-    }
-    catch (NoResultException ex) {}
+      Query q = strategy.getNamedQuery("BlogMember.getByBlogAndUser", false);
 
-    try
-    {
-      if (member == null)
+      q.setParameter("blog", blog);
+      q.setParameter("user", user);
+
+      BlogMember member = null;
+
+      try
       {
-        member = new BlogMember(blog, user, role);
-        strategy.store(member);
+        member = (BlogMember) q.getSingleResult();
       }
-      else
-      {
-        member.setRole(role);
-        strategy.edit(member);
-      }
+      catch (NoResultException ex) {}
 
-      strategy.flush();
+      try
+      {
+        if (member == null)
+        {
+          member = new BlogMember(blog, user, role);
+          strategy.store(member);
+        }
+        else
+        {
+          member.setRole(role);
+          strategy.edit(member);
+        }
+
+        strategy.flush();
+      }
+      catch (Exception ex)
+      {
+        logger.log(Level.SEVERE, null, ex);
+      }
     }
-    catch (Exception ex)
+    else
     {
-      logger.log(Level.SEVERE, null, ex);
+      throw new BlogSecurityException("admin session is required");
     }
   }
 }

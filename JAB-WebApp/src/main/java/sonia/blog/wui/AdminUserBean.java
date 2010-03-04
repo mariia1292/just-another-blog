@@ -120,7 +120,7 @@ public class AdminUserBean extends AbstractBean
 
       if (blog != null)
       {
-        userDAO.setRole(blog, user, Role.READER);
+        userDAO.setRole(request.getBlogSession(), blog, user, Role.READER);
         getMessageHandler().info(request, "addBlogToUserSuccess");
         addBlogName = null;
       }
@@ -182,7 +182,7 @@ public class AdminUserBean extends AbstractBean
 
       try
       {
-        userDAO.setRole(blog, user, role);
+        userDAO.setRole(getBlogSession(), blog, user, role);
         getMessageHandler().info(getRequest(), "changeRoleSuccess");
       }
       catch (Exception ex)
