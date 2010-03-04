@@ -177,6 +177,7 @@ public class RegistrationBean extends AbstractBean
     String result = SUCCESS;
     BlogSession session = BlogContext.getInstance().getSystemBlogSession();
 
+    BlogRequest request = getRequest();
     if (userDAO.add(session, user))
     {
       Blog blog = getRequest().getCurrentBlog();
@@ -184,18 +185,19 @@ public class RegistrationBean extends AbstractBean
 
       try
       {
-        userDAO.setRole(blog, user, role);
-        getMessageHandler().info(getRequest(), "registrationSuccess");
+        
+        userDAO.setRole(session, blog, user, role);
+        getMessageHandler().info(request, "registrationSuccess");
       }
       catch ( /* TODO replace with DAOException */Exception ex)
       {
         logger.log(Level.SEVERE, null, ex);
-        getMessageHandler().error(getRequest(), "unknownError");
+        getMessageHandler().error(request, "unknownError");
       }
     }
     else
     {
-      getMessageHandler().error(getRequest(), "unknownError");
+      getMessageHandler().error(request, "unknownError");
     }
 
     return result;

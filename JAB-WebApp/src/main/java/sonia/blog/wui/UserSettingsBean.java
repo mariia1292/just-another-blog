@@ -37,6 +37,7 @@ package sonia.blog.wui;
 
 import sonia.blog.api.app.BlogConfiguration;
 import sonia.blog.api.app.BlogContext;
+import sonia.blog.api.app.BlogRequest;
 import sonia.blog.api.app.Constants;
 import sonia.blog.api.authentication.RequireRole;
 import sonia.blog.api.dao.Dao;
@@ -165,7 +166,8 @@ public class UserSettingsBean extends AbstractBean
   {
     if (member == null)
     {
-      Blog b = getRequest().getCurrentBlog();
+      BlogRequest request = getRequest();
+      Blog b = request.getCurrentBlog();
       User u = getUser();
 
       member = userDAO.getMember(b, u);
@@ -176,7 +178,7 @@ public class UserSettingsBean extends AbstractBean
                  ? Role.ADMIN
                  : Role.READER;
 
-        userDAO.setRole(b, u, r);
+        userDAO.setRole(request.getBlogSession(), b, u, r);
       }
     }
 

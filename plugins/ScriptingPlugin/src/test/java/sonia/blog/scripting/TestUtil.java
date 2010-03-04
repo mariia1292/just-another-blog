@@ -50,6 +50,7 @@ import static org.mockito.Mockito.*;
 import java.io.File;
 import java.io.IOException;
 
+import javax.security.auth.Subject;
 import javax.security.auth.login.LoginContext;
 
 /**
@@ -67,7 +68,6 @@ public class TestUtil
    */
   public static BlogSession createGlobalAdminSession()
   {
-    LoginContext loginContext = mock(LoginContext.class);
     User user = new User();
 
     user.setId(12l);
@@ -77,6 +77,14 @@ public class TestUtil
     user.setGlobalAdmin(true);
     user.setName("ga");
     user.setPassword("secret");
+
+    Subject subject = new Subject();
+
+    subject.getPrincipals().add(user);
+
+    LoginContext loginContext = mock(LoginContext.class);
+
+    when(loginContext.getSubject()).thenReturn(subject);
 
     Blog blog = new Blog();
 

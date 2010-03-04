@@ -250,5 +250,5 @@ public interface UserDAO extends GenericDAO<User>
    * @param user
    * @param role
    */
-  public void setRole(Blog blog, User user, Role role);
+  public void setRole(BlogSession session, Blog blog, User user, Role role);
 }
