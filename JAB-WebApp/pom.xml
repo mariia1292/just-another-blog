@@ -176,6 +176,7 @@
         </configuration>
         <executions>
           <execution>
+            <id>sonia.maven-1</id>
             <phase>compile</phase>
             <goals>
               <goal>mergeorm</goal>
@@ -269,11 +270,6 @@
             <artifactId>SoniaMaven</artifactId>
             <version>${sonia.maven.version}</version>
             <configuration>
-              <ormBasePath>${project.build.directory}/classes</ormBasePath>
-              <ormIncludes>
-                <param>/sonia/blog/dao/jpa/orm/*.xml</param>
-              </ormIncludes>
-              <ormOutput>${project.build.directory}/classes/META-INF/orm.xml</ormOutput>
               <environmentBasePath>${project.build.directory}/${project.build.finalName}</environmentBasePath>
               <environment>release</environment>
               <classpath>
@@ -309,15 +305,7 @@
             </configuration>
             <executions>
               <execution>
-                <id>sonia.maven-1</id>
-                <phase>compile</phase>
-                <goals>
-                  <goal>mergeorm</goal>
-                  <goal>hgversion</goal>
-                  <goal>date</goal>
-                </goals>
-              </execution>
-              <execution>
+                <id>sonia.maven-2</id>
                 <phase>prepare-package</phase>
                 <goals>
                   <goal>changeenv</goal>
