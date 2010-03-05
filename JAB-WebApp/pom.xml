@@ -167,23 +167,7 @@
         <groupId>sonia.maven</groupId>
         <artifactId>SoniaMaven</artifactId>
         <version>${sonia.maven.version}</version>
-        <executions>
-          <execution>
-            <phase>verify</phase>
-            <goals>
-              <goal>hgversion</goal>
-              <goal>date</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-
-      <plugin>
-        <groupId>sonia.maven</groupId>
-        <artifactId>SoniaMaven</artifactId>
-        <version>${sonia.maven.version}</version>
         <configuration>
-          <path>${project.build.directory}/${project.build.finalName}/WEB-INF/config/version.txt</path>
           <ormBasePath>${project.build.directory}/classes</ormBasePath>
           <ormIncludes>
             <param>/sonia/blog/dao/jpa/orm/*.xml</param>
@@ -195,6 +179,8 @@
             <phase>compile</phase>
             <goals>
               <goal>mergeorm</goal>
+              <goal>hgversion</goal>
+              <goal>date</goal>
             </goals>
           </execution>
         </executions>
@@ -283,6 +269,11 @@
             <artifactId>SoniaMaven</artifactId>
             <version>${sonia.maven.version}</version>
             <configuration>
+              <ormBasePath>${project.build.directory}/classes</ormBasePath>
+              <ormIncludes>
+                <param>/sonia/blog/dao/jpa/orm/*.xml</param>
+              </ormIncludes>
+              <ormOutput>${project.build.directory}/classes/META-INF/orm.xml</ormOutput>
               <environmentBasePath>${project.build.directory}/${project.build.finalName}</environmentBasePath>
               <environment>release</environment>
               <classpath>
@@ -317,6 +308,15 @@
               </yuiIncludes>
             </configuration>
             <executions>
+              <execution>
+                <id>sonia.maven-1</id>
+                <phase>compile</phase>
+                <goals>
+                  <goal>mergeorm</goal>
+                  <goal>hgversion</goal>
+                  <goal>date</goal>
+                </goals>
+              </execution>
               <execution>
                 <phase>prepare-package</phase>
                 <goals>
