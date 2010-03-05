@@ -20,6 +20,8 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
+import java.text.NumberFormat;
+
 import java.util.List;
 
 /**
@@ -124,6 +126,18 @@ public class ClosureCompilerMojo extends AbstractMojo
       throw new MojoFailureException("closure returns with error " + status);
     }
 
+    double percentage = (1d - ((double) file.length()
+                               / (double) temp.length())) * 100;
+    NumberFormat format = NumberFormat.getInstance();
+
+    format.setMinimumFractionDigits(2);
+    format.setMaximumFractionDigits(2);
+
+    String percentageString = format.format(percentage);
+    StringBuffer msg = new StringBuffer(file.getPath()).append(" [");
+
+    msg.append(percentageString).append("%").append("]");
+    getLog().info(msg);
     temp.delete();
   }
 

@@ -216,14 +216,6 @@ public class HgVersionMojo extends AbstractMojo
   //~--- fields ---------------------------------------------------------------
 
   /**
-   * The maven project.
-   *
-   * @parameter expression="${project}"
-   * @readonly
-   */
-  private MavenProject project;
-
-  /**
    * The path to the mercurial binary
    *
    * @parameter expression="${hg.path}" default-value="hg"
@@ -243,6 +235,14 @@ public class HgVersionMojo extends AbstractMojo
    * @parameter
    */
   private String prefix;
+
+  /**
+   * The maven project.
+   *
+   * @parameter expression="${project}"
+   * @readonly
+   */
+  private MavenProject project;
 
   /**
    * The prefix of the output
