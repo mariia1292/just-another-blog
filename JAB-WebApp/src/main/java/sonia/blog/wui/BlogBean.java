@@ -288,7 +288,7 @@ public class BlogBean extends AbstractBean
                                "/personal/dashboard.jab");
       NavigationMenuItem dashboardItem = new NavigationMenuItem();
 
-      dashboardItem.setLabel(bundle.getString("personal"));
+      dashboardItem.setLabel(bundle.getString("personalArea"));
       dashboardItem.setExternalLink(dashboardLink);
       navigation.add(dashboardItem);
 
