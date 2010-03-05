@@ -40,6 +40,7 @@ import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 
 import org.w3c.dom.Document;
+import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 //~--- JDK imports ------------------------------------------------------------
@@ -55,7 +56,6 @@ import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
-import org.w3c.dom.Node;
 
 /**
  * @goal mergeorm
@@ -150,7 +150,8 @@ public class OrmFileMergeMojo extends AbstractMojo
 
       for (int i = 0; i < list.getLength(); i++)
       {
-        Node node = doc.importNode( list.item(i), true );
+        Node node = doc.importNode(list.item(i), true);
+
         doc.getDocumentElement().appendChild(node);
       }
     }
@@ -201,11 +202,15 @@ public class OrmFileMergeMojo extends AbstractMojo
   private void writeDocument(Node doc) throws MojoFailureException
   {
     File parent = ormOutput.getParentFile();
-    if ( ! parent.exists() ){
-      if ( ! parent.mkdirs() ){
+
+    if (!parent.exists())
+    {
+      if (!parent.mkdirs())
+      {
         throw new MojoFailureException("could not create parent directory");
       }
     }
+
     try
     {
       Transformer transformer =

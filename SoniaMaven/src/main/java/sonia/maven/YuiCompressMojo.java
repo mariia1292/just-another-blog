@@ -23,6 +23,8 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 
+import java.text.NumberFormat;
+
 import java.util.List;
 
 /**
@@ -42,7 +44,8 @@ public class YuiCompressMojo extends AbstractMojo
    */
   public void execute() throws MojoExecutionException, MojoFailureException
   {
-    List<File> files = MavenUtil.getFiles(yuiBasePath, yuiIncludes, yuiExcludes);
+    List<File> files = MavenUtil.getFiles(yuiBasePath, yuiIncludes,
+                         yuiExcludes);
 
     try
     {
@@ -70,6 +73,7 @@ public class YuiCompressMojo extends AbstractMojo
   private void compress(File file) throws IOException
   {
     getLog().info("compress file " + file.getPath());
+
     String name = file.getName().toLowerCase();
     File temp = new File(file.getAbsolutePath() + ".temp");
 
@@ -111,10 +115,28 @@ public class YuiCompressMojo extends AbstractMojo
       }
     }
 
+    double percentage = (1d - ((double) file.length()
+                               / (double) temp.length())) * 100;
+    NumberFormat format = NumberFormat.getInstance();
+
+    format.setMinimumFractionDigits(2);
+    format.setMaximumFractionDigits(2);
+
+    String percentageString = format.format(percentage);
+    StringBuffer msg = new StringBuffer(file.getPath()).append(" [");
+
+    msg.append(percentageString).append("%").append("]");
+    getLog().info(msg);
     temp.delete();
   }
 
   //~--- fields ---------------------------------------------------------------
+
+  /**
+   *
+   * @parameter
+   */
+  private File yuiBasePath;
 
   /**
    *
@@ -127,10 +149,4 @@ public class YuiCompressMojo extends AbstractMojo
    * @parameter
    */
   private String[] yuiIncludes;
-
-  /**
-   *
-   * @parameter
-   */
-  private File yuiBasePath;
 }
