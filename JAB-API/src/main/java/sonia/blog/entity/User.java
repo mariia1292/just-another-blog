@@ -41,6 +41,7 @@ import java.security.Principal;
 
 import java.util.Date;
 import java.util.Random;
+import java.util.UUID;
 
 /**
  *
@@ -412,10 +413,7 @@ public class User implements Serializable, Principal, PermaObject
    */
   private String buildActivationCode()
   {
-    Random r = new Random();
-
-    return r.nextInt(9999) + "-" + r.nextInt(9999) + "-" + r.nextInt(9999)
-           + "-" + r.nextInt(9999);
+    return UUID.randomUUID().toString();
   }
 
   //~--- fields ---------------------------------------------------------------
