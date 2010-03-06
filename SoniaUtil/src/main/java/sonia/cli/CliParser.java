@@ -120,7 +120,7 @@ public class CliParser
         for (int i = 0; i < length; i++)
         {
           if (arguments[i].equals(name)
-              || (!longName.equals("--") && arguments[i].equals(longName)))
+              || (!longName.equals("--") && arguments[i].startsWith(longName)))
           {
             found = true;
 
@@ -128,11 +128,21 @@ public class CliParser
             {
               setArgument(object, field, Boolean.TRUE);
             }
-            else if (i + 1 < length)
+            else if (arguments[i].equals(name) && (i + 1 < length))
             {
               setArgument(object, field,
                           Util.convertString(field.getType(),
                                              arguments[i + 1]));
+            }
+            else if (arguments[i].startsWith(longName + "="))
+            {
+              String value = arguments[i].substring(longName.length() + 1);
+
+              if ((value != null) && (value.length() > 0))
+              {
+                setArgument(object, field,
+                            Util.convertString(field.getType(), value));
+              }
             }
             else
             {

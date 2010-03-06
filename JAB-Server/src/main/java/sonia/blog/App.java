@@ -8,7 +8,6 @@ import org.eclipse.jetty.server.nio.SelectChannelConnector;
 import org.eclipse.jetty.webapp.WebAppContext;
 
 import sonia.cli.Argument;
-import sonia.cli.CliHelpBuilder;
 import sonia.cli.CliParser;
 import sonia.cli.DefaultCliHelpBuilder;
 
@@ -67,6 +66,7 @@ public class App
    */
   public void start() throws Exception
   {
+    printOptions();
     server = new Server();
     addShutdownHook();
 
@@ -152,8 +152,6 @@ public class App
    */
   private void copyWebApp(File warFile) throws IOException
   {
-    System.out.println("copy war-file");
-
     InputStream in = null;
     FileOutputStream out = null;
 
@@ -195,6 +193,19 @@ public class App
       new DefaultCliHelpBuilder(prefix.toString(), null);
 
     System.out.println(parser.createHelp(helpBuilder, this));
+  }
+
+  /**
+   * Method description
+   *
+   */
+  private void printOptions()
+  {
+    System.out.println("start JAB-Server");
+    System.out.append("  port:          ").println(port);
+    System.out.append("  context-path:  ").println(contextPath);
+    System.out.append("  resource-path: ").println(resourcePath);
+    System.out.println();
   }
 
   /**
