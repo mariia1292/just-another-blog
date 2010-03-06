@@ -41,6 +41,9 @@ import sonia.util.Util;
 
 import java.lang.reflect.Field;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  *
  * @author Sebastian Sdorra
@@ -52,15 +55,16 @@ public class CliParser
    * Method description
    *
    *
-   * @param object
+   *
+   * @param helpBuilder
+   * @param clazz
    *
    * @return
    */
-  public String createHelp(Object object)
+  public String createHelp(CliHelpBuilder helpBuilder, Class clazz)
   {
-    String s = System.getProperty("line.separator");
-    StringBuffer result = new StringBuffer();
-    Field[] fields = object.getClass().getDeclaredFields();
+    Field[] fields = clazz.getDeclaredFields();
+    List<Argument> arguments = new ArrayList<Argument>();
 
     for (Field field : fields)
     {
@@ -68,27 +72,25 @@ public class CliParser
 
       if (argument != null)
       {
-        String name = argument.value();
-        String longName = argument.longName();
-        String description = argument.description();
-
-        result.append("-").append(name);
-
-        if (longName.length() > 0)
-        {
-          result.append(",").append(longName);
-        }
-
-        if (description.length() > 0)
-        {
-          result.append("\t\t").append(description);
-        }
-
-        result.append(s);
+        arguments.add(argument);
       }
     }
 
-    return result.toString();
+    return helpBuilder.createHelp(arguments);
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param helpBuilder
+   * @param object
+   *
+   * @return
+   */
+  public String createHelp(CliHelpBuilder helpBuilder, Object object)
+  {
+    return createHelp(helpBuilder, object.getClass());
   }
 
   /**
