@@ -37,7 +37,7 @@ public class App
    */
   public static void main(String[] args) throws Exception
   {
-    App app = new App();
+    final App app = new App();
     StringBuffer resourceBuffer = new StringBuffer();
 
     resourceBuffer.append(System.getProperty("user.home"));
@@ -51,6 +51,17 @@ public class App
     if (app.showHelp)
     {
       app.printHelp(parser);
+    }
+    else if (app.gui)
+    {
+      java.awt.EventQueue.invokeLater(new Runnable()
+      {
+        @Override
+        public void run()
+        {
+          new ConfigFrame(app).setVisible(true);
+        }
+      });
     }
     else
     {
@@ -115,6 +126,145 @@ public class App
     server.start();
     server.join();
   }
+
+  //~--- get methods ----------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  public String getContextPath()
+  {
+    return contextPath;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  public Boolean getGui()
+  {
+    return gui;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  public Integer getPort()
+  {
+    return port;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  public String getResourcePath()
+  {
+    return resourcePath;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  public Server getServer()
+  {
+    return server;
+  }
+ 
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  public Boolean getShowHelp()
+  {
+    return showHelp;
+  }
+
+  //~--- set methods ----------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   * @param contextPath
+   */
+  public void setContextPath(String contextPath)
+  {
+    this.contextPath = contextPath;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param gui
+   */
+  public void setGui(Boolean gui)
+  {
+    this.gui = gui;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param port
+   */
+  public void setPort(Integer port)
+  {
+    this.port = port;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param resourcePath
+   */
+  public void setResourcePath(String resourcePath)
+  {
+    this.resourcePath = resourcePath;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param server
+   */
+  public void setServer(Server server)
+  {
+    this.server = server;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param showHelp
+   */
+  public void setShowHelp(Boolean showHelp)
+  {
+    this.showHelp = showHelp;
+  }
+
+  //~--- methods --------------------------------------------------------------
 
   /**
    * Method description
@@ -268,6 +418,14 @@ public class App
     description = "The Context-Path of the Jab-WebApp"
   )
   private String contextPath = "/";
+
+  /** Field description */
+  @Argument(
+    value = "g",
+    longName = "gui",
+    description = "starts with the GUI"
+  )
+  private Boolean gui = Boolean.FALSE;
 
   /** Field description */
   @Argument(
