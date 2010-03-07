@@ -163,7 +163,7 @@
 
   <servlet-mapping>
     <servlet-name>IndexServlet</servlet-name>
-    <url-pattern>/index</url-pattern>
+    <url-pattern>/index.idx</url-pattern>
   </servlet-mapping>
 
   <!-- Comment Servlet -->
@@ -252,7 +252,7 @@
   </session-config>
 
   <welcome-file-list>
-    <welcome-file>index</welcome-file>
+    <welcome-file>index.idx</welcome-file>
   </welcome-file-list>
 
 </web-app>
