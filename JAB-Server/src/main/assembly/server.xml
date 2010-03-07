@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+    Document   : newXMLDocument.xml
+    Created on : March 7, 2010, 6:02 PM
+    Author     : sdorra
+    Description:
+        Purpose of the document follows.
+-->
+
+<assembly  xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+   xmlns='http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.1'
+   xsi:schemaLocation='http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.1 http://maven.apache.org/xsd/assembly-1.1.1.xsd'>
+  <id>complete</id>
+  
+  <formats>
+    <format>jar</format>
+  </formats>
+  
+  <includeBaseDirectory>false</includeBaseDirectory>
+  
+  <dependencySets>
+    <dependencySet>
+      <unpack>true</unpack>
+      <scope>runtime</scope>
+      <excludes>
+        <exclude>${project.groupId}:${project.artifactId}</exclude>
+      </excludes>
+    </dependencySet>
+  </dependencySets>
+  
+  <fileSets>
+    <fileSet>
+      <directory>target/classes</directory>
+      <outputDirectory>/</outputDirectory>
+    </fileSet>
+  </fileSets>
+  
+</assembly>
