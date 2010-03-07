@@ -127,6 +127,25 @@ public class App
     server.join();
   }
 
+  /**
+   * Method description
+   *
+   */
+  public void stop()
+  {
+    if (server != null)
+    {
+      try
+      {
+        server.stop();
+      }
+      catch (Exception ex)
+      {
+        ex.printStackTrace();
+      }
+    }
+  }
+
   //~--- get methods ----------------------------------------------------------
 
   /**
@@ -183,7 +202,6 @@ public class App
   {
     return server;
   }
- 
 
   /**
    * Method description

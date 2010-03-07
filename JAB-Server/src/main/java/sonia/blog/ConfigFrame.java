@@ -37,21 +37,64 @@
 
 package sonia.blog;
 
+import java.awt.Image;
+import java.awt.MenuItem;
+import java.awt.PopupMenu;
+import java.awt.SystemTray;
+import java.awt.TrayIcon;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import javax.imageio.ImageIO;
+
 /**
  *
  * @author Sebastian Sdorra
  */
 public class ConfigFrame extends javax.swing.JFrame {
 
+    private TrayIcon trayIcon = null;
     private App app;
 
     /** Creates new form ConfigFrame */
     public ConfigFrame(App app) {
       this.app = app;
-        initComponents();
-        ed_contextpath.setText(app.getContextPath());
-        ed_port.setText( app.getPort().toString() );
-        ed_resourcedir.setText( app.getResourcePath() );
+      initComponents();
+      ed_contextpath.setText(app.getContextPath());
+      ed_port.setText( app.getPort().toString() );
+      ed_resourcedir.setText( app.getResourcePath() );
+    }
+
+    private final void createTrayIcon(){
+      SystemTray systemTray = SystemTray.getSystemTray();
+      PopupMenu menu = new PopupMenu();
+      MenuItem item = new MenuItem("Exit");
+      item.addActionListener( new ActionListener(){
+
+        @Override
+        public void actionPerformed(ActionEvent e)
+        {
+          app.stop();
+          System.exit(0);
+        }
+        
+      });
+      
+      menu.add(item);
+
+      try
+      {
+        Image image = ImageIO.read(getClass().getResource("/icon-64.gif"));
+
+        trayIcon = new TrayIcon(image);
+        trayIcon.setPopupMenu(menu);
+        trayIcon.setImageAutoSize(true);
+
+        systemTray.add(trayIcon);
+      } 
+      catch ( Exception ex )
+      {
+        ex.printStackTrace();
+      }
     }
 
 
@@ -143,6 +186,13 @@ public class ConfigFrame extends javax.swing.JFrame {
       app.setResourcePath( ed_resourcedir.getText() );
       Integer port = Integer.parseInt( ed_port.getText() );
       app.setPort(port);
+
+      if ( SystemTray.isSupported() )
+      {
+        createTrayIcon();
+      }
+
+      setVisible(false);
 
       try
       {
