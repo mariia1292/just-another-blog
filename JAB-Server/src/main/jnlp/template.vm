@@ -1,0 +1,27 @@
+<jnlp spec="$jnlpspec" codebase="$jab-jnlp-codeBase" href="$outputFile">
+  <information>
+    <title>$jab-jnlp-vendor</title>
+    <vendor>$project.Name</vendor>
+    <homepage href="$project.Url"/>
+    <description>$project.Description</description>
+    <icon href="lib/icons/icon-64.gif" width="64" height="64" kind="default" />
+    <shortcut online="false">
+      <menu submenu="Just-Another-Blog"/>
+    </shortcut>
+    #if($offlineAllowed)
+      <offline-allowed/>
+    #end
+  </information>
+  #if($allPermissions)
+    <security>
+      <all-permissions/>
+    </security>
+  #end
+  <resources>
+  <j2se version="1.6+"/>
+     $dependencies
+  </resources>
+  <application-desc main-class="$mainClass">
+    <argument>--gui</argument>
+  </application-desc>
+</jnlp>
