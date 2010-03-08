@@ -38,6 +38,7 @@ package sonia.blog.dao.jpa;
 import sonia.blog.api.app.BlogConfiguration;
 import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.app.Constants;
+import sonia.blog.api.app.ResourceManager;
 import sonia.blog.api.dao.AttachmentDAO;
 import sonia.blog.api.dao.BlogDAO;
 import sonia.blog.api.dao.BlogHitCountDAO;
@@ -112,8 +113,13 @@ public class JpaDAOFactory extends DAOFactory
     BlogConfiguration config = ctx.getConfiguration();
     String pu = getPU();
     Map<String, Object> parameters = new HashMap<String, Object>();
-    File tmpDir =
-      ctx.getResourceManager().getDirectory(Constants.RESOURCE_TEMP, true);
+    ResourceManager resManager = ctx.getResourceManager();
+    File logDir = resManager.getDirectory(Constants.RESOURCE_LOG, true);
+    File tmpDir = resManager.getDirectory(Constants.RESOURCE_TEMP, true);
+    StringBuffer derbyLog = new StringBuffer(logDir.getAbsolutePath());
+
+    derbyLog.append(File.separator).append("derby.log");
+    System.setProperty("derby.stream.error.file", derbyLog.toString());
 
     // eclipselink
     parameters.put("eclipselink.jdbc.driver",
