@@ -88,12 +88,7 @@ public class BlogResponse extends HttpServletResponseWrapper
   @Override
   public void addDateHeader(String name, long date)
   {
-    if (cacheEnabled)
-    {
-      cacheObject.addDateHeader(name, date);
-    }
-
-    super.addDateHeader(name, date);
+    setDateHeader(name, date);
   }
 
   /**
@@ -106,12 +101,7 @@ public class BlogResponse extends HttpServletResponseWrapper
   @Override
   public void addHeader(String name, String value)
   {
-    if (cacheEnabled)
-    {
-      cacheObject.addHeader(name, value);
-    }
-
-    super.addHeader(name, value);
+    setHeader(name, value);
   }
 
   /**
@@ -124,12 +114,7 @@ public class BlogResponse extends HttpServletResponseWrapper
   @Override
   public void addIntHeader(String name, int value)
   {
-    if (cacheEnabled)
-    {
-      cacheObject.addIntHeader(name, value);
-    }
-
-    super.addIntHeader(name, value);
+    setIntHeader(name, value);
   }
 
   /**
@@ -365,6 +350,60 @@ public class BlogResponse extends HttpServletResponseWrapper
     }
 
     super.setContentType(type);
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param name
+   * @param date
+   */
+  @Override
+  public void setDateHeader(String name, long date)
+  {
+    if (cacheEnabled)
+    {
+      cacheObject.addDateHeader(name, date);
+    }
+
+    super.setDateHeader(name, date);
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param name
+   * @param value
+   */
+  @Override
+  public void setHeader(String name, String value)
+  {
+    if (cacheEnabled)
+    {
+      cacheObject.addHeader(name, value);
+    }
+
+    super.setHeader(name, value);
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param name
+   * @param value
+   */
+  @Override
+  public void setIntHeader(String name, int value)
+  {
+    if (cacheEnabled)
+    {
+      cacheObject.addIntHeader(name, value);
+    }
+
+    super.setIntHeader(name, value);
   }
 
   /**
