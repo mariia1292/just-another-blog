@@ -83,6 +83,69 @@
 
   </build>
 
+
+  <profiles>
+    <profile>
+
+      <id>jnlp</id>
+
+      <activation>
+        <property>
+          <name>jab.jnlp.enable</name>
+          <value>true</value>
+        </property>
+      </activation>
+
+      <build>
+        <plugins>
+
+          <plugin>
+            <groupId>org.codehaus.mojo.webstart</groupId>
+            <artifactId>webstart-maven-plugin</artifactId>
+            <configuration>
+              <libPath>lib</libPath>
+              <sign>
+                <keypass>${jab-jnlp-password}</keypass>
+                <storepass>${jab-jnlp-password}</storepass>
+                <alias>${jab-jnlp-alias}</alias>
+
+                <dnameCn>${jab-jnlp-keystore-cn}</dnameCn>
+                <dnameOu>${jab-jnlp-keystore-ou}</dnameOu>
+                <dnameO>${jab-jnlp-keystore-o}</dnameO>
+                <dnameL>${jab-jnlp-keystore-l}</dnameL>
+                <dnameSt>${jab-jnlp-keystore-st}</dnameSt>
+                <dnameC>${jab-jnlp-keystore-c}</dnameC>
+                <validity>${jab-jnlp-keystore-validity}</validity>
+
+                <verify>true</verify>
+                <keystoreConfig>
+                  <gen>${jab-jnlp-keystore-gen}</gen>
+                  <delete>${jab-jnlp-keystore-delete}</delete>
+                </keystoreConfig>
+              </sign>
+              <jnlp>
+                <inputTemplate>src/main/jnlp/template.vm</inputTemplate>
+                <outputFile>app.jnlp</outputFile>
+                <mainClass>sonia.blog.App</mainClass>
+              </jnlp>
+            </configuration>
+            <executions>
+              <execution>
+                <id>make-jnlp</id>
+                <phase>package</phase>
+                <goals>
+                  <goal>jnlp</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+
+        </plugins>
+      </build>
+
+    </profile>
+  </profiles>
+
   <dependencies>
 
     <dependency>
@@ -104,16 +167,6 @@
       <groupId>org.mortbay.jetty</groupId>
       <artifactId>jsp-2.1-glassfish</artifactId>
       <version>2.1.v20091210</version>
-      <exclusions>
-        <exclusion>
-          <groupId>ant</groupId>
-          <artifactId>ant</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>org.eclipse.jdt.core.compiler</groupId>
-          <artifactId>ecj</artifactId>
-        </exclusion>
-      </exclusions>
     </dependency>
     <dependency>
       <groupId>sonia.util</groupId>

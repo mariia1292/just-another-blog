@@ -37,6 +37,10 @@ public class App
    */
   public static void main(String[] args) throws Exception
   {
+
+    // disable security manager
+    System.setSecurityManager(null);
+
     final App app = new App();
     StringBuffer resourceBuffer = new StringBuffer();
 
