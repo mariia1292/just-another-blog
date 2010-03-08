@@ -18,6 +18,11 @@
     <param-value>false</param-value>
   </context-param>
 
+  <context-param>
+    <param-name>org.apache.myfaces.USE_ENCRYPTION</param-name>
+    <param-value>false</param-value>
+  </context-param>
+
   <!-- jboss 5x myfaces http://community.jboss.org/wiki/JBoss5AndMyFaces -->
   <context-param>
      <param-name>org.jboss.jbossfaces.WAR_BUNDLES_JSF_IMPL</param-name>
