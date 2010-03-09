@@ -2,23 +2,20 @@ package sonia.blog;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import org.eclipse.jetty.server.Connector;
-import org.eclipse.jetty.server.Server;
-import org.eclipse.jetty.server.nio.SelectChannelConnector;
-import org.eclipse.jetty.webapp.WebAppContext;
+import sonia.blog.server.BlogServer;
+import sonia.blog.server.BlogServerConfig;
+import sonia.blog.server.BlogServerException;
+import sonia.blog.server.BlogServerFactory;
 
 import sonia.cli.Argument;
 import sonia.cli.CliParser;
 import sonia.cli.DefaultCliHelpBuilder;
 
-import sonia.util.Util;
-
 //~--- JDK imports ------------------------------------------------------------
 
+import com.sun.org.apache.regexp.internal.RESyntaxException;
+
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
 
 /**
  * Hello world!
@@ -63,7 +60,7 @@ public class App
         @Override
         public void run()
         {
-          new ConfigFrame(app).setVisible(true);
+          new ConfigFrame(app.resourcePath).setVisible(true);
         }
       });
     }
@@ -82,53 +79,13 @@ public class App
   public void start() throws Exception
   {
     printOptions();
-    server = new Server();
     addShutdownHook();
 
-    Connector connector = new SelectChannelConnector();
+    BlogServerConfig config = new BlogServerConfig(new File(resourcePath),
+                                port, contextPath);
 
-    connector.setPort(port);
-    server.addConnector(connector);
-
-    WebAppContext wac = new WebAppContext();
-
-    wac.setContextPath(contextPath);
-
-    File resourceDir = new File(resourcePath, "webapp");
-
-    if (!resourceDir.exists() &&!resourceDir.mkdirs())
-    {
-      throw new IOException("could not create directory");
-    }
-
-    File tempDirectory = new File(resourceDir, "temp");
-
-    if (!tempDirectory.exists() &&!tempDirectory.mkdirs())
-    {
-      throw new IOException("could not create directory");
-    }
-
-    File warFile = new File(resourceDir, "jab.war");
-
-    if (warFile.exists())
-    {
-      if (isNew(warFile))
-      {
-        updateWebApp(warFile);
-      }
-    }
-    else
-    {
-      copyWebApp(warFile);
-    }
-
-    wac.setWar(warFile.getAbsolutePath());
-    wac.setExtractWAR(true);
-    wac.setTempDirectory(tempDirectory);
-    server.setHandler(wac);
-    server.setStopAtShutdown(true);
+    server = BlogServerFactory.newServer(config);
     server.start();
-    server.join();
   }
 
   /**
@@ -202,17 +159,6 @@ public class App
    *
    * @return
    */
-  public Server getServer()
-  {
-    return server;
-  }
-
-  /**
-   * Method description
-   *
-   *
-   * @return
-   */
   public Boolean getShowHelp()
   {
     return showHelp;
@@ -268,17 +214,6 @@ public class App
    * Method description
    *
    *
-   * @param server
-   */
-  public void setServer(Server server)
-  {
-    this.server = server;
-  }
-
-  /**
-   * Method description
-   *
-   *
    * @param showHelp
    */
   public void setShowHelp(Boolean showHelp)
@@ -305,46 +240,13 @@ public class App
           {
             server.stop();
           }
-          catch (Exception ex)
+          catch (BlogServerException ex)
           {
             ex.printStackTrace();
           }
         }
       }
     });
-  }
-
-  /**
-   * Method description
-   *
-   *
-   * @param warFile
-   *
-   * @throws IOException
-   */
-  private void copyWebApp(File warFile) throws IOException
-  {
-    InputStream in = null;
-    FileOutputStream out = null;
-
-    try
-    {
-      in = getWebApp();
-      out = new FileOutputStream(warFile);
-      Util.copy(in, out);
-    }
-    finally
-    {
-      if (in != null)
-      {
-        in.close();
-      }
-
-      if (out != null)
-      {
-        out.close();
-      }
-    }
   }
 
   /**
@@ -378,57 +280,6 @@ public class App
     System.out.append("  context-path:  ").println(contextPath);
     System.out.append("  resource-path: ").println(resourcePath);
     System.out.println();
-  }
-
-  /**
-   * Method description
-   *
-   *
-   * @param warFile
-   *
-   * @throws IOException
-   */
-  private void updateWebApp(File warFile) throws IOException
-  {
-    System.out.println("Update WebApp");
-
-    if (!warFile.delete())
-    {
-      throw new IOException("could not delete war-file");
-    }
-
-    copyWebApp(warFile);
-  }
-
-  //~--- get methods ----------------------------------------------------------
-
-  /**
-   * Method description
-   *
-   *
-   * @return
-   */
-  private InputStream getWebApp()
-  {
-    return App.class.getResourceAsStream("/webapp/jab.war");
-  }
-
-  /**
-   * Method description
-   *
-   *
-   * @param warFile
-   *
-   * @return
-   *
-   * @throws IOException
-   */
-  private boolean isNew(File warFile) throws IOException
-  {
-    String checksum = ChecksumUtil.createChecksum(warFile);
-    String newChecksum = ChecksumUtil.createChecksum(getWebApp());
-
-    return !checksum.equals(newChecksum);
   }
 
   //~--- fields ---------------------------------------------------------------
@@ -466,7 +317,7 @@ public class App
   private String resourcePath;
 
   /** Field description */
-  private Server server;
+  private BlogServer server;
 
   /** Field description */
   @Argument(
