@@ -36,6 +36,7 @@
  */
 package sonia.blog;
 
+import java.awt.Desktop;
 import java.awt.Image;
 import java.awt.MenuItem;
 import java.awt.PopupMenu;
@@ -44,21 +45,24 @@ import java.awt.TrayIcon;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.net.URI;
 import javax.imageio.ImageIO;
 import sonia.blog.server.BlogServer;
 import sonia.blog.server.BlogServerConfig;
 import sonia.blog.server.BlogServerException;
 import sonia.blog.server.BlogServerFactory;
+import sonia.blog.server.BlogServerListener;
 
 /**
  *
  * @author Sebastian Sdorra
  */
-public class ConfigFrame extends javax.swing.JFrame
+public class ConfigFrame extends javax.swing.JFrame implements BlogServerListener
 {
 
   private TrayIcon trayIcon = null;
   private BlogServer server;
+  private BlogServerConfig config;
 
   /** Creates new form ConfigFrame */
   public ConfigFrame(String resourcePath)
@@ -101,7 +105,8 @@ public class ConfigFrame extends javax.swing.JFrame
       trayIcon.setImageAutoSize(true);
 
       systemTray.add(trayIcon);
-    } catch (Exception ex)
+    }
+    catch (Exception ex)
     {
       ex.printStackTrace();
     }
@@ -200,19 +205,20 @@ public class ConfigFrame extends javax.swing.JFrame
     private void bt_startActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_bt_startActionPerformed
     {//GEN-HEADEREND:event_bt_startActionPerformed
 
+      pb_status.setIndeterminate(true);
+
       String contextPath = ed_contextpath.getText();
       String resourcePath = ed_resourcedir.getText();
       Integer port = Integer.parseInt(ed_port.getText());
 
-      BlogServerConfig config = new BlogServerConfig(new File(resourcePath), port, contextPath);
+      config = new BlogServerConfig(new File(resourcePath), port, contextPath);
       server = BlogServerFactory.newServer(config);
+      server.addServerListener(this);
 
       if (SystemTray.isSupported())
       {
         createTrayIcon();
       }
-
-      setVisible(false);
 
       try
       {
@@ -250,4 +256,36 @@ public class ConfigFrame extends javax.swing.JFrame
   private javax.swing.JLabel la_resourcedir;
   private javax.swing.JProgressBar pb_status;
   // End of variables declaration//GEN-END:variables
+
+  @Override
+  public void failed(Throwable throwable)
+  {
+    pb_status.setIndeterminate(false);
+  }
+
+  @Override
+  public void started()
+  {
+    pb_status.setIndeterminate(false);
+    setVisible(false);
+    if (Desktop.isDesktopSupported())
+    {
+      StringBuffer buffer = new StringBuffer("http://localhost:");
+      buffer.append(config.getPort()).append(config.getContextPath());
+      try
+      {
+        Desktop.getDesktop().browse(new URI(buffer.toString()));
+      }
+      catch (Exception ex)
+      {
+        ex.printStackTrace();
+      }
+    }
+  }
+
+  @Override
+  public void stopped()
+  {
+    pb_status.setIndeterminate(false);
+  }
 }
