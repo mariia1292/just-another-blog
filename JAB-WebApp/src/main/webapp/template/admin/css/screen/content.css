@@ -313,7 +313,7 @@
   .tabs .inactive { display: none; }
 
   /** fix fancybox  **/
-  #fancybox-left, #fancybox-right {
+  #fancybox-left, #fancybox-right, #fancybox-close {
     background-color: transparent;
   }
   
