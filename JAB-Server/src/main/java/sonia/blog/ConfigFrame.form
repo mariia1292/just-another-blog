@@ -22,28 +22,35 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Group type="102" attributes="0">
+          <Group type="102" attributes="1">
+              <EmptySpace min="20" pref="20" max="20" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Component id="la_contextpath" alignment="0" min="-2" max="-2" attributes="0"/>
+                  <Component id="la_resourcedir" alignment="0" min="-2" max="-2" attributes="0"/>
+                  <Component id="la_port" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace min="-2" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Group type="102" alignment="0" attributes="0">
+                      <Component id="ed_resourcedir" min="-2" pref="248" max="-2" attributes="0"/>
+                      <EmptySpace max="32767" attributes="0"/>
+                      <Component id="bt_browse" min="-2" pref="68" max="-2" attributes="0"/>
+                  </Group>
+                  <Group type="103" groupAlignment="1" max="-2" attributes="0">
+                      <Component id="ed_contextpath" alignment="0" max="32767" attributes="1"/>
+                      <Component id="ed_port" alignment="0" pref="81" max="32767" attributes="1"/>
+                  </Group>
+              </Group>
+              <EmptySpace max="-2" attributes="0"/>
+          </Group>
+          <Group type="102" alignment="0" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="bt_start" alignment="0" pref="432" max="32767" attributes="0"/>
+                  <Component id="pb_status" alignment="0" pref="463" max="32767" attributes="0"/>
                   <Group type="102" alignment="0" attributes="0">
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="la_contextpath" alignment="0" min="-2" max="-2" attributes="0"/>
-                          <Component id="la_resourcedir" alignment="0" min="-2" max="-2" attributes="0"/>
-                          <Component id="la_port" min="-2" max="-2" attributes="0"/>
-                      </Group>
-                      <EmptySpace min="-2" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="ed_resourcedir" alignment="1" pref="211" max="32767" attributes="0"/>
-                          <Group type="103" alignment="0" groupAlignment="1" max="-2" attributes="0">
-                              <Component id="ed_port" alignment="0" max="32767" attributes="1"/>
-                              <Component id="ed_contextpath" alignment="0" pref="77" max="32767" attributes="1"/>
-                          </Group>
-                      </Group>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Component id="bt_browse" min="-2" max="-2" attributes="0"/>
+                      <Component id="bt_start" pref="236" max="32767" attributes="1"/>
+                      <Component id="bt_stop" min="-2" pref="227" max="-2" attributes="1"/>
                   </Group>
-                  <Component id="pb_status" alignment="0" pref="432" max="32767" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
@@ -69,7 +76,10 @@
                   <Component id="bt_browse" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace type="separate" max="-2" attributes="0"/>
-              <Component id="bt_start" min="-2" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="bt_stop" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="bt_start" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
               <EmptySpace max="-2" attributes="0"/>
               <Component id="pb_status" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="32767" attributes="0"/>
@@ -119,6 +129,15 @@
       </Events>
     </Component>
     <Component class="javax.swing.JProgressBar" name="pb_status">
+    </Component>
+    <Component class="javax.swing.JButton" name="bt_stop">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Stop"/>
+        <Property name="enabled" type="boolean" value="false"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="bt_stopActionPerformed"/>
+      </Events>
     </Component>
   </SubComponents>
 </Form>
