@@ -46,7 +46,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.net.URI;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.imageio.ImageIO;
+import javax.swing.JOptionPane;
 import sonia.blog.server.BlogServer;
 import sonia.blog.server.BlogServerConfig;
 import sonia.blog.server.BlogServerException;
@@ -60,6 +63,7 @@ import sonia.blog.server.BlogServerListener;
 public class ConfigFrame extends javax.swing.JFrame implements BlogServerListener
 {
 
+  private static Logger logger = Logger.getLogger(ConfigFrame.class.getName());
   private TrayIcon trayIcon = null;
   private BlogServer server;
   private BlogServerConfig config;
@@ -75,8 +79,23 @@ public class ConfigFrame extends javax.swing.JFrame implements BlogServerListene
   {
     SystemTray systemTray = SystemTray.getSystemTray();
     PopupMenu menu = new PopupMenu();
-    MenuItem item = new MenuItem("Exit");
-    item.addActionListener(new ActionListener()
+    MenuItem optionsItem = new MenuItem( "Options" );
+    optionsItem.addActionListener( new ActionListener() {
+
+      @Override
+      public void actionPerformed(ActionEvent ae)
+      {
+        setAlwaysOnTop(true);
+        setVisible(true);
+        setAlwaysOnTop(false);
+      }
+    });
+    
+    menu.add(optionsItem);
+
+    MenuItem exitItem = new MenuItem("Exit");
+    
+    exitItem.addActionListener(new ActionListener()
     {
 
       @Override
@@ -88,13 +107,13 @@ public class ConfigFrame extends javax.swing.JFrame implements BlogServerListene
         }
         catch (BlogServerException ex)
         {
-          ex.printStackTrace();
+          logger.log(Level.SEVERE, null, ex);
         }
         System.exit(0);
       }
     });
 
-    menu.add(item);
+    menu.add(exitItem);
 
     try
     {
@@ -108,8 +127,71 @@ public class ConfigFrame extends javax.swing.JFrame implements BlogServerListene
     }
     catch (Exception ex)
     {
-      ex.printStackTrace();
+      handleException(ex);
     }
+  }
+
+  private void handleException( Throwable exception )
+  {
+    logger.log(Level.SEVERE, null, exception);
+    JOptionPane.showMessageDialog(getContentPane(), exception.getMessage(),
+      "Error", JOptionPane.ERROR_MESSAGE);
+    finish();
+  }
+
+  private void load()
+  {
+    pb_status.setIndeterminate(true);
+    ed_contextpath.setEnabled(false);
+    ed_port.setEnabled(false);
+    ed_resourcedir.setEnabled(false);
+    bt_browse.setEnabled(false);
+    bt_start.setEnabled(false);
+    setVisible(true);
+    bt_stop.setEnabled(true);
+  }
+
+  private void finish()
+  {
+    pb_status.setIndeterminate(false);
+    ed_contextpath.setEnabled(true);
+    ed_port.setEnabled(true);
+    ed_resourcedir.setEnabled(true);
+    bt_browse.setEnabled(true);
+    bt_start.setEnabled(true);
+    bt_stop.setEnabled(false);
+  }
+
+  @Override
+  public void failed(Throwable throwable)
+  {
+    handleException(throwable);
+  }
+
+  @Override
+  public void started()
+  {
+    pb_status.setIndeterminate(false);
+    setVisible(false);
+    if (Desktop.isDesktopSupported())
+    {
+      StringBuffer buffer = new StringBuffer("http://localhost:");
+      buffer.append(config.getPort()).append(config.getContextPath());
+      try
+      {
+        Desktop.getDesktop().browse(new URI(buffer.toString()));
+      }
+      catch (Exception ex)
+      {
+        handleException(ex);
+      }
+    }
+  }
+
+  @Override
+  public void stopped()
+  {
+    finish();
   }
 
   /** This method is called from within the constructor to
@@ -130,6 +212,7 @@ public class ConfigFrame extends javax.swing.JFrame implements BlogServerListene
     bt_browse = new javax.swing.JButton();
     bt_start = new javax.swing.JButton();
     pb_status = new javax.swing.JProgressBar();
+    bt_stop = new javax.swing.JButton();
 
     setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -152,28 +235,41 @@ public class ConfigFrame extends javax.swing.JFrame implements BlogServerListene
       }
     });
 
+    bt_stop.setText("Stop");
+    bt_stop.setEnabled(false);
+    bt_stop.addActionListener(new java.awt.event.ActionListener() {
+      public void actionPerformed(java.awt.event.ActionEvent evt) {
+        bt_stopActionPerformed(evt);
+      }
+    });
+
     javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
     getContentPane().setLayout(layout);
     layout.setHorizontalGroup(
       layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
       .addGroup(layout.createSequentialGroup()
+        .addGap(20, 20, 20)
+        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+          .addComponent(la_contextpath)
+          .addComponent(la_resourcedir)
+          .addComponent(la_port))
+        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+          .addGroup(layout.createSequentialGroup()
+            .addComponent(ed_resourcedir, javax.swing.GroupLayout.PREFERRED_SIZE, 248, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(bt_browse, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE))
+          .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+            .addComponent(ed_contextpath, javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(ed_port, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 81, Short.MAX_VALUE)))
+        .addContainerGap())
+      .addGroup(layout.createSequentialGroup()
         .addContainerGap()
         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-          .addComponent(bt_start, javax.swing.GroupLayout.DEFAULT_SIZE, 432, Short.MAX_VALUE)
+          .addComponent(pb_status, javax.swing.GroupLayout.DEFAULT_SIZE, 463, Short.MAX_VALUE)
           .addGroup(layout.createSequentialGroup()
-            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-              .addComponent(la_contextpath)
-              .addComponent(la_resourcedir)
-              .addComponent(la_port))
-            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-              .addComponent(ed_resourcedir, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 211, Short.MAX_VALUE)
-              .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                .addComponent(ed_port, javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(ed_contextpath, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 77, Short.MAX_VALUE)))
-            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-            .addComponent(bt_browse))
-          .addComponent(pb_status, javax.swing.GroupLayout.DEFAULT_SIZE, 432, Short.MAX_VALUE))
+            .addComponent(bt_start, javax.swing.GroupLayout.DEFAULT_SIZE, 236, Short.MAX_VALUE)
+            .addComponent(bt_stop, javax.swing.GroupLayout.PREFERRED_SIZE, 227, javax.swing.GroupLayout.PREFERRED_SIZE)))
         .addContainerGap())
     );
     layout.setVerticalGroup(
@@ -193,7 +289,9 @@ public class ConfigFrame extends javax.swing.JFrame implements BlogServerListene
           .addComponent(la_resourcedir)
           .addComponent(bt_browse))
         .addGap(18, 18, 18)
-        .addComponent(bt_start)
+        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+          .addComponent(bt_stop)
+          .addComponent(bt_start))
         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
         .addComponent(pb_status, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -205,7 +303,7 @@ public class ConfigFrame extends javax.swing.JFrame implements BlogServerListene
     private void bt_startActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_bt_startActionPerformed
     {//GEN-HEADEREND:event_bt_startActionPerformed
 
-      pb_status.setIndeterminate(true);
+      load();
 
       String contextPath = ed_contextpath.getText();
       String resourcePath = ed_resourcedir.getText();
@@ -215,7 +313,7 @@ public class ConfigFrame extends javax.swing.JFrame implements BlogServerListene
       server = BlogServerFactory.newServer(config);
       server.addServerListener(this);
 
-      if (SystemTray.isSupported())
+      if (trayIcon == null && SystemTray.isSupported())
       {
         createTrayIcon();
       }
@@ -232,9 +330,10 @@ public class ConfigFrame extends javax.swing.JFrame implements BlogServerListene
             try
             {
               server.start();
-            } catch (Exception ex)
+            }
+            catch (Exception ex)
             {
-              ex.printStackTrace();
+              handleException(ex);
             }
           }
         }).start();
@@ -242,12 +341,26 @@ public class ConfigFrame extends javax.swing.JFrame implements BlogServerListene
       }
       catch (Exception ex)
       {
-        ex.printStackTrace();
+        handleException(ex);
       }
     }//GEN-LAST:event_bt_startActionPerformed
+
+    private void bt_stopActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_bt_stopActionPerformed
+    {//GEN-HEADEREND:event_bt_stopActionPerformed
+      try
+      {
+        server.stop();
+      }
+      catch (BlogServerException ex)
+      {
+        handleException(ex);
+      }
+    }//GEN-LAST:event_bt_stopActionPerformed
+
   // Variables declaration - do not modify//GEN-BEGIN:variables
   private javax.swing.JButton bt_browse;
   private javax.swing.JButton bt_start;
+  private javax.swing.JButton bt_stop;
   private javax.swing.JTextField ed_contextpath;
   private javax.swing.JTextField ed_port;
   private javax.swing.JTextField ed_resourcedir;
@@ -257,35 +370,4 @@ public class ConfigFrame extends javax.swing.JFrame implements BlogServerListene
   private javax.swing.JProgressBar pb_status;
   // End of variables declaration//GEN-END:variables
 
-  @Override
-  public void failed(Throwable throwable)
-  {
-    pb_status.setIndeterminate(false);
-  }
-
-  @Override
-  public void started()
-  {
-    pb_status.setIndeterminate(false);
-    setVisible(false);
-    if (Desktop.isDesktopSupported())
-    {
-      StringBuffer buffer = new StringBuffer("http://localhost:");
-      buffer.append(config.getPort()).append(config.getContextPath());
-      try
-      {
-        Desktop.getDesktop().browse(new URI(buffer.toString()));
-      }
-      catch (Exception ex)
-      {
-        ex.printStackTrace();
-      }
-    }
-  }
-
-  @Override
-  public void stopped()
-  {
-    pb_status.setIndeterminate(false);
-  }
 }
