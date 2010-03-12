@@ -208,9 +208,10 @@ public class CodeMacro extends AbstractBlogMacro implements WebMacro
   @MacroInfoParameter(
     displayName = "macro.code.lang.displayName",
     description = "macro.code.lang.description",
-    defaultValue= "java",
+    defaultValue = "java",
     widget = SelectWidget.class,
-    widgetParam = "options=bash|c++|c#|coldfusion|css|delphi|diff|erlang|groovy|*java|javaScript:js|perl|python|ruby|scala|sql|vb|xml"
+    widgetParam = "options=bash|c++|c#|coldfusion|css|delphi|diff|erlang|groovy|*java|javaScript:js|perl|python|ruby|scala|sql|vb|xml",
+    order = 1
   )
   public void setLang(String lang)
   {
@@ -228,7 +229,8 @@ public class CodeMacro extends AbstractBlogMacro implements WebMacro
     description = "macro.code.tabSize.description",
     defaultValue = "2",
     widget = StringInputWidget.class,
-    widgetParam = "regex=[0-9]+"
+    widgetParam = "regex=[0-9]+",
+    order = 2
   )
   public void setTabSize(String tabSize)
   {
@@ -246,7 +248,8 @@ public class CodeMacro extends AbstractBlogMacro implements WebMacro
     description = "macro.code.toolbar.description",
     defaultValue = "true",
     widget = CheckboxWidget.class,
-    widgetParam = "checked=true"
+    widgetParam = "checked=true",
+    order = 0
   )
   public void setToolbar(String toolbar)
   {

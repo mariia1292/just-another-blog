@@ -44,6 +44,7 @@ import sonia.util.Util;
 import java.lang.reflect.Method;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
@@ -182,7 +183,10 @@ public class DefaultMacroInformationProvider extends MacroInformationProvider
         String description = getString(bundle, param.description());
         MacroInformationParameter infoParam =
           new MacroInformationParameter(name, label, description);
-        infoParam.setPresetValue( param.defaultValue() );
+
+        infoParam.setPresetValue(param.defaultValue());
+        infoParam.setOrder(param.order());
+
         Class<? extends MacroWidget> widget = param.widget();
 
         if (widget != null)
@@ -200,6 +204,8 @@ public class DefaultMacroInformationProvider extends MacroInformationProvider
         parameters.add(infoParam);
       }
     }
+
+    Collections.sort(parameters);
 
     return parameters;
   }

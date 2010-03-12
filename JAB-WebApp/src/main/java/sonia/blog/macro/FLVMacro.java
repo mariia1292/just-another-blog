@@ -108,7 +108,8 @@ public class FLVMacro extends AbstractBlogMacro implements WebMacro
   @MacroInfoParameter(
     displayName = "macro.flv.autoBuffering.displayName",
     description = "macro.flv.autoBuffering.description",
-    widget = CheckboxWidget.class
+    widget = CheckboxWidget.class,
+    order = 2
   )
   public void setAutoBuffering(Boolean autoBuffering)
   {
@@ -124,7 +125,8 @@ public class FLVMacro extends AbstractBlogMacro implements WebMacro
   @MacroInfoParameter(
     displayName = "macro.flv.autoPlay.displayName",
     description = "macro.flv.autoPlay.description",
-    widget = CheckboxWidget.class
+    widget = CheckboxWidget.class,
+    order = 1
   )
   public void setAutoPlay(Boolean autoPlay)
   {
@@ -141,7 +143,8 @@ public class FLVMacro extends AbstractBlogMacro implements WebMacro
     displayName = "macro.flv.height.displayName",
     description = "macro.flv.height.description",
     widget = StringInputWidget.class,
-    widgetParam = "regex=\\d+;value=360"
+    widgetParam = "regex=\\d+;value=360",
+    order = 4
   )
   public void setHeight(Integer height)
   {
@@ -158,7 +161,8 @@ public class FLVMacro extends AbstractBlogMacro implements WebMacro
     displayName = "macro.flv.id.displayName",
     description = "macro.flv.id.description",
     widget = AttachmentWidget.class,
-    widgetParam = "filter=.*\\.(flv|f4v|f4p|f4a|f4b|mp4|m4v)"
+    widgetParam = "filter=.*\\.(flv|f4v|f4p|f4a|f4b|mp4|m4v)",
+    order = 0
   )
   public void setId(Long id)
   {
@@ -175,7 +179,8 @@ public class FLVMacro extends AbstractBlogMacro implements WebMacro
     displayName = "macro.flv.width.displayName",
     description = "macro.flv.width.description",
     widget = StringInputWidget.class,
-    widgetParam = "regex=\\d+;value=480"
+    widgetParam = "regex=\\d+;value=480",
+    order = 3
   )
   public void setWidth(Integer width)
   {

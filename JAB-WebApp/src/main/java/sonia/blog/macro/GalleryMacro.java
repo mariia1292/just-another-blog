@@ -101,7 +101,8 @@ public class GalleryMacro extends AbstractBlogMacro implements WebMacro
   @MacroInfoParameter(
     displayName = "macro.gallery.descriptionExclude.displayName",
     description = "macro.gallery.descriptionExclude.description",
-    widget = StringInputWidget.class
+    widget = StringInputWidget.class,
+    order = 3
   )
   public void setDescriptionExclude(String descriptionExclude)
   {
@@ -117,7 +118,8 @@ public class GalleryMacro extends AbstractBlogMacro implements WebMacro
   @MacroInfoParameter(
     displayName = "macro.gallery.descriptionInclude.displayName",
     description = "macro.gallery.descriptionInclude.description",
-    widget = StringInputWidget.class
+    widget = StringInputWidget.class,
+    order = 1
   )
   public void setDescriptionInclude(String descriptionInclude)
   {
@@ -133,7 +135,8 @@ public class GalleryMacro extends AbstractBlogMacro implements WebMacro
   @MacroInfoParameter(
     displayName = "macro.gallery.exclude.displayName",
     description = "macro.gallery.exclude.description",
-    widget = StringInputWidget.class
+    widget = StringInputWidget.class,
+    order = 2
   )
   public void setExclude(String exclude)
   {
@@ -149,7 +152,8 @@ public class GalleryMacro extends AbstractBlogMacro implements WebMacro
   @MacroInfoParameter(
     displayName = "macro.gallery.include.displayName",
     description = "macro.gallery.include.description",
-    widget = StringInputWidget.class
+    widget = StringInputWidget.class,
+    order = 0
   )
   public void setInclude(String include)
   {

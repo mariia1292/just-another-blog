@@ -55,4 +55,5 @@ public @interface MacroInfoParameter
   Class<? extends MacroWidget> widget() default MacroWidget.class;
   String defaultValue()                 default "";
   String widgetParam()                  default "";
+  int order()                           default 0;
 }
