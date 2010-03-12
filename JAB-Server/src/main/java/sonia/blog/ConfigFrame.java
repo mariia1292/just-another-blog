@@ -49,6 +49,7 @@ import java.net.URI;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
+import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import sonia.blog.server.BlogServer;
 import sonia.blog.server.BlogServerConfig;
@@ -67,6 +68,7 @@ public class ConfigFrame extends javax.swing.JFrame implements BlogServerListene
   private TrayIcon trayIcon = null;
   private BlogServer server;
   private BlogServerConfig config;
+  private JFileChooser chooser;
 
   /** Creates new form ConfigFrame */
   public ConfigFrame(String resourcePath)
@@ -236,6 +238,7 @@ public class ConfigFrame extends javax.swing.JFrame implements BlogServerListene
     bt_stop = new javax.swing.JButton();
 
     setTitle("JAB-Server");
+    setResizable(false);
 
     la_port.setText("Port:");
 
@@ -248,6 +251,11 @@ public class ConfigFrame extends javax.swing.JFrame implements BlogServerListene
     ed_contextpath.setText("/");
 
     bt_browse.setText("...");
+    bt_browse.addActionListener(new java.awt.event.ActionListener() {
+      public void actionPerformed(java.awt.event.ActionEvent evt) {
+        bt_browseActionPerformed(evt);
+      }
+    });
 
     bt_start.setText("Start");
     bt_start.addActionListener(new java.awt.event.ActionListener() {
@@ -376,6 +384,28 @@ public class ConfigFrame extends javax.swing.JFrame implements BlogServerListene
         }
       }
     }//GEN-LAST:event_bt_stopActionPerformed
+
+    private void bt_browseActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_bt_browseActionPerformed
+    {//GEN-HEADEREND:event_bt_browseActionPerformed
+      if ( chooser == null )
+      {
+        chooser = new JFileChooser();
+        String path = ed_resourcedir.getText();
+        if ( path != null && path.length() > 0 )
+        {
+          File directory = new File( path );
+          if ( directory.exists() && directory.isDirectory() )
+          {
+            chooser.setSelectedFile(directory);
+          }
+        }
+        chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY );
+      }
+      int returnVal = chooser.showOpenDialog(this);
+      if ( returnVal == JFileChooser.APPROVE_OPTION ){
+        ed_resourcedir.setText(chooser.getSelectedFile().getPath());
+      }
+    }//GEN-LAST:event_bt_browseActionPerformed
 
   // Variables declaration - do not modify//GEN-BEGIN:variables
   private javax.swing.JButton bt_browse;
