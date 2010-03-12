@@ -73,6 +73,11 @@ public class ConfigFrame extends javax.swing.JFrame implements BlogServerListene
   {
     initComponents();
     ed_resourcedir.setText(resourcePath);
+    
+    if (trayIcon == null && SystemTray.isSupported())
+    {
+      createTrayIcon();
+    }
   }
 
   private final void createTrayIcon()
@@ -97,19 +102,11 @@ public class ConfigFrame extends javax.swing.JFrame implements BlogServerListene
     
     exitItem.addActionListener(new ActionListener()
     {
-
+      
       @Override
       public void actionPerformed(ActionEvent e)
       {
-        try
-        {
-          server.stop();
-        }
-        catch (BlogServerException ex)
-        {
-          logger.log(Level.SEVERE, null, ex);
-        }
-        System.exit(0);
+        close();
       }
     });
 
@@ -137,6 +134,30 @@ public class ConfigFrame extends javax.swing.JFrame implements BlogServerListene
     JOptionPane.showMessageDialog(getContentPane(), exception.getMessage(),
       "Error", JOptionPane.ERROR_MESSAGE);
     finish();
+  }
+
+  public void close()
+  {
+    if ( server != null )
+    {
+      try
+      {
+        server.stop();
+      }
+      catch (BlogServerException ex)
+      {
+        logger.log(Level.SEVERE, null, ex);
+      }
+    }
+    
+    saveWindow();
+    System.exit(0);
+  }
+
+  private void saveWindow()
+  {
+    StringBuffer path = new StringBuffer( System.getProperty( "user.home" ) );
+    path.append( File.separator ).append(".jab-server");
   }
 
   private void load()
@@ -214,7 +235,7 @@ public class ConfigFrame extends javax.swing.JFrame implements BlogServerListene
     pb_status = new javax.swing.JProgressBar();
     bt_stop = new javax.swing.JButton();
 
-    setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+    setTitle("JAB-Server");
 
     la_port.setText("Port:");
 
@@ -248,28 +269,29 @@ public class ConfigFrame extends javax.swing.JFrame implements BlogServerListene
     layout.setHorizontalGroup(
       layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
       .addGroup(layout.createSequentialGroup()
-        .addGap(20, 20, 20)
-        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-          .addComponent(la_contextpath)
-          .addComponent(la_resourcedir)
-          .addComponent(la_port))
-        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
           .addGroup(layout.createSequentialGroup()
-            .addComponent(ed_resourcedir, javax.swing.GroupLayout.PREFERRED_SIZE, 248, javax.swing.GroupLayout.PREFERRED_SIZE)
-            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(bt_browse, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE))
-          .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-            .addComponent(ed_contextpath, javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(ed_port, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 81, Short.MAX_VALUE)))
-        .addContainerGap())
-      .addGroup(layout.createSequentialGroup()
-        .addContainerGap()
-        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-          .addComponent(pb_status, javax.swing.GroupLayout.DEFAULT_SIZE, 463, Short.MAX_VALUE)
+            .addGap(20, 20, 20)
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+              .addComponent(la_contextpath)
+              .addComponent(la_resourcedir)
+              .addComponent(la_port))
+            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+              .addGroup(layout.createSequentialGroup()
+                .addComponent(ed_resourcedir, javax.swing.GroupLayout.PREFERRED_SIZE, 248, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(bt_browse, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE))
+              .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                .addComponent(ed_contextpath, javax.swing.GroupLayout.Alignment.LEADING)
+                .addComponent(ed_port, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 81, Short.MAX_VALUE))))
           .addGroup(layout.createSequentialGroup()
-            .addComponent(bt_start, javax.swing.GroupLayout.DEFAULT_SIZE, 236, Short.MAX_VALUE)
-            .addComponent(bt_stop, javax.swing.GroupLayout.PREFERRED_SIZE, 227, javax.swing.GroupLayout.PREFERRED_SIZE)))
+            .addContainerGap()
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+              .addComponent(pb_status, javax.swing.GroupLayout.DEFAULT_SIZE, 464, Short.MAX_VALUE)
+              .addGroup(layout.createSequentialGroup()
+                .addComponent(bt_start, javax.swing.GroupLayout.DEFAULT_SIZE, 237, Short.MAX_VALUE)
+                .addComponent(bt_stop, javax.swing.GroupLayout.PREFERRED_SIZE, 227, javax.swing.GroupLayout.PREFERRED_SIZE)))))
         .addContainerGap())
     );
     layout.setVerticalGroup(
@@ -313,11 +335,6 @@ public class ConfigFrame extends javax.swing.JFrame implements BlogServerListene
       server = BlogServerFactory.newServer(config);
       server.addServerListener(this);
 
-      if (trayIcon == null && SystemTray.isSupported())
-      {
-        createTrayIcon();
-      }
-
       try
       {
 
@@ -347,13 +364,16 @@ public class ConfigFrame extends javax.swing.JFrame implements BlogServerListene
 
     private void bt_stopActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_bt_stopActionPerformed
     {//GEN-HEADEREND:event_bt_stopActionPerformed
-      try
+      if ( server != null )
       {
-        server.stop();
-      }
-      catch (BlogServerException ex)
-      {
-        handleException(ex);
+        try
+        {
+          server.stop();
+        }
+        catch (BlogServerException ex)
+        {
+          handleException(ex);
+        }
       }
     }//GEN-LAST:event_bt_stopActionPerformed
 
