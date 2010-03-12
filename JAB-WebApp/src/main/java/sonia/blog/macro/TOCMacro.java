@@ -95,7 +95,8 @@ public class TOCMacro extends AbstractBlogMacro implements WebMacro
   @MacroInfoParameter(
     displayName = "macro.toc.container.displayName",
     description = "macro.toc.container.description",
-    widget = StringInputWidget.class
+    widget = StringInputWidget.class,
+    order = 2
   )
   public void setContainer(String container)
   {
@@ -111,7 +112,8 @@ public class TOCMacro extends AbstractBlogMacro implements WebMacro
   @MacroInfoParameter(
     displayName = "macro.toc.exclude.displayName",
     description = "macro.toc.exclude.description",
-    widget = StringInputWidget.class
+    widget = StringInputWidget.class,
+    order = 3
   )
   public void setExclude(String exclude)
   {
@@ -127,7 +129,8 @@ public class TOCMacro extends AbstractBlogMacro implements WebMacro
   @MacroInfoParameter(
     displayName = "macro.toc.id.displayName",
     description = "macro.toc.id.description",
-    widget = StringInputWidget.class
+    widget = StringInputWidget.class,
+    order = 1
   )
   public void setId(String id)
   {
@@ -143,7 +146,8 @@ public class TOCMacro extends AbstractBlogMacro implements WebMacro
   @MacroInfoParameter(
     displayName = "macro.toc.orderedList.displayName",
     description = "macro.toc.orderedList.description",
-    widget = CheckboxWidget.class
+    widget = CheckboxWidget.class,
+    order = 0
   )
   public void setOrderedList(Boolean orderedList)
   {

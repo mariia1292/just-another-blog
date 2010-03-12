@@ -93,7 +93,8 @@ public class FeedMacro extends AbstractBlogMacro implements WebMacro
   @MacroInfoParameter(
     displayName = "macro.feed.maxItems.displayName",
     description = "macro.feed.maxItems.description",
-    widget = StringInputWidget.class
+    widget = StringInputWidget.class,
+    order = 1
   )
   public void setMaxItems(Integer maxItems)
   {
@@ -109,7 +110,8 @@ public class FeedMacro extends AbstractBlogMacro implements WebMacro
   @MacroInfoParameter(
     displayName = "macro.feed.url.displayName",
     description = "macro.feed.url.description",
-    widget = StringInputWidget.class
+    widget = StringInputWidget.class,
+    order = 0
   )
   public void setUrl(String url)
   {

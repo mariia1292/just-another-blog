@@ -173,7 +173,8 @@ public class SpoilerMacro implements WebMacro
     displayName = "macro.spoiler.macros.displayName",
     description = "macro.spoiler.macros.description",
     widget = CheckboxWidget.class,
-    widgetParam = "checked=true"
+    widgetParam = "checked=true",
+    order = 0
   )
   public void setMacros(Boolean macros)
   {
@@ -189,7 +190,8 @@ public class SpoilerMacro implements WebMacro
   @MacroInfoParameter(
     displayName = "macro.spoiler.style.displayName",
     description = "macro.spoiler.style.description",
-    widget = StringInputWidget.class
+    widget = StringInputWidget.class,
+    order = 2
   )
   public void setStyle(String style)
   {
@@ -205,7 +207,8 @@ public class SpoilerMacro implements WebMacro
   @MacroInfoParameter(
     displayName = "macro.spoiler.styleClass.displayName",
     description = "macro.spoiler.styleClass.description",
-    widget = StringInputWidget.class
+    widget = StringInputWidget.class,
+    order = 3
   )
   public void setStyleClass(String styleClass)
   {
@@ -222,7 +225,8 @@ public class SpoilerMacro implements WebMacro
     displayName = "macro.spoiler.title.displayName",
     description = "macro.spoiler.title.description",
     widget = StringInputWidget.class,
-    widgetParam = "value=Spoiler"
+    widgetParam = "value=Spoiler",
+    order = 1
   )
   public void setTitle(String title)
   {

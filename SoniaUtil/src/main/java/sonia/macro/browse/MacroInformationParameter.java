@@ -38,6 +38,7 @@ package sonia.macro.browse;
  * @author Sebastian Sdorra
  */
 public class MacroInformationParameter
+        implements Comparable<MacroInformationParameter>
 {
 
   /**
@@ -80,6 +81,33 @@ public class MacroInformationParameter
     this.description = description;
   }
 
+  //~--- methods --------------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   * @param o
+   *
+   * @return
+   */
+  public int compareTo(MacroInformationParameter o)
+  {
+    int result = 0;
+
+    if (!this.equals(o))
+    {
+      result = order - o.order;
+
+      if (result == 0)
+      {
+        result = label.compareTo(o.label);
+      }
+    }
+
+    return result;
+  }
+
   //~--- get methods ----------------------------------------------------------
 
   /**
@@ -113,6 +141,17 @@ public class MacroInformationParameter
   public String getName()
   {
     return name;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  public int getOrder()
+  {
+    return order;
   }
 
   /**
@@ -187,6 +226,17 @@ public class MacroInformationParameter
    * Method description
    *
    *
+   * @param order
+   */
+  public void setOrder(int order)
+  {
+    this.order = order;
+  }
+
+  /**
+   * Method description
+   *
+   *
    * @param presetValue
    */
   public void setPresetValue(String presetValue)
@@ -226,6 +276,9 @@ public class MacroInformationParameter
 
   /** Field description */
   private String name;
+
+  /** Field description */
+  private int order = 0;
 
   /** Field description */
   private String presetValue = "";

@@ -110,7 +110,8 @@ public class PdfViewerMacro extends AbstractBlogMacro implements WebMacro
     displayName = "macro.pdfviewer.id.displayName",
     description = "macro.pdfviewer.id.description",
     widget = AttachmentWidget.class,
-    widgetParam = ".*\\.pdf"
+    widgetParam = ".*\\.pdf",
+    order = 0
   )
   public void setId(Long id)
   {
@@ -127,7 +128,8 @@ public class PdfViewerMacro extends AbstractBlogMacro implements WebMacro
     displayName = "macro.pdfviewer.type.displayName",
     description = "macro.pdfviewer.type.description",
     widget = SelectWidget.class,
-    widgetParam = "options=hidden|thumb|linklist"
+    widgetParam = "options=hidden|thumb|linklist",
+    order = 1
   )
   public void setType(String type)
   {
