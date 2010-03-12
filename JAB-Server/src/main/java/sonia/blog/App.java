@@ -13,8 +13,6 @@ import sonia.cli.DefaultCliHelpBuilder;
 
 //~--- JDK imports ------------------------------------------------------------
 
-import com.sun.org.apache.regexp.internal.RESyntaxException;
-
 import java.io.File;
 
 /**

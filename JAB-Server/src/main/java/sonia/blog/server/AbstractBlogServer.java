@@ -90,6 +90,8 @@ public abstract class AbstractBlogServer implements BlogServer
     {
       this.config = config;
       deploy();
+      System.setProperty("jab.resource-directory",
+                         config.getResourceDirectory().getAbsolutePath());
     }
     catch (IOException ex)
     {

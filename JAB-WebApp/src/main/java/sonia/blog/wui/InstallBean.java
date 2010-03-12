@@ -120,6 +120,9 @@ public class InstallBean extends AbstractBean
   private static final String DBEMBEDDED_USERNAME = "jab";
 
   /** Field description */
+  private static final String SYSPROP_RESOURCEDIR = "jab.resource-directory";
+
+  /** Field description */
   private static Logger logger = Logger.getLogger(InstallBean.class.getName());
 
   //~--- constructors ---------------------------------------------------------
@@ -144,7 +147,9 @@ public class InstallBean extends AbstractBean
   {
     super.init();
     loadDatabaseProfiles();
-    resourcePath = new File(Util.getHomeDirectory(), ".jab").getAbsolutePath();
+    resourcePath = System.getProperty(SYSPROP_RESOURCEDIR,
+                                      new File(Util.getHomeDirectory(),
+                                        ".jab").getAbsolutePath());
     databaseEmbedded = true;
     databaseDriver = DBEMBEDDED_DRIVER;
     databaseProfile = DBEMBEDDED_PROFILE;
