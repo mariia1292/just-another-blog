@@ -224,6 +224,10 @@ public class Page
    */
   public Date getCreationDate()
   {
+    if ( creationDate == null )
+    {
+      creationDate = new Date();
+    }
     return creationDate;
   }
 

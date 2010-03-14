@@ -15,6 +15,7 @@
 
       <ui:define name="head">
         <h:outputText value="#{PageAuthorBean.editor}" escape="false" />
+        <script type="text/javascript" src="${facesContext.externalContext.requestContextPath}/resources/jquery/plugins/js/jquery.sendform.js" />
         <script type="text/javascript">
           //<![CDATA[
           function popup(){
@@ -56,6 +57,14 @@
             updateNavigationOptions("#{!PageAuthorBean.new && PageAuthorBean.page.parent != null ? PageAuthorBean.page.parent.id : ""}"
               , "#{!PageAuthorBean.new ? PageAuthorBean.page.navigationPosition : ""}"
             );
+            $("#preview").click(function(){
+              $("#editorForm").sendform( "${facesContext.externalContext.requestContextPath}/page-preview.jab", {
+                extraParams: [{
+                    name: "id",
+                    value: "#{EntryBean.entry.id}"
+                }]
+              });
+            });
           });
           //]]>
         </script>
@@ -121,7 +130,7 @@
           </h:panelGrid>
           
           <h:commandButton value="#{label.save}" action="#{PageAuthorBean.save}" />
-          <h:commandButton value="#{label.preview}" actionListener="#{PageAuthorBean.preview}" />
+          <input type="button" id="preview" value="#{label.preview}" />
           <h:commandButton value="#{label.remove}" action="#{PageAuthorBean.remove}" rendered="#{!PageAuthorBean.new}" />
 
         </h:form>

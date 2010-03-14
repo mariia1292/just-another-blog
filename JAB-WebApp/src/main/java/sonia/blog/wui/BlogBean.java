@@ -589,9 +589,12 @@ public class BlogBean extends AbstractBean
   {
     boolean result = false;
 
-    if (entry instanceof CommentAble)
+    if (entry.getId() != null)
     {
-      result = getBlog().isAllowComments();
+      if (entry instanceof CommentAble)
+      {
+        result = getBlog().isAllowComments();
+      }
     }
 
     return result;
