@@ -25,7 +25,7 @@
 
         <p>
           <h:outputText value="#{PageBean.page.creationDate}">
-            <f:convertDateTime pattern="#{BlogBean.blog.dateFormat}" />
+            <f:convertDateTime timeZone="#{BlogBean.blog.timeZone}" pattern="#{BlogBean.blog.dateFormat}" />
           </h:outputText>
           <h:outputText value=", " />
           <blog:link value="#{PageBean.page.authorName}" object="#{PageBean.page.author}" />

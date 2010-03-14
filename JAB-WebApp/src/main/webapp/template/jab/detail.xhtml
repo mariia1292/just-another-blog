@@ -33,7 +33,7 @@
 
         <p>
           <h:outputText value="#{BlogBean.entry.creationDate}">
-            <f:convertDateTime pattern="#{BlogBean.blog.dateFormat}" />
+            <f:convertDateTime timeZone="#{BlogBean.blog.timeZone}" pattern="#{BlogBean.blog.dateFormat}" />
           </h:outputText>
           <h:outputText value=", " />
           <blog:link value="#{BlogBean.entry.authorName}" object="#{BlogBean.entry.author}" />
@@ -80,7 +80,7 @@
               <br />
 
               <h:outputText value="#{Comment.creationDate}">
-                <f:convertDateTime pattern="#{BlogBean.blog.dateFormat}" />
+                <f:convertDateTime timeZone="#{BlogBean.blog.timeZone}" pattern="#{BlogBean.blog.dateFormat}" />
               </h:outputText>
 
             </h:column>

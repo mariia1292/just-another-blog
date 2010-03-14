@@ -16,7 +16,7 @@
 
           <h:column>
             <h:outputText value="#{Draft.creationDate}">
-              <f:convertDateTime pattern="#{BlogBean.blog.dateFormat}" />
+              <f:convertDateTime timeZone="#{BlogBean.blog.timeZone}" pattern="#{BlogBean.blog.dateFormat}" />
             </h:outputText>
           </h:column>
 
