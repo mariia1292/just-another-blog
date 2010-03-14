@@ -21,7 +21,7 @@
           
           <h:outputLabel for="date" value="#{label.creationDate}" />
           <h:outputText id="date" value="#{CommentBean.comment.creationDate}">
-            <f:convertDateTime pattern="yyyy-MM-dd HH:mm" />
+            <f:convertDateTime timeZone="#{BlogBean.blog.timeZone}" pattern="#{BlogBean.blog.dateFormat}" />
           </h:outputText>
           
           <h:outputLabel for="name" value="#{label.author}" />

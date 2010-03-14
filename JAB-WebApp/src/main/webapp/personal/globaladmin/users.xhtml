@@ -64,7 +64,7 @@
                 <h:outputText value="#{label.registrationDate}" />
               </f:facet>
               <h:outputText value="#{User.registrationDate}">
-                <f:convertDateTime pattern="#{BlogBean.blog.dateFormat}" />
+                <f:convertDateTime timeZone="#{BlogBean.blog.timeZone}" pattern="#{BlogBean.blog.dateFormat}" />
               </h:outputText>
             </h:column>
 
@@ -73,7 +73,7 @@
                 <h:outputText value="#{label.lastLogin}" />
               </f:facet>
               <h:outputText value="#{User.lastLogin}">
-                <f:convertDateTime pattern="#{BlogBean.blog.dateFormat}" />
+                <f:convertDateTime timeZone="#{BlogBean.blog.timeZone}" pattern="#{BlogBean.blog.dateFormat}" />
               </h:outputText>
             </h:column>
 

@@ -48,7 +48,7 @@
                 <h:outputText value="#{label.creationDate}" />
               </f:facet>
               <h:outputText value="#{Blog.creationDate}">
-                <f:convertDateTime pattern="yyyy-MM-dd HH:mm" />
+                <f:convertDateTime timeZone="#{BlogBean.blog.timeZone}" pattern="#{BlogBean.blog.dateFormat}" />
               </h:outputText>
             </h:column>
 

@@ -41,7 +41,7 @@
                 <h:outputText value="#{label.creationDate}" />
               </f:facet>
               <h:outputText value="#{Entry.creationDate}">
-                <f:convertDateTime pattern="#{BlogBean.blog.dateFormat}" />
+                <f:convertDateTime timeZone="#{BlogBean.blog.timeZone}" pattern="#{BlogBean.blog.dateFormat}" />
               </h:outputText>
             </h:column>
 
@@ -50,7 +50,7 @@
                 <h:outputText value="#{label.publishingDate}" />
               </f:facet>
               <h:outputText value="#{Entry.publishingDate}">
-                <f:convertDateTime pattern="#{BlogBean.blog.dateFormat}" />
+                <f:convertDateTime timeZone="#{BlogBean.blog.timeZone}" pattern="#{BlogBean.blog.dateFormat}" />
               </h:outputText>
             </h:column>
 

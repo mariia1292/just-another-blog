@@ -36,7 +36,7 @@
                     </h:commandLink>
                     <h:outputText value=" - " />
                     <h:outputText value="#{node.page.creationDate}">
-                      <f:convertDateTime pattern="#{BlogBean.blog.dateFormat}" />
+                      <f:convertDateTime timeZone="#{BlogBean.blog.dateFormat}" pattern="#{BlogBean.blog.dateFormat}" />
                     </h:outputText>
                   </h:panelGroup>
 
