@@ -16,6 +16,19 @@
 
       <ui:define name="head">
         <h:outputText value="#{EntryBean.editor}" escape="false" />
+        <script type="text/javascript" src="${facesContext.externalContext.requestContextPath}/resources/jquery/plugins/js/jquery.sendform.js" />
+        <script type="text/javascript">
+          $(document).ready(function(){
+            $("#preview").click(function(){
+              $("#editorForm").sendform( "${facesContext.externalContext.requestContextPath}/entry-preview.jab", {
+                extraParams: [{
+                    name: "id",
+                    value: "#{EntryBean.entry.id}"
+                }]
+              });
+            });
+          });
+        </script>
       </ui:define>
 
       <ui:define name="content">
@@ -88,7 +101,7 @@
           </h:panelGrid>
 
           <h:commandButton id="submit" value="#{label.save}" action="#{EntryBean.save}" />
-          <h:commandButton id="preview" value="#{label.preview}" actionListener="#{EntryBean.preview}" />
+          <input type="button" id="preview" value="#{label.preview}" />
           <h:commandButton id="remove" value="#{label.remove}" action="#{EntryBean.remove}" rendered="#{!EntryBean.new}" />
 
         </h:form>

@@ -42,7 +42,7 @@
 
         <h3><h:outputText value="#{label.links}" /></h3>
 
-        <h:panelGrid styleClass="small" columns="2">
+        <h:panelGrid styleClass="small" columns="2" rendered="#{BlogBean.entry.id != null}">
 
           <h:outputText value="#{label.permalink}:" />
           <h:outputText value="#{BlogBean.permalink}" />

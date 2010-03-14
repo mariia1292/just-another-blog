@@ -183,7 +183,6 @@ public class Entry implements Serializable, ContentObject, CommentAble
     category.getEntries().remove(this);
   }
 
- 
   /**
    * Method description
    *
@@ -347,6 +346,11 @@ public class Entry implements Serializable, ContentObject, CommentAble
    */
   public Date getCreationDate()
   {
+    if (creationDate == null)
+    {
+      creationDate = new Date();
+    }
+
     return creationDate;
   }
 
@@ -431,7 +435,6 @@ public class Entry implements Serializable, ContentObject, CommentAble
   {
     return title;
   }
-
 
   /**
    * Method description
@@ -702,5 +705,4 @@ public class Entry implements Serializable, ContentObject, CommentAble
 
   /** Field description */
   private String title;
-
 }
