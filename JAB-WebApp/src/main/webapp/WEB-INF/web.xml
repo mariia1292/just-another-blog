@@ -23,10 +23,25 @@
     <param-value>false</param-value>
   </context-param>
 
+  <context-param>
+    <param-name>org.apache.myfaces.COMPRESS_STATE_IN_SESSION</param-name>
+    <param-value>false</param-value>
+  </context-param>
+
+  <context-param>
+    <param-name>org.apache.myfaces.SERIALIZE_STATE_IN_SESSION</param-name>
+    <param-value>false</param-value>
+  </context-param>
+
   <!-- jboss 5x myfaces http://community.jboss.org/wiki/JBoss5AndMyFaces -->
   <context-param>
      <param-name>org.jboss.jbossfaces.WAR_BUNDLES_JSF_IMPL</param-name>
      <param-value>true</param-value>
+  </context-param>
+
+  <context-param>
+    <param-name>javax.faces.STATE_SAVING_METHOD</param-name>
+    <param-value>server</param-value>
   </context-param>
 
   <context-param>
