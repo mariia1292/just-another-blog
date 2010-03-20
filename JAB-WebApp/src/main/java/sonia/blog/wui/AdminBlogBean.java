@@ -211,6 +211,17 @@ public class AdminBlogBean extends AbstractInformationBean
    * Method description
    *
    *
+   * @param event
+   */
+  public void imageValueChanged(ValueChangeEvent event)
+  {
+    clearImageCache();
+  }
+
+  /**
+   * Method description
+   *
+   *
    * @return
    */
   public String newBlog()
