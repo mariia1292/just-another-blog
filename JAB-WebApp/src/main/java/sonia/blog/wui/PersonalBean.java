@@ -203,7 +203,8 @@ public class PersonalBean extends AbstractBean
       readerNavigation.add(new NavigationMenuItem(label.getString("dashboard"),
               "dashboard"));
 
-      User user = getRequest().getUser();
+      BlogRequest request = getRequest();
+      User user = request.getUser();
 
       if (user != null)
       {
@@ -212,6 +213,17 @@ public class PersonalBean extends AbstractBean
                 label.getString("userSettings"), "userSettings"));
         handleProviders(Constants.NAVIGATION_READER, readerNavigation);
       }
+
+      NavigationMenuItem logoutItem = new NavigationMenuItem();
+
+      logoutItem.setLabel(label.getString("logout"));
+
+      String link =
+        BlogContext.getInstance().getLinkBuilder().getRelativeLink(request,
+          "/logout");
+
+      logoutItem.setExternalLink(link);
+      readerNavigation.add(logoutItem);
     }
     else
     {
