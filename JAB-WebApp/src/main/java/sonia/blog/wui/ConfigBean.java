@@ -64,6 +64,7 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 import javax.faces.context.FacesContext;
+import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.SelectItem;
 
 /**
@@ -143,6 +144,17 @@ public class ConfigBean extends AbstractBean
     }
 
     return SUCCESS;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param event
+   */
+  public void imageValueChanged(ValueChangeEvent event)
+  {
+    clearImageCache();
   }
 
   /**

@@ -77,19 +77,23 @@
             <h:message for="entriesPerPage" />
 
             <h:outputLabel for="thumbnailWidth" value="#{label.thumbnailWidth}" />
-            <h:inputText id="thumbnailWidth" styleClass="short" value="#{ConfigBean.blog.thumbnailWidth}" required="true" />
+            <h:inputText id="thumbnailWidth" styleClass="short" value="#{ConfigBean.blog.thumbnailWidth}" 
+                         required="true" valueChangeListener="#{ConfigBean.imageValueChanged}" />
             <h:message for="thumbnailWidth" />
 
             <h:outputLabel for="thumbnailHeight" value="#{label.thumbnailHeight}" />
-            <h:inputText id="thumbnailHeight" styleClass="short" value="#{ConfigBean.blog.thumbnailHeight}" required="true" />
+            <h:inputText id="thumbnailHeight" styleClass="short" value="#{ConfigBean.blog.thumbnailHeight}"
+                         required="true" valueChangeListener="#{ConfigBean.imageValueChanged}" />
             <h:message for="thumbnailHeight" />
 
             <h:outputLabel for="imageWidth" value="#{label.imageWidth}" />
-            <h:inputText id="imageWidth" styleClass="short" value="#{ConfigBean.blog.imageWidth}" required="true" />
+            <h:inputText id="imageWidth" styleClass="short" value="#{ConfigBean.blog.imageWidth}"
+                         required="true" valueChangeListener="#{ConfigBean.imageValueChanged}" />
             <h:message for="imageWidth" />
 
             <h:outputLabel for="imageHeight" value="#{label.imageHeight}" />
-            <h:inputText id="imageHeight" styleClass="short" value="#{ConfigBean.blog.imageHeight}" required="true" />
+            <h:inputText id="imageHeight" styleClass="short" value="#{ConfigBean.blog.imageHeight}"
+                         required="true" valueChangeListener="#{ConfigBean.imageValueChanged}" />
             <h:message for="imageHeight" />
 
             <h:outputLabel for="dateFormat" value="#{label.dateFormat}" />
