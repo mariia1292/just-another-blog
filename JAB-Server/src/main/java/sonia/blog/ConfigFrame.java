@@ -48,6 +48,7 @@ import java.io.File;
 import java.net.URI;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.prefs.Preferences;
 import javax.imageio.ImageIO;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
@@ -65,20 +66,84 @@ public class ConfigFrame extends javax.swing.JFrame implements BlogServerListene
 {
 
   private static Logger logger = Logger.getLogger(ConfigFrame.class.getName());
+
+  private static final String PROPERTY_STATE = "window.state";
+  private static final String PROPERTY_X = "window.x";
+  private static final String PROPERTY_Y = "window.y";
+  private static final String PROPERTY_WIDTH = "window.width";
+  private static final String PROPERTY_HEIGHT = "window.height";
+  private static final String PROPERTY_RESOURCEDIR = "resource-dir";
+  private static final String PROPERTY_CONTEXTPATH = "context-path";
+  private static final String PROPERTY_PORT = "port";
+
   private TrayIcon trayIcon = null;
   private BlogServer server;
   private BlogServerConfig config;
   private JFileChooser chooser;
+  private Preferences preferences;
 
   /** Creates new form ConfigFrame */
   public ConfigFrame(String resourcePath)
   {
+    preferences = Preferences.userNodeForPackage( ConfigFrame.class );
     initComponents();
     ed_resourcedir.setText(resourcePath);
     
     if (trayIcon == null && SystemTray.isSupported())
     {
       createTrayIcon();
+    }
+  }
+
+  void saveState()
+  {
+    preferences.putInt( PROPERTY_STATE, getState());
+    preferences.putInt( PROPERTY_X, getX());
+    preferences.putInt( PROPERTY_Y, getY());
+    preferences.putInt( PROPERTY_WIDTH, getWidth());
+    preferences.putInt( PROPERTY_HEIGHT, getHeight());
+    preferences.put(PROPERTY_RESOURCEDIR, ed_resourcedir.getText());
+    preferences.put(PROPERTY_CONTEXTPATH, ed_contextpath.getText());
+    try
+    {
+      preferences.putInt(PROPERTY_PORT, Integer.parseInt(ed_port.getText()));
+    } 
+    catch ( NumberFormatException ex )
+    {
+      logger.log( Level.SEVERE, null, ex );
+    }
+  }
+
+  void restoreState()
+  {
+    int state = preferences.getInt(PROPERTY_STATE, -1);
+    if ( state >= 0 )
+    {
+      setState(state);
+    }
+    int x = preferences.getInt(PROPERTY_X, -1);
+    int y = preferences.getInt(PROPERTY_Y, -1);
+    int width = preferences.getInt(PROPERTY_WIDTH, -1);
+    int height = preferences.getInt(PROPERTY_HEIGHT, -1);
+    if ( x >= 0 && y >= 0 && width >= 0&& height >= 0 )
+    {
+      setBounds(x, y, width, height);
+    }
+
+    String resourceDir = preferences.get(PROPERTY_RESOURCEDIR, null);
+    if ( resourceDir != null )
+    {
+      ed_resourcedir.setText(resourceDir);
+    }
+    String contextPath = preferences.get(PROPERTY_CONTEXTPATH, null);
+    if ( contextPath != null )
+    {
+      ed_contextpath.setText(contextPath);
+    }
+    int port = preferences.getInt(PROPERTY_PORT, -1);
+    if ( port >= 0 )
+    {
+      ed_port.setText( Integer.toString(port) );
     }
   }
 
@@ -152,14 +217,8 @@ public class ConfigFrame extends javax.swing.JFrame implements BlogServerListene
       }
     }
     
-    saveWindow();
+    saveState();
     System.exit(0);
-  }
-
-  private void saveWindow()
-  {
-    StringBuffer path = new StringBuffer( System.getProperty( "user.home" ) );
-    path.append( File.separator ).append(".jab-server");
   }
 
   private void load()
@@ -335,16 +394,15 @@ public class ConfigFrame extends javax.swing.JFrame implements BlogServerListene
 
       load();
 
-      String contextPath = ed_contextpath.getText();
-      String resourcePath = ed_resourcedir.getText();
-      Integer port = Integer.parseInt(ed_port.getText());
-
-      config = new BlogServerConfig(new File(resourcePath), port, contextPath);
-      server = BlogServerFactory.newServer(config);
-      server.addServerListener(this);
-
       try
       {
+        String contextPath = ed_contextpath.getText();
+        String resourcePath = ed_resourcedir.getText();
+        Integer port = Integer.parseInt(ed_port.getText());
+
+        config = new BlogServerConfig(new File(resourcePath), port, contextPath);
+        server = BlogServerFactory.newServer(config);
+        server.addServerListener(this);
 
         new Thread(new Runnable()
         {
