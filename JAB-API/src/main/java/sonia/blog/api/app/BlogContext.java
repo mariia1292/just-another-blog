@@ -85,6 +85,7 @@ import java.io.InputStream;
 import java.util.Date;
 import java.util.Properties;
 import java.util.Set;
+import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -360,6 +361,22 @@ public class BlogContext
   }
 
   //~--- get methods ----------------------------------------------------------
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  public String getApplicationSessionId()
+  {
+    if (applicationSessionId == null)
+    {
+      applicationSessionId = UUID.randomUUID().toString();
+    }
+
+    return applicationSessionId;
+  }
 
   /**
    * Method description
@@ -946,6 +963,9 @@ public class BlogContext
   }
 
   //~--- fields ---------------------------------------------------------------
+
+  /** Field description */
+  private String applicationSessionId;
 
   /** Field description */
   private BlogVersion blogVersion;
