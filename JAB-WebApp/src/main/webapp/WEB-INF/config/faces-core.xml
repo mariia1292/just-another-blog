@@ -56,6 +56,11 @@
     <validator-class>sonia.blog.api.jsf.validator.UsernameValidator</validator-class>
   </validator>
 
+  <validator>
+    <validator-id>validator.identifier</validator-id>
+    <validator-class>sonia.blog.api.jsf.validator.BlogIdentifierValidator</validator-class>
+  </validator>
+
   <lifecycle>
     <phase-listener>
       sonia.blog.app.BlogContextPhaseListener

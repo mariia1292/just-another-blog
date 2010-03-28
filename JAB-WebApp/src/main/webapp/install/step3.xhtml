@@ -63,7 +63,9 @@
           <h:panelGrid columns="3">
 
             <h:outputLabel for="servername" value="#{label.servername}" />
-            <h:inputText id="servername" value="#{InstallBean.blog.identifier}" required="true" />
+            <h:inputText id="servername" value="#{InstallBean.blog.identifier}" required="true">
+              <f:validator validatorId="validator.identifier" />
+            </h:inputText>
             <h:message for="servername" />
 
             <h:outputLabel for="title" value="#{label.title}" />

@@ -209,6 +209,18 @@
     <servlet-name>LogoutServlet</servlet-name>
     <url-pattern>/logout</url-pattern>
   </servlet-mapping>
+
+  <!-- Ping Servlet -->
+
+  <servlet>
+    <servlet-name>PingServlet</servlet-name>
+    <servlet-class>sonia.blog.wui.servlet.PingServlet</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>PingServlet</servlet-name>
+    <url-pattern>/ping</url-pattern>
+  </servlet-mapping>
   
   <!-- Error Servlet -->
   
