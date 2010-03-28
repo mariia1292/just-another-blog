@@ -58,7 +58,9 @@ public class App
         @Override
         public void run()
         {
-          new ConfigFrame(app.resourcePath).setVisible(true);
+          ConfigFrame frame = new ConfigFrame(app.resourcePath);
+          frame.restoreState();
+          frame.setVisible(true);
         }
       });
     }
