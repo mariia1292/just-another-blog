@@ -32,7 +32,7 @@
     </named-query>
     <named-query name="BlogMember.getAllByBlog">
       <query>
-      select m from BlogMember as m where m.blog = :blog
+      select m from BlogMember as m where m.blog = :blog and m.user.active = true
       </query>
     </named-query>
     <named-query name="BlogMember.count">
