@@ -142,6 +142,7 @@ public class TinyMCEProvider implements EditorProvider
     result.append("theme : \"advanced\",\n");
     result.append("mode : \"textareas\",\n");
     result.append("skin : \"jab\",\n");
+    result.append("dialog_type : \"modal\",");
 
     String ls = "en";
     Locale locale = request.getLocale();
@@ -154,7 +155,7 @@ public class TinyMCEProvider implements EditorProvider
 
     result.append("language: \"").append(ls).append("\",\n");
     result.append(
-        "plugins : \"fullscreen,safari,emotions,imgbrowser,attachment,links,table,macro,imgresize");
+        "plugins : \"fullscreen,inlinepopups,emotions,imgbrowser,attachment,links,table,macro,imgresize");
     appendPlugins(result);
     result.append("\",\n");
     result.append(
