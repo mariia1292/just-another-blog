@@ -101,7 +101,7 @@
     function createMacro(content){
       var icon = getIcon(content);
       return $("<div />").addClass("mbOverview").append(
-        $("<a />").attr("href", "#").click(function(){
+        $("<a />").css("cursor", "pointer").click(function(){
             detailView( content.name )
           }).append(
             $("<img />").attr( "src", icon )
