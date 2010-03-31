@@ -128,13 +128,13 @@
     </named-query>
     <named-query name="Entry.calendar">
       <query>
-        select e.creationDate from Entry e join e.blog b 
+        select e.publishingDate from Entry e join e.blog b
         where
           b = :blog
         and
           e.published = true
         and
-          e.creationDate between :start and :end
+          e.publishingDate between :start and :end
       </query>
     </named-query>
     <named-query name="Entry.count">
