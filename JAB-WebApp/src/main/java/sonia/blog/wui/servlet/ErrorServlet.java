@@ -37,9 +37,15 @@ package sonia.blog.wui.servlet;
 
 import sonia.blog.util.ErrorObject;
 
+import sonia.util.Util;
+
 //~--- JDK imports ------------------------------------------------------------
 
 import java.io.IOException;
+import java.io.PrintWriter;
+
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -67,6 +73,9 @@ public class ErrorServlet extends HttpServlet
   /** Field description */
   private static final String ATTRIBUTE_STATUSCODE =
     "javax.servlet.error.status_code";
+
+  /** Field description */
+  private static Logger logger = Logger.getLogger(ErrorServlet.class.getName());
 
   //~--- methods --------------------------------------------------------------
 
@@ -128,6 +137,48 @@ public class ErrorServlet extends HttpServlet
    * Method description
    *
    *
+   * @param object
+   */
+  private void logError(ErrorObject object)
+  {
+    if (object != null)
+    {
+      StringBuffer buffer = new StringBuffer();
+      String message = object.getMessage();
+
+      if (Util.isEmpty(message))
+      {
+        buffer.append("error: ").append(object.getStatusCode());
+      }
+      else
+      {
+        buffer.append(message);
+      }
+
+      Level l = Level.FINER;
+
+      if (object.getStatusCode() >= 500)
+      {
+        l = Level.SEVERE;
+      }
+
+      Throwable throwable = object.getException();
+
+      if (throwable != null)
+      {
+        logger.log(l, buffer.toString(), throwable);
+      }
+      else
+      {
+        logger.log(l, buffer.toString());
+      }
+    }
+  }
+
+  /**
+   * Method description
+   *
+   *
    * @param request
    * @param response
    *
@@ -141,13 +192,44 @@ public class ErrorServlet extends HttpServlet
     int errorCode = getErrorCode(request);
     ErrorObject errorObject = createErrorObject(request, errorCode);
 
-    request.getSession(true).setAttribute(ErrorObject.NAME, errorObject);
+    logError(errorObject);
 
-    StringBuffer path = new StringBuffer();
+    String uri = errorObject.getRequestUri();
 
-    path.append(request.getContextPath()).append("/error/").append(errorCode);
-    path.append(".jab");
-    response.sendRedirect(path.toString());
+    if ((uri != null)
+        && (uri.endsWith(".jab") || uri.endsWith(".html")
+            || uri.endsWith(".xhtml") || uri.endsWith(".jsp")))
+    {
+      request.getSession(true).setAttribute(ErrorObject.NAME, errorObject);
+
+      StringBuffer path = new StringBuffer();
+
+      path.append(request.getContextPath()).append("/error/").append(errorCode);
+      path.append(".jab");
+      response.sendRedirect(path.toString());
+    }
+    else
+    {
+      response.setContentType("text/plain");
+
+      PrintWriter writer = response.getWriter();
+
+      try
+      {
+        if (Util.isNotEmpty(errorObject.getMessage()))
+        {
+          writer.println(errorObject.getMessage());
+        }
+        else
+        {
+          writer.append("error: ").println(errorObject.getStatusCode());
+        }
+      }
+      finally
+      {
+        writer.close();
+      }
+    }
   }
 
   //~--- get methods ----------------------------------------------------------
