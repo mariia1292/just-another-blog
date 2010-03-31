@@ -4,7 +4,7 @@
 .jabSkin table td {vertical-align:middle}
 
 /* Containers */
-.jabSkin table {background:#F0F0EE}
+.jabSkin table {direction:ltr; background:#F0F0EE}
 .jabSkin iframe {display:block; background:#FFF}
 .jabSkin .mceToolbar {height:26px}
 .jabSkin .mceLeft {text-align:left}
@@ -24,7 +24,7 @@
 .jabSkin .mceIframeContainer {border-top:1px solid #CCC; border-bottom:1px solid #CCC}
 .jabSkin .mceStatusbar {font-family:'MS Sans Serif',sans-serif,Verdana,Arial; font-size:9pt; line-height:16px; overflow:visible; color:#000; display:block; height:20px}
 .jabSkin .mceStatusbar div {float:left; margin:2px}
-.jabSkin .mceStatusbar a.mceResize {display:block; float:right; background:url(../../img/icons.gif) -800px 0; width:20px; height:20px; cursor:se-resize}
+.jabSkin .mceStatusbar a.mceResize {display:block; float:right; background:url(../../img/icons.gif) -800px 0; width:20px; height:20px; cursor:se-resize; outline:0}
 .jabSkin .mceStatusbar a:hover {text-decoration:underline}
 .jabSkin table.mceToolbar {margin-left:3px}
 .jabSkin span.mceIcon, .jabSkin img.mceIcon {display:block; width:20px; height:20px}
@@ -37,7 +37,7 @@
 .jabSkin .mceButton {display:block; border:1px solid #F0F0EE; width:20px; height:20px; margin-right:1px}
 .jabSkin a.mceButtonEnabled:hover {border:1px solid #0A246A; background-color:#B2BBD0}
 .jabSkin a.mceButtonActive, .jabSkin a.mceButtonSelected {border:1px solid #0A246A; background-color:#C2CBE0}
-.jabSkin .mceButtonDisabled .mceIcon {opacity:0.3; filter:alpha(opacity=30)}
+.jabSkin .mceButtonDisabled .mceIcon {opacity:0.3; -ms-filter:'alpha(opacity=30)'; filter:alpha(opacity=30)}
 .jabSkin .mceButtonLabeled {width:auto}
 .jabSkin .mceButtonLabeled span.mceIcon {float:left}
 .jabSkin span.mceButtonLabel {display:block; font-size:10px; padding:4px 6px 0 22px; font-family:Tahoma,Verdana,Arial,Helvetica}
@@ -47,7 +47,6 @@
 .jabSkin .mceSeparator {display:block; background:url(../../img/icons.gif) -180px 0; width:2px; height:20px; margin:2px 2px 0 4px}
 
 /* ListBox */
-.jabSkin .mceListBox {direction:ltr}
 .jabSkin .mceListBox, .jabSkin .mceListBox a {display:block}
 .jabSkin .mceListBox .mceText {padding-left:4px; width:70px; text-align:left; border:1px solid #CCC; border-right:0; background:#FFF; font-family:Tahoma,Verdana,Arial,Helvetica; font-size:11px; height:20px; line-height:20px; overflow:hidden}
 .jabSkin .mceListBox .mceOpen {width:9px; height:20px; background:url(../../img/icons.gif) -741px 0; margin-right:2px; border:1px solid #CCC;}
@@ -63,13 +62,12 @@
 .jabSkin .mceSplitButton {width:32px; height:20px; direction:ltr}
 .jabSkin .mceSplitButton a, .jabSkin .mceSplitButton span {height:20px; display:block}
 .jabSkin .mceSplitButton a.mceAction {width:20px; border:1px solid #F0F0EE; border-right:0;}
-.jabSkin .mceSplitButton span.mceAction {width:20px; background:url(../../img/icons.gif) 20px 20px;}
-.jabSkin .mceSplitButton a.mceOpen {width:9px; border:1px solid #F0F0EE;}
-.jabSkin .mceSplitButton span.mceOpen {width:9px; background:url(../../img/icons.gif) -741px 0;}
+.jabSkin .mceSplitButton span.mceAction {width:20px; background-image:url(../../img/icons.gif);}
+.jabSkin .mceSplitButton a.mceOpen {width:9px; background:url(../../img/icons.gif) -741px 0; border:1px solid #F0F0EE;}
+.jabSkin .mceSplitButton span.mceOpen {display:none}
 .jabSkin table.mceSplitButtonEnabled:hover a.mceAction, .jabSkin .mceSplitButtonHover a.mceAction, .jabSkin .mceSplitButtonSelected a.mceAction {border:1px solid #0A246A; border-right:0; background-color:#B2BBD0}
-.jabSkin table.mceSplitButtonEnabled:hover a.mceOpen, .jabSkin .mceSplitButtonHover a.mceOpen, .jabSkin .mceSplitButtonSelected a.mceOpen {border:1px solid #0A246A;}
-.jabSkin table.mceSplitButtonEnabled:hover span.mceOpen, .jabSkin .mceSplitButtonHover span.mceOpen, .jabSkin .mceSplitButtonSelected span.mceOpen {background-color:#B2BBD0}
-.jabSkin .mceSplitButtonDisabled .mceAction, .jabSkin .mceSplitButtonDisabled span.mceOpen {opacity:0.3; filter:alpha(opacity=30)}
+.jabSkin table.mceSplitButtonEnabled:hover a.mceOpen, .jabSkin .mceSplitButtonHover a.mceOpen, .jabSkin .mceSplitButtonSelected a.mceOpen {background-color:#B2BBD0; border:1px solid #0A246A;}
+.jabSkin .mceSplitButtonDisabled .mceAction, .jabSkin .mceSplitButtonDisabled a.mceOpen {opacity:0.3; -ms-filter:'alpha(opacity=30)'; filter:alpha(opacity=30)}
 .jabSkin .mceSplitButtonActive a.mceAction {border:1px solid #0A246A; background-color:#C2CBE0}
 .jabSkin .mceSplitButtonActive a.mceOpen {border-left:0;}
 
@@ -107,9 +105,8 @@
 .jabSkin .mceMenuItemSub a {background:url(img/menu_arrow.gif) no-repeat top right;}
 
 /* Progress,Resize */
-.jabSkin .mceBlocker {position:absolute; left:0; top:0; z-index:1000; opacity:0.5; filter:alpha(opacity=50); background:#FFF}
+.jabSkin .mceBlocker {position:absolute; left:0; top:0; z-index:1000; opacity:0.5; -ms-filter:'alpha(opacity=50)'; filter:alpha(opacity=50); background:#FFF}
 .jabSkin .mceProgress {position:absolute; left:0; top:0; z-index:1001; background:url(img/progress.gif) no-repeat; width:32px; height:32px; margin:-16px 0 0 -16px}
-.jabSkin .mcePlaceHolder {border:1px dotted gray}
 
 /* Formats */
 .jabSkin .mce_formatPreview a {font-size:10px}
@@ -212,4 +209,5 @@
 .jabSkin span.mce_del {background-position:-940px -20px}
 .jabSkin span.mce_ins {background-position:-960px -20px}
 .jabSkin span.mce_pagebreak {background-position:0 -40px}
+.jabSkin span.mce_restoredraft {background-position:-20px -40px}
 .jabSkin .mce_spellchecker span.mceAction {background-position:-540px -20px}
