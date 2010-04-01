@@ -50,6 +50,7 @@ import sonia.blog.api.dao.TagDAO;
 import sonia.blog.api.link.LinkBuilder;
 import sonia.blog.api.mapping.Mapping;
 import sonia.blog.api.mapping.MappingNavigation;
+import sonia.blog.api.navigation.NavigationItem;
 import sonia.blog.api.navigation.NavigationProvider;
 import sonia.blog.api.template.Template;
 import sonia.blog.api.util.AbstractBean;
@@ -61,6 +62,7 @@ import sonia.blog.entity.CommentAble;
 import sonia.blog.entity.ContentObject;
 import sonia.blog.entity.Entry;
 import sonia.blog.entity.Tag;
+import sonia.blog.util.BlogUtil;
 
 import sonia.config.ElParamConfigMap;
 
@@ -254,30 +256,29 @@ public class BlogBean extends AbstractBean
    */
   public List<NavigationMenuItem> getExtraNavigation()
   {
-    List<NavigationMenuItem> navigation = new ArrayList<NavigationMenuItem>();
+    List<NavigationItem> navigation = new ArrayList<NavigationItem>();
     ResourceBundle bundle = getResourceBundle("label");
     BlogRequest request = getRequest();
-    NavigationMenuItem random = new NavigationMenuItem();
+    NavigationItem random = new NavigationItem();
 
     random.setLabel(bundle.getString("random"));
-    random.setExternalLink(linkBuilder.getRelativeLink(request, "/random.jab"));
+    random.setHref(linkBuilder.getRelativeLink(request, "/random.jab"));
     navigation.add(random);
 
     if (request.getUser() == null)
     {
-      NavigationMenuItem loginItem = new NavigationMenuItem();
+      NavigationItem loginItem = new NavigationItem();
 
-      loginItem.setValue(bundle.getString("login"));
-      loginItem.setExternalLink(linkBuilder.getRelativeLink(request,
-              "/login.jab"));
+      loginItem.setLabel(bundle.getString("login"));
+      loginItem.setHref(linkBuilder.getRelativeLink(request, "/login.jab"));
       navigation.add(loginItem);
 
       if (config.getBoolean(Constants.CONFIG_ALLOW_REGISTRATION, Boolean.FALSE))
       {
-        NavigationMenuItem registerItem = new NavigationMenuItem();
+        NavigationItem registerItem = new NavigationItem();
 
-        registerItem.setValue(bundle.getString("register"));
-        registerItem.setExternalLink(linkBuilder.getRelativeLink(request,
+        registerItem.setLabel(bundle.getString("register"));
+        registerItem.setHref(linkBuilder.getRelativeLink(request,
                 "/register.jab"));
         navigation.add(registerItem);
       }
@@ -286,43 +287,32 @@ public class BlogBean extends AbstractBean
     {
       String dashboardLink = linkBuilder.getRelativeLink(request,
                                "/personal/dashboard.jab");
-      NavigationMenuItem dashboardItem = new NavigationMenuItem();
+      NavigationItem dashboardItem = new NavigationItem();
 
       dashboardItem.setLabel(bundle.getString("personalArea"));
-      dashboardItem.setExternalLink(dashboardLink);
+      dashboardItem.setHref(dashboardLink);
       navigation.add(dashboardItem);
 
       if (config.getBoolean(Constants.CONFIG_ALLOW_BLOGCREATION, Boolean.FALSE))
       {
-        NavigationMenuItem createBlogItem = new NavigationMenuItem();
+        NavigationItem createBlogItem = new NavigationItem();
 
-        createBlogItem.setValue(bundle.getString("createBlog"));
-        createBlogItem.setExternalLink(linkBuilder.getRelativeLink(request,
+        createBlogItem.setLabel(bundle.getString("createBlog"));
+        createBlogItem.setHref(linkBuilder.getRelativeLink(request,
                 "/blog.jab"));
         navigation.add(createBlogItem);
       }
 
-      NavigationMenuItem logoutItem = new NavigationMenuItem();
+      NavigationItem logoutItem = new NavigationItem();
 
-      logoutItem.setValue(bundle.getString("logout"));
-      logoutItem.setExternalLink(linkBuilder.getRelativeLink(request,
-              "/logout"));
+      logoutItem.setLabel(bundle.getString("logout"));
+      logoutItem.setHref(linkBuilder.getRelativeLink(request, "/logout"));
       navigation.add(logoutItem);
     }
 
     List<NavigationProvider> providers = extraNavigationReference.getAll();
 
-    if ((providers != null) &&!providers.isEmpty())
-    {
-      FacesContext facesContext = FacesContext.getCurrentInstance();
-
-      for (NavigationProvider provider : providers)
-      {
-        provider.handleNavigation(facesContext, request, navigation);
-      }
-    }
-
-    return navigation;
+    return BlogUtil.createNavigation(request, providers, navigation);
   }
 
   /**

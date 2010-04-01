@@ -35,6 +35,8 @@ package sonia.blog.util;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import org.apache.myfaces.custom.navmenu.NavigationMenuItem;
+
 import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.app.BlogRequest;
 import sonia.blog.api.app.BlogResponse;
@@ -42,6 +44,8 @@ import sonia.blog.api.app.Constants;
 import sonia.blog.api.exception.BlogException;
 import sonia.blog.api.macro.WebMacro;
 import sonia.blog.api.macro.WebResource;
+import sonia.blog.api.navigation.NavigationItem;
+import sonia.blog.api.navigation.NavigationProvider;
 import sonia.blog.api.util.AbstractBean;
 import sonia.blog.entity.Attachment;
 import sonia.blog.entity.ContentObject;
@@ -52,7 +56,6 @@ import sonia.logging.LogManager;
 
 import sonia.macro.Macro;
 import sonia.macro.MacroResult;
-
 
 import sonia.util.Util;
 
@@ -246,6 +249,43 @@ public class BlogUtil
   public static Date createEndDate(Integer year)
   {
     return createEndDate(year, null, null);
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param request
+   * @param providers
+   * @param items
+   *
+   * @return
+   */
+  public static List<NavigationMenuItem> createNavigation(BlogRequest request,
+          List<NavigationProvider> providers, List<NavigationItem> items)
+  {
+    if (Util.isNotEmpty(providers))
+    {
+      for (NavigationProvider provider : providers)
+      {
+        provider.handleNavigation(request, items);
+      }
+    }
+
+    List<NavigationMenuItem> menuItems = new ArrayList<NavigationMenuItem>();
+
+    for (NavigationItem item : items)
+    {
+      NavigationMenuItem menuItem = new NavigationMenuItem();
+
+      menuItem.setLabel(item.getLabel());
+      menuItem.setAction(item.getAction());
+      menuItem.setExternalLink(item.getHref());
+      menuItem.setTarget(item.getTarget());
+      menuItems.add(menuItem);
+    }
+
+    return menuItems;
   }
 
   /**
