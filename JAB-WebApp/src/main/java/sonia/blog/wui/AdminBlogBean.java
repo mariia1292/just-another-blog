@@ -44,6 +44,7 @@ import sonia.blog.api.authentication.RequireRole;
 import sonia.blog.api.dao.BlogDAO;
 import sonia.blog.api.dao.Dao;
 import sonia.blog.api.dao.UserDAO;
+import sonia.blog.api.navigation.NavigationItem;
 import sonia.blog.api.navigation.NavigationProvider;
 import sonia.blog.api.search.SearchContext;
 import sonia.blog.api.template.Template;
@@ -373,31 +374,20 @@ public class AdminBlogBean extends AbstractInformationBean
   @SuppressWarnings("unchecked")
   public List<NavigationMenuItem> getActions()
   {
-    List<NavigationMenuItem> items = new ArrayList<NavigationMenuItem>();
+    List<NavigationItem> items = new ArrayList<NavigationItem>();
     ResourceBundle label = getResourceBundle("label");
     SearchContext context = BlogContext.getInstance().getSearchContext();
 
     if (context != null)
     {
-      items.add(new NavigationMenuItem(label.getString("reIndexSearch"),
-                                       "#{AdminBlogBean.rebuildIndex}"));
+      items.add(new NavigationItem(label.getString("reIndexSearch"),
+                                   "#{AdminBlogBean.rebuildIndex}"));
     }
 
-    items.add(new NavigationMenuItem(label.getString("clearImageCache"),
-                                     "#{AdminBlogBean.clearImageCache}"));
+    items.add(new NavigationItem(label.getString("clearImageCache"),
+                                 "#{AdminBlogBean.clearImageCache}"));
 
-    if ((providers != null) &&!providers.isEmpty())
-    {
-      FacesContext facesContext = FacesContext.getCurrentInstance();
-      BlogRequest request = getRequest();
-
-      for (NavigationProvider provider : providers)
-      {
-        provider.handleNavigation(facesContext, request, items);
-      }
-    }
-
-    return items;
+    return BlogUtil.createNavigation(getRequest(), providers, items);
   }
 
   /**

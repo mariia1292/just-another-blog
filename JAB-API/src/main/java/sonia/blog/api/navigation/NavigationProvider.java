@@ -35,8 +35,6 @@ package sonia.blog.api.navigation;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import org.apache.myfaces.custom.navmenu.NavigationMenuItem;
-
 import sonia.blog.api.app.BlogRequest;
 
 //~--- JDK imports ------------------------------------------------------------
@@ -60,6 +58,6 @@ public interface NavigationProvider
    * @param request
    * @param items
    */
-  public void handleNavigation(FacesContext facesContext, BlogRequest request,
-                               List<NavigationMenuItem> items);
+  public void handleNavigation(BlogRequest request,
+                               List<NavigationItem> items);
 }

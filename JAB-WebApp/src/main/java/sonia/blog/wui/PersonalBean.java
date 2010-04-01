@@ -41,10 +41,11 @@ import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.app.BlogRequest;
 import sonia.blog.api.app.Constants;
 import sonia.blog.api.authentication.RequireRole;
+import sonia.blog.api.navigation.NavigationItem;
 import sonia.blog.api.navigation.NavigationProvider;
 import sonia.blog.api.util.AbstractBean;
 import sonia.blog.entity.Role;
-import sonia.blog.entity.User;
+import sonia.blog.util.BlogUtil;
 
 import sonia.plugin.service.ServiceReference;
 
@@ -53,8 +54,6 @@ import sonia.plugin.service.ServiceReference;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
-
-import javax.faces.context.FacesContext;
 
 /**
  *
@@ -88,15 +87,16 @@ public class PersonalBean extends AbstractBean
       if (adminNavigation == null)
       {
         ResourceBundle label = getResourceBundle("label");
+        List<NavigationItem> adminNavList = new ArrayList<NavigationItem>();
 
-        adminNavigation = new ArrayList<NavigationMenuItem>();
-        adminNavigation.add(
-            new NavigationMenuItem(label.getString("templates"), "templates"));
-        adminNavigation.add(new NavigationMenuItem(label.getString("members"),
+        adminNavList.add(new NavigationItem(label.getString("templates"),
+                "templates"));
+        adminNavList.add(new NavigationItem(label.getString("members"),
                 "members"));
-        adminNavigation.add(new NavigationMenuItem(label.getString("general"),
+        adminNavList.add(new NavigationItem(label.getString("general"),
                 "general"));
-        handleProviders(Constants.NAVIGATION_ADMIN, adminNavigation);
+        adminNavigation = handleProviders(Constants.NAVIGATION_ADMIN,
+                                          adminNavList);
       }
     }
     else
@@ -120,24 +120,22 @@ public class PersonalBean extends AbstractBean
       if (authorNavigation == null)
       {
         ResourceBundle bundle = getResourceBundle("label");
+        List<NavigationItem> authorNavList = new ArrayList<NavigationItem>();
 
-        authorNavigation = new ArrayList<NavigationMenuItem>();
-        authorNavigation.add(
-            new NavigationMenuItem(
-                bundle.getString("newEntry"), "#{EntryBean.newEntry}"));
-        authorNavigation.add(
-            new NavigationMenuItem(bundle.getString("entries"), "entries"));
-        authorNavigation.add(
-            new NavigationMenuItem(
-                bundle.getString("categories"), "categories"));
-        authorNavigation.add(
-            new NavigationMenuItem(bundle.getString("comments"), "comments"));
-        authorNavigation.add(
-            new NavigationMenuItem(
-                bundle.getString("newPage"), "#{PageAuthorBean.newPage}"));
-        authorNavigation.add(new NavigationMenuItem(bundle.getString("pages"),
+        authorNavList.add(new NavigationItem(bundle.getString("newEntry"),
+                "#{EntryBean.newEntry}"));
+        authorNavList.add(new NavigationItem(bundle.getString("entries"),
+                "entries"));
+        authorNavList.add(new NavigationItem(bundle.getString("categories"),
+                "categories"));
+        authorNavList.add(new NavigationItem(bundle.getString("comments"),
+                "comments"));
+        authorNavList.add(new NavigationItem(bundle.getString("newPage"),
+                "#{PageAuthorBean.newPage}"));
+        authorNavList.add(new NavigationItem(bundle.getString("pages"),
                 "pages"));
-        handleProviders(Constants.NAVIGATION_AUTHOR, authorNavigation);
+        authorNavigation = handleProviders(Constants.NAVIGATION_AUTHOR,
+                                           authorNavList);
       }
     }
     else
@@ -161,22 +159,21 @@ public class PersonalBean extends AbstractBean
       if (globalAdminNavigation == null)
       {
         ResourceBundle label = getResourceBundle("label");
+        List<NavigationItem> globalAdminNav = new ArrayList<NavigationItem>();
 
-        globalAdminNavigation = new ArrayList<NavigationMenuItem>();
-        globalAdminNavigation.add(
-            new NavigationMenuItem(
+        globalAdminNav.add(
+            new NavigationItem(
                 label.getString("blogAdministration"), "administration"));
-        globalAdminNavigation.add(
-            new NavigationMenuItem(
+        globalAdminNav.add(
+            new NavigationItem(
                 label.getString("userAdministration"), "userAdministration"));
-        globalAdminNavigation.add(
-            new NavigationMenuItem(label.getString("plugins"), "plugins"));
-        globalAdminNavigation.add(
-            new NavigationMenuItem(label.getString("status"), "globalStatus"));
-        globalAdminNavigation.add(
-            new NavigationMenuItem(label.getString("configuration"), "config"));
-        handleProviders(Constants.NAVIGATION_GLOBALADMIN,
-                        globalAdminNavigation);
+        globalAdminNav.add(new NavigationItem(label.getString("plugins"),
+                "plugins"));
+        globalAdminNav.add(new NavigationItem(label.getString("status"),
+                "globalStatus"));
+        globalAdminNav.add(new NavigationItem(label.getString("configuration"),
+                "config"));
+        globalAdminNavigation = handleProviders(Constants.NAVIGATION_GLOBALADMIN, globalAdminNav);
       }
     }
     else
@@ -198,23 +195,17 @@ public class PersonalBean extends AbstractBean
     if (readerNavigation == null)
     {
       ResourceBundle label = getResourceBundle("label");
+      List<NavigationItem> readerNav = new ArrayList<NavigationItem>();
 
-      readerNavigation = new ArrayList<NavigationMenuItem>();
-      readerNavigation.add(new NavigationMenuItem(label.getString("dashboard"),
-              "dashboard"));
+      readerNav.add(new NavigationItem(label.getString("dashboard"),
+                                       "dashboard"));
 
       BlogRequest request = getRequest();
-      User user = request.getUser();
 
-      if (user != null)
-      {
-        readerNavigation.add(
-            new NavigationMenuItem(
-                label.getString("userSettings"), "userSettings"));
-        handleProviders(Constants.NAVIGATION_READER, readerNavigation);
-      }
+      readerNav.add(new NavigationItem(label.getString("userSettings"),
+                                       "userSettings"));
 
-      NavigationMenuItem logoutItem = new NavigationMenuItem();
+      NavigationItem logoutItem = new NavigationItem();
 
       logoutItem.setLabel(label.getString("logout"));
 
@@ -222,8 +213,10 @@ public class PersonalBean extends AbstractBean
         BlogContext.getInstance().getLinkBuilder().getRelativeLink(request,
           "/logout");
 
-      logoutItem.setExternalLink(link);
-      readerNavigation.add(logoutItem);
+      logoutItem.setHref(link);
+      readerNav.add(logoutItem);
+      readerNavigation = handleProviders(Constants.NAVIGATION_READER,
+                                         readerNav);
     }
     else
     {
@@ -274,29 +267,24 @@ public class PersonalBean extends AbstractBean
    *
    * @param servicePath
    * @param items
+   *
+   * @return
    */
-  private void handleProviders(String servicePath,
-                               List<NavigationMenuItem> items)
+  private List<NavigationMenuItem> handleProviders(String servicePath,
+          List<NavigationItem> items)
   {
     BlogContext context = BlogContext.getInstance();
     ServiceReference<NavigationProvider> reference =
       context.getServiceRegistry().get(NavigationProvider.class, servicePath);
+    BlogRequest request = getRequest();
+    List<NavigationProvider> providers = null;
 
     if (reference != null)
     {
-      List<NavigationProvider> providers = reference.getAll();
-
-      if ((providers != null) &&!providers.isEmpty())
-      {
-        BlogRequest request = getRequest();
-        FacesContext facesContext = FacesContext.getCurrentInstance();
-
-        for (NavigationProvider provider : providers)
-        {
-          provider.handleNavigation(facesContext, request, items);
-        }
-      }
+      providers = reference.getAll();
     }
+
+    return BlogUtil.createNavigation(request, providers, items);
   }
 
   //~--- fields ---------------------------------------------------------------
