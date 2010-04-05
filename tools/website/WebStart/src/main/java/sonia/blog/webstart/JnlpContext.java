@@ -10,6 +10,7 @@ package sonia.blog.webstart;
 //~--- non-JDK imports --------------------------------------------------------
 
 import sonia.blog.webstart.repository.RepositoryManager;
+import sonia.blog.webstart.statistic.StatisticManager;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -58,11 +59,16 @@ public class JnlpContext
    *
    *
    * @param servletContext
+   * @param repositoryManager
+   * @param statisticManager
    */
-  public void init(ServletContext servletContext, RepositoryManager repositoryManager)
+  public void init(ServletContext servletContext,
+                   RepositoryManager repositoryManager,
+                   StatisticManager statisticManager)
   {
     this.servletContext = servletContext;
     this.repositoryManager = repositoryManager;
+    this.statisticManager = statisticManager;
   }
 
   //~--- get methods ----------------------------------------------------------
@@ -95,9 +101,21 @@ public class JnlpContext
    *
    * @return
    */
+  public StatisticManager getStatisticManager()
+  {
+    return statisticManager;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
   public boolean isInstalled()
   {
-    return servletContext != null && repositoryManager != null;
+    return (servletContext != null) && (repositoryManager != null)
+           && (statisticManager != null);
   }
 
   //~--- fields ---------------------------------------------------------------
@@ -107,4 +125,7 @@ public class JnlpContext
 
   /** Field description */
   private ServletContext servletContext;
+
+  /** Field description */
+  private StatisticManager statisticManager;
 }

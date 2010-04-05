@@ -35,6 +35,11 @@ import javax.servlet.http.HttpServletResponse;
 public class JnlpServlet extends HttpServlet
 {
 
+  /** Field description */
+  private static final String MAPPING = "/jnlp/";
+
+  //~--- constructors ---------------------------------------------------------
+
   /**
    * Constructs ...
    *
@@ -45,16 +50,6 @@ public class JnlpServlet extends HttpServlet
   }
 
   //~--- get methods ----------------------------------------------------------
-
-  /**
-   * Returns a short description of the servlet.
-   * @return a String containing servlet description
-   */
-  @Override
-  public String getServletInfo()
-  {
-    return "Short description";
-  }
 
   /**
    * Method description
@@ -143,6 +138,11 @@ public class JnlpServlet extends HttpServlet
       if (object != null)
       {
         proccessRequest(request, response, object);
+
+        if (path.endsWith(".jnlp"))
+        {
+          context.getStatisticManager().increase(path);
+        }
       }
       else
       {
@@ -224,14 +224,12 @@ public class JnlpServlet extends HttpServlet
   private String getRepositoryPath(HttpServletRequest request)
   {
     String uri = request.getRequestURI();
-
     int index = request.getContextPath().length();
+
     index += MAPPING.length();
 
     return uri.substring(index);
   }
-
-  private static final String MAPPING = "/jnlp/";
 
   //~--- fields ---------------------------------------------------------------
 

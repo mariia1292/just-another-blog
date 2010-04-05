@@ -11,13 +11,13 @@ package sonia.blog.webstart.install;
 
 import sonia.blog.webstart.JnlpContext;
 import sonia.blog.webstart.repository.DefaultRepositoryManager;
+import sonia.blog.webstart.statistic.DefaultStatisticManager;
 
 //~--- JDK imports ------------------------------------------------------------
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.IOError;
 import java.io.IOException;
 
 import java.util.Properties;
@@ -36,6 +36,9 @@ public class InstallManager
 
   /** Field description */
   private static final String PROPERTY = "repository.home";
+
+  /** Field description */
+  private static final String STATISTICFILE = "statistic.properties";
 
   //~--- methods --------------------------------------------------------------
 
@@ -91,8 +94,9 @@ public class InstallManager
   private static void install(ServletContext servletContext, File repostitory,
                               boolean save)
   {
-    JnlpContext.getInstance().init(servletContext,
-                                   new DefaultRepositoryManager(repostitory));
+    JnlpContext.getInstance().init(
+        servletContext, new DefaultRepositoryManager(repostitory),
+        new DefaultStatisticManager(new File(repostitory, STATISTICFILE)));
 
     if (save)
     {

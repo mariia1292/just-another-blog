@@ -5,37 +5,45 @@
 
 
 
-package sonia.blog.webstart.install;
+package sonia.blog.webstart.statistic;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import sonia.blog.webstart.repository.DefaultRepositoryManager;
-
-import sonia.util.Util;
+import sonia.blog.webstart.JnlpContext;
 
 //~--- JDK imports ------------------------------------------------------------
 
-import java.io.File;
 import java.io.IOException;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import sonia.blog.webstart.JnlpContext;
 
 /**
  *
  * @author Sebastian Sdorra
  */
-public class InstallServlet extends HttpServlet
+public class StatisticServlet extends HttpServlet
 {
 
   /** Field description */
-  private static final String URI_FORM = "/install/form.jsp";
+  public static final String VARIABLE = "statistics";
 
   /** Field description */
-  private static final String URI_INDEX = "/index.idx";
+  private static final String TEMPLATE = "/template/statistic.jsp";
+
+  //~--- constructors ---------------------------------------------------------
+
+  /**
+   * Constructs ...
+   *
+   */
+  public StatisticServlet()
+  {
+    this.context = JnlpContext.getInstance();
+  }
 
   //~--- methods --------------------------------------------------------------
 
@@ -79,45 +87,23 @@ public class InstallServlet extends HttpServlet
                                 HttpServletResponse response)
           throws ServletException, IOException
   {
-    String repositoryPath = request.getParameter("repoPath");
-
-    if (Util.isNotEmpty(repositoryPath))
+    if (context.isInstalled())
     {
-      File repository = new File(repositoryPath);
+      request.setAttribute(VARIABLE,
+                           context.getStatisticManager().getStatistics());
 
-      if (repository.exists() || repository.mkdirs())
-      {
-        InstallManager.install(getServletContext(), repository);
-        response.sendRedirect(request.getContextPath() + URI_INDEX);
-      }
-      else
-      {
-        sendError(request, response, "repository not found");
-      }
+      RequestDispatcher dispatcher = request.getRequestDispatcher(TEMPLATE);
+
+      dispatcher.forward(request, response);
     }
     else
     {
-      sendError(request, response, "parameter not found");
+      response.sendError(HttpServletResponse.SC_PRECONDITION_FAILED);
     }
   }
 
-  /**
-   * Method description
-   *
-   *
-   * @param request
-   * @param response
-   * @param message
-   *
-   * @throws IOException
-   */
-  private void sendError(HttpServletRequest request,
-                         HttpServletResponse response, String message)
-          throws IOException
-  {
-    String uri = new StringBuffer(request.getContextPath()).append(
-                     URI_FORM).append("?error=").append(message).toString();
+  //~--- fields ---------------------------------------------------------------
 
-    response.sendRedirect(uri);
-  }
+  /** Field description */
+  private JnlpContext context;
 }
