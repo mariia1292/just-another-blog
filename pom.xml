@@ -130,34 +130,6 @@
     <dependencies>
 
       <dependency>
-        <groupId>org.apache.myfaces.tomahawk</groupId>
-        <artifactId>tomahawk12</artifactId>
-        <version>1.1.9</version>
-        <exclusions>
-          <exclusion>
-            <artifactId>batik-awt-util</artifactId>
-            <groupId>batik</groupId>
-          </exclusion>
-          <exclusion>
-            <artifactId>jstl</artifactId>
-            <groupId>javax.servlet</groupId>
-          </exclusion>
-          <exclusion>
-            <artifactId>itext</artifactId>
-            <groupId>com.lowagie</groupId>
-          </exclusion>
-          <exclusion>
-            <artifactId>xml-apis</artifactId>
-            <groupId>xml-apis</groupId>
-          </exclusion>
-          <exclusion>
-            <artifactId>oro</artifactId>
-            <groupId>oro</groupId>
-          </exclusion>
-        </exclusions>
-      </dependency>
-
-      <dependency>
         <groupId>sonia.util</groupId>
         <artifactId>SoniaUtil</artifactId>
         <version>1.0</version>
