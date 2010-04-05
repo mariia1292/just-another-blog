@@ -68,19 +68,19 @@ public class WebUtil
   public static final long TIME_YEAR = 60 * 60 * 24 * 365;
 
   /** Field description */
-  private static final String HEADER_CACHECONTROL = "Cache-Control";
+  public static final String HEADER_CACHECONTROL = "Cache-Control";
 
   /** Field description */
-  private static final String HEADER_ETAG = "Etag";
+  public static final String HEADER_ETAG = "Etag";
 
   /** Field description */
-  private static final String HEADER_EXPIRES = "Expires";
+  public static final String HEADER_EXPIRES = "Expires";
 
   /** Field description */
-  private static final String HEADER_IFMS = "If-Modified-Since";
+  public static final String HEADER_IFMS = "If-Modified-Since";
 
   /** Field description */
-  private static final String HEADER_INM = "If-None-Match";
+  public static final String HEADER_INM = "If-None-Match";
 
   /** Field description */
   private static final String HTTP_DATE_FORMAT =
