@@ -821,10 +821,11 @@ public class BlogContext
   {
     if (templateManager == null)
     {
-      templateManager = new TemplateManager();
+      templateManager = getServiceRegistry().get(TemplateManager.class,
+              Constants.SERVICE_TEMPLATEMANAGER);
     }
 
-    return templateManager;
+    return templateManager.get();
   }
 
   /**
@@ -1009,6 +1010,8 @@ public class BlogContext
   /** Field description */
   private ServiceReference<MappingHandler> mappingHandler;
 
+  private ServiceReference<TemplateManager> templateManager;
+
   /** Field description */
   private PluginContext pluginContext;
 
@@ -1026,9 +1029,6 @@ public class BlogContext
 
   /** Field description */
   private Configuration ssoLoginConfiguration;
-
-  /** Field description */
-  private TemplateManager templateManager;
 
   /** Field description */
   private DefaultWebResources webResources;
