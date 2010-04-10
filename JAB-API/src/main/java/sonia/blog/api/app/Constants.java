@@ -352,6 +352,8 @@ public interface Constants
   /** Field description */
   public static final String SERVCIE_CIPHER = "/app/cipher";
 
+  public static final String SERVICE_TEMPLATEMANAGER = "/app/template-manager";
+
   /** Field description */
   public static final String SERVCIE_DAO = "/app/dao";
 

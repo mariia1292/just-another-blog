@@ -145,4 +145,8 @@
     <impl class="sonia.blog.editor.DefaultEditorUtil" />
   </service>
 
+  <service class="sonia.blog.api.template.TemplateManager" path="/app/template-manager">
+    <impl class="sonia.blog.template.DefaultTemplateManager" />
+  </service>
+
 </services>
