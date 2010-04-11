@@ -41,6 +41,8 @@ import sonia.blog.api.app.Constants;
 import sonia.blog.api.editor.EditorPlugin;
 import sonia.blog.api.editor.EditorProvider;
 import sonia.blog.api.link.LinkBuilder;
+import sonia.blog.api.template.Style;
+import sonia.blog.api.template.StyleAttribute;
 import sonia.blog.api.template.Template;
 import sonia.blog.entity.Blog;
 
@@ -50,6 +52,7 @@ import sonia.util.Util;
 
 //~--- JDK imports ------------------------------------------------------------
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 
@@ -165,13 +168,25 @@ public class TinyMCEProvider implements EditorProvider
     result.append("theme_advanced_toolbar_location : \"top\",\n");
     result.append("theme_advanced_toolbar_align : \"left\",\n");
 
-    String contentCSS = getContentCSS(request.getCurrentBlog());
+    Template template = getTemplate(request.getCurrentBlog());
 
-    if (Util.hasContent(contentCSS))
+    if (template != null)
     {
-      contentCSS = linkBuilder.getRelativeLink(request, contentCSS);
-      result.append("content_css : \"").append(contentCSS).append("?_=\"");
-      result.append(" + new Date().getTime(),\n");
+      String contentCSS = template.getContentCSS();
+
+      if (Util.hasContent(contentCSS))
+      {
+        contentCSS = linkBuilder.getRelativeLink(request, contentCSS);
+        result.append("content_css : \"").append(contentCSS).append("?_=\"");
+        result.append(" + new Date().getTime(),\n");
+      }
+
+      List<Style> styles = template.getStyles();
+
+      if (Util.isNotEmpty(styles))
+      {
+        appendStyles(result, styles);
+      }
     }
 
     String baseUrl = request.getContextPath();
@@ -216,29 +231,175 @@ public class TinyMCEProvider implements EditorProvider
     }
   }
 
-  //~--- get methods ----------------------------------------------------------
-
   /**
    * Method description
    *
    *
-   * @param blog
+   * @param buffer
+   * @param styles
    *
    * @return
    */
-  private String getContentCSS(Blog blog)
+  private StringBuffer appendStyles(StringBuffer buffer, List<Style> styles)
   {
-    String contentCSS = null;
-    Template template =
-      BlogContext.getInstance().getTemplateManager().getTemplate(blog);
+    buffer.append("style_formats : [\n");
 
-    if (template != null)
+    Iterator<Style> styleIt = styles.iterator();
+
+    while (styleIt.hasNext())
     {
-      contentCSS = template.getContentCSS();
+      Style style = styleIt.next();
+
+      buffer.append("{");
+
+      boolean first = true;
+      String title = style.getTitle();
+
+      if (Util.isNotEmpty(title))
+      {
+        first = false;
+        buffer.append("title: '").append(title).append("'");
+      }
+
+      List<String> selectors = style.getSelectors();
+
+      if (Util.isNotEmpty(selectors))
+      {
+        if (first)
+        {
+          first = false;
+        }
+        else
+        {
+          buffer.append(",");
+        }
+
+        buffer.append("selector: '");
+
+        Iterator<String> selectorIt = selectors.iterator();
+
+        while (selectorIt.hasNext())
+        {
+          buffer.append(selectorIt.next());
+
+          if (selectorIt.hasNext())
+          {
+            buffer.append(",");
+          }
+        }
+
+        buffer.append("'");
+      }
+
+      String inline = style.getInline();
+
+      if (Util.isNotEmpty(inline))
+      {
+        if (first)
+        {
+          first = false;
+        }
+        else
+        {
+          buffer.append(",");
+        }
+
+        buffer.append("inline: '").append(inline).append("'");
+      }
+
+      String block = style.getBlock();
+
+      if (Util.isNotEmpty(block))
+      {
+        if (first)
+        {
+          first = false;
+        }
+        else
+        {
+          buffer.append(",");
+        }
+
+        buffer.append("block: '").append(block).append("'");
+      }
+
+      List<String> classes = style.getClasses();
+
+      if (Util.isNotEmpty(classes))
+      {
+        if (first)
+        {
+          first = false;
+        }
+        else
+        {
+          buffer.append(",");
+        }
+
+        buffer.append("classes: '");
+
+        Iterator<String> classesIt = classes.iterator();
+
+        while (classesIt.hasNext())
+        {
+          buffer.append(classesIt.next());
+
+          if (classesIt.hasNext())
+          {
+            buffer.append(",");
+          }
+        }
+
+        buffer.append("'");
+      }
+
+      List<StyleAttribute> attributes = style.getAttributes();
+
+      if (Util.isNotEmpty(attributes))
+      {
+        if (first)
+        {
+          first = false;
+        }
+        else
+        {
+          buffer.append(",");
+        }
+
+        buffer.append("styles: {");
+
+        Iterator<StyleAttribute> attributeIt = attributes.iterator();
+
+        while (attributeIt.hasNext())
+        {
+          StyleAttribute a = attributeIt.next();
+
+          buffer.append("'").append(a.getName()).append("': '");
+          buffer.append(a.getValue()).append("'");
+
+          if (attributeIt.hasNext())
+          {
+            buffer.append(",");
+          }
+        }
+
+        buffer.append("}");
+      }
+
+      buffer.append("}");
+
+      if (styleIt.hasNext())
+      {
+        buffer.append(",");
+      }
+
+      buffer.append("\n");
     }
 
-    return contentCSS;
+    return buffer.append("],\n");
   }
+
+  //~--- get methods ----------------------------------------------------------
 
   /**
    * Method description
@@ -259,5 +420,18 @@ public class TinyMCEProvider implements EditorProvider
     }
 
     return plugins;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param blog
+   *
+   * @return
+   */
+  private Template getTemplate(Blog blog)
+  {
+    return BlogContext.getInstance().getTemplateManager().getTemplate(blog);
   }
 }

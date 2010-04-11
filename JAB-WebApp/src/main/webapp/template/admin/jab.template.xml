@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+    Document   : template.xml
+    Created on : April 10, 2010, 10:14 PM
+    Author     : sdorra
+    Description:
+        Purpose of the document follows.
+-->
+
+<template>
+
+  <name>Admin-Theme</name>
+  <author>Sebastian Sdorra</author>
+  <url>http://kenai.com/projects/jab</url>
+  <email>s.sdorra@gmail.com</email>
+  <version>1.0</version>
+  <description>jab admin theme</description>
+  <content-css>css/screen/content.css</content-css>
+
+  <styles>
+
+    <style>
+      <title>Note</title>
+      <inline>span</inline>
+      <classes>
+        <class>note</class>
+      </classes>
+    </style>
+
+    <style>
+      <title>Important</title>
+      <inline>span</inline>
+      <classes>
+        <class>important</class>
+      </classes>
+    </style>
+
+    <style>
+      <title>Warning</title>
+      <inline>span</inline>
+      <classes>
+        <class>warning</class>
+      </classes>
+    </style>
+
+  </styles>
+
+</template>

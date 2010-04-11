@@ -46,15 +46,11 @@ import sonia.blog.entity.Blog;
 
 import java.io.File;
 import java.io.FileFilter;
-import java.io.FileInputStream;
-import java.io.IOException;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
@@ -185,7 +181,7 @@ public class DefaultTemplateManager implements TemplateManager
       }
       else
       {
-        Template template = buildTemplate(f, pathBuffer.toString());
+        Template template = reader.readTemplate(f, pathBuffer.toString());
 
         if (template != null)
         {
@@ -194,68 +190,6 @@ public class DefaultTemplateManager implements TemplateManager
         }
       }
     }
-  }
-
-  /**
-   * Method description
-   *
-   *
-   * @param file
-   * @param path
-   *
-   * @return
-   */
-  private Template buildTemplate(File file, String path)
-  {
-    Template template = null;
-
-    if (file.exists() && file.isDirectory())
-    {
-      File informationFile = new File(file, "information.properties");
-
-      if (informationFile.exists() && informationFile.isFile())
-      {
-        FileInputStream fis = null;
-
-        try
-        {
-          template = new Template();
-          template.setPath(path);
-
-          Properties information = new Properties();
-
-          fis = new FileInputStream(informationFile);
-          information.load(fis);
-          template.setAuthor(information.getProperty("author"));
-          template.setName(information.getProperty("name"));
-          template.setUrl(information.getProperty("url"));
-          template.setEmail(information.getProperty("email"));
-          template.setDescription(information.getProperty("description"));
-          template.setVersion(information.getProperty("version"));
-          template.setContentCSS(information.getProperty("content_css"));
-        }
-        catch (IOException ex)
-        {
-          logger.log(Level.SEVERE, null, ex);
-        }
-        finally
-        {
-          if (fis != null)
-          {
-            try
-            {
-              fis.close();
-            }
-            catch (IOException ex)
-            {
-              logger.log(Level.SEVERE, null, ex);
-            }
-          }
-        }
-      }
-    }
-
-    return template;
   }
 
   /**
@@ -283,6 +217,7 @@ public class DefaultTemplateManager implements TemplateManager
           return file.isDirectory();
         }
       };
+      reader = new TemplateReader();
     }
   }
 
@@ -416,6 +351,9 @@ public class DefaultTemplateManager implements TemplateManager
 
   /** Field description */
   private FileFilter directoryFilter;
+
+  /** Field description */
+  private TemplateReader reader;
 
   /** Field description */
   private File templateDirectory;
