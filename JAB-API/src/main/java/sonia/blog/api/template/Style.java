@@ -42,23 +42,56 @@ import java.util.List;
  *
  * @author Sebastian Sdorra
  */
-public class Template
+public class Style
 {
 
   /**
    * Method description
    *
    *
-   * @param style
+   * @param name
+   * @param value
    */
-  public void addStyle(Style style)
+  public void addAttribute(String name, String value)
   {
-    if (styles == null)
+    if (attributes == null)
     {
-      styles = new ArrayList<Style>();
+      attributes = new ArrayList<StyleAttribute>();
     }
 
-    styles.add(style);
+    attributes.add(new StyleAttribute(name, value));
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param clazz
+   */
+  public void addClass(String clazz)
+  {
+    if (classes == null)
+    {
+      classes = new ArrayList<String>();
+    }
+
+    classes.add(clazz);
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param selector
+   */
+  public void addSelector(String selector)
+  {
+    if (selectors == null)
+    {
+      selectors = new ArrayList<String>();
+    }
+
+    selectors.add(selector);
   }
 
   //~--- get methods ----------------------------------------------------------
@@ -69,9 +102,9 @@ public class Template
    *
    * @return
    */
-  public String getAuthor()
+  public List<StyleAttribute> getAttributes()
   {
-    return author;
+    return attributes;
   }
 
   /**
@@ -80,19 +113,9 @@ public class Template
    *
    * @return
    */
-  public String getContentCSS()
+  public String getBlock()
   {
-    String result = null;
-
-    if (contentCSS != null)
-    {
-      StringBuffer css = new StringBuffer();
-
-      css.append(path).append("/").append(contentCSS);
-      result = css.toString();
-    }
-
-    return result;
+    return block;
   }
 
   /**
@@ -101,9 +124,9 @@ public class Template
    *
    * @return
    */
-  public String getDescription()
+  public List<String> getClasses()
   {
-    return description;
+    return classes;
   }
 
   /**
@@ -112,9 +135,9 @@ public class Template
    *
    * @return
    */
-  public String getEmail()
+  public String getInline()
   {
-    return email;
+    return inline;
   }
 
   /**
@@ -123,9 +146,9 @@ public class Template
    *
    * @return
    */
-  public String getName()
+  public List<String> getSelectors()
   {
-    return name;
+    return selectors;
   }
 
   /**
@@ -134,53 +157,9 @@ public class Template
    *
    * @return
    */
-  public String getPath()
+  public String getTitle()
   {
-    return path;
-  }
-
-  /**
-   * Method description
-   *
-   *
-   * @return
-   */
-  public String getScreenshot()
-  {
-    return path + "/screenshot.jpg";
-  }
-
-  /**
-   * Method description
-   *
-   *
-   * @return
-   */
-  public List<Style> getStyles()
-  {
-    return styles;
-  }
-
-  /**
-   * Method description
-   *
-   *
-   * @return
-   */
-  public String getUrl()
-  {
-    return url;
-  }
-
-  /**
-   * Method description
-   *
-   *
-   * @return
-   */
-  public String getVersion()
-  {
-    return version;
+    return title;
   }
 
   //~--- set methods ----------------------------------------------------------
@@ -189,116 +168,52 @@ public class Template
    * Method description
    *
    *
-   * @param author
+   * @param block
    */
-  public void setAuthor(String author)
+  public void setBlock(String block)
   {
-    this.author = author;
+    this.block = block;
   }
 
   /**
    * Method description
    *
    *
-   * @param contentCSS
+   * @param inline
    */
-  public void setContentCSS(String contentCSS)
+  public void setInline(String inline)
   {
-    this.contentCSS = contentCSS;
+    this.inline = inline;
   }
 
   /**
    * Method description
    *
    *
-   * @param description
+   * @param title
    */
-  public void setDescription(String description)
+  public void setTitle(String title)
   {
-    this.description = description;
-  }
-
-  /**
-   * Method description
-   *
-   *
-   * @param email
-   */
-  public void setEmail(String email)
-  {
-    this.email = email;
-  }
-
-  /**
-   * Method description
-   *
-   *
-   * @param name
-   */
-  public void setName(String name)
-  {
-    this.name = name;
-  }
-
-  /**
-   * Method description
-   *
-   *
-   * @param path
-   */
-  public void setPath(String path)
-  {
-    this.path = path;
-  }
-
-  /**
-   * Method description
-   *
-   *
-   * @param url
-   */
-  public void setUrl(String url)
-  {
-    this.url = url;
-  }
-
-  /**
-   * Method description
-   *
-   *
-   * @param version
-   */
-  public void setVersion(String version)
-  {
-    this.version = version;
+    this.title = title;
   }
 
   //~--- fields ---------------------------------------------------------------
 
   /** Field description */
-  private String author;
+  private List<StyleAttribute> attributes;
 
   /** Field description */
-  private String contentCSS;
+  private String block;
 
   /** Field description */
-  private String description;
+  private List<String> classes;
 
   /** Field description */
-  private String email;
+  private String inline;
 
   /** Field description */
-  private String name;
+  private List<String> selectors;
 
   /** Field description */
-  private String path;
-
-  /** Field description */
-  private List<Style> styles;
-
-  /** Field description */
-  private String url;
-
-  /** Field description */
-  private String version;
+  private String title;
 }
