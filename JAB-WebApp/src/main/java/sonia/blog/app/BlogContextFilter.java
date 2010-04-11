@@ -46,6 +46,7 @@ import sonia.blog.api.link.LinkBuilder;
 import sonia.blog.api.mapping.MappingHandler;
 import sonia.blog.api.mapping.MappingInstructions;
 import sonia.blog.entity.Blog;
+import sonia.blog.util.BlogUtil;
 import sonia.blog.wui.LoginBean;
 
 import sonia.cache.ObjectCache;
@@ -71,9 +72,6 @@ import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import sonia.blog.util.BlogUtil;
 
 /**
  *
@@ -219,8 +217,8 @@ public class BlogContextFilter implements Filter
     String contextPath = request.getContextPath();
 
     if ((uri.startsWith(contextPath + "/resource")
-         || uri.startsWith(contextPath + "/template/")) &&!uri.endsWith(
-           ".jab") && ! uri.endsWith(".jsp"))
+         || uri.startsWith(contextPath + "/template/")) &&!uri.endsWith(".jab")
+           &&!uri.endsWith(".jsp"))
     {
       WebUtil.addStaticCacheControls(response, WebUtil.TIME_MONTH);
     }
@@ -382,8 +380,8 @@ public class BlogContextFilter implements Filter
   private boolean isCacheable(BlogRequest request,
                               MappingInstructions instructions)
   {
-    return (cache != null) && (instructions != null)
-           && instructions.isCacheable()
+    return (cache != null) && request.getCurrentBlog().isAllowCaching()
+           && (instructions != null) && instructions.isCacheable()
            && (request.getParameter(PARAM_DONTCACHE) == null)
            && BlogContext.getInstance().isInstalled();
   }

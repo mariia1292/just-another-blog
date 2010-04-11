@@ -50,6 +50,10 @@
             </h:selectOneMenu>
             <h:message for="timeZone" />
 
+            <h:outputLabel for="allowCaching" value="#{label.allowCaching}" />
+            <h:selectBooleanCheckbox id="allowCaching" value="#{ConfigBean.blog.allowCaching}" />
+            <h:message for="allowCaching" />
+
             <h:outputLabel for="allowMacros" value="#{label.allowMacros}" />
             <h:selectBooleanCheckbox id="allowMacros" value="#{ConfigBean.blog.allowMacros}" />
             <h:message for="allowMacros" />

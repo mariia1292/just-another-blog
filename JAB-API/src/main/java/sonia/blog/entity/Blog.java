@@ -451,6 +451,17 @@ public class Blog implements Serializable, PermaObject, Comparable<Blog>
    *
    * @return
    */
+  public boolean isAllowCaching()
+  {
+    return allowCaching;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
   public boolean isAllowComments()
   {
     return allowComments;
@@ -511,6 +522,17 @@ public class Blog implements Serializable, PermaObject, Comparable<Blog>
   public void setActive(boolean active)
   {
     this.active = active;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param allowCaching
+   */
+  public void setAllowCaching(boolean allowCaching)
+  {
+    this.allowCaching = allowCaching;
   }
 
   /**
@@ -874,6 +896,9 @@ public class Blog implements Serializable, PermaObject, Comparable<Blog>
 
   /** Field description */
   private boolean allowComments = true;
+
+  /** Field description */
+  private boolean allowCaching = true;
 
   /** Field description */
   private boolean active = true;
