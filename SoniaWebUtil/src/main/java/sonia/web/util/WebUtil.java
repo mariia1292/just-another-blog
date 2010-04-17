@@ -62,12 +62,6 @@ public class WebUtil
 {
 
   /** Field description */
-  public static final long TIME_MONTH = 60 * 60 * 24 * 30;
-
-  /** Field description */
-  public static final long TIME_YEAR = 60 * 60 * 24 * 365;
-
-  /** Field description */
   public static final String HEADER_CACHECONTROL = "Cache-Control";
 
   /** Field description */
@@ -81,6 +75,15 @@ public class WebUtil
 
   /** Field description */
   public static final String HEADER_INM = "If-None-Match";
+
+  /** Field description */
+  public static final String SCHEME_HTTPS = "https";
+
+  /** Field description */
+  public static final long TIME_MONTH = 60 * 60 * 24 * 31;
+
+  /** Field description */
+  public static final long TIME_YEAR = 60 * 60 * 24 * 365;
 
   /** Field description */
   private static final String HTTP_DATE_FORMAT =
@@ -107,19 +110,31 @@ public class WebUtil
    * Method description
    *
    *
+   *
+   * @param request
    * @param response
    * @param seconds
    */
-  public static void addStaticCacheControls(HttpServletResponse response,
-          long seconds)
+  public static void addStaticCacheControls(HttpServletRequest request,
+          HttpServletResponse response, long seconds)
   {
     long time = new Date().getTime();
 
-    response.addDateHeader(HEADER_EXPIRES, time + (seconds * 1000));
+    response.addIntHeader(HEADER_EXPIRES, (int) (time + (seconds * 1000)));
 
     StringBuffer cc = new StringBuffer("max-age=").append(seconds);
 
-    cc.append(", private");
+    cc.append(", ");
+
+    if (SCHEME_HTTPS.equals(request.getScheme()))
+    {
+      cc.append("public");
+    }
+    else
+    {
+      cc.append("private");
+    }
+
     response.addHeader(HEADER_CACHECONTROL, cc.toString());
   }
 

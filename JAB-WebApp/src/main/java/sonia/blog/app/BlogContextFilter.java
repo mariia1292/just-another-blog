@@ -220,7 +220,7 @@ public class BlogContextFilter implements Filter
          || uri.startsWith(contextPath + "/template/")) &&!uri.endsWith(".jab")
            &&!uri.endsWith(".jsp"))
     {
-      WebUtil.addStaticCacheControls(response, WebUtil.TIME_MONTH);
+      WebUtil.addStaticCacheControls(request, response, WebUtil.TIME_MONTH);
     }
   }
 
