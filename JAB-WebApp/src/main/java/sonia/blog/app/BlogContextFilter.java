@@ -380,7 +380,9 @@ public class BlogContextFilter implements Filter
   private boolean isCacheable(BlogRequest request,
                               MappingInstructions instructions)
   {
-    return (cache != null) && request.getCurrentBlog().isAllowCaching()
+    Blog blog = request.getCurrentBlog();
+
+    return (cache != null) && (blog != null) && blog.isAllowCaching()
            && (instructions != null) && instructions.isCacheable()
            && (request.getParameter(PARAM_DONTCACHE) == null)
            && BlogContext.getInstance().isInstalled();
