@@ -89,7 +89,7 @@ public class ImageMapping extends AbstractAttachmentMapping
   protected void addAdditionalHeaderds(BlogRequest request,
           BlogResponse response, File file)
   {
-    WebUtil.addStaticCacheControls(response, WebUtil.TIME_YEAR);
+    WebUtil.addStaticCacheControls(request, response, WebUtil.TIME_YEAR);
   }
 
   /**
