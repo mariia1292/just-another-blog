@@ -92,7 +92,7 @@ public class ClosureCompilerMojo extends AbstractMojo
 
     cmd.append(File.separator).append("bin").append(File.separator);
     cmd.append("java -classpath ").append(genClasspath);
-    cmd.append(" com.google.javascript.jscomp.CompilerRunner --js=");
+    cmd.append(" com.google.javascript.jscomp.CommandLineRunner --js=");
     cmd.append(temp.getAbsolutePath()).append(" --js_output_file=");
     cmd.append(file.getAbsolutePath());
 
