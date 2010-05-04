@@ -25,6 +25,11 @@
         select p from Page p
       </query>
     </named-query>
+    <named-query name="Page.getAllByBlog">
+      <query>
+        select p from Page p where p.blog = :blog
+      </query>
+    </named-query>
     <named-query name="Page.getAllRootWithPublished">
       <query>
         select new sonia.blog.api.util.BasicPageNavigation( p.id, p.navigationTitle, p.navigationPosition )

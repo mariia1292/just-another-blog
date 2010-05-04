@@ -154,6 +154,23 @@ public class JpaPageDAO extends JpaGenericDAO<Page> implements PageDAO
    *
    *
    * @param blog
+   *
+   * @return
+   */
+  public List<Page> getAll(Blog blog)
+  {
+    Query q = strategy.getNamedQuery("Page.getAllByBlog", false);
+
+    q.setParameter("blog", blog);
+
+    return excecuteListQuery(q);
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param blog
    * @param published
    *
    * @return
