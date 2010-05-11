@@ -43,6 +43,7 @@ import sonia.blog.api.exception.BlogException;
 import sonia.blog.api.macro.LinkResource;
 import sonia.blog.api.macro.ScriptResource;
 import sonia.blog.api.macro.WebResource;
+import sonia.blog.api.macro.WebResourceManager;
 import sonia.blog.api.mapping.MappingHandler;
 import sonia.blog.authentication.CookieLoginModule;
 import sonia.blog.authentication.DefaultLoginModule;
@@ -181,6 +182,7 @@ public class BlogContextListener implements ServletContextListener
       initMBeans(context);
       loadCacheConfig(context);
       initServices(context);
+      context.init();
       registerResources(context);
 
       if (context.isInstalled())
@@ -202,8 +204,6 @@ public class BlogContextListener implements ServletContextListener
       initInjectionProvider(context);
       initMacros(event.getServletContext());
       context.getPluginContext().searchClasspath();
-
-      context.init();
 
       List<ServletContextListener> listeners = getPluginListeners(context);
 
@@ -541,6 +541,7 @@ public class BlogContextListener implements ServletContextListener
   private void registerResources(BlogContext context)
   {
     ServiceRegistry registry = context.getServiceRegistry();
+    WebResourceManager webResourceManager = context.getWebResourceManager();
     String ctxPath = context.getServletContext().getContextPath();
     LinkResource entryAtom = new LinkResource(0);
 
@@ -577,12 +578,12 @@ public class BlogContextListener implements ServletContextListener
     opensearch.setTitle("JAB - {2}");
     opensearch.setHref(ctxPath + "/opensearch/descriptor.xml");
 
-    ScriptResource jquery = new ScriptResource(10,
-                              ctxPath + "/resources/jquery/jquery.min.js");
+    ScriptResource jquery = webResourceManager.getJQuery();
     ScriptResource jqueryMsgs =
-      new ScriptResource(20,
-                         ctxPath
-                         + "/resources/jquery/plugins/js/jquery.messages.js");
+      new ScriptResource(
+          20,
+          webResourceManager.getResourceUri(
+            "/resources/jquery/plugins/js/jquery.messages.js"));
 
     registry.register(WebResource.class, Constants.SERVICE_HEADRESOURCES).add(
         entryAtom).add(entryRSS).add(commentAtom).add(commentRSS).add(

@@ -39,8 +39,8 @@ import sonia.blog.api.authentication.SSOCallbackHandler;
 import sonia.blog.api.dao.DAOFactory;
 import sonia.blog.api.exception.BlogException;
 import sonia.blog.api.link.LinkBuilder;
-import sonia.blog.api.macro.DefaultWebResources;
 import sonia.blog.api.macro.TemplateParser;
+import sonia.blog.api.macro.WebResourceManager;
 import sonia.blog.api.mapping.MappingHandler;
 import sonia.blog.api.search.SearchContext;
 import sonia.blog.api.template.TemplateManager;
@@ -252,7 +252,8 @@ public class BlogContext
    */
   public void init()
   {
-    webResources = new DefaultWebResources(servletContext.getContextPath());
+    webResourceManager =
+      new WebResourceManager(servletContext.getContextPath(), getBlogVersion());
   }
 
   /**
@@ -853,9 +854,9 @@ public class BlogContext
    *
    * @return
    */
-  public DefaultWebResources getWebResources()
+  public WebResourceManager getWebResourceManager()
   {
-    return webResources;
+    return webResourceManager;
   }
 
   /**
@@ -1010,8 +1011,6 @@ public class BlogContext
   /** Field description */
   private ServiceReference<MappingHandler> mappingHandler;
 
-  private ServiceReference<TemplateManager> templateManager;
-
   /** Field description */
   private PluginContext pluginContext;
 
@@ -1031,5 +1030,8 @@ public class BlogContext
   private Configuration ssoLoginConfiguration;
 
   /** Field description */
-  private DefaultWebResources webResources;
+  private ServiceReference<TemplateManager> templateManager;
+
+  /** Field description */
+  private WebResourceManager webResourceManager;
 }

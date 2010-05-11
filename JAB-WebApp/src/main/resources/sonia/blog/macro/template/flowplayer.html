@@ -6,7 +6,7 @@
         id: "flowplayer_${attachment.id}_content",
         width: ${width},
         height: ${height},
-        player: "${playerPath}flowplayer.swf",
+        player: "${flowplayer}",
         video: "${attachmentLink}"
       });
     });
@@ -14,7 +14,7 @@
 <#else>
   <a id="flowplayer_${attachment.id}" href="${attachmentLink}" style="display: block; width: ${width}px; height: ${height}px"></a>
   <script type="text/javascript">
-    $f("flowplayer_${attachment.id}", "${playerPath}flowplayer.swf",{
+    $f("flowplayer_${attachment.id}", "${flowplayer}",{
       clip: {
         autoPlay: ${autoPlay},
         autoBuffering: ${autoBuffering}

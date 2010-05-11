@@ -44,7 +44,7 @@ import sonia.blog.api.app.BlogResponse;
 import sonia.blog.api.app.Context;
 import sonia.blog.api.dao.TagDAO;
 import sonia.blog.api.link.LinkBuilder;
-import sonia.blog.api.macro.DefaultWebResources;
+import sonia.blog.api.macro.WebResourceManager;
 import sonia.blog.api.mapping.FinalMapping;
 import sonia.blog.api.mapping.MappingConfig;
 import sonia.blog.api.search.SearchCategory;
@@ -262,7 +262,7 @@ public class OpenSearchMapping extends FinalMapping
       image16El.setAttribute("width", "16");
       image16El.setAttribute("height", "16");
       image16El.setTextContent(linkBuilder.buildLink(request,
-              resources.getJabIcon(DefaultWebResources.JABICON_16)));
+              webResourceManager.getJabIcon(WebResourceManager.JABICON_16)));
       rootEl.appendChild(image16El);
 
       // image 32x32
@@ -271,7 +271,7 @@ public class OpenSearchMapping extends FinalMapping
       image32El.setAttribute("width", "32");
       image32El.setAttribute("height", "32");
       image32El.setTextContent(linkBuilder.buildLink(request,
-              resources.getJabIcon(DefaultWebResources.JABICON_32)));
+              webResourceManager.getJabIcon(WebResourceManager.JABICON_32)));
       rootEl.appendChild(image32El);
 
       // image 64x64
@@ -280,7 +280,7 @@ public class OpenSearchMapping extends FinalMapping
       image64El.setAttribute("width", "64");
       image64El.setAttribute("height", "64");
       image64El.setTextContent(linkBuilder.buildLink(request,
-              resources.getJabIcon(DefaultWebResources.JABICON_64)));
+              webResourceManager.getJabIcon(WebResourceManager.JABICON_64)));
       rootEl.appendChild(image64El);
 
       // image 128x128
@@ -289,7 +289,7 @@ public class OpenSearchMapping extends FinalMapping
       image128El.setAttribute("width", "128");
       image128El.setAttribute("height", "128");
       image128El.setTextContent(linkBuilder.buildLink(request,
-              resources.getJabIcon(DefaultWebResources.JABICON_128)));
+              webResourceManager.getJabIcon(WebResourceManager.JABICON_128)));
       rootEl.appendChild(image128El);
 
       // mozilla search from
@@ -297,9 +297,7 @@ public class OpenSearchMapping extends FinalMapping
 
       searchFormEl.setTextContent(link);
       rootEl.appendChild(searchFormEl);
-
       out = response.getOutputStream();
-
       XmlUtil.writeDocument(doc, out, false);
     }
     catch (Exception ex)
@@ -575,5 +573,5 @@ public class OpenSearchMapping extends FinalMapping
 
   /** Field description */
   @Context
-  private DefaultWebResources resources;
+  private WebResourceManager webResourceManager;
 }
