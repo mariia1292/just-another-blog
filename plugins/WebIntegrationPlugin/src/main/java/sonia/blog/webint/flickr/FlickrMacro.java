@@ -38,10 +38,10 @@ package sonia.blog.webint.flickr;
 import sonia.blog.api.app.BlogRequest;
 import sonia.blog.api.app.Context;
 import sonia.blog.api.macro.AbstractBlogMacro;
-import sonia.blog.api.macro.DefaultWebResources;
 import sonia.blog.api.macro.ScriptResource;
 import sonia.blog.api.macro.WebMacro;
 import sonia.blog.api.macro.WebResource;
+import sonia.blog.api.macro.WebResourceManager;
 import sonia.blog.entity.ContentObject;
 
 //~--- JDK imports ------------------------------------------------------------
@@ -110,14 +110,14 @@ public class FlickrMacro extends AbstractBlogMacro implements WebMacro
 
     path.append("resource/script/jquery.flickr.js");
     resources.add(new ScriptResource(701, path.toString()));
-    resources.addAll(defaultResources.getFancybox());
+    resources.addAll(webResourceManager.getFancybox());
 
     Map<String, Object> env = new HashMap<String, Object>();
 
     env.put("username", username);
     env.put("url",
             new StringBuffer(linkBase).append("gateway/flickr").toString());
-    env.put("loadingImage", defaultResources.getLoadingImage());
+    env.put("loadingImage", webResourceManager.getLoadingImage());
 
     return parseTemplate(env, TEMPLATE);
   }
@@ -125,12 +125,12 @@ public class FlickrMacro extends AbstractBlogMacro implements WebMacro
   //~--- fields ---------------------------------------------------------------
 
   /** Field description */
-  @Context
-  private DefaultWebResources defaultResources;
-
-  /** Field description */
   private List<WebResource> resources;
 
   /** Field description */
   private String username;
+
+  /** Field description */
+  @Context
+  private WebResourceManager webResourceManager;
 }

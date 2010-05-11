@@ -221,6 +221,16 @@
     <servlet-name>PingServlet</servlet-name>
     <url-pattern>/ping</url-pattern>
   </servlet-mapping>
+
+  <servlet>
+    <servlet-name>WebResourceServlet</servlet-name>
+    <servlet-class>sonia.blog.app.WebResourceServlet</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>WebResourceServlet</servlet-name>
+    <url-pattern>/resources/*</url-pattern>
+  </servlet-mapping>
   
   <!-- Error Servlet -->
   

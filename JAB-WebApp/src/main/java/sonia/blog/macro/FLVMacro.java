@@ -45,9 +45,11 @@ import sonia.blog.api.macro.AbstractBlogMacro;
 import sonia.blog.api.macro.ScriptResource;
 import sonia.blog.api.macro.WebMacro;
 import sonia.blog.api.macro.WebResource;
+import sonia.blog.api.macro.WebResourceManager;
 import sonia.blog.api.macro.browse.AttachmentWidget;
 import sonia.blog.api.macro.browse.CheckboxWidget;
 import sonia.blog.api.macro.browse.StringInputWidget;
+import sonia.blog.api.macro.browse.StringTextAreaWidget;
 import sonia.blog.entity.Attachment;
 import sonia.blog.entity.Blog;
 import sonia.blog.entity.ContentObject;
@@ -63,7 +65,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import sonia.blog.api.macro.browse.StringTextAreaWidget;
 
 /**
  *
@@ -74,7 +75,7 @@ import sonia.blog.api.macro.browse.StringTextAreaWidget;
   displayName = "macro.flv.displayName",
   description = "macro.flv.description",
   resourceBundle = "sonia.blog.resources.label",
-  bodyWidget= StringTextAreaWidget.class,
+  bodyWidget = StringTextAreaWidget.class,
   widgetParam = "cols=110;rows=20"
 )
 public class FLVMacro extends AbstractBlogMacro implements WebMacro
@@ -247,34 +248,30 @@ public class FLVMacro extends AbstractBlogMacro implements WebMacro
                               String linkBase, String body, int width,
                               int height)
   {
-    String playerPath = linkBase + "resources/flowplayer/";
     String attachmentLink = linkBuilder.getRelativeLink(request, attchment);
 
     resources = new ArrayList<WebResource>();
-
-    ScriptResource flowplayer = new ScriptResource(10,
-                          playerPath + "flowplayer.min.js");
-
-    resources.add(flowplayer);
+    resources.add(webResourceManager.getFlowplayerScript());
 
     Map<String, Object> params = new HashMap<String, Object>();
 
     if (Util.isNotEmpty(body))
     {
       resources.addAll(
-          BlogContext.getInstance().getWebResources().getFancybox());
+          BlogContext.getInstance().getWebResourceManager().getFancybox());
 
-      StringBuffer fp = new StringBuffer( linkBase );
-      fp.append( "resources/jquery/plugins/js/jquery.fancyplayer.js" );
+      String fcPath = webResourceManager.getResourceUri(
+                          "/resources/jquery/plugins/js/jquery.fancyplayer.js");
+      ScriptResource fancyplayer = new ScriptResource(110, fcPath);
 
-      ScriptResource fancyplayer = new ScriptResource(110, fp.toString());
       resources.add(fancyplayer);
-
       params.put("body", body);
     }
 
     params.put("attachment", attchment);
-    params.put("playerPath", playerPath);
+    params.put("flowplayer", webResourceManager.getFlowplayerUri());
+    params.put("flowplayerControls",
+               webResourceManager.getFlowplayerControlUri());
     params.put("attachmentLink", attachmentLink);
     params.put("width", width);
     params.put("height", height);
@@ -308,6 +305,10 @@ public class FLVMacro extends AbstractBlogMacro implements WebMacro
 
   /** Field description */
   private List<WebResource> resources;
+
+  /** Field description */
+  @Context
+  private WebResourceManager webResourceManager;
 
   /** Field description */
   private Integer width = 480;

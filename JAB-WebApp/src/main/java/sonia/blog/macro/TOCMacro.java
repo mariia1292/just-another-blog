@@ -36,10 +36,12 @@ package sonia.blog.macro;
 //~--- non-JDK imports --------------------------------------------------------
 
 import sonia.blog.api.app.BlogRequest;
+import sonia.blog.api.app.Context;
 import sonia.blog.api.macro.AbstractBlogMacro;
 import sonia.blog.api.macro.ScriptResource;
 import sonia.blog.api.macro.WebMacro;
 import sonia.blog.api.macro.WebResource;
+import sonia.blog.api.macro.WebResourceManager;
 import sonia.blog.api.macro.browse.CheckboxWidget;
 import sonia.blog.api.macro.browse.StringInputWidget;
 import sonia.blog.entity.ContentObject;
@@ -171,12 +173,11 @@ public class TOCMacro extends AbstractBlogMacro implements WebMacro
   protected String doBody(BlogRequest request, String linkBase,
                           ContentObject object, String body)
   {
-    StringBuffer resource = new StringBuffer();
-
-    resource.append(linkBase).append(
-        "resources/jquery/plugins/js/jquery.toc.js");
-
-    ScriptResource tocScript = new ScriptResource(51, resource.toString());
+    ScriptResource tocScript =
+      new ScriptResource(
+          51,
+          webResourceManager.getResourceUri(
+            "/resources/jquery/plugins/js/jquery.toc.js"));
 
     resources = new ArrayList<WebResource>();
     resources.add(tocScript);
@@ -209,4 +210,8 @@ public class TOCMacro extends AbstractBlogMacro implements WebMacro
 
   /** Field description */
   private List<WebResource> resources;
+
+  /** Field description */
+  @Context
+  private WebResourceManager webResourceManager;
 }

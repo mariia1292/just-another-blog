@@ -31,57 +31,35 @@
 
 
 
-package sonia.blog.api.macro;
+package sonia.web;
 
 //~--- JDK imports ------------------------------------------------------------
 
-import java.util.ArrayList;
-import java.util.List;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+
+import java.net.URLConnection;
+
+import java.util.Date;
 
 /**
  *
- * @author Sebastian Sdorra
+ * @author sdorra
  */
-public class DefaultWebResources
+public class FileResource implements Resource
 {
-
-  /** Field description */
-  public static final String JABICON_128 = "128.gif";
-
-  /** Field description */
-  public static final String JABICON_16 = "16.gif";
-
-  /** Field description */
-  public static final String JABICON_32 = "32.gif";
-
-  /** Field description */
-  public static final String JABICON_64 = "64.gif";
-
-  //~--- constructors ---------------------------------------------------------
 
   /**
    * Constructs ...
    *
    *
-   * @param contextPath
+   * @param file
    */
-  public DefaultWebResources(String contextPath)
+  public FileResource(File file)
   {
-    fancybox = new ArrayList<WebResource>();
-    fancybox.add(
-        new ScriptResource(
-            200, contextPath + "/resources/fancybox/jquery.fancybox.min.js"));
-    fancybox.add(
-        new ScriptResource(
-            201, contextPath + "/resources/fancybox/jquery.mousewheel.min.js"));
-    fancybox.add(
-        new LinkResource(
-            202, LinkResource.TYPE_STYLESHEET,
-            contextPath + "/resources/fancybox/jquery.fancybox.css",
-            LinkResource.REL_STYLESHEET, null, "user", false));
-    loadingImage = contextPath + "/resources/jquery/plugins/img/loading.gif";
-    favicon = contextPath + "/resources/images/favicon.ico";
-    jabIcon = contextPath + "/resources/images/icons/jab/icon-";
+    this.file = file;
   }
 
   //~--- get methods ----------------------------------------------------------
@@ -92,9 +70,22 @@ public class DefaultWebResources
    *
    * @return
    */
-  public List<WebResource> getFancybox()
+  public String getContentType()
   {
-    return fancybox;
+    return URLConnection.getFileNameMap().getContentTypeFor(getName());
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   *
+   * @throws IOException
+   */
+  public InputStream getInputStream() throws IOException
+  {
+    return new FileInputStream(file);
   }
 
   /**
@@ -103,22 +94,9 @@ public class DefaultWebResources
    *
    * @return
    */
-  public String getFavicon()
+  public Date getLastModifiedDate()
   {
-    return favicon;
-  }
-
-  /**
-   * Method description
-   *
-   *
-   * @param size
-   *
-   * @return
-   */
-  public String getJabIcon(String size)
-  {
-    return jabIcon + size;
+    return new Date(file.lastModified());
   }
 
   /**
@@ -127,22 +105,24 @@ public class DefaultWebResources
    *
    * @return
    */
-  public String getLoadingImage()
+  public String getName()
   {
-    return loadingImage;
+    return file.getName();
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  public long getSize()
+  {
+    return file.length();
   }
 
   //~--- fields ---------------------------------------------------------------
 
   /** Field description */
-  private List<WebResource> fancybox;
-
-  /** Field description */
-  private String favicon;
-
-  /** Field description */
-  private String jabIcon;
-
-  /** Field description */
-  private String loadingImage;
+  private File file;
 }

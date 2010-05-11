@@ -37,6 +37,8 @@ package sonia.web.util;
 
 import sonia.util.Util;
 
+import sonia.web.Resource;
+
 //~--- JDK imports ------------------------------------------------------------
 
 import java.io.File;
@@ -62,6 +64,9 @@ public class WebUtil
 {
 
   /** Field description */
+  public static final String DEFAULT_CONTENTTYPE = "application/octet-stream";
+
+  /** Field description */
   public static final String HEADER_CACHECONTROL = "Cache-Control";
 
   /** Field description */
@@ -75,6 +80,9 @@ public class WebUtil
 
   /** Field description */
   public static final String HEADER_INM = "If-None-Match";
+
+  /** Field description */
+  public static final String HEADER_LASTMODIFIED = "Last-Modified";
 
   /** Field description */
   public static final String SCHEME_HTTPS = "https";
@@ -110,6 +118,46 @@ public class WebUtil
    * Method description
    *
    *
+   * @param response
+   * @param resource
+   */
+  public static void addETagHeader(HttpServletResponse response,
+                                   Resource resource)
+  {
+    response.addHeader(HEADER_ETAG, getETag(resource));
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param response
+   * @param file
+   */
+  public static void addLastModifiedHeader(HttpServletResponse response,
+          File file)
+  {
+    response.addDateHeader(HEADER_LASTMODIFIED, file.lastModified());
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param response
+   * @param resource
+   */
+  public static void addLastModifiedHeader(HttpServletResponse response,
+          Resource resource)
+  {
+    response.addHeader(HEADER_LASTMODIFIED,
+                       formatHttpDate(resource.getLastModifiedDate()));
+  }
+
+  /**
+   * Method description
+   *
+   *
    *
    * @param request
    * @param response
@@ -120,7 +168,7 @@ public class WebUtil
   {
     long time = new Date().getTime();
 
-    response.addIntHeader(HEADER_EXPIRES, (int) (time + (seconds * 1000)));
+    response.addDateHeader(HEADER_EXPIRES, time + (seconds * 1000));
 
     StringBuffer cc = new StringBuffer("max-age=").append(seconds);
 
@@ -180,6 +228,20 @@ public class WebUtil
   {
     return new StringBuffer("W/\"").append(file.length()).append(
         file.lastModified()).append("\"").toString();
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param resource
+   *
+   * @return
+   */
+  public static String getETag(Resource resource)
+  {
+    return new StringBuffer("W/\"").append(resource.getSize()).append(
+        resource.getLastModifiedDate().getTime()).append("\"").toString();
   }
 
   /**
@@ -264,12 +326,44 @@ public class WebUtil
    */
   public static boolean isModified(HttpServletRequest request, File file)
   {
+    return isModified(request, file.lastModified(), getETag(file));
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param request
+   * @param resource
+   *
+   * @return
+   */
+  public static boolean isModified(HttpServletRequest request,
+                                   Resource resource)
+  {
+    return isModified(request, resource.getLastModifiedDate().getTime(),
+                      getETag(resource));
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param request
+   * @param lastModified
+   * @param etag
+   *
+   * @return
+   */
+  public static boolean isModified(HttpServletRequest request,
+                                   long lastModified, String etag)
+  {
     boolean result = true;
     Date modifiedSince = getIfModifiedSinceDate(request);
 
     if (modifiedSince != null)
     {
-      if (modifiedSince.getTime() == file.lastModified())
+      if (modifiedSince.getTime() == lastModified)
       {
         result = false;
       }
@@ -279,7 +373,7 @@ public class WebUtil
     {
       String inmEtag = request.getHeader(HEADER_INM);
 
-      if (Util.hasContent(inmEtag) && inmEtag.equals(getETag(file)))
+      if (Util.hasContent(inmEtag) && inmEtag.equals(etag))
       {
         result = false;
       }

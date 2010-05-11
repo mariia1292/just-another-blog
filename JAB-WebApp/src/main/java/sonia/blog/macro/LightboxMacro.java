@@ -84,7 +84,7 @@ public class LightboxMacro extends AbstractBlogMacro implements WebMacro
    */
   public List<WebResource> getResources()
   {
-    return BlogContext.getInstance().getWebResources().getFancybox();
+    return BlogContext.getInstance().getWebResourceManager().getFancybox();
   }
 
   //~--- set methods ----------------------------------------------------------

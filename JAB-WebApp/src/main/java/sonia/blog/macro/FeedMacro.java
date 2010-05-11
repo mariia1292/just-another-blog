@@ -36,10 +36,12 @@ package sonia.blog.macro;
 //~--- non-JDK imports --------------------------------------------------------
 
 import sonia.blog.api.app.BlogRequest;
+import sonia.blog.api.app.Context;
 import sonia.blog.api.macro.AbstractBlogMacro;
 import sonia.blog.api.macro.ScriptResource;
 import sonia.blog.api.macro.WebMacro;
 import sonia.blog.api.macro.WebResource;
+import sonia.blog.api.macro.WebResourceManager;
 import sonia.blog.api.macro.browse.StringInputWidget;
 import sonia.blog.entity.ContentObject;
 
@@ -137,23 +139,18 @@ public class FeedMacro extends AbstractBlogMacro implements WebMacro
                           ContentObject object, String body)
   {
     resources = new ArrayList<WebResource>();
-
-    StringBuffer resourceUrl = new StringBuffer(linkBase);
-
-    resourceUrl.append("resources/jquery/plugins/js/jquery.feeds.js");
-    resources.add(new ScriptResource(101, resourceUrl.toString(),
-                                     "text/javascript"));
+    resources.add(
+        new ScriptResource(
+            101,
+            webResourceManager.getResourceUri(
+              "/resources/jquery/plugins/js/jquery.feeds.js"), "text/javascript"));
 
     Map<String, Object> parameter = new HashMap<String, Object>();
     StringBuffer urlBuffer = new StringBuffer(linkBase);
 
     urlBuffer.append("async/feed.json?url=").append(url);
     parameter.put("url", urlBuffer.toString());
-
-    StringBuffer loaindImage = new StringBuffer(linkBase);
-
-    loaindImage.append("resources/jquery/plugins/img/loading.gif");
-    parameter.put("loadingImage", loaindImage.toString());
+    parameter.put("loadingImage", webResourceManager.getLoadingImage());
     parameter.put("id", object.getId());
     parameter.put("maxItems", maxItems);
 
@@ -170,4 +167,8 @@ public class FeedMacro extends AbstractBlogMacro implements WebMacro
 
   /** Field description */
   private String url;
+
+  /** Field description */
+  @Context
+  private WebResourceManager webResourceManager;
 }

@@ -36,13 +36,14 @@ package sonia.blog.office;
 //~--- non-JDK imports --------------------------------------------------------
 
 import sonia.blog.api.app.BlogRequest;
+import sonia.blog.api.app.Context;
 import sonia.blog.api.dao.AttachmentDAO;
 import sonia.blog.api.dao.Dao;
 import sonia.blog.api.macro.AbstractBlogMacro;
-import sonia.blog.api.macro.LinkResource;
 import sonia.blog.api.macro.ScriptResource;
 import sonia.blog.api.macro.WebMacro;
 import sonia.blog.api.macro.WebResource;
+import sonia.blog.api.macro.WebResourceManager;
 import sonia.blog.api.macro.browse.AttachmentWidget;
 import sonia.blog.api.macro.browse.SelectWidget;
 import sonia.blog.api.macro.browse.StringTextAreaWidget;
@@ -58,8 +59,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import sonia.blog.api.app.Context;
-import sonia.blog.api.macro.DefaultWebResources;
 
 /**
  *
@@ -157,8 +156,7 @@ public class PdfViewerMacro extends AbstractBlogMacro implements WebMacro
 
     if (id != null)
     {
-      Attachment attachment =
-        attachmentDAO.get(request.getCurrentBlog(), id);
+      Attachment attachment = attachmentDAO.get(request.getCurrentBlog(), id);
 
       if ((attachment != null)
           && attachment.getMimeType().equalsIgnoreCase(PDFMIMETYPE))
@@ -193,10 +191,12 @@ public class PdfViewerMacro extends AbstractBlogMacro implements WebMacro
                               Long galleryId, String body)
   {
     resources = new ArrayList<WebResource>();
-    resources.addAll( defaultResources.getFancybox() );
-    resources.add(new ScriptResource(600,
-                                     linkBase
-                                     + "resource/script/jquery.pdfgallery.js"));
+    resources.addAll(webResourceManager.getFancybox());
+    resources.add(
+        new ScriptResource(
+            600,
+            webResourceManager.getResourceUri(
+              linkBase + "resource/script/jquery.pdfgallery.js")));
 
     Map<String, Object> parameter = new HashMap<String, Object>();
 
@@ -206,7 +206,7 @@ public class PdfViewerMacro extends AbstractBlogMacro implements WebMacro
 
     url.append(attachment.getId()).append("/index.json");
     parameter.put("url", url.toString());
-    parameter.put("loadingImage", defaultResources.getLoadingImage());
+    parameter.put("loadingImage", webResourceManager.getLoadingImage());
     parameter.put("body", body);
     parameter.put("type", type);
 
@@ -214,9 +214,6 @@ public class PdfViewerMacro extends AbstractBlogMacro implements WebMacro
   }
 
   //~--- fields ---------------------------------------------------------------
-
-  @Context
-  private DefaultWebResources defaultResources;
 
   /** Field description */
   @Dao
@@ -230,4 +227,8 @@ public class PdfViewerMacro extends AbstractBlogMacro implements WebMacro
 
   /** Field description */
   private String type = "hidden";
+
+  /** Field description */
+  @Context
+  private WebResourceManager webResourceManager;
 }

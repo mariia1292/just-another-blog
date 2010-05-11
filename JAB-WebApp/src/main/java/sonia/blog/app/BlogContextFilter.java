@@ -216,7 +216,7 @@ public class BlogContextFilter implements Filter
     String uri = request.getRequestURI();
     String contextPath = request.getContextPath();
 
-    if ((uri.startsWith(contextPath + "/resource")
+    if ((uri.startsWith(contextPath + "/resource/")
          || uri.startsWith(contextPath + "/template/")) &&!uri.endsWith(".jab")
            &&!uri.endsWith(".jsp"))
     {
