@@ -49,6 +49,8 @@ import java.io.IOException;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -81,8 +83,9 @@ public class WebResourceServlet extends AbstractResourceServlet
   {
     int revision = BlogContext.getInstance().getBlogVersion().getRevision();
 
-    prefix = new StringBuffer("/resources/rev").append(revision).append(
-      "/").toString();
+    pattern = Pattern.compile(
+      new StringBuffer("^(/[^/]+/)rev").append(revision).append(
+        "/(.*)$").toString());
   }
 
   /**
@@ -123,11 +126,15 @@ public class WebResourceServlet extends AbstractResourceServlet
     Resource resource = null;
     String requestUri =
       request.getRequestURI().substring(request.getContextPath().length());
+    Matcher matcher = pattern.matcher(requestUri);
 
-    if (requestUri.startsWith(prefix))
+    if (matcher.matches())
     {
-      requestUri = new StringBuffer("/resources/").append(
-        requestUri.substring(prefix.length())).toString();
+      StringBuffer realUri = new StringBuffer();
+
+      realUri.append(matcher.group(1));
+      realUri.append(matcher.group(2));
+      requestUri = realUri.toString();
     }
 
     File file = new File(getServletContext().getRealPath(requestUri));
@@ -150,5 +157,5 @@ public class WebResourceServlet extends AbstractResourceServlet
   //~--- fields ---------------------------------------------------------------
 
   /** Field description */
-  private String prefix;
+  private Pattern pattern;
 }
