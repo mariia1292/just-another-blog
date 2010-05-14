@@ -146,6 +146,91 @@
       </build>
 
     </profile>
+
+    <profile>
+
+      <id>mac-bundle</id>
+
+      <build>
+        <plugins>
+
+          <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>osxappbundle-maven-plugin</artifactId>
+            <configuration>
+              <mainClass>sonia.blog.App</mainClass>
+              <bundleName>jab-server</bundleName>
+              <dictionaryFile>${basedir}/src/main/assembly/macos/Info.plist.template</dictionaryFile>
+              <iconFile>${basedir}/src/main/assembly/macos/icon.icns</iconFile>
+              <jvmVersion>1.6+</jvmVersion>
+              <vmOptions>-Xms256m -Xmx256m</vmOptions>
+            </configuration>
+            <executions>
+              <execution>
+                <phase>package</phase>
+                <goals>
+                  <goal>bundle</goal>
+                </goals>
+              </execution>
+            </executions>
+
+          </plugin>
+
+        </plugins>
+      </build>
+
+    </profile>
+
+    <profile>
+
+      <id>win-bundle</id>
+
+      <build>
+        <plugins>
+
+          <plugin>
+            <groupId>com.akathist.maven.plugins.launch4j</groupId>
+            <artifactId>launch4j-maven-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>l4j-gui</id>
+                <phase>package</phase>
+                <goals>
+                  <goal>launch4j</goal>
+                </goals>
+                <configuration>
+                  <headerType>gui</headerType>
+                  <outfile>target/jab-server.exe</outfile>
+                  <jar>target/jab-server.jar</jar>
+                  <errTitle>JAB-Server</errTitle>
+                  <classPath>
+                    <mainClass>sonia.blog.App</mainClass>
+                  </classPath>
+                  <jre>
+                    <minVersion>1.6.0</minVersion>
+                  </jre>
+                  <versionInfo>
+                    <fileVersion>1.0.0.0</fileVersion>
+                    <txtFileVersion>${pom.version}</txtFileVersion>
+                    <fileDescription>JAB-Server</fileDescription>
+                    <copyright>my copyright</copyright>
+                    <productVersion>1.0.0.0</productVersion>
+                    <txtProductVersion>${pom.version}</txtProductVersion>
+                    <productName>JAB-Server</productName>
+                    <internalName>jab-server</internalName>
+                    <originalFilename>jab-server.exe</originalFilename>
+                  </versionInfo>
+                </configuration>
+              </execution>
+            </executions>
+
+          </plugin>
+
+        </plugins>
+      </build>
+
+    </profile>
+
   </profiles>
 
   <dependencies>
@@ -153,17 +238,17 @@
     <dependency>
       <groupId>org.eclipse.jetty.aggregate</groupId>
       <artifactId>jetty-webapp</artifactId>
-      <version>7.0.2.v20100331</version>
+      <version>${jetty.version}</version>
     </dependency>
     <dependency>
       <groupId>org.eclipse.jetty.aggregate</groupId>
       <artifactId>jetty-servlet</artifactId>
-      <version>7.0.2.v20100331</version>
+      <version>${jetty.version}</version>
     </dependency>
     <dependency>
       <groupId>org.eclipse.jetty.aggregate</groupId>
       <artifactId>jetty-server</artifactId>
-      <version>7.0.2.v20100331</version>
+      <version>${jetty.version}</version>
     </dependency>
     <dependency>
       <groupId>org.mortbay.jetty</groupId>
@@ -179,6 +264,24 @@
   <properties>
     <project.build.sourceLevel>1.6</project.build.sourceLevel>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <jetty.version>7.0.2.v20100331</jetty.version>
   </properties>
+
+  <repositories>
+    <repository>
+      <id>akathist-repository</id>
+      <name>Akathist Repository</name>
+      <url>http://www.9stmaryrd.com/maven</url>
+    </repository>
+  </repositories>
+
+  <pluginRepositories>
+    <pluginRepository>
+      <id>akathist-repository</id>
+      <name>Akathist Repository</name>
+      <url>http://www.9stmaryrd.com/maven</url>
+    </pluginRepository>
+  </pluginRepositories>
+
 
 </project>
