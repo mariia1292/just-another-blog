@@ -105,6 +105,9 @@ public class BlogContextListener implements ServletContextListener
 {
 
   /** Field description */
+  private static final String CONTEXT_ATTRIBUTE_NAME = "blogContext";
+
+  /** Field description */
   private static final String DBPROFILE_DERBY =
     "/sonia/blog/dao/jpa/profile/derby-profile.properties";
 
@@ -214,6 +217,8 @@ public class BlogContextListener implements ServletContextListener
           listener.contextInitialized(event);
         }
       }
+
+      context.getServletContext().setAttribute(CONTEXT_ATTRIBUTE_NAME, context);
     }
     catch (IOException ex)
     {
