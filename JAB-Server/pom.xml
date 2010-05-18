@@ -204,6 +204,7 @@
                   <jar>target/jab-server.jar</jar>
                   <errTitle>JAB-Server</errTitle>
                   <cmdLine>--gui</cmdLine>
+                  <icon>src/main/assembly/win/icon-128.ico</icon>
                   <classPath>
                     <mainClass>sonia.blog.App</mainClass>
                   </classPath>
