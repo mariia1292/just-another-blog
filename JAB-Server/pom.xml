@@ -203,11 +203,14 @@
                   <outfile>target/jab-server.exe</outfile>
                   <jar>target/jab-server.jar</jar>
                   <errTitle>JAB-Server</errTitle>
+                  <cmdLine>--gui</cmdLine>
                   <classPath>
                     <mainClass>sonia.blog.App</mainClass>
                   </classPath>
                   <jre>
                     <minVersion>1.6.0</minVersion>
+                    <initialHeapSize>256</initialHeapSize>
+                    <maxHeapSize>256</maxHeapSize>
                   </jre>
                   <versionInfo>
                     <fileVersion>1.0.0.0</fileVersion>
@@ -224,6 +227,80 @@
               </execution>
             </executions>
 
+          </plugin>
+
+        </plugins>
+      </build>
+
+    </profile>
+
+    <profile>
+
+      <id>jsw-bundle</id>
+
+      <build>
+        <plugins>
+
+          <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>appassembler-maven-plugin</artifactId>
+            <configuration>
+              <repositoryLayout>flat</repositoryLayout>
+              <includeConfigurationDirectoryInClasspath>true</includeConfigurationDirectoryInClasspath>
+              <target>${project.build.directory}/appassembler</target>
+
+              <daemons>
+                <daemon>
+                  <id>jab-server</id>
+                  <mainClass>sonia.blog.App</mainClass>
+                  <platforms>
+                    <platform>jsw</platform>
+                  </platforms>
+
+                  <jvmSettings>
+                    <initialMemorySize>256m</initialMemorySize>
+                    <maxMemorySize>256m</maxMemorySize>
+                  </jvmSettings>
+
+                  <generatorConfigurations>
+                    <generatorConfiguration>
+                      <generator>jsw</generator>
+                      <configuration>
+                        <property>
+                          <name>configuration.directory.in.classpath.first</name>
+                          <value>conf</value>
+                        </property>
+                        <property>
+                          <name>set.default.REPO_DIR</name>
+                          <value>lib</value>
+                          <property>
+                            <name>wrapper.logfile</name>
+                            <value>logs/wrapper.log</value>
+                          </property>
+                        </property>
+                      </configuration>
+                    </generatorConfiguration>
+                  </generatorConfigurations>
+
+                </daemon>
+              </daemons>
+
+            </configuration>
+
+            <executions>
+              <execution>
+                <id>jab-appasembler</id>
+                <phase>package</phase>
+                <goals>
+                  <goal>create-repository</goal>
+                  <goal>generate-daemons</goal>
+                </goals>
+                <configuration>
+                  <assembleDirectory>${project.build.directory}/appassembler/jsw/jab-server</assembleDirectory>
+                  <repoPath>lib</repoPath>
+                </configuration>
+              </execution>
+            </executions>
           </plugin>
 
         </plugins>

@@ -1,24 +1,24 @@
 #!/bin/bash
 
-HOMEDIR=$(dirname $0)
+HOMEDIR=$(cd $(dirname $0); pwd)
 TARGETDIR=$HOMEDIR/target
 HOMEDIR=$HOMEDIR/../../..
 
-rm -rf $TARGETDIR
-
 # options
 VERSION=""
+BUILD="true"
 MVNPARAM=""
+MVNPROFILES="release,mac-bundle,win-bundle,jsw-bundle"
 CREATETAG="false"
 UPDATE="true"
 PLUGINS="false"
 PUSH="true"
 OFFLINE="false"
-TOMCAT="true"
 SOURCE="true"
+SERVER="true"
 
 USAGE="usage create-release.sh --version VERSION"
-USAGE="$USAGE [--offline|--create-tag|--disable-update|--with-plugins|--disable-push|--disable-tomcat|--help]"
+USAGE="$USAGE [--offline|--disable-build|--create-tag|--disable-update|--disable-server|--with-plugins|--disable-push|--help]"
 
 PCOUNT=$#
 for (( i=1; $i<=$PCOUNT; i++ ))
@@ -33,6 +33,8 @@ do
       i=$[$i+1]
       shift
       VERSION=$1
+    "--disable-build")
+      BUILD="false"
     ;;
     "--create-tag")
       CREATETAG="true"
@@ -46,11 +48,11 @@ do
     "--disable-push")
       PUSH="false"
     ;;
-    "--disable-tomcat")
-      TOMCAT="false"
-    ;;
     "--disable-source")
       SOURCE="false"
+    ;;
+    "--disable-server")
+      SERVER="false"
     ;;
     "--help")
       echo "$USAGE"
@@ -61,7 +63,7 @@ do
     	echo "--disable-update    Disables the mercurial update"
     	echo "--with-plugins      Build plugins for the release"
     	echo "--disable-push      Disables the mercurial push after the tag"
-    	echo "--disable-tomcat    Create no tomcat release"
+    	echo "--disable-server    Create no server release"
     	echo "--disable-source    Create no source release"
     	echo "--help              Shows this help"
     	exit 0
@@ -95,38 +97,59 @@ fi
 
 # for j2ee appservers
 echo "[INFO] build release"
-mvn clean install -P release -f $HOMEDIR/pom.xml $MVNPARAM
-mkdir -p $TARGETDIR/webapp
-cp $HOMEDIR/JAB-WebApp/target/*.war $TARGETDIR/webapp
 
-# for tomcat
-if [ "$TOMCAT" == "true" ]; then
-  echo "[INFO] build tomcat release"
-  mvn clean package -P release,tomcat -f $HOMEDIR/JAB-WebApp/pom.xml $MVNPARAM
-  mkdir -p $TARGETDIR/webapp-tomcat
-  cp $HOMEDIR/JAB-WebApp/target/*.war $TARGETDIR/webapp-tomcat
+TARGETDIR=$TARGETDIR"/"$VERSION
+rm -rf $TARGETDIR
+
+if [ "$BUILD" == "true" ]; then
+  mvn clean install -P $MVNPROFILES -f $HOMEDIR/pom.xml $MVNPARAM
+fi
+
+mkdir -p $TARGETDIR/webapp
+cp -v $HOMEDIR/JAB-WebApp/target/*.war $TARGETDIR/webapp
+
+# server
+if [ "$SERVER" == "true" ]; then
+  echo "[INFO] copy server bundles"
+  mkdir -p $TARGETDIR/server/win $TARGETDIR/server/mac $TARGETDIR/server/jsw $TARGETDIR/server/gen
+  # copy win version
+  cp -v $HOMEDIR/JAB-Server/target/jab-server.exe $TARGETDIR/server/win
+  # copy mac version
+  cp -v $HOMEDIR/JAB-Server/target/JAB-Server-*.dmg $TARGETDIR/server/mac/jab-server.dmg
+  # copy gen version
+  cp -v $HOMEDIR/JAB-Server/target/jab-server.jar $TARGETDIR/server/gen
+  # create jsw version 
+  cp -v $HOMEDIR/JAB-Server/src/main/assembly/default-config.properties $HOMEDIR/JAB-Server/target/appassembler/jsw/jab-server/conf/jab-server.conf
+  chmod +x $HOMEDIR/JAB-Server/target/appassembler/jsw/jab-server/bin/*
+  mkdir -p $HOMEDIR/JAB-Server/target/appassembler/jsw/jab-server/logs
+  cd $HOMEDIR/JAB-Server/target/appassembler/jsw/
+  zip -qr $TARGETDIR/server/jsw/jab-server.zip jab-server
+  tar -cf $TARGETDIR/server/jsw/jab-server.tar jab-server
+  bzip2 -c $TARGETDIR/server/jsw/jab-server.tar > $TARGETDIR/server/jsw/jab-server.tar.bz2
+  gzip $TARGETDIR/server/jsw/jab-server.tar
+  cd -
 fi
 
 # source
 if [ "$SOURCE" == "true" ]; then
 
-	#echo "[INFO] build SoniaUtil source release"	
-	#mvn clean package assembly:assembly -f $HOMEDIR/SoniaUtil/pom.xml $MVNPARAM -DdescriptorId=src
+  #echo "[INFO] build SoniaUtil source release"	
+  #mvn clean package assembly:assembly -f $HOMEDIR/SoniaUtil/pom.xml $MVNPARAM -DdescriptorId=src
   #mkdir -p $TARGETDIR/source
   #cp $HOMEDIR/SoniaUtil/target/*-src.zip $TARGETDIR/source
   
   #echo "[INFO] build api source release"	
-	#mvn clean package assembly:assembly -f $HOMEDIR/SoniaWebUtil/pom.xml $MVNPARAM -DdescriptorId=src
+  #mvn clean package assembly:assembly -f $HOMEDIR/SoniaWebUtil/pom.xml $MVNPARAM -DdescriptorId=src
   #cp $HOMEDIR/SoniaWebUtil/target/*-src.zip $TARGETDIR/source
   
-	echo "[INFO] build api source release"	
-	mvn clean package assembly:assembly -f $HOMEDIR/JAB-API/pom.xml $MVNPARAM -DdescriptorId=src
+  echo "[INFO] build api source release"	
+  mvn clean package assembly:assembly -f $HOMEDIR/JAB-API/pom.xml $MVNPARAM -DdescriptorId=src
   mkdir -p $TARGETDIR/source
   cp $HOMEDIR/JAB-API/target/*-src.zip $TARGETDIR/source
 	
-	echo "[INFO] build webapp source release"
-	mvn clean package assembly:assembly -f $HOMEDIR/JAB-WebApp/pom.xml $MVNPARAM -DdescriptorId=src
-	cp $HOMEDIR/JAB-WebApp/target/*-src.zip $TARGETDIR/source
+  echo "[INFO] build webapp source release"
+  mvn clean package assembly:assembly -f $HOMEDIR/JAB-WebApp/pom.xml $MVNPARAM -DdescriptorId=src
+  cp $HOMEDIR/JAB-WebApp/target/*-src.zip $TARGETDIR/source
 fi
 
 # plugins

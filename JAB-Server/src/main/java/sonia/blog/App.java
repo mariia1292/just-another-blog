@@ -11,9 +11,18 @@ import sonia.cli.Argument;
 import sonia.cli.CliParser;
 import sonia.cli.DefaultCliHelpBuilder;
 
+import sonia.util.Util;
+
 //~--- JDK imports ------------------------------------------------------------
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+
+import java.util.Properties;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Hello world!
@@ -21,6 +30,23 @@ import java.io.File;
  */
 public class App
 {
+
+  /** Field description */
+  public static final String DEFAULT_CONFIG = "/jab-server.conf";
+
+  /** Field description */
+  public static final String PROPERTY_CONTEXTPATH = "context-path";
+
+  /** Field description */
+  public static final String PROPERTY_PORT = "port";
+
+  /** Field description */
+  public static final String PROPERTY_RESOURCEDIRECTORY = "resource-dir";
+
+  /** Field description */
+  private static Logger logger = Logger.getLogger(App.class.getName());
+
+  //~--- methods --------------------------------------------------------------
 
   /**
    * Method description
@@ -47,6 +73,15 @@ public class App
 
     parser.parse(app, args);
 
+    if (Util.isNotEmpty(app.configFile))
+    {
+      app.readConfigFromFile();
+    }
+    else
+    {
+      app.readConfigFromClasspath();
+    }
+
     if (app.showHelp)
     {
       app.printHelp(parser);
@@ -59,6 +94,7 @@ public class App
         public void run()
         {
           ConfigFrame frame = new ConfigFrame(app.resourcePath);
+
           frame.restoreState();
           frame.setVisible(true);
         }
@@ -67,6 +103,61 @@ public class App
     else
     {
       app.start();
+    }
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param in
+   *
+   * @throws IOException
+   */
+  public void readConfig(InputStream in) throws IOException
+  {
+    Properties properties = new Properties();
+
+    properties.load(in);
+    readProperties(properties);
+  }
+
+  /**
+   * Method description
+   *
+   */
+  public void readConfigFromFile()
+  {
+    File file = new File(configFile);
+
+    if (file.exists())
+    {
+      InputStream in = null;
+
+      try
+      {
+        in = new FileInputStream(file);
+        readConfig(in);
+      }
+      catch (IOException ex)
+      {
+        logger.log(Level.SEVERE, null, ex);
+      }
+      finally
+      {
+        try
+        {
+          in.close();
+        }
+        catch (IOException ex)
+        {
+          logger.log(Level.SEVERE, null, ex);
+        }
+      }
+    }
+    else
+    {
+      logger.info("config file not found");
     }
   }
 
@@ -282,7 +373,70 @@ public class App
     System.out.println();
   }
 
+  /**
+   * Method description
+   *
+   */
+  private void readConfigFromClasspath()
+  {
+    InputStream in = Util.findResource(DEFAULT_CONFIG);
+
+    if (in != null)
+    {
+      try
+      {
+        readConfig(in);
+      }
+      catch (IOException ex)
+      {
+        logger.log(Level.SEVERE, null, ex);
+      }
+      finally
+      {
+        try
+        {
+          in.close();
+        }
+        catch (IOException ex)
+        {
+          logger.log(Level.SEVERE, null, ex);
+        }
+      }
+    }
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param properties
+   */
+  private void readProperties(Properties properties)
+  {
+    contextPath = properties.getProperty(PROPERTY_CONTEXTPATH, contextPath);
+    resourcePath = properties.getProperty(PROPERTY_RESOURCEDIRECTORY,
+            resourcePath);
+
+    try
+    {
+      port = Integer.parseInt(properties.getProperty(PROPERTY_PORT,
+              String.valueOf(port)));
+    }
+    catch (NumberFormatException ex)
+    {
+      logger.log(Level.SEVERE, null, ex);
+    }
+  }
+
   //~--- fields ---------------------------------------------------------------
+
+  /** Field description */
+  @Argument(
+    value = "f",
+    longName = "config-file",
+    description = "Path to a jab-server config file"
+  )
+  private String configFile;
 
   /** Field description */
   @Argument(
