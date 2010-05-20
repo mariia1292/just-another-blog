@@ -235,7 +235,7 @@ public class ScriptingContext
       engine.put("response", response);
     }
 
-    engine.put("context", BlogContext.getInstance());
+    engine.put("blogContext", BlogContext.getInstance());
     engine.put("daoFactory", BlogContext.getDAOFactory());
     engine.put("entityFactory", new EntityFactory());
     engine.put("session", session);
