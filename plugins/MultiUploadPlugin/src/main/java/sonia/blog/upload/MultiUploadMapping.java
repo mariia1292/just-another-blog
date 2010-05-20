@@ -173,11 +173,11 @@ public class MultiUploadMapping extends FinalMapping
 
     if (object instanceof Entry)
     {
-      path.append("entry");
+      path.append(Constants.RESOURCE_ENTRIES);
     }
     else if (object instanceof Page)
     {
-      path.append("page");
+      path.append(Constants.RESOURCE_PAGES);
     }
     else
     {
