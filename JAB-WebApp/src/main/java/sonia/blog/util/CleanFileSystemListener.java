@@ -123,5 +123,12 @@ public class CleanFileSystemListener implements DAOListener
     {
       Util.delete(directory);
     }
+    else if (logger.isLoggable(Level.FINER))
+    {
+      StringBuffer msg =
+        new StringBuffer("could not find attachment directory: ");
+
+      logger.finer(msg.append(directory.getPath()).toString());
+    }
   }
 }
