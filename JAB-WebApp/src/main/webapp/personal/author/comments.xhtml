@@ -5,37 +5,49 @@
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:blog="http://jab.nitilon.org/blog/">
-  
+
   <body>
-    
+
     <ui:composition template="../template.xhtml">
-      
+
       <ui:define name="title">
         <h:outputText value="#{label.comments}" />
       </ui:define>
-      
+
       <ui:define name="content">
-      
+
         <h1><h:outputText value="#{label.comments}" /></h1>
-        
+
+        <h:form>
+
+          <h:panelGrid columns="3">
+
+            <h:outputLabel for="showSpam" value=" #{label.showSpam}" />
+            <h:selectBooleanCheckbox id="showSpam" value="#{CommentBean.showSpam}" onchange="submit();" />
+            <h:message for="showSpam" />
+
+          </h:panelGrid>
+
+        </h:form>
+
         <h:form id="commentForm">
-          
+
           <h:dataTable id="commentTable" rows="#{CommentBean.pageSize}" value="#{CommentBean.comments}" var="Comment">
-            
+
             <h:column>
               <f:facet name="header">
                 <h:outputText value="#{label.address}" />
               </f:facet>
               <h:outputText value="#{Comment.authorAddress}" />
             </h:column>
-            
+
             <h:column>
               <f:facet name="header">
                 <h:outputText value="#{label.entry}" />
               </f:facet>
               <h:outputText value="#{Comment.entry.title}" />
             </h:column>
-            
+
             <h:column>
               <f:facet name="header">
                 <h:outputText value="#{label.comment}" />
@@ -43,14 +55,14 @@
               <h:outputText value="#{Comment.authorName}: " />
               <h:outputText value="#{Comment.content}" escape="false" />
             </h:column>
-            
+
             <h:column>
               <f:facet name="header">
                 <h:outputText value="#{label.details}" />
               </f:facet>
               <h:commandLink value="#{label.details}" action="#{CommentBean.details}" />
             </h:column>
-            
+
             <h:column>
               <f:facet name="header">
                 <h:outputText value="#{label.spam}" />
@@ -58,23 +70,23 @@
               <h:commandLink value="#{label.noSpam}" actionListener="#{CommentBean.toggleSpam}" rendered="#{Comment.spam}" />
               <h:commandLink value="#{label.spam}" actionListener="#{CommentBean.toggleSpam}" rendered="#{!Comment.spam}" />
             </h:column>
-            
+
             <h:column>
               <f:facet name="header">
                 <h:outputText value="#{label.remove}" />
               </f:facet>
               <h:commandLink value="#{label.remove}" actionListener="#{CommentBean.remove}" />
             </h:column>
-            
+
           </h:dataTable>
 
           <blog:pager for="commentForm:commentTable" showPages="10" selectedStyle="font-weight: bold;" />
-          
+
         </h:form>
-        
+
       </ui:define>
-      
+
     </ui:composition>
-    
+
   </body>
 </html>

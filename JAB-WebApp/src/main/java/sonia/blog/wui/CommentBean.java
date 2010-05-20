@@ -161,7 +161,7 @@ public class CommentBean extends AbstractBean
   {
     Blog blog = getRequest().getCurrentBlog();
 
-    comments = new CommentDataModel(blog, pageSize);
+    comments = new CommentDataModel(blog, pageSize, showSpam);
 
     return comments;
   }
@@ -177,6 +177,17 @@ public class CommentBean extends AbstractBean
     return pageSize;
   }
 
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  public boolean isShowSpam()
+  {
+    return showSpam;
+  }
+
   //~--- set methods ----------------------------------------------------------
 
   /**
@@ -190,6 +201,17 @@ public class CommentBean extends AbstractBean
     this.comment = comment;
   }
 
+  /**
+   * Method description
+   *
+   *
+   * @param showSpam
+   */
+  public void setShowSpam(boolean showSpam)
+  {
+    this.showSpam = showSpam;
+  }
+
   //~--- fields ---------------------------------------------------------------
 
   /** Field description */
@@ -201,4 +223,7 @@ public class CommentBean extends AbstractBean
   /** Field description */
   @Config(Constants.CONFIG_ADMIN_PAGESIZE)
   private Integer pageSize = Integer.valueOf(20);
+
+  /** Field description */
+  private boolean showSpam = true;
 }
