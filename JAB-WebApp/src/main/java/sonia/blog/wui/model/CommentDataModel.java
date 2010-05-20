@@ -57,9 +57,10 @@ public class CommentDataModel extends AbstractDataModel
    * @param blog
    * @param pageSize
    */
-  public CommentDataModel(Blog blog, int pageSize)
+  public CommentDataModel(Blog blog, int pageSize, boolean showSpam)
   {
     super(pageSize);
+    this.showSpam = showSpam;
     this.blog = blog;
     this.commentDAO = BlogContext.getDAOFactory().getCommentDAO();
   }
@@ -110,7 +111,14 @@ public class CommentDataModel extends AbstractDataModel
   @Override
   protected long countData()
   {
-    return commentDAO.count(blog);
+    long count = 0l;
+    if ( showSpam ){
+      count = commentDAO.count(blog);
+    }
+    else {
+      count = commentDAO.count(blog, false);
+    }
+    return count;
   }
 
   //~--- get methods ----------------------------------------------------------
@@ -127,10 +135,21 @@ public class CommentDataModel extends AbstractDataModel
   @Override
   protected List<?> getData(int start, int max)
   {
-    return commentDAO.getAll(blog, start, max);
+    List<?> result = null;
+    if ( showSpam )
+    {
+      result = commentDAO.getAll(blog, start, max);
+    }
+    else
+    {
+      result = commentDAO.getAll(blog, false, start, max);
+    }
+    return result;
   }
 
   //~--- fields ---------------------------------------------------------------
+
+  private boolean showSpam;
 
   /** Field description */
   private Blog blog;

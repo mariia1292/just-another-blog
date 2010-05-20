@@ -20,6 +20,16 @@
         select c from Comment c join c.entry e join e.blog b where b = :blog and e.published = true order by c.creationDate desc
       </query>
     </named-query>
+    <named-query name="Comment.getAllByBlogAndSpam">
+      <query>
+        select c from Comment c join c.entry e join e.blog b where b = :blog and e.published = true and c.spam = :spam order by c.creationDate desc
+      </query>
+    </named-query>
+    <named-query name="Comment.countByBlogAndSpam">
+      <query>
+        select count(c) from Comment c join c.entry e join e.blog b where b = :blog and e.published = true and c.spam = :spam
+      </query>
+    </named-query>
     <named-query name="Comment.getAllByEntryAndSpam">
       <query>
         select c from Comment c join c.entry e where e = :entry and c.spam = :spam order by c.creationDate

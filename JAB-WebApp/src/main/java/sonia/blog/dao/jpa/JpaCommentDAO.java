@@ -134,6 +134,25 @@ public class JpaCommentDAO extends JpaGenericDAO<Comment> implements CommentDAO
     return (Long) q.getSingleResult();
   }
 
+  /**
+   * Method description
+   *
+   *
+   * @param blog
+   * @param spam
+   *
+   * @return
+   */
+  public long count(Blog blog, boolean spam)
+  {
+    Query q = strategy.getNamedQuery("Comment.countByBlogAndSpam", false);
+
+    q.setParameter("blog", blog);
+    q.setParameter("spam", spam);
+
+    return (Long) q.getSingleResult();
+  }
+
   //~--- get methods ----------------------------------------------------------
 
   /**
@@ -294,6 +313,37 @@ public class JpaCommentDAO extends JpaGenericDAO<Comment> implements CommentDAO
   public List<Comment> getAll(Entry entry, Type type)
   {
     return getAll(entry, type, -1, -1);
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @param blog
+   * @param spam
+   * @param start
+   * @param max
+   *
+   * @return
+   */
+  public List<Comment> getAll(Blog blog, boolean spam, int start, int max)
+  {
+    Query query = strategy.getNamedQuery("Comment.getAllByBlogAndSpam", false);
+
+    query.setParameter("blog", blog);
+    query.setParameter("spam", spam);
+
+    if (start > 0)
+    {
+      query.setFirstResult(start);
+    }
+
+    if (max > 0)
+    {
+      query.setMaxResults(max);
+    }
+
+    return excecuteListQuery(query);
   }
 
   /**
