@@ -183,6 +183,10 @@ public interface Constants
   public static final String CONFIG_SSO = "auth.sso";
 
   /** Field description */
+  public static final String CONFIG_STORE_TRACKBACKSPAM =
+    "app.store.trackbackspam";
+
+  /** Field description */
   public static final String CONFIG_VERSION = "version";
 
   /** Field description */
@@ -352,8 +356,6 @@ public interface Constants
   /** Field description */
   public static final String SERVCIE_CIPHER = "/app/cipher";
 
-  public static final String SERVICE_TEMPLATEMANAGER = "/app/template-manager";
-
   /** Field description */
   public static final String SERVCIE_DAO = "/app/dao";
 
@@ -441,6 +443,9 @@ public interface Constants
 
   /** Field description */
   public static final String SERVICE_SSOAUTHENTICATION = "/app/sso";
+
+  /** Field description */
+  public static final String SERVICE_TEMPLATEMANAGER = "/app/template-manager";
 
   /** Field description */
   public static final String SERVICE_UPGRADELISTENER = "/app/upgrade";

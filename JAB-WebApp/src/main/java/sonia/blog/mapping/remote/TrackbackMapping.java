@@ -163,28 +163,49 @@ public class TrackbackMapping extends FinalMapping
                   trackback.setAuthorName(blogname);
                 }
 
-                trackback.setAuthorAddress( request.getRemoteAddr() );
+                trackback.setAuthorAddress(request.getRemoteAddr());
                 trackback.setAuthorURL(url);
                 trackback.setContent(content.toString());
                 trackback.setEntry(entry);
-                trackback.setSpam(isSpam(request, trackback));
 
-                if (commentDAO.add(
-                        BlogContext.getInstance().getSystemBlogSession(),
-                        trackback))
+                boolean spam = isSpam(request, trackback);
+
+                if (!spam
+                    || BlogContext.getInstance().getConfiguration().getBoolean(
+                      Constants.CONFIG_STORE_TRACKBACKSPAM, Boolean.TRUE))
                 {
-                  writeResponse(writer, CODE_OK, MSG_OK);
-                  response.setStatus(HttpServletResponse.SC_OK);
+                  trackback.setSpam(spam);
+
+                  if (commentDAO.add(
+                          BlogContext.getInstance().getSystemBlogSession(),
+                          trackback))
+                  {
+                    writeResponse(writer, CODE_OK, MSG_OK);
+                    response.setStatus(HttpServletResponse.SC_OK);
+                  }
+                  else
+                  {
+                    if (logger.isLoggable(Level.WARNING))
+                    {
+                      StringBuffer msg = new StringBuffer();
+
+                      msg.append("error during trackback add from ").append(
+                          request.getRemoteAddr()).append(" with url ").append(
+                          trackback.getAuthorURL());
+                      logger.warning(msg.toString());
+                    }
+
+                    writeResponse(writer, CODE_ERROR, MSG_ERROR);
+                  }
                 }
                 else
                 {
                   if (logger.isLoggable(Level.WARNING))
                   {
-                    StringBuffer msg = new StringBuffer();
+                    StringBuffer msg = new StringBuffer("reject spam from ");
 
-                    msg.append("blog spam trackback from ").append(
-                        request.getRemoteAddr()).append(" with url ").append(
-                        trackback.getAuthorURL());
+                    msg.append(request.getRemoteAddr()).append(" with url ");
+                    msg.append(trackback.getAuthorURL());
                     logger.warning(msg.toString());
                   }
 
