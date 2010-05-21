@@ -112,6 +112,8 @@ public class GlobalConfigBean extends AbstractConfigBean
             Boolean.FALSE);
     passwordMinLength = config.getInteger(Constants.CONFIG_PASSWORD_MINLENGTH,
             Constants.DEFAULT_PASSWORD_MINLENGTH);
+    storeTrackbackSpam =
+      config.getBoolean(Constants.CONFIG_STORE_TRACKBACKSPAM, Boolean.TRUE);
     spamInputMethod = config.getString(Constants.CONFIG_SPAMMETHOD);
     defaultBlog = config.getLong(Constants.CONFIG_DEFAULTBLOG);
     sso = config.getInteger(Constants.CONFIG_SSO, Constants.SSO_ONEPERSESSION);
@@ -180,6 +182,7 @@ public class GlobalConfigBean extends AbstractConfigBean
     config.set(Constants.CONFIG_ENABLESSL, enableSSL);
     config.set(Constants.CONFIG_SSLPORT, sslPort);
     config.set(Constants.CONFIG_COMPRESS, gzipCompression);
+    config.set(Constants.CONFIG_STORE_TRACKBACKSPAM, storeTrackbackSpam);
 
     if (Util.hasContent(smtpPassword))
     {
@@ -519,6 +522,17 @@ public class GlobalConfigBean extends AbstractConfigBean
     return registerAcknowledgement;
   }
 
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
+  public boolean isStoreTrackbackSpam()
+  {
+    return storeTrackbackSpam;
+  }
+
   //~--- set methods ----------------------------------------------------------
 
   /**
@@ -735,6 +749,17 @@ public class GlobalConfigBean extends AbstractConfigBean
    * Method description
    *
    *
+   * @param storeTrackbackSpam
+   */
+  public void setStoreTrackbackSpam(boolean storeTrackbackSpam)
+  {
+    this.storeTrackbackSpam = storeTrackbackSpam;
+  }
+
+  /**
+   * Method description
+   *
+   *
    * @param testMail
    */
   public void setTestMail(String testMail)
@@ -800,6 +825,9 @@ public class GlobalConfigBean extends AbstractConfigBean
 
   /** Field description */
   private Boolean startTls;
+
+  /** Field description */
+  private boolean storeTrackbackSpam;
 
   /** Field description */
   private String testMail;

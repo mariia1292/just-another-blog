@@ -46,6 +46,10 @@
             </h:selectOneRadio>
             <h:message for="spamInputMethod" />
 
+            <h:outputLabel for="storeTrackbackSpam" value="#{label.storeTrackbackSpam}" />
+            <h:selectBooleanCheckbox id="storeTrackbackSpam" value="#{GlobalConfigBean.storeTrackbackSpam}" />
+            <h:message for="storeTrackbackSpam" />
+
             <h:outputLabel for="sso" value="#{label.sso}" />
             <h:selectOneRadio id="sso" value="#{GlobalConfigBean.sso}" styleClass="list">
               <f:selectItem itemLabel="#{label.disabled}" itemValue="0" />
