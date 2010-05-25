@@ -38,13 +38,11 @@ package sonia.blog.upload;
 import sonia.blog.api.app.BlogContext;
 import sonia.blog.api.app.BlogRequest;
 import sonia.blog.api.app.BlogResponse;
-import sonia.blog.api.app.Constants;
-import sonia.blog.api.app.Context;
-import sonia.blog.api.app.ResourceManager;
 import sonia.blog.api.editor.EditorUtil;
 import sonia.blog.api.exception.BlogException;
 import sonia.blog.api.mapping.FinalMapping;
 import sonia.blog.api.mapping.MappingConfig;
+import sonia.blog.api.util.AttachmentFacade;
 import sonia.blog.entity.Attachment;
 import sonia.blog.entity.ContentObject;
 import sonia.blog.entity.Entry;
@@ -54,16 +52,7 @@ import sonia.util.Util;
 
 //~--- JDK imports ------------------------------------------------------------
 
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-
-import java.net.URLConnection;
-
-import java.util.UUID;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletResponse;
@@ -75,12 +64,6 @@ import javax.servlet.http.HttpServletResponse;
 @MappingConfig(regex = "^/editor/upload$")
 public class MultiUploadMapping extends FinalMapping
 {
-
-  /** Field description */
-  private static Logger logger =
-    Logger.getLogger(MultiUploadMapping.class.getName());
-
-  //~--- methods --------------------------------------------------------------
 
   /**
    * Method description
@@ -133,7 +116,9 @@ public class MultiUploadMapping extends FinalMapping
         save(request, object);
       }
 
-      Attachment attachement = createAttachment(request, object, name);
+      AttachmentFacade attachmentFacade = new AttachmentFacade();
+      Attachment attachement = attachmentFacade.createAttachment(object,
+                                 request.getInputStream(), name);
 
       if (attachement != null)
       {
@@ -149,119 +134,6 @@ public class MultiUploadMapping extends FinalMapping
     else
     {
       throw new BlogException("no contentobject found");
-    }
-  }
-
-  /**
-   * Method description
-   *
-   *
-   * @param request
-   * @param object
-   * @param name
-   *
-   * @return
-   */
-  private Attachment createAttachment(BlogRequest request,
-          ContentObject object, String name)
-  {
-    File resourceDirectory = resourceManager.getResourceDirectory();
-    File attachmentDirectory =
-      resourceManager.getDirectory(Constants.RESOURCE_ATTACHMENT,
-                                   request.getCurrentBlog());
-    StringBuffer path = new StringBuffer();
-
-    if (object instanceof Entry)
-    {
-      path.append(Constants.RESOURCE_ENTRIES);
-    }
-    else if (object instanceof Page)
-    {
-      path.append(Constants.RESOURCE_PAGES);
-    }
-    else
-    {
-      throw new IllegalArgumentException("page or entry is required");
-    }
-
-    path.append(File.separator).append(object.getId());
-
-    File directory = new File(attachmentDirectory, path.toString());
-
-    if (!directory.exists())
-    {
-      if (!directory.mkdirs())
-      {
-        throw new BlogException("could not create directory");
-      }
-    }
-
-    File attachmentFile = new File(directory, UUID.randomUUID().toString());
-    Attachment attachment = null;
-
-    try
-    {
-      createAttachmentFile(request, attachmentFile);
-      attachment = new Attachment();
-      attachment.setName(name);
-
-      String relativePath = attachmentFile.getAbsolutePath().substring(
-                                resourceDirectory.getAbsolutePath().length());
-
-      attachment.setFilePath(relativePath);
-
-      String contentType =
-        URLConnection.getFileNameMap().getContentTypeFor(name);
-
-      if (Util.isEmpty(contentType))
-      {
-        contentType = "application/octet-stream";
-      }
-
-      attachment.setMimeType(contentType);
-      attachment.setSize(attachmentFile.length());
-      setRelation(attachment, object);
-    }
-    catch (IOException ex)
-    {
-      logger.log(Level.SEVERE, null, ex);
-    }
-
-    return attachment;
-  }
-
-  /**
-   * Method description
-   *
-   *
-   * @param request
-   * @param file
-   *
-   * @throws IOException
-   */
-  private void createAttachmentFile(BlogRequest request, File file)
-          throws IOException
-  {
-    InputStream in = null;
-    FileOutputStream out = null;
-
-    try
-    {
-      in = request.getInputStream();
-      out = new FileOutputStream(file);
-      Util.copy(in, out);
-    }
-    finally
-    {
-      if (in != null)
-      {
-        in.close();
-      }
-
-      if (out != null)
-      {
-        out.close();
-      }
     }
   }
 
@@ -313,31 +185,4 @@ public class MultiUploadMapping extends FinalMapping
       throw new IllegalArgumentException("page or entry is required");
     }
   }
-
-  //~--- set methods ----------------------------------------------------------
-
-  /**
-   * Method description
-   *
-   *
-   * @param attachment
-   * @param object
-   */
-  private void setRelation(Attachment attachment, ContentObject object)
-  {
-    if (object instanceof Entry)
-    {
-      attachment.setEntry((Entry) object);
-    }
-    else if (object instanceof Page)
-    {
-      attachment.setPage((Page) object);
-    }
-  }
-
-  //~--- fields ---------------------------------------------------------------
-
-  /** Field description */
-  @Context
-  private ResourceManager resourceManager;
 }
