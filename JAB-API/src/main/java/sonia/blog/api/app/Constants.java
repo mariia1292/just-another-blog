@@ -140,7 +140,9 @@ public interface Constants
   public static final String CONFIG_PASSWORD_MINLENGTH = "password.minLength";
 
   /** Field description */
-  public static final String CONFIG_QUEUEHANDLER = "app.queue-handler";
+  public static final String CONFIG_WORKER_CORETHREADS = "app.worker.core-threads";
+
+  public static final String CONFIG_WORKER_MAXTHREADS = "app.worker.max-threads";
 
   /** Field description */
   public static final String CONFIG_REGISTERACKNOWLEDGEMENT =

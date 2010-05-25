@@ -35,14 +35,11 @@ package sonia.blog.notify;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import sonia.blog.api.app.BlogJob;
 import sonia.blog.api.app.Constants;
 import sonia.blog.entity.Blog;
 import sonia.blog.entity.BlogMember;
 import sonia.blog.entity.PermaObject;
 import sonia.blog.entity.User;
-
-import sonia.jobqueue.JobException;
 
 import sonia.util.Util;
 
@@ -60,7 +57,7 @@ import java.util.logging.Logger;
  * @param <T>
  */
 public abstract class AbstractNotificationJob<T extends PermaObject>
-        implements BlogJob
+        implements Runnable
 {
 
   /** Field description */
@@ -127,9 +124,8 @@ public abstract class AbstractNotificationJob<T extends PermaObject>
    * Method description
    *
    *
-   * @throws JobException
    */
-  public void excecute() throws JobException
+  public void run()
   {
     if (isActive())
     {

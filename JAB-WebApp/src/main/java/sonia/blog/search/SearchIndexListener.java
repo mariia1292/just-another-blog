@@ -36,12 +36,8 @@ package sonia.blog.search;
 //~--- non-JDK imports --------------------------------------------------------
 
 import sonia.blog.api.app.BlogContext;
-import sonia.blog.api.app.BlogJob;
 import sonia.blog.api.dao.DAOListener;
-import sonia.blog.entity.Blog;
 import sonia.blog.entity.PermaObject;
-
-import sonia.jobqueue.JobException;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -105,7 +101,7 @@ public class SearchIndexListener implements DAOListener
     {
       IndexEventJOB job = new IndexEventJOB(handler, action, item);
 
-      BlogContext.getInstance().getJobQueue().add(job);
+      BlogContext.getInstance().getThreadPoolExecutor().execute(job);
     }
     else if (logger.isLoggable(Level.WARNING))
     {
@@ -125,7 +121,7 @@ public class SearchIndexListener implements DAOListener
    * @version        Enter version here..., 09/11/13
    * @author         Enter your name here...
    */
-  private static class IndexEventJOB implements BlogJob
+  private static class IndexEventJOB implements Runnable
   {
 
     /**
@@ -149,9 +145,8 @@ public class SearchIndexListener implements DAOListener
      * Method description
      *
      *
-     * @throws JobException
      */
-    public void excecute() throws JobException
+    public void run()
     {
       switch (action)
       {
@@ -170,41 +165,6 @@ public class SearchIndexListener implements DAOListener
 
           break;
       }
-    }
-
-    //~--- get methods --------------------------------------------------------
-
-    /**
-     * Method description
-     *
-     *
-     * @return
-     */
-    public Blog getBlog()
-    {
-      return handler.getBlog(item);
-    }
-
-    /**
-     * Method description
-     *
-     *
-     * @return
-     */
-    public String getDescription()
-    {
-      return "adds, remove or update documents in the search index";
-    }
-
-    /**
-     * Method description
-     *
-     *
-     * @return
-     */
-    public String getName()
-    {
-      return getClass().getSimpleName();
     }
 
     //~--- fields -------------------------------------------------------------

@@ -355,8 +355,8 @@ public class EntryBean extends AbstractEditorBean
     {
       BlogRequest request = getRequest();
 
-      BlogContext.getInstance().getJobQueue().add(new TrackbackJob(request,
-              entry, new URL(trackbackURL)));
+      BlogContext.getInstance().getThreadPoolExecutor().execute(
+          new TrackbackJob(request, entry, new URL(trackbackURL)));
       getMessageHandler().info(getRequest(), "sendTrackBackSuccess");
     }
     catch (Exception ex)
@@ -767,8 +767,8 @@ public class EntryBean extends AbstractEditorBean
   {
     if (entry.isPublished() && request.getCurrentBlog().isSendAutoPing())
     {
-      BlogContext.getInstance().getJobQueue().add(new AutoTrackbackJob(request,
-              entry));
+      BlogContext.getInstance().getThreadPoolExecutor().execute(
+          new AutoTrackbackJob(request, entry));
     }
   }
 

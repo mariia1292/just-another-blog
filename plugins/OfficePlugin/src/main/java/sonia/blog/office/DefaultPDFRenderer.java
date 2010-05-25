@@ -36,12 +36,9 @@ package sonia.blog.office;
 //~--- non-JDK imports --------------------------------------------------------
 
 import sonia.blog.api.app.BlogContext;
-import sonia.blog.api.app.BlogJob;
 import sonia.blog.api.app.ResourceManager;
 import sonia.blog.entity.Attachment;
 import sonia.blog.entity.Blog;
-
-import sonia.jobqueue.JobException;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -62,6 +59,8 @@ import java.nio.channels.FileChannel;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.imageio.ImageIO;
 
@@ -74,6 +73,10 @@ public class DefaultPDFRenderer implements PDFRenderer
 
   /** Field description */
   public static final String RESOURCE = "pdf-gallery.xml";
+
+  /** Field description */
+  private static Logger logger =
+    Logger.getLogger(DefaultPDFRenderer.class.getName());
 
   //~--- methods --------------------------------------------------------------
 
@@ -110,8 +113,18 @@ public class DefaultPDFRenderer implements PDFRenderer
                                      manager.getFile(attachment),
                                      attachment.getName(), format, extension);
 
-      BlogContext.getInstance().getJobQueue().processs(rendererJob);
-      imageGallery = rendererJob.getImageGallery();
+      try
+      {
+        if (BlogContext.getInstance().getThreadPoolExecutor().submit(
+                rendererJob, Boolean.TRUE).get())
+        {
+          imageGallery = rendererJob.getImageGallery();
+        }
+      }
+      catch (Exception ex)
+      {
+        logger.log(Level.SEVERE, null, ex);
+      }
     }
 
     return imageGallery;
@@ -126,7 +139,7 @@ public class DefaultPDFRenderer implements PDFRenderer
    * @version        Enter version here..., 09/10/12
    * @author         Enter your name here...
    */
-  private class PDFRendererJob implements BlogJob
+  private class PDFRendererJob implements Runnable
   {
 
     /**
@@ -158,42 +171,43 @@ public class DefaultPDFRenderer implements PDFRenderer
      * Method description
      *
      *
-     * @throws JobException
      */
-    public void excecute() throws JobException
+    public void run()
     {
       try
       {
         if (!directory.mkdirs())
         {
-          throw new JobException("could not create directory for pdf images");
+          List<String> images = new ArrayList<String>();
+          RandomAccessFile raf = new RandomAccessFile(pdfFile, "r");
+          FileChannel channel = raf.getChannel();
+          ByteBuffer buf = channel.map(FileChannel.MapMode.READ_ONLY, 0,
+                                       channel.size());
+          PDFFile pdf = new PDFFile(buf);
+          int pages = pdf.getNumPages();
+
+          for (int i = 1; i < pages; i++)
+          {
+            PDFPage page = pdf.getPage(i);
+            String fileName = new StringBuffer(String.valueOf(i)).append(
+                                  ".").append(extension).toString();
+            File pageFile = new File(directory, fileName);
+
+            createPdfPage(page, pageFile);
+            images.add(pageFile.getName());
+          }
+
+          imageGallery = new PDFImageGallery(title, images);
+          imageGallery.toXML(new File(directory, RESOURCE));
         }
-
-        List<String> images = new ArrayList<String>();
-        RandomAccessFile raf = new RandomAccessFile(pdfFile, "r");
-        FileChannel channel = raf.getChannel();
-        ByteBuffer buf = channel.map(FileChannel.MapMode.READ_ONLY, 0,
-                                     channel.size());
-        PDFFile pdf = new PDFFile(buf);
-        int pages = pdf.getNumPages();
-
-        for (int i = 1; i < pages; i++)
+        else
         {
-          PDFPage page = pdf.getPage(i);
-          String fileName = new StringBuffer(String.valueOf(i)).append(
-                                ".").append(extension).toString();
-          File pageFile = new File(directory, fileName);
-
-          createPdfPage(page, pageFile);
-          images.add(pageFile.getName());
+          logger.severe("could not create directory for pdf images");
         }
-
-        imageGallery = new PDFImageGallery(title, images);
-        imageGallery.toXML(new File(directory, RESOURCE));
       }
       catch (IOException ex)
       {
-        throw new JobException(ex);
+        logger.log(Level.SEVERE, null, ex);
       }
     }
 
