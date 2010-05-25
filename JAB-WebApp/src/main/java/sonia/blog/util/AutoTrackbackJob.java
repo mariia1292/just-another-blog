@@ -36,13 +36,10 @@ package sonia.blog.util;
 //~--- non-JDK imports --------------------------------------------------------
 
 import sonia.blog.api.app.BlogContext;
-import sonia.blog.api.app.BlogJob;
 import sonia.blog.api.app.BlogRequest;
 import sonia.blog.entity.Blog;
 import sonia.blog.entity.Comment.Type;
 import sonia.blog.entity.Entry;
-
-import sonia.jobqueue.JobException;
 
 import sonia.util.Util;
 
@@ -62,7 +59,7 @@ import java.util.regex.Pattern;
  *
  * @author Sebastian Sdorra
  */
-public class AutoTrackbackJob implements BlogJob
+public class AutoTrackbackJob implements Runnable
 {
 
   /** Field description */
@@ -98,9 +95,8 @@ public class AutoTrackbackJob implements BlogJob
    * Method description
    *
    *
-   * @throws JobException
    */
-  public void excecute() throws JobException
+  public void run()
   {
     if (BlogContext.getDAOFactory().getCommentDAO().count(entry,
             Type.TRACKBACK_SEND) == 0)
@@ -119,7 +115,7 @@ public class AutoTrackbackJob implements BlogJob
           }
           catch (Exception ex)
           {
-            throw new JobException(ex);
+            logger.log(Level.SEVERE, null, ex);
           }
         }
       }

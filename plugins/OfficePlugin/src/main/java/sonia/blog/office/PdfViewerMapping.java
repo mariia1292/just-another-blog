@@ -36,7 +36,6 @@ package sonia.blog.office;
 //~--- non-JDK imports --------------------------------------------------------
 
 import sonia.blog.api.app.BlogContext;
-import sonia.blog.api.app.BlogJob;
 import sonia.blog.api.app.BlogRequest;
 import sonia.blog.api.app.BlogResponse;
 import sonia.blog.api.app.Constants;
@@ -44,13 +43,11 @@ import sonia.blog.api.app.ResourceManager;
 import sonia.blog.api.dao.AttachmentDAO;
 import sonia.blog.api.dao.Dao;
 import sonia.blog.api.mapping.FinalMapping;
+import sonia.blog.api.mapping.MappingConfig;
 import sonia.blog.entity.Attachment;
 import sonia.blog.entity.Blog;
 
 import sonia.config.Config;
-
-import sonia.jobqueue.JobException;
-import sonia.jobqueue.JobQueue;
 
 import sonia.plugin.service.Service;
 
@@ -66,19 +63,19 @@ import java.io.IOException;
 import java.io.PrintWriter;
 
 import java.util.List;
+import java.util.concurrent.Future;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.servlet.ServletException;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
-import sonia.blog.api.mapping.MappingConfig;
 
 /**
  *
  * @author Sebastian Sdorra
  */
-@MappingConfig(regex="^/macros/pdfviewer/([0-9]+)/(.*)$")
+@MappingConfig(regex = "^/macros/pdfviewer/([0-9]+)/(.*)$")
 public class PdfViewerMapping extends FinalMapping
 {
 
@@ -110,8 +107,7 @@ public class PdfViewerMapping extends FinalMapping
       {
         Blog blog = request.getCurrentBlog();
         Long attachmentId = Long.parseLong(param[0]);
-        Attachment attachment = attachmentDAO.get(blog,
-                                  attachmentId);
+        Attachment attachment = attachmentDAO.get(blog, attachmentId);
 
         if (attachment != null)
         {
@@ -284,14 +280,21 @@ public class PdfViewerMapping extends FinalMapping
     }
     else
     {
-      JobQueue<BlogJob> queue = BlogContext.getInstance().getJobQueue();
+      Future<Boolean> future =
+        BlogContext.getInstance().getThreadPoolExecutor().submit(
+            new ImageResizeJob(request.getCurrentBlog(), image, thumbnail),
+            Boolean.TRUE);
 
-      queue.processs(new ImageResizeJob(request.getCurrentBlog(), image,
-                                        thumbnail));
-
-      if (thumbnail.exists())
+      try
       {
-        printImage(request, response, thumbnail);
+        if (future.get() && thumbnail.exists())
+        {
+          printImage(request, response, thumbnail);
+        }
+      }
+      catch (Exception ex)
+      {
+        logger.log(Level.SEVERE, null, ex);
       }
     }
   }
@@ -362,7 +365,7 @@ public class PdfViewerMapping extends FinalMapping
    * @version        Enter version here..., 09/10/13
    * @author         Enter your name here...
    */
-  private class ImageResizeJob implements BlogJob
+  private class ImageResizeJob implements Runnable
   {
 
     /**
@@ -386,9 +389,8 @@ public class PdfViewerMapping extends FinalMapping
      * Method description
      *
      *
-     * @throws JobException
      */
-    public void excecute() throws JobException
+    public void run()
     {
       int width = blog.getThumbnailWidth();
       int height = blog.getThumbnailHeight();
@@ -400,7 +402,7 @@ public class PdfViewerMapping extends FinalMapping
       }
       catch (IOException ex)
       {
-        throw new JobException(ex);
+        logger.log(Level.SEVERE, null, ex);
       }
     }
 

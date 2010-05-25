@@ -36,7 +36,6 @@ package sonia.blog.mapping;
 //~--- non-JDK imports --------------------------------------------------------
 
 import sonia.blog.api.app.BlogContext;
-import sonia.blog.api.app.BlogJob;
 import sonia.blog.api.app.BlogRequest;
 import sonia.blog.api.app.BlogResponse;
 import sonia.blog.api.app.Constants;
@@ -47,8 +46,6 @@ import sonia.blog.util.ImageHandlerJob;
 
 import sonia.config.Config;
 
-import sonia.jobqueue.JobQueue;
-
 import sonia.util.Util;
 
 import sonia.web.util.WebUtil;
@@ -58,6 +55,7 @@ import sonia.web.util.WebUtil;
 import java.io.File;
 import java.io.IOException;
 
+import java.util.concurrent.Future;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -204,15 +202,31 @@ public class ImageMapping extends AbstractAttachmentMapping
         ImageHandlerJob job = new ImageHandlerJob(request.getCurrentBlog(),
                                 getFile(response, attachment), out, type,
                                 format, color, width, height, x, y);
+        Future<Boolean> future =
+          BlogContext.getInstance().getThreadPoolExecutor().submit(job,
+            Boolean.TRUE);
 
-        queue.processs(job);
-
-        if (out.exists())
+        try
         {
-          printFile(request, response, attachment.getName(), mimeType, out);
+          if (future.get())
+          {
+            if (out.exists())
+            {
+              printFile(request, response, attachment.getName(), mimeType, out);
+            }
+            else
+            {
+              response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            }
+          }
+          else
+          {
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+          }
         }
-        else
+        catch (Exception ex)
         {
+          logger.log(Level.SEVERE, null, ex);
           response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
       }
@@ -378,10 +392,6 @@ public class ImageMapping extends AbstractAttachmentMapping
   /** Field description */
   @Config(Constants.CONFIG_IMAGEFORMAT)
   private String format = Constants.DEFAULT_IMAGE_FORMAT;
-
-  /** Field description */
-  @Context
-  private JobQueue<BlogJob> queue;
 
   /** Field description */
   @Context

@@ -36,12 +36,9 @@ package sonia.blog.util;
 //~--- non-JDK imports --------------------------------------------------------
 
 import sonia.blog.api.app.BlogContext;
-import sonia.blog.api.app.BlogJob;
 import sonia.blog.entity.Blog;
 
 import sonia.image.ImageFileHandler;
-
-import sonia.jobqueue.JobException;
 
 import sonia.util.Util;
 
@@ -57,7 +54,7 @@ import java.util.logging.Logger;
  *
  * @author Sebastian Sdorra
  */
-public class ImageHandlerJob implements BlogJob
+public class ImageHandlerJob implements Runnable
 {
 
   /** Field description */
@@ -112,9 +109,8 @@ public class ImageHandlerJob implements BlogJob
    * Method description
    *
    *
-   * @throws JobException
    */
-  public void excecute() throws JobException
+  public void run()
   {
     if (!out.exists())
     {
@@ -163,7 +159,7 @@ public class ImageHandlerJob implements BlogJob
           logger.severe(log.toString());
         }
 
-        throw new JobException(ex);
+        logger.log(Level.SEVERE, null, ex);
       }
     }
     else if (logger.isLoggable(Level.FINE))

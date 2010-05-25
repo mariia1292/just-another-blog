@@ -58,8 +58,6 @@ import sonia.image.ImageHandler;
 import sonia.injection.DefaultInjectionProvider;
 import sonia.injection.InjectionProvider;
 
-import sonia.jobqueue.JobQueue;
-
 import sonia.macro.MacroParser;
 
 import sonia.plugin.PluginContext;
@@ -86,6 +84,9 @@ import java.util.Date;
 import java.util.Properties;
 import java.util.Set;
 import java.util.UUID;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -212,7 +213,7 @@ public class BlogContext
    */
   public void destroy()
   {
-    getJobQueue().stop();
+    getThreadPoolExecutor().shutdown();
     getPluginContext().shutdown();
     getDAOFactory().close();
 
@@ -574,40 +575,6 @@ public class BlogContext
    *
    * @return
    */
-  public JobQueue<BlogJob> getJobQueue()
-  {
-    if (jobQueue == null)
-    {
-      Integer hc = null;
-
-      if (isInstalled())
-      {
-        BlogConfiguration config = getConfiguration();
-
-        hc = config.getInteger(Constants.CONFIG_QUEUEHANDLER);
-      }
-
-      if (hc != null)
-      {
-        this.jobQueue = new JobQueue<BlogJob>(hc);
-      }
-      else
-      {
-        this.jobQueue = new JobQueue<BlogJob>();
-      }
-
-      this.jobQueue.start();
-    }
-
-    return jobQueue;
-  }
-
-  /**
-   * Method description
-   *
-   *
-   * @return
-   */
   public LinkBuilder getLinkBuilder()
   {
     if (linkBuilder == null)
@@ -835,6 +802,37 @@ public class BlogContext
    *
    * @return
    */
+  public ThreadPoolExecutor getThreadPoolExecutor()
+  {
+    if (threadPoolExecutor == null)
+    {
+      int cpuCount = Runtime.getRuntime().availableProcessors();
+
+      if (cpuCount > 8)
+      {
+        cpuCount = 8;
+      }
+
+      int coreThreadCount =
+        configuration.getInteger(Constants.CONFIG_WORKER_CORETHREADS, cpuCount);
+      int maxThreadCount =
+        configuration.getInteger(Constants.CONFIG_WORKER_MAXTHREADS,
+                                 cpuCount * 2);
+
+      threadPoolExecutor = new ThreadPoolExecutor(coreThreadCount,
+              maxThreadCount, 15, TimeUnit.MINUTES,
+              new LinkedBlockingQueue<Runnable>());
+    }
+
+    return threadPoolExecutor;
+  }
+
+  /**
+   * Method description
+   *
+   *
+   * @return
+   */
   public Integer getVersion()
   {
     Integer result = null;
@@ -991,9 +989,6 @@ public class BlogContext
   private boolean installed = false;
 
   /** Field description */
-  private JobQueue<BlogJob> jobQueue;
-
-  /** Field description */
   private ServiceReference<LinkBuilder> linkBuilder;
 
   /** Field description */
@@ -1031,6 +1026,9 @@ public class BlogContext
 
   /** Field description */
   private ServiceReference<TemplateManager> templateManager;
+
+  /** Field description */
+  private ThreadPoolExecutor threadPoolExecutor;
 
   /** Field description */
   private WebResourceManager webResourceManager;

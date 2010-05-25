@@ -112,7 +112,7 @@ public class DefaultSearchProvider implements SearchProvider
       throw new BlogSecurityException("AdminSession is required");
     }
 
-    BlogContext.getInstance().getJobQueue().add(new ReIndexJob(blog));
+    BlogContext.getInstance().getThreadPoolExecutor().execute(new ReIndexJob(blog));
   }
 
   /**

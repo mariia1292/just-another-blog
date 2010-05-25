@@ -36,7 +36,6 @@ package sonia.blog.notify;
 //~--- non-JDK imports --------------------------------------------------------
 
 import sonia.blog.api.app.BlogContext;
-import sonia.blog.api.app.BlogJob;
 import sonia.blog.api.dao.DAOListener;
 import sonia.blog.entity.Comment;
 import sonia.blog.entity.Entry;
@@ -60,7 +59,7 @@ public class NotificationListener implements DAOListener
   {
     if ((action == Action.POSTADD) || (action == Action.POSTUPDATE))
     {
-      BlogJob job = null;
+      Runnable job = null;
 
       if (item instanceof Entry)
       {
@@ -81,7 +80,7 @@ public class NotificationListener implements DAOListener
 
       if (job != null)
       {
-        BlogContext.getInstance().getJobQueue().add(job);
+        BlogContext.getInstance().getThreadPoolExecutor().execute(job);
       }
     }
   }

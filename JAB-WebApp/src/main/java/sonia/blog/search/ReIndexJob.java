@@ -42,15 +42,12 @@ import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 
 import sonia.blog.api.app.BlogContext;
-import sonia.blog.api.app.BlogJob;
 import sonia.blog.api.app.Constants;
 import sonia.blog.api.dao.EntryDAO;
 import sonia.blog.api.dao.PageDAO;
 import sonia.blog.entity.Blog;
 import sonia.blog.entity.Entry;
 import sonia.blog.entity.Page;
-
-import sonia.jobqueue.JobException;
 
 import sonia.util.Util;
 
@@ -67,7 +64,7 @@ import java.util.logging.Logger;
  *
  * @author Sebastian Sdorra
  */
-public class ReIndexJob implements BlogJob
+public class ReIndexJob implements Runnable
 {
 
   /** Field description */
@@ -95,10 +92,9 @@ public class ReIndexJob implements BlogJob
    * Method description
    *
    *
-   * @throws JobException
    */
   @SuppressWarnings("unchecked")
-  public void excecute() throws JobException
+  public void run()
   {
     IndexWriter writer = null;
     Lock lock = null;
@@ -107,74 +103,77 @@ public class ReIndexJob implements BlogJob
 
     try
     {
-      if (!file.exists() &&!file.mkdirs())
+      if (file.exists() || file.mkdirs())
       {
-        throw new JobException("could not create index directory");
-      }
+        lock = IndexHandlerFactory.getInstance().getLock(file);
 
-      lock = IndexHandlerFactory.getInstance().getLock(file);
+        IndexHandler<Entry> entryHandler =
+          (IndexHandler<Entry>) IndexHandlerFactory.getInstance().get(
+              Entry.class);
+        Analyzer analyzer = entryHandler.getAnalyzer();
 
-      IndexHandler<Entry> entryHandler =
-        (IndexHandler<Entry>) IndexHandlerFactory.getInstance().get(
-            Entry.class);
-      Analyzer analyzer = entryHandler.getAnalyzer();
+        lock.lock();
 
-      lock.lock();
+        Directory directory = FSDirectory.open(file);
 
-      Directory directory = FSDirectory.open(file);
+        writer = new IndexWriter(directory, SearchHelper.getAnalyzer(blog),
+                                 true, IndexWriter.MaxFieldLength.UNLIMITED);
 
-      writer = new IndexWriter(directory, SearchHelper.getAnalyzer(blog), true,
-                               IndexWriter.MaxFieldLength.UNLIMITED);
+        EntryDAO entryDAO = BlogContext.getDAOFactory().getEntryDAO();
+        List<Entry> entries = entryDAO.getAll(blog, true);
+        int counter = 0;
 
-      EntryDAO entryDAO = BlogContext.getDAOFactory().getEntryDAO();
-      List<Entry> entries = entryDAO.getAll(blog, true);
-      int counter = 0;
-
-      if (Util.hasContent(entries))
-      {
-        for (Entry e : entries)
+        if (Util.hasContent(entries))
         {
-          Document[] docs = entryHandler.createDocuments(e);
-
-          if (docs != null)
+          for (Entry e : entries)
           {
-            for (Document doc : docs)
+            Document[] docs = entryHandler.createDocuments(e);
+
+            if (docs != null)
             {
-              writer.addDocument(doc, analyzer);
-              counter++;
+              for (Document doc : docs)
+              {
+                writer.addDocument(doc, analyzer);
+                counter++;
+              }
             }
           }
         }
-      }
 
-      IndexHandler<Page> pageHandler =
-        (IndexHandler<Page>) IndexHandlerFactory.getInstance().get(Page.class);
-      PageDAO pageDAO = BlogContext.getDAOFactory().getPageDAO();
-      List<Page> pages = pageDAO.getAllByBlog(blog, true);
+        IndexHandler<Page> pageHandler =
+          (IndexHandler<Page>) IndexHandlerFactory.getInstance().get(
+              Page.class);
+        PageDAO pageDAO = BlogContext.getDAOFactory().getPageDAO();
+        List<Page> pages = pageDAO.getAllByBlog(blog, true);
 
-      if (Util.hasContent(pages))
-      {
-        for (Page p : pages)
+        if (Util.hasContent(pages))
         {
-          Document[] docs = pageHandler.createDocuments(p);
-
-          if (docs != null)
+          for (Page p : pages)
           {
-            for (Document doc : docs)
+            Document[] docs = pageHandler.createDocuments(p);
+
+            if (docs != null)
             {
-              writer.addDocument(doc, analyzer);
-              counter++;
+              for (Document doc : docs)
+              {
+                writer.addDocument(doc, analyzer);
+                counter++;
+              }
             }
           }
         }
+
+        if (logger.isLoggable(Level.FINER))
+        {
+          StringBuffer msg = new StringBuffer("added ");
+
+          msg.append(counter).append(" documents to index");
+          logger.finest(msg.toString());
+        }
       }
-
-      if (logger.isLoggable(Level.FINER))
+      else
       {
-        StringBuffer msg = new StringBuffer("added ");
-
-        msg.append(counter).append(" documents to index");
-        logger.finest(msg.toString());
+        logger.severe("could not create index directory");
       }
     }
     catch (Exception ex)
@@ -209,45 +208,6 @@ public class ReIndexJob implements BlogJob
         lock.unlock();
       }
     }
-  }
-
-  //~--- get methods ----------------------------------------------------------
-
-  /**
-   * Method description
-   *
-   *
-   * @return
-   */
-  public Blog getBlog()
-  {
-    return blog;
-  }
-
-  /**
-   * Method description
-   *
-   *
-   * @return
-   */
-  public String getDescription()
-  {
-    StringBuffer log = new StringBuffer();
-
-    log.append("rebuild search context for ").append(blog.getIdentifier());
-
-    return log.toString();
-  }
-
-  /**
-   * Method description
-   *
-   *
-   * @return
-   */
-  public String getName()
-  {
-    return "reindex";
   }
 
   //~--- fields ---------------------------------------------------------------

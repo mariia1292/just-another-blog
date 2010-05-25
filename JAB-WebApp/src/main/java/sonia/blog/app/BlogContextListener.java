@@ -61,8 +61,6 @@ import sonia.config.ModifyableConfigurationMBean;
 import sonia.injection.InjectionProvider;
 import sonia.injection.ObjectInjector;
 
-import sonia.jobqueue.JobQueueMBean;
-
 import sonia.macro.MacroParser;
 
 import sonia.net.FileNameMap;
@@ -303,7 +301,8 @@ public class BlogContextListener implements ServletContextListener
         mbs.registerMBean(
             new ModifyableConfigurationMBean(context.getConfiguration()),
             configName);
-        mbs.registerMBean(new JobQueueMBean(context.getJobQueue()), queueName);
+
+        // mbs.registerMBean(new JobQueueMBean(context.getJobQueue()), queueName);
         context.getCacheManager().setMbeanManager(
             new DefaultCacheMBeanManager(mbs, "sonia.blog.jmx.cache:type="));
       }

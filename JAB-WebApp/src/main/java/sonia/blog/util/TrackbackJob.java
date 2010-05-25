@@ -35,12 +35,9 @@ package sonia.blog.util;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import sonia.blog.api.app.BlogJob;
 import sonia.blog.api.app.BlogRequest;
 import sonia.blog.entity.Blog;
 import sonia.blog.entity.Entry;
-
-import sonia.jobqueue.JobException;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -55,8 +52,13 @@ import java.util.logging.Logger;
  *
  * @author sdorra
  */
-public class TrackbackJob implements BlogJob
+public class TrackbackJob implements Runnable
 {
+
+  /** Field description */
+  private static Logger logger = Logger.getLogger(TrackbackJob.class.getName());
+
+  //~--- constructors ---------------------------------------------------------
 
   /**
    * Constructs ...
@@ -79,9 +81,8 @@ public class TrackbackJob implements BlogJob
    * Method description
    *
    *
-   * @throws JobException
    */
-  public void excecute() throws JobException
+  public void run()
   {
     try
     {
@@ -89,7 +90,7 @@ public class TrackbackJob implements BlogJob
     }
     catch (IOException ex)
     {
-      throw new JobException(ex);
+      logger.log(Level.SEVERE, null, ex);
     }
   }
 
